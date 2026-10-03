@@ -28,7 +28,7 @@ async function setAbstract(page, app, text) {
     const read = () => page.evaluate((id) => window.tinymce.get(id).getContent({format: 'text'}).trim(), ABSTRACT);
     const before = await read();
     await page.evaluate((id) => window.tinymce.get(id).focus(), ABSTRACT);
-    await page.keyboard.press('Control+A');
+    await page.keyboard.press('ControlOrMeta+A'); // Meta on macOS
     await page.keyboard.press('Delete');
     if (text) await page.keyboard.type(text, {delay: 10});
     await sleep(500);

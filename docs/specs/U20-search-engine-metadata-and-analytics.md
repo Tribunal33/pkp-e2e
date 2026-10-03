@@ -895,6 +895,7 @@ Left out of the scenarios above, by reason:
   - OMP2 {OMP} (a book with two PDF files for the whole book and no ISBN: one "citation_pdf_url" per file; Fields, "citation_pdf_url")
   - A5 (an expired announcement: the sitemap lists the unexpired one alone; Rule 3)
   - A2 (the Plugins list's "Google Analytics Plugin" description on a press and a preprint server, and its "Settings" window's paragraphs, naming no other application and no missing function; scenario 8)
+  - A7 (an abstract holding "&" and "<": "citation_abstract" and "DC.Description" carry the symbols, not their HTML entities; Fields, "citation_abstract")
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -982,7 +983,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Google Analytics Plugin" tells a press and a preprint server it integrates OJS, and points every manager to a "Check Status" function that does not exist | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | The sitemap lists expired announcements, whose entries lead to the Announcements list | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | A contributor whose names are not entered in the submission's language is announced by the given name alone | 🐞 | minor | — |
-| [A7](#a7) | An "&" in an abstract reaches the tags as "&amp;" | 🐞 | minor | — |
+| [A7](#a7) | Reference managers and indexes get an abstract's "&" and "<" as "&amp;" and "&lt;" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | "DC.Source.URI" points to an address that does not exist instead of the journal's home page | 🐞 | minor | — |
 | [OJS2](#ojs2) | A journal's sitemap lists no article at all, only the issues' pages | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A book page tells Google Scholar its EPUB, or any file that is not a PDF, is HTML full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1085,12 +1086,20 @@ name.
 Basis: probe, 2026-09-26. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — An "&" in an abstract is announced as "&amp;"** · 🐞 · minor.
-An abstract such as "The sea & its tides" is announced in
-"citation_abstract" and "DC.Description" as "The sea &amp; its tides"
-(the page source holds `&amp;amp;`): the formatting is removed, but the
-"&" is escaped twice. A book file's page does the same.
-Basis: probe, 2026-09-26. <sup>f-a7</sup>
+**A7 — Reference managers and indexes get an abstract's "&" and "<" as "&amp;" and "&lt;"** · 🐞 · medium.
+An editor types an abstract that holds an "&" or a "<", such as "Soil &
+water quality improved (P<0.01).". The item's page shows it as typed.
+The copy of the abstract that the page gives reference managers and
+indexes, in the "citation_abstract" tag (and "DC.Description" on a
+journal and a press), reads "Soil &amp; water quality improved
+(P&lt;0.01).".
+
+A reader who saves the item to a reference manager such as Zotero gets
+the abstract with "&amp;" and "&lt;" in it.
+
+On a press, the book page and each book file's page carry the same
+wrong abstract.
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 ### OJS
 
@@ -1345,6 +1354,7 @@ Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../iss
 
 <a id="fn-f-a7"></a>
 **f-a7** — Notes h, i: the tags print `htmlspecialchars(strip_tags($abstract))`, and the stored abstract already holds "&" as `&amp;`, so it is escaped a second time. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP, and on a book file's page): note q14.
+Issue report: [docs/issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md](../issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note i: OJS `DublinCoreMetaPlugin` builds `DC.Source.URI` with `$request->getDispatcher()->url($request, ROUTE_PAGE, null, $journal->getPath(), urlLocaleForPage: '')`, the journal's path in the handler slot, so the address is `{journal address}/{journal path}`. Before commit `2c65b53000` "Show locale in url in multilingual contexts" (2024-04-16) it was `$request->url($journal->getPath())`, the home page; OMP's copy passes the path as the context. Live-probed 2026-09-26: the tag read `…/index.php/{path}/{path}` and answered 404; OMP's named the press's home page, 200 (note q14). Written up for the team in `docs/reports/2026-09-26-ojs-dc-source-uri-404.md`.

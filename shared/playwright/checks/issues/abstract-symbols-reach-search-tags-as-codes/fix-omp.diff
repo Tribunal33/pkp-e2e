@@ -1,0 +1,47 @@
+--- a/plugins/generic/googleScholar/GoogleScholarPlugin.php
++++ b/plugins/generic/googleScholar/GoogleScholarPlugin.php
+@@ -16,6 +16,7 @@
+ 
+ use APP\core\Application;
+ use APP\template\TemplateManager;
++use PKP\core\PKPString;
+ use PKP\i18n\LocaleConversion;
+ use PKP\plugins\GenericPlugin;
+ use PKP\plugins\Hook;
+@@ -120,7 +121,7 @@
+         // Abstract
+         $abstract = $isChapterRequest ? $chapter->getLocalizedData('abstract', $publicationLocale) : $publication->getLocalizedData('abstract', $publicationLocale);
+         if ($abstract != '') {
+-            $templateMgr->addHeader('googleScholarAbstract', '<meta name="citation_abstract" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($publicationLocale)) . '" content="' . htmlspecialchars(strip_tags($abstract)) . '"/>');
++            $templateMgr->addHeader('googleScholarAbstract', '<meta name="citation_abstract" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($publicationLocale)) . '" content="' . htmlspecialchars(trim(PKPString::html2text($abstract))) . '"/>');
+         }
+ 
+         // Publication DOI
+--- a/plugins/generic/dublinCoreMeta/DublinCoreMetaPlugin.php
++++ b/plugins/generic/dublinCoreMeta/DublinCoreMetaPlugin.php
+@@ -20,6 +20,7 @@
+ use APP\publicationFormat\PublicationFormat;
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
++use PKP\core\PKPString;
+ use PKP\i18n\LocaleConversion;
+ use PKP\plugins\GenericPlugin;
+ use PKP\plugins\Hook;
+@@ -119,7 +120,7 @@
+         $abstracts = $isChapterRequest ? $chapter->getData('abstract') : $publication->getData('abstract');
+         foreach ($abstracts ?: [] as $locale => $abstract) {
+             if ($abstract != '') {
+-                $templateMgr->addHeader('dublinCoreAbstract' . $locale, '<meta name="DC.Description" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($locale)) . '" content="' . htmlspecialchars(strip_tags($abstract)) . '"/>');
++                $templateMgr->addHeader('dublinCoreAbstract' . $locale, '<meta name="DC.Description" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($locale)) . '" content="' . htmlspecialchars(trim(PKPString::html2text($abstract))) . '"/>');
+             }
+         }
+ 
+@@ -263,7 +264,7 @@
+         $abstracts = $chapter ? $chapter->getData('abstract') : $publication->getData('abstract');
+         foreach ($abstracts ?: [] as $locale => $abstract) {
+             if ($abstract != '') {
+-                $templateMgr->addHeader('dublinCoreAbstract' . $locale, '<meta name="DC.Description" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($locale)) . '" content="' . htmlspecialchars(strip_tags($abstract)) . '"/>');
++                $templateMgr->addHeader('dublinCoreAbstract' . $locale, '<meta name="DC.Description" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($locale)) . '" content="' . htmlspecialchars(trim(PKPString::html2text($abstract))) . '"/>');
+             }
+         }
+ 

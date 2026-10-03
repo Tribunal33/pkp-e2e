@@ -1,0 +1,38 @@
+--- a/plugins/generic/googleScholar/GoogleScholarPlugin.php
++++ b/plugins/generic/googleScholar/GoogleScholarPlugin.php
+@@ -22,6 +22,7 @@
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
+ use PKP\core\PKPApplication;
++use PKP\core\PKPString;
+ use PKP\i18n\LocaleConversion;
+ use PKP\plugins\GenericPlugin;
+ use PKP\plugins\Hook;
+@@ -177,7 +178,7 @@
+ 
+         // Abstract
+         if ($abstract = $publication->getLocalizedData('abstract', $publicationLocale)) {
+-            $templateMgr->addHeader('googleScholarAbstract', '<meta name="citation_abstract" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($publicationLocale)) . '" content="' . htmlspecialchars(strip_tags($abstract)) . '"/>');
++            $templateMgr->addHeader('googleScholarAbstract', '<meta name="citation_abstract" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($publicationLocale)) . '" content="' . htmlspecialchars(trim(PKPString::html2text($abstract))) . '"/>');
+         }
+ 
+         // Subjects
+--- a/plugins/generic/dublinCoreMeta/DublinCoreMetaPlugin.php
++++ b/plugins/generic/dublinCoreMeta/DublinCoreMetaPlugin.php
+@@ -21,6 +21,7 @@
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
+ use PKP\core\PKPApplication;
++use PKP\core\PKPString;
+ use PKP\i18n\LocaleConversion;
+ use PKP\plugins\GenericPlugin;
+ use PKP\plugins\Hook;
+@@ -125,7 +126,7 @@
+         $abstracts = $publication->getData('abstract') ?: [];
+         foreach ($abstracts as $locale => $abstract) {
+             if ($abstract != '') {
+-                $templateMgr->addHeader('dublinCoreAbstract' . $locale, '<meta name="DC.Description" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($locale)) . '" content="' . htmlspecialchars(strip_tags($abstract)) . '"/>');
++                $templateMgr->addHeader('dublinCoreAbstract' . $locale, '<meta name="DC.Description" xml:lang="' . htmlspecialchars(LocaleConversion::toBcp47($locale)) . '" content="' . htmlspecialchars(trim(PKPString::html2text($abstract))) . '"/>');
+             }
+         }
+ 
