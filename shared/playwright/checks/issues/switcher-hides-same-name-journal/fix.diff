@@ -1,0 +1,32 @@
+--- a/lib/pkp/classes/template/PKPTemplateManager.php
++++ b/lib/pkp/classes/template/PKPTemplateManager.php
+@@ -1191,7 +1191,7 @@
+                 $availableContexts = app()->get('context')->getManySummary($args);
+                 if ($request->getContext()) {
+                     $availableContexts = array_filter($availableContexts, function ($context) use ($request) {
+-                        return $context->id !== $request->getContext()->getId();
++                        return (int) $context->id !== $request->getContext()->getId();
+                     });
+                 }
+                 // Admins should switch to the same page on another context where possible
+--- a/lib/pkp/templates/layouts/backend.tpl
++++ b/lib/pkp/templates/layouts/backend.tpl
+@@ -51,13 +51,11 @@
+ 					</template>
+ 					<ul>
+ 						{foreach from=$availableContexts item=$availableContext}
+-							{if !$currentContext || $availableContext->name !== $currentContext->getLocalizedData('name')}
+-								<li>
+-									<a href="{$availableContext->url|escape}" class="pkpDropdown__action">
+-										{$availableContext->name|escape}
+-									</a>
+-								</li>
+-							{/if}
++							<li>
++								<a href="{$availableContext->url|escape}" class="pkpDropdown__action">
++									{$availableContext->name|escape}
++								</a>
++							</li>
+ 						{/foreach}
+ 					</ul>
+ 				</dropdown>

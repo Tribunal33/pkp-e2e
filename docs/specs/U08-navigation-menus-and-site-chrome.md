@@ -1199,6 +1199,7 @@ Left out of the scenarios above, by reason:
   - the menu window with no items at all: neither panel claims items are assigned or sends the manager to drag (the guard [A16](#a16)'s issue report proposes)
   - the item window opened and closed with nothing typed: no "The data on this form has changed" box and no leave question (the guard of [A18](#a18)'s first issue report)
   - the item window after a refused "Save": the back arrow asks before closing and the entries stay until the manager answers (the guard of [A18](#a18)'s second issue report)
+  - the journals switcher on a site with two journals of one name: each offers the other (Rule 29; the guard [A21](#a21)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1291,7 +1292,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | With every navigation menu item removed, "Add Menu" says to drag items and that all items are assigned | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A21](#a21) | Two journals with the same name hide each other in the journals switcher | 🐞 | minor | — |
+| [A21](#a21) | The journals switcher in the editorial header leaves out every journal with exactly the current journal's name | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | minor | — |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
@@ -1568,13 +1569,13 @@ have different causes, in two reports.
 Basis: probe, 2026-10-03. <sup>f-a18</sup>
 
 <a id="a21"></a>
-**A21 — Journals with the same name hide each other in the switcher** · 🐞 · minor.
+**A21 — The journals switcher in the editorial header leaves out every journal with exactly the current journal's name** · 🐞 · low.
 The journals switcher leaves out every journal with the current
 journal's name. An Author enrolled in two journals of the same name sees
 the sitemap icon on either, and it opens an empty list; the Site
 Administrator on one of them is offered every journal but its namesake,
 while from a third journal both are listed.
-Basis: probe. <sup>f-a21</sup>
+Basis: probe, 2026-10-03. <sup>f-a21</sup>
 
 <a id="a22"></a>
 **A22 — A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page** · 🐞 · low · crash: script.
@@ -2921,6 +2922,7 @@ language list.
 **f-a21** — Note g (the switcher drops every context whose name equals
 the current one's). Live-probed 2026-09-23 (td16), all three apps, with
 two scratch journals given the same name.
+Issue report: [docs/issues/U08-A21-switcher-hides-same-name-journal.md](../issues/U08-A21-switcher-hides-same-name-journal.md).
 
 <a id="fn-f-a22"></a>
 **f-a22** — Note h. Live-probed 2026-09-23, all three apps: the
