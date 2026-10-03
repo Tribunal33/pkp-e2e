@@ -2200,7 +2200,7 @@ Issue report: [docs/issues/U65-OJS1-articles-report-supporting-agencies-empty.md
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — fn l (`htmlspecialchars()` on the title). Live-probed 2026-09-28: "Bread &amp; Butter", "A &lt; B &gt;
 C &amp; D"; the abstract and the press's title plain.
-Issue report: [docs/issues/U65-OJS2-articles-report-title-html-codes.md](../issues/U65-OJS2-articles-report-title-html-codes.md).
+Issue report: [docs/issues/U65-OJS2-articles-report-title-html-codes.md](../issues/U65-OJS2-articles-report-title-html-codes.md), filed as [pkp-e2e#649](https://github.com/jardakotesovec/pkp-e2e/issues/649).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — fn l (`getDecisionMessage()`); OMP's `Report::getDecisionMessage()`
