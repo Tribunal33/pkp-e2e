@@ -1829,7 +1829,7 @@ exercised (fn-m); `orderBy=datePublished` is f-a12.
 
 <a id="fn-f-a9"></a>
 **f-a9** — fn-n. Judgment from a repository-wide grep; no screen to probe.
-Issue report: [docs/issues/U15-A9-search-config-settings-do-nothing.md](../issues/U15-A9-search-config-settings-do-nothing.md).
+Issue report: [docs/issues/U15-A9-search-config-settings-do-nothing.md](../issues/U15-A9-search-config-settings-do-nothing.md), filed as [pkp-e2e#726](https://github.com/jardakotesovec/pkp-e2e/issues/726).
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn-b, fn-f, fn-i: the OPS `search.tpl` copy lacks the
