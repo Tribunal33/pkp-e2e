@@ -2816,7 +2816,7 @@ messages exist as `manager.navigationMenus.form.typeMissing`,
 **f-a12** — `NavigationMenuItemsFormHandler.js::setType()` replaces the
 line only when the chosen value has a description, and "Choose a
 type..." has none, so the last text stays. Live-probed 2026-09-23 (td2), all three apps.
-Issue report: [docs/issues/U08-A12-item-type-description-kept.md](../issues/U08-A12-item-type-description-kept.md).
+Issue report: [docs/issues/U08-A12-item-type-description-kept.md](../issues/U08-A12-item-type-description-kept.md), filed as [pkp-e2e#643](https://github.com/jardakotesovec/pkp-e2e/issues/643).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note m. Live-probed 2026-09-23 (td8 and the item types
