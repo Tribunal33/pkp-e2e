@@ -1,0 +1,86 @@
+--- a/lib/ui-library/src/utils/convertPhpDateTimeFormatToLuxon.js
++++ b/lib/ui-library/src/utils/convertPhpDateTimeFormatToLuxon.js
+@@ -2,9 +2,10 @@
+  * Converts PHP datetime format tokens to Luxon format tokens
+  * Generate by Claude (with bit of help)
+  * @param {string} phpFormat - PHP datetime format string
++ * @param {Object} [overrides] - Luxon tokens or literals to use for some PHP tokens instead of the map's
+  * @return {string} - Equivalent Luxon format string
+  */
+-export function phpToLuxonFormat(phpFormat) {
++export function phpToLuxonFormat(phpFormat, overrides = {}) {
+ 	const formatMap = {
+ 		// Day
+ 		d: 'dd', // Day of the month, 2 digits with leading zeros
+@@ -33,7 +34,7 @@
+ 		y: 'yy', // A two digit representation of a year
+ 
+ 		// Time
+-		a: 'a', // Lowercase Ante meridiem and Post meridiem
++		a: 'a', // Lowercase Ante meridiem and Post meridiem (Luxon has no lowercase token: formatDateWithPhpFormat passes it lowercased as a literal)
+ 		A: 'a', // Uppercase Ante meridiem and Post meridiem (Luxon doesn't distinguish case)
+ 		B: '', // Swatch Internet time (no Luxon equivalent)
+ 		g: 'h', // 12-hour format of an hour without leading zeros
+@@ -63,6 +64,8 @@
+ 		// Additional formats
+ 		x: "kkkk-'WW'", // ISO-8601 year-week pattern (e.g., 2022-W42)
+ 		X: 'W', // ISO-8601 week number of year without leading zeroes (PHP 7.2.0+)
++
++		...overrides,
+ 	};
+ 
+ 	// Characters used in Luxon format tokens that need to be escaped when used as literals
+--- a/lib/ui-library/src/utils/dateUtils.js
++++ b/lib/ui-library/src/utils/dateUtils.js
+@@ -146,8 +146,26 @@
+  * @returns {string} The formatted date string.
+  */
+ export function formatDateWithPhpFormat(dateTime, phpFormat, locale = 'en') {
+-	const luxonFormat = phpToLuxonFormat(phpFormat);
+-	return dateTime.setLocale(getLuxonLocale(locale)).toFormat(luxonFormat);
++	const localizedDateTime = dateTime.setLocale(getLuxonLocale(locale));
++	// PHP's `a` is the lowercase meridiem ("pm"), PHP's `A` the uppercase one ("PM"),
++	// but Luxon's only token, `a`, prints "PM": write `a` as a lowercased literal
++	const lowercaseMeridiem = localizedDateTime.toFormat('a').toLowerCase();
++	const luxonFormat = phpToLuxonFormat(phpFormat, {
++		a: toLuxonLiteral(lowercaseMeridiem),
++	});
++	return localizedDateTime.toFormat(luxonFormat);
++}
++
++/**
++ * Writes a text as a Luxon format literal: each character quoted, a single quote as ''
++ * @param {string} text
++ * @returns {string}
++ */
++function toLuxonLiteral(text) {
++	return text
++		.split('')
++		.map((char) => (char === "'" ? "''" : `'${char}'`))
++		.join('');
+ }
+ 
+ /**
+--- /dev/null
++++ b/lib/ui-library/src/utils/dateUtils.test.js
+@@ -0,0 +1,20 @@
++import {describe, test, expect} from 'vitest';
++import {DateTime} from 'luxon';
++import {formatDateWithPhpFormat} from './dateUtils';
++
++describe('formatDateWithPhpFormat', () => {
++	const afternoon = DateTime.fromISO('2026-09-24T15:05:00');
++
++	test('a prints the lowercase meridiem, A the uppercase one, as PHP does', () => {
++		expect(formatDateWithPhpFormat(afternoon, 'g:ia')).toBe('3:05pm');
++		expect(formatDateWithPhpFormat(afternoon, 'h:i A')).toBe('03:05 PM');
++		expect(formatDateWithPhpFormat(afternoon, 'Y-m-d g:ia')).toBe(
++			'2026-09-24 3:05pm',
++		);
++		expect(formatDateWithPhpFormat(afternoon, 'H:i')).toBe('15:05');
++	});
++
++	test('an escaped a stays the letter', () => {
++		expect(formatDateWithPhpFormat(afternoon, 'g:i \\a')).toBe('3:05 a');
++	});
++});
