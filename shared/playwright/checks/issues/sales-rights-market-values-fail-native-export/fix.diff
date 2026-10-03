@@ -1,0 +1,111 @@
+--- a/controllers/grid/catalogEntry/form/MarketForm.php
++++ b/controllers/grid/catalogEntry/form/MarketForm.php
+@@ -49,10 +49,49 @@
+         $this->setPublication($publication);
+         $this->setMarket($market);
+ 
+-        // Validation checks for this form
++        // Validation checks for this form. The values go into the format's ONIX product, so they
++        // are checked against what ONIX accepts (the territory in validate()).
++        $form = $this;
+         $this->addCheck(new \PKP\form\validation\FormValidator($this, 'representationId', 'required', 'grid.catalogEntry.publicationFormatRequired'));
+-        $this->addCheck(new \PKP\form\validation\FormValidator($this, 'date', 'required', 'grid.catalogEntry.dateRequired'));
+-        $this->addCheck(new \PKP\form\validation\FormValidator($this, 'price', 'required', 'grid.catalogEntry.priceRequired'));
++        $this->addCheck(new \PKP\form\validation\FormValidatorCustom(
++            $this,
++            'date',
++            'required',
++            'grid.catalogEntry.dateRequired',
++            function ($date) use ($form) {
++                // As PublicationDateForm's check, but each letter of the format stands for a digit,
++                // not just a character; a time may end in Z or an hhmm offset, as ONIX allows.
++                $onixCodelistItemDao = DAORegistry::getDAO('ONIXCodelistItemDAO'); /** @var ONIXCodelistItemDAO $onixCodelistItemDao */
++                $dateFormat = $form->getData('dateFormat');
++                if (!$dateFormat) {
++                    return false;
++                }
++                $dateFormats = $onixCodelistItemDao->getCodes('55');
++                $format = $dateFormats[$dateFormat] ?? '';
++                if (stristr($format, 'string') && $date != '') {
++                    return true;
++                }
++                $format = trim(preg_replace('/\s*\(.*?\)/i', '', $format));
++                $pattern = preg_replace('/[YMDWQShms]/', '\\d', preg_quote($format, '/'));
++                return (bool) preg_match('/^' . $pattern . (str_contains($format, 'T') ? '(Z|[+-]\d{4})?' : '') . '$/', $date);
++            }
++        ));
++        // ONIX's PriceAmount is a decimal greater than zero.
++        $this->addCheck(new \PKP\form\validation\FormValidatorCustom(
++            $this,
++            'price',
++            'required',
++            'grid.catalogEntry.validPriceRequired',
++            fn ($price) => (bool) preg_match('/^[0-9]*(\.[0-9]+)?$/', $price) && (float) $price > 0
++        ));
++        // ONIX's DiscountPercent is a decimal from 0 to 100.
++        $this->addCheck(new \PKP\form\validation\FormValidatorCustom(
++            $this,
++            'discount',
++            'optional',
++            'grid.catalogEntry.validDiscountRequired',
++            fn ($discount) => (bool) preg_match('/^[0-9]*(\.[0-9]+)?$/', $discount) && (float) $discount <= 100
++        ));
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+     }
+@@ -260,6 +299,18 @@
+     }
+ 
+     /**
++     * @copydoc Form::validate()
++     */
++    public function validate($callHooks = true)
++    {
++        // ONIX requires a market's territory to include at least one country or region.
++        if (!array_filter((array) $this->getData('countriesIncluded')) && !array_filter((array) $this->getData('regionsIncluded'))) {
++            $this->addError('countriesIncluded', __('grid.catalogEntry.territoryRequired'));
++        }
++        return parent::validate($callHooks);
++    }
++
++    /**
+      * @copydoc Form::execute()
+      */
+     public function execute(...$functionArgs)
+--- a/controllers/grid/catalogEntry/form/SalesRightsForm.php
++++ b/controllers/grid/catalogEntry/form/SalesRightsForm.php
+@@ -228,6 +228,19 @@
+     }
+ 
+     /**
++     * @copydoc Form::validate()
++     */
++    public function validate($callHooks = true)
++    {
++        // ONIX requires the territory of an entry that is not "Rest of World" to include at least
++        // one country or region.
++        if (!$this->getData('ROWSetting') && !array_filter((array) $this->getData('countriesIncluded')) && !array_filter((array) $this->getData('regionsIncluded'))) {
++            $this->addError('countriesIncluded', __('grid.catalogEntry.territoryRequired'));
++        }
++        return parent::validate($callHooks);
++    }
++
++    /**
+      * @copydoc Form::execute()
+      */
+     public function execute(...$functionArgs)
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -183,6 +183,12 @@
+ msgid "grid.catalogEntry.validPriceRequired"
+ msgstr "A valid price is required."
+ 
++msgid "grid.catalogEntry.validDiscountRequired"
++msgstr "The discount must be a percentage from 0 to 100."
++
++msgid "grid.catalogEntry.territoryRequired"
++msgstr "Choose at least one country or region under \"Included\"."
++
+ msgid "grid.catalogEntry.publicationFormatDetails"
+ msgstr "Format Details"
+ 

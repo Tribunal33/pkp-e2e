@@ -956,6 +956,11 @@ Left out of the scenarios above, by reason:
   - the guard for A5 (issue report
     `docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md`):
     "Add Market" opens with "Date Format" on "YYYYMMDD"
+  - the guard for A7 and A8 (issue report
+    `docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md`):
+    a market and a sales-rights entry saved without a territory, a
+    market price of "ten" and a date of "abc" under "YYYYMMDD" are
+    each refused in the window
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1034,8 +1039,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ends in "The process failed" for every book | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | Editing a book's market fills in "GST (Sales tax)" as its tax type, and "OK" saves it unasked | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | user-visible | — |
-| [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | user-visible | — |
+| [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | The representative window shows both "Role" lists and refuses a new supplier until the type is clicked | 🐞 | user-visible | — |
 | [A17](#a17) | A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | minor | — |
@@ -1125,7 +1130,7 @@ Check below for errors/warnings." If its "Taxation Rate" is "Zero-rated
 Since: 2012-01-20, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — An entry or a market with no territory breaks the Native XML export** · 🐞 · user-visible.
+**A7 — An entry or a market with no territory breaks the Native XML export** · 🐞 · medium.
 A sales-rights entry without "Rest of World?", and a market, save with
 no country and no region chosen. The book's export from Tools › "Native
 XML Plugin" then ends with "The process failed. Check below for
@@ -1142,10 +1147,10 @@ complete. Until then neither the book nor any book ticked with it can
 be exported. Expected: both windows ask for a country or region, the
 sales-rights window only while "Rest of World?" is unticked, as the tip
 under that box implies.
-Basis: probe. <sup>f-a7</sup>
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The market window takes any date and any price** · 🐞 · user-visible.
+**A8 — The market window takes any date and any price** · 🐞 · medium.
 "Date" takes any text whatever "Date Format" says, and "Price" any text,
 "ten" included; nothing tells the press. A price that is not a number
 then makes the book's export from Tools › "Native XML Plugin" end with
@@ -1157,7 +1162,7 @@ completes. Expected: the window refuses a price that is not a number,
 and a date that does not match its format, as its own message "A date
 is required and the date value must match the chosen date format."
 promises.
-Basis: probe. <sup>f-a8</sup>
+Basis: probe, 2026-10-03. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — The audience is written the wrong way round** · 🐞 · minor.
@@ -2264,6 +2269,7 @@ the market's empty `Territory` is left out, which leaves `Market`
 without its required child. Live-probed 2026-09-28 (A7), three runs:
 notes td15, td16 and td23; the same book exported before the empty
 entry was added and after it was deleted.
+Issue report: [docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Notes g and l: `MarketForm` checks presence only, though its
@@ -2272,6 +2278,7 @@ decimal, so the Native XML file fails its schema check with a non-number,
 as it does for the page counts of *Publication formats & proof terms*,
 its A17, while `Date` is plain text to the schema. Live-probed
 2026-09-28 (A8), two runs: notes td16, td22 and td23.
+Issue report: [docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note k: ONIX 3.0 has `AudienceCodeType` from list 29 ("01"
