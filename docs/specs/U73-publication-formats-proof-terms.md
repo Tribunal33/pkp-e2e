@@ -971,6 +971,10 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A6 (issue report
+    `docs/issues/U73-A6-digital-format-metadata-tab-asks-physical-details.md`):
+    a digital format's "Metadata" tab shows "Digital Information" and no
+    physical group, and a remotely hosted format's shows neither
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1059,7 +1063,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A6](#a6) | Every format's "Metadata" tab asks for physical dimensions and never offers "Digital Information" | 🐞 | user-visible | — |
+| [A6](#a6) | An e-book's "Metadata" tab asks for page counts and dimensions, never for its file size or DRM | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A priced file on a press with no payment method shows no price and turns readers away; nothing warns the press | 🐞 | user-visible | — |
 | [A17](#a17) | Page counts and dimensions take any text, and the book's Native XML export then fails | 🐞 | user-visible | — |
 | [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | minor | — |
@@ -1148,16 +1152,26 @@ Lean: yes; the checks are the galley's, and without them a reader's link breaks.
 Basis: probe. <sup>f-a5</sup> <sup>td16</sup>
 
 <a id="a6"></a>
-**A6 — Every format's "Metadata" tab is the physical one** · 🐞 · user-visible.
-A format's "Metadata" tab shows "Page Counts", "Returnable Indicator"
-and "Physical Dimensions" whether or not its "Physical format" box is
-ticked, and a digital format never gets "Digital Information" ("File
-Size in Mbytes", "Digital Technical Protection", "Enter your own file
-size value?"). A press cannot record an e-book's file size or its
-protection.
-The book trade's ONIX feed carries both for a digital format, which no screen can show, since no screen sets either (read from the code).
-Expected (no screen does this today): a physical format gets the physical groups, a digital one "Digital Information", a remote one neither.
-Since: 2019-08-21 (the versioning rework, 6 years), a date read from the code's history · Basis: probe. <sup>f-a6</sup> <sup>td13</sup>
+**A6 — An e-book's "Metadata" tab asks for page counts and dimensions, never for its file size or DRM** · 🐞 · low.
+A press editor opens the "Metadata" tab of a digital publication
+format, such as a PDF or an e-book whose "Physical format" box is
+unticked. The tab asks for "Page Counts", "Returnable Indicator" and
+"Physical Dimensions", as it does for a paperback. It never shows
+"Digital Information", where the press would enter the e-book's own
+file size and its "Digital Technical Protection" (DRM). A format hosted
+at another website should show neither the physical groups nor
+"Digital Information", but it gets the physical groups too.
+
+So no press can enter an e-book's own file size or its DRM. The
+book's ONIX product carries the file size OMP works out from the
+format's files, and no DRM statement; a remotely hosted format with
+no files gets "0.3" megabytes.
+
+A digital format whose tab has been saved also stores the tab's
+preselected physical values, "Canada (CA)" as country of manufacture
+and "Yes, returnable, full copies only (Y)". Its ONIX product states
+the country, and the returns code for each market it is sold in.
+Since: 2019-08-21 (the versioning rework) · Basis: probe, 2026-10-03. <sup>f-a6</sup> <sup>td13</sup>
 
 <a id="a7"></a>
 **A7 — A new date preselects the Hijri calendar** · 🐞 · medium.
@@ -2283,6 +2297,7 @@ flag. The ONIX export reads `fileSize` and `technicalProtectionCode` for
 digital formats (`MonographONIX30XmlFilter`).
 The date is the omp checkout's git history. Live-probed 2026-09-28:
 note td13.
+Issue report: [pkp-e2e#796](https://github.com/jardakotesovec/pkp-e2e/issues/796) ([docs/issues/U73-A6-digital-format-metadata-tab-asks-physical-details.md](../issues/U73-A6-digital-format-metadata-tab-asks-physical-details.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note g. `PublicationDateForm::fetch()` assigns
