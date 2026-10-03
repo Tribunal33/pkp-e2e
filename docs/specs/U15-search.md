@@ -1740,7 +1740,7 @@ in a modernization window (pkp/pkp-lib#8920, 2025-08) → decay, not choice.
 Live-probed 2026-09-02 on all three apps: a title edited and saved on the
 published version was shown in the result at once, but only the old word
 found it, before and after a queue run.
-Issue report: [docs/issues/U15-A3-published-edits-never-reach-search.md](../issues/U15-A3-published-edits-never-reach-search.md).
+Issue report: [docs/issues/U15-A3-published-edits-never-reach-search.md](../issues/U15-A3-published-edits-never-reach-search.md), filed as [pkp-e2e#704](https://github.com/jardakotesovec/pkp-e2e/issues/704).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-j. Live-probed 2026-09-02: the order was neither date order,
