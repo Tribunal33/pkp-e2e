@@ -1050,7 +1050,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | The "Market Territories" list shows bare codes and runs the price into the currency code | 🐞 | minor | — |
 | [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A9](#a9) | The audience reaches the ONIX product with its code type and code value swapped | 🐞 | minor | — |
+| [A9](#a9) | A book's "Audience" goes out in its ONIX data the wrong way round, so "Children" reads as a proprietary code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A "Rest of World?" entry comes back from a Native XML import unticked | 🐞 | minor | — |
 | [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
 | [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | minor | — |
@@ -1169,18 +1169,25 @@ promises.
 Basis: probe, 2026-10-03. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The audience is written the wrong way round** · 🐞 · minor.
-The ONIX product puts the chosen audience's code where ONIX expects the
-kind of audience code, and "01" where it expects the audience itself: a
-book for "Children (02)" reaches the trade as audience "01" in a
-publisher's own ("proprietary") code scheme, and only "General / adult
-(01)" comes out right. Other audiences name other schemes: "Teenage
-(03)" reaches the trade as an "MPAA rating" of "01". A press's own
-Native XML import reads it back the same wrong way, so the round trip
-hides it.
-Expected: "01" (ONIX audience codes) as the kind and the chosen code as
-the value.
-Since: 2012-01-11, a date read from the code's history · Basis: probe. <sup>f-a9</sup>
+**A9 — A book's "Audience" goes out in its ONIX data the wrong way round, so "Children" reads as a proprietary code** · 🐞 · medium.
+A press editor chooses a book's audience on "Marketing" › "Audience",
+for example "Children (02)". The book's ONIX data puts the chosen
+audience's code in the code-type field, which says which list the code
+comes from, and "01" in the field that should hold the audience itself.
+So a book for "Children (02)" reaches the trade as audience "01" in a
+publisher's own ("proprietary") code scheme. Only "General / adult (01)"
+comes out right.
+The other audiences name other schemes: "Teenage (03)" reads as an MPAA
+film rating of "01", and "Professional and scholarly (06)" as a code in
+the French-language BTLF scheme. Nothing on screen warns the press. The
+press's own Native XML import reads the value back the same wrong way,
+so moving a book between two presses restores the right audience and
+hides the fault. The ONIX 3.0 tool and the Native XML export both carry
+it.
+The stored audience is right; only the output is wrong. So a fix changes
+the export and the Native XML import, needs no repair of stored data,
+and files exported before it still import correctly.
+Since: 2012-01-11, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — Some representative fields reach no file** · ❓ · minor.
@@ -2296,6 +2303,7 @@ into `audience` (note m). Live-probed 2026-09-28 (A9), two runs:
 "Children (02)" gave `02/01`, "General / adult (01)" `01/01`, "Teenage
 (03)" `03/01`; the import read "Children (02)" back and the re-export
 wrote `02/01` again.
+Issue report: [docs/issues/U74-A9-onix-audience-code-type-value-swapped.md](../issues/U74-A9-onix-audience-code-type-value-swapped.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Notes e and k: `RepresentativeForm` stores

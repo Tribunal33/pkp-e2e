@@ -1,0 +1,36 @@
+--- a/plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php
++++ b/plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php
+@@ -488,8 +488,8 @@
+         if ($submission->getData('audience')) {
+             $audienceNode = $doc->createElementNS($deployment->getNamespace(), 'Audience');
+             $descDetailNode->appendChild($audienceNode);
+-            $audienceNode->appendChild($this->buildTextNode($doc, 'AudienceCodeType', $submission->getData('audience')));
+-            $audienceNode->appendChild($this->buildTextNode($doc, 'AudienceCodeValue', '01'));
++            $audienceNode->appendChild($this->buildTextNode($doc, 'AudienceCodeType', '01')); // List 29: ONIX audience codes, so the value is from List 28
++            $audienceNode->appendChild($this->buildTextNode($doc, 'AudienceCodeValue', $submission->getData('audience')));
+         }
+ 
+         if ($submission->getData('audienceRangeQualifier') != '') {
+--- a/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
++++ b/plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php
+@@ -156,7 +156,19 @@
+         $this->_extractExtentContent($node, $onixDeployment, $representation);
+ 
+         if ($submission) {
+-            $submission->setData('audience', $this->_extractTextFromNode($node, $onixDeployment, 'AudienceCodeType'));
++            // AudienceCodeType 01 (List 29) carries a List 28 audience in AudienceCodeValue. Files from
++            // OMP before that was fixed carry the List 28 code as the type and 01 as the value. An
++            // audience in any other scheme has no OMP equivalent.
++            $audienceCodeType = $this->_extractTextFromNode($node, $onixDeployment, 'AudienceCodeType');
++            $audienceCodeValue = $this->_extractTextFromNode($node, $onixDeployment, 'AudienceCodeValue');
++            if ($audienceCodeType === '01') {
++                $audience = $audienceCodeValue;
++            } elseif ($audienceCodeValue === '01') {
++                $audience = $audienceCodeType;
++            } else {
++                $audience = null;
++            }
++            $submission->setData('audience', $audience);
+             $submission->setData('audienceRangeQualifier', $this->_extractTextFromNode($node, $onixDeployment, 'AudienceRangeQualifier'));
+             $this->_extractAudienceRangeContent($node, $onixDeployment, $submission);
+ 
