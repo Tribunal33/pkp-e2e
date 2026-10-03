@@ -994,6 +994,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A3-format-change-file-only-adds.md`): a format's
     second "Change File" offers its first file to replace, and with it
     chosen the format still lists one file
+  - the guard for A4 (issue report
+    `docs/issues/U73-A4-remote-format-cannot-be-made-local.md`): the
+    dataset's remote "PDF", its box unticked and "OK" pressed, reopens
+    unticked with an empty address and offers "Change File"
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1088,9 +1092,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | A publication format's "Change File" cannot say which file it replaces, so every upload adds one more | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A4](#a4) | Unticking "This format will be available at a separate website" keeps the format remote | 🐞 | minor | — |
+| [A4](#a4) | Unticking a book format's "available at a separate website" box keeps the format remote after "OK" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | The "Format Availability" window reads "This format will unavailable to readers." | 🐞 | minor | — |
+| [A11](#a11) | A press editor withdrawing a book's format reads "This format will unavailable to readers." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | Approving and revoking a format file write the same two "History" lines | 🐞 | minor | — |
 | [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
 | [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1154,14 +1158,17 @@ formats of a published book.
 Since: 2026-02-18 (pkp/pkp-lib#12351; 3.4 offered the file to replace) · Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A remote format cannot be made local again** · 🐞 · minor.
+**A4 — Unticking a book format's "available at a separate website" box keeps the format remote after "OK"** · 🐞 · medium.
 In a remote format's "Edit" tab, unticking "This format will be
 available at a separate website." hides "URL of remotely-hosted
 content" but keeps the address in it. "OK" then saves the format still
-remote: its name stays a link to the address, it still offers no
-"Change File", and reopened the box is ticked again. Expected:
-unticking empties the address, as a journal's galley window does.
-Basis: probe. <sup>f-a4</sup> <sup>td11</sup>
+remote. Its name stays a link to the address, and its row offers no
+"Change File", so no file can be attached to it. When the editor opens
+"Edit" again, the box is ticked.
+
+A press that moves an e-book from another website onto its own files
+cannot do it the obvious way, and no message says why.
+Since: 2019-06-26 (pkp/pkp-lib#5025) · Basis: probe, 2026-10-03. <sup>f-a4</sup> <sup>td11</sup>
 
 <a id="a5"></a>
 **A5 — "URL Path" accepts a number or a path already used** · ❓ · minor.
@@ -1250,12 +1257,13 @@ Lean: no; the gate was removed on purpose in 2018, so the window's text and the 
 Since: 2018-03-09, a date read from the code's history · Basis: probe. <sup>f-a10</sup> <sup>td28</sup>
 
 <a id="a11"></a>
-**A11 — "This format will unavailable to readers."** · 🐞 · minor.
-The "Format Availability" window of an available format reads "This
-format will unavailable to readers. Any downloadable files or other
-distributions will no longer appear in the book's catalog entry.": a
-word is missing ("will be unavailable").
-Since: 2015-10-21, a date read from the code's history · Basis: probe. <sup>f-a11</sup>
+**A11 — A press editor withdrawing a book's format reads "This format will unavailable to readers."** · 🐞 · low.
+When a press editor presses "Available" on a book's format to withdraw
+it, the "Format Availability" window reads "This format will
+unavailable to readers. Any downloadable files or other distributions
+will no longer appear in the book's catalog entry.": the word "be" is
+missing.
+Since: 2015-10-21 · Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Approving and revoking a format file log the same lines** · 🐞 · minor.
@@ -2313,6 +2321,7 @@ nothing is emptied; `PublicationFormatForm::execute()` stores
 is still posted. A journal's galley window empties it (Galleys, its
 Fields).
 Live-probed 2026-09-28: note td11.
+Issue report: [pkp-e2e#801](https://github.com/jardakotesovec/pkp-e2e/issues/801) ([docs/issues/U73-A4-remote-format-cannot-be-made-local.md](../issues/U73-A4-remote-format-cannot-be-made-local.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note e: only the character check. `PublicationFormatDAO::getByBestId()`
@@ -2377,6 +2386,7 @@ pkp/pkp-lib#825 (omp `461a0e1d5`, 2015-10-21). Seen 2026-09-24 in
 passing (Submission activity log & notes claim check, the
 "formats-unavailable-dialog" read); live-probed 2026-09-28 again: note
 td21.
+Issue report: [pkp-e2e#802](https://github.com/jardakotesovec/pkp-e2e/issues/802) ([docs/issues/U73-A11-format-unavailable-window-missing-word.md](../issues/U73-A11-format-unavailable-window-missing-word.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note o. Live-probed 2026-09-28: note td20.
