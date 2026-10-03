@@ -23,9 +23,9 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
-| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, VM s2, 2026-10-03**; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md); A18 done; A22, OMP6, A39 done; A26, OMP3 done; A12 done; A30, A31 done; OMP4, A40 done; A19, OMP2, A36 done |
+| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | A13 open; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md); A18 done; A22, OMP6, A39 done; A26, OMP3 done; A12 done; A30, A31 done; OMP4, A40 done; A19, OMP2, A36 done; A21 and A32 no report (risk accepted) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 | **Taken: issues session, workstation s0, 2026-10-03**; A11 done (pkp-e2e#703); A3 done (pkp-e2e#704); A1 done (pkp-e2e#707); OJS2 done (pkp-e2e#708); OMP3, OPS4 done (pkp-e2e#709); A12 done (pkp-e2e#718); A13 done |
-| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md); A1's "offered before the review is complete" half done with U27 A1 (docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md); its "confirms in silence" half (a press, a public-API journal) open |
+| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md); A1's "offered before the review is complete" half done with U27 A1 (pkp-e2e#684); its "confirms in silence" half (a press, a public-API journal) open |
 | [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
@@ -42,7 +42,7 @@ and the hourly routine starts one only when none is running
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A2 done with U74 A2 (pkp-e2e#705); A5 done with U75 A11 (pkp-e2e#675) |
-| [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md) |
+| [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (pkp-e2e#690) |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (pkp-e2e#619) |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
