@@ -1303,6 +1303,8 @@ material, and OMP 3.4 showed the tab only to roles with Production
 access. What is wrong is the menu entry. These roles have no work on
 formats, so no work is lost; they meet a page that promises a list and
 gives a technical refusal.
+A press's "Media" page is offered in the same way
+([Workflow screen & stage access, its OMP2](U24-workflow-screen-and-stage-access.md#omp2)).
 Since: 2024-10-16 (pkp/ui-library#428) · Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
