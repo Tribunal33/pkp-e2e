@@ -1156,7 +1156,13 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the "Homepage Image" description typed in scenario 3 read on a press's and a preprint server's home page, as on a journal's (A1; the guard its issue report names)
+  - the names a screen reader hears for the "Editorial Masthead" arrows ("Increase position of {role}" for an up arrow) and for each "Sidebar" box (the block's name alone) (A3; the guard its issue report names)
   - a placed block's plugin turned off, then a "Page Footer" saved on "Setup" without a refusal (A4; the guard its issue report names)
+  - the French (Canada) "Apparence" tabs of a press and a preprint server showing no "##" code {OMP OPS} (A6; the guard its issue report names)
+  - a ".pdf" picked for "Logo" with "Upload File" and refused, then "Upload File" and the tab's "Save" enabled again (A7; the guard its issue report names)
+  - a French upload box's drop area reading the French text (A12; the guard its issue report names)
+  - a press category holding more books than "Items per page" showing page links, its page 2 listing the next book {OMP} (OMP2; the guard its issue report names)
   - a press's French pages giving a book's date in the default format before a French "Date" is saved, and in the saved one after, the English pages unchanged {OMP} (Rule 3a)
   - French ticked under "UI" alone: "Date & Time" without a "French" button, and a press's French pages keeping the default format after an English "Date" is saved {OMP} (Rule 3b)
   - a chapter's page printing the book's "Date" {OMP} (Rule 31)
@@ -1211,19 +1217,19 @@ otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A press's and a preprint server's homepage image never carries its "Alternate text" | 🐞 | minor | — |
-| [A3](#a3) | A screen reader hears the up arrow on "Editorial Masthead" as "{role} Decrease position of {role}", and each "Sidebar" box's name carries both arrows' names | 🐞 | minor | — |
+| [A1](#a1) | A press's and a preprint server's homepage image never carries the "Alternate text" the manager typed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A3](#a3) | Screen readers misname the masthead's up arrows and every Sidebar box; clicking a role's name moves it | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | A removed style sheet stops loading on the pages, but its file stays public at its old address | 🐞 | latent | — |
-| [A6](#a6) | The French "Theme" tab shows raw codes in place of labels, on all three apps, and so do a press's "Setup" and "Advanced" | 🐞 | minor | — |
-| [A7](#a7) | After a file refused through "Upload File", the box's "Upload File" and the tab's "Save" stay disabled | 🐞 | user-visible | — |
+| [A6](#a6) | In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A7](#a7) | After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | The "Time" choice shown as "3:05PM" prints in lower case ("7:17pm") | 🐞 | minor | — |
-| [A9](#a9) | An empty "Custom" saved under "Date (Short)" leaves editorial dates showing the time without the date | 🐞 | user-visible | — |
+| [A9](#a9) | After a manager saves an empty "Custom" short date, editorial dates show only the time | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | On a press and a preprint server the French "Entête" description says it orders "la revue"'s (the journal's) masthead | 🐞 | minor | — |
-| [A12](#a12) | In the French interface every upload box's drop area reads the English "Drop files here to upload" | 🐞 | minor | — |
+| [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS5](#ojs5) | With every "Journal Content Organization" box unticked, "Save" shows "Saved" and the home page keeps its default part | 🐞 | minor | — |
 | [OJS6](#ojs6) | The article titles under "Latest Publications" are headings of the section's own level | 🐞 | minor | — |
-| [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | user-visible | — |
+| [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | A logo saved without alternate text leaves the header's home link without a name | ❓ | minor | — |
 | [A10](#a10) | A saved "Colour" does not reach a browser that has already opened the journal | ❓ | user-visible | — |
 | [A13](#a13) | Until a French "Date" is saved, a press's French pages write a book's date in the English order ("mars 5, 2024") | ❓ | minor | — |
@@ -1239,13 +1245,18 @@ otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A press's and a preprint server's homepage image has no description** · 🐞 · minor.
-A manager who types an "Alternate text" for the "Homepage Image" expects
-it as the picture's description, as a journal's home page gives it. A
-press's and a preprint server's home pages show the picture with an empty
-description, whatever was typed, so a screen reader skips it. Since:
-2019-05 (the journal's page was corrected then, the others never) ·
-Basis: probe. <sup>f-a1</sup>
+**A1 — A press's and a preprint server's homepage image never carries the "Alternate text" the manager typed** · 🐞 · low.
+A manager who uploads a "Homepage Image" and types its "Alternate text"
+expects that text as the picture's description, as a journal's home page
+gives it. A press's and a preprint server's home page show the picture
+with an empty description, whatever was typed, so a screen reader skips
+it as decoration.
+
+The settings tab keeps the text and says "Saved", so nothing tells the
+manager it never reaches readers. Every press and preprint server on the
+default theme that shows a homepage image in the page body meets it.
+Since: 2019-05 (a journal's page was corrected in 2020, the others
+never) · Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A logo without alternate text leaves the home link unnamed** · ❓ · minor.
@@ -1257,15 +1268,25 @@ journal's name? Lean: yes; the name is what the logo stands for, and the
 field is easy to leave empty. Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The ordering arrows are misnamed to screen readers** · 🐞 · minor.
-On "Editorial Masthead" a screen reader announces each role's up arrow as
-"{role} Decrease position of {role}", although the arrow's own text reads
-"Increase position of {role}", and the down arrow as "Decrease position
-of {role}". Under "Sidebar" each block's box is announced with both
-"Increase position of {block}" and "Decrease position of {block}" in its
-name, so the box's own meaning is buried. A manager relying on a screen
-reader cannot tell which arrow moves a role up. Basis: probe.
-<sup>f-a3</sup>
+**A3 — Screen readers misname the masthead's up arrows and every Sidebar box; clicking a role's name moves it** · 🐞 · low.
+On Settings › Website › Appearance › "Editorial Masthead", each role's
+up arrow should be named "Increase position of {role}", but a screen
+reader announces it as "{role} Decrease position of {role}". The down
+arrow is named correctly, "Decrease position of {role}", so both arrows
+say "Decrease" and a manager ordering the masthead by ear cannot tell
+which one moves a role up. Under "Setup" › "Sidebar", each block's tick
+box is announced as "{block} Increase position of {block} Decrease
+position of {block}" instead of the block's name alone.
+
+For sighted managers, parts of each row pass their clicks to the wrong
+control. A click on a role's name in the "Editorial Masthead" list moves
+that role up one place. A click on a block's drag handle, without
+dragging, ticks or unticks the block's box.
+
+The masthead list shows while "Present a masthead based on user
+enrollments" is ticked, as it is on a new journal, press or preprint
+server, and the site-wide "Sidebar" list has the same fault. Basis:
+probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — "Setup" refuses to save over a placed block whose plugin is off** · 🐞 · medium.
@@ -1293,34 +1314,50 @@ shows it; it matters when the file held something meant to be withdrawn.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Raw codes on the French appearance tabs** · 🐞 · minor.
-A manager working in French reads, in place of labels,
-"##manager.setup.journalContentOrganization##", its description and its
-three boxes on a journal's "Theme"; on a press's "Theme" the only entry
-of the "Thème" list ("##plugins.themes.default.name##") and every label,
-description and choice of the default theme's fields
-("##manager.setup.contextSummary##", typography, header image, colour,
-series listing, statistics); and
-"##plugins.themes.default.option.displayStats.label##" with its three
-choices on a preprint server's "Theme". A press shows them on "Setup"
-and "Advanced" too, on the fields Rule 35 lists: its thumbnail
-("##manager.setup.pressThumbnail##"), the "Browse Block" box
-("##plugins.block.browse.displayName##"), its catalog fields
-("##manager.setup.displayFeaturedBooks##", "##catalog.sortBy##") and its
-cover image sizes ("##manager.setup.coverThumbnailsMaxWidth##").
-Basis: probe. <sup>f-a6</sup>
+**A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · 🐞 · low.
+A press manager who uses the interface in French (Canada) and opens
+Settings › Website › "Apparence" reads codes (untranslated keys, such as
+"##plugins.themes.default.name##" for the theme's name) in place of 36
+labels, descriptions and choices: every field of the theme on "Thème",
+the press thumbnail, "Featured Books", "New Releases" and "Order of
+monographs" on "Configuration", and the two cover image sizes on
+"Configuration avancée". A preprint server's "Thème" shows the download
+chart's field and its three choices as codes.
+
+When the press or server turns that chart on, a French (Canada) reader
+of a book's or a preprint's page sees a code as the chart's heading, and
+the months read "##plugins.themes.default.displayStats.monthInitials##
+2026" for January and "undefined 2026" for every other month. The
+download counts show, but not which month they belong to. The settings
+save and work.
+
+It happens on a press or preprint server that offers French (Canada);
+the chart is off until the manager picks one of its two chart types. A
+journal is not affected: its theme texts are translated, and the codes
+its "Thème" shows are texts new on `main` that await translation in
+every language. French (France) has nearly all the press's texts, but on
+a preprint server 9 of the other 16 languages lack the chart's texts
+too, French (France), Spanish and Portuguese among them. No code
+changes: PKP's French (Canada) translators, or a PKP developer with an
+account, enter the missing texts on PKP's translation platform. Basis:
+probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A refused file locks the upload box and the tab's "Save"** · 🐞 · user-visible.
+**A7 — After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled** · 🐞 · medium.
 A manager who picks a ".pdf" for "Logo" with "Upload File" sees "You
 can't upload files of this type." in the box and expects to pick another
-file. The box keeps an empty frame with no "Remove", its "Upload File" is
-disabled, and so is the tab's "Save", with "Please correct one error. Go
-to Logo: You can't upload files of this type. Jump to next error" at the
-form's foot. Only a picture dragged onto the box turns both back on; a
-manager who uses the button alone has to leave the page, losing every
-other change on the tab. "Favicon" and the style sheet behave the same.
-Basis: probe. <sup>f-a7</sup>
+file. Instead the box keeps an empty frame with no visible "Remove". Its
+"Upload File" is disabled, and so is the tab's "Save", and the form's
+foot reads:
+
+"Please correct one error. Go to Logo: You can't upload files of this
+type. Jump to next error"
+
+Only a file of the right type dragged onto the box turns both back on. A
+manager who never drags a file has to reload the page, losing every
+other unsaved change on the tab. "Favicon" and the style sheet behave
+the same, as does every upload box of the settings and publication forms
+when it refuses a file. Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The "3:05PM" time choice prints in lower case** · 🐞 · minor.
@@ -1330,15 +1367,17 @@ case instead: a library file uploaded at 7:17 in the evening reads
 "2026-09-24 7:17pm" under "Date uploaded". Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — An empty "Custom" under "Date (Short)" strips the date from editorial dates** · 🐞 · user-visible.
-A manager who picks "Custom" under "Date (Short)", leaves its box empty
-and presses "Save" sees "Saved", and the public dates fall back to
-"2026-09-24" as Rule 33 says. But "Date & Time (Short)" is saved as the
-time alone: on the next load that group sits on "Custom" with "h:i A" in
-its box, and the editorial dates print with no date (a file's note reads
-"07:17 PM", a library file's "Date uploaded" "07:17 PM"). Choosing
-another "Date (Short)" does not bring the date back; the manager has to
-pick the group's ready choice and save again. Basis: probe.
+**A9 — After a manager saves an empty "Custom" short date, editorial dates show only the time** · 🐞 · medium.
+A manager opens Settings › Website › "Date & Time", picks "Custom" under
+"Date (Short)", leaves its box empty and presses "Save". "Saved" shows,
+and the short dates go back to the installation's default. But the same
+save also rewrites "Date & Time (Short)", a group the manager never
+touched, to the time alone.
+
+From then on every editorial timestamp that uses "Date & Time (Short)"
+shows no date: a discussion message reads "11:58 AM" instead of
+"2026-10-02 11:58 AM". Nothing on the page says so, and choosing another
+"Date (Short)" does not bring the date back. Basis: probe, 2026-10-03.
 <sup>f-a9</sup>
 
 <a id="a10"></a>
@@ -1367,11 +1406,22 @@ press or preprint server manager is told the list orders a journal's
 ("la revue") editorial team page. Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The French upload boxes invite a drop in English** · 🐞 · minor.
+**A12 — In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English** · 🐞 · low.
 A manager working in French expects the upload boxes in French, as their
 button "Téléverser un fichier" is. The drop area of every upload box on
-"Setup" and "Advanced" reads "Drop files here to upload" in English, on
-all three apps. Basis: probe. <sup>f-a12</sup>
+"Setup" and "Advanced" reads "Drop files here to upload" in English.
+
+A file the box refuses gets the English message "You can't upload files
+of this type.", and the "Remove file" link on the refused file's frame
+is English too.
+
+The same holds for every interface language other than English, and for
+every upload box built on the same component: the pictures of
+announcements, categories, highlights, the site's appearance settings,
+an article's or preprint's cover image and a book's cover. The
+submission wizard's file upload shows the same English drop text while a
+file is dragged over it, and the same English refusals. Basis: probe,
+2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — The default French date keeps the English word order** · ❓ · minor.
@@ -1479,13 +1529,17 @@ adds "Show Series": the catalog is a press's home for its books, and a
 journal and a preprint server have none. Basis: code. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — A press's category page has no way past its first page** · 🐞 · user-visible.
-A category holding more books than "Items per page" heads its page with
-the full count ("3 Titles" at "Items per page" 1) but shows only the
-first page's books, with no page numbers and no "Previous" or "Next", so
-a visitor cannot reach the rest. The catalog pages the same books with
-"Next", and a journal's and a preprint server's category pages carry page
-numbers. Basis: probe. <sup>f-omp2</sup>
+**OMP2 — A press's category page shows only its first page of books, with no way to the rest** · 🐞 · medium.
+A visitor who opens a press's category holding more books than the
+press's "Items per page" (25 unless the press changes it) sees the
+category's full count but only the first page's books. There are no page
+numbers and no "Previous" or "Next" under them, so the visitor cannot
+reach the rest of the category from its page.
+
+No book or data is lost, but nothing on the page says the list is cut
+short. Visitors can still find the other books through the catalog,
+their series' pages or the search. Basis: probe, 2026-10-03.
+<sup>f-omp2</sup>
 
 ### OPS
 
@@ -1975,6 +2029,7 @@ from the journal's template in `c8046900c3`, 2021-02-14) kept
 apps: typed "Home picture" (and "Our building"), the journal's picture
 read the typed text, the press's and the server's `alt=""`; the tab
 still held the text after a reload.
+Issue report: [pkp-e2e#775](https://github.com/jardakotesovec/pkp-e2e/issues/775) ([docs/issues/U10-A1-homepage-image-alt-text-dropped.md](../issues/U10-A1-homepage-image-alt-text-dropped.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Seen 2026-09-23 in passing on all three apps (twice): the
@@ -1992,6 +2047,7 @@ announced "{role} Decrease position of {role}". Re-probed 2026-09-29 (all three 
 runs): unchanged; the two masthead boxes carry their own names only
 ("Present a masthead based on user enrollments", "Enable listing of
 reviewers on the masthead").
+Issue report: [pkp-e2e#776](https://github.com/jardakotesovec/pkp-e2e/issues/776) ([docs/issues/U10-A3-appearance-ordering-arrows-misnamed.md](../issues/U10-A3-appearance-ordering-arrows-misnamed.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note s: the stored value keeps the disabled block's name, the
@@ -2041,6 +2097,7 @@ ancien)", "Date de publication (du plus récent)"; its "Advanced"
 "##manager.setup.coverThumbnailsMaxHeight##", each over
 "##manager.setup.coverThumbnailsMaxWidthHeight.description##". A
 journal's and a server's "Setup" and "Advanced" showed none.
+Issue report: [pkp-e2e#777](https://github.com/jardakotesovec/pkp-e2e/issues/777) ([docs/issues/U10-A6-french-appearance-settings-raw-keys.md](../issues/U10-A6-french-appearance-settings-raw-keys.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-24 on all three apps ("Logo", "Favicon",
@@ -2049,6 +2106,7 @@ an empty frame, its "Upload File" and the form's "Save" were disabled,
 and the foot line stayed; a picture dropped on the box cleared the
 error and enabled both. A file dropped rather than picked is refused
 the same way, with nothing sent.
+Issue report: [pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772) ([docs/issues/U10-A7-refused-upload-locks-box.md](../issues/U10-A7-refused-upload-locks-box.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note j: the label is luxon's rendering of `g:ia`, the pages
@@ -2063,6 +2121,7 @@ saved; the tab then showed "2026-09-24" marked under "Date (Short)" and
 "Custom" with "h:i A" under "Date & Time (Short)"; a library file's "Date
 uploaded" read "07:17 PM" (all three) and a file's note "admin admin
 07:17 PM" (OJS, OMP).
+Issue report: [pkp-e2e#773](https://github.com/jardakotesovec/pkp-e2e/issues/773) ([docs/issues/U10-A9-date-short-empty-custom-strips-editorial-dates.md](../issues/U10-A9-date-short-empty-custom-strips-editorial-dates.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note l. Live-probed 2026-09-28 (Rules 2, 6, 6a; all three
@@ -2109,6 +2168,7 @@ affected (only French driven). Live-probed 2026-09-28 (Rule 35a; all
 three apps, two runs): "Logo", the thumbnail and "Homepage Image" on
 "Setup" and the style sheet and "Favicon" on "Advanced" each read "Drop
 files here to upload" beside "Téléverser un fichier".
+Issue report: [pkp-e2e#778](https://github.com/jardakotesovec/pkp-e2e/issues/778) ([docs/issues/U10-A12-upload-boxes-drop-text-english.md](../issues/U10-A12-upload-boxes-drop-text-english.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Each app's configuration file has one `[general]`
@@ -2204,6 +2264,7 @@ Live-probed 2026-09-24, two runs: at "Items per page" 1 a press category
 holding three books showed "3 Titles" and one book with no page links,
 while the catalog showed one book with "Next"; on a journal and a
 server a category of two items read "1 - 1 of 2 items 1 2 > >>".
+Issue report: [pkp-e2e#774](https://github.com/jardakotesovec/pkp-e2e/issues/774) ([docs/issues/U10-OMP2-press-category-page-no-page-links.md](../issues/U10-OMP2-press-category-page-no-page-links.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — OPS `IndexHandler::index()` and `indexServer.tpl` (notes m,
