@@ -1204,6 +1204,7 @@ Left out of the scenarios above, by reason:
   - on a journal, the menu's "Edit" window: "Subscriptions" and "My Subscriptions" carry the crossed-out eye and open their notices (Rule 7a; the guard [OJS1](#ojs1)'s issue report proposes)
   - a press's item window in French (Canada): the press's own types, their descriptions and the series and category lists read French (the guard [A24](#a24)'s issue report proposes)
   - a preprint server's French (Canada) pages with the "Developed By" block placed: its heading reads "Développé par" (the guard [OPS3](#ops3)'s issue report proposes)
+  - a preprint server's settings address typed with the site's path: the refusal names the missing server in words a user understands, as a journal's and a press's do (Rule 26c; the guard [OPS4](#ops4)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1303,7 +1304,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | Menu window marks "Subscriptions" and "My Subscriptions" items with no eye, so their notices never show {OJS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | {OPS} On a preprint server's French (Canada) pages, screen readers hear the "Developed By" heading as a text key | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OPS4](#ops4) | A server's settings address opened at the site's level reads "No server in context!" {OPS} | 🐞 | minor | — |
+| [OPS4](#ops4) | {OPS} A server's settings address typed with the site's path refuses with "No server in context!", which says nothing a user understands | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | The "About" item's notice promises a condition the header never applies | ❓ | minor | — |
 | [A8](#a8) | A menu can only be arranged with a mouse | ❓ | user-visible | — |
 | [A9](#a9) | Items saved three levels deep never show in the header | ❓ | latent | — |
@@ -1726,14 +1727,24 @@ those are outside this report's fix.
 Basis: probe, 2026-10-03. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
-**OPS4 — The site-level refusal reads "No server in context!"** · 🐞 · minor.
-A settings address opened at the site's level (Rule 26c) tells a
-journal's or press's user what went wrong:
-"No journal was found that matched your request." ("No press was found
-that matched your request."). On a preprint server the same page reads
-"No server in context!", wording that does not tell the user that the
-address names no server.
-Basis: probe. <sup>f-ops4</sup>
+**OPS4 — A server's settings address typed with the site's path refuses with "No server in context!", which says nothing a user understands** · 🐞 · low.
+A preprint server's settings page has a **site-level address** when the
+server's path in it is replaced by `index`, the site's own path: for
+Settings › Website, `/index.php/index/en/management/settings/website`
+instead of `/index.php/publicknowledge/en/management/settings/website`.
+The Site Administrator and the server's manager who open it get the
+access-denied page reading "No server in context!". A signed-out
+visitor gets the Login page first, and the same page after signing in.
+
+"In context" is a developer's word: the sentence does not tell the user
+that the address names no server. A journal and a press say so on the
+same page: "No journal was found that matched your request." ("No
+press was found that matched your request."). OJS and OMP reworded
+their sentence in 2022; OPS was left out.
+
+The user reaches a site-level address by typing or editing it, and the
+server's own address opens the page.
+Basis: probe, 2026-10-03. <sup>f-ops4</sup>
 
 ### Retired
 
@@ -3055,6 +3066,7 @@ Issue report: [docs/issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md](
 `user.authorization.noContext` reads "No server in context!"; it is the
 locale's own text, not a missing key. Live-probed 2026-09-29, two runs,
 OPS, with OJS and OMP the control.
+Issue report: [docs/issues/U08-OPS4-server-site-level-refusal-wording.md](../issues/U08-OPS4-server-site-level-refusal-wording.md).
 
 ## Reference — entry points & surfaces
 

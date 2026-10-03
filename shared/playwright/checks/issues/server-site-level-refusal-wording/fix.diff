@@ -1,0 +1,11 @@
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -480,7 +480,7 @@
+ msgstr "Awaiting Galleys."
+ 
+ msgid "user.authorization.noContext"
+-msgstr "No server in context!"
++msgstr "No server was found that matched your request."
+ 
+ msgid "notification.type.approveSubmission"
+ msgstr "This submission is currently awaiting approval."
