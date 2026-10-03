@@ -701,6 +701,10 @@ Left out of the scenarios above, by reason:
     or-author-response-refused.md`): an assigned Funding coordinator
     sees no "Request Response" and no "Delete" on the "Author Response"
     table, and "View" opens the response read-only
+  - the guard for A4 (issue report `docs/issues/U30-A4-request-author-re
+    sponse-typed-address-returns-nowhere.md`): the "Request Author
+    Response" page opened by its address, without a return address, then
+    "Cancel", the sent dialog's link and Escape each open the submission
 - **Nothing new to test**:
   - Site Administrator (the Journal Manager's offer, scenarios 1 and 3)
   - Guest Editor (the Section Editor's gate, scenario 6)
@@ -735,7 +739,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Editors' "Author Response" table still reads "Ready to invite author" after the request was sent | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | A Funding coordinator is offered "Request Response" and "Delete" on "Author Response", then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A4](#a4) | The request page opened by a typed address returns nowhere on "Cancel" and after sending | 🐞 | minor | — |
+| [A4](#a4) | "Request Author Response" page opened by its address: "Cancel" and the sent dialog lead to "404 Not Found" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | An emptied "Subject" or "Message" is refused with "An unexpected error has occurred." | 🐞 | minor | — |
 | [A7](#a7) | The decision email's "Submit Author Response" leads nowhere once revisions are uploaded | 🐞 | user-visible | — |
 | [A9](#a9) | In French the "Author Response" table, the author's card, both windows and the request page show raw codes such as "##submission.reviewRound.authorResponse##" | 🐞 | minor | — |
@@ -797,14 +801,22 @@ coordinator keeps "View", which then shows the response to read.
 Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A typed request-page address returns nowhere** · 🐞 · minor. The
-request page reached from "Request Response" returns to the workflow
-screen on "Cancel" and from the sent dialog. Reached by its typed address,
-"Cancel" lands on a page reading only "404 Not Found"; "Submit Request"
-sends the email, but the sent dialog's only control, "View Submission", is
-plain text that does nothing, and Escape lands on the same "404 Not Found"
-page, so the editor navigates back by hand. The same on a press, where the
-page is reachable only this way. Basis: probe. <sup>f-a4</sup>
+**A4 — "Request Author Response" page opened by its address: "Cancel" and the sent dialog lead to "404 Not Found"** · 🐞 · low.
+An editor who opens the "Request Author Response" page by its address,
+rather than through "Request Response" on the round, has nowhere to go
+back to. "Cancel" lands on a page reading only "404 Not Found".
+"Submit Request" sends the email, but the sent dialog's only control,
+"View Submission", is plain text that does nothing, and closing the
+dialog with Escape lands on the same "404 Not Found" page.
+
+The request still goes out, and the editor finds the way back by hand.
+
+Nothing in the app links to the page without the return address, so a
+journal editor meets this only from a bookmark or a copied address. A
+press has no way to the page from its screens at all, so there too only
+someone who has the address reaches it, which is rare. The fix lets the
+page fall back to the submission's address it already receives.
+Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — An emptied subject or message gets a generic error** · 🐞 · minor.
@@ -1015,6 +1027,7 @@ Issue report: [pkp-e2e#812](https://github.com/jardakotesovec/pkp-e2e/issues/812
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note f: `getReturnUrlToSubmissionSummary()` returns `null` without `ret`; `cancelResponseRequest()` sets `window.location.href = null` and the dialog's action gets `href: null` with the label `submission.list.viewSubmission`. Live-probed 2026-09-06 (note o): `reviewResponse/null` renders "404 Not Found"; the dialog's anchor has no `href` and a press on it changes nothing; the same on OMP.
+Issue report: [pkp-e2e#813](https://github.com/jardakotesovec/pkp-e2e/issues/813) ([docs/issues/U30-A4-request-author-response-typed-address-returns-nowhere.md](../issues/U30-A4-request-author-response-typed-address-returns-nowhere.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note f: `RequestAuthorResponse` refuses a missing `subject` or `body` with 422, and `RequestReviewRoundAuthorResponse.vue` routes every non-2xx answer of "Submit Request" to `openDialogNetworkError` (the generic "Error" dialog) instead of `setErrors` on the composer, so the field-level message never shows. Live-probed 2026-09-06: two 422s, the same dialog both times, the page's content intact after "OK".
