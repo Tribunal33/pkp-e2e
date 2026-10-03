@@ -2702,7 +2702,7 @@ text "##common.help##" beside "Tasks" in the dashboard header, in the side
 windows' strips (the "Assign Participant" window, the upload wizard, the
 workflow windows) and in legacy windows' and the Settings › Workflow
 page's headers.
-Issue report: [docs/issues/U08-A1-help-icon-raw-key-name.md](../issues/U08-A1-help-icon-raw-key-name.md).
+Issue report: [docs/issues/U08-A1-help-icon-raw-key-name.md](../issues/U08-A1-help-icon-raw-key-name.md), filed as [pkp-e2e#640](https://github.com/jardakotesovec/pkp-e2e/issues/640).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `PKPNavigationMenuService::getDisplayStatus()`,
