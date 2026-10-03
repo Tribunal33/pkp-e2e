@@ -2349,7 +2349,7 @@ them (note td23).
 **f-a11** — Notes k and m: the export writes `ROWSalesRightsType` under
 `PublishingDetail`, the import looks for it inside each `SalesRights`
 element. Live-probed 2026-09-28 (A11), three runs: note td24.
-Issue report: [docs/issues/U74-A11-native-import-unticks-rest-of-world.md](../issues/U74-A11-native-import-unticks-rest-of-world.md).
+Issue report: [pkp-e2e#713](https://github.com/jardakotesovec/pkp-e2e/issues/713) ([docs/issues/U74-A11-native-import-unticks-rest-of-world.md](../issues/U74-A11-native-import-unticks-rest-of-world.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note e. Live-probed 2026-09-28 (A12), two runs: note td12;
@@ -2392,8 +2392,8 @@ from a stored returnable code and `ProductAvailability` 20 when none is
 stored; the import reads neither back. The tab's preselected choices
 are *Publication formats & proof terms*' screen. Live-probed 2026-09-28
 (A18), two runs: notes td23 and td24.
-Issue report: [docs/issues/U74-A18-unsaved-format-states-no-returns-condition.md](../issues/U74-A18-unsaved-format-states-no-returns-condition.md).
-Issue report: [docs/issues/U74-A18-native-import-resets-returns-and-availability.md](../issues/U74-A18-native-import-resets-returns-and-availability.md).
+Issue report: [pkp-e2e#715](https://github.com/jardakotesovec/pkp-e2e/issues/715) ([docs/issues/U74-A18-unsaved-format-states-no-returns-condition.md](../issues/U74-A18-unsaved-format-states-no-returns-condition.md)).
+Issue report: [pkp-e2e#712](https://github.com/jardakotesovec/pkp-e2e/issues/712) ([docs/issues/U74-A18-native-import-resets-returns-and-availability.md](../issues/U74-A18-native-import-resets-returns-and-availability.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Notes k and m: an export without a supplier writes the
@@ -2404,8 +2404,8 @@ book's page (29), came back with no website; "Sigma Supply", exported
 with the book's page alone, came back with it. The re-export on the
 importing press named the exporting press's name, email and home page
 as the supplier.
-Issue report: [docs/issues/U74-A19-native-import-adds-press-as-supplier.md](../issues/U74-A19-native-import-adds-press-as-supplier.md).
-Issue report: [docs/issues/U74-A19-native-import-changes-supplier-websites.md](../issues/U74-A19-native-import-changes-supplier-websites.md).
+Issue report: [pkp-e2e#714](https://github.com/jardakotesovec/pkp-e2e/issues/714) ([docs/issues/U74-A19-native-import-adds-press-as-supplier.md](../issues/U74-A19-native-import-adds-press-as-supplier.md)).
+Issue report: [pkp-e2e#711](https://github.com/jardakotesovec/pkp-e2e/issues/711) ([docs/issues/U74-A19-native-import-changes-supplier-websites.md](../issues/U74-A19-native-import-changes-supplier-websites.md)).
 
 ## Reference — entry points & surfaces
 
