@@ -2233,7 +2233,7 @@ Issue report: [docs/issues/U65-OMP1-internal-review-decline-not-counted-declined
 <a id="fn-f-omp2"></a>
 **f-omp2** — `stats.description.daysToDecision` in lib/pkp
 `locale/en/manager.po`; OMP's locale files do not override it. Live-probed 2026-09-28: td4.
-Issue report: [docs/issues/U65-OMP2-press-days-to-decision-text-your-journal.md](../issues/U65-OMP2-press-days-to-decision-text-your-journal.md).
+Issue report: [docs/issues/U65-OMP2-press-days-to-decision-text-your-journal.md](../issues/U65-OMP2-press-days-to-decision-text-your-journal.md), filed as [pkp-e2e#653](https://github.com/jardakotesovec/pkp-e2e/issues/653).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn o (`retrieveLimits()`). Live-probed 2026-09-28: td13.
