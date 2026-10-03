@@ -1,0 +1,59 @@
+--- a/lib/ui-library/src/components/Form/fields/Autosuggest.vue
++++ b/lib/ui-library/src/components/Form/fields/Autosuggest.vue
+@@ -30,6 +30,8 @@
+ 		class="pkpAutosuggest__autosuggester"
+ 		as="div"
+ 		@update:model-value="selectSuggestion"
++		@blur.capture="handleLeave"
++		@keydown.capture="handleKeydown"
+ 	>
+ 		<ComboboxInput
+ 			class="pkpAutosuggest__input"
+@@ -220,17 +222,47 @@
+ const localInputValue = ref('');
+ const isFocused = ref(false);
+ 
++/**
++ * Whether the user is leaving the input without picking a suggestion.
++ *
++ * The Combobox selects its active option, which is the first suggestion
++ * until the user moves the highlight, when the input loses focus or Tab
++ * is pressed. Only a click on a suggestion or Enter picks one. A field
++ * that allows custom values keeps that behaviour, because its first
++ * option is the text the user typed.
++ */
++let isLeaving = false;
++
+ function handleChange(event) {
+ 	localInputValue.value = event.target.value.trim();
+ 	emit('update:inputValue', localInputValue.value);
+ }
+ 
+ function handleFocus(state) {
++	if (state) {
++		isLeaving = false;
++	}
+ 	isFocused.value = state;
+ 	emit('focus-changed', state);
+ }
+ 
++function handleLeave(event) {
++	if (props.allowCustom || event.currentTarget.contains(event.relatedTarget)) {
++		return;
++	}
++	isLeaving = true;
++}
++
++function handleKeydown(event) {
++	if (event.key === 'Tab' && !props.allowCustom) {
++		isLeaving = true;
++	}
++}
++
+ function selectSuggestion(suggestion) {
++	if (isLeaving) {
++		return;
++	}
+ 	emit('select-suggestion', suggestion);
+ }
+ 
