@@ -1322,6 +1322,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U27-A40-press-competing-interests-save-submits-review.md`):
     on a press, "Save Changes" with only a competing-interests declaration
     on an unanswered request keeps the row "Request Sent"
+  - the guard for A13 (issue report
+    `docs/issues/U27-A13-email-reviewer-sends-empty-body.md`):
+    "Email Reviewer" sent with a Subject and an empty Body is refused with
+    "Please provide the email body text.", and no email reaches the
+    reviewer
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1409,7 +1414,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | Editors see no "Response due" date on a reviewer's "Request Sent" row in the Reviewers table | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Submitting inverted due dates is refused with no message; the form just stays open | 🐞 | user-visible | — |
 | [A12](#a12) | A reviewer who unsubscribes through the "Your review assignment has been changed" email keeps getting it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A13](#a13) | Email Reviewer sends with an empty body despite the body being marked required | 🐞 | minor | — |
+| [A13](#a13) | Email Reviewer with an empty Body sends the reviewer a blank email and leaves the window stuck | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | An editor who empties the review request letter gets no answer, while a blank invitation goes to the reviewer | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
@@ -1628,11 +1633,18 @@ screen can record that choice. Basis: probe, 2026-10-03.
 <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
-**A13 — Email Reviewer enforces only the subject** · 🐞 · minor.
-The window marks both Subject and Body required, but filling only the
-Subject sends the email with an empty body. With both empty, the only error
-shown is "This field is required." under Subject. The body never shows one.
-Basis: live probe (both apps). <sup>[f-a13](#fn-a13)</sup>
+**A13 — Email Reviewer with an empty Body sends the reviewer a blank email and leaves the window stuck** · 🐞 · medium · crash: server.
+The "Email Reviewer" window opens with an empty Body and marks both
+Subject and Body as required, but only the Subject is checked. When an
+editor writes a Subject and sends, the reviewer receives a blank email,
+and the server then fails. The window stays open, says nothing, and its
+"Send Email" button stays greyed out. The editor cannot tell that the
+email went out, and it is missing from the submission's email log.
+Closing the window and sending again sends the reviewer another blank
+email. With both fields empty, the only error shown is "This field is
+required." under Subject. The Body never shows one. Basis: probe,
+2026-10-03.
+<sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
 **A14 — Retired: the enroll "required" error is ordinary validation** · ✅ ·
@@ -3173,6 +3185,7 @@ mail with an empty body on both apps; a both-empty submit showed "This
 field is
 required." under Subject only — the body's error node never renders
 (note l).
+Issue report: [docs/issues/U27-A13-email-reviewer-sends-empty-body.md](../issues/U27-A13-email-reviewer-sends-empty-body.md).
 
 <a id="fn-a14"></a>
 **f-a14** — Disproof live-probed 2026-08-02 (claim check; OJS, the sequence
