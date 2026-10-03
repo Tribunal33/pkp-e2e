@@ -1962,7 +1962,7 @@ online." (fn-l).
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn-o: `$press` assigned, `$journal` filtered. Judgment from
 the tool's source; not run.
-Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md).
+Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md), filed as [pkp-e2e#727](https://github.com/jardakotesovec/pkp-e2e/issues/727).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — fn-b, fn-f, fn-g: `omp/templates/frontend/pages/search.tpl`
@@ -2004,7 +2004,7 @@ the setting; every actor got the Search page and the archive box, no
 <a id="fn-f-ops3"></a>
 **f-ops3** — fn-o: `$server` assigned, `$journal` filtered. Judgment from
 the tool's source; not run.
-Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md).
+Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md), filed as [pkp-e2e#727](https://github.com/jardakotesovec/pkp-e2e/issues/727).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — fn-c, fn-s12. Suite run of 2026-09-13 on a scratch server,
