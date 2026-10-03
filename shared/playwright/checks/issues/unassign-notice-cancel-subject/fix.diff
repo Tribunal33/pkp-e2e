@@ -1,0 +1,12 @@
+--- a/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
++++ b/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
+@@ -717,8 +717,8 @@
+             $reviewer = Repo::user()->get($reviewAssignment->getReviewerId());
+             $user = $request->getUser();
+             $context = app()->get('context')->get($submission->getData('contextId'));
+-            $template = Repo::emailTemplate()->getByKey($context->getId(), ReviewCancel::getEmailTemplateKey());
+             $mailable = $form->getMailable($context, $submission, $reviewAssignment);
++            $template = Repo::emailTemplate()->getByKey($context->getId(), $mailable::getEmailTemplateKey());
+ 
+             if ($this->createMail($mailable, $request->getUserVar('personalMessage'), $template, $user, $reviewer)) {
+                 $eventType = $mailable instanceof ReviewCancel ? SubmissionEmailLogEventType::REVIEW_CANCEL : SubmissionEmailLogEventType::REVIEWER_UNASSIGN;

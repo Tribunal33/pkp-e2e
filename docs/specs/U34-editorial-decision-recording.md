@@ -1147,7 +1147,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | "Revert Decline" typed by address on a submission never declined records it and emails the author | 🐞 | minor | — |
 | [A9](#a9) | A Section Editor's "Find Template" answers an "Error" window and no results | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | "Waive" on "Request Payment" requests the fee like "Request publication fee" | 🐞 | user-visible | — |
-| [OMP1](#omp1) | A press's "Review Cancel" email reads "{$journalName}" where the press's name should be | 🐞 | minor | — |
+| [OMP1](#omp1) | A press's "Review Cancel" email reads "{$journalName}" where the press's name should be | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | "Insert Content" describes the server's initials with an untranslated key | 🐞 | minor | — |
 | [A1](#a1) | "Create New Review Round" opens a wizard headed "New Review Round" | ❓ | minor | — |
 | [A2](#a2) | A decision with no author assigned opens a wizard with no page, and its closing window still reports an email | ❓ | minor | — |
@@ -1301,11 +1301,11 @@ Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — The press's "Review Cancel" email leaves "{$journalName}" unfilled** · 🐞 · minor.
+**OMP1 — The press's "Review Cancel" email leaves "{$journalName}" unfilled** · 🐞 · low.
 A reviewer emailed by "Cancel Review Round" on a press reads "…agreeing to
 review "{title}" for {$journalName}." where the press's name should be; a
 journal's reviewer reads the journal's name.
-Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+Basis: probe, 2026-10-03. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -1468,6 +1468,7 @@ their own dates.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: OMP's `locale/en/emails.po` `emails.reviewCancel.body` still reads "{$journalName}", a variable `ReviewCancel` does not carry (`contextName` is the one it has). Live-probed 2026-09-20: the press's email "…agreeing to review "{title}" for {$journalName}."; the journal's names the journal.
+Issue report: [docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md](../issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md).
 
 ## Reference — entry points & surfaces
 

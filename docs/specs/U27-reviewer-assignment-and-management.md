@@ -1300,6 +1300,10 @@ Left out of the scenarios above, by reason:
     competing-interests answer changed to a statement and back reads
     "declared: NO" for "I do not have any competing interests" in each "View
     changes"
+  - the guard for A26 (issue report
+    `docs/issues/U27-A26-unassign-notice-cancel-subject.md`): an unanswered
+    reviewer removed with "Unassign Reviewer" gets the notice under its own
+    subject, "Your reviewer assignment for "{title}" has been removed"
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1395,8 +1399,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A21](#a21) | A rating star pressed just after the Review Details window opens is saved, yet the open window can fall back to "No rating" | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
 | [A22](#a22) | The Review Details window tells the editor to "upload the file below", but it has no upload control | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split, and a reviewer of the other stage picked from it is added to the round; only searching filters by stage | 🐞 | user-visible | — |
-| [A26](#a26) | The unassign notice reaches the reviewer under the cancel notice's subject, "Your review for "{title}" has been cancelled" | 🐞 | minor | — |
-| [OMP3](#omp3) | {OMP} The unassign notice's body prints "{$journalName}" literally where the press's name belongs | 🐞 | minor | — |
+| [A26](#a26) | A reviewer removed with "Unassign Reviewer" gets the email under the subject "Your review … has been cancelled" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [OMP3](#omp3) | {OMP} A press's reviewer removal and cancel emails print "{$journalName}" where the press's name belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | minor | — |
 | [A31](#a31) | An assistant-level participant is offered "Modify Review", and "Save Changes" answers "The current role does not have access to this operation." | 🐞 | minor | — |
 | [OMP4](#omp4) | {OMP} "Mark as Complete" is enabled on a request with no review; confirming records a completed review nobody wrote and leaves the reviewer on a first step that offers nothing | 🐞 | user-visible | — |
@@ -1753,14 +1757,19 @@ Since: 2026-08-29 (the modify-reviews rework) · Basis: probe.
 <sup>[f-a23](#fn-a23)</sup>
 
 <a id="a26"></a>
-**A26 — The unassign notice arrives under the cancel notice's subject** · 🐞 · minor.
-An unanswered reviewer removed with "Unassign Reviewer" gets an email whose
-subject reads "Your review for "{title}" has been cancelled" over the
-removal wording ("…you have been removed from the reviewer assignment for
-"{title}"…"). The unassign notice's own subject, "Your reviewer assignment
-for "{title}" has been removed", is never sent. The reviewer is told two
-different things in one message.
-Basis: test run. <sup>[f-a26](#fn-a26)</sup>
+**A26 — A reviewer removed with "Unassign Reviewer" gets the email under the subject "Your review … has been cancelled"** · 🐞 · low.
+An editor who removes a reviewer who has not yet answered, with
+"Unassign Reviewer", sends the reviewer an email whose subject reads
+"Your review for "{title}" has been cancelled", the subject of the
+"Review Cancel" email. The text under it is the removal notice ("…you
+have been removed from the reviewer assignment for "{title}"…"). The
+subject of the "Reviewer Unassign" email, "Your reviewer assignment for
+"{title}" has been removed", is never sent. So the subject tells the
+reviewer their review was cancelled, while the text says they were
+removed from the assignment. A manager who edits the subject of
+"Reviewer Unassign" under Settings › Workflow › Emails sees the edit
+ignored. The removal itself and the notice's text are right. Basis:
+probe, 2026-10-03. <sup>[f-a26](#fn-a26)</sup>
 
 <a id="a28"></a>
 **A28 — "Reviews completed" hides the never-assigned reviewers** · ❓ · minor.
@@ -2004,13 +2013,18 @@ from the opening list driven on Internal Review).
 <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
-**OMP3 — The unassign notice prints "{$journalName}" on a press** · 🐞 ·
-minor.
-On a press, the removal notice's sentence "…you have been removed from the
-reviewer assignment for "{title}" in {$journalName}." reaches the reviewer
-with that placeholder printed literally where the press's name belongs. On
-a journal the same sentence carries the journal's name.
-Basis: test run. <sup>[f-omp3](#fn-omp3)</sup>
+**OMP3 — A press's reviewer removal and cancel emails print "{$journalName}" where the press's name belongs** · 🐞 · low.
+On a press, the emails a reviewer receives when an editor removes them
+("Unassign Reviewer"), cancels their review ("Cancel Reviewer") or
+cancels the review round ("Cancel Review Round") print "{$journalName}"
+literally where the press's name belongs: "…you have been removed from
+the reviewer assignment for "{title}" in {$journalName}." and "Thank you
+for agreeing to review "{title}" for {$journalName}." A journal's
+reviewers read the journal's name in the same sentences. "Cancel
+Reviewer" and "Cancel Review Round" both send the "Review Cancel"
+template, and "Unassign Reviewer" sends "Reviewer Unassign", so the two
+templates carry the fault for all three actions. Basis: probe,
+2026-10-03. <sup>[f-omp3](#fn-omp3)</sup>
 
 <a id="omp4"></a>
 **OMP4 — A press marks complete a review nobody wrote** · 🐞 ·
@@ -3372,6 +3386,7 @@ so `ReviewerUnassign`'s own REVIEWER_UNASSIGN subject (installed by
 `I12903_ReviewerUnassignEmailTemplate`, note k) never reaches the mail. The
 suites match the removal mail by recipient and title (OJS) or body (OMP)
 and assert the subject neither way.
+Issue report: [docs/issues/U27-A26-unassign-notice-cancel-subject.md](../issues/U27-A26-unassign-notice-cancel-subject.md).
 
 <a id="fn-a27"></a>
 **f-a27** — Test run 2026-09-12 (OJS and OMP, scenario 9, one run each):
@@ -3710,6 +3725,7 @@ place. The template text is the same in both apps' own `locale/en/emails.po`
 (`emails.reviewerUnassign.body`, the 2026-08 unassign template of note k):
 it names `{$journalName}`, the journal-only variable, where the app-neutral
 context-name variable belongs, so a press leaves the placeholder as typed.
+Issue report: [docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md](../issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md).
 
 <a id="fn-omp4"></a>
 **f-omp4** — Driven 2026-09-17 (OMP, three runs; OJS as the control): on

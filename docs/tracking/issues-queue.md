@@ -24,7 +24,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U39](../specs/U39-submission-and-publisher-libraries.md) | 8 | 1 | 1 | **Taken: issues session, workstation s0, 2026-10-03** |
-| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, VM s2, 2026-10-03**; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md); A18 done; A22, OMP6, A39 done |
+| [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, VM s2, 2026-10-03**; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md); A18 done; A22, OMP6, A39 done; A26, OMP3 done |
 | [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (pkp-e2e#258) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
 | [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md); A1's "offered before the review is complete" half done with U27 A1 (docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md); its "confirms in silence" half (a press, a public-API journal) open |
@@ -44,7 +44,7 @@ and the hourly routine starts one only when none is running
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A5 done with U75 A11 (pkp-e2e#675) |
-| [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | **OMP1 taken: issues session, VM s2, 2026-10-03** (joined to U27 OMP3) |
+| [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md) |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (pkp-e2e#619) |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
