@@ -1,0 +1,55 @@
+--- a/lib/pkp/classes/core/PKPApplication.php
++++ b/lib/pkp/classes/core/PKPApplication.php
+@@ -749,6 +749,18 @@
+     public static function getSectionIdPropName(): string
+     {
+         return 'sectionId';
++    }
++
++    /**
++     * Whether a representation holds one submission file at a time
++     *
++     * A galley in OJS and OPS points to one file, so an upload to a galley
++     * replaces that file and offers no choice. A publication format in OMP
++     * holds many files, so an upload to it may revise any one of them.
++     */
++    public static function hasSingleFileRepresentations(): bool
++    {
++        return true;
+     }
+ 
+     /**
+--- a/lib/pkp/controllers/wizard/fileUpload/form/PKPSubmissionFilesUploadBaseForm.php
++++ b/lib/pkp/controllers/wizard/fileUpload/form/PKPSubmissionFilesUploadBaseForm.php
+@@ -221,8 +221,10 @@
+                     $this->_submissionFiles = [];
+                 }
+             } else {
+-                // For representations (galleys), don't show revision selector
+-                if ($this->getAssocType() === Application::ASSOC_TYPE_REPRESENTATION) {
++                // A galley holds one file: don't show the revision selector, only the
++                // file being replaced (pkp/pkp-lib#12349). A publication format holds
++                // many files, so its uploads list them to choose from (pkp/pkp-lib#13416).
++                if ($this->getAssocType() === Application::ASSOC_TYPE_REPRESENTATION && Application::hasSingleFileRepresentations()) {
+                     if ($this->getRevisedFileId()) {
+                         // Include only the file being revised so fetch() validation passes
+                         $revisedFile = Repo::submissionFile()->get($this->getRevisedFileId());
+--- a/classes/core/Application.php
++++ b/classes/core/Application.php
+@@ -218,6 +218,16 @@
+     }
+ 
+     /**
++     * @copydoc PKPApplication::hasSingleFileRepresentations()
++     *
++     * A publication format holds many files.
++     */
++    public static function hasSingleFileRepresentations(): bool
++    {
++        return false;
++    }
++
++    /**
+      * Define if the application has customizable reviewer recommendation functionality
+      */
+     public function hasCustomizableReviewerRecommendation(): bool
