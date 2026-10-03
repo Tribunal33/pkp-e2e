@@ -997,6 +997,7 @@ Left out of the scenarios above, by reason:
   - a Custom Range ending on the day submissions arrived: "Submissions Received" counts them and the rates are not "0%" (the guard for A1, once fixed; Rules 7a, 9)
   - an editor who saved Profile › "Notifications" while the monthly email was off, and one who saved the site-level profile: each keeps the statistics row as before and gets the email (the guard for A14, once fixed; Settings bullet 1)
   - "Articles Report" of a submission with supporting agencies: its "Supporting Agencies" cell lists them (the guard for OJS1, once fixed; Rule 20d)
+  - "Articles Report" of a submission whose title holds "&", an apostrophe and an italic word: the "Title" cell reads as typed (the guard for OJS2, once fixed; Rule 20d)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1071,7 +1072,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | A press's monthly statistics email reads "Login to the the press" ("the the preprint server" on a preprint server) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty for every submission, though the agencies are filled in | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OJS2](#ojs2) | "Articles Report" writes "&" in a title as "&amp;" | 🐞 | minor | — |
+| [OJS2](#ojs2) | "Articles Report" writes article titles holding "&", an apostrophe or italics with web codes ("&amp;") | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
 | [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1347,12 +1348,26 @@ with ", " as "Keywords" are.
 Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — "&" in a title reads "&amp;"** · 🐞 · minor.
-"Articles Report" writes a title holding "&", "<" or ">" with those
-characters as web codes ("Bread &amp; Butter"), while "Abstract" and
-the press's "Monograph Report" write them plainly. Expected: the title
-as typed.
-Basis: probe. <sup>f-ojs2</sup>
+**OJS2 — "Articles Report" writes article titles holding "&", an apostrophe or italics with web codes ("&amp;")** · 🐞 · medium.
+The "Articles Report" that a journal manager or editor downloads from
+Statistics › "Reports" writes article titles with web codes in place of
+"&", "<", ">", quotes, apostrophes and formatting. "Fogelin's" reads
+"Fogelin&#039;s", and a word put in italics reads
+"&lt;i&gt;Commons&lt;/i&gt;". Only the "Title" column is affected; the
+titles are stored and shown correctly everywhere else.
+
+How often "&" is coded depends on how the title was saved. The "Title"
+box on the "Title & Abstract" page stores "&" as "&amp;", so a title
+saved there reads "&amp;amp;" in the file. A title stored with a bare
+"&" (carried over from 3.3, saved through the API, or as in PKP's test
+data, "Hansen & Pinto") reads "&amp;" once.
+
+Whoever uses the file has to find and replace the codes by hand, and
+nothing says they are there. The report has done this since OJS 3.4.0;
+3.3 stored titles as plain text and wrote them as stored. The fix is one
+line: the report codes the title a second time on export. Expected: the
+title as typed.
+Basis: probe, 2026-10-02. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
 **OJS3 — Several decisions have no name in "Articles Report"** · 🐞 · minor.
@@ -2185,6 +2200,7 @@ Issue report: [docs/issues/U65-OJS1-articles-report-supporting-agencies-empty.md
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — fn l (`htmlspecialchars()` on the title). Live-probed 2026-09-28: "Bread &amp; Butter", "A &lt; B &gt;
 C &amp; D"; the abstract and the press's title plain.
+Issue report: [docs/issues/U65-OJS2-articles-report-title-html-codes.md](../issues/U65-OJS2-articles-report-title-html-codes.md).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — fn l (`getDecisionMessage()`); OMP's `Report::getDecisionMessage()`

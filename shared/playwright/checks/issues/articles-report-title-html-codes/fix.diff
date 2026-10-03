@@ -1,0 +1,11 @@
+--- a/plugins/reports/articles/ArticleReportPlugin.php
++++ b/plugins/reports/articles/ArticleReportPlugin.php
+@@ -184,7 +184,7 @@
+             // Store the submission results
+             $results[] = [
+                 'submissionId' => $submission->getId(),
+-                'title' => htmlspecialchars($publication->getLocalizedFullTitle(null, 'html')),
++                'title' => $publication->getLocalizedFullTitle(null, 'text'),
+                 'abstract' => html_entity_decode(strip_tags($publication->getLocalizedData('abstract'))),
+                 'authors' => array_map(function ($author) {
+                     return [
