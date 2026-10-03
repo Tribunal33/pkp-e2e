@@ -1045,6 +1045,8 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a Site Administrator with no manager role in a press and a preprint server opening each Settings page from the side menu, as on a journal {OMP OPS} (A1; the guard its issue report names)
+  - a reload on a Settings side tab under a later top tab (Website › "Setup" › "Privacy Statement") keeping that side tab (A7; the guard its issue report names)
   - the masthead not based on enrollments, "Present a masthead based on user enrollments" unticked: the masthead showing under its heading only the "Editorial History" text (and a manager's "Edit" link), or nothing with that text empty, the "Editorial History" address opening the masthead, the other two groups leaving the tab, and, ticked again, both pages listing as before in the saved role order (Rule 14f; Rules 16, 21; Settings bullet 4a)
   - "Enable listing of reviewers on the masthead" at its default: no "Peer Reviewers in Previous Year" although reviews were completed last year {OJS OMP} (Rule 15; Settings bullet 4c)
   - a disabled member staying listed on both pages and under "Peer Reviewers in Previous Year" (Rule 14e; A4 retired)
@@ -1103,8 +1105,8 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | On a press or preprint server, a Site Administrator with no manager role there is offered "Settings" and refused every Settings page | 🐞 | user-visible | — |
-| [A7](#a7) | Reloading a Settings side tab opens the page's first tab instead | 🐞 | minor | — |
+| [A1](#a1) | A Site Administrator without a manager role in a press or preprint server is offered "Settings" and refused every page of it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A7](#a7) | Reloading or bookmarking a Settings side tab opens the page's first tab instead | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the "Submissions" page {OJS OMP} | 🐞 | minor | — |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A press's and a preprint server's French Masthead tab shows raw text keys in place of headings, labels and help lines {OMP OPS} | 🐞 | minor | — |
@@ -1126,16 +1128,25 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — A Site Administrator without a press or server role is refused the Settings pages** · 🐞 · user-visible.
-On a journal a Site Administrator opens every Settings page whether or
-not they hold a manager role there. On a press or a preprint server an
-administrator who holds no manager-level role there still sees "Settings"
-in the side menu, but each of its five entries ("Press" or "Server",
-"Website", "Workflow", "Distribution", "Users & Roles") answers the
-access-denied page. The applications were meant to give administrators
-the same access everywhere, and the press and server kept the old rule
-for these pages.
-Since: 2022-05-05 · Basis: probe + code reading. <sup>f-a1</sup>
+**A1 — A Site Administrator without a manager role in a press or preprint server is offered "Settings" and refused every page of it** · 🐞 · medium.
+On a journal, a Site Administrator opens every Settings page whether or
+not they hold a manager role there. On a press or a preprint server, an
+administrator who holds no manager role there still sees "Settings" in
+the side menu. But each of its five entries ("Press" or "Server",
+"Website", "Workflow", "Distribution", "Users & Roles") opens a page
+reading "The current role does not have access to this operation.".
+
+From the Administration pages the administrator can still change the
+press's name, contact, theme, languages, indexing, plugins and users.
+Everything else in Settings is closed to them: the masthead, series and
+categories, the website's pages and menus, the workflow, emails,
+licensing, DOIs and the rest of Distribution. To reach it they must first
+give themselves the manager role.
+
+Since 2022 administrators were meant to act as managers in every journal,
+press and server without holding the role, and the side menu was opened
+to them accordingly. On the press and the server these pages were not.
+Since: 2022-05-09 · Basis: probe + code reading, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Edit" offered to a role that cannot edit** · ❓ · minor.
@@ -1165,12 +1176,22 @@ Page". Question: is the word "Page" meant to be in the heading? Lean: no,
 a leftover of the heading's text. Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Reloading a Settings side tab loses it** · 🐞 · minor.
-A manager who reloads a Settings page while on a side tab (Settings ›
-Website › "Setup" › "Privacy Statement"), or bookmarks it and comes back,
-expects the same tab, as a top tab such as Settings › Journal › "Contact"
-gives. The page opens on its first tab ("Appearance" › "Theme") instead,
-on every side tab of every Settings page. Basis: probe. <sup>f-a7</sup>
+**A7 — Reloading or bookmarking a Settings side tab opens the page's first tab instead** · 🐞 · low.
+A manager who opens a side tab on a Settings page, such as Settings ›
+Website › "Setup" › "Privacy Statement", and then reloads the page or
+comes back to it from a bookmark, expects the same tab. A top tab such
+as Settings › Journal › "Contact" does come back. The side tab does not:
+the page opens on its first tab, "Appearance" › "Theme".
+
+Nothing is lost, and the manager gets back by pressing the two tabs
+again. A saved or shared link to a side tab is no use, though.
+
+It happens on the side tabs under every top tab except a page's first
+one (Website › "Setup" and "Content", Workflow › "Review",
+Distribution › "DOIs" among them), and on the inner tabs of Website ›
+"Plugins". Side tabs under a page's first top tab, such as "Appearance"
+› "Advanced", do come back.
+Since: 2023-10-02 (the move to Vue 3) · Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The not-accepting notice outlives the change** · ❓ · minor.
@@ -2375,6 +2396,7 @@ theirs at `['access']`, which is still the case at the tips (note b). The
 side menu's `settings` group is built from `permitSettings`, which the
 administrator's group has, so the offer stays. Live-probed 2026-09-23
 (all three apps): note td1.
+Issue report: [pkp-e2e#785](https://github.com/jardakotesovec/pkp-e2e/issues/785) ([docs/issues/U07-A1-admin-without-press-role-settings-refused.md](../issues/U07-A1-admin-without-press-role-settings-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `editLink.tpl` tests `ROLE_ID_MANAGER` in `$userRoles` and not
@@ -2430,6 +2452,7 @@ Live-probed 2026-09-23 (all three apps): note td14.
 stores the chosen tab's own id in the address; a side tab's id matches no
 top tab when the page loads, so the page opens its first tab;
 `#setup/privacy` names both and is then rewritten to `#privacy`.
+Issue report: [pkp-e2e#784](https://github.com/jardakotesovec/pkp-e2e/issues/784) ([docs/issues/U07-A7-settings-side-tab-reload-opens-first-tab.md](../issues/U07-A7-settings-side-tab-reload-opens-first-tab.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Live-probed 2026-09-23 (OJS in two runs, OMP and OPS in one
