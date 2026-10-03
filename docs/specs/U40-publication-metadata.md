@@ -995,7 +995,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | With Plain Language Summary required, no Publication page but Title & Abstract can be saved, even after the summary is stored, and a journal's pre-scheduling panel is refused silently | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Reset Permissions stamps Copyright Year 1970 on every unpublished article or preprint, and publishing keeps it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A15](#a15) | The freshly opened language panel acts before its loading settles: stale guidance and prefill kept (journal), the old language's title stored as the new language's title (press and preprint server) | 🐞 | user-visible | — |
+| [A15](#a15) | Change Submission Language: a language picked while the panel loads saves the old title as the new one | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
@@ -1185,23 +1185,21 @@ it is the section's own policy. The description is the defect.
 Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The language panel acts before its own loading settles** · 🐞 · user-visible.
-Working the "Change Submission Language For" panel right after it opens,
-an ordinarily fast click, catches it still loading in the background.
-On a journal, the Title and Abstract boxes revealed by the language
-pick keep the OLD language's guidance and prefill for the rest of that
-opening. On a press and on a preprint server, a language picked before
-the panel has finished loading leaves the current language's text in
-the new language's boxes, and Confirm stores it as the new language's
-title and changes the submission language. On a press the Title box
-loads after the pick and can look empty meanwhile: text typed or
-deleted then is lost, and after an early pick it fills with the current
-language's title. On a preprint server the boxes sometimes open empty
-instead. Once the panel has settled (its subtitle shows the item's
-title), prefill and refusal behave exactly as Rule 13b says: on a press
-with no title in the new language, the loaded Title box is empty, and
-Confirm is refused with "This field is required."
-Since: live-observed 2026-08-28 · Basis: probe; test run (the press, 2026-09-30). <sup>f-a15</sup>
+**A15 — Change Submission Language: a language picked while the panel loads saves the old title as the new one** · 🐞 · medium.
+An editor opens "Change Submission Language For" and picks the new
+language before the panel has finished loading. The Title (and Abstract)
+boxes then hold the current language's text under labels that still
+name the current language, instead of what the submission holds in the
+new language.
+Confirm saves that text as the new language's title and abstract and
+changes the submission language. A title and abstract already stored in
+the new language are overwritten. The current language's own title and
+abstract are kept.
+It needs a pick before the panel's loading ends, which is signalled by
+the submission's title appearing under the panel heading. That moment
+comes a fraction of a second after the choices appear, longer on a slow
+link or a slow server.
+Since: live-observed 2026-08-28 · Basis: probe, 2026-10-03; test run (the press, 2026-09-30). <sup>f-a15</sup>
 
 <a id="a17"></a>
 **A17 — The Author's Contributors page offers editing on a new version of a published item** · ❓ · user-visible.
@@ -2604,6 +2602,7 @@ the Title empty and Confirm was refused with "This field is required."
 completed" on Title after the accepted Confirm showed while the
 publication held a title in both languages, so that counter is not a
 sign of an empty title.
+Issue report: [docs/issues/U40-A15-language-panel-early-pick-keeps-old-title.md](../issues/U40-A15-language-panel-early-pick-keeps-old-title.md).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** The change: pkp/pkp-lib#13109 "Author should

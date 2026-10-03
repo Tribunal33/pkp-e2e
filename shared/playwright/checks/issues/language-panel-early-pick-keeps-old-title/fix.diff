@@ -1,0 +1,98 @@
+--- a/lib/ui-library/src/pages/workflow/modals/WorkflowChangeSubmissionLanguageModal.vue
++++ b/lib/ui-library/src/pages/workflow/modals/WorkflowChangeSubmissionLanguageModal.vue
+@@ -13,12 +13,18 @@
+ 			<div class="bg-secondary p-4">
+ 				<div id="changeSubmissionLanguage">
+ 					<PkpForm
+-						v-if="store.form"
++						v-if="store.isReady"
+ 						v-bind="store.form"
+ 						@set="store.setCustom"
+ 						@success="store.success"
+ 						@cancel="store.closeSideModal"
+ 					></PkpForm>
++					<div
++						v-else-if="store.isLoading"
++						class="flex h-64 items-center justify-center"
++					>
++						<Spinner />
++					</div>
+ 				</div>
+ 			</div>
+ 		</div>
+@@ -29,6 +35,7 @@
+ import {defineProps} from 'vue';
+ import PkpForm from '@/components/Form/Form.vue';
+ import SideModalBody from '@/components/Modal/SideModalBody.vue';
++import Spinner from '@/components/Spinner/Spinner.vue';
+ import {useWorkflowChangeSubmissionLanguageModalStore} from './workflowChangeSubmissionLanguageModalStore';
+ 
+ const props = defineProps({
+--- a/lib/ui-library/src/pages/workflow/modals/workflowChangeSubmissionLanguageModalStore.js
++++ b/lib/ui-library/src/pages/workflow/modals/workflowChangeSubmissionLanguageModalStore.js
+@@ -40,8 +40,11 @@
+ 			return `submissions/${props.submissionId}/publications/${props.publicationId}/_components/changeLanguageMetadata`;
+ 		});
+ 		const {apiUrl: publicationFormUrl} = useUrl(relativeUrl);
+-		const {data: changeSubmissionForm, fetch: fetchForm} =
+-			useFetch(publicationFormUrl);
++		const {
++			data: changeSubmissionForm,
++			fetch: fetchForm,
++			isSuccess: isFormSuccess,
++		} = useFetch(publicationFormUrl);
+ 
+ 		watch(
+ 			publicationFormUrl,
+@@ -61,6 +64,17 @@
+ 
+ 		const publicationTitle = ref('');
+ 
++		// setCustom() pre-fills the revealed fields from the publication, so the
++		// form is offered only once the publication has loaded
++		const isPublicationLoaded = ref(false);
++		const isPublicationFailed = ref(false);
++		const isReady = computed(() => !!form.value && isPublicationLoaded.value);
++		const isLoading = computed(
++			() =>
++				!isReady.value &&
++				isFormSuccess.value !== false &&
++				!isPublicationFailed.value,
++		);
+ 		const publicationProps = {};
+ 		// Get publication props
+ 		getData();
+@@ -107,7 +121,15 @@
+ 			window.location.reload();
+ 		};
+ 
+-		return {closeSideModal, setCustom, success, form, publicationTitle};
++		return {
++			closeSideModal,
++			setCustom,
++			success,
++			form,
++			publicationTitle,
++			isReady,
++			isLoading,
++		};
+ 
+ 		/**
+ 		 * Aux functions
+@@ -122,8 +144,15 @@
+ 			);
+ 			await fetchPublication();
+ 
+-			Object.assign(publicationProps, publication.value ?? {});
++			// useFetch has shown the error dialog
++			if (!publication.value) {
++				isPublicationFailed.value = true;
++				return;
++			}
++
++			Object.assign(publicationProps, publication.value);
+ 			delete publicationProps['locale'];
++			isPublicationLoaded.value = true;
+ 
+ 			publicationTitle.value =
+ 				publication.value.fullTitle[publication.value.locale];
