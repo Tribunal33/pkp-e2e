@@ -1242,15 +1242,15 @@ interface is the control (note b). The run records list a server error on
 every Site Settings load, from the Plugin Gallery's list
 ([Plugins management A1](U62-plugins-management.md#a1)); the ORCID tab
 itself failed nothing, so the entry carries no crash word.
-Issue report: [docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md](../issues/U04-A11-orcid-tabs-named-after-old-plugin.md).
-Issue report: [docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md).
+Issue report: [pkp-e2e#739](https://github.com/jardakotesovec/pkp-e2e/issues/739) ([docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md](../issues/U04-A11-orcid-tabs-named-after-old-plugin.md)).
+Issue report: [pkp-e2e#740](https://github.com/jardakotesovec/pkp-e2e/issues/740) ([docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Note n (every code, the two requests answering 200, the
 locale cause). Seen identically on OJS, OMP and OPS in two runs,
 2026-09-28, with no failure behind either request; the English field on
 the same journals is the control.
-Issue report: [docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md).
+Issue report: [pkp-e2e#740](https://github.com/jardakotesovec/pkp-e2e/issues/740) ([docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:
