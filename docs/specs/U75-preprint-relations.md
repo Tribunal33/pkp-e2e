@@ -537,6 +537,8 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A11 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): on a preprint server, the Review step's "Relation status" and "License" panels' "Edit" opens "For Readers".
+  - the guard for A8 (issue report `docs/issues/U75-A8-preprint-submits-without-required-relation-status.md`): the wizard refuses to submit with "Relation status" unanswered (the Review step flags it and "Submit" stays disabled).
+  - the guard for A9 (issue report `docs/issues/U75-A9-review-reads-unanswered-relation-as-not-published.md`): the Review step reads "This preprint's relations have not been entered." for a draft whose "Relation status" is unanswered.
 - **Nothing new to test**:
   - the Site Administrator opening "Relations" and saving a relation on
     any version (Actors, "Open" and "Save a relation"): the Preprint
@@ -592,8 +594,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Relations" offers an active "Save" to someone who may not edit the version, and refuses it with an unexpected-error notice | 🐞 | minor | — |
 | [A3](#a3) | Saving another status keeps the DOI of the published version | 🐞 | invisible | — |
 | [A7](#a7) | A DOI written on its own on the wizard's "For Readers" step ends in an unexpected-error window | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
-| [A8](#a8) | A preprint can be submitted without answering the required "Relation status" | 🐞 | minor | — |
-| [A9](#a9) | The Review step says "This preprint has not been published elsewhere." for a question never answered | 🐞 | minor | — |
+| [A8](#a8) | A preprint author can submit without answering the "Relation status" question marked required | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A9](#a9) | A preprint's submission "Review" says "not published elsewhere" when the author never answered "Relation status" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | After a reload, the wizard's "For Readers" shows the saved relation unticked, and answering again erases the DOI | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The Review step's "Edit" on the "Relation status" panel does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "DOI of the published preprint" refuses a DOI written on its own | ❓ | minor | — |
@@ -708,25 +710,26 @@ relation at all.
 Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A preprint can be submitted without answering the required "Relation status"** · 🐞 · minor.
-"For Readers" marks the question "Relation status * Required", but with
-no choice picked the Review step flags nothing and "Submit" completes the
-submission ("Submission complete"). The preprint then holds no relation
-status (Rule 2): its "Relations" opens with no choice ticked, and its
-"Post the preprint" window reads "This preprint's relations have not
-been entered.".
-Basis: probe. <sup>f-a8</sup>
+**A8 — A preprint author can submit without answering the "Relation status" question marked required** · 🐞 · low.
+On a preprint server, the submission wizard's "For Readers" step marks
+"Relation status" as "* Required". An author who leaves it unanswered is
+not stopped: "Review" shows no problem, "Submit" stays enabled and the
+submission completes. The preprint is then stored with no relation
+status. Its "Relations" panel shows no choice ticked, and the "Post the
+preprint" window reads "This preprint's relations have not been
+entered.".
+Basis: probe, 2026-10-03. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The Review step says "This preprint has not been published elsewhere." for a question never answered** · 🐞 · minor.
-On a draft whose "Relation status" nobody has answered, the Review
-step's "Relation status" panel reads "This preprint has not been
-published elsewhere.", an answer the Author never gave. The same
-preprint's "Post the preprint" window reads "This preprint's relations
-have not been entered.", and its "Relations" shows no choice ticked.
-The panel should say "This preprint's relations have not been
-entered.", or show the question as unanswered.
-Basis: probe. <sup>f-a9</sup>
+**A9 — A preprint's submission "Review" says "not published elsewhere" when the author never answered "Relation status"** · 🐞 · low.
+On a preprint server, an author who leaves "Relation status" unanswered
+on the submission wizard's "For Readers" step finds the "Review" step's
+"Relation status" panel reading "This preprint has not been published
+elsewhere.", an answer they never gave. When the preprint is later
+posted, the Preprint Server manager's "Post the preprint" window reads
+"This preprint's relations have not been entered." for the same
+preprint.
+Basis: probe, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — After a reload, the wizard's "For Readers" shows the saved relation unticked, and answering again erases the DOI** · 🐞 · medium.
@@ -1260,6 +1263,7 @@ Issue report (the hang, shared with the Submission wizard's A19): [pkp-e2e#322](
 Live-probed 2026-09-27 on two drafts: the Review step's check answered
 with no problem for the unanswered question, "Submit" went through and
 `relationStatus` null was stored; td4.
+Issue report: [docs/issues/U75-A8-preprint-submits-without-required-relation-status.md](../issues/U75-A8-preprint-submits-without-required-relation-status.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note g: the panel's `=== 3` and `== 0` branches miss a
@@ -1267,6 +1271,7 @@ stored null, which falls through to `publication.relation.none`, while
 `PublishForm` reads it as unknown (note i). Live-probed 2026-09-27: td4,
 and the "Post the preprint" window of a preprint submitted unanswered
 (td8).
+Issue report: [docs/issues/U75-A9-review-reads-unanswered-relation-as-not-published.md](../issues/U75-A9-review-reads-unanswered-relation-as-not-published.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note d: `getEditorsStep()` passes the publication to a

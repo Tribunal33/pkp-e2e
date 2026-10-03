@@ -1,0 +1,32 @@
+--- a/classes/submission/Repository.php
++++ b/classes/submission/Repository.php
+@@ -47,6 +47,11 @@
+             $errors['abstract'] = [$locale => [__('validator.required')]];
+         }
+ 
++        // Required relation status, asked on the "For Readers" step
++        if ($publication->getData('relationStatus') === null) {
++            $errors['relationStatus'] = [__('validator.required')];
++        }
++
+         // Abstract/Plain Language Summary word limit validation
+         if ($section->getAbstractWordCount()) {
+             // validate abstract word count and add to errors
+--- a/templates/submission/review-relation.tpl
++++ b/templates/submission/review-relation.tpl
+@@ -26,6 +26,15 @@
+             submissionWizard__reviewPanel__body--relation
+         "
+     >
++        <notification
++            v-for="(error, i) in errors.relationStatus"
++            :key="i"
++            type="warning"
++            class="submissionWizard__reviewEmptyWarning"
++        >
++            <icon icon="Error" class="h-5 w-5" :inline="true"></icon>
++            {{ error }}
++        </notification>
+         <div class="submissionWizard__reviewPanel__item">
+             <template v-if="publication.relationStatus === {\APP\publication\Publication::PUBLICATION_RELATION_PUBLISHED}">
+                 <template v-if="publication.vorDoi">

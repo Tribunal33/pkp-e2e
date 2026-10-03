@@ -1,0 +1,11 @@
+--- a/templates/submission/review-relation.tpl
++++ b/templates/submission/review-relation.tpl
+@@ -35,7 +35,7 @@
+                     {translate key="publication.relation.published"}
+                 </template>
+             </template>
+-            <template v-else-if="publication.relationStatus == {\APP\publication\Publication::PUBLICATION_RELATION_UNKNOWN}">
++            <template v-else-if="publication.relationStatus === null || publication.relationStatus === undefined || publication.relationStatus == {\APP\publication\Publication::PUBLICATION_RELATION_UNKNOWN}">
+                 {translate key="publication.relation.unknown"}
+             </template>
+             <template v-else>
