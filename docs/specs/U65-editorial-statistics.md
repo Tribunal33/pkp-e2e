@@ -2040,7 +2040,7 @@ seed's arrival day read "Imported Submissions" and "Other Submissions"
 arrival day read "Submissions Received" 0, "Submissions Declined" 1 and
 every rate "0%"; the August email counted a submission of 31 August
 that the page's Custom Range 2026-08-01 — 2026-08-31 left out.
-Issue report: [docs/issues/U65-A1-range-last-day-left-out-of-received.md](../issues/U65-A1-range-last-day-left-out-of-received.md).
+Issue report: [docs/issues/U65-A1-range-last-day-left-out-of-received.md](../issues/U65-A1-range-last-day-left-out-of-received.md), filed as [pkp-e2e#641](https://github.com/jardakotesovec/pkp-e2e/issues/641).
 
 <a id="fn-f-a2"></a>
 **f-a2** — fn g: with the first and last year both this year, `years` is
