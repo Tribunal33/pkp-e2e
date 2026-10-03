@@ -9,9 +9,14 @@
   - 3.4: OPS (code)
   - 3.3: OPS (code)
 - **Introduced** `pkp/pkp-lib#6438` for `pkp/pkp-lib#5610` · [79dfc15996](https://github.com/pkp/pkp-lib/commit/79dfc15996960f4d959afb843383f3ac736f6974) · 2020-12-06 · Antti-Jussi Nygård (ajnyga)
-- **Upstream** none found (2026-10-02)
-- **Tracked in** spec U49 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#a10) (the "Date Posted" label), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a preprint server's codes: the "Preprint" heading, the status line, the "Post" and "Unpost" buttons and the "Production Tasks & Discussions" entry)
-- **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-03)
+- **Tracked in** spec U49 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#a10) (the "Date Posted" label), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a preprint server's codes: the "Preprint" heading, the status line, the "Post" and "Unpost" buttons and the "Production Tasks & Discussions" entry), spec U40 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#ops3) (the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions)
+- **Checked** 2026-10-02, the Author's banner and "Permissions & Disclosure" 2026-10-03, each branch's tip (the commits in Evidence)
+
+2026-10-03: widened to two more codes of the same French file: the
+Copyright Holder and Copyright Year descriptions on a preprint's
+"Permissions & Disclosure" page, and the banner an Author reads on a
+posted version (Steps 6 to 14).
 
 ## Summary
 
@@ -21,7 +26,10 @@ preprint's "Preprint Entry" page ("Entrée de la prépublication") reads
 "Date Posted". The page's heading reads "##submission.publication## :
 Entrée de la prépublication", its status line "Statut :
 ##publication.status.unscheduled##", and the "Post" button
-"##publication.publish##". OPS 3.2 showed these in French.
+"##publication.publish##". The banner that tells a preprint's Author
+why a posted version's pages are locked, and the Copyright Holder and
+Copyright Year descriptions on "Permissions & Disclosure", show as
+codes too. OPS 3.2 showed these in French.
 
 The field and the button still work, and the codes' own words
 ("datePublished", "publish") hint at what they are, but a
@@ -42,8 +50,11 @@ and Turkish, and some of them in Spanish.
   one of the languages above, on every page listed under a preprint in the
   workflow's side menu ("Title & Abstract" to "Preprint Entry"), where
   the heading, the status line and the "Post" or "Unpost" button show;
-  the preprint's authors see the status line and, in their side menu,
-  "Production Tasks & Discussions" as codes too (code).
+  the preprint's authors read the status line, "Production Tasks &
+  Discussions" in their side menu and, on a posted version, the banner
+  that says why its pages are locked as codes too. On "Permissions &
+  Disclosure" editors read the Copyright Holder and Copyright Year
+  descriptions as codes.
 - **Way round.** Switch the interface to English. The Custom Locale
   plugin from the Plugin Gallery does not offer these texts (code).
 
@@ -59,9 +70,11 @@ Preconditions:
   `publicknowledge`, "Public Knowledge Preprint Server", which offers
   English and French (Canada). Its submission 1, "The influence of
   lactation on the quantity and quality of cashmere production", is in
-  Production and not posted.
+  Production and not posted. Its submission 2, "The Facets Of Job
+  Satisfaction: A Nine-Nation Comparative Study Of Construct
+  Equivalence", is posted; its author account is `ckwantes`.
 
-Steps:
+The "Preprint Entry" page:
 
 1. Sign in as `dbarnes` (a Preprint Server manager).
 2. Open the menu under the initials at the top right and, under
@@ -98,6 +111,62 @@ shows codes for texts that are new since 3.5 and not yet translated
 (its "Placement", "Version and Updates", "Display" and "Access" groups
 among them); those are not part of this report.
 
+The "Permissions & Disclosure" page:
+
+6. As `dbarnes`, with "français" chosen (steps 1 and 2), open
+   submission 1 at
+   `/index.php/publicknowledge/fr_CA/dashboard/editorial?workflowSubmissionId=1`.
+7. In the side menu, press "Autorisations et divulgation".
+8. Read the descriptions under "Titulaire du droit d'auteur" and "Année
+   du copyright".
+9. Open submission 2 at
+   `/index.php/publicknowledge/fr_CA/dashboard/editorial?workflowSubmissionId=2`,
+   press "Autorisations et divulgation" and read the same two
+   descriptions.
+
+**Expected.** French texts, as a journal and a press read on the same
+page: "Les droits d'auteur seront automatiquement attribués à Serveur
+de prépublication de la connaissance du public lorsque ceci sera
+publié." and a French copyright-year text such as "L'année du droit
+d'auteur sera définie automatiquement en fonction de la date de
+publication.".
+
+**Observed**, on submission 1 and on submission 2 alike:
+
+```
+Titulaire du droit d'auteur:  ##submission.copyrightHolder.description##
+Année du copyright:           ##publication.copyrightYearBasis.submissionDescription##
+```
+
+In English the page reads "Copyright will be assigned automatically to
+Public Knowledge Preprint Server when this is posted." and "The
+copyright year will be set automatically based on the posted date.". A
+journal and a press (OJS submission 17, OMP submission 14) show both
+descriptions in French.
+
+The Author's banner:
+
+10. Sign out, and sign in as `ckwantes` (the author of submission 2).
+11. Open the menu under the initials and, under "Change Language",
+    choose "français".
+12. Open submission 2 at
+    `/index.php/publicknowledge/fr_CA/dashboard/mySubmissions?workflowSubmissionId=2`.
+13. In the side menu, press "Titre et résumé".
+14. Read the banner above the form.
+
+**Expected.** "Cette version a été publiée et ne peut pas être
+modifiée.", as an author reads on a published article or book of a
+journal or a press.
+
+**Observed.**
+
+```
+##publication.editDisabled##
+```
+
+In English the banner reads "This version has been posted and can not
+be edited.".
+
 ## Cause
 
 `pkp/pkp-lib#5610` ("OPS: Minimal Wording Changes for Emphasis on
@@ -127,7 +196,7 @@ An empty text counts as missing: `LocaleFile::loadArray()`
 
 Reach (code, unless marked on screen):
 
-- The four texts of the Steps (on screen). The label is read by OPS's
+- The four texts of Steps 1 to 5 (on screen). The label is read by OPS's
   `IssueEntryForm`. The heading comes from `getPublicationTitle()` in
   `lib/ui-library/src/pages/workflow/composables/useWorkflowNavigationConfig/useWorkflowNavigationConfigOPS.js`,
   the status line from `WorkflowPublicationVersionControl.vue`, and the
@@ -141,13 +210,25 @@ Reach (code, unless marked on screen):
   `publication.status.published`), the author's "Production Tasks &
   Discussions" (`submission.queries.production`), the "Post" window's
   requirements line (`PublishForm`), the "Unpost" confirmation
-  (`useWorkflowActions`), the license and copyright descriptions on
-  "Permissions & Disclosure" (`PKPPublicationLicenseForm`), and the
+  (`useWorkflowActions`), the License URL description on "Permissions
+  & Disclosure" (`submission.license.description`, shown once the
+  server sets a license), and the
   activity log's posting entries (`publication.event.*`, logged by key
   in `publication\Repository` and translated by
   `EventLogEntry::getTranslatedMessage()` when the log is shown). On
   3.5 all 28 have English and `publication.required.reviewStage` is the
   publishing refusal before Production (`publication\Repository`).
+- The three texts of Steps 6 to 14 (on screen). The two descriptions
+  are written by the constructor of `PKPPublicationLicenseForm`
+  (`lib/pkp/classes/components/forms/publication/`), for an editor and
+  for an author allowed to see the page. The banner is
+  `WorkflowPublicationEditDisabled.vue`, which the author's workflow
+  configuration (`workflowConfigAuthorOJS.js`, merged into OPS's by
+  `useWorkflowConfigOPS.js`) shows on every Preprint page of a posted
+  version. On 3.4 and 3.3 the same banner sits in OPS's
+  `templates/workflow/workflow.tpl` and
+  `templates/authorDashboard/authorDashboard.tpl`, so editors read the
+  code there too (code).
 - The "Date Posted" column of the preprints statistics report
   (`PKPStatsPublicationController::_getSubmissionReportColumnNames()`)
   when downloaded in French.
@@ -217,7 +298,10 @@ How this was settled:
 Tried on `main`: with the diff applied, the walk read "Prépublication :
 Entrée de la prépublication", "Statut : Non publié-e", "Publier" and
 "Date de publication". The English page and the French field
-description read the same with the fix in and out.
+description read the same with the fix in and out. For Steps 6 to 14
+the diff as it stands gave the French texts of Expected on both
+submissions and on the Author's banner; the English pages and the
+French page's labels read the same with the fix in and out.
 
 **Alternatives**
 
@@ -244,16 +328,32 @@ Small: texts in one locale file, tried.
 
 - Kept script:
   [`shared/playwright/checks/issues/ops-french-date-posted-raw-key/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-french-date-posted-raw-key/walk.js)
-  takes the Steps on OPS, then the same page in English. `MODE=nb`
+  takes Steps 1 to 5 on OPS, then the same page in English. `MODE=nb`
   reads the English page and the French field description, the texts
   the fix must leave alone. It changes nothing in the dataset. Run it
   on an install loaded from the default dataset:
   `node bin/probe.js ops shared/playwright/checks/issues/ops-french-date-posted-raw-key/walk.js`
   (with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5).
+- Kept script for Steps 6 to 14:
+  [`shared/playwright/checks/issues/ops-french-author-banner-copyright-codes/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-french-author-banner-copyright-codes/walk.js)
+  (helpers in `lib.js` beside it) takes them on OPS, then the same
+  pages in English; run with `all`, it takes the same two paths on OJS
+  (submissions 17 and 5, author `vkarbasizaed`) and OMP (submissions
+  14 and 4, author `mdawson`) as the control. `MODE=nb` reads the
+  English pages and the French page's labels on OPS. It changes nothing
+  in the dataset:
+  `node bin/probe.js all shared/playwright/checks/issues/ops-french-author-banner-copyright-codes/walk.js`
+  (with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5). The fix was
+  tried with `node bin/try-fix.js apply
+  shared/playwright/checks/issues/ops-french-date-posted-raw-key/fix.diff ops`,
+  this script on `ops` and with `MODE=nb`, then `revert` and `MODE=nb`
+  again.
 - Walked on `main` and `stable-3_5_0`, on PostgreSQL, from pkp/datasets
-  e8dafbc (2026-10-02). No request failed and no script error showed.
+  e8dafbc (2026-10-02), Steps 6 to 14 from 566bb1f (2026-10-03). No
+  request failed and no script error showed.
 - 3.5 walk: the four codes of Observed; the side menu's group heading
-  reads `##submission.publication##` too.
+  reads `##submission.publication##` too. Steps 6 to 14 on 3.5 show the
+  same three codes, and OJS and OMP the French texts.
 - Tips: OPS `main` c8af945bb7 (`lib/pkp` 3dc90c81a6, `lib/ui-library`
   280f98c570); OPS `stable-3_5_0` 38b61882d3 (`lib/pkp` cf3f984335);
   OPS `stable-3_4_0` acd8ae704b (`lib/pkp` 32b0f4b4af); OPS
@@ -266,7 +366,14 @@ Small: texts in one locale file, tried.
   `IssueEntryForm` reads `publication.datePublished` on all four
   (`.inc.php` on 3.3), and on 3.3 `LocaleFile::load()` skips an empty
   text the same way. The callers under Cause were read on `main`, and
-  the 17 other languages on 3.5 and `main`.
+  the 17 other languages on 3.5 and `main`. For Steps 6 to 14:
+  `PKPPublicationLicenseForm` and the banner's callers on `main` and
+  3.5, and on `upstream/stable-3_4_0` and `upstream/stable-3_3_0`
+  OPS's `workflow.tpl` and `authorDashboard.tpl` (the banner) with
+  `lib/pkp`'s `PKPPublicationLicenseForm` at `origin/stable-3_4_0`
+  767353f4fe and `origin/stable-3_3_0` ac3fa73402; the three French
+  entries are empty on all four branches, and 79dfc15996 removed all
+  three from pkp-lib's French.
 - History: OPS tag 3_2_1-4 has no OPS English entry for these keys and
   pins a pkp-lib whose French has them ("Date de publication",
   "Publier", "Non planifié-e"); the first OPS tag whose pkp-lib lacks
@@ -280,10 +387,16 @@ Small: texts in one locale file, tried.
   `CustomLocalePlugin::getTranslator()`), not installed.
 - Upstream: pkp/pkp-lib and pkp/ops searched by the key, "Date
   Posted", "French translation", "fr_CA", "OPS missing translations"
-  and `pkp/pkp-lib#5610`. Read: `pkp/pkp-lib#5610` (the wording change;
-  nothing on translations).
+  and `pkp/pkp-lib#5610`; on 2026-10-03 pkp/pkp-lib, pkp/ops and
+  pkp/ui-library by `publication.editDisabled`,
+  `copyrightHolder.description`, `copyrightYearBasis
+  submissionDescription`, "can not be edited", "French translation" and
+  "fr_CA". Read: `pkp/pkp-lib#5610` (the wording change; nothing on
+  translations), `pkp/pkp-lib#10263` and `pkp/ui-library#398` (where
+  the banner is shown; nothing on translations).
 - Not driven: 3.4 and 3.3; the languages other than French (Canada);
-  the texts of Reach other than the four on screen; the author's view;
-  the statistics report.
+  the texts of Reach other than the seven on screen; the License URL
+  description (the dataset's server sets no license); the statistics
+  report.
 - Unverified: whether PKP's French translators prefer "diffuser" to
   "publier" for OPS.

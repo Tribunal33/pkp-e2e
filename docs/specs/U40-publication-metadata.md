@@ -999,7 +999,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | minor | — |
+| [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Reset permissions rewrites every submission, unpublished and declined included, and logs one "metadata updated" line per version | ❓ | user-visible | — |
 | [A17](#a17) | The Author's Contributors page offers "Add Contributor", "Edit", "Delete" and "Order" on a new version of a published item; whether a save there is kept is untried | ❓ | user-visible | — |
 | [A5](#a5) | A scheduled article may still offer and allow Change Submission Language (code reading; the state was not reached live) | ❓ | minor | — |
@@ -1366,7 +1366,7 @@ which will not happen.
 Since: live-probed 2026-08-28 · Basis: probe. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — In French the "posted" banner and two copyright descriptions are raw codes** · 🐞 · minor.
+**OPS3 — In French the "posted" banner and two copyright descriptions are raw codes** · 🐞 · low.
 With the interface in French (Canada), a preprint server shows raw codes
 where French words belong:
 - on every Preprint page of a posted version, the Author's banner reads
@@ -1393,7 +1393,7 @@ around these codes are
 [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
 finding, and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
-Basis: probe. <sup>f-ops3</sup>
+Basis: probe, 2026-10-03. <sup>f-ops3</sup>
 
 ### Retired
 
@@ -2879,6 +2879,7 @@ sur le contenu publié." on all three apps. In French, leaving the page
 with an unsaved License URL asked nothing and the change was gone on
 return and after reload, on all three apps (Rule 10). No request
 failed and no script error was logged.
+Issue report: [pkp-e2e#548](https://github.com/jardakotesovec/pkp-e2e/issues/548) ([docs/issues/U49-A10-ops-french-date-posted-raw-key.md](../issues/U49-A10-ops-french-date-posted-raw-key.md)), shared with U49 A10 and U24 A11: the same empty texts in OPS's French file.
 
 ## Reference — entry points & surfaces
 
