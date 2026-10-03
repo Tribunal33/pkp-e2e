@@ -2295,7 +2295,7 @@ Live-probed 2026-09-28: note td14. The dedicated "ONIX 3.0 Monograph
 Export Plugin" export failed for every book, validation ticked or not
 (a finding for [ONIX metadata & export](U74-onix-metadata-export.md)), so the ONIX read was the one
 inside the Native XML export.
-Issue report: [docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md](../issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md).
+Issue report: [pkp-e2e#700](https://github.com/jardakotesovec/pkp-e2e/issues/700) ([docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md](../issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note j: the server's pattern and `changeHandler_()`'s

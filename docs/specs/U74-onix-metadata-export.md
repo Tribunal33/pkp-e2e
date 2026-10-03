@@ -2244,7 +2244,7 @@ it reached the Native XML file as `MarketDate` with `DateFormat` 20, and
 with "YYYYMMDD" chosen as `DateFormat` 00. The format window's
 "Publication Dates" › "Add publication date" also arrived on
 "YYYYMMDD (H)".
-Issue report: [docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md](../issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md).
+Issue report: [pkp-e2e#700](https://github.com/jardakotesovec/pkp-e2e/issues/700) ([docs/issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md](../issues/U74-A5-new-market-and-date-preselect-hijri-calendar.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note g: `MarketForm::fetch()` assigns `taxTypeCode` `02`
