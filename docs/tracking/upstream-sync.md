@@ -20,6 +20,14 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-10-03 (issues session, U39 A5): on `main` a config file with no
+  `strict` line now runs in strict mode (`Config::getVar('general',
+  'strict', true)` since pkp-lib cb32f21f94, pkp/pkp-lib#11583; 3.5 and
+  3.4 read a missing line as Off), checked by the A5 reporter booting OJS
+  `main` from the command line with the line removed. A 3.3-era config
+  carried forward by an upgrade would then hit every bare `ASSOC_TYPE_*`
+  and other global alias (docs/issues/U39-A5-library-delete-strict-mode-error.md
+  names three). Whether the default is intended is the question for #11583.
 - 2026-10-02 (issues session, U36 A14): the open report
   docs/reports/2026-09-27-pkp-lib-13288.md says in passing that fixing
   the wizard's delete request (the parameter name `deleteFile` reads)

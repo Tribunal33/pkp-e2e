@@ -559,6 +559,7 @@ Left out of the scenarios above, by reason:
   - a row's strip opened within two seconds of a download stays open three seconds later, and two names pressed in a row raise no page error (Rule 8a; A9, A12)
   - "Description" in both libraries' "Add a file" and "Edit" carries the required star only if an empty one is refused (Fields; A3)
   - a file whose uploaded name holds its extension earlier on ("notes-pdf-draft.pdf"), and one of 127 characters or more, downloads as its name with the type code before one extension (Rule 8a; A4)
+  - "Delete" › "OK" in the Submission Library removes the file on an install running in strict mode (Settings bullet 3; A5)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)
   - the "Request Author Response" page {OJS}: the Editor's and an assigned Section Editor's "Library Files" (Actors row 8; Rule 11a)
@@ -595,7 +596,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "OK" in "Add a file" before a file has uploaded does nothing and says nothing | 🐞 | minor | — |
 | [A3](#a3) | "Description" in the library's "Add a file" and "Edit" windows is starred as required, yet saves empty | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Library files download under a mangled name when the uploaded name repeats its extension or is long | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A5](#a5) | With strict mode on, "Delete" in the Submission Library fails | 🐞 | latent | — |
+| [A5](#a5) | With strict mode on, deleting a Submission Library file, dashboard search and the reviewer's file list stop working | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A second file's name pressed, or a save, within two seconds of a download makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | After an "OK" without a file, closing "Add a file" drops what was typed without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A row's "Edit"/"Delete" strip opened within two seconds of a download closes by itself when the list is drawn again | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -676,11 +677,23 @@ the same wrong name.
 Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — "Delete" fails in strict mode** · 🐞 · latent.
-With the configuration file's "strict" option On (Settings bullet 3),
-"OK" in a Submission Library file's "Delete" dialog ends in a server
-error, not a deletion. Default installs have it Off and delete normally.
-Basis: code. <sup>[f-a5](#fn-a5)</sup>
+**A5 — With strict mode on, deleting a Submission Library file, dashboard search and the reviewer's file list stop working** · 🐞 · low · crash: server.
+On an install whose configuration file has the "strict" option On, a
+workflow participant who presses "OK" in a Submission Library file's
+"Delete" dialog gets a server error instead of a deletion. The dialog
+stays open and says nothing, and the file stays in the list. The
+Publisher Library's "Delete" works on the same install.
+
+Under the same setting, every search in the dashboard's "Search
+submissions" box answers a server error and lists "Search Results (0)",
+and a reviewer's "Reviewer Files" list stays on "Loading" with no way
+to upload a file.
+
+Nothing is lost, and installs with strict mode Off work normally. The
+configuration template ships it Off, and no screen offers it. On
+`main`, a configuration file with no "strict" line also runs in strict
+mode. Files first written for 3.3 or earlier have no such line.
+Basis: probe, 2026-10-03. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — Anyone on the submission may rename or delete any Library file** · ❓ · minor.
@@ -890,6 +903,7 @@ Issue report: [docs/issues/U39-A4-library-download-name-cut.md](../issues/U39-A4
 
 <a id="fn-a5"></a>
 **f-a5** — Note p. Live-probed 2026-09-24: the strict-off end only (note p); the strict-on end was not driven.
+Issue report: [docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Note c. Live-probed 2026-09-24: note td10.

@@ -1,0 +1,33 @@
+--- a/lib/pkp/controllers/grid/files/submissionDocuments/SubmissionDocumentsFilesGridHandler.php
++++ b/lib/pkp/controllers/grid/files/submissionDocuments/SubmissionDocumentsFilesGridHandler.php
+@@ -180,7 +180,7 @@
+     function deleteFile($args, $request)
+     {
+         $context = $request->getContext();
+-        $submission = $this->getAuthorizedContextObject(ASSOC_TYPE_SUBMISSION);
++        $submission = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_SUBMISSION);
+         $fileId = isset($args['fileId']) ? $args['fileId'] : null;
+ 
+         $libraryFileDao = DAORegistry::getDAO('LibraryFileDAO'); /* @var $libraryFileDao LibraryFileDAO */
+--- a/lib/pkp/classes/submission/Collector.php
++++ b/lib/pkp/classes/submission/Collector.php
+@@ -689,7 +689,7 @@
+                                 ->select('p.submission_id')->from('publications AS p')
+                                 ->join('controlled_vocabs AS cv', function (Builder $q) {
+                                     $q->on('p.publication_id', '=', 'cv.assoc_id')
+-                                        ->where('cv.assoc_type', ASSOC_TYPE_PUBLICATION)
++                                        ->where('cv.assoc_type', Application::ASSOC_TYPE_PUBLICATION)
+                                         ->whereIn('cv.symbolic', [ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_DISCIPLINE, ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_KEYWORD, ControlledVocab::CONTROLLED_VOCAB_SUBMISSION_SUBJECT]);
+                                 })
+                                 ->join('controlled_vocab_entries AS cve', 'cve.controlled_vocab_id', 'cv.controlled_vocab_id')
+--- a/lib/pkp/templates/reviewer/review/step3.tpl
++++ b/lib/pkp/templates/reviewer/review/step3.tpl
+@@ -55,7 +55,7 @@
+ 	{/if}
+ 
+ 	{fbvFormSection label="common.upload" description="reviewer.submission.uploadDescription"}
+-		{capture assign="reviewAttachmentsGridUrl"}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.files.attachment.ReviewerReviewAttachmentsGridHandler" op="fetchGrid" assocType=$smarty.const.ASSOC_TYPE_REVIEW_ASSIGNMENT assocId=$reviewAssignment->getId() submissionId=$submission->getId() stageId=$reviewAssignment->getStageId() reviewIsClosed=$reviewIsClosed escape=false}{/capture}
++		{capture assign="reviewAttachmentsGridUrl"}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.files.attachment.ReviewerReviewAttachmentsGridHandler" op="fetchGrid" assocType=PKP\core\PKPApplication::ASSOC_TYPE_REVIEW_ASSIGNMENT assocId=$reviewAssignment->getId() submissionId=$submission->getId() stageId=$reviewAssignment->getStageId() reviewIsClosed=$reviewIsClosed escape=false}{/capture}
+ 		{load_url_in_div id="reviewAttachmentsGridContainer" url=$reviewAttachmentsGridUrl}
+ 	{/fbvFormSection}
+ 
