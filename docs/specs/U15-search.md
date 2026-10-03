@@ -1936,7 +1936,7 @@ same address had answered 200 with the book's title before the decline,
 and answered 200 to the signed-in Press Manager after it. Mechanism not
 traced; the decline leaves the publication's status published (fn-s12),
 so the catalog page's own gate, not the index, refuses the visitor.
-Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md).
+Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn-g: `{if $results->count > 1}` reads a property the
@@ -1968,7 +1968,7 @@ Found" (the run's page snapshot holds the level-1 heading "404 Not Found"
 and nothing else), where an undeclined preprint's `preprint/view/{id}` had
 answered 200 earlier in the same run. Not read as the signed-in Preprint
 Server Manager. Mechanism not traced (f-omp3).
-Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md).
+Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
 
 ## Reference — entry points & surfaces
 
