@@ -1906,7 +1906,7 @@ Code read 2026-09-17. Live-probed 2026-09-17 (A1), OJS, OMP and OPS: the
 dialog's text and buttons as the entry says, "Announcement type removed."
 the only message, the two typed announcements gone from the public site at
 once and from the list after a reload.
-Issue report: [docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md](../issues/U12-A1-remove-announcement-type-deletes-announcements.md).
+Issue report: [pkp-e2e#762](https://github.com/jardakotesovec/pkp-e2e/issues/762) ([docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md](../issues/U12-A1-remove-announcement-type-deletes-announcements.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `PKPAnnouncementController::edit()`'s catch block
