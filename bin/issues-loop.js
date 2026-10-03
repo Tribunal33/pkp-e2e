@@ -42,7 +42,12 @@ const PROMPT = `start issues session, 1 spec
 This session was started by bin/issues-loop.js and runs unattended: no one
 reads questions until it ends. Where the process says to pause for the
 maintainer, stop the way a stopping session does (remove the Taken marks,
-commit, push, name what stays open) and end. End with the step 11 summary.`;
+commit, push, name what stays open) and end. End with the step 11 summary.
+
+Headless, the session ends the moment a turn ends with only background shell
+commands running, and they are killed: claude -p waits for background agents,
+not for run_in_background Bash. Run fleet-prep, walks and other waits in the
+foreground, or end a turn only while a background agent is still running.`;
 
 const sh = (cmd, cmdArgs) => spawnSync(cmd, cmdArgs, {cwd: ROOT, encoding: 'utf8'});
 const git = (...a) => sh('git', a).stdout.trim();
