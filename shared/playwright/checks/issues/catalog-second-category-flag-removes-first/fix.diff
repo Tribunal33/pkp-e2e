@@ -1,0 +1,68 @@
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListItem.vue
+@@ -151,17 +151,28 @@
+ 	},
+ 	methods: {
+ 		/**
++		 * Does a featured or new release flag belong to the list shown now?
++		 * The press, or the one category or series of the filter
++		 *
++		 * @param {Object} flag A `featured` or `newRelease` entry
++		 * @return {Boolean}
++		 */
++		isInFilteredList(flag) {
++			return (
++				flag.assoc_type === this.filterAssocType &&
++				flag.assoc_id === this.filterAssocId
++			);
++		},
++
++		/**
+ 		 * Toggle the checkbox when clicked
+ 		 */
+ 		toggleFeatured() {
+-			const isFeatured = this.item.featured.find((feature) => {
+-				return feature.assoc_type === this.filterAssocType;
+-			});
+-			if (isFeatured) {
++			if (this.isFeatured) {
+ 				this.$emit('update:item', {
+ 					...this.item,
+ 					featured: this.item.featured.filter((feature) => {
+-						return feature.assoc_type !== this.filterAssocType;
++						return !this.isInFilteredList(feature);
+ 					}),
+ 				});
+ 			} else {
+@@ -183,15 +194,11 @@
+ 		 * Toggle the checkbox when clicked
+ 		 */
+ 		toggleNewRelease() {
+-			const matchingNewReleases = this.item.newRelease.find((newRelease) => {
+-				return newRelease.assoc_type === this.filterAssocType;
+-			});
+-			const isNewRelease = typeof matchingNewReleases !== 'undefined';
+-			if (isNewRelease) {
++			if (this.isNewRelease) {
+ 				this.$emit('update:item', {
+ 					...this.item,
+ 					newRelease: this.item.newRelease.filter((newRelease) => {
+-						return newRelease.assoc_type !== this.filterAssocType;
++						return !this.isInFilteredList(newRelease);
+ 					}),
+ 				});
+ 			} else {
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
+@@ -600,7 +600,10 @@
+ 			let seq = 0;
+ 			for (const item of this.items) {
+ 				const feature = item.featured.find((feature) => {
+-					return feature.assoc_type === this.filterAssocType;
++					return (
++						feature.assoc_type === this.filterAssocType &&
++						feature.assoc_id === this.filterAssocId
++					);
+ 				});
+ 				if (feature) {
+ 					feature.seq = seq;
