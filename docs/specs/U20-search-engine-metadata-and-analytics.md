@@ -1335,11 +1335,11 @@ Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](..
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note h: `case 'text/xml' or 'text/html':` evaluates to `case true:`, which `switch` matches for any mimetype that is not `application/pdf`; the header name `googleScholarHtmlUrl{$i}` repeats as for OMP2, so the last such file wins. Live-probed 2026-09-26: the "HTML" file (`text/html`) got no tag and the "Notes" file (`text/markdown`) the one "citation_fulltext_html_url" (note q14).
-Issue report: [docs/issues/U20-OMP1-book-epub-announced-as-html.md](../issues/U20-OMP1-book-epub-announced-as-html.md).
+Issue report: [docs/issues/U20-OMP1-book-epub-announced-as-html.md](../issues/U20-OMP1-book-epub-announced-as-html.md), filed as [pkp-e2e#664](https://github.com/jardakotesovec/pkp-e2e/issues/664).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note h: `_setFileUrl()` takes `$i` by value; with no identification code between two files, both write the header `googleScholarPdfUrl0`, and `addHeader()` keeps the second; an ISBN on the first format moves `$i` only after that format's file. Live-probed 2026-09-26: one "citation_pdf_url", the "PDF Two" file's, with no ISBN and with an ISBN-13 on "PDF" alone (note q14).
-Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U20-OMP2-book-page-announces-one-pdf.md).
+Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U20-OMP2-book-page-announces-one-pdf.md), filed as [pkp-e2e#665](https://github.com/jardakotesovec/pkp-e2e/issues/665).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Note i: `monographFileView()` always adds `DC.Type` `Text.Chapter`, while `monographView()` adds `Text.Book`. Live-probed 2026-09-26: note q19.
