@@ -1,0 +1,66 @@
+--- a/lib/pkp/classes/announcement/Announcement.php
++++ b/lib/pkp/classes/announcement/Announcement.php
+@@ -95,9 +95,11 @@
+      */
+     public function delete()
+     {
++        // The image as loaded (or as last saved); the row is gone once parent::delete() returns
++        $image = $this->getOriginal('image');
+         $deleted = parent::delete();
+         if ($deleted) {
+-            $this->deleteImage();
++            $this->deleteImage($image);
+         }
+ 
+         return $deleted;
+@@ -111,6 +113,8 @@
+     public function save(array $options = [])
+     {
+         $newlyCreated = !$this->exists;
++        // The image as stored before this save: the file a new image or its removal replaces
++        $storedImage = $newlyCreated ? null : $this->getOriginal('image');
+         $saved = parent::save($options);
+ 
+         if (!$saved) {
+@@ -131,14 +135,14 @@
+ 
+         // The announcement is being updated, check if it contains new image
+         if ($hasNewImage) {
+-            $this->deleteImage();
++            $this->deleteImage($storedImage);
+             $this->handleImageUpload();
+         }
+ 
+         // If there is no new image and image data exists in DB and it's now removed as part of update
+         // need to delete the image for this announcement model instance
+-        if (!$hasNewImage && !$this?->image && $this->fresh()->image) {
+-            $this->deleteImage();
++        if (!$hasNewImage && !$this?->image && $storedImage) {
++            $this->deleteImage($storedImage);
+             DB::table($this->getSettingsTable())
+                 ->where($this->getkeyName(), $this->getKey())
+                 ->where('setting_name', 'image')
+@@ -295,16 +299,17 @@
+     }
+ 
+     /**
+-     * Delete the image related to announcement
++     * Delete the file of an image as stored for this announcement
++     *
++     * @param ?object $image The image data as stored before the change, see getOriginal()
+      */
+-    protected function deleteImage(): void
++    protected function deleteImage(?object $image): void
+     {
+-        $image = $this->fresh()->image;
+-
+         if ($image && isset($image->uploadName)) {
+             $publicFileManager = new PublicFileManager();
+-            $filesPath = $this->hasAttribute('assocId')
+-                ? $publicFileManager->getContextFilesPath($this->getAttribute('assocId'))
++            // As storeTemporaryFile() does: a site announcement has no assocId
++            $filesPath = $this->assocId
++                ? $publicFileManager->getContextFilesPath($this->assocId)
+                 : $publicFileManager->getSiteFilesPath();
+ 
+             $publicFileManager->deleteByPath(

@@ -848,6 +848,7 @@ Left out of the scenarios above, by reason:
   - the guard for A15 (issue report `docs/issues/U12-A15-announcement-feed-dates-percent-signs.md`): the Atom and RSS 1.0 feeds' dates are well-formed RFC 3339 and W3CDTF values.
   - the guard for A3 (issue report `docs/issues/U12-A3-announcement-expiry-date-refused-on-edit.md`): an unchanged "Save" on "Edit Announcement" keeps the expiry date, with another "Date (Short)" and with a browser west of the install's time zone.
   - the guard for A2 (issue report `docs/issues/U12-A2-refused-image-deletes-announcement.md`): an edit whose new picture is refused ("photo.jpeg") keeps the announcement, its text and its earlier picture.
+  - the guard for A12 (issue report `docs/issues/U12-A12-announcement-image-files-left-behind.md`): deleting an announcement with a picture, and replacing its picture with one of another type, leave no file behind, on a context and on the site.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -943,7 +944,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A journal's announcement feeds with "Limit feed to" set carry the oldest announcements, never the newest {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Ticking "Send an email about this to all registered users." when editing an announcement sends nothing | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
+| [A12](#a12) | A deleted announcement's picture, and a picture replaced by one of another type, stay on the server and online | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On a French press or preprint server, the new-announcement email's last sentence arrives in English {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A journal's Atom and RSS 1.0 announcement feeds write every date with "%" signs ("%2026-%10-%03UTC%UTC%275") {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1089,12 +1090,21 @@ puts the saved title back. The same as
 *[Highlights](U11-highlights.md#a4)* A4. Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — A deleted announcement's image file is left behind** · 🐞 · minor.
-A manager who deletes an announcement expects its image to go with it.
-"Delete Announcement" › "Yes", the refused image of [A2](#a2) and a new
-image of another type all leave the earlier file in the journal's public
-files; only "Remove" then "Save" deletes a file. No screen shows it; the
-folder grows. Basis: probe. <sup>f-a12</sup>
+**A12 — A deleted announcement's picture, and a picture replaced by one of another type, stay on the server and online** · 🐞 · medium.
+A manager who deletes an announcement expects its picture to go with it.
+"Delete Announcement" › "Yes" removes the announcement and its pages,
+but the picture file stays on the server and is still served at its old
+address. That address is named after the announcement's number, so
+anyone can guess it. When a manager replaces a picture with one of
+another type, for example a GIF in place of a PNG, the old file stays
+beside the new one in the same way. A new picture of the same type
+overwrites the old file, as it should. Nothing on screen shows these
+files, so the manager is not told. On a journal, press or server,
+"Remove" then "Save" on the announcement before deleting it removes the
+file. The site's announcements leave their pictures the same way, and
+there "Remove" does not help: the file stays too, and on a press or
+preprint server the save fails with an error.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — An edited announcement type keeps its old name in the Announcement Types table until a reload** · 🐞 · low · crash: server.
@@ -2072,6 +2082,7 @@ OJS, OMP and OPS: `{id}.gif` still under `public/…/announcements/` after
 left their `{id}.png`; a GIF replacing a PNG left `{id}.png` beside
 `{id}.gif`, a PNG replacing the GIF overwrote `{id}.png`; "Remove" then
 "Save" removed the file. Nothing on a screen shows the folder.
+Issue report: [docs/issues/U12-A12-announcement-image-files-left-behind.md](../issues/U12-A12-announcement-image-files-left-behind.md).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** After the edit form's success the grid requests
