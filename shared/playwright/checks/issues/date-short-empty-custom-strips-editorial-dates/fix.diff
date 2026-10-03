@@ -1,0 +1,160 @@
+--- a/lib/pkp/classes/components/forms/context/PKPDateTimeForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPDateTimeForm.php
+@@ -18,6 +18,7 @@
+ 
+ use PKP\components\forms\FieldRadioInput;
+ use PKP\components\forms\FormComponent;
++use PKP\config\Config;
+ 
+ class PKPDateTimeForm extends FormComponent
+ {
+@@ -128,6 +129,25 @@
+     }
+ 
+     /**
++     * @copydoc FormComponent::getConfig()
++     *
++     * Adds the installation's default formats, which a format saved empty
++     * ("Custom" with nothing in its box) falls back to, so that the form can
++     * build "Date & Time" and "Date & Time (Short)" from them
++     */
++    public function getConfig()
++    {
++        $config = parent::getConfig();
++        $config['defaultFormats'] = [
++            'dateFormatLong' => Config::getVar('general', 'date_format_long'),
++            'dateFormatShort' => Config::getVar('general', 'date_format_short'),
++            'timeFormat' => Config::getVar('general', 'time_format'),
++        ];
++
++        return $config;
++    }
++
++    /**
+      * Set localized options for date/time fields
+      *
+      * @param array $optionValues options to pass to the field
+--- a/lib/ui-library/src/components/Form/context/DateTimeForm.vue
++++ b/lib/ui-library/src/components/Form/context/DateTimeForm.vue
+@@ -6,6 +6,16 @@
+ export default {
+ 	name: 'DateTimeForm',
+ 	extends: PkpForm,
++	props: {
++		/**
++		 * The installation's default "dateFormatLong", "dateFormatShort" and
++		 * "timeFormat", which a format saved empty falls back to
++		 */
++		defaultFormats: {
++			type: Object,
++			default: () => ({}),
++		},
++	},
+ 	data() {
+ 		return {
+ 			// holds initial value of the field that emitted set event
+@@ -79,33 +89,36 @@
+ 
+ 			// Determine value for the short and long date & time fields
+ 			let shortDateTimeValue = {
+-				date: shortDate.value[localeKey],
+-				time: time.value[localeKey],
++				date: this.effectiveFormat(
++					'dateFormatShort',
++					shortDate.value[localeKey],
++				),
++				time: this.effectiveFormat('timeFormat', time.value[localeKey]),
+ 			};
+ 			let longDateTimeValue = {
+-				date: longDate.value[localeKey],
+-				time: time.value[localeKey],
++				date: this.effectiveFormat('dateFormatLong', longDate.value[localeKey]),
++				time: this.effectiveFormat('timeFormat', time.value[localeKey]),
+ 			};
+ 
+ 			// Change value based on a new input
+ 			if (name === 'dateFormatShort') {
+-				shortDateTimeValue.date = value;
++				shortDateTimeValue.date = this.effectiveFormat(name, value);
+ 			} else if (name === 'dateFormatLong') {
+-				longDateTimeValue.date = value;
++				longDateTimeValue.date = this.effectiveFormat(name, value);
+ 			} else if (name === 'timeFormat') {
+-				shortDateTimeValue.time = value;
+-				longDateTimeValue.time = value;
++				shortDateTimeValue.time = this.effectiveFormat(name, value);
++				longDateTimeValue.time = this.effectiveFormat(name, value);
+ 			}
+ 
+ 			// Determine labels for the short and long date & time fields
+ 			const shortDateOption = shortDate.options[localeKey].find(
+-				(option) => option.value === shortDate.value[localeKey],
++				(option) => option.value === shortDateTimeValue.date,
+ 			);
+ 			const longDateOption = longDate.options[localeKey].find(
+-				(option) => option.value === longDate.value[localeKey],
++				(option) => option.value === longDateTimeValue.date,
+ 			);
+ 			const timeOption = time.options[localeKey].find(
+-				(option) => option.value === time.value[localeKey],
++				(option) => option.value === shortDateTimeValue.time,
+ 			);
+ 
+ 			// If there isn't label for the date or time in case of custom input, use latter as a label
+@@ -131,6 +144,19 @@
+ 		},
+ 
+ 		/**
++		 * The format a date or time field stands for: its own value, or the
++		 * installation's default when it is left empty ("Custom" with nothing
++		 * in its box), which is what the server falls back to on save
++		 *
++		 * @param {String} name - dateFormatLong, dateFormatShort or timeFormat
++		 * @param {String|null} value
++		 * @return {String}
++		 */
++		effectiveFormat: function (name, value) {
++			return value || this.defaultFormats[name] || '';
++		},
++
++		/**
+ 		 * Provide actual update of the fields, update value only if predefined radio input is selected
+ 		 *
+ 		 * @param {Array} newFields - contains updated field on set event
+@@ -147,6 +173,12 @@
+ 			shortDateTime,
+ 			longDateTime,
+ 		) {
++			// The format the changed field stood for before this change
++			const oldFormat = this.effectiveFormat(
++				name,
++				this.fieldBeforeSetEvent.value,
++			);
++
+ 			return newFields.map((field) => {
+ 				if (
+ 					(name === 'dateFormatShort' || name === 'timeFormat') &&
+@@ -156,8 +188,8 @@
+ 					// needed to determine value selected by a user (predefined vs custom)
+ 					let suggestedOldValue =
+ 						name === 'dateFormatShort'
+-							? this.fieldBeforeSetEvent.value + ' ' + shortDateTime.value.time
+-							: shortDateTime.value.date + ' ' + this.fieldBeforeSetEvent.value;
++							? oldFormat + ' ' + shortDateTime.value.time
++							: shortDateTime.value.date + ' ' + oldFormat;
+ 
+ 					// Update value only if it refers to the option selected
+ 					if (suggestedOldValue === field.value[localeKey]) {
+@@ -175,10 +207,8 @@
+ 				) {
+ 					let suggestedOldValue =
+ 						name === 'dateFormatLong'
+-							? this.fieldBeforeSetEvent.value + ' - ' + longDateTime.value.time
+-							: longDateTime.value.date +
+-								' - ' +
+-								this.fieldBeforeSetEvent.value;
++							? oldFormat + ' - ' + longDateTime.value.time
++							: longDateTime.value.date + ' - ' + oldFormat;
+ 
+ 					if (suggestedOldValue === field.value[localeKey]) {
+ 						field.value[localeKey] =
