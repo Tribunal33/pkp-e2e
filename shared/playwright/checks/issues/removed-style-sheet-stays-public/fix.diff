@@ -1,0 +1,30 @@
+--- a/lib/pkp/classes/services/PKPContextService.php
++++ b/lib/pkp/classes/services/PKPContextService.php
+@@ -875,9 +875,9 @@
+ 
+         // If the value is null, clean up any existing file in the system
+         if (is_null($value)) {
+-            $setting = $context->getData($settingName, $localeKey);
+-            if ($setting) {
+-                $fileName = $isImage ? $setting['uploadName'] : $setting;
++            $setting = $localeKey ? $context->getData($settingName, $localeKey) : $context->getData($settingName);
++            $fileName = $setting['uploadName'] ?? null;
++            if ($fileName) {
+                 $publicFileManager = new PublicFileManager();
+                 $publicFileManager->removeContextFile($context->getId(), $fileName);
+             }
+--- a/lib/pkp/classes/services/PKPSiteService.php
++++ b/lib/pkp/classes/services/PKPSiteService.php
+@@ -312,9 +312,9 @@
+ 
+         // If the value is null, clean up any existing file in the system
+         if (is_null($value)) {
+-            $setting = $site->getData($settingName, $localeKey);
+-            if ($setting) {
+-                $fileName = $isImage ? $setting['uploadName'] : $setting;
++            $setting = $localeKey ? $site->getData($settingName, $localeKey) : $site->getData($settingName);
++            $fileName = $setting['uploadName'] ?? null;
++            if ($fileName) {
+                 $publicFileManager = new PublicFileManager();
+                 $publicFileManager->removeSiteFile($fileName);
+             }
