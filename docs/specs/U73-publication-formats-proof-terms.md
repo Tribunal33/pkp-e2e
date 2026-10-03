@@ -975,6 +975,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A6-digital-format-metadata-tab-asks-physical-details.md`):
     a digital format's "Metadata" tab shows "Digital Information" and no
     physical group, and a remotely hosted format's shows neither
+  - the guard for A1 and A2 (issue report
+    `docs/issues/U73-A1-A2-format-controls-offered-then-refused.md`):
+    the assigned Layout Editor makes a format "Available", opens "Set
+    Terms" on its form and "Select Files" on its list, and the "Metadata"
+    tab's four lists load for the Layout Editor and the assigned Series
+    editor
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1066,8 +1072,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | An e-book's "Metadata" tab asks for page counts and dimensions, never for its file size or DRM | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A priced file on a press with no payment method shows no price and turns readers away; nothing warns the press | 🐞 | user-visible | — |
 | [A17](#a17) | Page counts and dimensions take any text, and the book's Native XML export then fails | 🐞 | user-visible | — |
-| [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | minor | — |
-| [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | minor | — |
+| [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | A format's "Change File" adds a file; nothing is changed | 🐞 | minor | — |
 | [A4](#a4) | Unticking "This format will be available at a separate website" keeps the format remote | 🐞 | minor | — |
 | [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1092,7 +1098,7 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The assistant roles are offered availability, terms and file selection, and refused** · 🐞 · minor.
+**A1 — The assistant roles are offered availability, terms and file selection, and refused** · 🐞 · medium.
 An assigned Layout Editor, Designer, Indexer or Proofreader gets the
 full Publication Formats page: they add, edit, delete and approve
 formats and upload files. The same row also offers them "Not Available"
@@ -1105,10 +1111,10 @@ where the list belongs, after two pop-ups, "The current role does not
 have access to this operation." and "undefined"; its "OK" pops up the
 first again and copies nothing. Expected: a control a role cannot use
 is not offered, or the role may use it like the rest of the page.
-Basis: probe. <sup>f-a1</sup> <sup>td5</sup>
+Basis: probe, 2026-10-03. <sup>f-a1</sup> <sup>td5</sup>
 
 <a id="a2"></a>
-**A2 — The "Metadata" tab's lists do not load for the Series editor and the assistant roles** · 🐞 · minor.
+**A2 — The "Metadata" tab's lists do not load for the Series editor and the assistant roles** · 🐞 · medium.
 The assigned Series editor and the assigned assistant roles may open a
 format's "Metadata" tab and its "Save" stores the fields, but the four
 lists at its top ("Product Identification", "Sales Rights", "Market
@@ -1117,7 +1123,7 @@ same two pop-ups ("The current role does not have access to this
 operation." and "undefined"). They cannot add an ISBN code or a date
 there; the "ISBN" boxes of the "Edit" tab still work for them.
 Expected: the lists follow the tab.
-Basis: probe. <sup>f-a2</sup> <sup>td6</sup>
+Basis: probe, 2026-10-03. <sup>f-a2</sup> <sup>td6</sup>
 
 <a id="a3"></a>
 **A3 — "Change File" adds a file** · 🐞 · minor.
@@ -2254,12 +2260,14 @@ renders both links for any `_canManage` user; `selectFiles` includes the
 assistant role but the list inside (`ManageProofFilesGridHandler`) does
 not. Every refusal answered with `status: false`, no server error.
 Live-probed 2026-09-28: notes td3, td5, td6.
+Issue report: [pkp-e2e#797](https://github.com/jardakotesovec/pkp-e2e/issues/797) ([docs/issues/U73-A1-A2-format-controls-offered-then-refused.md](../issues/U73-A1-A2-format-controls-offered-then-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Notes c and f: the four sub-grids assign every op to
 `MANAGER` and `SITE_ADMIN` only; `editFormatMetadata` and
 `updateFormatMetadata` include `SUB_EDITOR` and `ASSISTANT`.
 Live-probed 2026-09-28: note td6.
+Issue report: [pkp-e2e#797](https://github.com/jardakotesovec/pkp-e2e/issues/797) ([docs/issues/U73-A1-A2-format-controls-offered-then-refused.md](../issues/U73-A1-A2-format-controls-offered-then-refused.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note h. lib/pkp `AddFileLinkAction::_getTextLabels()` maps
