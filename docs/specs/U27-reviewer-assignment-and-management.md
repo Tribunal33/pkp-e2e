@@ -3161,7 +3161,7 @@ Re-driven in the claim check (2026-08-02) by fetching the actual
 unsubscribe link out of a live change notice: the page lists eleven email
 types (issues, submissions, discussions, announcements, tasks, statistics)
 — the changed-assignment type absent. The suppression guard itself: note g.
-Issue report: [docs/issues/U27-A12-review-change-email-unsubscribe-ignored.md](../issues/U27-A12-review-change-email-unsubscribe-ignored.md).
+Issue report: [pkp-e2e#699](https://github.com/jardakotesovec/pkp-e2e/issues/699) ([docs/issues/U27-A12-review-change-email-unsubscribe-ignored.md](../issues/U27-A12-review-change-email-unsubscribe-ignored.md)).
 
 <a id="fn-a13"></a>
 **f-a13** — Live-probed 2026-08-02 (OJS + OMP; the OMP subject-only send
