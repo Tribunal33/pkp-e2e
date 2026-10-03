@@ -1263,7 +1263,7 @@ Issue report (the hang, shared with the Submission wizard's A19): [pkp-e2e#322](
 Live-probed 2026-09-27 on two drafts: the Review step's check answered
 with no problem for the unanswered question, "Submit" went through and
 `relationStatus` null was stored; td4.
-Issue report: [docs/issues/U75-A8-preprint-submits-without-required-relation-status.md](../issues/U75-A8-preprint-submits-without-required-relation-status.md).
+Issue report: [pkp-e2e#676](https://github.com/jardakotesovec/pkp-e2e/issues/676) ([docs/issues/U75-A8-preprint-submits-without-required-relation-status.md](../issues/U75-A8-preprint-submits-without-required-relation-status.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note g: the panel's `=== 3` and `== 0` branches miss a
@@ -1271,7 +1271,7 @@ stored null, which falls through to `publication.relation.none`, while
 `PublishForm` reads it as unknown (note i). Live-probed 2026-09-27: td4,
 and the "Post the preprint" window of a preprint submitted unanswered
 (td8).
-Issue report: [docs/issues/U75-A9-review-reads-unanswered-relation-as-not-published.md](../issues/U75-A9-review-reads-unanswered-relation-as-not-published.md).
+Issue report: [pkp-e2e#677](https://github.com/jardakotesovec/pkp-e2e/issues/677) ([docs/issues/U75-A9-review-reads-unanswered-relation-as-not-published.md](../issues/U75-A9-review-reads-unanswered-relation-as-not-published.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note d: `getEditorsStep()` passes the publication to a
