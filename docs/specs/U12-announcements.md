@@ -1965,7 +1965,7 @@ nowhere else; `edit()` reads `sendEmail` into `$params` and discards it.
 Code read 2026-09-17. Live-probed 2026-09-17 (A9), OJS, OMP and OPS: the
 edit's PUT carried `sendEmail=true`, answered 200 and queued nothing; every
 mailbox unchanged while the control add after it mailed.
-Issue report: [docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md](../issues/U12-A9-edit-announcement-email-box-sends-nothing.md).
+Issue report: [pkp-e2e#760](https://github.com/jardakotesovec/pkp-e2e/issues/760) ([docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md](../issues/U12-A9-edit-announcement-email-box-sends-nothing.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** Note p: `announcements.tpl` and
