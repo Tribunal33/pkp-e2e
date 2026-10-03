@@ -3048,7 +3048,7 @@ Issue report: [pkp-e2e#380](https://github.com/jardakotesovec/pkp-e2e/issues/380
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note s. Live-probed 2026-09-23 (Rule 21), OPS, with OJS and
 OMP the control.
-Issue report: [docs/issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md](../issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md).
+Issue report: [docs/issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md](../issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md), filed as [pkp-e2e#660](https://github.com/jardakotesovec/pkp-e2e/issues/660).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Note td21. OPS `locale/en/locale.po`
