@@ -1,0 +1,61 @@
+--- a/lib/pkp/locale/fr_CA/user.po
++++ b/lib/pkp/locale/fr_CA/user.po
+@@ -735,6 +735,9 @@
+ msgid "orcid.verify.success"
+ msgstr "Votre identifiant ORCID a été vérifié et bien associé à la soumission."
+ 
++msgid "orcid.verify.success.redirect"
++msgstr "Vous serez maintenant redirigé-e automatiquement vers {$contextName}."
++
+ msgid "orcid.verify.sendSubmissionToOrcid.notpublished"
+ msgstr ""
+ "La soumission sera ajoutée à votre dossier ORCID lors de la publication."
+@@ -910,5 +913,48 @@
+ msgid "orcid.manager.context.enabled"
+ msgstr "Activer la fonctionnalité ORCID"
+ 
++msgid "orcid.manager.siteWide.enabled"
++msgstr "Activer la fonctionnalité ORCID pour l'ensemble du site"
++
++msgid "orcid.manager.siteWide.description"
++msgstr ""
++"La fonctionnalité ORCID peut être activée et configurée au niveau du site "
++"pour l'ensemble des revues, presses et serveurs. Si elle est activée, les "
++"identifiants ci-dessous remplaceront ceux de chaque revue, presse ou serveur "
++"et s'appliqueront à toutes les revues, presses et serveurs de cette "
++"installation."
++
++msgid "orcid.field.verification.request"
++msgstr "Demander la vérification"
++
++msgid "orcid.field.verification.requested"
++msgstr "La vérification ORCID a été demandée !"
++
++msgid "orcid.field.verification.resendRequest"
++msgstr "Renvoyer le courriel de vérification"
++
++msgid "orcid.field.authorEmailModal.title"
++msgstr "Demander la vérification ORCID"
++
++msgid "orcid.field.authorEmailModal.message"
++msgstr ""
++"Souhaitez-vous envoyer un courriel à cet-te auteur-e pour lui demander de "
++"vérifier son identifiant ORCID ?"
++
++msgid "orcid.field.authorEmailModal.message.noAuthor"
++msgstr "Le courriel sera envoyé une fois l'auteur-e créé-e."
++
++msgid "orcid.field.deleteOrcidModal.title"
++msgstr "Supprimer l'identifiant ORCID"
++
++msgid "orcid.field.deleteOrcidModal.message"
++msgstr "Voulez-vous vraiment supprimer cet identifiant ORCID ?"
++
++msgid "orcid.field.unverified.shouldRequest"
++msgstr ""
++"Cet identifiant ORCID n'a pas été vérifié. Veuillez supprimer cet "
++"identifiant ORCID non vérifié et demander directement à l'utilisateur-trice "
++"ou à l'auteur-e de le faire vérifier."
++
+ msgid "user.bioStatement"
+ msgstr "Biographie"

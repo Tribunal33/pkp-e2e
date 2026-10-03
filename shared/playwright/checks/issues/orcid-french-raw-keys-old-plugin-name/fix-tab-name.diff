@@ -1,0 +1,349 @@
+--- a/lib/pkp/locale/an/user.po
++++ b/lib/pkp/locale/an/user.po
+@@ -632,7 +632,7 @@
+ "nueva adreza."
+ 
+ msgid "orcid.displayName"
+-msgstr "Modulo de perfil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Permite la importación d'o perfil d'usuario/a dende ORCID."
+--- a/lib/pkp/locale/ar/user.po
++++ b/lib/pkp/locale/ar/user.po
+@@ -518,7 +518,7 @@
+ msgstr "اسم المستخدم أو البريد الالكتروني"
+ 
+ msgid "orcid.displayName"
+-msgstr "إضافة الملف التعريفي ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "تسمح باستيراد بيانات الملف الشخصي للمستخدم من ORCID."
+--- a/lib/pkp/locale/az/user.po
++++ b/lib/pkp/locale/az/user.po
+@@ -522,7 +522,7 @@
+ msgstr "Şifrə uğurla yeniləndi. Zəhmət olmasa yenilənmiş parol ilə daxil olun."
+ 
+ msgid "orcid.displayName"
+-msgstr "Orcid Profil əlavəsi"
++msgstr "ORCID"
+ 
+ msgid "orcid.emailOrOrcid"
+ msgstr "Email adresi və ya ORCID:"
+--- a/lib/pkp/locale/bg/user.po
++++ b/lib/pkp/locale/bg/user.po
+@@ -529,7 +529,7 @@
+ msgstr "Потребителско име или имейл"
+ 
+ msgid "orcid.displayName"
+-msgstr "Добавка за ORCID профил"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Позволява инпортиране на информация от ORCID профили на потребители."
+--- a/lib/pkp/locale/ca/user.po
++++ b/lib/pkp/locale/ca/user.po
+@@ -705,7 +705,7 @@
+ msgstr "Permet la importació del perfil d'usuari/ària des d'ORCID."
+ 
+ msgid "orcid.displayName"
+-msgstr "Mòdul de perfil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.about.howAndWhyPublicAPI"
+ msgstr ""
+--- a/lib/pkp/locale/ckb/user.po
++++ b/lib/pkp/locale/ckb/user.po
+@@ -517,4 +517,4 @@
+ msgstr ""
+ 
+ msgid "orcid.displayName"
+-msgstr "زیادکردنی پڕۆفایلی ORCID"
++msgstr "ORCID"
+--- a/lib/pkp/locale/cs/user.po
++++ b/lib/pkp/locale/cs/user.po
+@@ -553,7 +553,7 @@
+ msgstr "Přístup k redakčnímu procesu je u neúplných příspěvků omezen."
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin pro profil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Umožňuje import informací o uživatelských profilech z ORCID."
+--- a/lib/pkp/locale/da/user.po
++++ b/lib/pkp/locale/da/user.po
+@@ -545,7 +545,7 @@
+ msgstr "Adgang til workflow'et for ufærdige indsendelser er begrænset."
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID profil-plugin"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Tillader import af brugerprofilinformationer fra ORCID."
+--- a/lib/pkp/locale/de/user.po
++++ b/lib/pkp/locale/de/user.po
+@@ -561,7 +561,7 @@
+ "Ihrem neuen Passwort an."
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID-Plugin"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Ermöglicht das Importieren von Benutzerinformationen von ORCID."
+--- a/lib/pkp/locale/el/user.po
++++ b/lib/pkp/locale/el/user.po
+@@ -550,7 +550,7 @@
+ "χρησιμοποιώντας τον ενημερωμένο κωδικό πρόσβασης."
+ 
+ msgid "orcid.displayName"
+-msgstr "Πρόσθετο Προφίλ ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Ενεργοποιεί την εισαγωγή στοιχείων Χρηστών από το ORCID."
+--- a/lib/pkp/locale/es/user.po
++++ b/lib/pkp/locale/es/user.po
+@@ -569,7 +569,7 @@
+ msgstr "Nombre de usuario/a o correo electrónico"
+ 
+ msgid "orcid.displayName"
+-msgstr "Módulo de perfil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Permite la importación del perfil de usuario/a desde ORCID."
+--- a/lib/pkp/locale/fi/user.po
++++ b/lib/pkp/locale/fi/user.po
+@@ -523,7 +523,7 @@
+ msgstr "Käyttäjätunnus tai sähköposti"
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID-lisäosa"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Helpottaa ORCID-tunnisteiden käyttöä OJS-järjestelmässä."
+--- a/lib/pkp/locale/fr_CA/user.po
++++ b/lib/pkp/locale/fr_CA/user.po
+@@ -554,7 +554,7 @@
+ msgstr "Nom d'utilisateur ou courriel"
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugiciel de profil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr ""
+--- a/lib/pkp/locale/hu/user.po
++++ b/lib/pkp/locale/hu/user.po
+@@ -605,7 +605,7 @@
+ ""
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID profil bővítmény"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Lehetővé teszi a felhasználói profil információinak importálását ORCID-ból.  "
+--- a/lib/pkp/locale/hy/user.po
++++ b/lib/pkp/locale/hy/user.po
+@@ -746,7 +746,7 @@
+ msgstr "Թույլ է տալիս ներմուծել օգտվողի պրոֆիլի տեղեկատվությունը ORCID-ից:"
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID պրոֆիլի հավելված"
++msgstr "ORCID"
+ 
+ msgid "orcid.invalidClient"
+ msgstr "Հաճախորդի անվավեր հավատարմագրերը"
+--- a/lib/pkp/locale/id/user.po
++++ b/lib/pkp/locale/id/user.po
+@@ -613,7 +613,7 @@
+ msgstr "Memungkinkan mengimpor informasi profil pengguna dari ORCID."
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin Profil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.author.accessTokenStored"
+ msgstr ""
+--- a/lib/pkp/locale/it/user.po
++++ b/lib/pkp/locale/it/user.po
+@@ -528,7 +528,7 @@
+ "password aggiornata."
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin per il profilo ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Consente di importare informazioni del profilo dell'utente da ORCID."
+--- a/lib/pkp/locale/ja/user.po
++++ b/lib/pkp/locale/ja/user.po
+@@ -706,7 +706,7 @@
+ msgstr "ORCIDからユーザーのプロフィール情報を取り込めるようになりました。"
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCIDプロフィールプラグイン"
++msgstr "ORCID"
+ 
+ msgid "orcid.manager.settings.saved"
+ msgstr "設定が保存されました"
+--- a/lib/pkp/locale/ka/user.po
++++ b/lib/pkp/locale/ka/user.po
+@@ -529,7 +529,7 @@
+ "orcid.org </a> - ზე."
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID პროფილის პლაგინი"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "საშუალებას აძლევს მომხმარებლის პროფილის ინფორმაციის იმპორტი ORCID– დან."
+--- a/lib/pkp/locale/mk/user.po
++++ b/lib/pkp/locale/mk/user.po
+@@ -537,7 +537,7 @@
+ msgstr "Овозможува внес на информации за кориснички профил од ORCID."
+ 
+ msgid "orcid.displayName"
+-msgstr "Плагин за профилот на ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.about.display"
+ msgstr ""
+--- a/lib/pkp/locale/ms/user.po
++++ b/lib/pkp/locale/ms/user.po
+@@ -518,7 +518,7 @@
+ msgstr ""
+ 
+ msgid "orcid.displayName"
+-msgstr "Pemalam Profil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.noData"
+ msgstr "Tidak dapat mencari sebarang data daripada ORCID."
+--- a/lib/pkp/locale/nb_NO/user.po
++++ b/lib/pkp/locale/nb_NO/user.po
+@@ -742,7 +742,7 @@
+ "fra ORCID."
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID-profil programtillegg"
++msgstr "ORCID"
+ 
+ msgid "user.affiliations.translation"
+ msgstr "Mer informasjon"
+--- a/lib/pkp/locale/nl/user.po
++++ b/lib/pkp/locale/nl/user.po
+@@ -525,7 +525,7 @@
+ msgstr "Wachtwoord is succesvol bijgewerkt. Log in met het nieuwe wachtwoord."
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID profiel plugin"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Maakt het mogelijk om gegevens van ORCID gebruikersprofielen te importeren."
+--- a/lib/pkp/locale/pl/user.po
++++ b/lib/pkp/locale/pl/user.po
+@@ -523,7 +523,7 @@
+ msgstr "Hasło zostało zaktualizowane. Zaloguj się nim."
+ 
+ msgid "orcid.displayName"
+-msgstr "Wtyczka ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr ""
+--- a/lib/pkp/locale/pt/user.po
++++ b/lib/pkp/locale/pt/user.po
+@@ -523,7 +523,7 @@
+ msgstr "Nome de utilizador ou e-mail"
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin Perfil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Permite a importação do perfil de autor do ORCID."
+--- a/lib/pkp/locale/pt_BR/user.po
++++ b/lib/pkp/locale/pt_BR/user.po
+@@ -534,7 +534,7 @@
+ msgstr "O acesso ao fluxo de trabalho para submissão incompleta é restrito."
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin de Perfil ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr ""
+--- a/lib/pkp/locale/ru/user.po
++++ b/lib/pkp/locale/ru/user.po
+@@ -550,7 +550,7 @@
+ "Доступ к рабочему процессу для незавершённых отправок материалов ограничен."
+ 
+ msgid "orcid.displayName"
+-msgstr "Модуль «Профиль ORCID»"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Позволяет импортировать информацию профиля пользователя из ORCID."
+--- a/lib/pkp/locale/sl/user.po
++++ b/lib/pkp/locale/sl/user.po
+@@ -524,7 +524,7 @@
+ msgstr "Dostop do delovnega toka ne dokončane oddaje je omejen."
+ 
+ msgid "orcid.displayName"
+-msgstr "Vtičnik za ORCID profil"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Omogoča uvoz uporabniških podatkov iz ORCID."
+--- a/lib/pkp/locale/sv/user.po
++++ b/lib/pkp/locale/sv/user.po
+@@ -531,7 +531,7 @@
+ msgstr "Användarnamn eller e-post"
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin för ORCID-profil"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Gör det möjligt att importera användarprofilsinformation från ORCID."
+--- a/lib/pkp/locale/tr/user.po
++++ b/lib/pkp/locale/tr/user.po
+@@ -552,7 +552,7 @@
+ msgstr "Kullanıcı adı veya E-posta"
+ 
+ msgid "orcid.displayName"
+-msgstr "ORCID Profil Eklentisi"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "ORCID'den kullanıcı profili bilgilerinin içe aktarılmasına izin verir."
+--- a/lib/pkp/locale/uk/user.po
++++ b/lib/pkp/locale/uk/user.po
+@@ -539,7 +539,7 @@
+ msgstr "Доступ до робочого процесу для неповного подання обмежено."
+ 
+ msgid "orcid.displayName"
+-msgstr "Плагін профілю ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.description"
+ msgstr "Дозволяє імпортувати інформацію профілю користувача з ORCID."
+--- a/lib/pkp/locale/vi/user.po
++++ b/lib/pkp/locale/vi/user.po
+@@ -704,7 +704,7 @@
+ msgstr "Cho phép nhập thông tin hồ sơ người dùng từ ORCID."
+ 
+ msgid "orcid.displayName"
+-msgstr "Plugin hồ sơ ORCID"
++msgstr "ORCID"
+ 
+ msgid "orcid.about.howAndWhyMemberAPI"
+ msgstr ""

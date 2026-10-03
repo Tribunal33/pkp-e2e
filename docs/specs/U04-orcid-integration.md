@@ -495,6 +495,8 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the guard for A4 (issue report `docs/issues/U04-A4-what-is-orcid-link-opens-sign-in.md`): Scenario 2 presses "What is ORCID?" on the profile Identity tab and the registration page and expects the "What is ORCID?" page.
   - the guard for A2 (issue report `docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md`): a contributor who denies access at ORCID lands on the "ORCID Authorization" page and reads "You denied access to your ORCID record.", no raw key.
+  - the guard for A11 (issue report `docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md`): in French (Canada), both ORCID tabs (the site's and the journal's) read "ORCID".
+  - the guard for A12 (issue report `docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md`): in French (Canada), the site's ORCID switch and every state of the contributor's ORCID iD field show no untranslated text key (A11's switch too).
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -557,8 +559,8 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A4](#a4) | "What is ORCID?" beside the ORCID button opens ORCID's sign-in instead of the explanation page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
 | [A8](#a8) | A press's or preprint server's ORCID verification failure page says to contact "the journal manager" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | minor | — |
-| [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | user-visible | — |
+| [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
@@ -687,27 +689,29 @@ journal.
 Basis: code. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a11"></a>
-**A11 — French: the site's ORCID switch is unlabelled, and both ORCID tabs carry the old plugin's name** · 🐞 · minor.
-A Site Administrator working in French expects the site's ORCID tab in
-French, as the journal's tab is. Instead the one box that turns ORCID on
-for every journal reads "##orcid.manager.siteWide.enabled##", with
-"##orcid.manager.siteWide.description##" as its explanation, so nothing
-on the tab says what the box does (Rule 17). Both ORCID tabs, the site's
-and the journal's, are named "Plugiciel de profil ORCID" ("ORCID Profile
-Plugin"), the name of the retired plugin (Rule 16), where the English
-interface says "ORCID".
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+**A11 — French: the site's ORCID switch is unlabelled, and both ORCID tabs carry the old plugin's name** · 🐞 · low.
+A Site Administrator working in French (Canada) expects the site's ORCID
+tab in French, as the journal's tab is. Instead the one box that turns
+ORCID on for every journal reads "##orcid.manager.siteWide.enabled##",
+explained by "##orcid.manager.siteWide.description##": untranslated text
+keys, so nothing on the tab says what the box does (Rule 17). Both ORCID
+tabs, the site's and the journal's, are named "Plugiciel de profil
+ORCID" ("ORCID Profile Plugin"), the name of the retired plugin (Rule
+16), where English says "ORCID"; the same old name shows in 31 other
+interface languages, whose translations were not marked for review when
+the English text changed.
+Basis: probe, 2026-10-03. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — French: the contributor's ORCID iD field shows raw codes** · 🐞 · user-visible.
-A Journal Manager working in French expects the contributor's ORCID iD
-field in French. Its label and help text are, but the request button,
-its question window, the requested state and its resend link, an
-unauthenticated iD's note and the "Supprimer" question all show raw
-codes (Rule 17a). The buttons still work: "Oui" sends the request or
-removes the iD. The manager cannot tell what the button does or what
-they are confirming.
-Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+**A12 — French: the contributor's ORCID iD field shows raw codes** · 🐞 · low.
+A Journal Manager working in French (Canada) expects the contributor's
+ORCID iD field in French. Its label and help text are, but the button
+that asks the author to verify their iD and its question, the button's
+"requested" state and its resend link, an unverified iD's warning and
+the question "Supprimer" asks all show untranslated text keys (Rule 17a).
+The buttons still work ("Oui" sends the email or removes the iD), but
+the manager cannot read what they confirm.
+Basis: probe, 2026-10-03. <sup>[f-a12](#fn-a12)</sup>
 
 ### OMP
 
@@ -1238,12 +1242,15 @@ interface is the control (note b). The run records list a server error on
 every Site Settings load, from the Plugin Gallery's list
 ([Plugins management A1](U62-plugins-management.md#a1)); the ORCID tab
 itself failed nothing, so the entry carries no crash word.
+Issue report: [docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md](../issues/U04-A11-orcid-tabs-named-after-old-plugin.md).
+Issue report: [docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md).
 
 <a id="fn-a12"></a>
 **f-a12** — Note n (every code, the two requests answering 200, the
 locale cause). Seen identically on OJS, OMP and OPS in two runs,
 2026-09-28, with no failure behind either request; the English field on
 the same journals is the control.
+Issue report: [docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:
