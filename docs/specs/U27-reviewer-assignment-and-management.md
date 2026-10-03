@@ -3289,7 +3289,7 @@ as Complete'…" as displayed — and the same rework's commit
 Live-probed 2026-08-29 (OJS + OMP): the view window renders no upload
 control anywhere; the "Upload" control exists only in
 `ReviewDetailsEditModal.vue` (Rule 14b).
-Issue report: [docs/issues/U27-A22-review-details-guidance-promises-upload.md](../issues/U27-A22-review-details-guidance-promises-upload.md).
+Issue report: [pkp-e2e#686](https://github.com/jardakotesovec/pkp-e2e/issues/686) ([docs/issues/U27-A22-review-details-guidance-promises-upload.md](../issues/U27-A22-review-details-guidance-promises-upload.md)).
 
 <a id="fn-a23"></a>
 **f-a23** — Live-probed 2026-08-29 (OJS): "Recommendation: {label}" in
@@ -3635,7 +3635,7 @@ flag, which records that the question was answered, not which answer;
 "Competing Interests declared: NO"
 (`…competingInterestsWithNoDeclaration`) prints only for a previous state
 never answered.
-Issue report: [docs/issues/U27-A39-competing-interests-no-reads-declared-yes.md](../issues/U27-A39-competing-interests-no-reads-declared-yes.md).
+Issue report: [pkp-e2e#688](https://github.com/jardakotesovec/pkp-e2e/issues/688) ([docs/issues/U27-A39-competing-interests-no-reads-declared-yes.md](../issues/U27-A39-competing-interests-no-reads-declared-yes.md)).
 
 <a id="fn-a40"></a>
 **f-a40** — Driven 2026-09-29 (a context with a "Competing Interests"
@@ -3760,7 +3760,7 @@ review form: the block's title is the form's own, the line under it the
 fixed string "The questions this journal asks reviewers to answer."
 (`editor.review.reviewerForm.description.default`, lib/pkp
 `locale/en/editor.po`), shared by OJS and OMP with no press override.
-Issue report: [docs/issues/U27-OMP6-press-review-form-line-says-this-journal.md](../issues/U27-OMP6-press-review-form-line-says-this-journal.md).
+Issue report: [pkp-e2e#687](https://github.com/jardakotesovec/pkp-e2e/issues/687) ([docs/issues/U27-OMP6-press-review-form-line-says-this-journal.md](../issues/U27-OMP6-press-review-form-line-says-this-journal.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Code+registry inspection 2026-08-27 (pkp/ops main
