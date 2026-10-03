@@ -961,6 +961,10 @@ Left out of the scenarios above, by reason:
     a market and a sales-rights entry saved without a territory, a
     market price of "ten" and a date of "abc" under "YYYYMMDD" are
     each refused in the window
+  - the guard for A2 (issue report
+    `docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md`):
+    an assigned Layout Editor opens "Marketing" › "Audience" with
+    "Save" greyed, while the Press editor saves
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1043,7 +1047,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | The representative window shows both "Role" lists and refuses a new supplier until the type is clicked | 🐞 | user-visible | — |
 | [A17](#a17) | A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | minor | — |
+| [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | The "Market Territories" list shows bare codes and runs the price into the currency code | 🐞 | minor | — |
 | [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The audience reaches the ONIX product with its code type and code value swapped | 🐞 | minor | — |
@@ -1073,7 +1077,7 @@ affected. An install upgraded from 3.5 or earlier still exports.
 Since: 2025-12-04, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — "Audience" refuses the assistant roles it offers "Save" to** · 🐞 · minor.
+**A2 — "Audience" refuses the assistant roles it offers "Save" to** · 🐞 · low.
 Every assigned assistant role (Copyeditor, Layout Editor, Marketing and
 sales coordinator and the others) opens "Marketing" › "Audience" with
 "Save" pressable. Their "Save" shows the passing notice "An unexpected
@@ -1083,7 +1087,7 @@ same happens on "Publication Dates"
 ([Chapters & work type, its A2](U72-chapters-work-type.md#a2)).
 Expected: a page these roles cannot save is offered read-only, or not
 at all.
-Basis: probe. <sup>f-a2</sup>
+Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A saved audience list cannot be emptied** · ❓ · minor.
@@ -2224,6 +2228,7 @@ of the seven assigned assistant roles got 401 and the passing notice,
 no window (note td3); the Layout Editor's and the Marketing and sales
 coordinator's "Save" on "Publication Dates" did the same, while the
 Press manager's saved.
+Issue report: [docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md](../issues/U74-A2-assistant-marketing-and-work-type-refused.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note d: no `FieldSelect` carries an empty option, and the

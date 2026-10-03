@@ -1,0 +1,107 @@
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowPermissions.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowPermissions.js
+@@ -22,6 +22,12 @@
+ 		let canAccessEditorialHistory = false;
+ 		// Changing submission language
+ 		let canChangeSubmissionLanguage = false;
++		// Saving the submission itself (PUT submissions/{id}: work type,
++		// audience, chapter publication dates). The API admits managers and
++		// sub-editors (and authors, who use their own view), from whatever
++		// stage they are assigned in, so unlike canAccessEditorialHistory
++		// this is not limited to the active stage
++		let canEditSubmission = false;
+ 
+ 		let accessibleStages = [];
+ 
+@@ -32,6 +38,7 @@
+ 				canEditPublication,
+ 				canPublish,
+ 				canAccessEditorialHistory,
++				canEditSubmission,
+ 				accessibleStages,
+ 			};
+ 		}
+@@ -46,6 +53,14 @@
+ 			if (stage.currentUserAssignedRoles.length) {
+ 				accessibleStages.push(stage.id);
+ 			}
++			if (
++				hasIntersection(stage.currentUserAssignedRoles, [
++					pkp.const.ROLE_ID_MANAGER,
++					pkp.const.ROLE_ID_SUB_EDITOR,
++				])
++			) {
++				canEditSubmission = true;
++			}
+ 		});
+ 
+ 		canEditPublication =
+@@ -95,6 +110,7 @@
+ 			canPublish,
+ 			canAccessEditorialHistory,
+ 			canChangeSubmissionLanguage,
++			canEditSubmission,
+ 			accessibleStages,
+ 		};
+ 	});
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOMP.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOMP.js
+@@ -64,12 +64,16 @@
+ 		},
+ 	});
+ 
+-	actions.push({
+-		component: 'WorkflowWorkTypeOMP',
+-		props: {
+-			submission: submission,
++	addItemIf(
++		actions,
++		{
++			component: 'WorkflowWorkTypeOMP',
++			props: {
++				submission: submission,
++			},
+ 		},
+-	});
++		permissions.canEditSubmission,
++	);
+ 
+ 	addItemIf(
+ 		actions,
+@@ -454,6 +458,7 @@
+ 				{
+ 					component: 'WorkflowMarketingForm',
+ 					props: {
++						canEdit: permissions.canEditSubmission,
+ 						formName: 'audience',
+ 						submission,
+ 					},
+@@ -479,6 +484,7 @@
+ 				{
+ 					component: 'WorkflowMarketingForm',
+ 					props: {
++						canEdit: permissions.canEditSubmission,
+ 						formName: 'publicationDates',
+ 						submission,
+ 					},
+--- a/lib/ui-library/src/pages/workflow/components/publication/WorkflowMarketingForm.vue
++++ b/lib/ui-library/src/pages/workflow/components/publication/WorkflowMarketingForm.vue
+@@ -16,6 +16,7 @@
+ import {useDataChanged} from '@/composables/useDataChanged';
+ 
+ const props = defineProps({
++	canEdit: {type: Boolean, required: true},
+ 	formName: {type: String, required: true},
+ 	submission: {type: Object, required: true},
+ });
+@@ -36,6 +37,10 @@
+ 	{immediate: true},
+ );
+ 
++watch(publicationForm, (newPublicationForm) => {
++	newPublicationForm.canSubmit = props.canEdit;
++});
++
+ const {triggerDataChange} = useDataChanged();
+ 
+ const {set, form} = useForm(publicationForm);

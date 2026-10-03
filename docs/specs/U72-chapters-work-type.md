@@ -698,6 +698,10 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A5 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): the Review step's "Chapters" panel's "Edit" opens "Details".
+  - the guard for A2 (issue report
+    `docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md`):
+    an assigned Layout Editor gets no work-type menu and a greyed
+    "Save" on "Publication Dates", while the Press editor changes both
 - **Nothing new to test**:
   - two form languages on the press: one "Title", "Subtitle" and
     "Abstract" box per language, the book's language first, and a title
@@ -753,7 +757,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A6](#a6) | "Order" cannot move a chapter: a dragged chapter stays where it was | 🐞 | user-visible | — |
 | [A4](#a4) | A chapter's "Date Published" shows today's date when the chapter has none, and "Save" does not store it | 🐞 | user-visible | — |
-| [A2](#a2) | The work-type control and "Publication Dates" are offered to the assistant roles, and their choice is refused | 🐞 | minor | — |
+| [A2](#a2) | The work-type control and "Publication Dates" are offered to the assistant roles, and their choice is refused | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | After "Create New Version" the new version's chapters lose their files, which no chapter of the new version can take back | 🐞 | minor | — |
 | [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A chapter's new author order is lost after an earlier "Done" in the same visit | 🐞 | minor | — |
@@ -780,7 +784,7 @@ Lean: yes; the published-version opening was added in 2025 so editors could corr
 Since: 2025-05-28, a date read from the code's history · Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The work type and "Publication Dates" refuse the assistant roles they are offered to** · 🐞 · minor.
+**A2 — The work type and "Publication Dates" refuse the assistant roles they are offered to** · 🐞 · low.
 The editorial view's header shows the work-type control to every role
 that opens it, and the "Marketing" › "Publication Dates" page opens with
 "Save" pressable for them too. For the assistant roles (Copyeditor,
@@ -794,7 +798,7 @@ showing the new choice selected; only a reload shows that nothing
 changed. The "Marketing" › "Audience" page ([ONIX metadata & export](U74-onix-metadata-export.md))
 is offered and refused the same way. Expected: controls these
 roles cannot use are not offered, or shown read-only.
-Basis: probe, with the cause read from the code. <sup>f-a2</sup>
+Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A new version's chapters lose their files** · 🐞 · minor.
@@ -1546,6 +1550,7 @@ Live-probed 2026-09-28: notes td4 and td5; the refused "Publication
 Dates" save carries the same server message as the work-type refusal,
 which the form replaces with its generic notice. The Layout Editor's
 "Save" on "Audience" answered 401 with the same notice (two runs).
+Issue report: [docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md](../issues/U74-A2-assistant-marketing-and-work-type-refused.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note q. Live-probed 2026-09-28: note td15; in the stored data
