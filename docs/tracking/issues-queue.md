@@ -46,7 +46,7 @@ and the hourly routine starts one only when none is running
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (pkp-e2e#521) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
-| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | A5: the ordering arrows done with U46 A5 (pkp-e2e#619); its typed-name boxes half (the multilingual name boxes' accessible names) open, a cause of its own |
+| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | **A3 and A5's typed-name boxes half taken: issues session, workstation s0, 2026-10-03** (with U41 A5 and A10) (A5: the ordering arrows done with U46 A5 (pkp-e2e#619); its typed-name boxes half (the multilingual name boxes' accessible names) open, a cause of its own) |
 | [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
