@@ -1,0 +1,37 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldUpload.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldUpload.vue
+@@ -354,13 +354,16 @@
+ 		 * @see https://www.dropzonejs.com/#event-error
+ 		 */
+ 		onError: function (file, message) {
+-			let errors = this.errors.slice();
+-			if (typeof message === 'string') {
+-				errors.push(message);
++			// The file was refused, by dropzone.js or by the API: take it out of the
++			// box so that another file can be chosen. Removing it fires
++			// onRemoveFile(), which clears uploadFile and the field's errors, so the
++			// message is set after it.
++			this.$refs.dropzone.dropzone.removeFile(file);
++			if (typeof message === 'string') {
++				this.setErrors([message]);
+ 			} else if (typeof message === 'object') {
+-				errors.push(message.errorMessage);
++				this.setErrors([message.errorMessage]);
+ 			}
+-			this.setErrors(errors);
+ 		},
+ 
+ 		/**
+--- a/lib/ui-library/src/components/Form/fields/FieldUploadImage.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldUploadImage.vue
+@@ -285,6 +285,10 @@
+ 		 * @see https://www.dropzonejs.com/#event-thumbnail
+ 		 */
+ 		onThumbnail: function (file) {
++			// dropzone.js may draw the thumbnail of a refused picture after onError()
++			if (file.status === 'error') {
++				return;
++			}
+ 			this.uploadFile = {...file};
+ 			this.setFocusToControl();
+ 		},
