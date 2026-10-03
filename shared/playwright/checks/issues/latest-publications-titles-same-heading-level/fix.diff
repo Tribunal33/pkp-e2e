@@ -1,0 +1,17 @@
+--- a/templates/frontend/objects/latest_article.tpl
++++ b/templates/frontend/objects/latest_article.tpl
+@@ -1,3 +1,14 @@
++{if !$heading}
++	{assign var="heading" value="h2"}
++{/if}
++{assign var="articleHeading" value="h3"}
++{if $heading == "h3"}
++	{assign var="articleHeading" value="h4"}
++{elseif $heading == "h4"}
++	{assign var="articleHeading" value="h5"}
++{elseif $heading == "h5"}
++	{assign var="articleHeading" value="h6"}
++{/if}
+ <div class="sections latest_articles">
+     <{$heading} class="highlight_first">
+         {translate key="submissions.published.latest"}
