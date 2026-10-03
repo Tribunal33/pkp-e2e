@@ -1192,6 +1192,7 @@ Left out of the scenarios above, by reason:
   - a Section Editor's "Dashboard" under the username on the public pages opens the Dashboard, with their task count (Rule 19a; the guard [A2](#a2)'s issue report proposes, shared with Notifications center & email preferences A3)
   - the eye notices of "Privacy Statement", "Contact" and "About" and the "About" type's description, on a journal, a press and a preprint server: each names the Settings place where the screens put it (Rules 7a–7b; the guard [A6](#a6) and [A13](#a13)'s issue report proposes)
   - a Site Administrator holding Reader alone in a journal opens "Editor Dashboard": the views and counts show, and no "Error" window opens on the editorial pages (Actors; the guard [A22](#a22)'s issue report proposes)
+  - the editorial header's "i" icon and the Tasks window's strip: the link's accessible name reads "Help" ("Aide" in French) (Rule 27b; the guard [A1](#a1)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1271,7 +1272,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | The editorial header's help icon is named "##common.help##" | 🐞 | minor | — |
+| [A1](#a1) | Screen readers announce the editorial header's "i" (help) icon as "##common.help##" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
@@ -1305,12 +1306,21 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The help icon is named "##common.help##"** · 🐞 · minor.
-The "i" icon in every editorial header, and in the strip atop every
-window that opens from the right, should be announced as "Help". A
-screen reader, and the page's text, give it the raw text
-"##common.help##" instead, in every app and language.
-Since: 2025-04-10 · Basis: probe. <sup>f-a1</sup>
+**A1 — Screen readers announce the editorial header's "i" (help) icon as "##common.help##"** · 🐞 · low.
+The "i" icon at the top right of every editorial page should be
+announced as "Help". A screen reader announces it as the raw
+translation key "##common.help##" instead, in every language, English
+included. Editors meet it on every editorial page; Authors on My
+Submissions, the submission form, their submission's page and their
+profile.
+
+The same icon sits again in the dark bar atop each window that slides
+in from the right, such as the Tasks window, with the same name there.
+
+Sighted users never see the raw key: the icon shows no text and has no
+tooltip. It still opens the "Learning OJS" ("Learning OMP", "Learning
+OPS") guide in a new tab.
+Since: 2025-04-10 · Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — A Section Editor's "Dashboard" opens the Profile page** · 🐞 · low.
@@ -2692,6 +2702,7 @@ text "##common.help##" beside "Tasks" in the dashboard header, in the side
 windows' strips (the "Assign Participant" window, the upload wizard, the
 workflow windows) and in legacy windows' and the Settings › Workflow
 page's headers.
+Issue report: [docs/issues/U08-A1-help-icon-raw-key-name.md](../issues/U08-A1-help-icon-raw-key-name.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `PKPNavigationMenuService::getDisplayStatus()`,

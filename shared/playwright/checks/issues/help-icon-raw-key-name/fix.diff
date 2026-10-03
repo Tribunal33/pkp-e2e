@@ -1,0 +1,21 @@
+--- a/lib/ui-library/public/globals.js
++++ b/lib/ui-library/public/globals.js
+@@ -298,7 +298,6 @@
+ 		'common.findTemplate': 'Find Template',
+ 		'common.fullscreen': 'Fullscreen',
+ 		'common.geographic': 'Geographic',
+-		'common.help': '##common.help##',
+ 		'common.history': 'History',
+ 		'common.id': 'ID',
+ 		'common.inParenthesis': '({$text})',
+--- a/lib/ui-library/src/components/TopNavActions/TopNavActions.vue
++++ b/lib/ui-library/src/components/TopNavActions/TopNavActions.vue
+@@ -8,7 +8,7 @@
+ 				class="flex h-full items-center p-2"
+ 			>
+ 				<Icon icon="HelpTopNav" class="h-7 w-7"></Icon>
+-				<span class="-screenReader">{{ t('common.help') }}</span>
++				<span class="-screenReader">{{ t('help.help') }}</span>
+ 			</a>
+ 		</div>
+ 		<div>
