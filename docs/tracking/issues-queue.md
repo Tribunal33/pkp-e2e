@@ -44,7 +44,7 @@ and the hourly routine starts one only when none is running
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A5 done with U75 A11 (pkp-e2e#675) |
-| [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 |  |
+| [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | **OMP1 taken: issues session, VM s2, 2026-10-03** (joined to U27 OMP3) |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (pkp-e2e#619) |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
