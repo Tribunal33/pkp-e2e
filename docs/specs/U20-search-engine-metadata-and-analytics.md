@@ -898,6 +898,7 @@ Left out of the scenarios above, by reason:
   - A7 (an abstract holding "&" and "<": "citation_abstract" and "DC.Description" carry the symbols, not their HTML entities; Fields, "citation_abstract")
   - OMP3 {OMP} (book 14's pages: "DC.Type" "Text.Book" on the book's page and a whole-book file's view page, "Text.Chapter" on a chapter's page and a chapter file's view page; Rule 17)
   - OMP4 {OMP} (a published book with a chapter page and "Create New Version", then the new version published: the sitemap lists the chapter page at the address the book's page links to, and it opens; Rule 2c)
+  - A6 (an author whose account holds an English name only submits in French: "citation_author" and "DC.Creator.PersonalName" carry the full name; Fields, "citation_author")
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -984,7 +985,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Search engines get the home page's "Description" cut at its first double quote mark | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Google Analytics Plugin" tells a press and a preprint server it integrates OJS, and points every manager to a "Check Status" function that does not exist | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | The sitemap lists expired announcements, whose entries lead to the Announcements list | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A6](#a6) | A contributor whose names are not entered in the submission's language is announced by the given name alone | 🐞 | minor | — |
+| [A6](#a6) | An author submitting in a language their account has no name in is published under the given name alone | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Reference managers and indexes get an abstract's "&" and "<" as "&amp;" and "&lt;" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | "DC.Source.URI" points to an address that does not exist instead of the journal's home page | 🐞 | minor | — |
 | [OJS2](#ojs2) | A journal's sitemap lists no article at all, only the issues' pages | 🐞 | user-visible | — |
@@ -1078,14 +1079,21 @@ entries grow by one with each announcement that expires.
 Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — Author tags give the given name alone in another language** · 🐞 · minor.
-An author whose names are entered in English submits an item in French.
-The item's page shows "Ada Author", but "citation_author" and
-"DC.Creator.PersonalName" read "Ada": the tags take the name in the
-submission's language alone, and in French the contributor has a given
-name but no family name. Indexes receive the author without a family
-name.
-Basis: probe, 2026-09-26. <sup>f-a6</sup>
+**A6 — An author submitting in a language their account has no name in is published under the given name alone** · 🐞 · medium.
+An author whose account holds their name in English only submits an
+item in French. The item they submit, and later the published item,
+names them by their given name alone wherever the item's French name
+is used: the search engine tags ("citation_author",
+"DC.Creator.PersonalName") read "Carlo" instead of "Carlo Corino", and
+so does the item's page when a reader views it in French.
+
+In English the wizard, the workflow and the item's page all show the
+full name, so the editor who publishes it has no reason to look.
+
+An account registered on an English page holds its name in English
+only, so this is the ordinary case for an author who writes in a
+journal's second language.
+Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Reference managers and indexes get an abstract's "&" and "<" as "&amp;" and "&lt;"** · 🐞 · medium.
@@ -1369,6 +1377,7 @@ Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../iss
 
 <a id="fn-f-a6"></a>
 **f-a6** — Notes h, i: `citation_author` and `DC.Creator.PersonalName` read `getFullName(false, false, $publicationLocale)`, the name in the submission language only, with no fallback; the item's page falls back to the other language. The contributor copied from the submitting author holds the given name in the submission language and not the family name. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP), in either interface language: note q14.
+Issue report: [docs/issues/U20-A6-author-tags-given-name-alone-other-language.md](../issues/U20-A6-author-tags-given-name-alone-other-language.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Notes h, i: the tags print `htmlspecialchars(strip_tags($abstract))`, and the stored abstract already holds "&" as `&amp;`, so it is escaped a second time. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP, and on a book file's page): note q14.

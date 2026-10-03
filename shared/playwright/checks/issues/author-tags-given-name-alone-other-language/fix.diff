@@ -1,0 +1,21 @@
+--- a/lib/pkp/classes/author/Repository.php
++++ b/lib/pkp/classes/author/Repository.php
+@@ -259,9 +259,16 @@
+         }
+         // given name has to exist in the submission locale:
+         // if there is no user given name in the submission locale
+-        // copy the given name in the user's default (site) locale
++        // copy the given name in the user's default (site) locale,
++        // with the family name of the same locale, so that the name stays whole
++        // (as changePublicationLocale() copies the names together)
+         if (!array_key_exists($submissionLocale, $user->getGivenName(null))) {
+-            $author->setGivenName($user->getGivenName($user->getDefaultLocale()), $submissionLocale);
++            $defaultLocale = $user->getDefaultLocale();
++            $author->setGivenName($user->getGivenName($defaultLocale), $submissionLocale);
++            $familyName = $user->getFamilyName($defaultLocale);
++            if (!empty($familyName) && empty($user->getFamilyName($submissionLocale))) {
++                $author->setFamilyName($familyName, $submissionLocale);
++            }
+         }
+ 
+         $migratedAffiliation = Repo::affiliation()->migrateUserAffiliation($user, $submission, $context);
