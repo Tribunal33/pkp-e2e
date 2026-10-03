@@ -632,11 +632,12 @@ Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
 **A5 — Assistant's refused ORCID controls report success** · 🐞 · user-visible.
 An Assistant editing a contributor sees the same ORCID iD field as an editor,
 with "Request verification" and "Delete". The server refuses both: no email
-goes out, and the iD stays. The screen still reports success. The field
-switches to "ORCID Verification has been requested!" or shows the iD gone,
-with no error anywhere. The roles allowed to use these controls omit the
+goes out, and the iD stays. A window titled "Error" says the action
+was not allowed, but the field behind it still reports success: it
+switches to "ORCID Verification has been requested!" or shows the iD
+gone, until the form is closed and opened again. The roles allowed to use these controls omit the
 Assistant, though Assistants may edit every other contributor field.
-Basis: probe + code. <sup>[f-a5](#fn-a5)</sup>
+Basis: probe, 2026-10-03. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — The email toggle's label misdescribes its trigger** · ❓ · minor.
@@ -1168,6 +1169,7 @@ otherwise admits Assistants (the contributors feature's gate). Live-probed
 2026-08-07 (OJS): both actions returned an authorization refusal
 (HTTP 401) — no email delivered, stored iD unchanged — while the field
 showed the requested state / the iD removed.
+Issue report: [docs/issues/U04-A5-orcid-field-refusal-shown-as-done.md](../issues/U04-A5-orcid-field-refusal-shown-as-done.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Label `orcid.manager.settings.sendMailToAuthorsOnPublication`

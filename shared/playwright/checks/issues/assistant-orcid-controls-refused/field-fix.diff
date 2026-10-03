@@ -1,0 +1,20 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldOrcid.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldOrcid.vue
+@@ -189,7 +189,7 @@
+ 			});
+ 			await fetch();
+ 
+-			if (isSuccess) {
++			if (isSuccess.value) {
+ 				this.verificationRequested = true;
+ 			}
+ 		},
+@@ -251,7 +251,7 @@
+ 
+ 			await fetch();
+ 
+-			if (isSuccess) {
++			if (isSuccess.value) {
+ 				this.orcidValue = '';
+ 			}
+ 
