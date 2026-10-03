@@ -1,0 +1,8 @@
+--- a/plugins/blocks/developedBy/locale/fr_CA/locale.po
++++ b/plugins/blocks/developedBy/locale/fr_CA/locale.po
+@@ -19,4 +19,4 @@
+ "Ce plugiciel offre un lien au bloc « Développé par » dans l'encadré latéral."
+ 
+ msgid "plugins.block.developedBy.blockTitle"
+-msgstr ""
++msgstr "Développé par"

@@ -1203,6 +1203,7 @@ Left out of the scenarios above, by reason:
   - the side menu's "DOIs" entry and the DOIs page in French (Canada) on a press and a preprint server: French labels, no raw key (the guard [A23](#a23)'s issue report proposes)
   - on a journal, the menu's "Edit" window: "Subscriptions" and "My Subscriptions" carry the crossed-out eye and open their notices (Rule 7a; the guard [OJS1](#ojs1)'s issue report proposes)
   - a press's item window in French (Canada): the press's own types, their descriptions and the series and category lists read French (the guard [A24](#a24)'s issue report proposes)
+  - a preprint server's French (Canada) pages with the "Developed By" block placed: its heading reads "Développé par" (the guard [OPS3](#ops3)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1301,7 +1302,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | Menu window marks "Subscriptions" and "My Subscriptions" items with no eye, so their notices never show {OJS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [OPS3](#ops3) | On a preprint server's French pages the "Developed By" heading reads a raw code {OPS} | 🐞 | minor | — |
+| [OPS3](#ops3) | {OPS} On a preprint server's French (Canada) pages, screen readers hear the "Developed By" heading as a text key | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS4](#ops4) | A server's settings address opened at the site's level reads "No server in context!" {OPS} | 🐞 | minor | — |
 | [A5](#a5) | The "About" item's notice promises a condition the header never applies | ❓ | minor | — |
 | [A8](#a8) | A menu can only be arranged with a mouse | ❓ | user-visible | — |
@@ -1707,11 +1708,22 @@ its PDF; the sentence a refused Reader should see exists in no language.
 Basis: probe, 2026-10-01. <sup>f-ops2</sup>
 
 <a id="ops3"></a>
-**OPS3 — The French "Developed By" heading reads a raw code** · 🐞 · minor.
-On a preprint server's French pages a screen reader hears the "Developed
-By" block's heading as "##plugins.block.developedBy.blockTitle##"; a
-journal and a press read "Développé par".
-Basis: probe. <sup>f-ops3</sup>
+**OPS3 — On a preprint server's French (Canada) pages, screen readers hear the "Developed By" heading as a text key** · 🐞 · low.
+A visitor who uses a screen reader on a preprint server's pages in
+French (Canada) hears the "Developed By" block's heading as
+"##plugins.block.developedBy.blockTitle##" instead of "Développé par".
+The heading is hidden on screen, so sighted visitors see nothing wrong.
+A journal's and a press's French pages read "Développé par".
+
+Nothing is lost: the block's link, "Open Preprint Systems", reads and
+works as in English.
+
+The block is off until a manager turns it on and places it in the
+sidebar; on a server that does, every public page in French (Canada)
+reads the key. The same heading also has no text in 10 more of a
+preprint server's languages, and in 3 each on a journal and a press;
+those are outside this report's fix.
+Basis: probe, 2026-10-03. <sup>f-ops3</sup>
 
 <a id="ops4"></a>
 **OPS4 — The site-level refusal reads "No server in context!"** · 🐞 · minor.
@@ -3036,6 +3048,7 @@ Issue report: [pkp-e2e#380](https://github.com/jardakotesovec/pkp-e2e/issues/380
 <a id="fn-f-ops3"></a>
 **f-ops3** — Note s. Live-probed 2026-09-23 (Rule 21), OPS, with OJS and
 OMP the control.
+Issue report: [docs/issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md](../issues/U08-OPS3-ops-french-developed-by-heading-raw-key.md).
 
 <a id="fn-f-ops4"></a>
 **f-ops4** — Note td21. OPS `locale/en/locale.po`
