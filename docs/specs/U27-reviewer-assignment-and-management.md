@@ -1279,6 +1279,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U27-A2-request-resent-row-shows-review-deadline.md`): a
     resent request with two different dates reads "Response due:" with the
     response date
+  - the guard for A15 (issue report
+    `docs/issues/U27-A15-reviewer-response-erases-reminder-history.md`):
+    after a reminder and then the reviewer's response, the assignment's
+    History still reads "Reviewer Reminded" with its date
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1361,13 +1365,13 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Send Review To ORCID" is offered on rows in every state, not only completed reviews | 🐞 | latent | — |
+| [A1](#a1) | A reviewer's row offers "Send Review To ORCID" before the review is submitted, and pressing it does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | A reviewer's "Request Resent" row reads "Response due:" with the review deadline, not the response deadline | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Editors see no "Response due" date on a reviewer's "Request Sent" row in the Reviewers table | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Submitting inverted due dates is refused with no message; the form just stays open | 🐞 | user-visible | — |
 | [A12](#a12) | The assignment-changed email's opt-out is offered nowhere; its own unsubscribe page omits the type | 🐞 | minor | — |
 | [A13](#a13) | Email Reviewer sends with an empty body despite the body being marked required | 🐞 | minor | — |
-| [A15](#a15) | The reviewer's response erases the dated "Reviewer Reminded" milestone from the assignment's History | 🐞 | minor | claim check (claude), 2026-08-02 — settled |
+| [A15](#a15) | A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | Emptying the request letter makes the add fail silently, yet the assignment is created and the request email never goes out | 🐞 | user-visible | — |
 | [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
@@ -1382,7 +1386,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP6](#omp6) | {OMP} The Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." on a press | 🐞 | minor | — |
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
 | [A36](#a36) | A reviewer assigned today reads "Yesterday" in the Add Reviewer list, while the entry's statistics give 0 days since the last assignment | 🐞 | minor | — |
-| [A37](#a37) | After "Resend Review Request" the activity log reads "…for submission {$submissionid}." with the placeholder printed | 🐞 | minor | — |
+| [A37](#a37) | After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A39](#a39) | "View changes" on a competing-interests change reads "Competing Interests declared: YES" for an answer of "I do not have any competing interests" | 🐞 | minor | @beaug 2026-09-30 · confirmed |
 | [A40](#a40) | On a request with no review, "Save Changes" with only the competing-interests answer recorded submits the review for the reviewer, with no content on a press | 🐞 | minor | @beaug 2026-09-30 · confirmed on OMP |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
@@ -1414,17 +1418,19 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — ORCID deposit offered regardless of review state** · 🐞 · latent.
+**A1 — A reviewer's row offers "Send Review To ORCID" before the review is submitted, and pressing it does nothing** · 🐞 · low.
 A reviewer row whose reviewer has an authenticated ORCID iD shows "Send
-Review To ORCID" in its menu in every state, including before the reviewer
-has even responded. The action only makes sense for a completed review. It
-is latent because it needs ORCID configured and an authenticated reviewer
-iD, which default test installs lack.
-Basis: code reading. A live probe (2026-08-02) could only confirm the flip
-side: without an ORCID on the reviewer, the entry is absent in every state
-checked. Attaching an iD needs the external OAuth flow no screen here
-provides. Settled by: a reviewer with a verified iD, any non-complete row,
-open the menu. <sup>[f-a1](#fn-a1)</sup>
+Review To ORCID" in its menu in every state, including before the
+reviewer has even responded. The action only makes sense for a completed
+review. The entry shows on declined and cancelled requests too, which
+will never have a review. Pressed early, it asks "Send this review to
+the reviewer's ORCID?", and "OK" closes the question with no message;
+nothing is sent, and nothing says so. Once the review is submitted, the
+entry starts the deposit on a journal that uses ORCID's member API,
+which also sends a confirmed review on its own. A press never sends
+reviews to ORCID, so there the entry does nothing in any state. The fix
+is one condition on the menu entry. Basis: probe, 2026-10-03.
+<sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — A reviewer's "Request Resent" row reads "Response due:" with the review deadline, not the response deadline** · 🐞 · low.
@@ -1599,18 +1605,19 @@ Re-checked: claim check (claude), 2026-08-02 — overturned (was a defect).
 <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — The reviewer's response erases the History "Reviewer Reminded" line** · 🐞 ·
-minor.
+**A15 — A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report** · 🐞 · low.
 Sending a reminder stamps a dated "Reviewer Reminded" milestone into the
-assignment's History. Once the reviewer responds, the line is gone. The
-response resets the reminder bookkeeping, the same reset that re-arms the automatic
-reminders (Side effects), and erases the dated History milestone with it.
-The mechanism is deliberate; the user-facing cost is the lost History line.
-Basis: live probe (the settling recipe run exactly: reminder, then History
-shows the reminder line; an acceptance logged, then the line is gone).
-Re-checked: claim check (claude), 2026-08-02 — settled from an open question
-to a defect; both prior conflicting observations are explained (one read
-History before the response, one after). <sup>[f-a15](#fn-a15)</sup>
+assignment's History. Once the reviewer responds, the line is gone. When
+the reviewer accepts or declines, the app clears the assignment's stored
+reminder date. That clearing is what lets the automatic reminder about
+the review go out later, but the History reads the same date, so its
+line disappears, and the Review Report's "Date Reminded" column goes
+empty for that reviewer. It happens to reminders the editor sends and to
+automatic ones alike. The assignment keeps one reminder date, the
+latest; a reminder about the review sent after the response stamps it
+again and shows. The fix keeps the date through the response; dates
+already cleared cannot be brought back. Basis: probe, 2026-10-03.
+<sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
 **A16 — A wrong-format typed due date is silently thrown away** · 🐞 · medium.
@@ -1839,14 +1846,19 @@ entry should read the same interval its own statistics give.
 Basis: probe. <sup>[f-a36](#fn-a36)</sup>
 
 <a id="a37"></a>
-**A37 — The resend's activity-log line prints "{$submissionid}"** · 🐞 ·
-minor.
-After "Resend Review Request" on a declined row, the submission's activity
-log gains "Resent the request to review in round 1 to {reviewer} for
-submission {$submissionid}.", with the placeholder printed literally where
-the submission's number belongs. The lines of the same log about the
-assignment and the decline print the number.
-Basis: probe. <sup>[f-a37](#fn-a37)</sup>
+**A37 — After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs** · 🐞 · low.
+After "Resend Review Request" on a declined row, the submission's
+activity log gains "Resent the request to review in round 1 to
+{reviewer} for submission {$submissionid}.", with the placeholder
+printed literally where the submission's number belongs. The lines of
+the same log about the assignment and the decline print the number.
+"Resend Review Request" is offered only on a declined row. Only the log
+line is affected: the email the reviewer receives is a different text,
+which names the submission by its title. 34 of the translated languages
+print the same placeholder, among them French, the default test
+dataset's second language. The fix is a one-placeholder correction of
+this text in each language file that has the typo. Basis: probe,
+2026-10-03. <sup>[f-a37](#fn-a37)</sup>
 
 <a id="a38"></a>
 **A38 — Which other requests keep a removed reviewer in discussions** · ❓ ·
@@ -2983,6 +2995,7 @@ and the deposit call re-confirmed in the confirm path
 (`PKPReviewerGridHandler::reviewConfirmed` → `SendReviewToOrcid`,
 PKPReviewerGridHandler.php:818); attaching an iD still needs the external
 OAuth flow no screen here provides. Settling observation unchanged.
+Issue report: [docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md](../issues/U27-A1-send-review-to-orcid-offered-before-complete.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `getCellStatusItems`, case REQUEST_RESEND: `message:
@@ -3138,6 +3151,7 @@ both reminder fields (note h), erasing the line. Since pkp/pkp-lib#13346
 (driven 2026-09-24 on OJS at the PR head `26a5efcb74` (pkp-lib) / `ad0fdd33` (ui-library), before its merge) the line reads
 `Reviewer Reminded: {date and time}`; the reset that erases it is
 untouched by that change (code-read, not re-driven after a response).
+Issue report: [docs/issues/U27-A15-reviewer-response-erases-reminder-history.md](../issues/U27-A15-reviewer-response-erases-reminder-history.md).
 
 <a id="fn-a16"></a>
 **f-a16** — Rescoped by the claim check, live-probed 2026-08-02 (OJS + OMP;
@@ -3567,6 +3581,7 @@ the submission's number. Mechanism: the string
 names `{$submissionid}`, while `ResendRequestReviewerForm::execute()`
 logs the parameter as `submissionId`, so the lower-case placeholder finds
 no value.
+Issue report: [docs/issues/U27-A37-resend-request-log-raw-submission-placeholder.md](../issues/U27-A37-resend-request-log-raw-submission-placeholder.md).
 
 <a id="fn-a38"></a>
 **f-a38** — Driven: *Tasks & discussions* note td13 and its kept check

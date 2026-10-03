@@ -1,0 +1,51 @@
+--- a/lib/pkp/classes/submission/reviewer/ReviewerAction.php
++++ b/lib/pkp/classes/submission/reviewer/ReviewerAction.php
+@@ -87,9 +87,9 @@
+                 }
+             }
+ 
++            // dateReminded is kept: it is the History's "Reviewer Reminded" milestone. The scheduled
++            // ReviewReminder task treats a reminder dated before this response as none.
+             Repo::reviewAssignment()->edit($reviewAssignment, [
+-                'dateReminded' => null,
+-                'reminderWasAutomatic' => 0,
+                 'declined' => $decline,
+                 'dateConfirmed' => Core::getCurrentDate(),
+             ]);
+--- a/lib/pkp/classes/task/ReviewReminder.php
++++ b/lib/pkp/classes/task/ReviewReminder.php
+@@ -84,8 +84,8 @@
+             $dateResponseDue = Carbon::parse($reviewAssignment->getDateResponseDue());
+             $dateDue = Carbon::parse($reviewAssignment->getDateDue());
+ 
+-            // after a REVIEW REQUEST has been responded, the value of `dateReminded` and `reminderWasAutomatic`
+-            // get reset, see \PKP\submission\reviewer\ReviewerAction::confirmReview. 
++            // `dateReminded` is the last reminder of either kind. Once the REVIEW REQUEST has been
++            // responded, a reminder dated before the response was about the request, not the review.
+             if ($reviewAssignment->getDateConfirmed() === null) {
+                 // REVIEW REQUEST has not been responded
+                 // only need to concern with BEFORE/AFTER REVIEW REQUEST RESPONSE reminder
+@@ -119,7 +119,10 @@
+                 // REVIEW REQUEST has been responded
+                 // only need to concern with BEFORE/AFTER REVIEW SUBMIT reminder
+ 
+-                if ($reviewAssignment->getDateReminded() === null) {
++                $remindedSinceResponse = $reviewAssignment->getDateReminded() !== null
++                    && Carbon::parse($reviewAssignment->getDateReminded())->gte(Carbon::parse($reviewAssignment->getDateConfirmed()));
++
++                if (!$remindedSinceResponse) {
+                     // There has not been any reminder sent after responding to REVIEW REQUEST
+                     // no REVIEW SUBMIT reminder has been sent
+                     if ($numDaysBeforeReviewSubmitReminderDue > 0 &&
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ResendRequestReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ResendRequestReviewerForm.php
+@@ -130,6 +130,9 @@
+                 'declined' => false,
+                 'requestResent' => true,
+                 'dateConfirmed' => null,
++                // A resent request starts its reminders afresh (the scheduled ReviewReminder task)
++                'dateReminded' => null,
++                'reminderWasAutomatic' => 0,
+                 'dateDue' => $this->getData('reviewDueDate'), // Set the review due date
+                 'dateResponseDue' => $this->getData('responseDueDate'), // Set the response due date
+             ]);

@@ -549,7 +549,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | user-visible | — |
+| [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The ORCID-denied landing shows a raw placeholder instead of its message | 🐞 | user-visible | — |
 | [A4](#a4) | "What is ORCID?" beside the connect button opens the sign-in popup, not the page | 🐞 | user-visible | — |
 | [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
@@ -569,7 +569,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 ### All apps
 
 <a id="a1"></a>
-**A1 — Send Review To ORCID ignores review completion, and answers with silence** · 🐞 · user-visible.
+**A1 — Send Review To ORCID ignores review completion, and answers with silence** · 🐞 · low.
 The Reviewers table offers "Send Review To ORCID" on any row whose reviewer
 holds a verified iD, whatever the state of the review. The completion
 condition the action was given never evaluates to false. Nothing is
@@ -579,7 +579,7 @@ editor who uses it early gets no sign that the deposit never happened. A
 Press Manager is offered the same action, dialog and silent close, though a
 press deposits nothing ([OMP1](#omp1)). A public-API journal offers it the
 same way, though its deposit runs only under the member API (Rule 12).
-Basis: probe + code. <sup>[f-a1](#fn-a1)</sup>
+Basis: probe, 2026-10-03. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — Denied-access landing renders a raw placeholder** · 🐞 · user-visible.
@@ -1110,6 +1110,7 @@ reviewer and absent for a no-iD reviewer (OJS); confirming on a completed
 review succeeded with no feedback of any kind; a Press Manager gets the
 same action, dialog and silent success (OMP — base `SendReviewToOrcid` is
 a no-op there).
+Issue report: [docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md](../issues/U27-A1-send-review-to-orcid-offered-before-complete.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `orcidVerify.tpl` denied branch: `{translate

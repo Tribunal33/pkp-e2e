@@ -1,0 +1,21 @@
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerConfig.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewerManagerConfig.js
+@@ -376,10 +376,16 @@
+ 			});
+ 		}
+ 
+-		// ORCID reviewer deposit
++		// ORCID reviewer deposit: only a submitted review can be deposited
++		// (ReviewAssignment::REVIEW_COMPLETE_STATUSES, as DepositOrcidReview checks)
+ 		if (
+ 			reviewAssignment.reviewerHasOrcid &&
+-			pkp.const.REVIEW_ASSIGNMENT_STATUS_COMPLETE
++			[
++				pkp.const.REVIEW_ASSIGNMENT_STATUS_RECEIVED,
++				pkp.const.REVIEW_ASSIGNMENT_STATUS_VIEWED,
++				pkp.const.REVIEW_ASSIGNMENT_STATUS_COMPLETE,
++				pkp.const.REVIEW_ASSIGNMENT_STATUS_THANKED,
++			].includes(reviewAssignmentStatusId)
+ 		) {
+ 			actions.push({
+ 				label: t('dashboard.reviewAssignment.action.sendReviewToOrcid'),

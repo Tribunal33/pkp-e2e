@@ -1,0 +1,406 @@
+--- a/lib/pkp/locale/an/submission.po
++++ b/lib/pkp/locale/an/submission.po
+@@ -2179,7 +2179,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Reninviar la solicitut de revisión en a ronda {$round} a {$reviewerName} pa "
+-"lo ninvio {$submissionid}."
++"lo ninvio {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/ar/submission.po
++++ b/lib/pkp/locale/ar/submission.po
+@@ -1980,7 +1980,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "إعادة إرسال إلتماس التحكيم في الجولة {$round} إلى {$reviewerName} لطلب "
+-"التقديم {$submissionid}."
++"التقديم {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/az/submission.po
++++ b/lib/pkp/locale/az/submission.po
+@@ -2107,7 +2107,7 @@
+ 
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+-"{$round} Yoxlama sorğusunu {$reviewerName} göndərmək üçün {$submissionid} - "
++"{$round} Yoxlama sorğusunu {$reviewerName} göndərmək üçün {$submissionId} - "
+ "A yenidən göndərin."
+ 
+ msgid "log.review.reviewConfirmed"
+--- a/lib/pkp/locale/bg/submission.po
++++ b/lib/pkp/locale/bg/submission.po
+@@ -2069,7 +2069,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Изпратете повторно заявката за рецензия в кръг {$round} до {$reviewerName} "
+-"за подадени материали {$submissionid}."
++"за подадени материали {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/cs/submission.po
++++ b/lib/pkp/locale/cs/submission.po
+@@ -2035,7 +2035,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Opětovné odeslání žádosti o recenzi v kole {$round} na adresu "
+-"{$reviewerName} pro příspěvek {$submissionid}."
++"{$reviewerName} pro příspěvek {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/da/submission.po
++++ b/lib/pkp/locale/da/submission.po
+@@ -2071,7 +2071,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Sendte anmodningen om at bedømme i bedømmelsesrunde {$round} til "
+-"{$reviewerName} for indsendelsen {$submissionid} igen."
++"{$reviewerName} for indsendelsen {$submissionId} igen."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/de/submission.po
++++ b/lib/pkp/locale/de/submission.po
+@@ -2124,7 +2124,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Anfrage zu einem Gutachten in Runde {$round} an {$reviewerName} für die "
+-"Einreichung {$submissionid} wurde erneut verschickt."
++"Einreichung {$submissionId} wurde erneut verschickt."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/el/submission.po
++++ b/lib/pkp/locale/el/submission.po
+@@ -2113,7 +2113,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Το αίτημα για αξιολόγηση από τον γύρο {$round} για την υποβολή "
+-"{$submissionid} ξαναπήγε στον/στην {$reviewerName}."
++"{$submissionId} ξαναπήγε στον/στην {$reviewerName}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -2314,7 +2314,7 @@
+ msgstr "The round {$round} review by {$reviewerName} for submission {$submissionId} has been reinitiated."
+ 
+ msgid "log.review.reviewerResendRequest"
+-msgstr "Resent the request to review in round {$round} to {$reviewerName} for submission {$submissionid}."
++msgstr "Resent the request to review in round {$round} to {$reviewerName} for submission {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr "Editor {$editorName} has confirmed a review for the round {$round} review for submission {$submissionId}."
+--- a/lib/pkp/locale/es/submission.po
++++ b/lib/pkp/locale/es/submission.po
+@@ -2062,7 +2062,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Reenviar la solicitud de revisión en la ronda {$round} a {$reviewerName} "
+-"para el envío {$submissionid}."
++"para el envío {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/eu/submission.po
++++ b/lib/pkp/locale/eu/submission.po
+@@ -2048,7 +2048,7 @@
+ 
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+-"Birbidali {$round} errondan {$submissionid} bidalketa berrikusteko eskaera "
++"Birbidali {$round} errondan {$submissionId} bidalketa berrikusteko eskaera "
+ "{$reviewerName}-ri."
+ 
+ msgid "log.review.reviewConfirmed"
+--- a/lib/pkp/locale/fi/submission.po
++++ b/lib/pkp/locale/fi/submission.po
+@@ -2064,7 +2064,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Arviointipyyntö lähetettiin uudelleen kierroksella {$round} arvioijalle "
+-"{$reviewerName} käsikirjoituksessa {$submissionid}."
++"{$reviewerName} käsikirjoituksessa {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/fr_CA/submission.po
++++ b/lib/pkp/locale/fr_CA/submission.po
+@@ -2137,7 +2137,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Renvoyer la demande d'évaluation au cycle {$round} à {$reviewerName} pour la "
+-"soumission {$submissionid}."
++"soumission {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/fr/submission.po
++++ b/lib/pkp/locale/fr/submission.po
+@@ -2112,7 +2112,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Envoyer à nouveau la demande d'évaluation dans le cycle {$round} à "
+-"{$reviewerName} pour la soumission {$submissionid}."
++"{$reviewerName} pour la soumission {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/hr/submission.po
++++ b/lib/pkp/locale/hr/submission.po
+@@ -2014,7 +2014,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Ponovno pošaljite zahtjev za recenziju u krugu {$round} za {$reviewerName} "
+-"za predaju {$submissionid}."
++"za predaju {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/hy/submission.po
++++ b/lib/pkp/locale/hy/submission.po
+@@ -2042,7 +2042,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Նորից ուղարկեք {$round} փուլում գրախոսման հարցումը {$reviewerName}-ին "
+-"{$submissionid} ներկայացնելու համար:"
++"{$submissionId} ներկայացնելու համար:"
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/id/submission.po
++++ b/lib/pkp/locale/id/submission.po
+@@ -2030,7 +2030,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Mengirimkan kembali permintaan pada tahap {$round} kepada {$reviewerName} "
+-"untuk naskah {$submissionid}."
++"untuk naskah {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/is/submission.po
++++ b/lib/pkp/locale/is/submission.po
+@@ -2025,7 +2025,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Resent the request to review in round {$round} to {$reviewerName} for "
+-"submission {$submissionid}."
++"submission {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/ja/submission.po
++++ b/lib/pkp/locale/ja/submission.po
+@@ -1955,7 +1955,7 @@
+ "た。"
+ 
+ msgid "log.review.reviewerResendRequest"
+-msgstr "投稿 {$submissionid} について、ラウンド {$round} の査読依頼を {$reviewerName}"
++msgstr "投稿 {$submissionId} について、ラウンド {$round} の査読依頼を {$reviewerName}"
+ " に再送信します。"
+ 
+ msgid "log.review.reviewConfirmed"
+--- a/lib/pkp/locale/ky/submission.po
++++ b/lib/pkp/locale/ky/submission.po
+@@ -2369,7 +2369,7 @@
+ 
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+-"{$submissionid} материалы үчүн {$reviewerName} дарегине {$round}-айлампа "
++"{$submissionId} материалы үчүн {$reviewerName} дарегине {$round}-айлампа "
+ "рецензия өтүнүчү кайра жөнөтүлдү."
+ 
+ msgid "log.review.reviewConfirmed"
+--- a/lib/pkp/locale/lt/submission.po
++++ b/lib/pkp/locale/lt/submission.po
+@@ -2116,7 +2116,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Pakartotinai išsiųskite {$reviewerName} užklausą peržiūrėti {$round} etape "
+-"dėl pateikto darbo {$submissionid}."
++"dėl pateikto darbo {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/lv/submission.po
++++ b/lib/pkp/locale/lv/submission.po
+@@ -2235,7 +2235,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Atkārtoti nosūtīt {$round}. kārtas recenzēšanas pieprasījumu recenzentam "
+-"{$reviewwerName} par materiālu {$submissionid}."
++"{$reviewwerName} par materiālu {$submissionId}."
+ 
+ msgid "submission.event.fileDeleted"
+ msgstr "Datni \"{$filename}\" materiālam {$submissionId} izdzēsa {$username}."
+--- a/lib/pkp/locale/mk/submission.po
++++ b/lib/pkp/locale/mk/submission.po
+@@ -2054,7 +2054,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Повторно испратете го барањето за рецензија во кругот {$round} до "
+-"{$reviewerName} за поднесување {$submissionid}."
++"{$reviewerName} за поднесување {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/mr/submission.po
++++ b/lib/pkp/locale/mr/submission.po
+@@ -1553,7 +1553,7 @@
+ 
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+-"{$submissionid} या सादरीकरणासाठी {$reviewerName} ना {$round} फेरीदरम्यान "
++"{$submissionId} या सादरीकरणासाठी {$reviewerName} ना {$round} फेरीदरम्यान "
+ "पुन्हा समीक्षणाची विनंती केली आहे."
+ 
+ msgid "log.review.reviewConfirmed"
+--- a/lib/pkp/locale/nb_NO/submission.po
++++ b/lib/pkp/locale/nb_NO/submission.po
+@@ -2056,7 +2056,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Forespørselen om gjennomgang i runde {$round} sendt på nytt til "
+-"{$reviewerName} for bidrag {$submissionid}."
++"{$reviewerName} for bidrag {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/nl/submission.po
++++ b/lib/pkp/locale/nl/submission.po
+@@ -2071,7 +2071,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Stuur het verzoek tot beoordeling in ronde {$round} opnieuw naar "
+-"{$reviewerName} voor inzending {$submissionid}."
++"{$reviewerName} voor inzending {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/pl/submission.po
++++ b/lib/pkp/locale/pl/submission.po
+@@ -2012,7 +2012,7 @@
+ msgid "log.review.reviewCleared"
+ msgstr ""
+ "{$round} Runda recenzji w której brał udział {$reviewerName} w zgłoszeniu "
+-"{$submissionid} została ukończona."
++"{$submissionId} została ukończona."
+ 
+ msgid "log.review.reviewUnconsidered"
+ msgstr ""
+@@ -2022,17 +2022,17 @@
+ msgid "log.review.reviewReinstated"
+ msgstr ""
+ "{$round} Runda recenzji w której brał udział {$reviewerName} w zgłoszeniu "
+-"{$submissionid} została ponownie rozpoczęta."
++"{$submissionId} została ponownie rozpoczęta."
+ 
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Wyślij powtórnie prośbę o recenzję w rundzie {$round} do {$reviewerName} w "
+-"zgłoszeniu {$submissionid}."
++"zgłoszeniu {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+ "Radaktor {$editorName} potwierdził przyjęcie recenzji dla rundy {$round} w "
+-"zgłoszeniu {$submissionid}."
++"zgłoszeniu {$submissionId}."
+ 
+ #, fuzzy
+ msgid "log.review.reviewReady"
+--- a/lib/pkp/locale/pt_BR/submission.po
++++ b/lib/pkp/locale/pt_BR/submission.po
+@@ -2067,7 +2067,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Reenvie a solicitação de avaliação na rodada {$round} para {$reviewerName} "
+-"para submissão {$submissionid}."
++"para submissão {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/pt/submission.po
++++ b/lib/pkp/locale/pt/submission.po
+@@ -2050,7 +2050,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Reenvie o pedido de revisão da ronda {$round} para {$reviewerName} para a "
+-"submissão {$submissionid}."
++"submissão {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/ru/submission.po
++++ b/lib/pkp/locale/ru/submission.po
+@@ -2069,7 +2069,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Повторно отправлен запрос на рецензию в раунде {$round} на имя рецензента "
+-"{$reviewerName} для материала {$submissionid}."
++"{$reviewerName} для материала {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/sl/submission.po
++++ b/lib/pkp/locale/sl/submission.po
+@@ -2025,7 +2025,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Recenzentu {$reviewerName} ponovno pošjli prošnjo za opravljanje recenzije v "
+-"recenzijskem krogu {$round} za prispevek {$submissionid}."
++"recenzijskem krogu {$round} za prispevek {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/th/submission.po
++++ b/lib/pkp/locale/th/submission.po
+@@ -108,7 +108,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "ได้ส่งคำขอให้ทบทวนใหม่ในรอบที่ {$round} ถึง {$reviewerName} สำหรับการส่"
+-"งบทความหมายเลข {$submissionid}."
++"งบทความหมายเลข {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/tr/submission.po
++++ b/lib/pkp/locale/tr/submission.po
+@@ -2010,7 +2010,7 @@
+ 
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+-"{$submissionid} numaralı aday makale için {$reviewerName} isimli hakeme "
++"{$submissionId} numaralı aday makale için {$reviewerName} isimli hakeme "
+ "{$round}. turda yeniden değerlendirme talebi gönderin."
+ 
+ msgid "log.review.reviewConfirmed"
+--- a/lib/pkp/locale/uk/submission.po
++++ b/lib/pkp/locale/uk/submission.po
+@@ -2058,7 +2058,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Повторно надіслати запит на розгляд у раунді {$round} до {$reviewerName} для "
+-"подання {$submissionid}."
++"подання {$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr ""
+--- a/lib/pkp/locale/vi/submission.po
++++ b/lib/pkp/locale/vi/submission.po
+@@ -1996,7 +1996,7 @@
+ msgid "log.review.reviewerResendRequest"
+ msgstr ""
+ "Đã gửi lại yêu cầu đánh giá ở vòng {reviewerName} cho bài nộp "
+-"{$submissionid}."
++"{$submissionId}."
+ 
+ msgid "log.review.reviewConfirmed"
+ msgstr "Biên tập viên {round} cho bài nộp {$submissionId}."
