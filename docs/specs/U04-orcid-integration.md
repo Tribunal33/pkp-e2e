@@ -1142,7 +1142,7 @@ returns false, cancelling navigation. Affects profile and register variants
 (both render the same capture). Live-probed 2026-08-07 (OJS Identity tab):
 the click opened the sign-in popup and never navigated; `/orcid/about`
 typed directly renders the page.
-Issue report: [docs/issues/U04-A4-what-is-orcid-link-opens-sign-in.md](../issues/U04-A4-what-is-orcid-link-opens-sign-in.md).
+Issue report: [pkp-e2e#729](https://github.com/jardakotesovec/pkp-e2e/issues/729) ([docs/issues/U04-A4-what-is-orcid-link-opens-sign-in.md](../issues/U04-A4-what-is-orcid-link-opens-sign-in.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — Note e: API-029's role middleware (site admin / manager /
