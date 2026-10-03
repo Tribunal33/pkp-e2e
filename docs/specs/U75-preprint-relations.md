@@ -1209,7 +1209,7 @@ action, where publishing also cleared the Author's `canChangeMetadata`
 scheduled preprint (nor, in one read, to the assigned Moderator with
 the edit permission); it was offered to the Preprint Server Manager and
 the Site Administrator.
-Issue report: [docs/issues/U75-A1-A2-relations-save-refused.md](../issues/U75-A1-A2-relations-save-refused.md).
+Issue report: [pkp-e2e#678](https://github.com/jardakotesovec/pkp-e2e/issues/678) ([docs/issues/U75-A1-A2-relations-save-refused.md](../issues/U75-A1-A2-relations-save-refused.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: no read-only switch on the panel; the other
@@ -1218,7 +1218,7 @@ publication forms get `canSubmit` false for a viewer who may not edit
 `Form.vue::error()`'s fallback for a 401. Live-probed 2026-09-27: td1,
 td2, td9 (eight refused saves in six separate runs, the same notice
 each time).
-Issue report: [docs/issues/U75-A1-A2-relations-save-refused.md](../issues/U75-A1-A2-relations-save-refused.md).
+Issue report: [pkp-e2e#678](https://github.com/jardakotesovec/pkp-e2e/issues/678) ([docs/issues/U75-A1-A2-relations-save-refused.md](../issues/U75-A1-A2-relations-save-refused.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes f and j: the hidden `vorDoi` is sent and stored with
@@ -1229,7 +1229,7 @@ before 2024 saved to the older relation address
 that page now redirects to the dashboard (`PKPWorkflowHandler::index()`),
 and the screens no longer call the address. Live-probed 2026-09-27: td6
 (a save with another status sent and kept the address).
-Issue report: [docs/issues/U75-A3-relation-change-keeps-published-version-doi.md](../issues/U75-A3-relation-change-keeps-published-version-doi.md).
+Issue report: [pkp-e2e#679](https://github.com/jardakotesovec/pkp-e2e/issues/679) ([docs/issues/U75-A3-relation-change-keeps-published-version-doi.md](../issues/U75-A3-relation-change-keeps-published-version-doi.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Schema `vorDoi` validation `["nullable", "url"]`; the field
