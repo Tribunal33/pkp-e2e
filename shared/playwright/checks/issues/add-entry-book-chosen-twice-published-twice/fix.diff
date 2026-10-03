@@ -1,0 +1,33 @@
+--- a/api/v1/_submissions/BackendSubmissionsController.php
++++ b/api/v1/_submissions/BackendSubmissionsController.php
+@@ -168,7 +168,7 @@
+             ], Response::HTTP_BAD_REQUEST);
+         }
+ 
+-        $submissionIds = array_map(intval(...), (array) $params['submissionIds']);
++        $submissionIds = array_values(array_unique(array_map(intval(...), (array) $params['submissionIds'])));
+ 
+         if (empty($submissionIds)) {
+             return response()->json([
+--- a/lib/ui-library/src/components/Form/fields/FieldSelectSubmissions.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldSelectSubmissions.vue
+@@ -16,7 +16,7 @@
+ 		setSuggestions(newItems) {
+ 			const suggestions = newItems
+ 				.filter((item) => {
+-					return !this.selected.find((s) => s.id === item.id);
++					return !this.selected.find((s) => s.value === item.id);
+ 				})
+ 				.map((item) => {
+ 					const currentPublication = item.publications.find((publication) => {
+--- a/lib/ui-library/src/components/Form/fields/FieldSelectUsers.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldSelectUsers.vue
+@@ -16,7 +16,7 @@
+ 		setSuggestions(newItems) {
+ 			const suggestions = newItems
+ 				.filter((item) => {
+-					return !this.selected.find((s) => s.id === item.id);
++					return !this.selected.find((s) => s.value === item.id);
+ 				})
+ 				.map((item) => {
+ 					return {
