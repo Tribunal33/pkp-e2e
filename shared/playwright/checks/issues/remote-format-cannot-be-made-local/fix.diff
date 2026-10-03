@@ -1,0 +1,11 @@
+--- a/lib/pkp/js/controllers/grid/representations/form/RepresentationFormHandler.js
++++ b/lib/pkp/js/controllers/grid/representations/form/RepresentationFormHandler.js
+@@ -74,7 +74,7 @@
+ 		} else {
+ 			// hide and clear the remote URL input field
+ 			$('#remote').hide(20);
+-			$('input[id^="urlRemote"]').val('');
++			$('#remote input').val('');
+ 			$('#urlPathSection').show(20);
+ 		}
+ 		return true;
