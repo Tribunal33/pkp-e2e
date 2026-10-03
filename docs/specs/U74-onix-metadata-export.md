@@ -2258,7 +2258,7 @@ td6); in a Native XML file a book with no audience saved had no
 **f-a4** — Note g: `Market::getTerritoriesAsString()` joins the stored
 codes; `MarketsGridCellProvider` concatenates price and currency code.
 Live-probed 2026-09-28 (A4): note td8.
-Issue report: [docs/issues/U74-A4-market-list-shows-codes-price-run-together.md](../issues/U74-A4-market-list-shows-codes-price-run-together.md).
+Issue report: [pkp-e2e#710](https://github.com/jardakotesovec/pkp-e2e/issues/710) ([docs/issues/U74-A4-market-list-shows-codes-price-run-together.md](../issues/U74-A4-market-list-shows-codes-price-run-together.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note g: `MarketForm::fetch()` assigns `dateFormat` `20` on a
