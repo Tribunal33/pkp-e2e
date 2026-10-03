@@ -1913,7 +1913,7 @@ items.") has no plural forms, so `translatePlural()` returns null and the
 key prints as `##search.searchResults.foundPlural##`. Live-probed
 2026-09-02 with 2, 3, 5, 7 and 25 results, on every page and on the bare
 page; "Found one item." with one result.
-Issue report: [docs/issues/U15-OJS1-OPS1-search-result-count-screen-reader.md](../issues/U15-OJS1-OPS1-search-result-count-screen-reader.md).
+Issue report: [docs/issues/U15-OJS1-OPS1-search-result-count-screen-reader.md](../issues/U15-OJS1-OPS1-search-result-count-screen-reader.md), filed as [pkp-e2e#725](https://github.com/jardakotesovec/pkp-e2e/issues/725).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — fn-g, fn-i: `smartyPageLinks()` forwards `searchContext`
@@ -1968,7 +1968,7 @@ Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.m
 **f-ops1** — fn-g: `{if $results->count > 1}` reads a property the
 paginator does not have. Live-probed 2026-09-02: "Found one item." with 1,
 3, 7 and 25 results.
-Issue report: [docs/issues/U15-OJS1-OPS1-search-result-count-screen-reader.md](../issues/U15-OJS1-OPS1-search-result-count-screen-reader.md).
+Issue report: [docs/issues/U15-OJS1-OPS1-search-result-count-screen-reader.md](../issues/U15-OJS1-OPS1-search-result-count-screen-reader.md), filed as [pkp-e2e#725](https://github.com/jardakotesovec/pkp-e2e/issues/725).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — fn-l: the policy's message key exists in no `.po` file of the
