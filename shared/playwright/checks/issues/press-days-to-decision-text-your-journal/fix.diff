@@ -1,0 +1,17 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1125,6 +1125,14 @@
+ msgid "stats.context.downloadReport.downloadContext"
+ msgstr "Download Press"
+ 
++msgid "stats.description.daysToDecision"
++msgstr ""
++"The number of days it takes for most submissions to receive the first "
++"editorial decision, such as desk rejection or send for review.<br><br>These "
++"figures indicate that 80% of submissions reach the decision within the given "
++"number of days.<br><br>This statistic attempts to describe when the majority "
++"of authors submitting to your press can expect a decision."
++
+ msgid "stats.publications.downloadReport.description"
+ msgstr "Download a CSV/Excel spreadsheet with usage statistics for monographs matching the following parameters."
+ 

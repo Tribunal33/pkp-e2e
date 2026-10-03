@@ -1076,7 +1076,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
 | [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press's Editorial Activity leaves books declined at Internal Review out of "Submissions Declined" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OMP2](#omp2) | The press's "Days to First Editorial Decision" text speaks of "your journal" | 🐞 | minor | — |
+| [OMP2](#omp2) | A press's "Days to First Editorial Decision" help text says "authors submitting to your journal" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | "Monograph Report" sizes its author and decision columns by every press of the installation | 🐞 | minor | — |
 | [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | minor | — |
 | [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | minor | — |
@@ -1421,11 +1421,17 @@ declines.
 Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — "your journal" on a press** · 🐞 · minor.
-The information icon of "Days to First Editorial Decision" on a press
-ends "…when the majority of authors submitting to your journal can
-expect a decision." Expected: "your press".
-Basis: probe. <sup>f-omp2</sup>
+**OMP2 — A press's "Days to First Editorial Decision" help text says "authors submitting to your journal"** · 🐞 · low.
+On a press, Statistics › "Editorial Activity" has an information icon
+after "Days to First Editorial Decision". Its text ends "…when the
+majority of authors submitting to your journal can expect a decision."
+It should read "your press".
+
+Nothing else on the page is wrong, and the figures are right.
+
+Most translations name a journal too: in French the text reads
+"…soumettant à votre revue…" on a press.
+Basis: probe, 2026-10-02. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — "Monograph Report" columns are sized by every press** · 🐞 · minor.
@@ -2227,6 +2233,7 @@ Issue report: [docs/issues/U65-OMP1-internal-review-decline-not-counted-declined
 <a id="fn-f-omp2"></a>
 **f-omp2** — `stats.description.daysToDecision` in lib/pkp
 `locale/en/manager.po`; OMP's locale files do not override it. Live-probed 2026-09-28: td4.
+Issue report: [docs/issues/U65-OMP2-press-days-to-decision-text-your-journal.md](../issues/U65-OMP2-press-days-to-decision-text-your-journal.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn o (`retrieveLimits()`). Live-probed 2026-09-28: td13.
