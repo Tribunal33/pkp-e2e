@@ -1067,7 +1067,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | Statistics › "Users" lists a "Site Administrator" row that always reads 0 | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A report address with an unknown or missing report name lands on "404 Not Found", not on "Reports" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A11](#a11) | The monthly email reads "Login to the the press" ("the the preprint server") | 🐞 | minor | — |
+| [A11](#a11) | A press's monthly statistics email reads "Login to the the press" ("the the preprint server" on a preprint server) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty | 🐞 | minor | — |
 | [OJS2](#ojs2) | "Articles Report" writes "&" in a title as "&amp;" | 🐞 | minor | — |
@@ -1249,13 +1249,25 @@ Lean: yes, a defect: a French editor should land on French pages.
 Basis: probe. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — "Login to the the press"** · 🐞 · minor.
-The shipped monthly email of a press reads "Login to the the press to
-view more detailed editorial trends…", and that of a preprint server
-"Login to the the preprint server…". Expected: "Login to the press",
-"Login to the preprint server", as a journal's reads "Login to the
-journal". The text can be corrected on "Manage Emails".
-Basis: probe. <sup>f-a11</sup>
+**A11 — A press's monthly statistics email reads "Login to the the press" ("the the preprint server" on a preprint server)** · 🐞 · low.
+The monthly statistics email a press sends its managers and editors (a
+preprint server: its managers and moderators) closes with "Login to the
+the press to view more detailed editorial trends and published book
+stats.", and a preprint server's with "Login to the the preprint server
+to view more detailed trends and posted preprint stats.". They should
+read "Login to the press" and "Login to the preprint server", as a
+journal's reads "Login to the journal".
+
+Only the English text has the doubled word. The template on Settings ›
+Workflow › "Emails" › "Manage Emails" › "Statistics Report Notification"
+has it too, and a manager can correct it there.
+
+Correcting the shipped text reaches only new installs: an install stores
+the template once, when it is set up, so every existing press keeps the
+doubled word until a manager edits it or an upgrade repairs the stored
+copies (the optional part of the fix). Expected: "Login to the press",
+"Login to the preprint server".
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — The reports leave out decisions by unassigned editors** · ❓ · minor.
@@ -2130,6 +2142,7 @@ not opened.
 **f-a11** — OMP and OPS `locale/en/emails.po`,
 `emails.statisticsReportNotification.body`; OJS's reads "Login to the
 journal". Live-probed 2026-09-28: the three closings word for word (td14).
+Issue report: [docs/issues/U65-A11-monthly-email-login-to-the-the-press.md](../issues/U65-A11-monthly-email-login-to-the-the-press.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — fn l and fn o: decisions are matched by `editorId` to the

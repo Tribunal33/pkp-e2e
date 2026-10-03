@@ -1,0 +1,11 @@
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -202,7 +202,7 @@
+ "\t<li>Accepted submissions this month: {$acceptedSubmissions}</li>\n"
+ "\t<li>Total submissions in the system: {$totalSubmissions}</li>\n"
+ "</ul>\n"
+-"Login to the the preprint server to view more detailed <a href="
++"Login to the preprint server to view more detailed <a href="
+ "\"{$editorialStatsLink}\">trends</a> and <a href="
+ "\"{$publicationStatsLink}\">posted preprint stats</a>. A full copy of this "
+ "month's trends is attached.<br />\n"

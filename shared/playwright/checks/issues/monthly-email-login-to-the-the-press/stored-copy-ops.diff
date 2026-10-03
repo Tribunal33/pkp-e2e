@@ -1,0 +1,12 @@
+--- a/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
++++ b/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
+@@ -20,6 +20,9 @@
+     {
+         parent::up();
+ 
++        // The shipped English body doubled the article (the journal's was corrected by pkp/ojs#2684)
++        $this->replace('STATISTICS_REPORT_NOTIFICATION', 'Login to the the preprint server', 'Login to the preprint server', '', 'en');
++
+         $this->replace('POSTED_ACK', '{$submissionUrl}', '<a href="{$submissionUrl}">{$submissionUrl}</a>', 'href="{$submissionUrl}"');
+ 
+         // es kept a variable which no longer exists

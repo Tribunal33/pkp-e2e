@@ -1,0 +1,12 @@
+--- a/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
++++ b/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
+@@ -22,6 +22,9 @@
+     {
+         parent::up();
+ 
++        // The shipped English body doubled the article (the journal's was corrected by pkp/ojs#2684)
++        $this->replace('STATISTICS_REPORT_NOTIFICATION', 'Login to the the press', 'Login to the press', '', 'en');
++
+         $this->replace('INDEX_REQUEST', '{$contextUrl}', '<a href="{$contextUrl}">{$contextUrl}</a>', 'href="{$contextUrl}"');
+         $this->replace('INDEX_REQUEST', '{$submissionUrl}', '<a href="{$submissionUrl}">{$submissionUrl}</a>', 'href="{$submissionUrl}"');
+         $this->replace('REVIEW_RESPONSE_OVERDUE_AUTO', '{$reviewAssignmentUrl}', '<a href="{$reviewAssignmentUrl}">{$reviewAssignmentUrl}</a>', 'href="{$reviewAssignmentUrl}"');
