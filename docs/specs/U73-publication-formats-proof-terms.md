@@ -1018,6 +1018,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A20-direct-sales-price-zero-gives-file-free.md`):
     "Direct Sales" at "0" and at "0.00" is refused in "Set Terms for
     Downloading", the window staying on "Direct Sales"
+  - the guard for A25 (issue report
+    `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`): in French
+    (Canada), the Publication Formats list and "Add publication format"
+    show no "##" code
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1123,7 +1127,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A book file on "Direct Sales" at a zero price is free at "0" and out of readers' reach at "0.00" | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | minor | — |
+| [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | "URL Path" accepts a number, or a path another format already uses, and a reader link then answers "404 Not Found" | ❓ | minor | — |
 | [A8](#a8) | The price box's two checks disagree: "10.5" is pressable and refused, "1,500.00" accepted but not pressable | ❓ | minor | — |
 | [A10](#a10) | "Approve Proof" says a file becomes ready to be published, but approval changes nothing readers get | ❓ | minor | — |
@@ -1469,7 +1473,7 @@ and a save that succeeds shows no error.
 Basis: test run, 2026-10-04. <sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — In French the "Availability" heading and four texts of "Add publication format" read raw codes** · 🐞 · minor.
+**A25 — In French the "Availability" heading and four texts of "Add publication format" read raw codes** · 🐞 · medium.
 With the interface in French (Canada), the Publication Formats page and its "Add
 publication format" window read French ("Formats de publication",
 "Ajouter un format de publication", "Nom", "Terminer", "Modifier le
@@ -1494,8 +1498,14 @@ screen's own codes around the page are
 [Workflow screen & stage access, its A11](U24-workflow-screen-and-stage-access.md#a11),
 and why a missing French text shows as a code at all is
 [Languages & locales, its A4](U57-languages-and-locales.md#a4).
+The same page shows more in the walk of 2026-10-04: a format neither
+approved nor available reads "##submission.incomplete##" and
+"##grid.catalogEntry.isNotAvailable##", the remote box's address label
+"##grid.catalogEntry.remoteURL##", the "Format Approval" window's title
+and text are codes, and the "Format Availability" window is titled
+"Approbation du format" ("Format Approval").
 Expected: French words, as the rest of the page shows.
-Basis: probe. <sup>f-a25</sup>
+Basis: probe, 2026-10-04. <sup>f-a25</sup>
 
 ---
 
@@ -2583,6 +2593,7 @@ and third pages. The French list's heading row read "Nom", "Terminer",
 "##grid.catalogEntry.availability##"; the window read the four codes in
 both runs; the English reads showed no code on the page or in the
 window beyond the help icon's (Navigation menus & site chrome).
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)).
 
 ## Reference — entry points & surfaces
 

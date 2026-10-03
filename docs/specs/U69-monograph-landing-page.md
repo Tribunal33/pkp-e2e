@@ -1460,36 +1460,31 @@ Basis: probe, 2026-09-28. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — In French (Canada), a press's catalog, book and chapter pages and Roles list show codes, even for editors' names** · 🐞 · medium.
-On a press shown in French (Canada), a book's page and a chapter's page
-show raw codes where the English pages show labels: the date is headed
-"##catalog.published##" instead of "Published", and a file's view page
-has the browser tab "##catalog.viewableFile.title##". On an edited
-volume the code also takes the place of each editor's name: the page
-lists "##submission.editorName##" where the English page lists "Sarah
-Carter (ed)" and "Peter Fortna (ed)". A file for sale is linked as
-"Achat (25.00 USD)", without the format's name that the English link
-gives ("Purchase PDF (25.00 USD)"). The catalog, a category's or a
-series' page, the "New Releases" page and the home page's lists show
-codes for the book count ("##catalog.browseTitles##" for "2 Titles"),
-the list headings ("Featured", "New Releases", "All Books") and the
-empty-list messages, and the sidebar's "Browse" block reads
-"##plugins.block.browse##" over codes for "Categories" and "Series".
-The press's staff see the same in its settings and workflow: the
-External Review stage is named "##workflow.review.externalReview##" in
-the "Rôles" list, in the window that creates a role, and in a
-submission's workflow menu. The workflow screen shows the same for a review round's
-name and for the "Monograph" control ("##common.publication##").
+On a press shown in French (Canada), readers and staff meet raw codes
+where the English pages show labels: the Steps show 47 texts as codes
+and 3 more in the wrong words. A book's page heads its date
+"##catalog.published##" instead of "Published", and on an edited volume
+the code takes the place of each editor's name: the page lists
+"##submission.editorName##" where the English page lists "Sarah Carter
+(ed)" and "Peter Fortna (ed)". The catalog pages and the "Browse" block
+show codes for their counts and headings, and each book's French
+OAI-PMH record gives its type as "##rt.metadata.pkp.dctype##" where the
+English record says "Book". The staff meet the same on the "Rôles"
+list, in the workflow, in the monthly statistics email, and on the Catalog,
+Catalog Entry and Publication Formats pages, where the External Review
+stage reads "##workflow.review.externalReview##" and a column heading
+"##grid.catalogEntry.availability##".
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
-cannot change these texts from its settings. The fix changes no code:
-the missing French (Canada) texts, all of them OMP's own, are entered
-on PKP's translation platform.
+cannot change these texts from its settings. The fix changes no code: a
+developer enters or corrects 72 French (Canada) texts, all of them
+OMP's own, on PKP's translation platform.
 
 A press shows these codes when "Français (Canada)" is among the
-languages it offers in its language settings. A press that offers
-"Français" (France) instead has these texts, except the priced link's
-format name and the review rounds' names on the workflow screen.
+languages it offers. "Français" (France) has these texts, except a
+priced file's format name and the review rounds' names, which it lacks
+too.
 Every version name reads "{date} (##publication.versionStage.display##)", as on an article's page ([→ Article landing page & reading, A1](U13-article-landing-page-and-reading.md#a1)), whose report covers it.
 Basis: probe, 2026-10-02. <sup>f-a15</sup>
 
