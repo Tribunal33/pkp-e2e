@@ -2180,7 +2180,7 @@ Issue report: [docs/issues/U65-A14-stats-email-optout-after-saving-notifications
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn l (`$agencies`). Live-probed 2026-09-28: td10, with the item switched off and on.
-Issue report: [docs/issues/U65-OJS1-articles-report-supporting-agencies-empty.md](../issues/U65-OJS1-articles-report-supporting-agencies-empty.md).
+Issue report: [docs/issues/U65-OJS1-articles-report-supporting-agencies-empty.md](../issues/U65-OJS1-articles-report-supporting-agencies-empty.md), filed as [pkp-e2e#648](https://github.com/jardakotesovec/pkp-e2e/issues/648).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — fn l (`htmlspecialchars()` on the title). Live-probed 2026-09-28: "Bread &amp; Butter", "A &lt; B &gt;
