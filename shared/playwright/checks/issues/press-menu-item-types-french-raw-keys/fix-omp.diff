@@ -1,0 +1,58 @@
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -840,25 +840,25 @@
+ msgstr "Liens et médias sociaux"
+ 
+ msgid "navigation.navigationMenus.catalog.description"
+-msgstr ""
++msgstr "Lien vers votre catalogue."
+ 
+ msgid "navigation.navigationMenus.series.generic"
+-msgstr ""
++msgstr "Série"
+ 
+ msgid "navigation.navigationMenus.series.description"
+-msgstr ""
++msgstr "Lien vers une série."
+ 
+ msgid "navigation.navigationMenus.category.generic"
+-msgstr ""
++msgstr "Catégorie"
+ 
+ msgid "navigation.navigationMenus.category.description"
+-msgstr ""
++msgstr "Lien vers une catégorie."
+ 
+ msgid "navigation.navigationMenus.newRelease"
+-msgstr ""
++msgstr "Nouveautés"
+ 
+ msgid "navigation.navigationMenus.newRelease.description"
+-msgstr ""
++msgstr "Lien vers vos nouveautés."
+ 
+ msgid "context.contexts"
+ msgstr "Presses"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1295,16 +1295,18 @@
+ msgstr ""
+ 
+ msgid "manager.navigationMenus.form.navigationMenuItem.series"
+-msgstr ""
++msgstr "Sélectionner une série"
+ 
+ msgid "manager.navigationMenus.form.navigationMenuItemSeriesMessage"
+ msgstr ""
++"Veuillez sélectionner la série vers laquelle cet élément de menu doit pointer."
+ 
+ msgid "manager.navigationMenus.form.navigationMenuItem.category"
+-msgstr ""
++msgstr "Sélectionner une catégorie"
+ 
+ msgid "manager.navigationMenus.form.navigationMenuItemCategoryMessage"
+ msgstr ""
++"Veuillez sélectionner la catégorie vers laquelle cet élément de menu doit pointer."
+ 
+ msgid "grid.series.urlWillBe"
+ msgstr ""

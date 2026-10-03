@@ -1202,6 +1202,7 @@ Left out of the scenarios above, by reason:
   - the journals switcher on a site with two journals of one name: each offers the other (Rule 29; the guard [A21](#a21)'s issue report proposes)
   - the side menu's "DOIs" entry and the DOIs page in French (Canada) on a press and a preprint server: French labels, no raw key (the guard [A23](#a23)'s issue report proposes)
   - on a journal, the menu's "Edit" window: "Subscriptions" and "My Subscriptions" carry the crossed-out eye and open their notices (Rule 7a; the guard [OJS1](#ojs1)'s issue report proposes)
+  - a press's item window in French (Canada): the press's own types, their descriptions and the series and category lists read French (the guard [A24](#a24)'s issue report proposes)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1297,7 +1298,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | The journals switcher in the editorial header leaves out every journal with exactly the current journal's name | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | minor | — |
+| [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS1](#ojs1) | Menu window marks "Subscriptions" and "My Subscriptions" items with no eye, so their notices never show {OJS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | On a preprint server's French pages the "Developed By" heading reads a raw code {OPS} | 🐞 | minor | — |
@@ -1626,16 +1627,29 @@ Administrator has to guess what the entries are for.
 Basis: probe, 2026-10-03. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — In French the Navigation tab's windows show raw codes** · 🐞 · minor.
-With the interface in French, the item window labels the "Query
-Parameters" box "##manager.navigationMenus.form.queryParams##", with
-"##manager.navigationMenus.form.queryParams.description##" as the line
-under it, and the menu window's drag handles show the hint
-"##common.dragToReorder##" when the pointer rests on them. On a press the
-item window's "Navigation Menu Type" list also offers
-"##navigation.navigationMenus.newRelease##" in place of "New Releases".
-The manager cannot tell what the box is for or which type that entry is.
-Basis: probe. <sup>f-a24</sup>
+**A24 — In French the Navigation tab's windows show raw codes** · 🐞 · low.
+With the interface in French (Canada):
+- a press manager who adds or edits a menu item sees codes in eleven
+  places of the item window. The type list names three of the press's
+  own types as codes: "##navigation.navigationMenus.newRelease##" for
+  "New Releases", "##navigation.navigationMenus.series.generic##" for
+  "Series" and "##navigation.navigationMenus.category.generic##" for
+  "Category". Choosing any of the press's four own types (these three
+  and "Catalogue") shows a code as the line that describes the type, and
+  choosing "Series" or "Category" also shows the list of the press's
+  series or categories, whose label and help line are codes. The series
+  and category types are listed only while the press has series or
+  top-level categories;
+- on all three apps the item window labels the "Query Parameters" box
+  "##manager.navigationMenus.form.queryParams##", with
+  "##manager.navigationMenus.form.queryParams.description##" under it,
+  and the menu window's drag handles show the hint
+  "##common.dragToReorder##". These texts are new on `main` (2026) and
+  no language has them yet, the usual state before a release. Kept as a
+  note, not reported.
+
+The manager cannot tell what the box is for or which type an entry is.
+Basis: probe, 2026-10-03. <sup>f-a24</sup>
 
 <a id="a25"></a>
 **A25 — The initials menu does not close on Escape** · ❓ · minor.
@@ -2986,6 +3000,7 @@ item's window showed the label and the line under it as the raw codes;
 the Primary menu window's handles carried the `title`
 `##common.dragToReorder##`; on OMP the type list's options included
 `##navigation.navigationMenus.newRelease##`.
+Issue report: [docs/issues/U08-A24-press-menu-item-types-french-raw-keys.md](../issues/U08-A24-press-menu-item-types-french-raw-keys.md).
 
 <a id="fn-f-a25"></a>
 **f-a25** — Note td19: `Dropdown.vue` has no Escape handler; the

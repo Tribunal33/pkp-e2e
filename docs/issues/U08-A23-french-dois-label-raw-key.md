@@ -184,9 +184,10 @@ translator's yes before it is entered.
 
 Where to enter them: the `manager` component of Weblate's `omp` and
 `ops` projects, on `stable-3_5_0`. Both apps merge a
-`translations/stable-3_5_0` branch into `stable-3_5_0`, which reaches
-`main` when 3.5 is next merged forward; `main` itself has had no
-`translations/main` merge since 2023. A text entered there does not
+`translations/stable-3_5_0` branch into `stable-3_5_0`, and pkp copies
+each such merge onto `main` as a commit of the same title and date (OMP
+15e98f9b8 as 8a6ff0375, OPS 934933ae0f as 8d7eef85b7); `main` itself has
+had no `translations/main` merge since 2023. A text entered there does not
 reach 3.4, which has its own translations branch (below).
 
 Tried on `main`, with the two diffs applied: the walk read "DOIs" in
