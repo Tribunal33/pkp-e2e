@@ -965,6 +965,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md`):
     an assigned Layout Editor opens "Marketing" › "Audience" with
     "Save" greyed, while the Press editor saves
+  - the guard for A4 (issue report
+    `docs/issues/U74-A4-market-list-shows-codes-price-run-together.md`):
+    a market's row in "Market Territories" names its countries and
+    regions as the window does and shows its price apart from the
+    currency
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1048,7 +1053,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | The representative window shows both "Role" lists and refuses a new supplier until the type is clicked | 🐞 | user-visible | — |
 | [A17](#a17) | A book whose market has a tax rate other than "Zero-rated", or a tax type alone, fails its Native XML export | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A4](#a4) | The "Market Territories" list shows bare codes and runs the price into the currency code | 🐞 | minor | — |
+| [A4](#a4) | A book format's "Market Territories" list shows country codes and runs the price into its currency | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A book's "Audience" goes out in its ONIX data the wrong way round, so "Children" reads as a proprietary code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A "Rest of World?" entry comes back from a Native XML import unticked | 🐞 | minor | — |
@@ -1101,13 +1106,17 @@ list as "not stated" (Rule 20).
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The "Market Territories" list shows codes and a run-together price** · 🐞 · minor.
-The window names every country and region ("Canada (CA)"), but the
-list's "Territory" column shows the bare codes ("Included: CA, US,
-Excluded: "), and the "Price" column runs the amount into the currency
-code ("25CAD"). Expected: the list reads the way the window does, and
-the price is separated from its currency.
-Basis: probe. <sup>f-a4</sup>
+**A4 — A book format's "Market Territories" list shows country codes and runs the price into its currency** · 🐞 · low.
+A press editor adds a market to a book's format and chooses its
+countries and regions by name in the window ("Canada (CA)", "Quebec
+(CA-QC)"). The format's "Market Territories" list then shows only the
+codes, "Included: CA, US, Excluded: GB, CA-QC", and its "Price" column
+runs the amount into the currency code: "25CAD", "12.50USD".
+Nothing is saved wrong, and the book's ONIX data and public page are not
+affected: the list is shown only in the editorial back end, so readers
+never see it. Only presses that record markets for their formats meet
+it.
+Basis: probe, 2026-10-03. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A new market preselects the Hijri calendar** · 🐞 · medium.
@@ -2249,6 +2258,7 @@ td6); in a Native XML file a book with no audience saved had no
 **f-a4** — Note g: `Market::getTerritoriesAsString()` joins the stored
 codes; `MarketsGridCellProvider` concatenates price and currency code.
 Live-probed 2026-09-28 (A4): note td8.
+Issue report: [docs/issues/U74-A4-market-list-shows-codes-price-run-together.md](../issues/U74-A4-market-list-shows-codes-price-run-together.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note g: `MarketForm::fetch()` assigns `dateFormat` `20` on a
