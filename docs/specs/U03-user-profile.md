@@ -2221,7 +2221,7 @@ or revised." and the .jpg was gone from the tab after a reload, while
 text file named `.png` was refused with the same sentence and the picture
 stayed. Live-probed 2026-09-04 (claim check), all three apps: holds (each refusal also
 raised a browser alert with the sentence).
-Issue report: [docs/issues/U03-A2-refused-gif-wipes-profile-image.md](../issues/U03-A2-refused-gif-wipes-profile-image.md).
+Issue report: [pkp-e2e#793](https://github.com/jardakotesovec/pkp-e2e/issues/793) ([docs/issues/U03-A2-refused-gif-wipes-profile-image.md](../issues/U03-A2-refused-gif-wipes-profile-image.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — `InvitationActionRedirectController::declineHandle()` builds the
@@ -2288,7 +2288,7 @@ context loop prints every enabled context and only the box loops skip the
 closed one). Live-probed 2026-09-04 (claim check), all three apps: holds; the closing
 control is Site Access Options › "User Registration" (its strings in note
 e), not a box named "Users can register".
-Issue report: [docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md](../issues/U03-A4-closed-journal-listed-on-roles-tab.md).
+Issue report: [pkp-e2e#794](https://github.com/jardakotesovec/pkp-e2e/issues/794) ([docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md](../issues/U03-A4-closed-journal-listed-on-roles-tab.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — `ProfileHandler::profile()`: the query is
@@ -2327,7 +2327,7 @@ records the cap on the Login, Confirm Access, forced-change and reset forms
 and the ruling to raise it; this template carries the same attribute.
 Live-probed 2026-09-03, all three apps: 40 characters typed into each of the
 three boxes leave 32. Live-probed 2026-09-04 (claim check), all three apps: holds.
-Issue report: [docs/issues/U03-A7-password-boxes-keep-32-characters.md](../issues/U03-A7-password-boxes-keep-32-characters.md).
+Issue report: [pkp-e2e#795](https://github.com/jardakotesovec/pkp-e2e/issues/795) ([docs/issues/U03-A7-password-boxes-keep-32-characters.md](../issues/U03-A7-password-boxes-keep-32-characters.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — `ChangeProfileEmailInvite::getMailable()` addresses
@@ -2369,7 +2369,7 @@ context (a site-level request, `index/…`) the value printed is the literal
 ended "Kind regards, Site Admin"; the site-level message of the same user
 kind, sent by a two-journal user from `index/user/profile`, ended "Kind
 regards, Array". Live-probed 2026-09-04 (claim check), all three apps: holds.
-Issue report: [docs/issues/U03-A10-site-profile-email-change-signs-off-array.md](../issues/U03-A10-site-profile-email-change-signs-off-array.md).
+Issue report: [pkp-e2e#789](https://github.com/jardakotesovec/pkp-e2e/issues/789) ([docs/issues/U03-A10-site-profile-email-change-signs-off-array.md](../issues/U03-A10-site-profile-email-change-signs-off-array.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — `ChangePasswordForm` success returns a content-less
@@ -2389,7 +2389,7 @@ fires a `formCanceled` event with no `cancelRedirectUrl` and no listener.
 Live-probed 2026-09-03, all three apps: with the three boxes filled, "Cancel"
 sent no request, changed no tab and kept the values. Live-probed 2026-09-04 (claim check),
 all three apps: holds.
-Issue report: [docs/issues/U03-A12-password-tab-cancel-does-nothing.md](../issues/U03-A12-password-tab-cancel-does-nothing.md).
+Issue report: [pkp-e2e#790](https://github.com/jardakotesovec/pkp-e2e/issues/790) ([docs/issues/U03-A12-password-tab-cancel-does-nothing.md](../issues/U03-A12-password-tab-cancel-does-nothing.md)).
 
 <a id="fn-a13"></a>
 **f-a13** — `Repo::author()->newAuthorFromUser()` copies `givenName` and
@@ -2411,7 +2411,7 @@ was `index/en/about/privacy` with `target="_blank"` and opened "404 Not
 Found"; at journal level the same link opened that journal's "Privacy
 Statement". A fix is to fall back to a journal's or the site's statement,
 or to leave the sentence out where there is none.
-Issue report: [docs/issues/U03-A14-site-profile-privacy-link-not-found.md](../issues/U03-A14-site-profile-privacy-link-not-found.md).
+Issue report: [pkp-e2e#791](https://github.com/jardakotesovec/pkp-e2e/issues/791) ([docs/issues/U03-A14-site-profile-privacy-link-not-found.md](../issues/U03-A14-site-profile-privacy-link-not-found.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — `PublicProfileForm` adds `FormValidatorUrl` on `userUrl`, which
@@ -2456,7 +2456,7 @@ changed. Do you wish to continue without saving?" (Cancel kept the tab, OK
 opened the other one); a phone typed into the re-rendered tab after the
 server refusal raised it as well, and a tab whose last save succeeded asked
 nothing.
-Issue report: [docs/issues/U03-A17-contact-refused-save-lost-on-next-tab.md](../issues/U03-A17-contact-refused-save-lost-on-next-tab.md).
+Issue report: [pkp-e2e#792](https://github.com/jardakotesovec/pkp-e2e/issues/792) ([docs/issues/U03-A17-contact-refused-save-lost-on-next-tab.md](../issues/U03-A17-contact-refused-save-lost-on-next-tab.md)).
 
 <a id="fn-a18"></a>
 **f-a18** — pkp/pkp-lib#13181 ("Invitation accept/decline URLs name the

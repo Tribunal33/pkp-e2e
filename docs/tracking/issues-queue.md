@@ -28,7 +28,7 @@ and the hourly routine starts one only when none is running
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
 | [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
-| [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 | A1 done with U03 A7 (docs/issues/U03-A7-password-boxes-keep-32-characters.md) |
+| [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 | A1 done with U03 A7 (pkp-e2e#795) |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A7 done with U70 A10 (pkp-e2e#734); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |

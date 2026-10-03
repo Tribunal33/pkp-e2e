@@ -1260,7 +1260,7 @@ imported accounts, or pre-cap registrations). Live-probed: typing 34
 characters leaves 32 in the box and sign-in fails with the generic error
 (OJS and OMP, 2026-07-31); the same cap observed on the reset form
 (2026-07-31) and the Confirm Access box (2026-08-01).
-Issue report: [docs/issues/U03-A7-password-boxes-keep-32-characters.md](../issues/U03-A7-password-boxes-keep-32-characters.md) (with [User profile A7](U03-user-profile.md#a7)).
+Issue report: [pkp-e2e#795](https://github.com/jardakotesovec/pkp-e2e/issues/795) ([docs/issues/U03-A7-password-boxes-keep-32-characters.md](../issues/U03-A7-password-boxes-keep-32-characters.md)) (with [User profile A7](U03-user-profile.md#a7)).
 
 <a id="fn-a2"></a>
 **f-a2** — `userLogin.tpl`: `<input type="checkbox" name="remember" ...
