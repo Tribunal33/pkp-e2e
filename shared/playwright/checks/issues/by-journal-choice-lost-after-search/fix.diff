@@ -1,0 +1,38 @@
+--- a/lib/pkp/pages/search/SearchHandler.php
++++ b/lib/pkp/pages/search/SearchHandler.php
+@@ -43,6 +43,8 @@
+ 
+         $rangeInfo = $this->getRangeInfo($request, 'search');
+         $builder = (new SubmissionSearchResult())->builderFromRequest($request, $rangeInfo);
++        // The journal searched: the request's own, or the one chosen under "By Journal" on the site-wide page
++        $contextId = ($builder->wheres['contextId'] ?? null) ?: null;
+         $results = $builder->paginate($rangeInfo->getCount(), 'submissions', $rangeInfo->getPage());
+ 
+         $this->setupTemplate($request);
+@@ -51,8 +53,7 @@
+ 
+         // Assign the year range.
+         $collector = Repo::publication()->getCollector();
+-        $context = $request->getContext();
+-        $collector->filterByContextIds($context ? [$context->getId()] : null);
++        $collector->filterByContextIds($contextId ? [$contextId] : null);
+         $yearRange = Repo::publication()->getDateBoundaries($collector);
+         $yearStart = substr($yearRange->min_date_published, 0, 4);
+         $yearEnd = substr($yearRange->max_date_published, 0, 4);
+@@ -62,14 +63,14 @@
+         $templateMgr->assign([
+             'query' => $builder->query,
+             'results' => $results,
+-            'searchContext' => $context?->getId(),
++            'searchContext' => $contextId,
+             'yearStart' => $yearStart,
+             'yearEnd' => $yearEnd,
+             'orderBy' => $request->getUserVar('orderBy'),
+             'orderDir' => $request->getUserVar('orderDir'),
+         ]);
+ 
+-        if (!$context) {
++        if (!$request->getContext()) {
+             $contextService = app()->get('context');
+             $templateMgr->assign('searchableContexts', $contextService->getManySummary(['isEnabled' => true]));
+         }

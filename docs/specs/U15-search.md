@@ -663,6 +663,7 @@ Left out of the scenarios above, by reason:
   - a word that is only in a published HTML galley finds the article, book or preprint once the queue has run (Rule 3; A11)
   - a title corrected and a contributor added on a published article, book or preprint are found by their new words once the queue has run, and the old title word no longer finds it (Rule 12; A3)
   - a Year alone under "Published Before", and a Year and Month without a Day, limit the results and come back showing the date applied (Rule 9; A1)
+  - on the site-wide Search page, a journal chosen under "By Journal" stays selected after the search and its page 2 lists that journal's articles only (Rule 10; OJS2)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -764,7 +765,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A sort by published date, typed into the address, answers an error page | 🐞 | latent | — |
 | [A13](#a13) | A page number in the address that is not a number answers a completely empty page | 🐞 | latent | — |
 | [OJS1](#ojs1) | With more than one result, the screen-reader count reads out a raw code | 🐞 | minor | — |
-| [OJS2](#ojs2) | On the site-wide page, "By Journal" limits the first page only and never shows as chosen | 🐞 | user-visible | — |
+| [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP1](#omp1) | The index-rebuild tool ignores the press path it is given and rebuilds every press | 🐞 | invisible | — |
 | [OMP3](#omp3) | A book declined after publication stays listed, but its title opens "404 Not Found" for a visitor | 🐞 | user-visible | — |
 | [OPS1](#ops1) | The screen-reader result count always says "Found one item." | 🐞 | minor | — |
@@ -1000,15 +1001,21 @@ technology hears the code.
 Basis: probe. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — "By Journal" is dropped by the page links and never shows as chosen** · 🐞 · user-visible.
-On the site-wide Search page, choosing a journal under "By Journal" limits
-the first page of results to that journal, but the page links drop the
-choice: page 2 is the whole site's listing and the total jumps to the
-site's own count (28 items on page 1 became 175 on page 2, seven pages,
-on one install). And after any search the select
-shows its blank entry again, although the results were limited, so the
-reader cannot see that a journal is in force.
-Basis: probe. <sup>f-ojs2</sup>
+**OJS2 — On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen** · 🐞 · medium.
+On a site that hosts several journals, a reader on the site-wide Search
+page chooses a journal under "By Journal" and presses "Search". The first
+page of results is limited to that journal, but the select shows its
+blank entry again, so nothing on the page says a journal is in force.
+
+The page links below the results drop the choice. Page 2 and every page
+after it list the whole site, and the count jumps from the journal's
+total to the site's, with nothing telling the reader that the filter is
+gone. A second search from the same form, with the select now blank,
+searches the whole site from page 1.
+
+No release has it: it is on `main`, the coming 3.6, and 3.5 keeps the
+chosen journal.
+Basis: probe, 2026-10-03. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
 **OJS3 — A visitor is asked to sign in instead of being told** · ❓ · minor.
@@ -1886,6 +1893,7 @@ upcpage" chosen read "1 - 25 of 28 items 1 2 > >>", the address carried
 `searchContext=3`, every page link carried `searchContext=` empty, and "2"
 read "26 - 50 of 175 items << < 1 2 3 4 5 6 7 > >>": the whole site's
 listing.
+Issue report: [docs/issues/U15-OJS2-by-journal-choice-lost-after-search.md](../issues/U15-OJS2-by-journal-choice-lost-after-search.md).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — fn-l: a denied authorization policy redirects an anonymous
