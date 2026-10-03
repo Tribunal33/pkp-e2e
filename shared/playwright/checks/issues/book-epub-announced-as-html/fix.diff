@@ -1,0 +1,11 @@
+--- a/plugins/generic/googleScholar/GoogleScholarPlugin.php
++++ b/plugins/generic/googleScholar/GoogleScholarPlugin.php
+@@ -216,7 +216,7 @@
+             case 'application/pdf':
+                 $templateMgr->addHeader('googleScholarPdfUrl' . $i++, '<meta name="citation_pdf_url" content="' . $request->getDispatcher()->url($request, Application::ROUTE_PAGE, null, 'catalog', 'download', [$submission->getId(), $availableFile->getData('assocId'), $availableFile->getId()], urlLocaleForPage: '') . '"/>');
+                 break;
+-            case 'text/xml' or 'text/html':
++            case 'text/html':
+                 $templateMgr->addHeader('googleScholarHtmlUrl' . $i++, '<meta name="citation_fulltext_html_url" content="' . $request->getDispatcher()->url($request, Application::ROUTE_PAGE, null, 'catalog', 'download', [$submission->getId(), $availableFile->getData('assocId'), $availableFile->getId()], urlLocaleForPage: '') . '"/>');
+                 break;
+         }

@@ -891,6 +891,8 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - A1 (a "Description" with a double quote mark: the journal's home page carries the whole text in its description tag; Rule 9)
+  - OMP1 {OMP} (a book with an EPUB format and an HTML format: the book page's "citation_fulltext_html_url" names the HTML file alone; Fields, "citation_fulltext_html_url")
+  - OMP2 {OMP} (a book with two PDF files for the whole book and no ISBN: one "citation_pdf_url" per file; Fields, "citation_pdf_url")
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -981,8 +983,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | An "&" in an abstract reaches the tags as "&amp;" | 🐞 | minor | — |
 | [OJS1](#ojs1) | "DC.Source.URI" points to an address that does not exist instead of the journal's home page | 🐞 | minor | — |
 | [OJS2](#ojs2) | A journal's sitemap lists no article at all, only the issues' pages | 🐞 | user-visible | — |
-| [OMP1](#omp1) | A book page announces only its last file that is not a PDF as full text in HTML, whatever its type | 🐞 | minor | — |
-| [OMP2](#omp2) | A book with two PDF files announces only one of them to Google Scholar | 🐞 | minor | — |
+| [OMP1](#omp1) | A book page tells Google Scholar its EPUB, or any file that is not a PDF, is HTML full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [OMP2](#omp2) | A book with two PDF files for the whole book announces only one of them to Google Scholar | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | A book file's page calls every file a chapter | 🐞 | minor | — |
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists chapter pages that answer "404 Not Found" | 🐞 | minor | — |
 | [OMP5](#omp5) | A book file's page names the book's page as its own address | 🐞 | minor | — |
@@ -1097,24 +1099,38 @@ Since: 2026-02-17 · Basis: probe, 2026-09-26. <sup>f-ojs2</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — Only the last non-PDF file is announced as HTML** · 🐞 · minor.
-A press that offers a book as an HTML file and, in another format, a
-file of another type expects Google Scholar's tags to name the HTML file
-as full text in HTML. The book's page carries one
-"citation_fulltext_html_url", naming the last file that is not a PDF,
-whatever its type: with an "HTML" format and then a "Notes" format (a
-Markdown file), and no ISBN, it names the Markdown file, and the HTML
-file is not announced.
-Basis: probe, 2026-09-26. <sup>f-omp1</sup>
+**OMP1 — A book page tells Google Scholar its EPUB, or any file that is not a PDF, is HTML full text** · 🐞 · medium.
+A press offers a book as an EPUB, or as any other file that is neither a
+PDF nor HTML. Its book page then tells Google Scholar that this file is
+the book's full text in HTML: the "citation_fulltext_html_url" tag names
+the EPUB's download address. A chapter's page does the same with the
+chapter's files.
+
+When the book also has a real HTML file, only one of the two gets the
+tag: the file uploaded first. If the press uploaded the EPUB first, its
+HTML full text is left out. Nothing on screen shows this. The only way
+round is to make the EPUB format "Not Available", which also takes the
+EPUB away from readers.
+
+It applies to any format marked "Available" whose file has its terms
+set, on any press where the Google Scholar plugin is on, as it is by
+default.
+Basis: probe, 2026-10-03. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — Only one of a book's PDF files is announced** · 🐞 · minor.
-A book with two PDF files for the whole book (in two formats, say)
-expects one "citation_pdf_url" tag per file. When no ISBN sits between
-the two files' formats (no ISBN at all, or one on the first format
-only), the page carries one such tag, the last file's; the other file is
-not announced.
-Basis: probe, 2026-09-26. <sup>f-omp2</sup>
+**OMP2 — A book with two PDF files for the whole book announces only one of them to Google Scholar** · 🐞 · low.
+A book that offers two PDF files for the whole book, in one publication
+format or in two, announces only one of them to Google Scholar. The
+book page carries a single "citation_pdf_url" tag, for the file
+uploaded first. The same holds for two HTML files, and for two files of
+one kind on a chapter's page.
+
+The page itself offers both files to readers, so only the search index
+misses one. The press is not told.
+
+It happens when the formats carry no ISBN, as in PKP's own test data.
+When every such format carries an ISBN, both files are announced.
+Basis: probe, 2026-10-03. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — A book file's page calls every file a chapter** · 🐞 · minor.
@@ -1319,9 +1335,11 @@ Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](..
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note h: `case 'text/xml' or 'text/html':` evaluates to `case true:`, which `switch` matches for any mimetype that is not `application/pdf`; the header name `googleScholarHtmlUrl{$i}` repeats as for OMP2, so the last such file wins. Live-probed 2026-09-26: the "HTML" file (`text/html`) got no tag and the "Notes" file (`text/markdown`) the one "citation_fulltext_html_url" (note q14).
+Issue report: [docs/issues/U20-OMP1-book-epub-announced-as-html.md](../issues/U20-OMP1-book-epub-announced-as-html.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Note h: `_setFileUrl()` takes `$i` by value; with no identification code between two files, both write the header `googleScholarPdfUrl0`, and `addHeader()` keeps the second; an ISBN on the first format moves `$i` only after that format's file. Live-probed 2026-09-26: one "citation_pdf_url", the "PDF Two" file's, with no ISBN and with an ISBN-13 on "PDF" alone (note q14).
+Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U20-OMP2-book-page-announces-one-pdf.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — Note i: `monographFileView()` always adds `DC.Type` `Text.Chapter`, while `monographView()` adds `Text.Book`. Live-probed 2026-09-26: note q19.

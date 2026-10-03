@@ -1,0 +1,33 @@
+--- a/plugins/generic/googleScholar/GoogleScholarPlugin.php
++++ b/plugins/generic/googleScholar/GoogleScholarPlugin.php
+@@ -151,10 +151,10 @@
+                                 $templateMgr->addHeader('googleScholarIsbn' . $i++, '<meta name="citation_isbn" content="' . htmlspecialchars($identificationCode->getValue()) . '"/>');
+                             }
+                         }
+-                        $this->_setFileUrl($availableFile, $templateMgr, $i, $request, $submission);
++                        $this->_setFileUrl($availableFile, $templateMgr, $request, $submission);
+                     } elseif ($isChapterRequest) {
+                         if ($chapter->getId() == $availableFile->getData('chapterId')) {
+-                            $this->_setFileUrl($availableFile, $templateMgr, $i, $request, $submission);
++                            $this->_setFileUrl($availableFile, $templateMgr, $request, $submission);
+                         }
+                     }
+                 }
+@@ -205,14 +205,14 @@
+         return __('plugins.generic.googleScholar.description');
+     }
+ 
+-    private function _setFileUrl($availableFile, TemplateManager $templateMgr, int $i, \APP\Core\Request $request, \APP\submission\Submission $submission): void
++    private function _setFileUrl($availableFile, TemplateManager $templateMgr, \APP\Core\Request $request, \APP\submission\Submission $submission): void
+     {
+         switch ($availableFile->getData('mimetype')) {
+             case 'application/pdf':
+-                $templateMgr->addHeader('googleScholarPdfUrl' . $i++, '<meta name="citation_pdf_url" content="' . $request->url(null, 'catalog', 'download', [$submission->getId(), $availableFile->getData('assocId'), $availableFile->getId()]) . '"/>');
++                $templateMgr->addHeader('googleScholarPdfUrl' . $availableFile->getId(), '<meta name="citation_pdf_url" content="' . $request->url(null, 'catalog', 'download', [$submission->getId(), $availableFile->getData('assocId'), $availableFile->getId()]) . '"/>');
+                 break;
+             case 'text/xml' or 'text/html':
+-                $templateMgr->addHeader('googleScholarHtmlUrl' . $i++, '<meta name="citation_fulltext_html_url" content="' . $request->url(null, 'catalog', 'download', [$submission->getId(), $availableFile->getData('assocId'), $availableFile->getId()]) . '"/>');
++                $templateMgr->addHeader('googleScholarHtmlUrl' . $availableFile->getId(), '<meta name="citation_fulltext_html_url" content="' . $request->url(null, 'catalog', 'download', [$submission->getId(), $availableFile->getData('assocId'), $availableFile->getId()]) . '"/>');
+                 break;
+         }
+     }
