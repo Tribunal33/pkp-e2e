@@ -1,0 +1,13 @@
+--- a/lib/pkp/js/controllers/form/AjaxFormHandler.js
++++ b/lib/pkp/js/controllers/form/AjaxFormHandler.js
+@@ -141,6 +141,10 @@
+ 		} else {
+ 			// data was false -- assume errors, re-enable form controls.
+ 			this.enableFormControls();
++			// The save was refused, so what the form holds is still unsaved.
++			// submitHandler_() stopped tracking it when the form was sent:
++			// track it again, so closing or leaving asks first.
++			this.formChange();
+ 		}
+ 
+ 		// Trigger the notify user event, passing this

@@ -1,0 +1,13 @@
+--- a/lib/pkp/js/controllers/grid/navigationMenus/form/NavigationMenuItemsFormHandler.js
++++ b/lib/pkp/js/controllers/grid/navigationMenus/form/NavigationMenuItemsFormHandler.js
+@@ -38,7 +38,9 @@
+ 				this.showPreview_));
+ 
+ 		$('#menuItemType', $formElement).change(this.callbackWrapper(this.setType));
+-		$('#menuItemType', $formElement).trigger('change');
++		// Set up the chosen type's fields directly: a triggered `change` would
++		// reach FormHandler.formChange() and mark the untouched form as changed.
++		this.setType();
+ 	};
+ 
+ 

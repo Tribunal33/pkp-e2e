@@ -1197,6 +1197,8 @@ Left out of the scenarios above, by reason:
   - the item window's "Navigation Menu Type": choosing a type and then "Choose a type..." keeps the heading and returns the line under the list to its first text (the guard [A12](#a12)'s issue report proposes)
   - the "Navigation" table after an item is renamed or removed: each menu's "Navigation Menu Items" cell follows without a reload (the guard [A15](#a15)'s issue report proposes)
   - the menu window with no items at all: neither panel claims items are assigned or sends the manager to drag (the guard [A16](#a16)'s issue report proposes)
+  - the item window opened and closed with nothing typed: no "The data on this form has changed" box and no leave question (the guard of [A18](#a18)'s first issue report)
+  - the item window after a refused "Save": the back arrow asks before closing and the entries stay until the manager answers (the guard of [A18](#a18)'s second issue report)
 - **Rarely met**:
   - "Publishing Mode" set to "OJS will not be used to publish the journal's contents online." {OJS}: "Current Issue" and "Archives" leaving the header (Settings bullet 2; item types table)
   - a Reader with no side menu while "Disable Submissions" is on (Actors row 8)
@@ -1288,7 +1290,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Website › "Navigation": after an item is renamed or removed, each menu's item list keeps the old items until a reload | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | With every navigation menu item removed, "Add Menu" says to drag items and that all items are assigned | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
-| [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | minor | — |
+| [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | Two journals with the same name hide each other in the journals switcher | 🐞 | minor | — |
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | minor | — |
@@ -1544,17 +1546,26 @@ After a discarded drag it does not.
 Basis: probe. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — The item window's question on closing does not follow what changed** · 🐞 · minor.
-The item window's back arrow ("Close") opens the browser's own box "The
-data on this form has changed. Do you wish to continue without saving?"
-even when nothing was typed, and leaving Settings › Website while the
-window is open, untouched, raises the browser's leave question. The
-menu window asks only after a change, in the page. A manager who opened
-an item only to look is asked to confirm losing changes they never made.
-Right after a refused "Save" it is the other way round: the back arrow
-closes the window at once, with no question, and what the manager typed
-is lost.
-Basis: probe, test run. <sup>f-a18</sup>
+**A18 — The item window's question on closing does not follow what changed** · 🐞 · low.
+A manager opens "Add item" or an item's "Edit" on Settings › Website ›
+"Navigation", types nothing, and closes the window with its back arrow.
+The browser asks "The data on this form has changed. Do you wish to
+continue without saving?", though nothing changed. Escape and a click
+beside the window close it the same way, so they ask too; the window
+has no "Cancel". While the window is open it covers the page, so the
+manager can leave only through the browser (typing an address,
+reloading, going back), and each raises the browser's "Leave site?"
+question. The menu window asks only after a change, in the page.
+
+Right after a refused "Save" it is the other way round: the window
+stays open with the entries and a notice at the top right says why,
+but the back arrow then closes it at once, with no question, and the
+entries are gone; leaving the page does not ask either. Every reason
+for a refusal does it: a missing type, an address that is not a full
+web address, a path with characters other than letters, digits, ".",
+"/", "-" and "_", or a path another item already uses. The two halves
+have different causes, in two reports.
+Basis: probe, 2026-10-03. <sup>f-a18</sup>
 
 <a id="a21"></a>
 **A21 — Journals with the same name hide each other in the switcher** · 🐞 · minor.
@@ -2863,6 +2874,8 @@ and `containerCloseHandler()` confirms `form.dataHasChanged` only while
 `formChangesTracked` is set, which the next `formChange()` sets again.
 Test run 2026-09-24 on OJS and OPS, and by hand on OPS (note l): no box
 after a refused "Save", the box again after a changed "Title".
+Issue report: [docs/issues/U08-A18-item-window-asks-with-nothing-typed.md](../issues/U08-A18-item-window-asks-with-nothing-typed.md).
+Issue report: [docs/issues/U08-A18-item-window-refused-save-closes-unasked.md](../issues/U08-A18-item-window-refused-save-closes-unasked.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — The installed item's title key `common.editorialMasthead`
