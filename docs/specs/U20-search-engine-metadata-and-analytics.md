@@ -1377,7 +1377,7 @@ Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../iss
 
 <a id="fn-f-a6"></a>
 **f-a6** — Notes h, i: `citation_author` and `DC.Creator.PersonalName` read `getFullName(false, false, $publicationLocale)`, the name in the submission language only, with no fallback; the item's page falls back to the other language. The contributor copied from the submitting author holds the given name in the submission language and not the family name. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP), in either interface language: note q14.
-Issue report: [docs/issues/U20-A6-author-tags-given-name-alone-other-language.md](../issues/U20-A6-author-tags-given-name-alone-other-language.md).
+Issue report: [docs/issues/U20-A6-author-tags-given-name-alone-other-language.md](../issues/U20-A6-author-tags-given-name-alone-other-language.md), filed as [pkp-e2e#671](https://github.com/jardakotesovec/pkp-e2e/issues/671).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Notes h, i: the tags print `htmlspecialchars(strip_tags($abstract))`, and the stored abstract already holds "&" as `&amp;`, so it is escaped a second time. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP, and on a book file's page): note q14.
