@@ -2011,7 +2011,7 @@ its row again (`announcement-type-grid/fetch-row?rowId={id}`), and that
 request answered 500 on every edit. Live-probed 2026-09-17 (A13), OJS, OMP
 and OPS, the journal's tab and the site's: the row read the old name after
 the notice and three seconds later, the new one after a reload.
-Issue report: [docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md](../issues/U12-A13-edited-announcement-type-keeps-old-name.md).
+Issue report: [pkp-e2e#757](https://github.com/jardakotesovec/pkp-e2e/issues/757) ([docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md](../issues/U12-A13-edited-announcement-type-keeps-old-name.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14 evidence.** The job forces the recipient's locale to the
