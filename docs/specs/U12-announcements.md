@@ -846,6 +846,7 @@ Left out of the scenarios above, by reason:
   - the guard for A14 (issue report `docs/issues/U12-A14-french-announcement-email-english-sentence.md`): on a press and a preprint server whose primary language is French, the announcement email's body sentence arrives in French.
   - the guard for A7 (issue report `docs/issues/U12-A7-announcement-feed-limit-keeps-oldest.md`): with "Limit feed to" set below the number of current announcements, the three feeds carry the newest ones and RSS 2.0's channel date is the newest's.
   - the guard for A15 (issue report `docs/issues/U12-A15-announcement-feed-dates-percent-signs.md`): the Atom and RSS 1.0 feeds' dates are well-formed RFC 3339 and W3CDTF values.
+  - the guard for A3 (issue report `docs/issues/U12-A3-announcement-expiry-date-refused-on-edit.md`): an unchanged "Save" on "Edit Announcement" keeps the expiry date, with another "Date (Short)" and with a browser west of the install's time zone.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -937,7 +938,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Removing an announcement type deletes every announcement of that type, behind a dialog that names neither the type nor its announcements | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | An image refused on "Save" (a ".jpeg" name, an upper-case extension) deletes the announcement being edited | 🐞 | user-visible | — |
-| [A3](#a3) | "Edit Announcement" prints the expiry date in the journal's short date format, which the save refuses unless that format is YYYY-MM-DD | 🐞 | user-visible | — |
+| [A3](#a3) | "Edit Announcement" shows the expiry date in a format "Save" refuses, or one day early, which "Save" then stores | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A journal's announcement feeds with "Limit feed to" set carry the oldest announcements, never the newest {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Ticking "Send an email about this to all registered users." when editing an announcement sends nothing | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
@@ -988,13 +989,23 @@ its earlier image file stays in the journal's public files
 save. Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The expiry date is printed in a format the save refuses** · 🐞 · user-visible.
-On a journal whose "Date (Short)" is anything but YYYY-MM-DD, "Edit
-Announcement" prints a saved expiry date in that format, and "Save",
-even with nothing changed, is refused with "The date format is not
-valid. Enter each date in the format YYYY-MM-DD." until the manager
-retypes the date. On a fresh journal the two formats agree and nothing
-shows. Basis: probe. <sup>f-a3</sup>
+**A3 — "Edit Announcement" shows the expiry date in a format "Save" refuses, or one day early, which "Save" then stores** · 🐞 · medium.
+A manager opens "Edit Announcement" on an announcement with an expiry
+date and expects "Expiry Date" to show the date as it was entered, YYYY-
+MM-DD, the only shape the box accepts. Instead the box shows the date as
+the journal prints dates elsewhere, and in the browser's own time zone.
+On a journal whose "Date (Short)" is anything but YYYY-MM-DD (the
+default), the box shows that format ("31-03-2027"), and "Save", even
+with nothing changed, is refused with "The date format is not valid.
+Enter each date in the format YYYY-MM-DD." until the manager retypes the
+date. In a browser west of the install's time zone (an install on UTC,
+the default, edited from the Americas), the box shows the day before,
+and "Save" stores it without a word: every save of the panel moves the
+expiry one day earlier, and the announcement leaves the public site
+early. On a journal with the default "Date (Short)", edited from a
+browser at or east of the install's time zone, the fault does not
+appear. The site's own Announcements panel behaves the same.
+Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a5"></a>
 **A5 — A type is printed nowhere** · ❓ · minor.
@@ -1959,6 +1970,7 @@ row stayed until a reload, then was gone with its page; the announcement's
 `formatShortDate()` and the API validates `date_format:Y-m-d`. Code read 2026-09-17. Live-probed 2026-09-17 (A3), OJS, OMP and OPS: with
 "Date (Short)" `d-m-Y` the panel printed "17-10-2026" and the unchanged save
 was refused; retyped as YYYY-MM-DD it saved.
+Issue report: [docs/issues/U12-A3-announcement-expiry-date-refused-on-edit.md](../issues/U12-A3-announcement-expiry-date-refused-on-edit.md).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence (retired).** The entry rested on a code read:

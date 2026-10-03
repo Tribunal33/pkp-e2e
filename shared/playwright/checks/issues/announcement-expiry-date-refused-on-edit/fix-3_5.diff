@@ -1,0 +1,119 @@
+--- a/lib/pkp/classes/template/PKPTemplateManager.php
++++ b/lib/pkp/classes/template/PKPTemplateManager.php
+@@ -1398,7 +1398,8 @@
+                 null,
+             ),
+             'helpUrl' => Application::get()->getHelpUrl(),
+-            'timeZone' => Config::getVar('general', 'time_zone')
++            // The zone PHP resolved from `time_zone` (an empty or legacy setting included)
++            'timeZone' => date_default_timezone_get()
+         ];
+ 
+         if ($context) {
+--- a/lib/ui-library/src/utils/dateUtils.js
++++ b/lib/ui-library/src/utils/dateUtils.js
+@@ -147,6 +147,22 @@
+ }
+ 
+ /**
++ * Formats a date as YYYY-MM-DD in the install's time zone, whatever the
++ * context's display formats: the shape the API's date fields accept
++ * (`date_format:Y-m-d`), for a form field that sends the value back.
++ * @param {string | Date} dateString - The date string (ISO 8601 as the API sends it) or Date object.
++ * @returns {string} The date as YYYY-MM-DD, or an empty string if dateString is falsy.
++ */
++export function formatIsoDate(dateString) {
++	if (!dateString) {
++		return '';
++	}
++	return parseDateTimeString(dateString)
++		.setZone(getConfiguredTimezone())
++		.toISODate();
++}
++
++/**
+  * Formats a datetime string using the configured short datetime format and current locale.
+  * @param {string | Date} dateString - The datetime string or Date object to format.
+  * @returns {string} The formatted datetime string, or an empty string if dateString is falsy.
+--- a/lib/ui-library/src/composables/useDate.js
++++ b/lib/ui-library/src/composables/useDate.js
+@@ -1,5 +1,6 @@
+ import {
+ 	formatShortDate,
++	formatIsoDate,
+ 	formatShortDateTime,
+ 	calculateDaysBetweenDates,
+ 	getDateCurrentLocale,
+@@ -30,6 +31,14 @@
+ 		formatShortDate,
+ 
+ 		/**
++		 * Format a date as YYYY-MM-DD in the install's time zone, for a form field the API validates as Y-m-d
++		 * @type {Function}
++		 * @param {Date|string} date - The date to format
++		 * @returns {string} The date as YYYY-MM-DD
++		 */
++		formatIsoDate,
++
++		/**
+ 		 * Format a date with time in a short format according to user locale
+ 		 * @type {Function}
+ 		 * @param {Date|string} date - The date to format
+--- a/lib/ui-library/src/composables/useDate.test.js
++++ b/lib/ui-library/src/composables/useDate.test.js
+@@ -1,4 +1,5 @@
+-import {describe, test, expect} from 'vitest';
++import {describe, test, expect, afterEach} from 'vitest';
++import {Settings} from 'luxon';
+ import {useDate} from './useDate';
+ global.pkp = {
+ 	context: {
+@@ -33,3 +34,27 @@
+ 		).toBe(-1);
+ 	});
+ });
++
++describe('formatIsoDate', () => {
++	const {formatIsoDate} = useDate();
++	const browserZone = Settings.defaultZone;
++	afterEach(() => {
++		Settings.defaultZone = browserZone;
++		global.pkp.context.timeZone = 'UTC';
++		delete global.pkp.context.dateFormatShort;
++	});
++	test('keeps the stored date in a browser west of the install', () => {
++		Settings.defaultZone = 'America/New_York';
++		global.pkp.context.timeZone = 'UTC';
++		expect(formatIsoDate('2027-03-31T00:00:00.000000Z')).toBe('2027-03-31');
++	});
++	test('reads the date in the install time zone', () => {
++		Settings.defaultZone = 'UTC';
++		global.pkp.context.timeZone = 'Europe/Prague';
++		expect(formatIsoDate('2027-03-30T22:00:00.000000Z')).toBe('2027-03-31');
++	});
++	test('ignores the display format', () => {
++		global.pkp.context.dateFormatShort = 'd-m-Y';
++		expect(formatIsoDate('2027-03-31T00:00:00.000000Z')).toBe('2027-03-31');
++	});
++});
+--- a/lib/ui-library/src/components/ListPanel/announcements/AnnouncementsListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/announcements/AnnouncementsListPanel.vue
+@@ -59,7 +59,7 @@
+ import AnnouncementsEditModal from './AnnouncementsEditModal.vue';
+ import {useModal} from '@/composables/useModal';
+ import {useDate} from '@/composables/useDate';
+-const {formatShortDate} = useDate();
++const {formatIsoDate} = useDate();
+ 
+ export default {
+ 	components: {
+@@ -264,7 +264,8 @@
+ 					let value = announcement[field.name];
+ 
+ 					if (field.name == 'dateExpire') {
+-						value = formatShortDate(value);
++						// The box and the API take YYYY-MM-DD, not the display format
++						value = formatIsoDate(value);
+ 					}
+ 					field.value = value;
+ 				}
