@@ -1169,7 +1169,7 @@ otherwise admits Assistants (the contributors feature's gate). Live-probed
 2026-08-07 (OJS): both actions returned an authorization refusal
 (HTTP 401) — no email delivered, stored iD unchanged — while the field
 showed the requested state / the iD removed.
-Issue report: [docs/issues/U04-A5-orcid-field-refusal-shown-as-done.md](../issues/U04-A5-orcid-field-refusal-shown-as-done.md).
+Issue report: [pkp-e2e#749](https://github.com/jardakotesovec/pkp-e2e/issues/749) ([docs/issues/U04-A5-orcid-field-refusal-shown-as-done.md](../issues/U04-A5-orcid-field-refusal-shown-as-done.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Label `orcid.manager.settings.sendMailToAuthorsOnPublication`
