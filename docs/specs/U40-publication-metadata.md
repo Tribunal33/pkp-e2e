@@ -2719,7 +2719,7 @@ administrator with the manager role kept: 200, the panel closed, the
 language changed, on all three apps. The assistant half is a code
 reading of the route group; a permitted Copyeditor's Confirm was never
 driven (fn-i's 2026-08-28 Confirm was the manager's).
-Issue report: [docs/issues/U40-A19-change-language-offered-then-refused.md](../issues/U40-A19-change-language-offered-then-refused.md).
+Issue report: [pkp-e2e#814](https://github.com/jardakotesovec/pkp-e2e/issues/814) ([docs/issues/U40-A19-change-language-offered-then-refused.md](../issues/U40-A19-change-language-offered-then-refused.md)).
 
 <a id="fn-f-a20"></a>
 **f-a20 — A20 evidence.** fn-g: `PKPPublicationLicenseForm` builds the
