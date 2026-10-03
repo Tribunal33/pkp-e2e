@@ -1,0 +1,11 @@
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -1038,7 +1038,7 @@
+ 
+ msgid "about.aboutOMPSite"
+ msgstr ""
+-"This press uses Open Monograph Press {$ompVersion}, which is open source "
++"This site uses Open Monograph Press {$ompVersion}, which is open source "
+ "press management and publishing software developed, supported, and freely "
+ "distributed by the Public Knowledge Project under the GNU General Public "
+ "License. Visit PKP's website to <a href=\"https://pkp.sfu.ca/\">learn more "
