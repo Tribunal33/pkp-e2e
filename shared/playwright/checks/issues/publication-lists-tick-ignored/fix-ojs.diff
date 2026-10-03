@@ -1,0 +1,11 @@
+--- a/templates/frontend/objects/article_summary.tpl
++++ b/templates/frontend/objects/article_summary.tpl
+@@ -64,7 +64,7 @@
+ 	<div class="meta">
+ 		{if $showAuthor}
+ 		<div class="authors">
+-			{$publication->getAuthorString()|escape}
++			{$publication->getAuthorString(true)|escape}
+ 		</div>
+ 		{/if}
+ 

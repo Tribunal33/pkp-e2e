@@ -1,0 +1,11 @@
+--- a/templates/frontend/objects/preprint_summary.tpl
++++ b/templates/frontend/objects/preprint_summary.tpl
+@@ -54,7 +54,7 @@
+ 
+ 		{if $showAuthor}
+ 		<div class="authors">
+-			{$preprint->getCurrentPublication()->getAuthorString()|escape}
++			{$preprint->getCurrentPublication()->getAuthorString(true)|escape}
+ 		</div>
+ 		{/if}
+ 
