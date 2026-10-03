@@ -683,6 +683,29 @@ published. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A4 (issue report
+    `docs/issues/U70-A4-catalog-second-category-flag-removes-first.md`):
+    a book in two categories, featured in each, keeps both "Featured in
+    category" boxes ticked after a reload
+  - the guard for A5 (issue report
+    `docs/issues/U70-A5-add-entry-refusal-no-reason.md`): "Add Entry" ›
+    "Save" with nothing chosen marks the box
+  - the guard for A2 (issue report
+    `docs/issues/U70-A2-catalog-management-notice-links-not-there.md`):
+    the Author's Production stage shows neither the "Catalog Management"
+    nor the "Awaiting approval." box
+  - the guard for A3 (issue report
+    `docs/issues/U70-A3-catalog-filter-order-reversed.md`): a series on
+    "Title (A-Z)" lists A to Z under "Filters"
+  - the guard for A3 (issue report
+    `docs/issues/U70-A3-catalog-press-order-lost-after-filter.md`): a
+    press on "Title (Z-A)" keeps that order after a filter is chosen and
+    removed
+  - the guard for A10 (issue report
+    `docs/issues/U70-A10-category-page-books-featured-elsewhere-first.md`):
+    on a category's public page, the book featured in that category comes
+    before one featured only in the whole catalog
 - **Rarely met**:
   - "Add Entry" › "Save" of a book whose "Date Published" lies in the
     future: the book is scheduled, stays off the list and is still
@@ -764,15 +787,15 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | The "Catalog Management" notice points at links that are not there, and the Author gets it too | 🐞 | minor | — |
-| [A3](#a3) | With a filter, an ascending "Order of monographs" lists the other way round; after a filter the press's order is lost | 🐞 | user-visible | — |
-| [A4](#a4) | A book holds category flags in one category only: pressing a second category's box takes the first away and stays empty | 🐞 | user-visible | — |
-| [A5](#a5) | "Add Entry" › "Save" refused with "Please correct these errors", and nothing is marked | 🐞 | minor | — |
+| [A2](#a2) | A published book's Production stage says "using the links just above" with no links there, and shows it to the Author | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A3](#a3) | With a filter, an ascending "Order of monographs" lists the other way round; after a filter the press's order is lost | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A4](#a4) | Catalog page: pressing "Featured in category" for a book's second category unfeatures it in the first | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A5](#a5) | Catalog "Add Entry" refuses a book with only "Please correct these errors" and never says why | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | After "Unpublish" the Production stage still says the monograph has been approved | 🐞 | minor | — |
 | [A7](#a7) | In French the Catalog page shows raw keys for its tab, list, column headings and "View Entry" | 🐞 | minor | — |
-| [A8](#a8) | "Add Entry" › "Save" with a word typed and nothing chosen publishes the first suggestion | 🐞 | user-visible | — |
-| [A9](#a9) | A book chosen twice in "Add Entry" is published twice and becomes "Version of Record 2.0" | 🐞 | user-visible | — |
-| [A10](#a10) | A category's public page ignores "Featured in category" and shows no "New Releases" | 🐞 | user-visible | — |
+| [A8](#a8) | Catalog "Add Entry": "Save" with a word typed publishes the first suggested book, chosen or not | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A9](#a9) | Catalog "Add Entry" still offers a book already chosen, and "Save" publishes it twice | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A10](#a10) | A category's public page ignores "Featured in category" and shows no "New Releases" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The ordering notice says "Drag-and-drop", but no row can be dragged | 🐞 | minor | — |
 | [A12](#a12) | While ordering, an open "Filters" column stays and can leave the page with no "Save Order" or "Cancel" | 🐞 | minor | — |
 | [A13](#a13) | While ordering, the last book's down arrow silently costs an extra press | 🐞 | minor | — |
@@ -801,53 +824,69 @@ Lean: refuse them; the side menu and every save have treated the catalog as a ma
 Basis: probe, 2026-09-27. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The "Catalog Management" notice points at links that are not there** · 🐞 · minor.
-The notice on the Production stage tells the reader to "visit Marketing
-and Publication … using the links just above", but nothing is above it:
-"Marketing" and "Publication" are groups of the side menu on the left. The
-same notice, addressed to whoever manages the catalog, also shows on the
-Author's Production stage, where neither the Catalog Entry page nor the
-catalog is open to them. Expected: a notice that names where to go, shown
-to those who can act on it.
-Basis: probe, 2026-09-27. <sup>f-a2</sup>
+**A2 — A published book's Production stage says "using the links just above" with no links there, and shows it to the Author** · 🐞 · low.
+Once a book is published, its Production stage shows a box headed
+"Catalog Management": "The monograph has been approved. Please visit
+Marketing and Publication to manage its catalog details, using the links
+just above." Nothing stands above the box but the "Status" box:
+"Marketing" and "Publication" are groups of the side menu on the left.
+
+The book's Author gets the same box on their own Production stage,
+although their side menu has no "Marketing" group and no "Catalog Entry"
+page, and the Catalog page refuses them. While the book is in
+Production and not yet published, the Author gets "Awaiting approval."
+in the same way: a box written for editors, which says "click on the
+Publication tab", a tab that no longer exists.
+Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The Catalog page's order with a filter** · 🐞 · user-visible.
-With a category or series as the filter, a category or series set to an
-ascending "Order of monographs" ("Title (A-Z)", the default of every new
-series) lists its books the other way round, Z to A. After the filter is
-removed, the whole catalog comes back newest first by publication date,
-although the press's own "Order of monographs" says otherwise and the page
-first opened in that order. Expected: each list in the order its setting
-names. The staff see the books in a different order than readers do.
-Basis: probe, 2026-09-27. <sup>f-a3</sup>
+**A3 — The Catalog page's order with a filter** · 🐞 · low.
+With a series or category as the filter, one set to an ascending "Order
+of monographs" ("Title (A-Z)", the default of every new series,
+"Publication date (oldest first)" or "Series position (lowest first)")
+lists its books that are not featured the other way round: Z to A,
+newest first, highest position first. Descending orders list correctly.
+Once the filter is removed, the books that are not featured come back
+newest first by publication date, and paging and search keep that order
+until a reload, although the press's own "Order of monographs" says
+otherwise and the page first opened in that order; a press on the
+default "Publication date (newest first)" sees no difference. Expected:
+each list in the order its setting names. The staff see the books in a
+different order than readers do.
+Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A book's category flags act as one** · 🐞 · user-visible.
-A book featured in category A, shown with category B as the filter, has
-an empty "Featured in category" box; pressing it does not feature the
-book in B: the book loses its feature in A and the box stays empty.
-Pressing it again then features the book in B, and A's box shows empty.
-"New release in category" does the same. A book moved to another series
-keeps its old series' flags, hidden, until the new series' box is
-pressed, which takes them away and leaves the box empty. Expected: each
-box sets the flag of the category or series it is shown for. A press
-cannot feature one book in two categories.
-Since: 2017-09-05 (nine years) · Basis: probe, 2026-09-27. <sup>f-a4</sup>
+**A4 — Catalog page: pressing "Featured in category" for a book's second category unfeatures it in the first** · 🐞 · medium.
+On a press's Catalog page, a book featured in one category shows an
+empty "Featured in category" box when another of its categories is the
+filter. Pressing that box does not feature the book there: it removes
+the book's feature in the first category, and the box stays empty. A
+second press features the book in the second category, and the first
+category's box is now empty. "New release in category" behaves the same.
+Nothing on the page says a flag was removed.
+
+So a press cannot feature a book, or mark it a new release, in two
+categories. Readers see the loss on the press's public category pages,
+which list featured books first: the book drops from the top of the
+first category's page (on `main` only once it has no flag left in any
+list, since the category pages there count every list's flags). A book moved to another series also needs two presses on its new
+series' box before it is featured there.
+Since: 2017-09-05 (nine years) · Basis: probe, 2026-10-03. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — "Add Entry" refused with nothing marked** · 🐞 · minor.
-"Save" with nothing chosen, or with a chosen book that a publishing
-requirement refuses (an unverified or duplicated ORCID iD), shows "The
-form was not saved because 1 error(s) were encountered. Please correct
-these errors and try again." for about five seconds, but nothing in the
-panel is marked, so the user is not told what is wrong. Expected: "You
-must provide one or more submission ids to be added to the catalog.", or
-the requirement's own message as the workflow's "Schedule For
-Publication" window shows it: "The following requirements must be met
-before this can be published." with "Unauthenticated ORCiDs for
-contributors detected." or "Duplicate ORCiDs for contributors detected."
-Basis: probe, 2026-09-27. <sup>f-a5</sup>
+**A5 — Catalog "Add Entry" refuses a book with only "Please correct these errors" and never says why** · 🐞 · low.
+On a press with ORCID turned on, an editor chooses a book in the Catalog
+page's "Add Entry" and presses "Save". When one of the book's
+contributors has an unauthenticated ORCID iD, the book is not added, and
+the page shows only "The form was not saved because 1 error(s) were
+encountered. Please correct these errors and try again." for about five
+seconds. Nothing in the panel is marked, so the editor cannot tell why
+the book was refused, or which book when several were chosen.
+
+The same blank refusal answers "Save" with no book chosen, on every
+press and version; there the editor can guess the reason. The book's own
+workflow names the ORCID reason in its "Publish" window.
+Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — After "Unpublish" the notice still says "approved"** · 🐞 · minor.
@@ -874,37 +913,56 @@ French throughout.
 Basis: probe, 2026-09-27. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — "Add Entry" publishes a book nobody chose** · 🐞 · user-visible.
-With a word typed in the "Add Entry" box and suggestions showing but no
-book chosen, "Save" takes the first suggestion as chosen and publishes it
-at once, with no confirmation: the book goes on the catalog and its
-Authors get "Publication Published". Leaving the box with Tab also makes
-the first suggestion a chosen book. The suggestions come in no fixed
-order, so the user cannot tell which book that will be. Expected: only a
-book the user picked is added.
-Basis: probe, 2026-09-27. <sup>f-a8</sup>
+**A8 — Catalog "Add Entry": "Save" with a word typed publishes the first suggested book, chosen or not** · 🐞 · medium.
+On a press's Catalog page, an editor types a word in the "Add Entry"
+box and, with the suggestions showing but no book chosen, clicks
+"Save". The first suggested book is published at once, with no
+confirmation, and joins the catalog. Pressing Tab to leave the box
+chooses the first suggestion in the same way; a later "Save" publishes
+it.
+
+The editor expected nothing to happen until they picked a book. A book
+nobody meant to release can go public, and on `main` its author is
+mailed "Publication Published". Clicking a suggestion before "Save"
+avoids it.
+
+The same happens in every suggestion box that offers only listed
+choices. In a decision's "Notify Reviewers" email, a name typed in "To"
+and left without a pick adds the first suggested reviewer, who is then
+mailed.
+Basis: probe, 2026-10-03. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — A book chosen twice in "Add Entry" is published twice** · 🐞 · user-visible.
-The "Add Entry" box still suggests a book already chosen. Choosing it a
-second time and pressing "Save" publishes it twice: its only version
-reads "Version of Record 2.0" instead of 1.0, the Activity Log has "The
-submission was published." twice, and each Author gets "Publication
-Published" twice. Expected: a chosen book is no longer offered, or "Save"
-takes each book once.
-Basis: probe, 2026-09-27. <sup>f-a9</sup>
+**A9 — Catalog "Add Entry" still offers a book already chosen, and "Save" publishes it twice** · 🐞 · medium.
+On a press's Catalog page, an editor chooses a book in the "Add Entry"
+box. The box keeps suggesting that book, so it can be chosen a second
+time, and "Save" then publishes it twice. Nothing on screen says so.
+
+On `main` the book's first and only version is numbered "Version of
+Record 2.0" instead of 1.0, on the public book page too. The author is
+mailed "Publication Published" twice, and the Activity Log says "The
+submission was published." twice. On 3.5 and older the version stays 1
+and no email goes out; only the log line repeats.
+
+Removing the repeated book from the box before "Save" avoids it. After
+"Save", nothing on screen renumbers the version or takes the second
+email back.
+Basis: probe, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — Category flags do not reach the category's page** · 🐞 · user-visible.
+**A10 — Category flags do not reach the category's page** · 🐞 · medium.
 A press's public category page should list first the books featured in
-that category, in the order "Save Order" set there, and show the books
-ticked "New release in category" as its new releases. Instead it lists
-first every book featured anywhere (in the whole catalog, in any
-category, in its series), so a book featured only in another list comes
-before one featured in this category, and it has no "New Releases" list
-at all. Expected: the category's page lists its own featured books
-first, in their saved order, and its new releases.
-Basis: probe, 2026-09-27. <sup>f-a10</sup>
+that category, in the order "Save Order" set there, set them apart, and
+show the books ticked "New release in category" as its new releases, as
+a series' page does. Instead, among the category's own books, it lists
+first every book featured in any list (the whole catalog, a series,
+another category), each ranked by its furthest-back place in any of
+them, so a book featured only in another list can come before one
+featured in this category. The featured books are drawn two to a row
+like every other book, and the page has no "New Releases" list at all.
+Expected: the category's page lists its own featured books first, in
+their saved order and set apart, and its new releases.
+Basis: probe, 2026-10-03. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The ordering notice offers a drag that does not work** · 🐞 · minor.
@@ -1545,16 +1603,20 @@ display. Live-probed 2026-09-27 (note td15): no link in the box or above
 it; the Author's menu has no "Marketing" group and no "Catalog Entry", a
 typed page key lands them on "Title & Abstract", and the Catalog page's
 address gives them the access-denied page.
+Issue report: [pkp-e2e#743](https://github.com/jardakotesovec/pkp-e2e/issues/743) ([docs/issues/U70-A2-catalog-management-notice-links-not-there.md](../issues/U70-A2-catalog-management-notice-links-not-there.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Note i, live-probed 2026-09-27 there. The integer comparison
 fits the older numeric sort options; the stored options read "…-ASC" /
 "…-DESC" today, so the check never matches (decay, not choice).
+Issue report: [pkp-e2e#741](https://github.com/jardakotesovec/pkp-e2e/issues/741) ([docs/issues/U70-A3-catalog-filter-order-reversed.md](../issues/U70-A3-catalog-filter-order-reversed.md)).
+Issue report: [pkp-e2e#742](https://github.com/jardakotesovec/pkp-e2e/issues/742) ([docs/issues/U70-A3-catalog-press-order-lost-after-filter.md](../issues/U70-A3-catalog-press-order-lost-after-filter.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note j, live-probed 2026-09-27 there (note td9). The type-only
 lookup in `toggleFeatured()` / `toggleNewRelease()` has been there since
 the catalog list panel was added (ui-library `56b809dc`, 2017-09-05).
+Issue report: [pkp-e2e#730](https://github.com/jardakotesovec/pkp-e2e/issues/730) ([docs/issues/U70-A4-catalog-second-category-flag-removes-first.md](../issues/U70-A4-catalog-second-category-flag-removes-first.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note g, live-probed 2026-09-27 there: the empty "Save" and the
@@ -1564,6 +1626,7 @@ added to the catalog."; the workflow's "Schedule For Publication" window,
 for the same books, named the requirement and offered no publish button.
 "Please fix the errors marked below" is in no English locale file of the
 checkout.
+Issue report: [pkp-e2e#735](https://github.com/jardakotesovec/pkp-e2e/issues/735) ([docs/issues/U70-A5-add-entry-refusal-no-reason.md](../issues/U70-A5-add-entry-refusal-no-reason.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Note e: the notices key on `datePublished`, which a scheduled
@@ -1584,6 +1647,7 @@ manager: "Lantern" typed, five suggestions, no tag; "Save" posted the
 first suggestion's ID to `addToCatalog` (200), the panel closed, and after
 a reload that book was listed (a different book on each run). Tab out of
 the box turned the first suggestion into a tag.
+Issue report: [pkp-e2e#731](https://github.com/jardakotesovec/pkp-e2e/issues/731) ([docs/issues/U70-A8-add-entry-publishes-book-nobody-chose.md](../issues/U70-A8-add-entry-publishes-book-nobody-chose.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note g: `addToCatalog()` publishes once per ID posted.
@@ -1593,6 +1657,7 @@ publication, `version_major` 2; the Activity Log read "The submission was
 published.", "…moved this submission to the Done stage.", "The
 submission was published."; the Author's mailbox held two "Publication
 Published".
+Issue report: [pkp-e2e#732](https://github.com/jardakotesovec/pkp-e2e/issues/732) ([docs/issues/U70-A9-add-entry-book-chosen-twice-published-twice.md](../issues/U70-A9-add-entry-book-chosen-twice-published-twice.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note j (the category page's code). Live-probed 2026-09-27,
@@ -1601,6 +1666,8 @@ new release in "Science", came second on the "Science" page behind Alpha,
 featured only in "History"; Gamma featured only in the whole catalog
 came first; a book ticked "New release in category" left the page with
 no "New Releases" list.
+Issue report: [pkp-e2e#733](https://github.com/jardakotesovec/pkp-e2e/issues/733) ([docs/issues/U70-A10-category-page-books-featured-elsewhere-first.md](../issues/U70-A10-category-page-books-featured-elsewhere-first.md)).
+Issue report: [pkp-e2e#734](https://github.com/jardakotesovec/pkp-e2e/issues/734) ([docs/issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md](../issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md)), shared with [Catalog browse A7](U68-catalog-browse.md#a7).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note k. Live-probed 2026-09-27, OMP, two runs: the drag

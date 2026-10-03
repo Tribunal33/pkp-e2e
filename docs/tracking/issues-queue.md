@@ -24,7 +24,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | **Taken: issues session, VM s1, 2026-10-03** (A2, A4, A5, A8, A11, A12 and A1's "confirms in silence" half open); OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md); A1's "offered before the review is complete" half done with U27 A1 (pkp-e2e#684); its "confirms in silence" half (a press, a public-API journal) open; A4 done; A1's "confirms in silence" half done; A2 done; A8 done; A11 done (two reports); A12 done |
-| [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 | **Taken: issues session, workstation s0, 2026-10-03** |
+| [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 | **Taken: issues session, workstation s0, 2026-10-03** (A7, A11–A15 open); A4 #730, A8 #731, A9 #732, A10 #733 and #734 (with U68 A7), A5 #735, A3 #741 and #742, A2 #743, A6 #744 (with U33 OMP2) |
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, workstation s0, 2026-10-03** (A13 open; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done; A15, A37, A1 done; A8 not reproduced (incidentals.md); A18 done; A22, OMP6, A39 done; A26, OMP3 done; A12 done; A30, A31 done; OMP4, A40 done; A19, OMP2, A36 done; A21 and A32 no report (risk accepted)) |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
@@ -38,7 +38,7 @@ and the hourly routine starts one only when none is running
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
-| [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | **A7 taken: issues session, workstation s0, 2026-10-03** (with U70 A10); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
+| [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A7 done with U70 A10 (pkp-e2e#734); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A2 done with U74 A2 (pkp-e2e#705); A5 done with U75 A11 (pkp-e2e#675) |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (pkp-e2e#690) |

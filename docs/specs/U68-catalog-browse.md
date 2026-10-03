@@ -613,6 +613,11 @@ catalog holds what earlier runs published. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A7 (issue report
+    `docs/issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md`):
+    a category's new release listed on its page, and its featured book
+    set apart
 - **Nothing new to test**:
   - a signed-in user of any role, shown the same pages with the same
     books as the signed-out visitor (Actors row 1)
@@ -674,7 +679,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Every book summary's cover is a link a screen reader cannot name | 🐞 | minor | — |
 | [A3](#a3) | A series' page shows no name, description or ISSN, and ignores the series' order | 🐞 | user-visible | — |
 | [A4](#a4) | A series' picture does not lead to its full size | 🐞 | minor | — |
-| [A7](#a7) | A press's category page sets no featured book apart and never lists new releases | 🐞 | user-visible | — |
+| [A7](#a7) | A press's category page never lists its new releases and never sets its featured books apart | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | In French the catalog pages and the "Browse" block show raw text codes | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The catalog's old search address answers a not-found page | 🐞 | invisible | — |
 | [A11](#a11) | With every series inactive, the "Browse" block shows the line "Series" with nothing under it | 🐞 | minor | — |
@@ -757,20 +762,22 @@ the numbered positions this order mixes up.
 Basis: probe, 2026-09-27. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A press's category page sets no featured book apart and lists no new releases** · 🐞 · user-visible.
-On the catalog and series pages a featured book takes a whole row, and a
-series' page lists its new releases above its books. A press's category
-page puts the featured books first but draws them like the rest, and
-never shows a
-"New Releases" list, although the Catalog page offers "New release in
-category" and the page's design still holds the list. Expected: the
-category's featured books set apart and its new releases listed, as on a
-series' page. The same move left the page without page links
-([Appearance & theming](U10-appearance-and-theming.md#omp2), its OMP2)
-and its order is recorded in [Catalog management](U70-catalog-management.md#a10)
-(its A10). It worked until the page moved into the code the three apps
-share, in December 2018: a regression.
-Since: 2018-12-17 (eight years) · Basis: probe, 2026-09-27; its start, commit. <sup>f-a7</sup>
+**A7 — A press's category page never lists its new releases and never sets its featured books apart** · 🐞 · medium.
+On the Catalog page, with a category chosen, a press editor ticks "New
+release in category" for one book and "Featured in category" for
+another. The category's public page shows neither choice: it has no
+"New Releases" list, and the featured book is shown two to a row like
+every other book. A series' page does both: its new releases are listed
+above its books, and a featured book is set apart in a row of its own.
+
+The boxes save and show ticked, so the editor sees no sign that readers
+never see them. There is no way round: no setting makes the category's
+page show its new releases or set its featured books apart, and the
+press's "New Releases" page lists only the whole catalog's new
+releases. The fix copies what the series page already does.
+The page's order of books is recorded in [Catalog
+management](U70-catalog-management.md#a10) (its A10).
+Since: 2018-12-17 (eight years) · Basis: probe, 2026-10-03; its start, commit. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The catalog pages and the "Browse" block in French show raw text codes** · 🐞 · medium.
@@ -1303,6 +1310,7 @@ Live-probed 2026-09-27 (note td9): no featured book set apart
 and no "New Releases" list while the Catalog page offered "New release
 in category". The expectation, the start date and the 2018 history are
 read from the code and its history.
+Issue report: [pkp-e2e#734](https://github.com/jardakotesovec/pkp-e2e/issues/734) ([docs/issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md](../issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md)), shared with [Catalog management A10](U70-catalog-management.md#a10).
 
 <a id="fn-f-a8"></a>
 **f-a8** — OMP `locale/fr_CA/locale.po` and `submission.po` hold empty
