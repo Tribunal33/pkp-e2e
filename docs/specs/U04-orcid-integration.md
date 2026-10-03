@@ -1119,7 +1119,7 @@ review succeeded with no feedback of any kind; a Press Manager gets the
 same action, dialog and silent success (OMP — base `SendReviewToOrcid` is
 a no-op there).
 Issue report: [pkp-e2e#684](https://github.com/jardakotesovec/pkp-e2e/issues/684) ([docs/issues/U27-A1-send-review-to-orcid-offered-before-complete.md](../issues/U27-A1-send-review-to-orcid-offered-before-complete.md)).
-Issue report: [docs/issues/U04-A1-send-review-to-orcid-confirms-in-silence.md](../issues/U04-A1-send-review-to-orcid-confirms-in-silence.md).
+Issue report: [pkp-e2e#736](https://github.com/jardakotesovec/pkp-e2e/issues/736) ([docs/issues/U04-A1-send-review-to-orcid-confirms-in-silence.md](../issues/U04-A1-send-review-to-orcid-confirms-in-silence.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — `orcidVerify.tpl` denied branch: `{translate
