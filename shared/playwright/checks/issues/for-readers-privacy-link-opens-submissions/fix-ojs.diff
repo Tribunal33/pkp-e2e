@@ -1,0 +1,735 @@
+--- a/locale/an/default.po
++++ b/locale/an/default.po
+@@ -55,7 +55,7 @@
+ "recibirá per correu electronico la Tabla de conteniu de cada numero d'a "
+ "revista. Esta lista tamién permite que se le atribuiga a la revista un "
+ "cierto nivel de seguimiento u de lectors/as. Consulte la <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Declaración "
++"{$indexUrl}/{$contextPath}/about/privacy\">Declaración "
+ "de privacidat</a> d'a revista, que garantiza a los lectors/as que los suyos "
+ "nombres y adrezas de correu electronico no s'usarán con atras finalidaz."
+ 
+--- a/locale/ar/default.po
++++ b/locale/ar/default.po
+@@ -72,7 +72,7 @@
+ "بالبريد الكتروني تتضمن جدولاً بعمليات النشر الجديدة في المجلة. ذلك الجدول أو "
+ "القائمة تساعد المجلة على استقطاب القراء مما يساعدها على الانتشار ويكسب لها "
+ "سمعة في الوسط العلمي. أنظر <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">بيان الخصوصية</a> الذي يؤكد أن أسماء الأشخاص "
++"privacy\">بيان الخصوصية</a> الذي يؤكد أن أسماء الأشخاص "
+ "المسجلين في الموقع وعناوينهم البريدية لن تكون متاحة إلا للأغراض المتعلقة "
+ "بإجراء النشر."
+ 
+--- a/locale/az/default.po
++++ b/locale/az/default.po
+@@ -122,8 +122,8 @@
+ "{$indexUrl}/{$contextPath}/user/register\">Qeydiyyat</a> linki vasitəsilə bu "
+ "əməliyyat həyata keçirilə bilər. Bu qeydiyyatla hər yeni nömrə nəşr/dərc "
+ "edildiyində Mündəricat səhifəsi email vasitəsilə oxucuya çatdırılır. "
+-"Jurnalın <a href=\"{$indexUrl}/{$contextPath}/about/submissions#"
+-"privacyStatement\"> təhlükəsizlik qaydalarına baxın</a> Müəlliflərin kimlik/"
++"Jurnalın <a href=\"{$indexUrl}/{$contextPath}/about/"
++"privacy\"> təhlükəsizlik qaydalarına baxın</a> Müəlliflərin kimlik/"
+ "identifikasiya məlumatları və email adresləri heç bir şəkildə başqa "
+ "məqsədlər üçün istifadə edilməyəcəkdir."
+ 
+--- a/locale/be/default.po
++++ b/locale/be/default.po
+@@ -52,7 +52,7 @@
+ "нумара часопіса. Колькасць падпісаных на апавяшчэнні дае магчымасць часопісу "
+ "меркаваць пра ўзровень падтрымкі або колькасць чытачоў. Паглядзіце таксама "
+ "старонку <a href=\"{$indexUrl}/{$journalPath}/about/"
+-"submissions#privacyStatement\">Заява аб канфідэнцыяльнасці</a>, якая "
++"privacy\">Заява аб канфідэнцыяльнасці</a>, якая "
+ "дазваляе чытачам пераканацца ў тым, што іх імя і адрас электроннай пошты не "
+ "будуць выкарыстаны з іншымі мэтамі."
+ 
+--- a/locale/bg/default.po
++++ b/locale/bg/default.po
+@@ -79,7 +79,7 @@
+ "поща, при публикуване на всеки нов брой на списанието. Този списък също така "
+ "позволява на списанието, за да претендира за определено ниво на подкрепа или "
+ "читатели. Прегледайте сайответната <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Декларация за поверителност</a>, която "
++"about/privacy\">Декларация за поверителност</a>, която "
+ "потвърждава ангажиментът че данните за читателите (тяхното име и имейл "
+ "адрес) няма да бъдат използвана за други цели."
+ 
+--- a/locale/bs_Latn/default.po
++++ b/locale/bs_Latn/default.po
+@@ -51,7 +51,7 @@
+ "primati kazalo sadržaja  za svaku novi broj ovoga časopisa. Popis "
+ "predbilježenih čitatelja također pruža časopisu informacije o postignutom "
+ "stupnju podrške čitateljstva. Pogledajte <a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\">Izjavu o privatnosti</a> "
++"{$contextPath}/about/privacy\">Izjavu o privatnosti</a> "
+ "časopisa koja jamči čitateljima da njihovo ime i adresa e-pošte neće biti "
+ "korišteni za druge potrebe."
+ 
+--- a/locale/ca/default.po
++++ b/locale/ca/default.po
+@@ -83,7 +83,7 @@
+ "continguts per correu electrònic per cada nou número de la revista. Aquesta "
+ "llista també permet que la revista pugui demostrar que té un cert nivell de "
+ "seguiment o de lectors/ores. Vegeu la <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Declaració de privacitat</a> de la "
++"about/privacy\">Declaració de privacitat</a> de la "
+ "revista, que assegura als lectors/ores que el seu nom i correu electrònic no "
+ "s'utilitzarà per a cap altra finalitat."
+ 
+--- a/locale/ckb/default.po
++++ b/locale/ckb/default.po
+@@ -49,7 +49,7 @@
+ "سەرەکیی گۆڤارەکە. ئەم تۆمارە وا دەکات کە تۆی خوێنەر ناوەرۆکی بڵاوکراوە "
+ "نوێیەکانت بە ئیمەیڵ پێ بگات. ئەم لیستە ڕێگا بە گۆڤاریش دەدات کە هاوکاری "
+ "هەندێک لە خوێنەران بکات. لێرەوە سەیری تایبەتێتییەکانی گۆڤار بکە <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">، </a> "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">، </a> "
+ "دڵنیا دەکاتەوە کە ئیمەیڵ و زانیارییەکانیان بۆ هیچ مەبەستێکی دیکە بەکار نایەت."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/cnr/default.po
++++ b/locale/cnr/default.po
+@@ -131,8 +131,8 @@
+ ">Registracija</a> vezu na vrhu početne strane časopisa. Ova registracija će "
+ "za rezultat imati to da će čitaoci primiti Sadržaj porukom za svaki novi "
+ "broj časopisa. Ova lista daje pravo časopisu da traži od čitaoca izvesni vid "
+-"podrške. Pogledajte <a href=\"{$indexUrl}/{$contextPath}/about/submissions#"
+-"privacyStatement\">Izjava o privatnosti</a> časopisa koji garantuje "
++"podrške. Pogledajte <a href=\"{$indexUrl}/{$contextPath}/about/"
++"privacy\">Izjava o privatnosti</a> časopisa koji garantuje "
+ "čitaocima da njihovo ime i e-adresa neće biti upotrijebljene za druge svrhe."
+ 
+ msgid "default.genres.researchInstrument"
+--- a/locale/cs/default.po
++++ b/locale/cs/default.po
+@@ -77,7 +77,7 @@
+ "této registraci bude čtenář dostávat e-mailem obsah každého nově vydaného "
+ "čísla. Seznam čtenářů rovněž umožňuje časopisu doložit určitou úroveň "
+ "podpory nebo čtenosti časopisu. Viz <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Prohlášení o soukromí</a> tohoto "
++"about/privacy\">Prohlášení o soukromí</a> tohoto "
+ "časopisu, které ujišťuje čtenáře, že jejich jméno a e-mailová adresa nebudou "
+ "použity pro jiné účely."
+ 
+--- a/locale/da/default.po
++++ b/locale/da/default.po
+@@ -81,7 +81,7 @@
+ "indholdsfortegnelsen fra hvert nyt nummer. Denne liste giver også "
+ "tidsskriftet mulighed for at hævde at have et vist supportniveau eller et "
+ "vist antal læsere. Se tidsskriftets <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Erklæring om beskyttelse af personlige "
++"about/privacy\">Erklæring om beskyttelse af personlige "
+ "oplysninger</a>, der garanterer læserne, at deres navne og e-mail-adresser "
+ "ikke benyttes til andre formål."
+ 
+--- a/locale/de/default.po
++++ b/locale/de/default.po
+@@ -86,7 +86,7 @@
+ "Anmeldung ermöglicht es gleichzeitig der Zeitschrift, einen gewissen Grad an "
+ "Unterstützung oder eine gewisse Leser/innenschaft zu belegen. Siehe die "
+ "Regelungen zum <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Schutz personenbezogener Daten</a> der "
++"privacy\">Schutz personenbezogener Daten</a> der "
+ "Zeitschrift, die sicherstellen, dass weder Namen noch E-Mail-Adressen "
+ "registrierter Benutzer/innen zu anderen Zwecken verwendet werden."
+ 
+--- a/locale/el/default.po
++++ b/locale/el/default.po
+@@ -66,7 +66,7 @@
+ "κάθε νέου τεύχους που δημοσιεύεται στην συλλογή. Επίσης η λίστα των "
+ "καταχωρημένων χρηστών-αναγνωστών επιτρέπει στον περιοδικό να διαπιστώσει το "
+ "πραγματικό επίπεδο ανταπόκρισης και χρήσης του. Ενημερωθείτε για την <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Πολιτική "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">Πολιτική "
+ "Προστασίας Προσωπικών Δεδομένων</a> της συλλογής, που διαβεβαιώνει ότι τα "
+ "στοιχεία και τα e-mail των καταχωρημένων χρηστών-αναγνωστών δεν θα "
+ "χρησιμοποιηθούν για άλλους λόγους."
+--- a/locale/en/default.po
++++ b/locale/en/default.po
+@@ -51,7 +51,7 @@
+ msgstr "This journal provides immediate open access to its content on the principle that making research freely available to the public supports a greater global exchange of knowledge."
+ 
+ msgid "default.contextSettings.forReaders"
+-msgstr "We encourage readers to sign up for the publishing notification service for this journal. Use the <a href=\"{$indexUrl}/{$contextPath}/user/register\">Register</a> link at the top of the home page for the journal. This registration will result in the reader receiving the Table of Contents by email for each new issue of the journal. This list also allows the journal to claim a certain level of support or readership. See the journal's <a href=\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Privacy Statement</a>, which assures readers that their name and email address will not be used for other purposes."
++msgstr "We encourage readers to sign up for the publishing notification service for this journal. Use the <a href=\"{$indexUrl}/{$contextPath}/user/register\">Register</a> link at the top of the home page for the journal. This registration will result in the reader receiving the Table of Contents by email for each new issue of the journal. This list also allows the journal to claim a certain level of support or readership. See the journal's <a href=\"{$indexUrl}/{$contextPath}/about/privacy\">Privacy Statement</a>, which assures readers that their name and email address will not be used for other purposes."
+ 
+ msgid "default.contextSettings.forAuthors"
+ msgstr "Interested in submitting to this journal? We recommend that you review the <a href=\"{$indexUrl}/{$contextPath}/about\">About the Journal</a> page for the journal's section policies, as well as the <a href=\"{$indexUrl}/{$contextPath}/about/submissions#authorGuidelines\">Author Guidelines</a>. Authors need to <a href=\"{$indexUrl}/{$contextPath}/user/register\">register</a> with the journal prior to submitting or, if already registered, can simply <a href=\"{$indexUrl}/index/login\">log in</a> and begin the five-step process."
+--- a/locale/es/default.po
++++ b/locale/es/default.po
+@@ -83,7 +83,7 @@
+ "revista. Esta lista también permite que se le atribuya a la revista un "
+ "cierto nivel de apoyo o número de lectores/as. Consulte la <a "
+ "href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Declaración de privacidad</a> de la revista, "
++"privacy\">Declaración de privacidad</a> de la revista, "
+ "que garantiza a los lectores/as que sus nombres y direcciones de correo "
+ "electrónico no se usarán con otros fines."
+ 
+--- a/locale/es_MX/default.po
++++ b/locale/es_MX/default.po
+@@ -78,7 +78,7 @@
+ "electrónico la Tabla de contenidos de cada número publicado. Esta lista "
+ "también permite que se le atribuya a la publicación un cierto nivel de apoyo "
+ "o número de lectores/as. Consulte la <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Declaración de privacidad de la "
++"about/privacy\">Declaración de privacidad de la "
+ "revista</a>, que garantiza a los lectores/as que sus nombres y direcciones "
+ "de correo electrónico no se usarán con otros fines."
+ 
+--- a/locale/et/default.po
++++ b/locale/et/default.po
+@@ -182,6 +182,6 @@
+ "registreerimine toob lugejale e-posti teel iga uue ajakirja numbri "
+ "sisukorra. See nimekiri võimaldab ajakirjal väita teatud taseme toetuse või "
+ "lugejaskonna olemasolu. Vaadake ajakirja <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\""
++"{$indexUrl}/{$contextPath}/about/privacy\""
+ ">Privaatsusavaldust</a>, mis kinnitab lugejatele, et nende nime ja e-posti "
+ "aadressi ei kasutata muudel eesmärkidel."
+--- a/locale/eu/default.po
++++ b/locale/eu/default.po
+@@ -149,7 +149,7 @@
+ "Edukien Taula aldizkariaren zenbaki berri bakoitzeko. Zerrenda horri esker, "
+ "gainera, babes-maila edo irakurle-kopuru jakin bat aldarrika dezake "
+ "aldizkariak. Ikusi aldizkariaren <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Pribatutasun-adierazpena</a>, irakurleei "
++"privacy\">Pribatutasun-adierazpena</a>, irakurleei "
+ "ziurtatzen diena beren izena eta helbide elektronikoa ez direla beste "
+ "helburu batzuetarako erabiliko."
+ 
+--- a/locale/fa/default.po
++++ b/locale/fa/default.po
+@@ -57,8 +57,8 @@
+ "کلیک کردن بر روی لینک <a href=\"{$indexUrl}/{$contextPath}/user/register\""
+ ">ثبت‌نام</a> در بالای صفحات ثبت‌نام کنند. در نتیجه شما از طریق ایمیل فهرست "
+ "مطالب هر شماره جدید را دریافت خواهید داشت. برای اطلاع از محرمانگی اطلاعاتی "
+-"که وارد می‌کنید  <a href=\"{$indexUrl}/{$contextPath}/about/submissions#"
+-"privacyStatement\">بیانیه محرمانگی</a> مجله را مطالعه نمایید. در این بیانیه "
++"که وارد می‌کنید  <a href=\"{$indexUrl}/{$contextPath}/about/"
++"privacy\">بیانیه محرمانگی</a> مجله را مطالعه نمایید. در این بیانیه "
+ "آمده است که ایمیل‌هایی که وارد می‌کنید برای مقاصد دیگر بکار نخواهد رفت."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/fi/default.po
++++ b/locale/fi/default.po
+@@ -80,7 +80,7 @@
+ "julkaisun jokaisen uuden numeron sisällysluettelo. Tämän palvelun "
+ "käyttäjälistan avulla julkaisu myös saa tietoa kannattajamääristään ja "
+ "lukijakunnastaan. Julkaisun <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Tietosuojaseloste</a> takaa, että lukijoiden "
++"privacy\">Tietosuojaseloste</a> takaa, että lukijoiden "
+ "nimiä ja sähköpostiosoitteita ei käytetä muihin tarkoituksiin."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/fr/default.po
++++ b/locale/fr/default.po
+@@ -82,7 +82,7 @@
+ "courriel la table des matières de chaque nouveau numéro de la revue. Pour la "
+ "revue, la liste des inscriptions lui servira à revendiquer un certain niveau "
+ "de soutien ou de lectorat. Voir la <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Déclaration de confidentialité</a> de "
++"about/privacy\">Déclaration de confidentialité</a> de "
+ "la revue qui certifie que les noms et courriels des lecteur/ices ne seront "
+ "pas utilisés à d'autres fins."
+ 
+--- a/locale/fr_CA/default.po
++++ b/locale/fr_CA/default.po
+@@ -87,7 +87,7 @@
+ "par courriel le sommaire de chaque nouveau numéro de la revue. Cette liste "
+ "permet aussi à la revue de revendiquer un certain niveau de soutien ou de "
+ "lectorat. Voir la <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Déclaration de confidentialité</a> de la "
++"privacy\">Déclaration de confidentialité</a> de la "
+ "revue qui certifie aux lecteurs-trices que leur nom et leur courriel ne "
+ "seront pas utilisés à d'autres fins."
+ 
+--- a/locale/gd/default.po
++++ b/locale/gd/default.po
+@@ -52,7 +52,7 @@
+ "Ma nì thu clàradh, gheibh thu clàr-innse gach iris ùr an iris-leabhair air "
+ "a’ phost-d. Ri linn sin, ’s urrainn dhan iris-leabhar tagradh gu bheil ìre "
+ "de thaic no luchd-leughaidh aca. Faic <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">poileasaidh prìobhaideachd</a> an iris-"
++"about/privacy\">poileasaidh prìobhaideachd</a> an iris-"
+ "leabhair a dhearbhas dha na leughadairean nach cleachd iad an ainmean is "
+ "seòlaidhean puist-d airson adhbhar sam bith eile."
+ 
+--- a/locale/gl/default.po
++++ b/locale/gl/default.po
+@@ -78,7 +78,7 @@
+ "por correo electrónico a Táboa de contidos de cada número da revista. Esta "
+ "listaxe permite tamén que a revista poida demostrar que ten un certo nivel "
+ "de seguimento ou de lectores/as. Consulte a <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Declaración "
++"{$indexUrl}/{$contextPath}/about/privacy\">Declaración "
+ "de privacidade</a> da revista, que asegura aos lectores/as que o seu nome e "
+ "o seu correo electrónico non se utilizarán para ningún outro fin."
+ 
+--- a/locale/he/default.po
++++ b/locale/he/default.po
+@@ -66,7 +66,7 @@
+ "בראש דף הבית של כתב העת. רישום זה יביא לכך שהקורא יקבל את תוכן העניינים "
+ "במייל עבור כל גיליון חדש של כתב העת. רשימה זו מאפשרת גם לכתב עת להגיע לרמה "
+ "מסוימת של תמיכה וקהל קוראים. ראה את <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">הצהרת פרטיות</a> של כתב העת, שמבטיח "
++"about/privacy\">הצהרת פרטיות</a> של כתב העת, שמבטיח "
+ "לקוראים ששמם וכתובת הדוא\"ל שלהם לא ישמשו למטרות אחרות."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/hi/default.po
++++ b/locale/hi/default.po
+@@ -59,7 +59,7 @@
+ "\">Register</a> जर्नल के लिए मुख पृष्ठ के शीर्ष पर लिंक हैं। यह पंजीकरण पाठक को जर्नल के "
+ "प्रत्येक नए अंक के लिए ईमेल द्वारा सामग्री तालिका प्राप्त करने का परिणाम देगा। यह सूची "
+ "जर्नल को एक निश्चित स्तर के समर्थन या पाठक का दावा करने की भी अनुमति देती है। जर्नल को "
+-"देखें <a href=\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement"
++"देखें <a href=\"{$indexUrl}/{$contextPath}/about/privacy"
+ "\">Privacy Statement</a>, जो पाठकों को आश्वस्त करता है कि उनके नाम और ईमेल पते का "
+ "उपयोग अन्य उद्देश्यों के लिए नहीं किया जाएगा."
+ 
+--- a/locale/hr/default.po
++++ b/locale/hr/default.po
+@@ -79,7 +79,7 @@
+ "primati kazalo sadržaja za svaku novi broj ovoga časopisa. Popis "
+ "predbilježenih čitatelja također pruža časopisu informacije o postignutom "
+ "stupnju podrške čitateljstva. Pogledajte <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Izjavu o "
++"{$indexUrl}/{$contextPath}/about/privacy\">Izjavu o "
+ "privatnosti</a> časopisa koja jamči čitateljima da njihovo ime i adresa e-"
+ "pošte neće biti korišteni za druge potrebe."
+ 
+--- a/locale/hu/default.po
++++ b/locale/hu/default.po
+@@ -82,7 +82,7 @@
+ "publikálásakor e-mailben elküldésre kerül a tartalomjegyzék. Ez a lista azt "
+ "is lehetővé teszi, hogy a folyóirat bizonyos szintű támogatást vagy "
+ "olvasótábort igényeljen. Kérjük, olvassa el a folyóirat <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Adatvédelmi "
++"{$indexUrl}/{$contextPath}/about/privacy\">Adatvédelmi "
+ "nyilatkozatát</a>, mely garantálja olvasóinknak, hogy nevüket és e-mail "
+ "címüket nem használjuk fel más célokra."
+ 
+--- a/locale/hy/default.po
++++ b/locale/hy/default.po
+@@ -79,7 +79,7 @@
+ "բովանդակության աղյուսակը ամսագրի յուրաքանչյուր նոր թողարկման համար: Այս "
+ "ցանկը նաև թույլ է տալիս ամսագրին պահանջել որոշակի մակարդակի աջակցություն կամ "
+ "ընթերցողների քանակ: Տե՛ս ամսագրի <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Գաղտնիության հայտարարությունը</a>, որը "
++"privacy\">Գաղտնիության հայտարարությունը</a>, որը "
+ "վստահեցնում է ընթերցողներին, որ իրենց անունը և էլ. հասցեները չեն օգտագործվի "
+ "այլ նպատակների համար:"
+ 
+--- a/locale/id/default.po
++++ b/locale/id/default.po
+@@ -78,7 +78,7 @@
+ "Dengan mendaftar, pembaca akan memperoleh email berisi Daftar Isi tiap ada "
+ "terbitan jurnal baru. Daftar ini juga membuat jurnal dapat mengetahui "
+ "tingkat dukungan atau jumlah pembaca. Lihat jurnal <a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\">Pernyataan Privasi</a>, "
++"{$contextPath}/about/privacy\">Pernyataan Privasi</a>, "
+ "yang meyakinkan pembaca bahwa nama dan alamat email yang didaftarkan tidak "
+ "akan digunakan untuk tujuan lain."
+ 
+--- a/locale/is/default.po
++++ b/locale/is/default.po
+@@ -77,7 +77,7 @@
+ "Skráðir lesendur fá sent yfirlit í tölvupósti yfir innihald hvers tölublaðs. "
+ "Listinn yfir áskrifendur styður einnig við tímartið. Um meðferð "
+ "persónuupplýsinga má sjá hér: 's <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Persónuvernd</a>, sem sýnir að lesendur geta "
++"privacy\">Persónuvernd</a>, sem sýnir að lesendur geta "
+ "verið vissir um að nöfn þeirra og netföng verða aldrei notuð í öðrum "
+ "tilgangi."
+ 
+--- a/locale/it/default.po
++++ b/locale/it/default.po
+@@ -81,7 +81,7 @@
+ "register\">Registrazione</a> in alto nella homepage della rivista. Grazie a "
+ "questa registrazione si riceverà l'indice di ogni nuovo fascicolo della "
+ "rivista. Si prega di prendere visione della <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\""
++"{$indexUrl}/{$contextPath}/about/privacy\""
+ ">dichiarazione sulla privacy</a> della rivista, nella quale è specificato "
+ "che i nomi e gli indirizzi email degli utenti non saranno usati per altri "
+ "fini."
+--- a/locale/ja/default.po
++++ b/locale/ja/default.po
+@@ -70,7 +70,7 @@
+ "出版されるたびに、目次情報をメールでお知らせするものです。登録者リストは、こ"
+ "の雑誌のサポートや読者数のレベルを主張することを可能にします。登録読者の名前"
+ "とメールアドレスは、その他の目的では使用いたしません。この雑誌の<a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">個人情報の"
++"\"{$indexUrl}/{$contextPath}/about/privacy\">個人情報の"
+ "取り扱いについて</a>を参照してください。"
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/ka/default.po
++++ b/locale/ka/default.po
+@@ -50,7 +50,7 @@
+ "რეგისტრაცია საშუალებას მოგცემთ ელფოსტაზე მიიღოთ ყოველი ახალი ნომრის "
+ "შიგთავსი. ეს სია ასევე ჟურნალს საშუალებას აძლევს განიხილოს მხარდაჭერის დონე "
+ "და მკითხველთა რაოდენობა. აგრეთვე იხილეთ <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">კონფიდენციალურობის განაცხადი</a>, "
++"about/privacy\">კონფიდენციალურობის განაცხადი</a>, "
+ "რომელიც მკითხველებს დაარწმუნებს იმაში, რომ მათი ელფოსტა არ იქნება "
+ "გამოყენებული სხვა მიზნებისათვის."
+ 
+--- a/locale/kk/default.po
++++ b/locale/kk/default.po
+@@ -48,7 +48,7 @@
+ "электрондық поштасына журналдың жаңа саны туралы хабарлама келіп отырады. "
+ "Сіздің электрондық поштаңыз өзге мақсаттарда пайдаланылмайтындығына көз "
+ "жеткізу үшін <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Құпиялылық мәлімдемесі</a> бөлімімен "
++"privacy\">Құпиялылық мәлімдемесі</a> бөлімімен "
+ "танысыңыз."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/ko/default.po
++++ b/locale/ko/default.po
+@@ -52,7 +52,7 @@
+ "</a> 링크를 사용하십시오. 이 등록을 통해 독자는 학술지의 새로운 호마다 이메일"
+ "로 목차를 받게됩니다. 이 목록을 통해 학술지는 특정 수준의 지지 또는 독자층을 "
+ "주장 할 수 있습니다. 학술지의 <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\"> 개인 정보 보호 정책 </a>을 참조하세요. 이는 "
++"privacy\"> 개인 정보 보호 정책 </a>을 참조하세요. 이는 "
+ "독자의 이름과 이메일 주소가 다른 용도로 사용되지 않을 것임을 보증합니다."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/ky/default.po
++++ b/locale/ky/default.po
+@@ -131,7 +131,7 @@
+ "колдонуңуз. Бул катталуу ар бир жаңы чыгарылыш үчүн мазмун тизмесин "
+ "электрондук почта аркылуу алууга мүмкүндүк берет. Бул тизме журналга "
+ "окурмандардын деңгээлин көрсөтүүгө да жардам берет. Журналдын <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Купуялык "
++"{$indexUrl}/{$contextPath}/about/privacy\">Купуялык "
+ "билдирүүсүн</a> караңыз, анда окурмандардын аты жана электрондук почта "
+ "дареги башка максаттар үчүн колдонулбай турганы кепилденет."
+ 
+--- a/locale/lt/default.po
++++ b/locale/lt/default.po
+@@ -78,7 +78,7 @@
+ "Užsiregistravę el. paštu gausite kiekvieno naujo žurnalo numerio turinį. Šis "
+ "sąrašas taip pat leidžia žurnalui pagrįsti tam tikrą skaitytojų susidomėjimo "
+ "ir palaikymo lygį. Daugiau informacijos rasite žurnalo <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Privatumo "
++"{$indexUrl}/{$contextPath}/about/privacy\">Privatumo "
+ "pareiškime</a>, kuriame užtikrinama, kad jūsų vardas, el. pašto adresas "
+ "nebus naudojami jokiais kitais tikslais."
+ 
+--- a/locale/lv/default.po
++++ b/locale/lv/default.po
+@@ -76,7 +76,7 @@
+ "lasītājs e-pastā saņems katra jauna žurnāla numura satura rādītāju. Šis "
+ "uzskaitījums arī ļauj žurnālam pretendēt uz noteiktu atbalstu vai lasītāju "
+ "loku. Skatiet žurnāla <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Privātuma atrunu</a>, kas apliecina "
++"privacy\">Privātuma atrunu</a>, kas apliecina "
+ "lasītājiem, ka viņu vārds un e-pasta adrese netiks izmantoti citiem mērķiem."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/mk/default.po
++++ b/locale/mk/default.po
+@@ -77,7 +77,7 @@
+ "читателот ќе ја добие табелата со содржина на и-меил за секој нов број на "
+ "списанието. Оваа листа исто така овозможува списанието да добие одредено "
+ "ниво на поддршка или публика. Погледнете ја <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Изјавата за "
++"{$indexUrl}/{$contextPath}/about/privacy\">Изјавата за "
+ "приватност</a> на списанието, која ги уверува читателите дека нивното име и "
+ "и-меил адреса нема да бидат користени за други цели."
+ 
+--- a/locale/mn/default.po
++++ b/locale/mn/default.po
+@@ -74,7 +74,7 @@
+ "ашиглана уу. Ингэснээр уншигч сэтгүүлийн шинэ дугаар бүрийн гарчгийг "
+ "имэйлээр хүлээн авах болно. Энэхүү жагсаалт нь мөн сэтгүүлд тодорхой түвшний "
+ "дэмжлэг эсвэл уншигчдын тоог харуулах боломжийг олгодог. Сэтгүүлийн <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Нууцлалын "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">Нууцлалын "
+ "мэдэгдэл</a>-тэй танилцана уу. Энэ нь уншигчдын нэр, имэйл хаягийг бусад "
+ "зорилгоор ашиглахгүй байх баталгаа болно."
+ 
+--- a/locale/mr/default.po
++++ b/locale/mr/default.po
+@@ -52,7 +52,7 @@
+ "वापरा. या नोंदणीमुळे वाचकांना नियतकालिकाच्या प्रत्येक नव्याने प्रसिद्ध "
+ "झालेल्या अंकातली अनुक्रमणिका ई-मेलद्वारे मिळेल. या यादीमुळे नियतकालिकाचे किती"
+ " नियमित वाचकांचा पाठिंबा आहे याचा अंदाज बांधता येतो. नियतकालिकाच्या <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">गोपनीयता "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">गोपनीयता "
+ "विधानाद्वारे</a> वाचकांचे नाव आणि ई-मेल पत्ता इतर हेतूंसाठी वापरला जाणार नाही"
+ " याचे आम्ही वाचकांना आश्वासन देतो."
+ 
+--- a/locale/ms/default.po
++++ b/locale/ms/default.po
+@@ -80,7 +80,7 @@
+ "ini akan menyebabkan pembaca menerima Isi Kandungan melalui e-mel untuk "
+ "setiap terbitan jurnal baru. Senarai ini juga membolehkan jurnal menuntut "
+ "tahap sokongan atau pembaca. Lihat <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\"> Kenyataan Privasi </a> jurnal, yang "
++"about/privacy\"> Kenyataan Privasi </a> jurnal, yang "
+ "memberi jaminan kepada pembaca bahawa nama dan alamat e-mel mereka tidak "
+ "akan digunakan untuk tujuan lain."
+ 
+--- a/locale/nb_NO/default.po
++++ b/locale/nb_NO/default.po
+@@ -86,7 +86,7 @@
+ "for tidsskriftet. Da vil du få tilsendt en e-post med innholdsoversikten for "
+ "hver nye utgivelse fra tidsskriftet. På denne måten kan tidsskriftet "
+ "dessuten dokumentere leserkretsen sin. Se gjerne tidsskriftets <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Erklæring "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">Erklæring "
+ "om personopplysninger</a>, som skal sikre at leserenes navn og e-"
+ "postadresser ikke brukes for uvedkommende formål."
+ 
+--- a/locale/nl/default.po
++++ b/locale/nl/default.po
+@@ -82,7 +82,7 @@
+ "homepage van het tijdschrift. Na registratie ontvangt u per e-mail de "
+ "inhoudsopgave van elk nieuw nummer. Daarnaast stelt u het tijdschrift in "
+ "staat zich te beroepen op een zekere achterban. Zie de <a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\">Privacy verklaring</a> "
++"{$contextPath}/about/privacy\">Privacy verklaring</a> "
+ "van het tijdschrift waarin de lezers wordt verzekerd dat hun naam en e-"
+ "mailadres niet voor andere doeleinden zullen worden gebruikt."
+ 
+--- a/locale/pl/default.po
++++ b/locale/pl/default.po
+@@ -80,7 +80,7 @@
+ "Rejestracja zapewni czytelnikowi otrzymywanie wiadomości e-mail ze spisem "
+ "treści każdego wydania czasopisma. Dodatkowo, lista ta umożliwia czasopismu "
+ "zdobywanie większego poziomu wsparcia i wzrost czytelnictwa. Zobacz <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\"> "
++"\"{$indexUrl}/{$contextPath}/about/privacy\"> "
+ "Oświadczenie o ochronie prywatności</a>, które gwarantuje czytelnikom, że "
+ "ich nazwy i adresy e-mail nie będą wykorzystane w celach innych niż te "
+ "określone dla czasopisma."
+--- a/locale/ps/default.po
++++ b/locale/ps/default.po
+@@ -85,7 +85,7 @@
+ "لیکنه به د دې لامل شي چې تاسو ته د هرې نوې ګڼې د جدول د مطالبو لېست د "
+ "برېښنالیک له لارې در ولېږل شي. دا لېست ژورنال ته دا فرصت ورکوي چې د لوستونکو "
+ "شمېر وښيي. د ژورنال د د محرمیت پالیسي <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Privacy Statement</a> وګورئ، چې "
++"about/privacy\">Privacy Statement</a> وګورئ، چې "
+ "لوستونکو ته دا ډاډ ورکوي چې د دوی نوم او برېښنالیک پته به د بلې موخې لپاره "
+ "ونه کارول شي."
+ 
+--- a/locale/pt/default.po
++++ b/locale/pt/default.po
+@@ -79,7 +79,7 @@
+ "register\">Registo</a> no menu superior da página. O registo permitirá ao "
+ "leitor receber o Sumário via e-mail a cada nova edição. A lista procura "
+ "também reivindicar um nível básico de apoio ou de leitura. Leia a <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Política "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">Política "
+ "de Privacidade</a> da revista, que assegura aos leitores que os nomes e "
+ "endereços fornecidos não serão utilizados para outros fins."
+ 
+--- a/locale/pt_BR/default.po
++++ b/locale/pt_BR/default.po
+@@ -79,7 +79,7 @@
+ "revista. Esse registro fará com que o leitor receba o Índice por e-mail para "
+ "cada nova edição da revista. Essa lista também permite que o periódico "
+ "reivindique um certo nível de suporte ou leitores. Veja a <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Declaração "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">Declaração "
+ "de privacidade da revista</a>, que garante aos leitores que seu nome e "
+ "endereço de e-mail não serão usados para outros fins."
+ 
+--- a/locale/ro/default.po
++++ b/locale/ro/default.po
+@@ -79,8 +79,8 @@
+ "jurnalului. Această înregistrare va permite cititorului să primească prin "
+ "email Cuprinsul pentru fiecare nou număr al jurnalului. Această listă "
+ "permite revistei să știe care este nivelul de accesare de către cititori. "
+-"Vezi <a href=\"{$indexUrl}/{$contextPath}/about/submissions#"
+-"privacyStatement\">Declarația de confidențialitate a jurnalului</a>, prin "
++"Vezi <a href=\"{$indexUrl}/{$contextPath}/about/"
++"privacy\">Declarația de confidențialitate a jurnalului</a>, prin "
+ "care cititorii sunt asigurați că numele și adresele lor de email nu vor fi "
+ "folosite în alte scopuri."
+ 
+--- a/locale/ru/default.po
++++ b/locale/ru/default.po
+@@ -82,7 +82,7 @@
+ "каждого нового номера журнала. Этот список также позволяет журналу говорить "
+ "об определенном уровне поддержки или количестве читателей. Посмотрите также "
+ "страницу <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Заявление о конфиденциальности</a>, которая "
++"privacy\">Заявление о конфиденциальности</a>, которая "
+ "позволяет читателям убедиться в том, что их имя и адрес электронной почты не "
+ "будут использованы для других целей."
+ 
+--- a/locale/rue/default.po
++++ b/locale/rue/default.po
+@@ -80,7 +80,7 @@
+ "електронном почтом спису змісту каждого нового чысла часопису. Тота листа "
+ "дозвалят тіж часописови выказати ся певным рівньом спертя і заінтересуваня "
+ "зо стороны чытатели. Детальны інформациі находят ся в <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Політыці "
++"{$indexUrl}/{$contextPath}/about/privacy\">Політыці "
+ "приватности</a> часопису, котра дає певніст, же мено і назвиско як тіж адрес "
+ "електронной почты не будут хоснуваны до інчых цілів."
+ 
+--- a/locale/sk/default.po
++++ b/locale/sk/default.po
+@@ -49,7 +49,7 @@
+ "tejto registrácii bude čitateľ dostávať emailom obsah každého nového "
+ "vydaného čísla. Zoznam čitateľov rovnako umožňuje časopisu doložiť určitú "
+ "úroveň podpory alebo čítanosti časopisu. Pozri<a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\">Vyhlásenie o súkromí</a> "
++"{$contextPath}/about/privacy\">Vyhlásenie o súkromí</a> "
+ "tohto časopisu, ktoré uisťuje čitateľov, že ich meno a emailová adresa "
+ "nebudú použité na iné účely."
+ 
+--- a/locale/sl/default.po
++++ b/locale/sl/default.po
+@@ -76,7 +76,7 @@
+ "a> na vrhu domače strani revije. Po registraciji boste po e-pošti prejemali "
+ "kazalo vsebine vsake nove izdaje revije. Spisek tako registriranih bralcev "
+ "pomeni za revijo tudi določeno podporo s strani bralcev. Preverite <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Izjavo o "
++"\"{$indexUrl}/{$contextPath}/about/privacy\">Izjavo o "
+ "varstvu podatkov</a>, revije, ki zagotavlja, da se imena in e-poštni naslovi "
+ "bralcev ne bodo zlorabili."
+ 
+--- a/locale/sr_Cyrl/default.po
++++ b/locale/sr_Cyrl/default.po
+@@ -55,7 +55,7 @@
+ "имати то да ће читаоци примити Садржај поруком за сваки нови број часописа. "
+ "Ова листа даје право чсопису да тражи од читаоца извесни вид подршке. "
+ "Погледајте  <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Изјава о приватности</a> часописа који "
++"privacy\">Изјава о приватности</a> часописа који "
+ "гарантује читаоцима да њихово име и е-адреса неће бити употребљене за друге "
+ "сврхе."
+ 
+--- a/locale/sr_Latn/default.po
++++ b/locale/sr_Latn/default.po
+@@ -81,7 +81,7 @@
+ "primati sadržaj svakog novog broja časopisa. Ova lista takođe omogućava "
+ "časopisu da iskaže određeni nivo\n"
+ "podrške ili broj čitalaca. Pogledajte <a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">Izjavu o privatnosti</a>,\n"
++"about/privacy\">Izjavu o privatnosti</a>,\n"
+ "koja čitaocima garantuje da njihovo ime i imejl adresa neće biti korišćeni u "
+ "druge svrhe."
+ 
+--- a/locale/sv/default.po
++++ b/locale/sv/default.po
+@@ -76,7 +76,7 @@
+ "innehållsförteckning för varje nytt nummer tidskriften publicerar. Listan "
+ "gör också att tidskriften kan peka på ett visst läsarunderlag. Se "
+ "tidskriftens <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Integritetspolicy</a>, som försäkrar dig som "
++"privacy\">Integritetspolicy</a>, som försäkrar dig som "
+ "läsare att ditt namn eller e-postadress inte kommer användas för andra "
+ "syften."
+ 
+--- a/locale/th/default.po
++++ b/locale/th/default.po
+@@ -83,8 +83,8 @@
+ "{$indexUrl}/{$contextPath}/user/register\">ลงทะเบียน</a> ที่ด้านบนของหน้าหลั"
+ "กวารสาร เมื่อลงทะเบียนแล้ว ผู้อ่านจะได้รับสารบัญของวารสารฉบับใหม่ทางอีเมล "
+ "รายชื่อผู้ลงทะเบียนยังช่วยสะท้อนระดับการสนับสนุนและจำนวนผู้อ่านของวารสาร "
+-"โปรดดู <a href=\"{$indexUrl}/{$contextPath}/about/submissions#"
+-"privacyStatement\">คำชี้แจงสิทธิส่วนบุคคล</a> ของวารสาร "
++"โปรดดู <a href=\"{$indexUrl}/{$contextPath}/about/"
++"privacy\">คำชี้แจงสิทธิส่วนบุคคล</a> ของวารสาร "
+ "ซึ่งระบุว่าชื่อและอีเมลของผู้อ่านจะไม่นำไปใช้เพื่อวัตถุประสงค์อื่น"
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/tr/default.po
++++ b/locale/tr/default.po
+@@ -82,7 +82,7 @@
+ "register\">Kayıt</a> bağlantısı aracılığı ile bu işlem gerçekleştirilebilir. "
+ "Bu kayıtla her yeni sayı yayınlandığında İÇİNDEKİLER sayfası e-posta "
+ "aracılığı ile okuyucuya iletilir. Derginin <a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\">güvenlik kurallarına "
++"{$contextPath}/about/privacy\">güvenlik kurallarına "
+ "bakınız</a> yazarların kimlik bilgileri ve e-posta adresleri hiç bir şekilde "
+ "başka amaçlar için kullanılmayacaktır."
+ 
+--- a/locale/uk/default.po
++++ b/locale/uk/default.po
+@@ -83,7 +83,7 @@
+ "отримувати електронною поштою сторінки змісту кожного нового випуску "
+ "журналу. Цей список також дозволяє журналу претендувати на певний рівень "
+ "підтримки чи читацької аудиторії. Перегляньте <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Заяву про "
++"{$indexUrl}/{$contextPath}/about/privacy\">Заяву про "
+ "конфіденційність</a> журналу, яка запевняє читачів, що їхні ім’я та адреса "
+ "електронної пошти не використовуватимуться для інших цілей."
+ 
+--- a/locale/uz/default.po
++++ b/locale/uz/default.po
+@@ -77,8 +77,8 @@
+ "jurnalning har bir yangi soni uchun elektron pochta orqali Mundarijani "
+ "olishiga olib keladi. Ushbu ro'yxat, shuningdek, jurnalga ma'lum darajadagi "
+ "qo'llab-quvvatlash yoki o'quvchilarga da'vo qilish imkonini beradi. "
+-"Jurnalning <a href=\"{$indexUrl}/{$contextPath}/about/submissions#"
+-"privacyStatement\">Maxfiylik bayonnomasi</a> bilan tanishib chiqing, bu esa "
++"Jurnalning <a href=\"{$indexUrl}/{$contextPath}/about/"
++"privacy\">Maxfiylik bayonnomasi</a> bilan tanishib chiqing, bu esa "
+ "o'quvchilarni ularning ismi va elektron pochta manzilidan boshqa maqsadlarda "
+ "foydalanilmasligini kafolatlaydi."
+ 
+@@ -91,7 +91,7 @@
+ "har bir yangi soni uchun elektron pochta orqali Mundarijani olishiga olib "
+ "keladi. Ush ro'xta, jurnalga ma'lum tekshirish yoki qo'llab-quvvatlash yoki "
+ "o'quvchilarga da'vo qilish imkonini beradi. Jurnalning <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Maxfiylik "
++"{$indexUrl}/{$contextPath}/about/privacy\">Maxfiylik "
+ "bayonnomasi</a> bilan tanishib chiqing."
+ 
+ msgid "default.contextSettings.forLibrarians"
+--- a/locale/uz_Latn/default.po
++++ b/locale/uz_Latn/default.po
+@@ -53,7 +53,7 @@
+ "har bir yangi soni uchun elektron pochta orqali Mundarija oladi. Bu ro'yxat, "
+ "shuningdek, jurnalga ma'lum darajada qo'llab -quvvatlash yoki o'quvchi "
+ "auditoriyasini talab qilish imkonini beradi. Jurnalning <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\"> Maxfiylik "
++"\"{$indexUrl}/{$contextPath}/about/privacy\"> Maxfiylik "
+ "bayonnomasiga </a> qarang, bu o'quvchilarga ularning nomi va elektron pochta "
+ "manzili boshqa maqsadlarda ishlatilmasligiga ishonch hosil qiladi."
+ 
+--- a/locale/vi/default.po
++++ b/locale/vi/default.po
+@@ -49,7 +49,7 @@
+ "việc người đọc nhận được Mục lục qua email cho mỗi số mới của tạp chí. Danh "
+ "sách này cũng cho phép tạp chí yêu cầu một mức độ hỗ trợ hoặc độc giả nhất "
+ "định. Xem tạp chí <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Cam kết bảo mật</a>, đảm bảo cho người đọc "
++"privacy\">Cam kết bảo mật</a>, đảm bảo cho người đọc "
+ "rằng tên và địa chỉ email của họ sẽ không được sử dụng cho các mục đích khác."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/zh_Hans/default.po
++++ b/locale/zh_Hans/default.po
+@@ -62,7 +62,7 @@
+ "我们鼓励读者订阅期刊出版通知服务。 在期刊主页的顶部使用<a href=\"{$indexUrl}/"
+ "{$contextPath}/user/register\">注册</a>链接。完成注册后，读者可以收到期刊每一"
+ "期内容目录。这样期刊也可以获得固定读者群。期刊上的<a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\">隐私声明</a>可以保证读者"
++"{$contextPath}/about/privacy\">隐私声明</a>可以保证读者"
+ "的姓名和电子邮件地址不会被用于其他用途。"
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/zh_Hant/default.po
++++ b/locale/zh_Hant/default.po
+@@ -46,7 +46,7 @@
+ "\"{$indexUrl}/{$contextPath}/user/register\">註冊</a>連結。註冊後，您會透過電"
+ "郵收到每新一期的目錄。此列表也讓期刊可宣稱擁有一定程度的支持及讀者。請參見說"
+ "明確保用戶的姓名及電郵不會用作其他用途的<a href=\"{$indexUrl}/{$contextPath}/"
+-"about/submissions#privacyStatement\">隱私聲明</a>。"
++"about/privacy\">隱私聲明</a>。"
+ 
+ msgid "default.contextSettings.forAuthors"
+ msgstr ""

@@ -1,0 +1,110 @@
+--- a/locale/bg/default.po
++++ b/locale/bg/default.po
+@@ -142,7 +142,7 @@
+ "{$indexUrl}/{$contextPath}/user/register\">Регистрация</a> в горната част на "
+ "началната страница. Този списък също позволява на сървъра да претендира за "
+ "определено ниво на поддръжка или читателска аудитория. Вижте <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Декларацията "
++"{$indexUrl}/{$contextPath}/about/privacy\">Декларацията "
+ "за поверителност</a>, която гарантира на читателите, че тяхното име и имейл "
+ "адрес няма да бъдат използвани за други цели."
+ 
+--- a/locale/cs/default.po
++++ b/locale/cs/default.po
+@@ -47,7 +47,7 @@
+ "{$indexUrl}/{$contextPath}/user/register\">Registrovat</a> v horní části "
+ "domovské stránky. Tento seznam také umožňuje serveru nárokovat si určitou "
+ "úroveň podpory nebo čtenářskou obec. Viz <a href=\""
+-"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Prohlášení o "
++"{$indexUrl}/{$contextPath}/about/privacy\">Prohlášení o "
+ "ochraně osobních údajů</a>, které čtenáře ujišťuje, že jejich jméno a e-"
+ "mailová adresa nebudou použity k jiným účelům."
+ 
+--- a/locale/de/default.po
++++ b/locale/de/default.po
+@@ -64,7 +64,7 @@
+ "{$contextPath}/user/register\">Registrieren</a> Link oben auf der Homepage. "
+ "Diese Liste ermöglicht es dem Server auch, einen bestimmten Grad an "
+ "Unterstützung oder Leserschaft zu beanspruchen. Siehe die <a href="
+-"\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement"
++"\"{$indexUrl}/{$contextPath}/about/privacy"
+ "\">Datenschutzerklärung</a>, die den Lesern versichert, dass ihr Name und "
+ "ihre E-Mail-Adresse nicht für andere Zwecke verwendet werden."
+ 
+--- a/locale/en/default.po
++++ b/locale/en/default.po
+@@ -48,7 +48,7 @@
+ "</ul>"
+ 
+ msgid "default.contextSettings.forReaders"
+-msgstr "We encourage readers to sign up for the posting notification service for this server. Use the <a href=\"{$indexUrl}/{$contextPath}/user/register\">Register</a> link at the top of the home page. This list also allows the server to claim a certain level of support or readership. See the <a href=\"{$indexUrl}/{$contextPath}/about/submissions#privacyStatement\">Privacy Statement</a>, which assures readers that their name and email address will not be used for other purposes."
++msgstr "We encourage readers to sign up for the posting notification service for this server. Use the <a href=\"{$indexUrl}/{$contextPath}/user/register\">Register</a> link at the top of the home page. This list also allows the server to claim a certain level of support or readership. See the <a href=\"{$indexUrl}/{$contextPath}/about/privacy\">Privacy Statement</a>, which assures readers that their name and email address will not be used for other purposes."
+ 
+ msgid "default.contextSettings.forAuthors"
+ msgstr "Interested in submitting to this server? We recommend that you review the <a href=\"{$indexUrl}/{$contextPath}/about\">About</a> page for the policies, as well as the <a href=\"{$indexUrl}/{$contextPath}/about/submissions#authorGuidelines\">Author Guidelines</a>. Authors need to <a href=\"{$indexUrl}/{$contextPath}/user/register\">register</a> prior to submitting or, if already registered, can simply <a href=\"{$indexUrl}/index/login\">log in</a> and begin the process."
+--- a/locale/es/default.po
++++ b/locale/es/default.po
+@@ -40,7 +40,7 @@
+ "{$contextPath}/user/register\"> Registrarse </a> en la parte superior de la "
+ "página principal. Esta lista también permite al servidor reclamar un cierto "
+ "nivel de soporte o lectores. Consulte la <a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\"> Declaración de "
++"{$contextPath}/about/privacy\"> Declaración de "
+ "privacidad </a>, que garantiza a los lectores que su nombre y dirección de "
+ "correo electrónico no se utilizarán para otros fines."
+ 
+--- a/locale/fi/default.po
++++ b/locale/fi/default.po
+@@ -60,7 +60,7 @@
+ "yläosassa olevaa <a href=\"{$indexUrl}/{$contextPath}/user/register\""
+ ">Rekisteröidy</a> -linkkiä. Tämän käyttäjälistan avulla palvelin myös saa "
+ "tietoa lukijoistaan. Palvelimen <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Tietosuojaseloste</a> takaa, että lukijoiden "
++"privacy\">Tietosuojaseloste</a> takaa, että lukijoiden "
+ "nimiä ja sähköpostiosoitteita ei käytetä muihin tarkoituksiin."
+ 
+ msgid "default.contextSettings.forAuthors"
+--- a/locale/mk/default.po
++++ b/locale/mk/default.po
+@@ -59,7 +59,7 @@
+ "{$contextPath}/user/register\"> Регистрирај се </a> на врвот на почетната "
+ "страница. Оваа листа исто така му овозможува на серверот да бара одредено "
+ "ниво на поддршка или читаност. Погледнете ја <a href=\"{$indexUrl}/"
+-"{$contextPath}/about/submissions#privacyStatement\"> Изјавата за приватност "
++"{$contextPath}/about/privacy\"> Изјавата за приватност "
+ "</a>, што ги уверува читателите дека нивното име и адреса на е-пошта нема да "
+ "се користат за други цели."
+ 
+--- a/locale/pt/default.po
++++ b/locale/pt/default.po
+@@ -39,7 +39,7 @@
+ "{$contextPath}/user/register\">Registar</a> na parte superior da página de "
+ "início. Esta lista também permite ao servidor reivindicar um certo nível de "
+ "suporte ou leitores. Consulte a <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Política de Privacidade</a>, que garante aos "
++"privacy\">Política de Privacidade</a>, que garante aos "
+ "leitores que o seu nome e e-mail não serão utilizados para outras "
+ "finalidades."
+ 
+--- a/locale/pt_BR/default.po
++++ b/locale/pt_BR/default.po
+@@ -61,7 +61,7 @@
+ "{$contextPath}/user/register\"> Registre-se </a> no link no topo da página "
+ "de inicio. Esta lista também permite ao servidor reclamar um certo nível de "
+ "suporte ou leitores. Consulte a <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\"> Declaração de privacidade </a>, que garante "
++"privacy\"> Declaração de privacidade </a>, que garante "
+ "aos leitores que seu nome e e-mail não serão utilizados para outras "
+ "finalidades."
+ 
+--- a/locale/uk/default.po
++++ b/locale/uk/default.po
+@@ -29,7 +29,7 @@
+ "user/register\">Зареєструватися</a> у верхній частині домашньої сторінки. "
+ "Цей список також дозволяє серверу претендувати на певний рівень підтримки чи "
+ "читацької аудиторії. Перегляньте <a href=\"{$indexUrl}/{$contextPath}/about/"
+-"submissions#privacyStatement\">Заяву про конфіденційність</a>, яка запевняє "
++"privacy\">Заяву про конфіденційність</a>, яка запевняє "
+ "читачів, що їхні ім’я та адреса електронної пошти не використовуватимуться "
+ "для інших цілей."
+ 
