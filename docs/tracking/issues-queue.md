@@ -23,7 +23,6 @@ and the hourly routine starts one only when none is running
 | [U18](../specs/U18-web-feeds.md) | 6 | 2 | 2 | A1, A7, OPS1: open reports docs/reports/2026-09-26-webfeed-rss2-empty-feed-fails.md, docs/reports/2026-09-26-webfeed-terms-read-array.md and docs/reports/2026-09-26-webfeed-ops-publisher-array.md (the rest of U18 written up by the issues session, workstation s0, 2026-10-02) |
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
-| [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | **Taken: issues session, workstation s0, 2026-10-03** (A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet) |
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | **Taken: issues session, VM s1, 2026-10-03** (A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot)); A13 done (docs/issues/U12-A13-edited-announcement-type-keeps-old-name.md); A9 done (docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md); A1 done (docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md); OMP2 done (docs/issues/U12-OMP2-press-home-shows-site-announcements.md) |
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 done with U09 A15 ([pkp-e2e#370](https://github.com/jardakotesovec/pkp-e2e/issues/370)) |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | A19 done with U09 A19 (pkp-e2e#375); OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md) |
@@ -45,7 +44,7 @@ and the hourly routine starts one only when none is running
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (pkp-e2e#521) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
-| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | **A3 and A5's typed-name boxes half taken: issues session, workstation s0, 2026-10-03** (with U41 A5 and A10) (A5: the ordering arrows done with U46 A5 (pkp-e2e#619); its typed-name boxes half (the multilingual name boxes' accessible names) open, a cause of its own) |
+| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | A3 done with U41 A5 (pkp-e2e#754); A5 done: the ordering arrows with U46 A5 (pkp-e2e#619), the typed-name boxes with U41 A10 (pkp-e2e#755) |
 | [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |

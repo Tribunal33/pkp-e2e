@@ -793,6 +793,17 @@ Left out of the scenarios above, by reason:
   - the guard for A1 (issue report
     `docs/issues/U41-A1-book-page-long-credits-dangling-comma.md`): on a
     book page with five or more contributors, each affiliation shown
+  - the guard for A9 (issue report
+    `docs/issues/U41-A9-ror-logo-link-unnamed.md`): scenario 6's landing
+    page, every ROR logo link with a name
+  - the guard for A12 (issue report
+    `docs/issues/U41-A12-delete-role-button-label-sentence.md`): scenario
+    5's "Delete Role", its button named "I understand the consequences,
+    delete this role"
+  - the guard for OPS2 (issue report
+    `docs/issues/U41-OPS2-competing-interests-label-raw-markup.md`):
+    scenario 8 on a preprint server, the contributor form's field
+    labelled "Competing Interests"
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills
@@ -886,11 +897,11 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A20](#a20) | "Add Contributor" never saves when a "Forms" language is not a metadata language | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium || issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A refused affiliation reads "Go to Affiliations: [object Object]" to screen-reader users of the contributor form | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A9](#a9) | The landing page's affiliation ROR link has no accessible name | 🐞 | minor | — |
+| [A9](#a9) | On an article, book or preprint page, screen readers announce the ROR logo beside an affiliation or funder as an unnamed link | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A12](#a12) | The delete-role confirm button is labeled with a whole warning sentence instead of "Delete" | 🐞 | minor | — |
+| [A12](#a12) | The button that deletes a contributor role is labelled with a warning question, not the action | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [OPS2](#ops2) | On a preprint server, the contributor form labels "Competing Interests" with raw link markup | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | On a French landing page a CRediT role's degree prints as a raw text code | 🐞 | minor | — |
-| [OPS2](#ops2) | The contributor form's Competing Interests label renders raw markup on a preprint server | 🐞 | minor | — |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
 | [A4](#a4) | The organization contributor's "ROR ID" box accepts any text without a shape check | ❓ | minor | — |
@@ -1035,12 +1046,24 @@ keep it? Lean: warn. The pick-then-Add flow is easy to miss.
 Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The landing page's affiliation ROR link has no accessible name** · 🐞 · minor.
-On a journal's article page and a preprint server's preprint page, a
-registry-backed affiliation's ROR mark is an icon-only link with no text
-and no accessible name. A screen-reader user hears an unnamed link and
-cannot tell that it leads to the institution's registry record.
-Basis: probe. <sup>f-a9</sup>
+**A9 — On an article, book or preprint page, screen readers announce the ROR logo beside an affiliation or funder as an unnamed link** · 🐞 · low.
+On a published article's, book's or preprint's page, each affiliation and
+funder picked from the Research Organization Registry has a small ROR logo
+beside its name. The logo is a link to the organisation's registry record,
+but the link has no text and no label. A screen reader announces it as
+a link with no name, with nothing to say what it leads to.
+
+Usually the organisation's name is printed beside the logo, so only the
+link's purpose is hidden. When the organisation was saved without a name
+(pkp-e2e [#754](https://github.com/jardakotesovec/pkp-e2e/issues/754)),
+the logo stands alone, and a screen-reader user meets only this unnamed
+link.
+
+The link is in the three apps' own page templates, which the default
+theme uses. On a press, it shows only on books with fewer than five
+contributors. With five or more, the book page lists names only, with no
+logos.
+Basis: probe, 2026-10-03. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The typed affiliation's name boxes are announced wrongly** · 🐞 · low.
@@ -1071,12 +1094,17 @@ reopening the panel.
 Basis: probe. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The delete-role confirm button is labeled with a whole sentence** · 🐞 · minor.
-In the type-to-confirm delete-role dialog (Rule 13), the confirm button's
-label is the message "Are you sure you wish to delete this item? This
-action cannot be undone." That is a warning sentence where a short
-"Delete" belongs. No concise confirm label exists in the dialog.
-Basis: probe. <sup>f-a12</sup>
+**A12 — The button that deletes a contributor role is labelled with a warning question, not the action** · 🐞 · low.
+In the type-to-confirm delete-role dialog, the confirm button's label is
+the message "Are you sure you wish to delete this item? This action
+cannot be undone." That is a warning question where a label naming the
+action belongs.
+
+The button still works: it enables once the role's identifier is typed,
+and the role is deleted. The label meant for it, "I understand the
+consequences, delete this role", is already in the application's English
+texts but unused.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A role name saves with a language left empty** · ❓ · minor.
@@ -1271,14 +1299,21 @@ holds for the neighboring Funding list.
 Basis: probe. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
-**OPS2 — The Competing Interests label renders raw markup** · 🐞 · minor.
-On a preprint server the contributor form's Competing Interests field is
-labeled with raw code-like text instead of the plain "Competing
-Interests" label the other applications show. The text is visible link
-markup around "CI Policy" plus an unresolved placeholder token. The
-guidance sentence, the required behavior and saving all work as
-specified.
-Basis: probe + code reading. <sup>f-ops2</sup>
+**OPS2 — On a preprint server, the contributor form labels "Competing Interests" with raw link markup** · 🐞 · low.
+On a preprint server that requires competing-interest statements, the
+contributor form's "Competing Interests" field is labelled with raw
+code-like text instead of the plain "Competing Interests" a journal or
+press shows. The label reads `Competing interests <a target="_new"
+class="action" href="{$competingInterestGuidelinesUrl}">CI Policy</a>`,
+with an unfilled placeholder and visible link markup. It is an old
+label that OPS's own language files still carry for this field.
+
+The field's guidance, its required mark and saving all work, so the
+statement is filled in and saved as usual; only the field's name is
+wrong. A French interface shows the same markup in French. Readers never
+see it: the public preprint page shows no competing-interests
+statement.
+Basis: probe + code reading, 2026-10-03. <sup>f-ops2</sup>
 
 ### Retired
 
@@ -1977,6 +2012,7 @@ only the logo image, with no text, title or ARIA name — an accessibility
 scan reads the link out as nothing. OMP's book page renders its own
 ROR-mark markup and was not checked (its ≥5-contributor compaction
 drops the marks entirely, OMP1).
+Issue report: [pkp-e2e#763](https://github.com/jardakotesovec/pkp-e2e/issues/763) ([docs/issues/U41-A9-ror-logo-link-unnamed.md](../issues/U41-A9-ror-logo-link-unnamed.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** Live-probed 2026-08-28 (OJS; shared
@@ -2005,6 +2041,7 @@ dialog's two buttons read "Are you sure you wish to delete this item?
 This action cannot be undone." (the confirm — locale key
 `common.confirmDelete`, a message string wired in as the label) and
 "Cancel".
+Issue report: [pkp-e2e#761](https://github.com/jardakotesovec/pkp-e2e/issues/761) ([docs/issues/U41-A12-delete-role-button-label-sentence.md](../issues/U41-A12-delete-role-button-label-sentence.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** Live-probed 2026-08-28 (OJS scratch journal,
@@ -2247,6 +2284,7 @@ lib/pkp's `author.competingInterests` key with a legacy pre-Vue string
 carrying markup and a template placeholder, and the Vue form renders
 field labels as plain text. OJS and OMP take lib/pkp's plain "Competing
 Interests" (live-probed 2026-08-28, fn j).
+Issue report: [pkp-e2e#765](https://github.com/jardakotesovec/pkp-e2e/issues/765) ([docs/issues/U41-OPS2-competing-interests-label-raw-markup.md](../issues/U41-OPS2-competing-interests-label-raw-markup.md)).
 
 ## Reference — entry points & surfaces
 
