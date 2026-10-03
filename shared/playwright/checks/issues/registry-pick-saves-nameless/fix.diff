@@ -1,0 +1,193 @@
+--- a/lib/pkp/classes/affiliation/Repository.php
++++ b/lib/pkp/classes/affiliation/Repository.php
+@@ -242,7 +242,14 @@
+                 $affiliation->setData('authorId', $authorId);
+             }
+             if ($affiliation->getRor() !== null) {
+-                $affiliation->setName(null);
++                if (Repo::ror()->getByRor($affiliation->getRor()) !== null) {
++                    // A registry-backed affiliation takes its name from the ROR cache.
++                    $affiliation->setName(null);
++                } elseif (!empty(array_filter((array) $affiliation->getName()))) {
++                    // The ROR record is not cached (ror.org could not be reached): keep the
++                    // affiliation as a typed name, without a ROR ID the server has not verified.
++                    $affiliation->setRor(null);
++                }
+             }
+             $this->dao->updateOrInsert($affiliation);
+         }
+--- a/lib/pkp/api/v1/funders/PKPFunderController.php
++++ b/lib/pkp/api/v1/funders/PKPFunderController.php
+@@ -168,11 +168,11 @@
+     {
+         $input = $illuminateRequest->input();
+ 
+-        $ror = $input['funder']['ror'] ?? null;
++        [$ror, $name] = $this->getRorAndName($input['funder']['ror'] ?? null, $input['funder']['name'] ?? []);
+ 
+         $params = [
+             'ror' => $ror,
+-            'name' => $ror ? [] : ($input['funder']['name'] ?? []),
++            'name' => $name,
+             'grants' => array_values(array_filter(
+                 $input['grants'] ?? [],
+                 fn ($g) => !empty($g['grantNumber']) || !empty($g['grantDoi']) || !empty($g['grantName'])
+@@ -222,10 +222,10 @@
+ 
+         $input = $illuminateRequest->input();
+ 
+-        $ror = $input['funder']['ror'] ?? null;
++        [$ror, $name] = $this->getRorAndName($input['funder']['ror'] ?? null, $input['funder']['name'] ?? []);
+         $params = [
+             'ror' => $ror,
+-            'name' => $ror ? [] : ($input['funder']['name'] ?? []),
++            'name' => $name,
+             'grants' => array_values(array_filter(
+                 $input['grants'] ?? [],
+                 fn ($g) => !empty($g['grantNumber']) || !empty($g['grantDoi']) || !empty($g['grantName'])
+@@ -257,6 +257,25 @@
+     }
+ 
+     /**
++     * The ROR ID and name to store with a funder. A registry-backed funder takes its name
++     * from the ROR cache. When the cache does not hold the ROR record (ror.org could not be
++     * reached), a funder sent with a name is kept as a typed name, without a ROR ID the
++     * server has not verified.
++     *
++     * @return array [?string $ror, mixed $name]
++     */
++    protected function getRorAndName(?string $ror, mixed $name): array
++    {
++        if (!$ror) {
++            return [null, $name];
++        }
++        if (Repo::ror()->getByRor($ror) !== null || empty(array_filter((array) $name))) {
++            return [$ror, []];
++        }
++        return [null, $name];
++    }
++
++    /**
+      * Delete a funder.
+      */
+     public function delete(Request $illuminateRequest): JsonResponse
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -83,6 +83,9 @@
+ msgid "user.affiliations.error.rorApiRateLimited"
+ msgstr "Too many requests have been sent to the ROR API. Please wait a moment before continuing to search."
+ 
++msgid "user.affiliations.error.rorNotFetched"
++msgstr "The details of this organization could not be fetched from ROR, so it has been added by its name only, without a ROR ID. To link it to ROR, remove it and choose it again later."
++
+ msgid "user.authorization.accessDenied"
+ msgstr "Access denied."
+ 
+--- a/lib/ui-library/src/components/Form/fields/FieldAffiliations.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldAffiliations.vue
+@@ -341,11 +341,44 @@
+ 		? newAffiliation.value['rorObject']
+ 		: {};
+ });
+-const {fetch: postRorObject} = useFetch(apiUrl.value, {
+-	method: 'POST',
+-	body: rorObjectToBeUpdated,
+-});
++const {fetch: postRorObject, isSuccess: rorObjectPosted} = useFetch(
++	apiUrl.value,
++	{
++		method: 'POST',
++		body: rorObjectToBeUpdated,
++		onError: () => true, // handled in cacheRorOrKeepName()
++	},
++);
+ 
++/**
++ * Ask the server to cache the picked ROR record. When it cannot (ror.org unreachable,
++ * rate limited), keep the new row as a typed name without its ROR ID, as the server will
++ * save it, and say so.
++ */
++async function cacheRorOrKeepName(ror) {
++	await postRorObject();
++	if (rorObjectPosted.value !== false) return;
++	currentValue.value = currentValue.value.map((affiliation) =>
++		!affiliation.id && affiliation.ror === ror
++			? {...affiliation, ror: null, rorObject: {}}
++			: affiliation,
++	);
++	const {openDialog} = useModal();
++	openDialog({
++		name: 'rorNotFetched',
++		title: t('user.affiliations.error.rorApi'),
++		message: t('user.affiliations.error.rorNotFetched'),
++		actions: [
++			{
++				label: t('common.ok'),
++				isPrimary: true,
++				callback: (close) => close(),
++			},
++		],
++		modalStyle: 'negative',
++	});
++}
++
+ const errors = computed(() => {
+ 	if (!Object.keys(props.allErrors).includes(props.name)) {
+ 		return [];
+@@ -388,7 +421,7 @@
+ 	if (Object.hasOwn(newAffiliation.value, 'id')) {
+ 		currentValue.value.push(JSON.parse(JSON.stringify(newAffiliation.value)));
+ 		if (Object.hasOwn(newAffiliation.value['rorObject'], 'id')) {
+-			postRorObject();
++			cacheRorOrKeepName(newAffiliation.value.ror);
+ 		}
+ 		newAffiliation.value = {};
+ 		autoSuggestSelected.value = [];
+--- a/lib/ui-library/src/components/Form/fields/FieldFunder.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldFunder.vue
+@@ -86,6 +86,7 @@
+ import { t, localize } from '@/utils/i18n';
+ import {useUrl} from '@/composables/useUrl';
+ import {useFetch} from '@/composables/useFetch';
++import {useModal} from '@/composables/useModal';
+ import PkpButton from '@/components/Button/Button.vue';
+ import FieldText from '@/components/Form/fields/FieldText.vue';
+ import FieldAffiliationsRorAutoSuggest from '@/components/Form/fields/FieldAffiliationsRorAutoSuggest.vue';
+@@ -126,12 +127,34 @@
+ });
+ 
+ const {apiUrl} = useUrl('rors/');
+-function postRorObject(rorObject) {
+-	const {fetch} = useFetch(apiUrl.value, {
++/**
++ * Ask the server to cache the picked ROR record. When it cannot (ror.org unreachable,
++ * rate limited), keep the funder as a typed name without its ROR ID, as the server will
++ * save it, and say so.
++ */
++async function postRorObject(rorObject) {
++	const {fetch, isSuccess} = useFetch(apiUrl.value, {
+ 		method: 'POST',
+ 		body: rorObject,
++		onError: () => true,
+ 	});
+-	fetch();
++	await fetch();
++	if (isSuccess.value !== false || currentValue.value?.ror !== rorObject.ror) return;
++	currentValue.value = {...currentValue.value, ror: null, rorObject: null};
++	const {openDialog} = useModal();
++	openDialog({
++		name: 'rorNotFetched',
++		title: t('user.affiliations.error.rorApi'),
++		message: t('user.affiliations.error.rorNotFetched'),
++		actions: [
++			{
++				label: t('common.ok'),
++				isPrimary: true,
++				callback: (close) => close(),
++			},
++		],
++		modalStyle: 'negative',
++	});
+ }
+ 
+ const autoSuggestRef = ref(null);
