@@ -2264,7 +2264,7 @@ Issue report: [docs/issues/U65-OMP2-press-days-to-decision-text-your-journal.md]
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — fn o (`retrieveLimits()`). Live-probed 2026-09-28: td13.
-Issue report: [docs/issues/U65-OMP3-monograph-report-columns-sized-by-other-presses.md](../issues/U65-OMP3-monograph-report-columns-sized-by-other-presses.md).
+Issue report: [docs/issues/U65-OMP3-monograph-report-columns-sized-by-other-presses.md](../issues/U65-OMP3-monograph-report-columns-sized-by-other-presses.md), filed as [pkp-e2e#657](https://github.com/jardakotesovec/pkp-e2e/issues/657).
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — fn o (`getDecisionMessage()`). Live-probed 2026-09-28: td13.
