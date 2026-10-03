@@ -1,0 +1,37 @@
+--- a/lib/pkp/classes/notification/PKPNotificationManager.php
++++ b/lib/pkp/classes/notification/PKPNotificationManager.php
+@@ -430,12 +430,18 @@
+             Notification::NOTIFICATION_TYPE_REVIEWER_COMMENT => ['settingName' => 'notificationReviewerComment',
+                 'emailSettingName' => 'emailNotificationReviewerComment',
+                 'settingKey' => 'notification.type.reviewerComment'],
++            Notification::NOTIFICATION_TYPE_REVIEW_ASSIGNMENT_UPDATED => ['settingName' => 'notificationReviewAssignmentUpdated',
++                'emailSettingName' => 'emailNotificationReviewAssignmentUpdated',
++                'settingKey' => 'notification.type.reviewAssignmentUpdated'],
+             Notification::NOTIFICATION_TYPE_NEW_QUERY => ['settingName' => 'notificationNewQuery',
+                 'emailSettingName' => 'emailNotificationNewQuery',
+                 'settingKey' => 'notification.type.queryAdded'],
+             Notification::NOTIFICATION_TYPE_QUERY_ACTIVITY => ['settingName' => 'notificationQueryActivity',
+                 'emailSettingName' => 'emailNotificationQueryActivity',
+                 'settingKey' => 'notification.type.queryActivity'],
++            Notification::NOTIFICATION_TYPE_SUBMISSION_NEW_VERSION => ['settingName' => 'notificationSubmissionNewVersion',
++                'emailSettingName' => 'emailNotificationSubmissionNewVersion',
++                'settingKey' => 'notification.type.submissionNewVersion'],
+             Notification::NOTIFICATION_TYPE_NEW_ANNOUNCEMENT => ['settingName' => 'notificationNewAnnouncement',
+                 'emailSettingName' => 'emailNotificationNewAnnouncement',
+                 'settingKey' => 'notification.type.newAnnouncement'],
+--- a/lib/pkp/classes/notification/form/PKPNotificationSettingsForm.php
++++ b/lib/pkp/classes/notification/form/PKPNotificationSettingsForm.php
+@@ -91,11 +91,13 @@
+                     Notification::NOTIFICATION_TYPE_EDITOR_ASSIGNMENT_REQUIRED,
+                     Notification::NOTIFICATION_TYPE_NEW_QUERY,
+                     Notification::NOTIFICATION_TYPE_QUERY_ACTIVITY,
++                    Notification::NOTIFICATION_TYPE_SUBMISSION_NEW_VERSION,
+                 ]
+             ],
+             ['categoryKey' => 'notification.type.reviewing',
+                 'settings' => [
+                     Notification::NOTIFICATION_TYPE_REVIEWER_COMMENT,
++                    Notification::NOTIFICATION_TYPE_REVIEW_ASSIGNMENT_UPDATED,
+                 ]
+             ],
+             ['categoryKey' => 'user.role.editors',

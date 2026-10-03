@@ -1304,6 +1304,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U27-A26-unassign-notice-cancel-subject.md`): an unanswered
     reviewer removed with "Unassign Reviewer" gets the notice under its own
     subject, "Your reviewer assignment for "{title}" has been removed"
+  - the guard for A12 (issue report
+    `docs/issues/U27-A12-review-change-email-unsubscribe-ignored.md`): a
+    reviewer who unsubscribes through the "Your review assignment has been
+    changed" email is not sent it after the next "Edit" save, and the
+    profile's "Notifications" tab lists it
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1390,7 +1395,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | A reviewer's "Request Resent" row reads "Response due:" with the review deadline, not the response deadline | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Editors see no "Response due" date on a reviewer's "Request Sent" row in the Reviewers table | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Submitting inverted due dates is refused with no message; the form just stays open | 🐞 | user-visible | — |
-| [A12](#a12) | The assignment-changed email's opt-out is offered nowhere; its own unsubscribe page omits the type | 🐞 | minor | — |
+| [A12](#a12) | A reviewer who unsubscribes through the "Your review assignment has been changed" email keeps getting it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | Email Reviewer sends with an empty body despite the body being marked required | 🐞 | minor | — |
 | [A15](#a15) | A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1597,13 +1602,17 @@ date fields). <sup>[f-a11](#fn-a11)</sup>
 > untouched and stands.
 
 <a id="a12"></a>
-**A12 — The change notice's opt-out is unreachable** · 🐞 · minor.
-The assignment-changed email is suppressed for reviewers who opted out of
-it, but no screen offers that opt-out. The email type is missing from the
-profile's notification settings, and the unsubscribe page the email's own
-footer links to does not list it either. The link dead-ends for its own
-email type.
-Basis: live probe. <sup>[f-a12](#fn-a12)</sup>
+**A12 — A reviewer who unsubscribes through the "Your review assignment has been changed" email keeps getting it** · 🐞 · medium.
+When an editor changes a reviewer's due dates or review type, the
+reviewer gets "Your review assignment has been changed", whose footer
+says "You can unsubscribe from this email at any time." The link opens
+an "Unsubscribe" page that does not list this email. Pressing
+"Unsubscribe" there reads "You have been unsubscribed … We'll no longer
+send you those emails", and the next change sends the email again. The
+profile's "Notifications" tab has no row for it either. The code that
+sends the email does skip a reviewer who has opted out of it, but no
+screen can record that choice. Basis: probe, 2026-10-03.
+<sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — Email Reviewer enforces only the subject** · 🐞 · minor.
@@ -3152,6 +3161,7 @@ Re-driven in the claim check (2026-08-02) by fetching the actual
 unsubscribe link out of a live change notice: the page lists eleven email
 types (issues, submissions, discussions, announcements, tasks, statistics)
 — the changed-assignment type absent. The suppression guard itself: note g.
+Issue report: [docs/issues/U27-A12-review-change-email-unsubscribe-ignored.md](../issues/U27-A12-review-change-email-unsubscribe-ignored.md).
 
 <a id="fn-a13"></a>
 **f-a13** — Live-probed 2026-08-02 (OJS + OMP; the OMP subject-only send
