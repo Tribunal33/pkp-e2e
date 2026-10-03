@@ -1,0 +1,114 @@
+--- a/locale/fr_CA/emails.po
++++ b/locale/fr_CA/emails.po
+@@ -141,10 +141,16 @@
+ msgstr ""
+ 
+ msgid "emails.announcement.subject"
+-msgstr ""
++msgstr "{$announcementTitle}"
+ 
+ msgid "emails.announcement.body"
+ msgstr ""
++"<b>{$announcementTitle}</b><br />\n"
++"<br />\n"
++"{$announcementSummary}<br />\n"
++"<br />\n"
++"Visiter notre site Web pour consulter <a href="
++"\"{$announcementUrl}\">l'annonce complète</a>."
+ 
+ msgid "emails.submissionAck.body"
+ msgstr ""
+--- a/dbscripts/xml/upgrade.xml
++++ b/dbscripts/xml/upgrade.xml
+@@ -214,6 +214,7 @@
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13117_AddReviewAssignmentLastModifiedBy"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12593_EmailToTaskTemplates"/>
+ 		<migration class="APP\migration\upgrade\v3_5_0\I13128_FixEmailUrlLinks"/><!-- Already executed with 3.5.0-6 but idempotent -->
++		<migration class="APP\migration\upgrade\v3_6_0\FillEmptyAnnouncementEmailTexts"/>
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I12347_FixRevisionUploadLogData" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13109_PermitPublishedMetadataEdit" />
+ 		<migration class="PKP\migration\upgrade\v3_6_0\I13213_TaskTemplateForeignConstraint"/>
+--- /dev/null
++++ b/classes/migration/upgrade/v3_6_0/FillEmptyAnnouncementEmailTexts.php
+@@ -0,0 +1,81 @@
++<?php
++
++/**
++ * @file classes/migration/upgrade/v3_6_0/FillEmptyAnnouncementEmailTexts.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class FillEmptyAnnouncementEmailTexts
++ *
++ * @brief Fill the stored default subject and body of the ANNOUNCEMENT email where an
++ *   install stored them empty because the language's emails.po had no text yet.
++ *   Idempotent: a non-empty stored text is never touched, and a language whose
++ *   emails.po still has no text stays empty. A manager's own text lives in
++ *   email_templates_settings and is not touched either.
++ */
++
++namespace APP\migration\upgrade\v3_6_0;
++
++use Illuminate\Support\Facades\DB;
++use PKP\facades\Locale;
++use PKP\install\DowngradeNotSupportedException;
++use PKP\migration\Migration;
++
++class FillEmptyAnnouncementEmailTexts extends Migration
++{
++    protected const EMAIL_KEY = 'ANNOUNCEMENT';
++
++    /** The stored column and the locale key that supplies it. */
++    protected const TEXTS = [
++        'subject' => 'emails.announcement.subject',
++        'body' => 'emails.announcement.body',
++    ];
++
++    /**
++     * @inheritDoc
++     */
++    public function up(): void
++    {
++        $rows = DB::table('email_templates_default_data')
++            ->where('email_key', self::EMAIL_KEY)
++            ->where(fn ($q) => $q->whereNull('subject')->orWhere('subject', '')->orWhereNull('body')->orWhere('body', ''))
++            ->get();
++
++        $previous = Locale::getMissingKeyHandler();
++        Locale::setMissingKeyHandler(fn (string $key): string => '');
++        try {
++            foreach ($rows as $row) {
++                $update = [];
++                foreach (self::TEXTS as $column => $localeKey) {
++                    if ((string) $row->{$column} !== '') {
++                        continue;
++                    }
++                    $text = (string) __($localeKey, [], $row->locale);
++                    if ($text !== '') {
++                        $update[$column] = $text;
++                    }
++                }
++                if ($update) {
++                    DB::table('email_templates_default_data')
++                        ->where('email_key', self::EMAIL_KEY)
++                        ->where('locale', $row->locale)
++                        ->update($update);
++                }
++            }
++        } finally {
++            Locale::setMissingKeyHandler($previous);
++        }
++    }
++
++    /**
++     * @inheritDoc
++     *
++     * @throws DowngradeNotSupportedException
++     */
++    public function down(): void
++    {
++        throw new DowngradeNotSupportedException();
++    }
++}

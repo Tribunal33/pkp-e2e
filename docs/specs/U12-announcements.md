@@ -843,6 +843,7 @@ Left out of the scenarios above, by reason:
   - the guard for A9 (issue report `docs/issues/U12-A9-edit-announcement-email-box-sends-nothing.md`): an edit with the email box ticked mails the context's users, and an unticked edit mails nobody.
   - the guard for A1 (issue report `docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md`): removing an announcement type with typed announcements leaves them on the list and the public site, their type cleared.
   - the guard for OMP2 (issue report `docs/issues/U12-OMP2-press-home-shows-site-announcements.md`): a press with no announcements block of its own shows no announcements on its home page while the site's announcements are on with a count.
+  - the guard for A14 (issue report `docs/issues/U12-A14-french-announcement-email-english-sentence.md`): on a press and a preprint server whose primary language is French, the announcement email's body sentence arrives in French.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -940,7 +941,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | The announcement email's "Visit our website…" sentence stays English on a French press or preprint server {OMP OPS} | 🐞 | minor | — |
+| [A14](#a14) | On a French press or preprint server, the new-announcement email's last sentence arrives in English {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | The Atom and RSS 1.0 feeds carry unreadable dates ("%2026-%09-%17UTC%UTC%259") {OJS} | 🐞 | minor | — |
 | [OMP2](#omp2) | A press's home page shows the site's announcements, with links that lead nowhere {OMP} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An announcement's type is printed nowhere a reader looks | ❓ | minor | — |
@@ -1083,12 +1084,19 @@ servers.
 Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — One sentence of the email stays English on a French press or server** {OMP OPS} · 🐞 · minor.
-A user of a press or a preprint server whose primary language is French
-gets the announcement email with the French title as its subject and "Se
-désabonner … des courriels envoyés par …" as its footer, but "Visit our
-website to read the full announcement." in English between them; a
-journal sends the whole mail in French. Basis: probe. <sup>f-a14</sup>
+**A14 — On a French press or preprint server, the new-announcement email's last sentence arrives in English** {OMP OPS} · 🐞 · low.
+On a press or a preprint server whose primary language is French
+(Canada), the announcement email arrives with the French title as its
+subject and "Se désabonner … des courriels envoyés par …" as its footer.
+Between them, "Visit our website to read the full announcement." is in
+English. A journal sends the whole mail in French. The press's primary
+language decides, not the reader's: every recipient gets this mix.
+Nothing is lost: only that one sentence is English. A manager can fix it
+for good by typing the French text into the "New Announcement" email
+template, whose French fields are empty. The same happens with any
+primary language whose translation lacks this email's text; the Cause
+lists them.
+Basis: probe, 2026-10-03. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — The Atom and RSS 1.0 feeds carry unreadable dates** {OJS} · 🐞 · minor.
@@ -2046,6 +2054,7 @@ contributions", footer "Se désabonner … des courriels envoyés par …", body
 read "Visiter notre site Web pour consulter l'annonce complète". The likely
 cause is a French string of `emails.announcement.body` missing from the
 press's and server's locale files; the files were not compared.
+Issue report: [docs/issues/U12-A14-french-announcement-email-english-sentence.md](../issues/U12-A14-french-announcement-email-english-sentence.md).
 
 <a id="fn-f-a15"></a>
 **f-a15 — A15 evidence.** The feeds are rendered by
