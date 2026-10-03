@@ -1,0 +1,18 @@
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -316,13 +316,11 @@
+ 
+ msgid "submission.list.orderingFeatures"
+ msgstr ""
+-"Drag-and-drop or tap the up and down buttons to change the order of features "
+-"on the homepage."
++"Use the up and down buttons to change the order of features on the homepage."
+ 
+ msgid "submission.list.orderingFeaturesSection"
+ msgstr ""
+-"Drag-and-drop or tap the up and down buttons to change the order of features "
+-"in {$title}."
++"Use the up and down buttons to change the order of features in {$title}."
+ 
+ msgid "submission.list.saveFeatureOrder"
+ msgstr "Save Order"
