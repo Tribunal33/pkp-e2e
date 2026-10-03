@@ -759,6 +759,9 @@ Left out of the scenarios above, by reason:
   - the press's notice box in French: the heading "En attente
     d'approbation." on a monograph never published, "Gestion du
     catalogue" once it is published (Rule 3d)
+  - the guard for OMP2 (issue report
+    `docs/issues/U70-A6-unpublished-book-notice-still-approved.md`): the
+    Production stage reads "Awaiting approval." after "Unpublish"
 - **Rarely met**:
   - a second "Send To Production" bringing the earlier production ready files back beside the newly ticked ones (Rule 7b): sending a submission to production twice is not an ordinary week's action; scenario 4 stops at the hidden "Production" entry
   - "Stage Assignment" changed on the Roles screen, Production ticked for Copyeditor and unticked again (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week
@@ -802,7 +805,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [OPS2](#ops2) | "Revert Decline" on a preprint says the submission is "now active in the submission stage", a stage the server has not got | 🐞 | minor | — |
-| [OMP2](#omp2) | "Unpublish" leaves a press's Production entry at "Catalog Management", telling everyone the monograph has been approved | 🐞 | minor | — |
+| [OMP2](#omp2) | On a press, an unpublished book's Production stage still says the monograph has been approved | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | In French the press's Production notice keeps its French heading, but its paragraph is a raw code | 🐞 | minor | — |
 | [A1](#a1) | A recommend-only editor is offered "Upload", "Schedule For Publication" and "Assign" on Production, and no decision or recommendation | ❓ | minor | — |
 | [A2](#a2) | The "You have been asked to review layouts" task is never cleared, not by "Galleys Complete" | ❓ | minor | — |
@@ -921,15 +924,19 @@ catalog, not the galleys, and its publication formats belong to
 Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — "Unpublish" leaves the press's notice at "Catalog Management"** · 🐞 · minor.
-An editor who unpublishes a monograph expects the Production entry's box
-to read "Awaiting approval." again, as it did before publishing, since the
-monograph is back at Production with "Schedule For Publication" and "Move
-To Copyediting" offered. It keeps reading "Catalog Management" with "The
-monograph has been approved. Please visit Marketing and Publication to
-manage its catalog details, using the links just above." for every role,
-the Author included, and a second publish leaves it there.
-Basis: probe. <sup>[f-omp2](#fn-omp2)</sup>
+**OMP2 — On a press, an unpublished book's Production stage still says the monograph has been approved** · 🐞 · low.
+When an editor of any press unpublishes a book, its Production stage
+keeps the "Catalog Management" notice: "The monograph has been approved.
+Please visit Marketing and Publication to manage its catalog details,
+using the links just above." Expected is the notice an unpublished book
+has: "Awaiting approval." with "The monograph will not be listed in the
+catalog until it has been published. To add this book to the catalog,
+click on the Publication tab."
+
+The wrong notice stays until the book is published again. The fix is one
+condition in one shared class; the fault has been there since 3.2.
+The same fault is [Catalog management, its A6](U70-catalog-management.md#a6).
+Basis: probe, 2026-10-03. <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
 **OMP3 — In French the press's Production notice is a heading over a raw code** · 🐞 · minor.
@@ -1136,6 +1143,7 @@ the `t` notes hold the drives of the draft's open questions.
 
 <a id="fn-omp2"></a>
 **f-omp2** — Note f: `PKPApproveSubmissionNotificationManager::updateNotification()` is meant to delete `NOTIFICATION_TYPE_VISIT_CATALOG` and recreate `FORMAT_NEEDS_APPROVED_SUBMISSION` when the current publication has no `datePublished`, and `omp/classes/publication/Repository.php` calls it on unpublish. Live-probed 2026-09-19 on OMP, two monographs (one published on screen, one by seed), one run each: after "Unpublish" (`POST …/publications/{id}/unpublish` 200) the assigned Series editor, the unassigned Press Manager and the author read "Catalog Management" / "The monograph has been approved. …" on the entry, five seconds later too, with the header back at "Production" and "Schedule For Publication" and "Move To Copyediting" offered; a second "Publish" left it at "Catalog Management". Why the unpublish path leaves the row was not traced.
+Issue report: [pkp-e2e#744](https://github.com/jardakotesovec/pkp-e2e/issues/744) ([docs/issues/U70-A6-unpublished-book-notice-still-approved.md](../issues/U70-A6-unpublished-book-notice-still-approved.md)), shared with [Catalog management A6](U70-catalog-management.md#a6).
 
 <a id="fn-omp3"></a>
 **f-omp3** — Note f. OMP `locale/fr_CA/locale.po` (omp checkout

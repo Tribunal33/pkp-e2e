@@ -706,6 +706,26 @@ Left out of the scenarios above, by reason:
     `docs/issues/U70-A10-category-page-books-featured-elsewhere-first.md`):
     on a category's public page, the book featured in that category comes
     before one featured only in the whole catalog
+  - the guard for A6 (issue report
+    `docs/issues/U70-A6-unpublished-book-notice-still-approved.md`): the
+    Production stage reads "Awaiting approval." after "Unpublish"
+  - the guard for A11 (issue report
+    `docs/issues/U70-A11-catalog-ordering-notice-offers-drag.md`): after
+    "Order Features", the notice names only the up and down buttons
+  - the guard for A12 (issue report
+    `docs/issues/U70-A12-catalog-filters-column-stays-while-ordering.md`):
+    an open "Filters" column is hidden while ordering
+  - the guard for A13 (issue report
+    `docs/issues/U70-A13-catalog-last-featured-down-arrow-extra-press.md`):
+    with a book not featured in the list, one press of a featured book's
+    arrow moves it
+  - the guard for A14 (issue report
+    `docs/issues/U70-A14-catalog-ordering-arrows-name-undefined.md`):
+    after "Order Features", each arrow's name for a screen reader carries
+    the book's title
+  - the guard for A7 (issue report
+    `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`): the Catalog
+    page in French (Canada) shows no `##` code
 - **Rarely met**:
   - "Add Entry" › "Save" of a book whose "Date Published" lies in the
     future: the book is scheduled, stays off the list and is still
@@ -791,16 +811,16 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | With a filter, an ascending "Order of monographs" lists the other way round; after a filter the press's order is lost | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Catalog page: pressing "Featured in category" for a book's second category unfeatures it in the first | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | Catalog "Add Entry" refuses a book with only "Please correct these errors" and never says why | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A6](#a6) | After "Unpublish" the Production stage still says the monograph has been approved | 🐞 | minor | — |
-| [A7](#a7) | In French the Catalog page shows raw keys for its tab, list, column headings and "View Entry" | 🐞 | minor | — |
+| [A6](#a6) | On a press, an unpublished book's Production stage still says the monograph has been approved | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A7](#a7) | In French (Canada) the Catalog page shows raw keys for its tab, headings, buttons, ordering notice and "View Entry" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Catalog "Add Entry": "Save" with a word typed publishes the first suggested book, chosen or not | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Catalog "Add Entry" still offers a book already chosen, and "Save" publishes it twice | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | A category's public page ignores "Featured in category" and shows no "New Releases" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | The ordering notice says "Drag-and-drop", but no row can be dragged | 🐞 | minor | — |
-| [A12](#a12) | While ordering, an open "Filters" column stays and can leave the page with no "Save Order" or "Cancel" | 🐞 | minor | — |
-| [A13](#a13) | While ordering, the last book's down arrow silently costs an extra press | 🐞 | minor | — |
-| [A14](#a14) | Screen readers hear "Increase position of undefined" on the ordering arrows | 🐞 | minor | — |
-| [A15](#a15) | In French the Catalog Entry page shows raw keys for its group headings, descriptions and "Update Type" list | 🐞 | minor | — |
+| [A11](#a11) | Catalog "Order Features" notice says "Drag-and-drop", but no featured book can be dragged | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A12](#a12) | Catalog ordering: an open "Filters" column still switches the list and can hide "Save Order" and "Cancel" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A13](#a13) | Catalog "Order Features": arrow presses that should move a featured book sometimes do nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A14](#a14) | While ordering featured books, screen readers hear "Increase position of undefined" on every arrow | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A15](#a15) | In French the Catalog Entry page shows raw keys for its group headings, descriptions and "Update Type" list; all but "Series Position"'s description await their translations | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A1](#a1) | A Series editor opens the Catalog page by its address, then every action on it is refused | ❓ | minor | — |
 
 ### All apps
@@ -889,28 +909,43 @@ workflow names the ORCID reason in its "Publish" window.
 Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — After "Unpublish" the notice still says "approved"** · 🐞 · minor.
-Unpublishing a book's only published version leaves its Production stage
-showing "Catalog Management" and "The monograph has been approved…";
-"Awaiting approval." and its "The monograph will not be listed in the
-catalog until it has been published…" do not come back, although the book
-has left the catalog. A scheduled book shows the "approved" notice too,
-before it is in the catalog. Expected: the notice follows whether the
-book is in the catalog.
-Basis: probe, 2026-09-27. <sup>f-a6</sup>
+**A6 — On a press, an unpublished book's Production stage still says the monograph has been approved** · 🐞 · low.
+When an editor of any press unpublishes a book, its Production stage
+keeps the "Catalog Management" notice: "The monograph has been approved.
+Please visit Marketing and Publication to manage its catalog details,
+using the links just above." Expected is the notice an unpublished book
+has: "Awaiting approval." with "The monograph will not be listed in the
+catalog until it has been published. To add this book to the catalog,
+click on the Publication tab."
+
+The wrong notice stays until the book is published again. The fix is one
+condition in one shared class; the fault has been there since 3.2.
+Basis: probe, 2026-10-03. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The Catalog page shows raw keys in French** · 🐞 · minor.
-With French as the interface language, the Catalog page reads
-"##navigation.catalog.allMonographs##" for its tab,
-"##submission.list.monographs##" for the list's heading,
+**A7 — The Catalog page shows raw keys in French** · 🐞 · medium.
+With French (Canada) as the interface language, the Catalog page
+(Content › "Catalogue") reads "##navigation.catalog.allMonographs##" for
+its tab, "##submission.list.monographs##" for the list's heading,
 "##catalog.manage.featured##" and "##catalog.manage.feature.newRelease##"
-for the column headings and "##submission.list.viewEntry##" on each row,
-and a screen reader hears "##catalog.manage.isNotFeatured##" and
-"##catalog.manage.isNotNewRelease##" on the boxes. "Rechercher",
-"Filtres" and "Nouvelle entrée de catalogue" are translated. Expected:
-French throughout.
-Basis: probe, 2026-09-27. <sup>f-a7</sup>
+for the column headings (with a series as the filter,
+"##catalog.manage.seriesFeatured##" and
+"##catalog.manage.feature.seriesNewRelease##"), and
+"##submission.list.viewEntry##" beside "Voir la soumission" on each row.
+"Order Features" reads "##submission.list.orderFeatures##"; while
+ordering, "Save Order" reads "##submission.list.saveFeatureOrder##" and
+the notice "##submission.list.orderingFeatures##". The "Filtres" column
+heads its first group "##catalog.categories##", and the "Add Entry"
+panel's search box is labelled "##catalog.manage.findSubmissions##". A
+screen reader hears each box by a code, such as
+"##catalog.manage.isNotFeatured##", "##catalog.manage.isFeatured##" and
+"##catalog.manage.isNotNewRelease##". "Rechercher", "Filtres", "Annuler"
+and "Nouvelle entrée de catalogue" are translated. Expected: French
+throughout. One of several French (Canada) texts the press lacks, with
+its book and chapter pages
+([→ Monograph landing page, A15](U69-monograph-landing-page.md#a15)),
+whose report covers it.
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — Catalog "Add Entry": "Save" with a word typed publishes the first suggested book, chosen or not** · 🐞 · medium.
@@ -965,44 +1000,73 @@ their saved order and set apart, and its new releases.
 Basis: probe, 2026-10-03. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The ordering notice offers a drag that does not work** · 🐞 · minor.
-While ordering, the notice reads "Drag-and-drop or tap the up and down
-buttons to change the order of features…", but dragging a row moves
-nothing; only the arrows reorder. Expected: a notice that names the
-arrows only, or a working drag.
-Basis: probe, 2026-09-27. <sup>f-a11</sup>
+**A11 — Catalog "Order Features" notice says "Drag-and-drop", but no featured book can be dragged** · 🐞 · low.
+On a press's Catalog page, once "Order Features" is pressed, the notice
+reads "Drag-and-drop or tap the up and down buttons to change the order
+of features…", but dragging a row moves nothing: no row has a drag
+handle, and only the up and down arrows reorder the featured books.
+
+Until 3.2 the rows could be dragged; a 2020 rework of the list removed
+dragging and left the notice's text as it was. The proposed fix rewords
+the notice to name only the arrows; it does not bring dragging back.
+Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — An open "Filters" column stays while ordering** · 🐞 · minor.
-"Order Features" hides the "Filters" button but not a "Filters" column
-already open. Choosing a category or series there switches the list while
-ordering goes on, the notice ending "…in {that list}.". Where nothing is
-featured, the page then shows only the notice: no rows, no "Save Order",
-no "Cancel", no "Search", no "Add Entry". Choosing a list with featured
-books, or reloading, brings them back, with the moves made so far
-undone. Expected: the column hidden while ordering, as the button is.
-Basis: probe, 2026-09-27. <sup>f-a12</sup>
+**A12 — Catalog ordering: an open "Filters" column still switches the list and can hide "Save Order" and "Cancel"** · 🐞 · low.
+On a press's Catalog page, "Order Features" hides the "Filters" button
+but not a "Filters" column that is already open. Choosing a category or
+series there while ordering switches the rows to that list's books, and
+the notice then names it ("…in Psychology."). The arrow moves made so
+far are dropped without a word.
+
+Where the chosen list has a featured book, "Save Order" stays and saves
+that list's order, not the one the editor was arranging. Where nothing
+in it is featured, the page shows only the notice: no rows, no "Save
+Order", no "Cancel". Clearing the filter or reloading brings them back.
+
+The editor expects the column to be hidden while ordering, as the
+"Filters" button is.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The last featured book's down arrow costs an extra press** · 🐞 · minor.
-While ordering, the last featured book's down arrow changes nothing on
-screen, as expected. But the next arrow press that should move that book
-(its own up arrow, or the down arrow of the book above it) changes
-nothing on screen either; only a second press moves it. Expected: the
-last book's down arrow does nothing, and the next press moves the book.
-Basis: probe, 2026-09-27. <sup>f-a13</sup>
+**A13 — Catalog "Order Features": arrow presses that should move a featured book sometimes do nothing** · 🐞 · low.
+On a press's Catalog page, "Order Features" hides the books that are
+not featured, but the up and down arrows still count them as rows. A
+press that should move a featured book past one of these hidden books
+changes nothing on screen, and only the next press moves the book.
+
+This happens in two ordinary ways. First, the last book's down arrow,
+which should do nothing, moves that book below a hidden book on each
+press, and each of those presses must later be undone by a press that
+shows nothing. Second, a book featured after the page was loaded stays
+among the books that are not featured, so its up arrow does nothing for
+each hidden book above it.
+
+Nothing is lost: "Save Order" saves the order the screen shows. Almost
+every press that orders its features also has books it does not
+feature, so the hidden books are there whenever the arrows are used.
+Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — Screen readers hear "undefined" on the ordering arrows** · 🐞 · minor.
+**A14 — While ordering featured books, screen readers hear "Increase position of undefined" on every arrow** · 🐞 · low.
 While ordering, a screen reader hears every row's arrows as "Increase
 position of undefined" and "Decrease position of undefined", so a
 screen-reader user cannot tell which book an arrow moves. Expected: the
-book's title in place of "undefined".
-Basis: probe, 2026-09-27. <sup>f-a14</sup>
+book's title in place of "undefined". A sighted user sees only the arrow
+icons, so nothing looks wrong on screen.
+
+This is on a press's Catalog page, after "Order Features", both for the
+whole catalog and for a series or category chosen under "Filters". Only
+presses have this page. Nothing is saved wrong: the arrows move the
+right book, and the order is kept only on "Save Order".
+
+The arrows named the book in OMP 3.1 and lost it in 3.2, when book
+titles moved to the publication (a code reading; 3.1 was not walked).
+Basis: probe, 2026-10-03. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The Catalog Entry page shows raw keys in French** · 🐞 · minor.
-With French as the interface language, the Catalog Entry page (listed
+**A15 — The Catalog Entry page shows raw keys in French** · 🐞 · low.
+With French (Canada) as the interface language, the Catalog Entry page (listed
 under the version as "Catalogue", headed "Publication : Catalogue") reads
 raw keys where French words belong:
 - the five group headings: "##publication.placement##",
@@ -1035,13 +1099,20 @@ The field labels, "URL Path"'s description, "Insert Content" ("Insérer le
 contenu") and "Save" ("Enregistrer") are French. A French-speaking Press manager fills the page
 without its group names or most of its guidance, and picks the kind of
 update from twelve keys. Expected: French throughout; the English page
-shows none of these keys. The keys of the workflow screen around the page
+shows none of these keys. Of these texts only "Series Position"'s
+description shipped in a released version, and its French (Canada) is
+empty there too: it is one of several French (Canada) texts the press
+lacks, with its book and chapter pages
+([→ Monograph landing page, A15](U69-monograph-landing-page.md#a15)),
+whose report covers it. The rest arrived with main's new Catalog Entry
+page and wait for their translations, which the team does not count as
+a defect (2026-10-02). The keys of the workflow screen around the page
 are [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s,
 why a missing French text shows as a key at all is
 [Languages & locales](U57-languages-and-locales.md#a4)', and a journal's
 "Publication Settings" and a preprint server's "Preprint entry" pages are
 recorded in [Publish, schedule & versions](U49-publish-schedule-and-versions.md#a10)'s A10.
-Basis: probe, 2026-09-30. <sup>f-a15</sup>
+Basis: probe, 2026-10-03. <sup>f-a15</sup>
 
 ---
 
@@ -1633,6 +1704,7 @@ Issue report: [pkp-e2e#735](https://github.com/jardakotesovec/pkp-e2e/issues/735
 version carries and an unpublished one keeps. Live-probed 2026-09-27
 (note td15). The Production stage's spec records the unpublish half as
 its OMP2.
+Issue report: [pkp-e2e#744](https://github.com/jardakotesovec/pkp-e2e/issues/744) ([docs/issues/U70-A6-unpublished-book-notice-still-approved.md](../issues/U70-A6-unpublished-book-notice-still-approved.md)), shared with [Production stage OMP2](U33-production-stage.md#omp2).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-27, OMP, two runs, as Press manager on
@@ -1640,6 +1712,7 @@ its OMP2.
 quoted; a book titled in both languages showed its French title. The
 French strings of these keys are empty in the install's `fr_CA` locale
 files. The panel headers' "##common.help##" is the navigation spec's A1.
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)) (its Steps 34 to 39, walked on main and 3.5), shared with [Monograph landing page A15](U69-monograph-landing-page.md#a15).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note g. Live-probed 2026-09-27, OMP, two runs, as Press
@@ -1673,6 +1746,7 @@ Issue report: [pkp-e2e#734](https://github.com/jardakotesovec/pkp-e2e/issues/734
 **f-a11** — Note k. Live-probed 2026-09-27, OMP, two runs: the drag
 handle never visible; a mouse drag of the third row onto the first left
 the order as it was.
+Issue report: [pkp-e2e#745](https://github.com/jardakotesovec/pkp-e2e/issues/745) ([docs/issues/U70-A11-catalog-ordering-notice-offers-drag.md](../issues/U70-A11-catalog-ordering-notice-offers-drag.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note k. Live-probed 2026-09-27, OMP, as Press manager, three
@@ -1681,6 +1755,7 @@ runs: with "Science" chosen and its column open, "Order Features", then
 on the page; "Science" again brought back the rows, "Save Order" and
 "Cancel", the moves undone. In another run "Save Order" did not come back
 until a reload.
+Issue report: [pkp-e2e#746](https://github.com/jardakotesovec/pkp-e2e/issues/746) ([docs/issues/U70-A12-catalog-filters-column-stays-while-ordering.md](../issues/U70-A12-catalog-filters-column-stays-while-ordering.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note k. Live-probed 2026-09-27, OMP, three runs, M3, M1, M2
@@ -1688,10 +1763,12 @@ featured: the first up arrow and the last down arrow changed nothing on
 screen; then M1's down arrow changed nothing either. After M2's down
 arrow alone, its up arrow pressed once changed nothing and pressed twice
 gave M3, M2, M1.
+Issue report: [pkp-e2e#748](https://github.com/jardakotesovec/pkp-e2e/issues/748) ([docs/issues/U70-A13-catalog-last-featured-down-arrow-extra-press.md](../issues/U70-A13-catalog-last-featured-down-arrow-extra-press.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note k. Live-probed 2026-09-27, OMP: every arrow of every row,
 with and without a filter.
+Issue report: [pkp-e2e#747](https://github.com/jardakotesovec/pkp-e2e/issues/747) ([docs/issues/U70-A14-catalog-ordering-arrows-name-undefined.md](../issues/U70-A14-catalog-ordering-arrows-name-undefined.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — Note h (the form's strings). Live-probed 2026-09-30, OMP, two
@@ -1708,6 +1785,7 @@ utilisant l'URL au lieu de l'identifiant.", "Insérer le contenu" and
 (the navigation spec's A1). The frame's keys on the same screen (the
 side menu's, the header's, the version names) are the workflow screen
 spec's A11 and the navigation spec's A23.
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)), for "Series Position"'s description alone (its Step 40, walked on main and 3.5), shared with [Monograph landing page A15](U69-monograph-landing-page.md#a15); that report's severity, medium, comes from the editors' names on the book page, and the entry's impact, low, is its own part's. No report for the other keys: they are main-only texts, none in 3.5's English files, under the 2026-10-02 ruling on main-only locale keys.
 
 ## Reference — entry points & surfaces
 
