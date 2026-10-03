@@ -1,0 +1,12 @@
+--- a/lib/pkp/locale/fr_CA/manager.po
++++ b/lib/pkp/locale/fr_CA/manager.po
+@@ -3966,8 +3966,7 @@
+ msgstr "Lien vers la page affichant les membres actifs du personnel éditorial."
+ 
+ msgid "manager.setup.editorialMasthead.order.description"
+-msgstr ""
+-"Définir l’ordre des rôles sur la page de l'équipe éditoriale de la revue."
++msgstr "Définir l’ordre d’affichage public des rôles de l’entête."
+ 
+ msgid "manager.setup.editorialMasthead.editorialHistory.description"
+ msgstr ""
