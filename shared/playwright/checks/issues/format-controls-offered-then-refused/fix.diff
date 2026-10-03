@@ -1,0 +1,93 @@
+--- a/controllers/grid/catalogEntry/PublicationFormatGridHandler.php
++++ b/controllers/grid/catalogEntry/PublicationFormatGridHandler.php
+@@ -72,17 +72,14 @@
+     public function __construct()
+     {
+         parent::__construct(new PublicationFormatCategoryGridDataProvider($this));
+-        $this->addRoleAssignment(
+-            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_SITE_ADMIN],
+-            [
+-                'setAvailable', 'editApprovedProof', 'saveApprovedProof',
+-            ]
+-        );
++        // Every role that gets `_canManage` (initialize()) is offered every
++        // control of the list, availability and terms included.
+         $this->addRoleAssignment(
+             [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SITE_ADMIN],
+             [
+                 'addFormat', 'editFormat', 'editFormatTab', 'updateFormat', 'deleteFormat',
+                 'setApproved', 'setProofFileCompletion', 'selectFiles',
++                'setAvailable', 'editApprovedProof', 'saveApprovedProof',
+                 'identifiers', 'updateIdentifiers', 'clearPubId',
+                 'dependentFiles', 'editFormatMetadata', 'updateFormatMetadata'
+             ]
+--- a/controllers/grid/catalogEntry/IdentificationCodeGridHandler.php
++++ b/controllers/grid/catalogEntry/IdentificationCodeGridHandler.php
+@@ -54,8 +54,10 @@
+     public function __construct()
+     {
+         parent::__construct();
++        // The roles of PublicationFormatGridHandler::editFormatMetadata(), whose
++        // "Metadata" tab loads this list.
+         $this->addRoleAssignment(
+-            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
++            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SITE_ADMIN],
+             ['fetchGrid', 'fetchRow', 'addCode', 'editCode', 'updateCode', 'deleteCode']
+         );
+     }
+--- a/controllers/grid/catalogEntry/SalesRightsGridHandler.php
++++ b/controllers/grid/catalogEntry/SalesRightsGridHandler.php
+@@ -54,8 +54,10 @@
+     public function __construct()
+     {
+         parent::__construct();
++        // The roles of PublicationFormatGridHandler::editFormatMetadata(), whose
++        // "Metadata" tab loads this list.
+         $this->addRoleAssignment(
+-            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
++            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SITE_ADMIN],
+             ['fetchGrid', 'fetchRow', 'addRights', 'editRights', 'updateRights', 'deleteRights']
+         );
+     }
+--- a/controllers/grid/catalogEntry/MarketsGridHandler.php
++++ b/controllers/grid/catalogEntry/MarketsGridHandler.php
+@@ -54,8 +54,10 @@
+     public function __construct()
+     {
+         parent::__construct();
++        // The roles of PublicationFormatGridHandler::editFormatMetadata(), whose
++        // "Metadata" tab loads this list.
+         $this->addRoleAssignment(
+-            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
++            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SITE_ADMIN],
+             ['fetchGrid', 'fetchRow', 'addMarket', 'editMarket',
+                 'updateMarket', 'deleteMarket']
+         );
+--- a/controllers/grid/catalogEntry/PublicationDateGridHandler.php
++++ b/controllers/grid/catalogEntry/PublicationDateGridHandler.php
+@@ -54,8 +54,10 @@
+     public function __construct()
+     {
+         parent::__construct();
++        // The roles of PublicationFormatGridHandler::editFormatMetadata(), whose
++        // "Metadata" tab loads this list.
+         $this->addRoleAssignment(
+-            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
++            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SITE_ADMIN],
+             ['fetchGrid', 'fetchRow', 'addDate', 'editDate', 'updateDate', 'deleteDate']
+         );
+     }
+--- a/lib/pkp/controllers/grid/files/proof/ManageProofFilesGridHandler.php
++++ b/lib/pkp/controllers/grid/files/proof/ManageProofFilesGridHandler.php
+@@ -40,8 +40,10 @@
+             WORKFLOW_STAGE_ID_PRODUCTION
+         );
+ 
++        // The roles of the "Select Files" window that loads this list
++        // (OMP PublicationFormatGridHandler::selectFiles()).
+         $this->addRoleAssignment(
+-            [Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
++            [Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_MANAGER, Role::ROLE_ID_ASSISTANT, Role::ROLE_ID_SITE_ADMIN],
+             [
+                 'fetchGrid', 'fetchCategory', 'fetchRow',
+                 'addFile', 'downloadFile', 'deleteFile',
