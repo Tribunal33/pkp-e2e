@@ -1,0 +1,140 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldOptions.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldOptions.vue
+@@ -40,57 +40,67 @@
+ 				:disabled="!isOrderable"
+ 				@end="updateValueOrder"
+ 			>
+-				<label
++				<div
+ 					v-for="option in localizedOptions"
+ 					:key="option.value"
+-					class="pkpFormField--options__option"
++					class="pkpFormField--options__optionRow"
+ 				>
+ 					<!--
+-						The `type` property can not be dynamic when using the
+-						v-model and value properties together, or it results
+-						in an error in IE 11.
+-						See: https://stackoverflow.com/a/59999459/1723499
++						Only the box and its text go in the <label>: the Orderer's
++						buttons inside it would become part of the box's name, or,
++						with no box (allowOnlySorting), be labelled by the row.
+ 					-->
+-					<template v-if="!allowOnlySorting">
+-						<input
+-							v-if="type === 'checkbox'"
+-							v-model="selectedValue"
+-							class="pkpFormField--options__input"
+-							:value="option.value"
+-							type="checkbox"
+-							:name="localizedName"
+-							:aria-describedby="describedByIds"
+-							:aria-invalid="!!errors?.length"
+-							:disabled="option.disabled"
+-						/>
+-						<input
+-							v-else
+-							v-model="selectedValue"
+-							class="pkpFormField--options__input"
+-							:value="option.value"
+-							type="radio"
+-							:name="localizedName"
+-							:aria-describedby="describedByIds"
+-							:aria-invalid="!!errors?.length"
+-							:disabled="option.disabled"
+-						/>
+-					</template>
+-					<div class="flex flex-col">
+-						<span
+-							v-strip-unsafe-html="option.label"
+-							class="pkpFormField--options__optionLabel"
+-						/>
+-						<span
+-							v-strip-unsafe-html="option.subLabel"
+-							class="pkpFormField--options__optionLabel"
+-						/>
+-						<span
+-							v-if="option.subLabelSecondary"
+-							class="pkpFormField--options__optionLabel text-base-normal text-secondary"
+-						>
+-							{{ option.subLabelSecondary }}
+-						</span>
+-					</div>
++					<component
++						:is="allowOnlySorting ? 'div' : 'label'"
++						class="pkpFormField--options__option"
++					>
++						<!--
++							The `type` property can not be dynamic when using the
++							v-model and value properties together, or it results
++							in an error in IE 11.
++							See: https://stackoverflow.com/a/59999459/1723499
++						-->
++						<template v-if="!allowOnlySorting">
++							<input
++								v-if="type === 'checkbox'"
++								v-model="selectedValue"
++								class="pkpFormField--options__input"
++								:value="option.value"
++								type="checkbox"
++								:name="localizedName"
++								:aria-describedby="describedByIds"
++								:aria-invalid="!!errors?.length"
++								:disabled="option.disabled"
++							/>
++							<input
++								v-else
++								v-model="selectedValue"
++								class="pkpFormField--options__input"
++								:value="option.value"
++								type="radio"
++								:name="localizedName"
++								:aria-describedby="describedByIds"
++								:aria-invalid="!!errors?.length"
++								:disabled="option.disabled"
++							/>
++						</template>
++						<div class="flex flex-col">
++							<span
++								v-strip-unsafe-html="option.label"
++								class="pkpFormField--options__optionLabel"
++							/>
++							<span
++								v-strip-unsafe-html="option.subLabel"
++								class="pkpFormField--options__optionLabel"
++							/>
++							<span
++								v-if="option.subLabelSecondary"
++								class="pkpFormField--options__optionLabel text-base-normal text-secondary"
++							>
++								{{ option.subLabelSecondary }}
++							</span>
++						</div>
++					</component>
+ 					<Orderer
+ 						v-if="isOrderable"
+ 						:item-id="option.value"
+@@ -98,7 +108,7 @@
+ 						@up="optionOrderUp"
+ 						@down="optionOrderDown"
+ 					/>
+-				</label>
++				</div>
+ 			</component>
+ 			<MultilingualProgress
+ 				v-if="isMultilingual && locales.length > 1"
+@@ -321,6 +331,14 @@
+ 	margin-bottom: 1rem;
+ }
+ 
++.pkpFormField--options__optionRow {
++	position: relative;
++
++	+ .pkpFormField--options__optionRow {
++		margin-top: 0.5rem;
++	}
++}
++
+ .pkpFormField--options__option {
+ 	position: relative;
+ 	display: flex;
