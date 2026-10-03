@@ -2837,7 +2837,7 @@ Issue report: [docs/issues/U08-A6-A13-menu-notices-wrong-settings-places.md](../
 <a id="fn-f-a15"></a>
 **f-a15** — Live-probed 2026-09-23 (note i), all three apps; a reload
 brought the cells in line.
-Issue report: [docs/issues/U08-A15-navigation-table-keeps-old-item-titles.md](../issues/U08-A15-navigation-table-keeps-old-item-titles.md).
+Issue report: [docs/issues/U08-A15-navigation-table-keeps-old-item-titles.md](../issues/U08-A15-navigation-table-keeps-old-item-titles.md), filed as [pkp-e2e#644](https://github.com/jardakotesovec/pkp-e2e/issues/644).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `manager.navigationMenu.noAssignedItems` and
