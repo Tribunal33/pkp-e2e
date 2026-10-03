@@ -1309,6 +1309,11 @@ Left out of the scenarios above, by reason:
     reviewer who unsubscribes through the "Your review assignment has been
     changed" email is not sent it after the next "Edit" save, and the
     profile's "Notifications" tab lists it
+  - the guard for A30 (issue report
+    `docs/issues/U27-A30-A31-modify-review-offered-then-refused.md`): the
+    Review Details window of a "Request Declined" row shows "Modify Review"
+    disabled with the reason beside it, and a Funding coordinator assigned
+    to the stage is not shown "Modify Review"
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1406,8 +1411,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP2](#omp2) | {OMP} The Add Reviewer window's opening list ignores the internal/external stage split, and a reviewer of the other stage picked from it is added to the round; only searching filters by stage | 🐞 | user-visible | — |
 | [A26](#a26) | A reviewer removed with "Unassign Reviewer" gets the email under the subject "Your review … has been cancelled" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | {OMP} A press's reviewer removal and cancel emails print "{$journalName}" where the press's name belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | minor | — |
-| [A31](#a31) | An assistant-level participant is offered "Modify Review", and "Save Changes" answers "The current role does not have access to this operation." | 🐞 | minor | — |
+| [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A31](#a31) | An assistant-level participant is offered "Modify Review", and "Save Changes" answers "The current role does not have access to this operation." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP4](#omp4) | {OMP} "Mark as Complete" is enabled on a request with no review; confirming records a completed review nobody wrote and leaves the reviewer on a first step that offers nothing | 🐞 | user-visible | — |
 | [OMP6](#omp6) | {OMP} On a press, the Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
@@ -1811,7 +1816,7 @@ Since: 2026-08-29 (the modify-reviews rework opened the window on every
 row) · Basis: probe. <sup>[f-a29](#fn-a29)</sup>
 
 <a id="a30"></a>
-**A30 — "Modify Review" on a declined request is offered, then refused** · 🐞 · minor.
+**A30 — "Modify Review" on a declined request is offered, then refused** · 🐞 · low.
 On a "Request Declined" row the Review Details window offers an enabled
 "Modify Review", and the dialog and the edit window open as on any other
 row. "Save Changes" is refused only after the editor has entered the
@@ -1824,11 +1829,11 @@ asks the unsaved-changes warning (Rule 14b). The button should sit disabled
 with that reason beside it, as "Mark as Complete" does on a journal, or the
 message should name the way forward: once the request is re-sent with
 "Resend Review Request", the same save goes through.
-Since: 2026-08-29 (the modify-reviews rework) · Basis: probe.
+Since: 2026-08-29 (the modify-reviews rework) · Basis: probe, 2026-10-03.
 <sup>[f-a30](#fn-a30)</sup>
 
 <a id="a31"></a>
-**A31 — An assistant-level participant is offered a "Modify Review" they cannot save** · 🐞 · minor.
+**A31 — An assistant-level participant is offered a "Modify Review" they cannot save** · 🐞 · low.
 A Funding Coordinator assigned to the stage gets the same Review Details
 window as a review manager, "Modify Review" enabled. The dialog opens, and
 the edit window opens with its fields, the competing-interests answer
@@ -1837,7 +1842,7 @@ the edit window opens with its fields, the competing-interests answer
 is saved, the row is unchanged, and leaving asks the unsaved-changes
 warning (Rule 14b). The refusal is right and the offer is not: the button
 should not be shown to a role that may not save.
-Since: 2026-08-29 (the modify-reviews rework) · Basis: probe.
+Since: 2026-08-29 (the modify-reviews rework) · Basis: probe, 2026-10-03.
 <sup>[f-a31](#fn-a31)</sup>
 
 <a id="a32"></a>
@@ -3462,6 +3467,7 @@ editable because it was declined."}` and the assignment read unchanged.
 assignments, while `ReviewDetailsModal.vue` disables the button only while
 the review loads. After "Resend Review Request" the same save went through
 and the row read "Review Submitted" (OMP, the same day).
+Issue report: [docs/issues/U27-A30-A31-modify-review-offered-then-refused.md](../issues/U27-A30-A31-modify-review-offered-then-refused.md).
 
 <a id="fn-a31"></a>
 **f-a31** — Driven 2026-09-17 (OJS + OMP): a throwaway Funding Coordinator
@@ -3480,6 +3486,7 @@ the "Competing Interests" group with "Modify Review" enabled, the edit
 window offered the competing-interests radios, and "Save Changes" answered
 401 with the same "Error" dialog; "Cancel" asked the unsaved-changes
 warning and the row was unchanged.
+Issue report: [docs/issues/U27-A30-A31-modify-review-offered-then-refused.md](../issues/U27-A30-A31-modify-review-offered-then-refused.md).
 
 <a id="fn-a32"></a>
 **f-a32** — `useReviewDetails.js` used to reload the opener once the mark

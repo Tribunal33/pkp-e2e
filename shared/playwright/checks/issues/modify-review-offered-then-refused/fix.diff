@@ -1,0 +1,161 @@
+--- a/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
++++ b/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
+@@ -440,7 +440,8 @@
+         /** @var ReviewAssignment $reviewAssignment */
+         $reviewAssignment = $validated['reviewAssignment'];
+ 
+-        if (!$this->canAccessReviewAssignment($submission, $reviewAssignment, [Role::ROLE_ID_SUB_EDITOR])) {
++        $userRoles = (array) $this->getAuthorizedContextObject(Application::ASSOC_TYPE_USER_ROLES);
++        if (!Repo::reviewAssignment()->canEditReview($reviewAssignment, $user->getId(), $userRoles)) {
+             return response()->json([
+                 'error' => __('api.403.unauthorized'),
+             ], Response::HTTP_FORBIDDEN);
+--- a/lib/pkp/classes/submission/maps/Schema.php
++++ b/lib/pkp/classes/submission/maps/Schema.php
+@@ -695,6 +695,7 @@
+                 'reviewMethod' => $reviewAssignment->getData('reviewMethod'),
+                 'canLoginAs' => $canLoginAs,
+                 'canGossip' => $canGossip,
++                'canEditReview' => Repo::reviewAssignment()->canEditReview($reviewAssignment, $currentUser->getId(), $this->userRoles),
+                 'reviewerDisplayInitials' => $shouldAnonymizeReviewAssignment ? '' : Repo::user()->get($reviewAssignment->getReviewerId(), true)->getDisplayInitials(),
+                 'reviewerHasOrcid' => !$shouldAnonymizeReviewAssignment && !!Repo::user()->get($reviewAssignment->getReviewerId(), true)->getData('orcidIsVerified')
+             ];
+--- a/lib/pkp/classes/submission/reviewAssignment/Repository.php
++++ b/lib/pkp/classes/submission/reviewAssignment/Repository.php
+@@ -33,6 +33,7 @@
+ use PKP\security\Role;
+ use PKP\security\RoleDAO;
+ use PKP\services\PKPSchemaService;
++use PKP\stageAssignment\StageAssignment;
+ use PKP\submission\ReviewFilesDAO;
+ use PKP\submission\reviewRound\ReviewRoundDAO;
+ use PKP\submission\SubmissionComment;
+@@ -96,6 +97,28 @@
+     }
+ 
+     /**
++     * Whether a user may save a modified review on this assignment
++     * (`PUT submissions/{submissionId}/reviewAssignments/{reviewAssignmentId}/review`):
++     * a manager or site administrator of the context, or a section editor
++     * assigned to the assignment's stage.
++     *
++     * @param int[] $contextRoleIds The user's roles in the assignment's context
++     */
++    public function canEditReview(ReviewAssignment $reviewAssignment, int $userId, array $contextRoleIds): bool
++    {
++        if (array_intersect([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN], $contextRoleIds)) {
++            return true;
++        }
++
++        return in_array(Role::ROLE_ID_SUB_EDITOR, $contextRoleIds)
++            && StageAssignment::withSubmissionIds([$reviewAssignment->getSubmissionId()])
++                ->withStageIds([$reviewAssignment->getStageId()])
++                ->withRoleIds([Role::ROLE_ID_SUB_EDITOR])
++                ->withUserId($userId)
++                ->exists();
++    }
++
++    /**
+      * Validate properties for a category
+      *
+      * Perform validation checks on data used to add or edit a review assignment.
+--- a/lib/pkp/schemas/submission.json
++++ b/lib/pkp/schemas/submission.json
+@@ -222,6 +222,13 @@
+ 						"readOnly": true,
+ 						"apiSummary": true,
+ 						"apiDetail": true
++					},
++					"canEditReview": {
++						"type": "boolean",
++						"description": "Whether the current user may modify reviews in this assignment's stage. A declined or cancelled assignment is still refused.",
++						"readOnly": true,
++						"apiSummary": true,
++						"apiDetail": true
+ 					}
+ 				}
+ 			}
+--- a/lib/ui-library/src/managers/ReviewerManager/ReviewDetailsModal.vue
++++ b/lib/ui-library/src/managers/ReviewerManager/ReviewDetailsModal.vue
+@@ -20,6 +20,12 @@
+ 			<!-- Out of the form's footer, since neither button saves the form -->
+ 			<div class="mt-6 border-t border-light pt-4">
+ 				<p
++					v-if="canModifyReview && modifyBlockedMessage"
++					class="mb-4 text-end text-lg-normal text-secondary"
++				>
++					{{ modifyBlockedMessage }}
++				</p>
++				<p
+ 					v-if="confirmBlockedMessage"
+ 					class="mb-4 text-end text-lg-normal text-secondary"
+ 				>
+@@ -29,7 +35,11 @@
+ 					<PkpButton :is-warnable="true" @click="closeModal">
+ 						{{ t('common.cancel') }}
+ 					</PkpButton>
+-					<PkpButton :is-disabled="isLoadingReview" @click="editReview">
++					<PkpButton
++						v-if="canModifyReview"
++						:is-disabled="isLoadingReview || !!modifyBlockedMessage"
++						@click="editReview"
++					>
+ 						{{ t('editor.review.modifyReview') }}
+ 					</PkpButton>
+ 					<PkpButton
+@@ -93,6 +103,8 @@
+ 	isConfirmed,
+ 	confirmBlockedMessage,
+ 	confirm,
++	canModifyReview,
++	modifyBlockedMessage,
+ 	editReview,
+ 	modifiedByMessage,
+ } = useReviewDetails(props);
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewDetails.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewDetails.js
+@@ -85,6 +85,25 @@
+ 			: null;
+ 	});
+ 
++	// Whether the server lets the current user save a modified review (canEditReview);
++	// an assistant may only read and rate it
++	const canModifyReview = computed(() => !!reviewAssignment.canEditReview);
++
++	// A declined or cancelled request cannot be modified (EditReview) until it is sent again
++	const modifyBlockedMessage = computed(() => {
++		if (isLoadingReview.value) {
++			return null;
++		}
++
++		if (reviewAssignmentRef.value?.declined) {
++			return t('editor.review.requestDeclined.tooltip');
++		}
++
++		return reviewAssignmentRef.value?.cancelled
++			? t('editor.review.requestCancelled.tooltip')
++			: null;
++	});
++
+ 	const modifiedByMessage = computed(() => {
+ 		const fullName = reviewAssignmentRef.value?.lastModifiedBy?.userFullName;
+ 
+@@ -185,6 +204,8 @@
+ 		isConfirmed,
+ 		confirmBlockedMessage,
+ 		confirm,
++		canModifyReview,
++		modifyBlockedMessage,
+ 		editReview,
+ 		modifiedByMessage,
+ 	};
+--- a/lib/ui-library/src/mockFactories/reviewAssignmentsMock.js
++++ b/lib/ui-library/src/mockFactories/reviewAssignmentsMock.js
+@@ -13,6 +13,7 @@
+ 	reviewMethod: pkp.const.SUBMISSION_REVIEW_METHOD_ANONYMOUS,
+ 	recommendation: null,
+ 	statusId: pkp.const.REVIEW_ASSIGNMENT_STATUS_AWAITING_RESPONSE,
++	canEditReview: true,
+ };
+ 
+ // Thats returned from the _submissions/reviewAssignments

@@ -1,0 +1,100 @@
+--- a/lib/ui-library/src/managers/ReviewerManager/ReviewDetailsModal.vue
++++ b/lib/ui-library/src/managers/ReviewerManager/ReviewDetailsModal.vue
+@@ -20,6 +20,12 @@
+ 			<!-- Out of the form's footer, since neither button saves the form -->
+ 			<div class="mt-6 border-t border-light pt-4">
+ 				<p
++					v-if="canModifyReview && modifyBlockedMessage"
++					class="mb-4 text-end text-lg-normal text-secondary"
++				>
++					{{ modifyBlockedMessage }}
++				</p>
++				<p
+ 					v-if="confirmBlockedMessage"
+ 					class="mb-4 text-end text-lg-normal text-secondary"
+ 				>
+@@ -29,7 +35,11 @@
+ 					<PkpButton :is-warnable="true" @click="closeModal">
+ 						{{ t('common.cancel') }}
+ 					</PkpButton>
+-					<PkpButton :is-disabled="isLoadingReview" @click="editReview">
++					<PkpButton
++						v-if="canModifyReview"
++						:is-disabled="isLoadingReview || !!modifyBlockedMessage"
++						@click="editReview"
++					>
+ 						{{ t('editor.review.modifyReview') }}
+ 					</PkpButton>
+ 					<PkpButton
+@@ -93,6 +103,8 @@
+ 	isConfirmed,
+ 	confirmBlockedMessage,
+ 	confirm,
++	canModifyReview,
++	modifyBlockedMessage,
+ 	editReview,
+ 	modifiedByMessage,
+ } = useReviewDetails(props);
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewDetails.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewDetails.js
+@@ -4,6 +4,7 @@
+ import {useApp} from '@/composables/useApp';
+ import {useNotify} from '@/composables/useNotify';
+ import {useDataChangedProvider} from '@/composables/useDataChangedProvider';
++import {useCurrentUser} from '@/composables/useCurrentUser';
+ 
+ import {useReviewAssignment} from './useReviewAssignment';
+ import {useReviewContent} from './useReviewContent';
+@@ -24,6 +25,7 @@
+ 	const {openDialog, openSideModal} = useModal();
+ 	const {isOJS} = useApp();
+ 	const {notify} = useNotify();
++	const {hasCurrentUserAtLeastOneAssignedRoleInStage} = useCurrentUser();
+ 	// Modals mount outside the workflow page, so the file manager needs its own provider
+ 	const {triggerDataChange} = useDataChangedProvider();
+ 
+@@ -85,6 +87,35 @@
+ 			: null;
+ 	});
+ 
++	// Saving a modified review is for managers and the stage's section editors
++	// (ReviewAssignmentController::editReview); an assistant may only read and rate it
++	const canModifyReview = computed(() =>
++		hasCurrentUserAtLeastOneAssignedRoleInStage(
++			submission,
++			reviewAssignmentRef.value?.stageId ?? submissionStageId,
++			[
++				pkp.const.ROLE_ID_MANAGER,
++				pkp.const.ROLE_ID_SITE_ADMIN,
++				pkp.const.ROLE_ID_SUB_EDITOR,
++			],
++		),
++	);
++
++	// A declined or cancelled request cannot be modified (EditReview) until it is sent again
++	const modifyBlockedMessage = computed(() => {
++		if (isLoadingReview.value) {
++			return null;
++		}
++
++		if (reviewAssignmentRef.value?.declined) {
++			return t('editor.review.requestDeclined.tooltip');
++		}
++
++		return reviewAssignmentRef.value?.cancelled
++			? t('editor.review.requestCancelled.tooltip')
++			: null;
++	});
++
+ 	const modifiedByMessage = computed(() => {
+ 		const fullName = reviewAssignmentRef.value?.lastModifiedBy?.userFullName;
+ 
+@@ -185,6 +216,8 @@
+ 		isConfirmed,
+ 		confirmBlockedMessage,
+ 		confirm,
++		canModifyReview,
++		modifyBlockedMessage,
+ 		editReview,
+ 		modifiedByMessage,
+ 	};
