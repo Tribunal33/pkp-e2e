@@ -1,0 +1,52 @@
+--- a/lib/ui-library/src/components/ListPanel/contributors/ContributorsListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/contributors/ContributorsListPanel.vue
+@@ -58,7 +58,7 @@
+ 				</template>
+ 				<template #item-subtitle="{item}">
+ 					<div class="whitespace-normal text-justify">
+-						{{ localize(item.affiliation) }}
++						{{ getAffiliationNames(item) }}
+ 					</div>
+ 				</template>
+ 				<template v-if="canEditPublication" #item-actions="{item}">
+@@ -215,6 +215,20 @@
+ 		},
+ 	},
+ 	methods: {
++		/**
++		 * Get a contributor's affiliation names, separated by commas
++		 * as on the reader pages
++		 *
++		 * @param {Object} contributor A contributor object
++		 * @return {String}
++		 */
++		getAffiliationNames(contributor) {
++			return (contributor.affiliations || [])
++				.map((affiliation) => this.localize(affiliation.name))
++				.filter((name) => name)
++				.join(this.t('common.commaListSeparator'));
++		},
++
+ 		/**
+ 		 * Helper method to access a global constant in the template
+ 		 *
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
+@@ -398,10 +398,15 @@
+ 		 * @return {String}
+ 		 */
+ 		getAuthorName(author) {
+-			let affiliation = this.localize(author.affiliation);
++			// Semicolons between affiliations, so that the comma after the
++			// name is not read as one more affiliation
++			let affiliation = (author.affiliations || [])
++				.map((affiliation) => this.localize(affiliation.name))
++				.filter((name) => name)
++				.join(this.t('common.semicolonListSeparator'));
+ 			if (affiliation) {
+ 				return [author.fullName, affiliation].join(
+-					pkp.localeKeys['common.commaListSeparator'],
++					this.t('common.commaListSeparator'),
+ 				);
+ 			}
+ 			return author.fullName;

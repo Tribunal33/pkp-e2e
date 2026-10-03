@@ -1,0 +1,11 @@
+--- a/templates/frontend/components/authors.tpl
++++ b/templates/frontend/components/authors.tpl
+@@ -102,7 +102,7 @@
+ 						{capture assign="authorName"}<span class="label">{$author->getFullName()|escape}</span>{/capture}
+ 					{/if}
+ 					{capture assign="authorAffiliations"}<span class="value">{$author->getLocalizedAffiliationNamesAsString(null, ', ')|escape}</span>{/capture}
+-					{translate key="submission.authorWithAffiliation" name=$authorName affiliation=$authorAffiliation}
++					{translate key="submission.authorWithAffiliation" name=$authorName affiliation=$authorAffiliations}
+ 				{else}
+ 					<span class="label">{$author->getFullName()|escape}</span>
+ 				{/if}
