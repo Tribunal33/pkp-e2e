@@ -1314,6 +1314,14 @@ Left out of the scenarios above, by reason:
     Review Details window of a "Request Declined" row shows "Modify Review"
     disabled with the reason beside it, and a Funding coordinator assigned
     to the stage is not shown "Modify Review"
+  - the guard for OMP4 (issue report
+    `docs/issues/U27-OMP4-press-mark-complete-closes-unreviewed-request.md`):
+    on a press, "Mark as Complete" on an unanswered request with no review
+    stays blocked with its message, and the request stays open
+  - the guard for A40 (issue report
+    `docs/issues/U27-A40-press-competing-interests-save-submits-review.md`):
+    on a press, "Save Changes" with only a competing-interests declaration
+    on an unanswered request keeps the row "Request Sent"
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1413,13 +1421,13 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP3](#omp3) | {OMP} A press's reviewer removal and cancel emails print "{$journalName}" where the press's name belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A30](#a30) | "Modify Review" is offered on a "Request Declined" row, and its "Save Changes" is refused with "This review not editable because it was declined." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A31](#a31) | An assistant-level participant is offered "Modify Review", and "Save Changes" answers "The current role does not have access to this operation." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP4](#omp4) | {OMP} "Mark as Complete" is enabled on a request with no review; confirming records a completed review nobody wrote and leaves the reviewer on a first step that offers nothing | 🐞 | user-visible | — |
+| [OMP4](#omp4) | {OMP} On a press, "Mark as Complete" closes a review request that has no review, leaving the reviewer nothing to press | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP6](#omp6) | {OMP} On a press, the Review Details windows introduce a review form with "The questions this journal asks reviewers to answer." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A32](#a32) | A Review Details window closed within a moment of opening, before its mark as viewed is saved, can leave the row "Review Submitted", and the dashboard's "View unread recommendation", until a page reload | 🐞 | minor | @blessie 2026-09-24 · risk accepted, not fixing |
 | [A36](#a36) | A reviewer assigned today reads "Yesterday" in the Add Reviewer list, while the entry's statistics give 0 days since the last assignment | 🐞 | minor | — |
 | [A37](#a37) | After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A39](#a39) | The activity log's "View changes" reads "Competing Interests declared: YES" for a reviewer who declared none | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A40](#a40) | On a request with no review, "Save Changes" with only the competing-interests answer recorded submits the review for the reviewer, with no content on a press | 🐞 | minor | @beaug 2026-09-30 · confirmed on OMP |
+| [A40](#a40) | On a press, recording a reviewer's competing interests in "Modify Review" submits an empty review for them | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -1935,21 +1943,20 @@ pkp/pkp-lib#13291, 2026-09-23), on screen since pkp/ui-library#993
 > YES" whatever the answer is changed to.
 
 <a id="a40"></a>
-**A40 — Recording a competing-interests answer submits the review** · 🐞 ·
-minor.
-On an accepted or unanswered request, an editor who opens "Modify Review"
-only to record the reviewer's competing-interests answer (Rule 14b) submits
-the review with it (Rule 14d). {OMP} On a press, ticking "I may have
-competing interests (Specify below)", typing the statement and pressing
-"Save Changes" turns the row "Review Submitted" with "Read Review" and the
-"Competing Interests" badge, "-" in both comment blocks, and the
-reviewer's request is closed: nothing asks for a review first. {OJS} On a
-journal the save first asks for a "Recommendation" ("This field is
-required."), and then submits. Expected, a change to the answer alone to
-leave the request open; the editor changed the reviewer's declaration, not
-the review. Next to [OMP5](#omp5).
-Since: pkp/ui-library#993 with pkp/pkp-lib#13394 (issue
-pkp/pkp-lib#13282, 2026-09-29) · Basis: probe. <sup>[f-a40](#fn-a40)</sup>
+**A40 — On a press, recording a reviewer's competing interests in "Modify Review" submits an empty review for them** · 🐞 · medium.
+On a press with a "Competing Interests" policy, an editor opens "Modify
+Review" on a request whose reviewer has not answered yet, or has
+accepted but not submitted, records only the reviewer's
+competing-interests declaration and presses "Save Changes". The save
+submits the review on the reviewer's behalf: the row turns "Review
+Submitted" with "Read Review", and both comment blocks read "-". Nothing
+on screen says the save will submit anything. The reviewer's request is
+closed: their list shows "Review submitted on {date}" and "View" opens
+the read-only "4. Completion" page. The empty review then counts as
+received for the round and is listed, with no comments, in the decision
+emails to the author. Since: pkp/ui-library#993 with pkp/pkp-lib#13394
+(issue pkp/pkp-lib#13282, 2026-09-29) · Basis: probe, 2026-10-03.
+<sup>[f-a40](#fn-a40)</sup>
 
 > **Reviewed — @beaug, 2026-09-30**: confirmed 🐞 on OMP. Ruling: a
 > valid defect of OMP; a press's "Modify Review" has no validation in place
@@ -2041,30 +2048,20 @@ templates carry the fault for all three actions. Basis: probe,
 2026-10-03. <sup>[f-omp3](#fn-omp3)</sup>
 
 <a id="omp4"></a>
-**OMP4 — A press marks complete a review nobody wrote** · 🐞 ·
-user-visible.
-On a press the Review Details window of a request with no review and no
-review form (unanswered, accepted or declined) offers an enabled "Mark as
-Complete"; on a journal the missing recommendation keeps it disabled (Rule
-14c). Confirming shows "The review has been marked as complete.". An
-unanswered or accepted request's row turns "Complete" with "Thank Reviewer"
-and "Revert Decision", its menu swaps "Unassign Reviewer" for "Cancel
-Reviewer" and loses "Log Response", and the window's dated line (Rule 14a)
-carries the moment of the click over two empty comment blocks. The reviewer finds
-the request gone from "Action Required by me" and listed under "All
-assignments" and "Completed" as "Review submitted on {date}"; "View" opens
-step 1, "Request for Review", with a disabled "Save and continue" and steps
-2 to 4 disabled: no accept, no decline, no completion page. On a declined
-request the same notice shows and the row stays "Request Declined", while
-the window's dated line takes the moment of the click and the button goes
-disabled.
-The window's guidance does invite completing a review that arrived
-elsewhere, so the completion itself may be meant. Leaving the reviewer on a
-first step that offers nothing is not: the upstream change that settles the
-reviewer's side of a review an editor submits for them (pkp/pkp-lib#13338)
-covers "Save Changes" only (Rule 14d).
-Since: 2026-08-29 (the modify-reviews rework opened the window on every
-row) · Basis: probe. <sup>[f-omp4](#fn-omp4)</sup>
+**OMP4 — On a press, "Mark as Complete" closes a review request that has no review, leaving the reviewer nothing to press** · 🐞 · medium.
+On a press, an editor opens "Review Details" on a review request the
+reviewer has not answered yet, or has accepted but not yet submitted.
+"Mark as Complete" is enabled. The dialog it opens, "Mark this review as
+complete?", does not say that the reviewer has submitted nothing.
+Confirming shows "The review has been marked as complete." and records a
+completed review with nothing in it; the row turns "Complete". The
+reviewer's request is closed. Their list reads "Review submitted on
+{date}", and "View" opens the step they had reached ("1. Request" or "2.
+Guidelines") with its only button disabled. An accepted reviewer's
+acceptance date is replaced by the moment of the click. The editor
+cannot reopen the request or send the same reviewer a new one in this
+round. Since: 2026-08-29 (the modify-reviews rework opened the window on
+every row) · Basis: probe, 2026-10-03. <sup>[f-omp4](#fn-omp4)</sup>
 
 <a id="omp5"></a>
 **OMP5 — A press accepts an empty save as the reviewer's review** · ❓ ·
@@ -3681,6 +3678,7 @@ request, "This field is required." showed under the empty
 "Recommendation", and the row stayed "Request Accepted". The journal's
 save with a recommendation picked was not driven with the answer; it is
 the save of Rule 14d.
+Issue report: [docs/issues/U27-A40-press-competing-interests-save-submits-review.md](../issues/U27-A40-press-competing-interests-save-submits-review.md).
 
 <a id="fn-a41"></a>
 **f-a41** — Not driven. The saves whose rows were read (note i,
@@ -3775,6 +3773,7 @@ only the moment, which both labels carry. The same code reading raises an
 unprobed side: History would now show "Request Accepted" and "Review
 Submitted" for the editor's click, where it read "Confirm" and
 "Completed" before.
+Issue report: [docs/issues/U27-OMP4-press-mark-complete-closes-unreviewed-request.md](../issues/U27-OMP4-press-mark-complete-closes-unreviewed-request.md).
 
 <a id="fn-omp5"></a>
 **f-omp5** — Driven 2026-09-17 (OMP, three runs): "Save Changes" pressed

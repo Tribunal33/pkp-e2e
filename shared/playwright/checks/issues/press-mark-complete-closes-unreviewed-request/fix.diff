@@ -1,0 +1,128 @@
+--- a/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
++++ b/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
+@@ -298,8 +298,14 @@
+         ];
+ 
+         if (!$reviewAssignment->getDateCompleted()) {
+-            // Editor completes the review.
+-            $newReviewData['dateConfirmed'] = $newReviewData['dateCompleted'] = Core::getCurrentDate();
++            // Editor completes the review, as editReview() does when the editor submits it for the reviewer:
++            // one timestamp, the reviewer moved to step 4, and an acceptance already given kept
++            $now = Core::getCurrentDate();
++            $newReviewData['dateCompleted'] = $now;
++            $newReviewData['step'] = 4;
++            if (!$reviewAssignment->getDateConfirmed()) {
++                $newReviewData['dateConfirmed'] = $now;
++            }
+         }
+ 
+         // Trigger an update of the review round status
+--- a/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
++++ b/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
+@@ -828,8 +828,13 @@
+         $newReviewData['dateConsidered'] = Core::getCurrentDate();
+ 
+         if (!$reviewAssignment->getDateCompleted()) {
+-            // Editor completes the review.
+-            $newReviewData['dateConfirmed'] = $newReviewData['dateCompleted'] = Core::getCurrentDate();
++            // Editor completes the review, as ReviewAssignmentController::markReviewConsidered() does
++            $now = Core::getCurrentDate();
++            $newReviewData['dateCompleted'] = $now;
++            $newReviewData['step'] = 4;
++            if (!$reviewAssignment->getDateConfirmed()) {
++                $newReviewData['dateConfirmed'] = $now;
++            }
+         }
+ 
+         // Trigger an update of the review round status
+--- a/lib/ui-library/src/managers/ReviewerManager/useReviewDetails.js
++++ b/lib/ui-library/src/managers/ReviewerManager/useReviewDetails.js
+@@ -1,5 +1,7 @@
+ import {computed} from 'vue';
+ import {useLocalize} from '@/composables/useLocalize';
++import {useUrl} from '@/composables/useUrl';
++import {useFetch} from '@/composables/useFetch';
+ import {useModal} from '@/composables/useModal';
+ import {useApp} from '@/composables/useApp';
+ import {useNotify} from '@/composables/useNotify';
+@@ -46,8 +48,25 @@
+ 		downloadReview,
+ 	} = useReviewContent({submission, reviewAssignment});
+ 
++	// The reviewer files of the review. A file uploaded for a review that arrived elsewhere is
++	// what may be marked as complete before the reviewer submits anything (the press's former
++	// "Confirm" asked for one: "No Files Uploaded")
++	const {apiUrl: reviewerFilesApiUrl} = useUrl(
++		`submissions/${encodeURIComponent(submission.id)}/files/review/${reviewAssignment.id}`,
++	);
++	const {
++		fetch: loadReviewerFiles,
++		data: reviewerFiles,
++		isLoading: isLoadingReviewerFiles,
++	} = useFetch(reviewerFilesApiUrl, {
++		query: {fileStages: pkp.const.SUBMISSION_FILE_REVIEW_ATTACHMENT},
++	});
++
+ 	const isLoadingReview = computed(
+-		() => isLoadingAssignment.value || isLoadingReviewContent.value,
++		() =>
++			isLoadingAssignment.value ||
++			isLoadingReviewContent.value ||
++			isLoadingReviewerFiles.value,
+ 	);
+ 
+ 	const {form, set, hasUnansweredRequiredFields} = useReviewDetailsForm(
+@@ -80,6 +99,17 @@
+ 			return t('editor.review.confirmReview.missingRecommendation');
+ 		}
+ 
++		// A press collects no recommendation, so nothing above stops a request with no review: as
++		// its former "Confirm" did, ask for a submitted review or an uploaded reviewer file
++		const isMissingReview =
++			!isOJS() &&
++			!reviewAssignmentRef.value?.dateCompleted &&
++			!reviewerFiles.value?.items?.length;
++
++		if (isMissingReview) {
++			return t('editor.review.confirmReview.incomplete');
++		}
++
+ 		return hasUnansweredRequiredFields.value
+ 			? t('editor.review.confirmReview.incomplete')
+ 			: null;
+@@ -101,7 +131,11 @@
+ 
+ 	// Only the modal's own data; the reviewers table and file manager reload when their modals close
+ 	async function reloadReview() {
+-		await Promise.all([loadReviewAssignment(), loadReviewContent()]);
++		await Promise.all([
++			loadReviewAssignment(),
++			loadReviewContent(),
++			loadReviewerFiles(),
++		]);
+ 	}
+ 
+ 	function confirm() {
+@@ -161,7 +195,13 @@
+ 								isCompetingInterestsRequested,
+ 								onSavedFn: reloadReview,
+ 							},
+-							{onClose: triggerDataChange},
++							{
++								onClose: () => {
++									triggerDataChange();
++									// A file uploaded in Modify Review is kept without a save
++									loadReviewerFiles();
++								},
++							},
+ 						);
+ 					},
+ 				},
+@@ -175,6 +215,7 @@
+ 	}
+ 
+ 	loadReviewContent();
++	loadReviewerFiles();
+ 	loadReviewAssignment().then(markViewedIfNew);
+ 
+ 	return {

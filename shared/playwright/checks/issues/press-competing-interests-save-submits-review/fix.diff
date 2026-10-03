@@ -1,0 +1,13 @@
+--- a/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
++++ b/lib/pkp/api/v1/submissions/reviewAssignments/ReviewAssignmentController.php
+@@ -601,8 +601,9 @@
+                     true
+                 )->next();
+ 
++                // No stored comment reads as an empty one, so an empty box left empty is not an edit
+                 $oldComments = $existingComment?->getData('comments');
+-                if ($commentsSubmitted !== $oldComments) {
++                if ($commentsSubmitted !== ($oldComments ?? '')) {
+                     $savedComment = Repo::reviewAssignment()->saveReviewComment($reviewAssignment, $commentsSubmitted, true);
+                     $isReviewUpdated = true;
+                     // Log changes to the event log
