@@ -20,6 +20,13 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-10-03 (issues session, U41 A9): on `stable-3_5_0` publishing an
+  article, book or preprint logged a PHP warning, `Undefined property:
+  stdClass::$type` at lib/pkp `PKPBaseController.php` line 489, while the
+  publish answered 200; seen in passing by the A9 reporter's 3.5 walk
+  (`shared/playwright/checks/issues/ror-logo-link-unnamed/walk.js`), not
+  pursued. Whether `main` logs it too, and whether a stricter setting turns
+  it into an error, is the question for the stable-line read.
 - 2026-10-03 (issues session, U39 A5): on `main` a config file with no
   `strict` line now runs in strict mode (`Config::getVar('general',
   'strict', true)` since pkp-lib cb32f21f94, pkp/pkp-lib#11583; 3.5 and
