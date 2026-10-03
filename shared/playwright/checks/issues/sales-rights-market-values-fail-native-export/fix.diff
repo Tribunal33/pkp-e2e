@@ -94,9 +94,40 @@
       * @copydoc Form::execute()
       */
      public function execute(...$functionArgs)
+--- a/controllers/grid/catalogEntry/form/PublicationFormatMetadataForm.php
++++ b/controllers/grid/catalogEntry/form/PublicationFormatMetadataForm.php
+@@ -28,6 +28,7 @@
+ use PKP\form\Form;
+ use PKP\form\validation\FormValidator;
+ use PKP\form\validation\FormValidatorCSRF;
++use PKP\form\validation\FormValidatorCustom;
+ use PKP\form\validation\FormValidatorPost;
+ use PKP\form\validation\FormValidatorRegExp;
+ use PKP\notification\Notification;
+@@ -93,6 +94,20 @@
+         $this->addCheck(new FormValidator($this, 'productAvailabilityCode', 'required', 'grid.catalogEntry.productAvailabilityRequired'));
+         $this->addCheck(new FormValidatorRegExp($this, 'directSalesPrice', 'optional', 'grid.catalogEntry.validPriceRequired', '/^[0-9]*(\.[0-9]+)?$/'));
+         $this->addCheck(new FormValidator($this, 'productCompositionCode', 'required', 'grid.catalogEntry.productCompositionRequired'));
++        // These values go into the format's ONIX product as ExtentValue (page counts, file size) and
++        // Measurement (sizes, weight), decimals greater than zero. A page count of 0 is left out of the product.
++        foreach (['frontMatter', 'backMatter'] as $field) {
++            $this->addCheck(new FormValidatorRegExp($this, $field, 'optional', 'grid.catalogEntry.validPageCountRequired', '/^[0-9]+$/'));
++        }
++        foreach (['height', 'width', 'thickness', 'weight', 'fileSize'] as $field) {
++            $this->addCheck(new FormValidatorCustom(
++                $this,
++                $field,
++                'optional',
++                'grid.catalogEntry.validMeasurementRequired',
++                fn ($value) => (bool) preg_match('/^[0-9]*(\.[0-9]+)?$/', $value) && (float) $value > 0
++            ));
++        }
+         $this->addCheck(new FormValidatorPost($this));
+         $this->addCheck(new FormValidatorCSRF($this));
+     }
 --- a/locale/en/locale.po
 +++ b/locale/en/locale.po
-@@ -183,6 +183,12 @@
+@@ -183,6 +183,18 @@
  msgid "grid.catalogEntry.validPriceRequired"
  msgstr "A valid price is required."
  
@@ -105,6 +136,12 @@
 +
 +msgid "grid.catalogEntry.territoryRequired"
 +msgstr "Choose at least one country or region under \"Included\"."
++
++msgid "grid.catalogEntry.validPageCountRequired"
++msgstr "A page count must be a whole number, such as 12."
++
++msgid "grid.catalogEntry.validMeasurementRequired"
++msgstr "A size, weight or file size must be a number greater than 0, such as 228.6."
 +
  msgid "grid.catalogEntry.publicationFormatDetails"
  msgstr "Format Details"

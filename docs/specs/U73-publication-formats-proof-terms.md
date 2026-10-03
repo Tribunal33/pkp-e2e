@@ -986,6 +986,10 @@ Left out of the scenarios above, by reason:
     on a press with no currency, a "Direct Sales" save in "Set Terms for
     Downloading" is refused with its message, and a reader who opens a
     file priced earlier is told it is not available
+  - the guard for A17 (issue report
+    `docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md`):
+    a physical format's "Metadata" tab refuses "xii" as "Front Matter"
+    and "tall" as "Height", and the book's Native XML export completes
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1076,7 +1080,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A6](#a6) | An e-book's "Metadata" tab asks for page counts and dimensions, never for its file size or DRM | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | A press that cannot take payments can put a book file on sale, and readers who open it are turned away without a word | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A17](#a17) | Page counts and dimensions take any text, and the book's Native XML export then fails | 🐞 | user-visible | — |
+| [A17](#a17) | Page counts and dimensions take any text, and the book's Native XML export then fails | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | A format's "Change File" adds a file; nothing is changed | 🐞 | minor | — |
@@ -1310,7 +1314,7 @@ Lean: yes; the window asks for its other tab, so a lost catalog field is the odd
 Basis: probe. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — Page counts and dimensions take any text, and the book's export then fails** · 🐞 · user-visible.
+**A17 — Page counts and dimensions take any text, and the book's export then fails** · 🐞 · medium.
 Nothing checks that "Front Matter", "Back Matter", "Height", "Width",
 "Thickness" and "Weight" are numbers. With "xii", "abc", "tall" or
 "heavy" saved on a format, Tools › "Native XML Plugin" › "Export
@@ -1318,7 +1322,7 @@ Submissions" for the book ends with "The process failed. Check below
 for errors/warnings." and names each of those values; typed as numbers
 ("12", "240") the same export completes. Expected: the tab refuses what
 the export refuses.
-Basis: probe. <sup>f-a17</sup>
+Basis: probe, 2026-10-03. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — Every unit list offers lengths and weights alike** · ❓ · minor.
@@ -2434,6 +2438,7 @@ and "heavy" saved on "Print", then Tools › "Native XML Plugin" ›
 "Export Submissions" for the book failed, naming each value as "not a
 valid value of the atomic type …dt.StrictPositiveDecimal"; with "12",
 "3", "240" and "500" the export completed.
+Issue report: [pkp-e2e#701](https://github.com/jardakotesovec/pkp-e2e/issues/701) ([docs/issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md](../issues/U74-A7-A8-sales-rights-market-values-fail-native-export.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note f: every unit list is ONIX list 50. Live-probed
