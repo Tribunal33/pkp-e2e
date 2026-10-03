@@ -1,0 +1,15 @@
+--- a/lib/pkp/controllers/tab/user/ProfileTabHandler.php
++++ b/lib/pkp/controllers/tab/user/ProfileTabHandler.php
+@@ -334,7 +334,11 @@
+             $notificationMgr = new NotificationManager();
+             $notificationMgr->createTrivialNotification($user->getId());
+ 
+-            return new JSONMessage(true);
++            // Draw the form again, as the Contact and API Key tabs do: left as
++            // it was, the tab would keep an earlier refusal's notice and the
++            // typed passwords beside the saved message.
++            $passwordForm->initData();
++            return new JSONMessage(true, $passwordForm->fetch($request));
+         }
+ 
+         return new JSONMessage(true, $passwordForm->fetch($request));

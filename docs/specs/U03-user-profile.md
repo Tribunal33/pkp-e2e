@@ -993,6 +993,12 @@ Left out of the scenarios above, by reason:
     taking all 40 characters ([A7](#a7)): the guard the issue report
     (`docs/issues/U03-A7-password-boxes-keep-32-characters.md`)
     proposes, once fixed
+  - the Password tab offering only "Save", and another tab pressed over
+    typed passwords asking "The data on this form has changed. Do you
+    wish to continue without saving?" ([A12](#a12); Rule 10c): the
+    guard the issue report
+    (`docs/issues/U03-A12-password-tab-cancel-does-nothing.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1004,7 +1010,6 @@ Left out of the scenarios above, by reason:
   - A4 (a journal closed to registrations leaving an empty section and listed name-only; Rules 8a and 8c)
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
   - A11 (the stale error notice beside the saved message; Rule 10b; scenario 8 marks it)
-  - A12 (the Password tab's "Cancel" doing nothing; Rule 10c)
   - A14 (the site-level privacy link opening "404 Not Found"; Rule 14)
   - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
   - A18 ("confirm" and "reject" landing an account with roles in more than one journal on the site-level profile; Rules 6c and 6d)
@@ -1052,7 +1057,7 @@ unless its Basis line says otherwise.
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | The email-change message of a site-level request signs off "Kind regards, Array" | 🐞 | latent | — |
 | [A11](#a11) | After a successful password change the previous attempt's error notice stays on screen beside the saved message | 🐞 | minor | — |
-| [A12](#a12) | The Password tab's "Cancel" does nothing | 🐞 | minor | — |
+| [A12](#a12) | "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On the site-level profile every tab's "privacy statement" link opens a "404 Not Found" page | 🐞 | minor | — |
 | [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
 | [A17](#a17) | After a refused "Save" on the Profile page's Contact tab, another tab drops the typed values unasked | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1185,11 +1190,18 @@ once.
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
-**A12 — The Password tab's "Cancel" does nothing** · 🐞 · minor.
-The tab offers "Cancel" beside "Save". Pressing it sends nothing, opens no
-other tab and leaves the three boxes as typed. A control that does nothing
-should not be offered, or should clear the boxes.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a12](#fn-a12)</sup>
+**A12 — "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question** · 🐞 · low.
+On the "Password" tab of their profile, a user who has typed in the
+three password boxes and presses "Cancel" under the form expects the
+boxes to be emptied. Nothing visible happens: the typed passwords stay
+in the boxes.
+
+"Cancel" does turn off one thing: the question "The data on this form
+has changed. Do you wish to continue without saving?", which the profile
+asks when another tab is pressed while the boxes hold typed passwords.
+After "Cancel", the next tab opens without it. The fix hides "Cancel",
+as on the other profile tabs.
+Basis: probe, 2026-10-03. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — The preferred public name does not reach a new submission** · ❓ · minor.
@@ -2339,6 +2351,7 @@ fires a `formCanceled` event with no `cancelRedirectUrl` and no listener.
 Live-probed 2026-09-03, all three apps: with the three boxes filled, "Cancel"
 sent no request, changed no tab and kept the values. Live-probed 2026-09-04 (claim check),
 all three apps: holds.
+Issue report: [docs/issues/U03-A12-password-tab-cancel-does-nothing.md](../issues/U03-A12-password-tab-cancel-does-nothing.md).
 
 <a id="fn-a13"></a>
 **f-a13** — `Repo::author()->newAuthorFromUser()` copies `givenName` and

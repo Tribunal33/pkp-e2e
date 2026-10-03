@@ -1,0 +1,10 @@
+--- a/lib/pkp/templates/user/changePassword.tpl
++++ b/lib/pkp/templates/user/changePassword.tpl
+@@ -38,6 +38,6 @@
+ 			{translate key="user.privacyLink" privacyUrl=$privacyUrl}
+ 		</p>
+ 
+-		{fbvFormButtons submitText="common.save"}
++		{fbvFormButtons hideCancel=true submitText="common.save"}
+ 	{/fbvFormArea}
+ </form>

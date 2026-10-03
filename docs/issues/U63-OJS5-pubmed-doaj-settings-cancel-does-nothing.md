@@ -151,8 +151,10 @@ Hide "Cancel" and drop the note in both templates
 
 This is how the code base handles legacy forms that sit on a page
 rather than in a modal: the native and users import/export forms, the
-subscription policy and payment forms, and the user profile forms all
-pass `hideCancel=true`. The forced "Change Password" form got the same
+subscription policy and payment forms, and every user profile form but
+the Password tab pass `hideCancel=true` (the Password tab's dead
+"Cancel" is
+[its own report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U03-A12-password-tab-cancel-does-nothing.md)). The forced "Change Password" form got the same
 fix for the same symptom (`pkp/pkp-lib#6654`, pkp-lib e141d7fb8f).
 Removing "Cancel" also keeps the unsaved-change question working, since
 nothing switches it off any more.
