@@ -1,0 +1,11 @@
+--- a/plugins/reports/articles/ArticleReportPlugin.php
++++ b/plugins/reports/articles/ArticleReportPlugin.php
+@@ -207,7 +207,7 @@
+                 'type' => $publication->getLocalizedData('type'),
+                 'disciplines' => join(', ', $disciplines[Locale::getLocale()] ?? $disciplines[$submission->getData('locale')] ?? []),
+                 'keywords' => join(', ', $keywords[Locale::getLocale()] ?? $keywords[$submission->getData('locale')] ?? []),
+-                'agencies' => join(', ', $agencies[Locale::getLocale()] ?? $agencies[$submission->getData('locale')] ?? []),
++                'agencies' => join(', ', $supportingAgencies[Locale::getLocale()] ?? $supportingAgencies[$submission->getData('locale')] ?? []),
+                 'status' => $submission->getData('status') == PKPSubmission::STATUS_QUEUED ? $this->getStageLabel($submission->getData('stageId')) : __($statusMap[$submission->getData('status')]),
+                 'url' => $request->url(null, 'dashboard', 'editorial', null, ['workflowSubmissionId' => $submission->getId()]),
+                 'doi' => $publication->getDoi(),

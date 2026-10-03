@@ -996,6 +996,7 @@ Left out of the scenarios above, by reason:
   - a report address with an unknown, empty or missing report name: lands on the "Reports" page (the guard for A8, once fixed; Rule 19)
   - a Custom Range ending on the day submissions arrived: "Submissions Received" counts them and the rates are not "0%" (the guard for A1, once fixed; Rules 7a, 9)
   - an editor who saved Profile › "Notifications" while the monthly email was off, and one who saved the site-level profile: each keeps the statistics row as before and gets the email (the guard for A14, once fixed; Settings bullet 1)
+  - "Articles Report" of a submission with supporting agencies: its "Supporting Agencies" cell lists them (the guard for OJS1, once fixed; Rule 20d)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1069,7 +1070,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | A press's monthly statistics email reads "Login to the the press" ("the the preprint server" on a preprint server) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty | 🐞 | minor | — |
+| [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty for every submission, though the agencies are filled in | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | "Articles Report" writes "&" in a title as "&amp;" | 🐞 | minor | — |
 | [OJS3](#ojs3) | "Articles Report" leaves the decision cell empty for several decisions | 🐞 | minor | — |
 | [OJS4](#ojs4) | "Subscriptions Report" downloads nothing and leaves a blank tab when an institutional contact has no country | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1328,12 +1329,22 @@ Basis: probe, 2026-10-02. <sup>f-a14</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — "Supporting Agencies" is always empty** · 🐞 · minor.
-"Articles Report"'s "Supporting Agencies" column is empty for every
-submission, although the submission's "Supporting Agencies" (Metadata)
-are filled in. Expected: the agencies, joined with ", " as "Keywords"
-are.
-Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — "Articles Report" leaves "Supporting Agencies" empty for every submission, though the agencies are filled in** · 🐞 · medium.
+The "Articles Report" that a journal manager or editor downloads from
+Statistics › "Reports" has an empty "Supporting Agencies" column for
+every submission, published or not. The agencies entered on each
+submission's Publication › "Metadata" page are saved and shown there,
+and the columns beside it, such as "Keywords", are filled as expected.
+Nothing in the file or on the page says the column is missing data.
+
+Live journals meet it today: the released OJS 3.5.0-4 (April 2026) and
+3.5.0-5 both have the fault. Only journals that turn on "Supporting
+Agencies" (Settings › Workflow › Metadata, off by default) collect
+agencies, so only they are affected. Nothing in the app reads the file;
+it is for the journal's own use, such as listing who funded its
+articles. The fix is one variable name. Expected: the agencies, joined
+with ", " as "Keywords" are.
+Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — "&" in a title reads "&amp;"** · 🐞 · minor.
@@ -2169,6 +2180,7 @@ Issue report: [docs/issues/U65-A14-stats-email-optout-after-saving-notifications
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn l (`$agencies`). Live-probed 2026-09-28: td10, with the item switched off and on.
+Issue report: [docs/issues/U65-OJS1-articles-report-supporting-agencies-empty.md](../issues/U65-OJS1-articles-report-supporting-agencies-empty.md).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — fn l (`htmlspecialchars()` on the title). Live-probed 2026-09-28: "Bread &amp; Butter", "A &lt; B &gt;
