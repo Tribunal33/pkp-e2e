@@ -906,6 +906,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a press with License Terms and no license: a book page without its own License URL shows the "License" heading and the terms, with no link in the block (OMP5; the guard its issue report names)
   - a journal that requires the plain language summary: the
     Metadata and Permissions & Disclosure pages saved after the summary
     is stored, the journal's "Review Publishing Details" Confirm
@@ -997,7 +998,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | Cancelling the reset-permissions confirm box leaves the button greyed until a reload | 🐞 | minor | — |
 | [A19](#a19) | A Site Administrator left with only an assistant role is offered "Change" (submission language), and Confirm fails with a message that names nothing | 🐞 | minor | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
-| [OMP5](#omp5) | With License Terms but no license, the book page shows a "License" link that leads nowhere | 🐞 | minor | — |
+| [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | minor | — |
 | [A3](#a3) | Reset permissions rewrites every submission, unpublished and declined included, and logs one "metadata updated" line per version | ❓ | user-visible | — |
 | [A17](#a17) | The Author's Contributors page offers "Add Contributor", "Edit", "Delete" and "Order" on a new version of a published item; whether a save there is kept is untried | ❓ | user-visible | — |
@@ -1328,12 +1329,15 @@ object.
 Since: live-probed 2026-08-28 · Basis: probe. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
-**OMP5 — A "License" link that leads nowhere** · 🐞 · minor.
-On a press with License Terms and no license address, the book page's
-"License" block shows a link labelled "License" above the terms that
-points at no address. Clicking it goes nowhere. A journal and a preprint
-server show the heading and the terms alone in that case.
-Since: live-probed 2026-08-28 · Basis: probe. <sup>f-omp5</sup>
+**OMP5 — Book page: with press License Terms and no book license, a "License" link reloads the page** · 🐞 · low.
+When a press has set License Terms (Settings › Distribution ›
+"License") and a book has no License URL of its own, the book page's
+"License" block shows a link labelled "License" above the terms.
+Clicking it reloads the book page. A journal and a preprint server show
+the heading and the terms alone in that case.
+A reader meets it on the page of every book without its own License
+URL, once the press has terms.
+Since: live-probed 2026-08-28 · Basis: probe, 2026-10-03. <sup>f-omp5</sup>
 
 ### OPS
 
@@ -2821,6 +2825,7 @@ branch (fn-l). Live-probed 2026-08-28 (control press, License Terms
 "Terms-only paragraph omp." and no license): block `<h2 class="label">
 License </h2> <a href=""> License </a> <p>Terms-only paragraph omp.</p>`;
 the journal and the server rendered heading + paragraph only.
+Issue report: [docs/issues/U40-OMP5-book-page-license-link-no-address.md](../issues/U40-OMP5-book-page-license-link-no-address.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1 — OPS1 evidence.** fn-b: `ops/registry/userGroups.xml` author

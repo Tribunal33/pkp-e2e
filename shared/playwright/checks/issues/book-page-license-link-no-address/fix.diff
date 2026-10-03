@@ -1,0 +1,11 @@
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -479,7 +479,7 @@
+ 					</h2>
+ 					{if $ccLicenseBadge}
+ 						{$ccLicenseBadge}
+-					{else}
++					{elseif $publication->getData('licenseUrl')}
+ 						<a href="{$publication->getData('licenseUrl')|escape}">
+ 							{translate key="submission.license"}
+ 						</a>
