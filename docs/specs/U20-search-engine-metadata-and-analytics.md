@@ -1326,7 +1326,7 @@ Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](..
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note e: the announcement entries come from `Announcement::withContextIds` with no date filter, while the announcement's own page sends an expired announcement's reader to the list. Live-probed 2026-09-26, all three apps: note q5.
-Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../issues/U20-A5-sitemap-lists-expired-announcements.md).
+Issue report: [docs/issues/U20-A5-sitemap-lists-expired-announcements.md](../issues/U20-A5-sitemap-lists-expired-announcements.md), filed as [pkp-e2e#666](https://github.com/jardakotesovec/pkp-e2e/issues/666).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Notes h, i: `citation_author` and `DC.Creator.PersonalName` read `getFullName(false, false, $publicationLocale)`, the name in the submission language only, with no fallback; the item's page falls back to the other language. The contributor copied from the submitting author holds the given name in the submission language and not the family name. Live-probed 2026-09-26, all three apps (Dublin Core on OJS and OMP), in either interface language: note q14.
