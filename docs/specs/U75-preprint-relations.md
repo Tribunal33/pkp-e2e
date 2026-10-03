@@ -1246,7 +1246,7 @@ undefined (reading 'url')" at the wizard's `#review` address. After
 "OK" the "Relation status" panel read the earlier answer; back on "For
 Readers" the box held "10.1234/abcd" with no field message. Note d for
 the validation, note g for the panel.
-Issue report: [docs/issues/U75-A7-wizard-refused-doi-no-field-message.md](../issues/U75-A7-wizard-refused-doi-no-field-message.md).
+Issue report: [pkp-e2e#673](https://github.com/jardakotesovec/pkp-e2e/issues/673) ([docs/issues/U75-A7-wizard-refused-doi-no-field-message.md](../issues/U75-A7-wizard-refused-doi-no-field-message.md)).
 Issue report (the hang, shared with the Submission wizard's A19): [pkp-e2e#322](https://github.com/jardakotesovec/pkp-e2e/issues/322) ([docs/issues/U21-A19-wizard-refused-save-hangs-saving.md](../issues/U21-A19-wizard-refused-save-hangs-saving.md)).
 
 <a id="fn-f-a8"></a>
@@ -1267,7 +1267,7 @@ and the "Post the preprint" window of a preprint submitted unanswered
 constructor that does not take it, so the wizard's radio starts empty
 whatever is stored. Live-probed 2026-09-27 with "published elsewhere"
 and the address saved, and with "not entered" saved (td4).
-Issue report: [docs/issues/U75-A10-wizard-relation-answer-unticked-after-reload.md](../issues/U75-A10-wizard-relation-answer-unticked-after-reload.md).
+Issue report: [pkp-e2e#674](https://github.com/jardakotesovec/pkp-e2e/issues/674) ([docs/issues/U75-A10-wizard-relation-answer-unticked-after-reload.md](../issues/U75-A10-wizard-relation-answer-unticked-after-reload.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note g: `openStep('{$step.id}')` is served as `openStep('')`
