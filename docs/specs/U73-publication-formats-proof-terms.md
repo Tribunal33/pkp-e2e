@@ -1002,6 +1002,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U73-A12-proof-approval-revoke-logged-as-sign-off.md`):
     a format file approved and then revoked shows two different lines in
     its "History"
+  - the guard for A13 (issue report
+    `docs/issues/U73-A13-copyeditor-formats-page-no-list.md`): a press
+    Copyeditor on a book in Copyediting is not offered "Publication
+    Formats", and the assigned Layout Editor in Production is
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1100,7 +1104,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A new publication date preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A press editor withdrawing a book's format reads "This format will unavailable to readers." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A format file's History records a revoked proof approval as a sign-off, the same as the approval | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A13](#a13) | The side menu offers "Publication Formats" to a Copyeditor, Marketing and sales coordinator or Funding coordinator, and the page shows them no list | 🐞 | minor | — |
+| [A13](#a13) | On a press, the Copyeditor is offered "Publication Formats", and the page shows a refusal instead of the list | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | A book in the press's second language cannot get a format without a name in the primary language | 🐞 | minor | — |
 | [A19](#a19) | "Select Files" tells the user to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | minor | — |
@@ -1283,17 +1287,23 @@ order of the pairs.
 Since: 2015-10-06 (approval made a toggle) · Basis: probe, 2026-10-03. <sup>f-a12</sup> <sup>td20</sup>
 
 <a id="a13"></a>
-**A13 — "Publication Formats" is offered to assistant roles the page then refuses** · 🐞 · minor.
-An assigned Copyeditor or Marketing and sales coordinator on a book in
-Copyediting, and those two and an assigned Funding coordinator on a
-published book, see "Publication Formats" in the side menu. Choosing it
-shows the page's heading, "Current Submission Language", "Status" and
-"You don't currently have access to that stage of the workflow.", with
-no list. Expected: the side menu offers the page only to the roles it
-serves, or the page shows them the list without controls. A press's
-"Media" page is offered in the same way
-([Workflow screen & stage access, its OMP2](U24-workflow-screen-and-stage-access.md#omp2)).
-Basis: probe. <sup>f-a13</sup>
+**A13 — On a press, the Copyeditor is offered "Publication Formats", and the page shows a refusal instead of the list** · 🐞 · low.
+On a press, the side menu lists "Publication Formats" under a book's
+version for roles whose work stops before Production: the Copyeditor
+and the Marketing and Sales Coordinator on a book in Copyediting, the
+Funding Coordinator on a book in Submission or review, and all three on
+a published book. Any custom editorial role without Production in its
+stages gets the same entry on a book in one of its stages. Choosing it
+shows the page's heading and the version's status, then only "You
+don't currently have access to that stage of the workflow." where the
+list of formats should be.
+
+The refusal itself is intended: formats and their files are production
+material, and OMP 3.4 showed the tab only to roles with Production
+access. What is wrong is the menu entry. These roles have no work on
+formats, so no work is lost; they meet a page that promises a list and
+gives a technical refusal.
+Since: 2024-10-16 (pkp/ui-library#428) · Basis: probe, 2026-10-03. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A format moves in the list when it is saved from "Edit", its approval or availability changes, or its DOI is emptied on the DOIs page** · 🐞 · medium.
@@ -2405,6 +2415,7 @@ Issue report: [pkp-e2e#803](https://github.com/jardakotesovec/pkp-e2e/issues/803
 (Workflow screen & stage access, its note q), while the grid's stage
 policy refuses a role without Production access. Live-probed
 2026-09-28: note c's probe line, two runs.
+Issue report: [pkp-e2e#804](https://github.com/jardakotesovec/pkp-e2e/issues/804) ([docs/issues/U73-A13-copyeditor-formats-page-no-list.md](../issues/U73-A13-copyeditor-formats-page-no-list.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note d: every format is created with `seq` 0 and the list
