@@ -4,14 +4,14 @@
 - **Effort** small
 - **Kind** defect
 - **Affects**
-  - main: OMP (walked: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens, the monthly statistics email's attachment)
-  - 3.5: OMP (walked: the book and chapter pages, the catalog pages and the "Browse" block, the staff screens, the monthly statistics email's attachment; the editors' names read in the code, as no edited volume's page opened there)
-  - 3.4: OMP (code: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the monthly statistics email's attachment)
-  - 3.3: OMP (code: the book page, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the monthly statistics email's attachment; no chapter pages)
+  - main: OMP (walked: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens, the Catalog and Catalog Entry pages, the monthly statistics email's attachment)
+  - 3.5: OMP (walked: the book and chapter pages, the catalog pages and the "Browse" block, the staff screens, the Catalog and Catalog Entry pages, the monthly statistics email's attachment; the editors' names read in the code, as no edited volume's page opened there)
+  - 3.4: OMP (code: the book and chapter pages, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the Catalog and Catalog Entry pages, the monthly statistics email's attachment)
+  - 3.3: OMP (code: the book page, the editors' names, the catalog pages and the "Browse" block, the staff screens without the review rounds' names, the Catalog and Catalog Entry pages, the monthly statistics email's attachment; no chapter pages)
 - **Introduced** not traced as one change. Most of the texts never had a French (Canada) text; the oldest, the book page's "Published" and "Categories", came in English in [52df855c59](https://github.com/pkp/omp/commit/52df855c59a26832353324486789159f965d5605) (2015-09-04). Two had one and lost it: the External Review stage's name and the catalog's book count read in French (Canada) in OMP 3.1.1 and show codes from 3.1.2 (2019) on; on the main line pkp-lib [ceef9fdb49](https://github.com/pkp/pkp-lib/commit/ceef9fdb49470eb056e88d0930777897faeadddc) (2019-10-15) dropped both. Those two parts are a regression. The rest, the editors' names among them, never worked, so the report as a whole is a defect
 - **Upstream** none found (2026-10-03)
-- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (a press's category page), spec U68 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a8) (the catalog pages and the "Browse" block), spec U65 [OMP5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#omp5) (the monthly statistics email's attachment on a press whose primary language is French (Canada))
-- **Checked** 2026-10-01, the staff screens and the catalog pages 2026-10-02, the monthly statistics email's attachment 2026-10-03, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U69 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a15), spec U19 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a13) (a book's OAI-PMH "Resource Type"), spec U54 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#omp1) (the External Review stage's name on the press's "Roles" list), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a press's codes on the workflow screen: the External Review stage, the review rounds' names, the "Monograph" control and its menu), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (a press's category page), spec U68 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a8) (the catalog pages and the "Browse" block), spec U65 [OMP5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#omp5) (the monthly statistics email's attachment on a press whose primary language is French (Canada)), spec U70 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a7) (the Catalog page), [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a15) (the Catalog Entry page's "Series Position" description)
+- **Checked** 2026-10-01, the staff screens and the catalog pages 2026-10-02, the monthly statistics email's attachment and the Catalog and Catalog Entry pages 2026-10-03, each branch's tip (the commits in Evidence)
 
 2026-10-02: widened to the press's staff screens, where the External
 Review stage's name is a code (Steps 14 to 17), and to the workflow
@@ -21,7 +21,10 @@ screen's own codes: a review round's name and the "Monograph" control
 
 2026-10-03: widened to the monthly statistics email of a press whose
 primary language is French (Canada): its attachment names the External
-Review stage by the same code (Steps 28 to 33).
+Review stage by the same code (Steps 28 to 33). Widened again to the
+press's Catalog page and a version's Catalog Entry page, where the staff
+read codes for the page's tab, headings, buttons and notices (Steps 34
+to 40).
 
 ## Summary
 
@@ -47,6 +50,13 @@ review round's name and for the "Monograph" control
 ("##common.publication##"). On a press whose primary language is French
 (Canada), the monthly statistics email's "editorial-report.csv" also
 names the External Review stage "##workflow.review.externalReview##".
+The Catalog page (Content › "Catalogue") reads
+"##navigation.catalog.allMonographs##" for its tab and shows codes for
+its list heading, its column headings, each book's "View Entry", the
+"Order Features" and "Save Order" buttons, the ordering notice, the
+"Add Entry" panel's search box and the names a screen reader gives the
+"Featured" and "New release" check boxes. A version's "Catalog Entry" page describes "Series Position" as
+"##submission.submit.seriesPosition.description##".
 
 The rest of each page shows as usual and every link works. A French
 reader of an edited volume cannot see who edited it, and the press
@@ -63,9 +73,11 @@ format name and the review rounds' names on the workflow screen.
 
 - **Lost.** An edited volume's editors' names, about a dozen labels
   on every book and chapter page, and the catalog pages' book count,
-  list headings and "Browse" block labels.
+  list headings and "Browse" block labels; on the Catalog page, the
+  names of its buttons, columns and boxes.
 - **Who.** Readers of a press that offers French (Canada); its staff
-  working in French (Canada) on the "Rôles" list and in the workflow;
+  working in French (Canada) on the "Rôles" list, in the workflow and
+  on the Catalog page;
   the editors who receive the monthly statistics email of a press whose
   primary language is French (Canada). The locale files show the same
   gaps on the reader pages in
@@ -74,7 +86,16 @@ format name and the review rounds' names on the workflow screen.
 - **Way round.** A reader can switch the page to English only when the
   press also offers English; on a press that offers French (Canada)
   alone, readers have no way round, and in French there is none. Staff
-  are not held up: the stage's code only stands in for its name. The
+  are not held up: the stage's code only stands in for its name, and
+  the Catalog page's codes name their controls' purpose ("featured",
+  "orderFeatures", "saveFeatureOrder") closely enough to use them. A
+  screen-reader user there hears each box as a code too, but the code
+  still tells the state apart ("##catalog.manage.isNotFeatured##",
+  "##catalog.manage.isFeatured##"), and the ordering arrows read
+  "Avancer la position de …" and "Reculer la position de …" in French
+  (their missing book title is spec U70
+  [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a14)'s
+  fault), so the page can still be worked; the staff part stays low. The
   press cannot enter the texts itself; the French (Canada) translators,
   or a developer, enter them in OMP alone, with no change to pkp-lib.
   Texts entered on PKP's translation platform reach 3.5 and `main`
@@ -109,6 +130,9 @@ Preconditions:
   as an editor by that kind of role, whatever the press calls it.
 - The dataset has no chapter added in a second version and no file for
   sale, so steps 5 to 8 and 10 to 11 make them.
+- Submission 4, "How Canadians Communicate: Contexts of Canadian
+  Popular Culture", is in Production, not yet published. Book 14 is in
+  the series "Psychology".
 
 Reader, the dataset as loaded (signed out):
 
@@ -249,6 +273,34 @@ command.
     the new email "Editorial activity for septembre, 2026" (the previous
     month) and read its first block.
 
+The Catalog and Catalog Entry pages, as staff (on a freshly loaded
+dataset; step 36 features book 14):
+
+34. Sign in as `dbarnes` and change the language to "français" as in
+    step 14.
+35. In the side menu, open the group that holds "Catalogue" (on `main`
+    it reads "##navigation.content##", a separate fault; in English
+    "Content") and press "Catalogue"
+    (`/index.php/publicknowledge/fr_CA/manageCatalog`). [3.5: "Catalogue"
+    is a top-level entry.] Read the tab, the list's heading, the two
+    column headings, the links on the row of "From Bricks to Brains:
+    The Embodied Cognitive Science of LEGO Robots", and the names a
+    screen reader gives its two boxes (the browser's accessibility
+    inspector shows them).
+36. On that row, press the first box. Read the box's name again, and
+    the button that appears above the list.
+37. Press that button. Read its new label and the notice over the list.
+    Press "Annuler".
+38. Press "Filtres" and read the headings of its two groups. Under the
+    series group press "Psychology". Read the two column headings.
+39. Press "Nouvelle entrée de catalogue" and read the label of the
+    panel's search box. Close the panel.
+40. Open submission 4
+    (`/index.php/publicknowledge/fr_CA/dashboard/editorial?workflowSubmissionId=4`),
+    and in the window's menu, under "Publication", press "Catalogue".
+    Read the description under "Position dans cette série (ex: livre 2
+    ou Volume 2)".
+
 **Expected.** Each label reads in French what the English page reads:
 "Published" (steps 2, 3), "Volume" (3), the tab "PDF view of the file
 Segmentation of Vascular Ultrasound Imag.pdf" and the arrow "Return to
@@ -271,6 +323,18 @@ time." (21); "Featured" and "New Releases", and the block "Browse",
 titles have been published yet." (27). The attachment's first block
 names each stage in French, as the English file reads "Submission",
 "Internal Review", "External Review", "Copyediting", "Production" (33).
+The Catalog page reads in French what English reads: the tab "All
+Monographs", the heading "Monographs", the columns "Featured" and "New
+release", the row's "View Submission" and "View Entry", the boxes "This
+monograph is not featured. Make this monograph featured." and "This
+monograph is not a new release. Make this monograph a new release." (35);
+"This monograph is featured. Make this monograph not featured." and
+"Order Features" (36); "Save Order" and "Drag-and-drop or tap the up and
+down buttons to change the order of features on the homepage." (37);
+the groups "Categories" and "Series", the columns "Featured in series"
+and "New release in series" (38); "Find monographs to add to the
+catalog" (39). The Catalog Entry page describes "Series Position" as
+"Examples: Book 2, Volume 2" (40).
 
 **Observed.**
 
@@ -315,6 +379,20 @@ Step 33: "Soumissions actives",Total
          ##workflow.review.externalReview##,4
          Révision,4
          Production,1
+Step 35: tab      ##navigation.catalog.allMonographs##
+         heading  ##submission.list.monographs##
+         columns  ##catalog.manage.featured## | ##catalog.manage.feature.newRelease##
+         row      Voir la soumission | ##submission.list.viewEntry##
+         boxes    ##catalog.manage.isNotFeatured## | ##catalog.manage.isNotNewRelease##
+Step 36: boxes    ##catalog.manage.isFeatured## | ##catalog.manage.isNotNewRelease##
+         button   ##submission.list.orderFeatures##
+Step 37: button   ##submission.list.saveFeatureOrder##   (beside "Annuler")
+         notice   ##submission.list.orderingFeatures##
+Step 38: groups   ##catalog.categories## | Série
+         columns  ##catalog.manage.seriesFeatured## | ##catalog.manage.feature.seriesNewRelease##
+Step 39: ##catalog.manage.findSubmissions##
+Step 40: Position dans cette série (ex: livre 2 ou Volume 2)
+         ##submission.submit.seriesPosition.description##
 ```
 
 The block shows the same codes on every page of steps 24 to 27, and
@@ -509,10 +587,50 @@ left out.
   - `catalog.category.subcategories` is empty in OMP's
     `locale/fr_CA/locale.po` too, but pkp-lib's French (Canada) file
     has the same key, so step 26 reads "Sous-catégories".
+- On screen (`main` and 3.5), the press's Catalog page and a version's
+  Catalog Entry page, for the press's staff: 20 OMP texts beyond those
+  above, empty in `locale/fr_CA/locale.po` and `submission.po`.
+  - `navigation.catalog.allMonographs`, the tab, printed by
+    `templates/manageCatalog/index.tpl`; `submission.list.monographs`,
+    the list's heading, passed by `ManageCatalogHandler::index()` as the
+    list's title. A press's DOIs page heads its list with the same
+    text, so the fix covers it there too.
+  - `catalog.categories`, the heading of the "Filtres" column's first
+    group (step 38), passed by `CatalogListPanel`; the book page prints
+    it over a book's categories.
+  - ui-library's `CatalogListPanel.vue` and `CatalogListItem.vue` print
+    `catalog.manage.featured`, `catalog.manage.feature.newRelease`,
+    `catalog.manage.seriesFeatured`,
+    `catalog.manage.feature.seriesNewRelease`,
+    `catalog.manage.categoryFeatured`,
+    `catalog.manage.feature.categoryNewRelease` (the column headings
+    without a filter, with a series filter, with a category filter),
+    `submission.list.viewEntry`, the four box names
+    `catalog.manage.isFeatured`, `isNotFeatured`, `isNewRelease` and
+    `isNotNewRelease`, `submission.list.orderFeatures`,
+    `submission.list.saveFeatureOrder`, and the ordering notice
+    `submission.list.orderingFeatures` (the whole catalog) or
+    `submission.list.orderingFeaturesSection` (a category or series).
+    The two category headings and the section notice were read in the
+    code, not on screen: the column headings show only over rows, and
+    no published book of the dataset is in a category; the section
+    notice needs a book featured within the chosen series first.
+  - `catalog.manage.findSubmissions`, the "Add Entry" panel's search
+    box (`AddEntryForm`).
+  - `submission.submit.seriesPosition.description`, under "Series
+    Position" on the Catalog Entry page (`CatalogEntryForm`).
+
+  None of them ever had a French (Canada) text: their English texts
+  came with the catalog management rework from 2016 to 2020
+  (`pkp/pkp-lib#1212`, `pkp/pkp-lib#2163`, `pkp/pkp-lib#2906`, `pkp/pkp-lib#5865`), and their French
+  (Canada) entries first appear, empty, in
+  [3bcd14e06](https://github.com/pkp/omp/commit/3bcd14e06cc22367cecae0210fb6834a79c98991)
+  (2023-01-30). On 3.4 and 3.3 the same keys are empty, and
+  `CatalogListPanel` hands the same keys to the page
+  (`setLocaleKeys`).
 - Read in the code, in cases these Steps do not set up, the same
-  templates print nine more keys that are empty in `locale/fr_CA`:
+  templates print eight more keys that are empty in `locale/fr_CA`:
   - `catalog.forthcoming`, over a publication date in the future.
-  - `catalog.categories`, over a book's categories.
   - `doi.readerDisplayName` ("DOI:"), on a book, a chapter and a format
     with a DOI.
   - `catalog.manage.series.onlineIssn` and `…printIssn`, under a series
@@ -542,7 +660,18 @@ left out.
     Kurdish, Kyrgyz and Vietnamese, where the priced link is a code.
 - Not this fault: `submission.plainLanguageSummary` is new in pkp-lib
   `main`. The English page reads "Plain Language Summary"; no other
-  language has the text yet, as is usual before a release. The HTML
+  language has the text yet, as is usual before a release. The same
+  holds for the codes of `main`'s new Catalog Entry page (step 40):
+  the five group headings (`publication.placement`, `…publicationTiming`,
+  `…versionAndUpdates`, `…display`, `…access`), "Update Type"
+  (`publication.updateType.*`), "Summary of Changes"
+  (`submission.form.summaryOfChanges`,
+  `publication.summaryOfChanges.description`) and the descriptions
+  `publication.series.description`,
+  `publication.datePublished.description`,
+  `publication.categories.description` and
+  `publication.coverImage.description`, with `manager.selectCategories`;
+  none is in 3.5's English files. The HTML
   view page's return arrow reads `monograph.return`, a key defined in
   no language (spec U69 A10).
 
@@ -554,7 +683,7 @@ commit them. This is work for the French (Canada) translators, or for a
 developer with a Weblate account, and it touches OMP alone: every text
 is OMP's own, none pkp-lib's. The texts are those of
 [fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-book-page-raw-keys/fix.diff),
-40 in all, in five components of Weblate's `omp` project: `locale`,
+59 in all, in five components of Weblate's `omp` project: `locale`,
 `manager`, `submission`, `themes-default` (the default theme) and
 `blocks-browse` (the Browse block). French (Canada) takes texts in all
 five; French (France) takes the priced link in `locale` and the rounds'
@@ -564,13 +693,20 @@ touches name none.
 
 What the diff holds:
 
-- 25 empty entries filled, and the one entry the default theme's French
+- 44 empty entries filled, and the one entry the default theme's French
   (Canada) file lacks added. Each text is copied from OMP's French
   (France) files, except where OMP's French (Canada) already has its
   own word for the same thing: "En vedette" (its `catalog.feature`)
   for "Featured", "Volume édité" (its `submission.workflowType.editedVolume`)
   for "Edited Volume", and OJS's French (Canada) count, "{$numTitles}
-  titre(s)".
+  titre(s)". The Catalog page's texts follow the same rule: "En
+  vedette" for "Featured" (French (France) says "À la une") and "série"
+  for "series" (French (France) says "collection"); "Ordonner les titres
+  en vedette" and "Enregistrer l'ordre" are this report's own wording,
+  since French (France)'s "Enregistrer la commande" reads as saving a
+  purchase order. The ordering notice names the up and down buttons
+  only, as pkp-e2e#745 proposes for the English, since no row can be
+  dragged.
 - 8 entries added to the Browse block's French (Canada) file, which
   holds none: "Parcourir", "Bloc Parcourir", "Catégories" and the
   description from OJS's French (Canada) Browse block, "Séries" and
@@ -629,6 +765,8 @@ block "Parcourir", "Catégories", "Séries" (24), "2 titre(s)" (25),
 "Tous les livres" (26) and "Aucun titre n’a encore été publié." (27);
 the same pages in English, and the French "Catalogue", its trail and
 the block's "Nouveautés", read the same with the diff in and out.
+Steps 35 to 40 read the diff's texts; the same steps in English read
+the same with the diff in and out.
 
 **Alternatives**
 
@@ -644,7 +782,7 @@ the block's "Nouveautés", read the same with the diff in and out.
   and French (Canada) would still ship incomplete.
 - Read pkp-lib's translated keys where one has the same word
   (`category.category` "Catégories", `submission.downloads`
-  "Téléchargements"): it covers two of the 34 empty or missing entries,
+  "Téléchargements"): it covers two of the 53 empty or missing entries,
   and the rest still need a text.
 - Print the editor's name, the version's name and " — " from the
   template and translate only the words of `submission.editorName`,
@@ -675,11 +813,12 @@ the block's "Nouveautés", read the same with the diff in and out.
   and no French (France) file to copy from.
 - The guard: the U69 spec's French-page scenario asserting that a
   book's and a chapter's page show no `##` code, and the U68 spec's
-  for the catalog pages and the "Browse" block (Planned items).
+  for the catalog pages and the "Browse" block, and the U70 spec's for
+  the Catalog page (Planned items).
 
 A proposal; the team decides.
 
-Small: 40 texts entered on Weblate and no code, tried as a diff.
+Small: 59 texts entered on Weblate and no code, tried as a diff.
 
 ## Evidence
 
@@ -713,7 +852,7 @@ Small: 40 texts entered on Weblate and no code, tried as a diff.
   280f98c5) for every walk. `stable-3_5_0` moved between the walks:
   b24879c3d (`lib/pkp` 1fb843f491) for steps 1 to 13, c7b45f88e
   (`lib/pkp` 1fb843f491) for steps 14 to 17, 9c5e24246c (`lib/pkp`
-  cf3f984335, `lib/ui-library` d4e01883) for steps 18 to 27. Code reads:
+  cf3f984335, `lib/ui-library` d4e01883) for steps 18 to 40. Code reads:
   `stable-3_4_0` 0aec65441 (`lib/pkp` df13621c2d), `stable-3_3_0`
   8e72fc883 (`lib/pkp` d446601ebe).
 - Code reads, on each branch: the entries of the keys above in OMP's
@@ -868,12 +1007,42 @@ Small: 40 texts entered on Weblate and no code, tried as a diff.
   primary language, not the recipient's (read in the code), so a press
   with English primary shows no code there whatever its editors'
   language; not driven.
+- The Catalog and Catalog Entry pages (spec U70 A7 and A15, steps 34
+  to 40): taken by
+  [`omp-french-catalog-management-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-catalog-management-raw-keys/walk.js).
+  It features book 14, so it runs on an install freshly loaded from
+  the default dataset:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js omp shared/playwright/checks/issues/omp-french-catalog-management-raw-keys/walk.js`;
+  `NB=1` in front takes the same steps in English (the check that the
+  diff changes nothing else). Walked on `main` and `stable-3_5_0`, on
+  PostgreSQL, from pkp/datasets 566bb1f (2026-10-03), and on `main`
+  with the diff in and, in English, in and out. The two lines read the
+  same codes. No request failed and no script error showed. The script
+  reads the boxes' names from the page's markup. Code reads: the
+  entries of the 19 keys in OMP's `locale/en` and `locale/fr_CA` on
+  `main`, 3.5, `stable-3_4_0` (0aec65441f) and `stable-3_3_0`
+  (8e72fc8836), and `locale/fr` on `main` for the wording;
+  `templates/manageCatalog/index.tpl`, `ManageCatalogHandler`,
+  `CatalogListPanel`, `AddEntryForm` and `CatalogEntryForm` on `main`,
+  3.4 and 3.3 (`.inc.php` there); ui-library's `CatalogListPanel.vue`
+  and `CatalogListItem.vue` on `main` and on `stable-3_4_0` (ee684b341b)
+  and `stable-3_3_0` (96959f9ed4); 3.5's `CatalogEntryForm` and its
+  English files for the texts new on `main`; a search of OMP, pkp-lib
+  and ui-library for a reader of `successMessage` (none). History:
+  `git log -S` of five of the keys on OMP's `locale/en`, `en_US` and
+  `fr_CA`. Upstream searched 2026-10-03 in pkp/pkp-lib, pkp/omp and
+  pkp/ui-library by `catalog.manage.featured`,
+  `submission.list.viewEntry`, `navigation.catalog.allMonographs`,
+  `seriesPosition.description`, `orderFeatures`, "catalog French
+  translation", "manage catalog French missing translation", "fr_CA
+  catalog" and "catalog translation key": nothing on this fault.
 - Fix trial: the kept scripts on `main` with the diff applied to OMP's
   checkout, and again with it taken out. After "Volume édité" replaced
   the French (France) "Ouvrage collectif" in the diff, steps 18 to 20
   were walked again with the diff in.
-- Not driven: 3.4 and 3.3 (read in the code only); the nine keys the
-  Cause lists as read in the code; the External Review stage's name in
+- Not driven: 3.4 and 3.3 (read in the code only); the eight keys the
+  Cause lists as read in the code; the Catalog page's category column
+  headings and its notice while ordering within a category or series; the External Review stage's name in
   the "Rôles" list's filter, the stage notice, the statistics page and
   the export plugins' lists (read in the code); languages other than
   French (Canada) and English (read in the locale files only); the diff

@@ -115,10 +115,12 @@ Reach:
 - The workflow's Contributors list and the settings' Highlights list
   hide the same drag handle while ordering, but show no notice that
   mentions dragging (code).
-- On `main` 27 other languages translate the two keys with the same
-  promise, French (`fr_CA`) among them: "Glissez-déposez ou cliquez sur
-  les boutons haut et bas…"; `ckb`, `el` and `vi` leave them empty. On
-  3.5 `fr_CA` is empty too (26 translated).
+- On `main` 26 other languages translate the two keys with the same
+  promise, French (France, `fr`) among them: "Glissez-déposez ou cliquez
+  sur les boutons haut et bas…". French (Canada, `fr_CA`), `ckb`, `el`
+  and `vi` leave them empty, on `main` and 3.5; in French (Canada) the
+  notice shows as a code, which the report on OMP's French (Canada)
+  codes covers (pkp-e2e#291).
 - The ui-library story `CatalogListPanel.stories.js` mocks the two keys
   with the same English text.
 - OMP's `catalog.manage.homepageDescription`, `categoryDescription` and
@@ -163,9 +165,9 @@ after a reload.
 
 **What goes with it**
 
-- The fix changes English only. French and the 26 other translations,
-  which make the same promise, are left to their translators on PKP's
-  Weblate; until then a French-interface editor still reads
+- The fix changes English only. The 26 translations that make the same
+  promise are left to their translators on PKP's Weblate; until then an
+  editor working in French (France), for one, still reads
   "Glissez-déposez…".
 - Not in the fix: `:is-draggable="false"` on `CatalogListItem.vue`'s
   `Orderer` would drop the dead handle and its CSS rule, a cleanup the

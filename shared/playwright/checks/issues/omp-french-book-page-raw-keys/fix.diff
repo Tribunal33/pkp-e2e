@@ -22,8 +22,69 @@
  
  msgid "catalog.selectSeries"
  msgstr "Choisir une série"
-@@ -666,10 +666,10 @@
+@@ -609,13 +609,13 @@
+ msgstr "Aucune monographie n'a été assignée."
+ 
+ msgid "catalog.manage.featured"
+-msgstr ""
++msgstr "En vedette"
+ 
+ msgid "catalog.manage.categoryFeatured"
+-msgstr ""
++msgstr "En vedette dans la catégorie"
+ 
+ msgid "catalog.manage.seriesFeatured"
+-msgstr ""
++msgstr "En vedette dans la série"
+ 
+ msgid "catalog.manage.featuredSuccess"
  msgstr ""
+@@ -630,13 +630,13 @@
+ msgstr ""
+ 
+ msgid "catalog.manage.feature.newRelease"
+-msgstr ""
++msgstr "Nouveauté"
+ 
+ msgid "catalog.manage.feature.categoryNewRelease"
+-msgstr ""
++msgstr "Nouveauté dans la catégorie"
+ 
+ msgid "catalog.manage.feature.seriesNewRelease"
+-msgstr ""
++msgstr "Nouveauté dans la série"
+ 
+ msgid "catalog.manage.nonOrderable"
+ msgstr ""
+@@ -646,15 +646,22 @@
+ 
+ msgid "catalog.manage.isFeatured"
+ msgstr ""
++"Cette monographie est en vedette. Retirer cette monographie des titres en "
++"vedette."
+ 
+ msgid "catalog.manage.isNotFeatured"
+ msgstr ""
++"Cette monographie n'est pas en vedette. Mettre cette monographie en vedette."
+ 
+ msgid "catalog.manage.isNewRelease"
+ msgstr ""
++"Cette monographie est une nouveauté. Faire que cette monographie ne soit "
++"plus une nouveauté."
+ 
+ msgid "catalog.manage.isNotNewRelease"
+ msgstr ""
++"Cette monographie n'est pas une nouveauté. Faire de cette monographie une "
++"nouveauté."
+ 
+ msgid "catalog.manage.noSubmissionsSelected"
+ msgstr ""
+@@ -663,13 +670,13 @@
+ msgstr ""
+ 
+ msgid "catalog.manage.findSubmissions"
+-msgstr ""
++msgstr "Trouver des monographies à ajouter au catalogue"
  
  msgid "catalog.noTitles"
 -msgstr ""
@@ -35,7 +96,7 @@
  
  msgid "catalog.noTitlesSearch"
  msgstr ""
-@@ -678,7 +678,7 @@
+@@ -678,7 +685,7 @@
  msgstr "En vedette"
  
  msgid "catalog.featured"
@@ -44,7 +105,7 @@
  
  msgid "catalog.featuredBooks"
  msgstr "Livres en vedette"
-@@ -690,10 +690,10 @@
+@@ -690,10 +697,10 @@
  msgstr ""
  
  msgid "catalog.category.heading"
@@ -57,7 +118,7 @@
  
  msgid "catalog.dateAdded"
  msgstr "Ajouté le"
-@@ -702,13 +702,13 @@
+@@ -702,13 +709,13 @@
  msgstr "Renseignements sur la publication"
  
  msgid "catalog.published"
@@ -74,7 +135,7 @@
  
  msgid "catalog.parentCategory"
  msgstr ""
-@@ -744,16 +744,16 @@
+@@ -744,16 +751,16 @@
  msgstr ""
  
  msgid "catalog.viewableFile.title"
@@ -94,7 +155,16 @@
  
  msgid "common.publications"
  msgstr ""
-@@ -1539,7 +1539,7 @@
+@@ -798,7 +805,7 @@
+ msgstr "Politique concernant les intérêts concurrentiels"
+ 
+ msgid "navigation.catalog.allMonographs"
+-msgstr ""
++msgstr "Toutes les monographies"
+ 
+ msgid "navigation.catalog.manage"
+ msgstr "Gérer"
+@@ -1539,7 +1546,7 @@
  msgstr "Il faut indiquer un prix numérique valide."
  
  msgid "payment.directSales.purchase"
@@ -103,7 +173,7 @@
  
  msgid "payment.directSales.download"
  msgstr "Télécharger"
-@@ -1558,7 +1558,7 @@
+@@ -1558,7 +1565,7 @@
  "trouver {$id}."
  
  msgid "rt.metadata.pkp.dctype"
@@ -152,6 +222,15 @@
  
  msgid "submission.artwork.permissions"
  msgstr "Permissions"
+@@ -135,7 +135,7 @@
+ msgstr "Position dans cette série (ex: livre 2 ou Volume 2)"
+ 
+ msgid "submission.submit.seriesPosition.description"
+-msgstr ""
++msgstr "Exemples : livre 2, volume 2"
+ 
+ msgid "submission.submit.privacyStatement"
+ msgstr "Énoncé de confidentialité"
 @@ -291,7 +291,7 @@
  msgstr ""
  
@@ -161,8 +240,39 @@
  
  msgid "submission.upload.fileContents"
  msgstr ""
-@@ -330,7 +330,7 @@
+@@ -306,7 +306,7 @@
  msgstr ""
+ 
+ msgid "submission.list.monographs"
+-msgstr ""
++msgstr "Monographies"
+ 
+ msgid "submission.list.countMonographs"
+ msgstr ""
+@@ -315,22 +315,26 @@
+ msgstr ""
+ 
+ msgid "submission.list.orderFeatures"
+-msgstr ""
++msgstr "Ordonner les titres en vedette"
+ 
+ msgid "submission.list.orderingFeatures"
+ msgstr ""
++"Utilisez les boutons haut et bas pour modifier l'ordre des titres en "
++"vedette de la page d'accueil."
+ 
+ msgid "submission.list.orderingFeaturesSection"
+ msgstr ""
++"Utilisez les boutons haut et bas pour modifier l'ordre des titres en "
++"vedette dans {$title}."
+ 
+ msgid "submission.list.saveFeatureOrder"
+-msgstr ""
++msgstr "Enregistrer l'ordre"
+ 
+ msgid "submission.list.viewEntry"
+-msgstr ""
++msgstr "Voir l'entrée"
  
  msgid "catalog.browseTitles"
 -msgstr ""
@@ -170,7 +280,7 @@
  
  msgid "publication.catalogEntry"
  msgstr "Catalogue"
-@@ -467,16 +467,16 @@
+@@ -467,16 +471,16 @@
  msgstr ""
  
  msgid "chapter.volume"
@@ -191,7 +301,7 @@
  
  msgid "editor.submission.decision.sendInternalReview"
  msgstr ""
-@@ -609,3 +609,9 @@
+@@ -609,3 +613,9 @@
  
  #~ msgid "submission.submit.confirmExpedite"
  #~ msgstr "Confirmer les métadonnées pour une soumission accélérée"
