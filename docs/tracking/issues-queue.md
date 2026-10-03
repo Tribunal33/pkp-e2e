@@ -37,7 +37,7 @@ and the hourly routine starts one only when none is running
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 |  |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
-| [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
+| [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | **A7 taken: issues session, workstation s0, 2026-10-03** (with U70 A10); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A2 done with U74 A2 (pkp-e2e#705); A5 done with U75 A11 (pkp-e2e#675) |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (pkp-e2e#690) |
@@ -54,7 +54,7 @@ and the hourly routine starts one only when none is running
 | [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 done with U35 A5 (pkp-e2e#343); A6 done with U71 OMP10 (pkp-e2e#560) |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
-| [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 |  |
+| [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 | **OMP2 taken: issues session, workstation s0, 2026-10-03** (with U70 A6) |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 |  |
 | [U63](../specs/U63-import-export.md) | 2 | 0 | 0 | A23: open report docs/reports/2026-10-01-pkp-lib-13414.md (the rest of U63 written up by the issues session, workstation s0, 2026-10-01); A24 open (new 2026-10-02 by the housekeeping fold: the Native XML export list past one page repeats and skips submissions) |
 | [U13](../specs/U13-article-landing-page-and-reading.md) | 1 | 0 | 0 | A13 open (new 2026-10-02 by the housekeeping fold: the PDF reader from a new version's preview says "outdated version published on ."; the OPS1 report docs/issues/U13-OPS1-new-version-preview-called-outdated.md names it and leaves it out of its fix) |
