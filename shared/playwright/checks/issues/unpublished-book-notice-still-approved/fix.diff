@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/notification/managerDelegate/PKPApproveSubmissionNotificationManager.php
++++ b/lib/pkp/classes/notification/managerDelegate/PKPApproveSubmissionNotificationManager.php
+@@ -22,6 +22,7 @@
+ use PKP\core\PKPRequest;
+ use PKP\notification\Notification;
+ use PKP\notification\NotificationManagerDelegate;
++use PKP\publication\PKPPublication;
+ 
+ class PKPApproveSubmissionNotificationManager extends NotificationManagerDelegate
+ {
+@@ -66,7 +67,8 @@
+             Notification::NOTIFICATION_TYPE_VISIT_CATALOG => true,
+         ];
+ 
+-        $isPublished = (bool) $publication->getData('datePublished');
++        // Read the status: an unpublished publication keeps its datePublished.
++        $isPublished = in_array($publication->getData('status'), [PKPPublication::STATUS_PUBLISHED, PKPPublication::STATUS_SCHEDULED]);
+ 
+         foreach ($notificationTypes as $type => $forPublicationState) {
+             $notification = Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
