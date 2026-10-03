@@ -1,0 +1,28 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldAffiliations.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldAffiliations.vue
+@@ -102,6 +102,7 @@
+ 											v-if="supportedLocales.includes(affiliationNameLocale)"
+ 										>
+ 											<FieldText
++												:form-id="`${props.formId}-${props.name}-${affiliationIndex}-${affiliationNameLocale}`"
+ 												:label="getTextFieldLabel(affiliationNameLocale)"
+ 												:value="affiliation.name[affiliationNameLocale]"
+ 												name="name"
+@@ -204,6 +205,7 @@
+ 										>
+ 											<div>
+ 												<FieldText
++													:form-id="`${props.formId}-${props.name}-new-${newAffiliationNameLocale}`"
+ 													:label="getTextFieldLabel(newAffiliationNameLocale)"
+ 													:value="newAffiliation.name[newAffiliationNameLocale]"
+ 													name="name"
+--- a/lib/ui-library/src/components/Form/fields/FieldFunder.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldFunder.vue
+@@ -44,6 +44,7 @@
+ 						:key="locale"
+ 					>
+ 						<FieldText
++							:form-id="`${props.formId}-${props.name}-${locale}`"
+ 							:label="getTextFieldLabel(locale)"
+ 							:value="currentValue.name[locale]"
+ 							name="name"
