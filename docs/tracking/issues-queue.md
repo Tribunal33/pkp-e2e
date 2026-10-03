@@ -34,7 +34,7 @@ and the hourly routine starts one only when none is running
 | [U10](../specs/U10-appearance-and-theming.md) | 13 | 0 | 4 | A4 done with U09 A15 ([pkp-e2e#370](https://github.com/jardakotesovec/pkp-e2e/issues/370)) |
 | [U03](../specs/U03-user-profile.md) | 12 | 0 | 4 | A19 done with U09 A19 (pkp-e2e#375); OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | OPS3 done with U57 A8 (pkp-e2e#360); OPS4 done with U57 A8 (pkp-e2e#360); A11 done with U59 A1 (pkp-e2e#496) |
-| [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 | A14 done with U46 A7 (pkp-e2e#617) |
+| [U73](../specs/U73-publication-formats-proof-terms.md) | 18 | 0 | 3 | **A7 taken: issues session, VM s3, 2026-10-03 (with U74 A5)**; A14 done with U46 A7 (pkp-e2e#617) |
 | [U40](../specs/U40-publication-metadata.md) | 8 | 0 | 3 | A1 done with U21 A20 ([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 |  |
 | [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
@@ -43,7 +43,7 @@ and the hourly routine starts one only when none is running
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A3 done with U08 A2 (pkp-e2e#634) |
-| [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A5 done with U75 A11 (pkp-e2e#675) |
+| [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | **A2 taken: issues session, VM s3, 2026-10-03 (with U74 A2)**; A5 done with U75 A11 (pkp-e2e#675) |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (docs/issues/U27-OMP3-press-reviewer-notices-journal-placeholder.md) |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (pkp-e2e#619) |
