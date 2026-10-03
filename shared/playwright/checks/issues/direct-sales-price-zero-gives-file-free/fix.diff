@@ -1,0 +1,42 @@
+--- a/controllers/grid/files/proof/form/ApprovedProofForm.php
++++ b/controllers/grid/files/proof/form/ApprovedProofForm.php
+@@ -50,6 +50,15 @@
+ 
+         // matches currencies like:  1,500.50 1500.50 1,112.15 5,99 .99
+         $this->addCheck(new \PKP\form\validation\FormValidatorRegExp($this, 'price', 'optional', 'grid.catalogEntry.validPriceRequired', '/^(([1-9]\d{0,2}(,\d{3})*|[1-9]\d*|0|)(.\d{2})?|([1-9]\d{0,2}(,\d{3})*|[1-9]\d*|0|)(.\d{2})?)$/'));
++        // "Direct Sales" needs a price above 0: 0 is what "Open Access" stores, and readers get such a file free
++        $form = $this;
++        $this->addCheck(new \PKP\form\validation\FormValidatorCustom(
++            $this,
++            'price',
++            'optional',
++            'grid.catalogEntry.validPriceRequired',
++            fn ($price) => $form->getData('salesType') !== 'directSales' || (float) $price > 0
++        ));
+         $this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+         $this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
+     }
+@@ -78,7 +87,8 @@
+         ];
+ 
+         $templateMgr->assign('salesTypes', $salesTypes);
+-        $templateMgr->assign('salesType', $this->approvedProof->getSalesType());
++        // The saved choice, or the one just posted when a save is refused
++        $templateMgr->assign('salesType', $this->getData('salesType'));
+         return parent::fetch($request, $template, $display);
+     }
+ 
+--- a/js/controllers/grid/files/proof/form/ApprovedProofFormHandler.js
++++ b/js/controllers/grid/files/proof/form/ApprovedProofFormHandler.js
+@@ -48,7 +48,10 @@
+ 
+ 		// Set up the default enabled/disabled state of the checkbox controls
+ 		if (this.salesType_ !== '') {
+-			if ($priceElement.attr('value') === '') {
++			if (this.salesType_ === 'directSales') {
++				// A sale opens on its choice and price, a refused one included
++				$('#directSales').attr('checked', 'true');
++			} else if ($priceElement.attr('value') === '') {
+ 				$('#notAvailable').attr('checked', 'true');
+ 				$priceElement.attr('disabled', 'true');
+ 			} else if ($priceElement.attr('value') === '0') {
