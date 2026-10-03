@@ -1,0 +1,30 @@
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -246,6 +246,9 @@
+ msgid "manager.setup.contextSummary"
+ msgstr "Résumé du serveur"
+ 
++msgid "manager.setup.contextSummary.description"
++msgstr "Veuillez fournir une brève description de votre serveur afin de présenter sa proposition et son contenu."
++
+ msgid "manager.setup.contextAbout"
+ msgstr "À propos du serveur"
+ 
+@@ -262,7 +265,7 @@
+ msgstr "Initiales du serveur"
+ 
+ msgid "manager.setup.selectCountry"
+-msgstr ""
++msgstr "Sélectionner le pays où se trouve ce serveur, ou le pays de l'adresse postale du serveur ou de l'éditeur."
+ 
+ msgid "manager.setup.serverThumbnail"
+ msgstr "Vignette du serveur"
+@@ -307,7 +310,7 @@
+ msgstr ""
+ 
+ msgid "manager.setup.sponsoringOrganization"
+-msgstr ""
++msgstr "Organisme commanditaire"
+ 
+ msgid "manager.setup.disableSubmissions.description"
+ msgstr ""

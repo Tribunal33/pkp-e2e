@@ -1,0 +1,70 @@
+--- a/locale/fr_CA/locale.po
++++ b/locale/fr_CA/locale.po
+@@ -48,6 +48,9 @@
+ msgid "monograph.publicationFormat"
+ msgstr "Format"
+ 
++msgid "monograph.publicationFormat.onixDeprecated"
++msgstr " (abandonné)"
++
+ msgid "monograph.publicationFormatDetails"
+ msgstr ""
+ 
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -129,7 +129,7 @@
+ msgstr "Presse"
+ 
+ msgid "manager.settings.publisher.identity"
+-msgstr ""
++msgstr "Identité de l'éditeur"
+ 
+ msgid "manager.settings.publisher.identity.description"
+ msgstr ""
+@@ -147,7 +147,7 @@
+ msgstr "Code de l'éditeur"
+ 
+ msgid "manager.settings.publisherCodeType"
+-msgstr ""
++msgstr "Type de code de l'éditeur"
+ 
+ msgid "manager.settings.publisherCodeType.invalid"
+ msgstr ""
+@@ -323,13 +323,16 @@
+ msgstr "(S'affichera dans À propos de cette presse) "
+ 
+ msgid "manager.setup.contextAbout"
+-msgstr ""
++msgstr "À propos de la presse"
+ 
+ msgid "manager.setup.contextAbout.description"
+-msgstr ""
++msgstr "Inclure tout renseignement sur votre presse qui serait d'intérêt pour les lecteurs-trices, auteurs-es ou évaluateurs-trices. Cela peut comprendre votre politique de libre accès, l'orientation et la portée de la presse, la divulgation de commandites et l'historique de la presse."
+ 
+ msgid "manager.setup.contextSummary"
+-msgstr ""
++msgstr "Résumé de la presse"
++
++msgid "manager.setup.contextSummary.description"
++msgstr "Veuillez fournir une brève description de votre presse afin de présenter sa proposition et son contenu."
+ 
+ msgid "manager.setup.copyediting"
+ msgstr "Réviseurs de textes"
+@@ -545,7 +548,7 @@
+ msgstr "Étape 3. Préparer le flux des travaux"
+ 
+ msgid "manager.setup.identity"
+-msgstr ""
++msgstr "Identité de la presse"
+ 
+ msgid "manager.setup.information"
+ msgstr ""
+@@ -749,7 +752,7 @@
+ msgstr "Sigles de la presse"
+ 
+ msgid "manager.setup.selectCountry"
+-msgstr ""
++msgstr "Sélectionner le pays où se trouve cette presse, ou le pays de l'adresse postale de la presse ou de l'éditeur."
+ 
+ msgid "manager.setup.layout"
+ msgstr "Mise en page de la presse"
