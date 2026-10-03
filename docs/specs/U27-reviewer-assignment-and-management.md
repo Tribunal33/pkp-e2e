@@ -1266,6 +1266,11 @@ Left out of the scenarios above, by reason:
   - the competing-interests answer in "Modify Review": preset to the reviewer's answer, changed to a statement and back to "I do not have any competing interests", the row's badge added and removed with it, and the "…Reviewer Competing Interests." row in the activity log (Rules 2, 14b, Side effects): needs a journal with a "Competing Interests" policy, which no scenario sets
   - answers given under a "Competing Interests" policy kept after the policy is emptied: the badge and the group still shown, the answer still editable, and new reviewers no longer asked (Settings, Rule 2): the same journal, with its policy then emptied
   - the "Edit Review" window's top "Close" asking first after a change to the review due date, the "Review Type" or the "Public Visibility" box (no other control tried), the window kept open on "Cancel" and the change dropped on "OK", and closing at once with nothing changed (Fields): likely a bullet in scenario 6, which opens the row's "Edit"
+  - the guard for A16 (issue report
+    `docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md`): a review
+    due date typed in another format ("11/12/2030") in the "Edit" and "Add
+    Reviewer" windows is refused with a message beside the box, and the
+    stored date is unchanged
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
   - the Review Details window on a request with no review: "Request Sent:", "Reviewer Reminded:", "Request Accepted:" or "Request Declined:", the empty blocks, and "Mark as Complete" disabled beside its recommendation message {OJS} or, with a review form, its incomplete-review message (Rule 14c): an editor opens the window to read a review, and on a request that has none only in a rare week
@@ -1355,7 +1360,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | The assignment-changed email's opt-out is offered nowhere; its own unsubscribe page omits the type | 🐞 | minor | — |
 | [A13](#a13) | Email Reviewer sends with an empty body despite the body being marked required | 🐞 | minor | — |
 | [A15](#a15) | The reviewer's response erases the dated "Reviewer Reminded" milestone from the assignment's History | 🐞 | minor | claim check (claude), 2026-08-02 — settled |
-| [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | user-visible | claim check (claude), 2026-08-02 — rescoped |
+| [A16](#a16) | A due date typed in the wrong format looks accepted on screen, but the old value is silently submitted | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | Emptying the request letter makes the add fail silently, yet the assignment is created and the request email never goes out | 🐞 | user-visible | — |
 | [A19](#a19) | The template chooser renders on every add, as a one-option select even with zero alternate templates | 🐞 | minor | — |
 | [A21](#a21) | A rating star pressed just after the Review Details window opens is saved, yet the open window can fall back to "No rating" | 🐞 | user-visible | @beaug 2026-08-29 · risk accepted |
@@ -1594,14 +1599,13 @@ to a defect; both prior conflicting observations are explained (one read
 History before the response, one after). <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — A wrong-format typed due date is silently thrown away** · 🐞 ·
-user-visible.
+**A16 — A wrong-format typed due date is silently thrown away** · 🐞 · medium.
 The due-date pickers (the Add, Edit and Resend windows share the widget)
 accept a date typed in the YYYY-MM-DD format (e.g. 2026-08-02): it saves
 and flows downstream. Input in any other format only looks accepted. The
 visible field keeps the keystrokes while the old value is silently
 submitted, so the editor's correction does not happen and nothing says so.
-Basis: live probe.
+Basis: probe, 2026-10-03.
 Re-checked: claim check (claude), 2026-08-02 — rescoped (a correctly
 formatted typed date is accepted end-to-end; only wrong-format input is
 discarded). <sup>[f-a16](#fn-a16)</sup>
@@ -3136,6 +3140,7 @@ the change notice ("*Submit Review By:* {date}"); typed as MM/DD/YYYY it
 showed "11122026" and kept the old date (the save answered 200, nothing
 sent). A date set with a script's `fill()` behaves like the wrong format,
 which is how an earlier "typed dates are not saved" reading arose.
+Issue report: [pkp-e2e#230](https://github.com/jardakotesovec/pkp-e2e/issues/230) ([docs/issues/U13-OJS8-impossible-typed-date-saved-wrong.md](../issues/U13-OJS8-impossible-typed-date-saved-wrong.md)).
 
 <a id="fn-a17"></a>
 **f-a17** — Live-probed 2026-08-02 (OJS + OMP): past response and review

@@ -1325,7 +1325,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS5](#ojs5) | With the Publication Facts Label plugin on, no article page shows the "Publication Facts" panel | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | On a journal article's PDF reader, the return arrow is announced "Return to Issue Details" but opens the article | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS7](#ojs7) | A refused "OK" in the Publication Facts Label settings shows the saved values again, dropping every change just made | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS8](#ojs8) | A typed date that does not exist is saved as another date, or not at all, with no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [OJS8](#ojs8) | A typed impossible date, or one in another format, is silently saved as another date or none | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS9](#ojs9) | Readers opening an XML galley in the Lens reader see its TeX formulas as blanks | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1690,21 +1690,24 @@ the index's server cannot be reached.
 Basis: probe, 2026-10-01. <sup>[f-ojs7](#fn-f-ojs7)</sup>
 
 <a id="ojs8"></a>
-**OJS8 — A typed date that does not exist is saved as another date, or not at all, with no message** · 🐞 · medium.
+**OJS8 — A typed impossible date, or one in another format, is silently saved as another date or none** · 🐞 · medium.
 An editor or manager types a date that does not exist into a date box
 and presses "OK": "2030-02-30" as a review's "Review Due Date", or
 "2026-99-99" as the "Start Date" in the Publication Facts Label
-settings. The window closes as after any save, with no message, but
-what is stored is another date ("2030-02-03"), the date that was there
-before, or no date. They expect the date to be refused.
-For a review, the reviewer is emailed the wrong due date and the
-reminders follow it. A date picked in the calendar, or a real date
-typed, is saved correctly.
-It was seen in a review's "Edit" window and in the Publication Facts
-Label settings. By the code it is the same in every window whose date
-box opens a calendar: adding a reviewer, an issue's data and access, a
-subscription, a book chapter. A preprint server has no such window.
-Basis: probe, 2026-10-01. <sup>[f-ojs8](#fn-f-ojs8)</sup>
+settings. Or they type a real date in another format than the box shows,
+"11/12/2030" for "2030-11-12": the box drops the slashes and shows
+"11122030". The window closes as after any save, with no error message,
+but what is stored is another date ("2030-02-03"), the date that was
+there before, or no date. They expect the date to be refused. For a
+review, the reviewer is emailed the wrong due date and the reminders
+follow it; when a reviewer is added with a due date in another format,
+the invitation names the date the window prefilled. A date picked in the
+calendar, or a real date typed in the format the box shows, is saved
+correctly. It was seen in a review's "Edit" window, in the "Add
+Reviewer" window and in the Publication Facts Label settings. By the
+code it is the same in every window whose date box opens a calendar:
+resending a review request, an issue's data and access, a subscription,
+a book chapter. Basis: probe, 2026-10-03. <sup>[f-ojs8](#fn-f-ojs8)</sup>
 
 <a id="ojs9"></a>
 **OJS9 — Readers opening an XML galley in the Lens reader see its TeX formulas as blanks** · 🐞 · medium · crash: script.

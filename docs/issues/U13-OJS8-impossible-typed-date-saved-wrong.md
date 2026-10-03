@@ -1,4 +1,4 @@
-# A typed date that does not exist is saved as another date, or not at all, with no message
+# A typed impossible date, or one in another format, is silently saved as another date or none
 
 - **Severity** medium
 - **Effort** small
@@ -9,60 +9,78 @@
   - 3.4: OJS, OMP (code)
   - 3.3: OJS, OMP (code)
 - **Introduced** `pkp/pkp-lib#2030` for `pkp/pkp-lib#1868` · [bc4f102bc7](https://github.com/pkp/pkp-lib/commit/bc4f102bc779d829c316b77ba566b02416d3344c) · 2016-10-20 · Dimitris Efstathiou (defstat)
-- **Upstream** none found (2026-10-01)
-- **Tracked in** spec U13 [OJS8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ojs8)
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-01, again 2026-10-03)
+- **Tracked in** spec U13 [OJS8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ojs8), spec U27 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U27-reviewer-assignment-and-management.md#a16)
+- **Checked** 2026-10-01 and 2026-10-03, each branch's tip (the commits in Evidence)
 
 ## Summary
 
 An editor or manager types a date that does not exist into a date box
 and presses "OK": "2030-02-30" as a review's "Review Due Date", or
 "2026-99-99" as the "Start Date" in the Publication Facts Label
-settings. The window closes as after any save, with no message, but
-what is stored is another date ("2030-02-03"), the date that was there
-before, or no date. They expect the date to be refused.
+settings. Or they type a real date in another format than the box
+shows, "11/12/2030" for "2030-11-12": the box drops the slashes and
+shows "11122030". The window closes as after any save, with no error
+message, but what is stored is another date ("2030-02-03"), the date
+that was there before, or no date. They expect the date to be refused.
 
 For a review, the reviewer is emailed the wrong due date and the
-reminders follow it. A date picked in the calendar, or a real date
-typed, is saved correctly.
+reminders follow it; when a reviewer is added with a due date in
+another format, the invitation names the date the window prefilled. A date picked in the calendar, or
+a real date typed in the format the box shows, is saved correctly.
 
-It was seen in a review's "Edit" window and in the Publication Facts
-Label settings. By the code it is the same in every window whose date
-box opens a calendar: adding a reviewer, an issue's data and access, a
-subscription, a book chapter. A preprint server has no such window.
+It was seen in a review's "Edit" window, in the "Add Reviewer" window
+and in the Publication Facts Label settings. By the code it is the same
+in every window whose date box opens a calendar: resending a review
+request, an issue's data and access, a subscription, a book chapter.
 
 ## Impact
 
 - **Lost.** The date the person meant. What is stored instead depends
-  on the box and the text:
-  - an empty box, a text that is never a date while typed
-    ("2026-99-99"): no date is stored;
-  - a day past the end of the month ("2030-02-30", "2026-11-31"): the
-    date read before the last key is stored ("2030-02-03",
-    "2026-11-03");
-  - a box that already held a date, a text that is never a date: the
-    old date is kept.
-- **Who.** An editor who types a review's due date and mistypes it:
-  the reviewer's email "Your review assignment has been changed" says
-  "Submit Review By: 2030-02-03", and the review's reminders and its
-  overdue status follow the stored date. A journal manager who types
-  the Publication Facts Label "Start Date".
+  on what the box held and what was typed:
+  - The box was empty and the text never read as a date while it was
+    typed ("2026-99-99"): no date is stored.
+  - The day is past the end of the month ("2030-02-30", "2026-11-31"):
+    the date the text read as one key earlier is stored ("2030-02-03",
+    "2026-11-03").
+  - The box held a date and the text never read as a date: the old date
+    is kept. A real date in another format ("11/12/2030") is such a
+    text, since the box reads only year-month-day.
+- **Who.** Editors and journal managers who type a date instead of
+  picking it:
+  - A review's due date: the reviewer's email "Your review assignment
+    has been changed" says "Submit Review By: 2030-02-03", and the
+    review's reminders and its overdue status follow the stored date.
+  - A subscription's "End Date" (by the code, not walked): "2027-02-30"
+    ends the subscription on 2027-02-03, and a renewal typed in another
+    format keeps the old end date, so the subscriber loses access early.
+  - An issue's open access date (by the code, not walked): readers get
+    the issue free on another day ("2027-02-30" opens it on
+    2027-02-03); with no date stored, the issue stays behind the
+    subscription.
+  - The Publication Facts Label "Start Date": the label is left off
+    articles submitted before it, and its journal-wide figures count
+    only submissions from that date on. A wrong or missing date shows
+    or hides the label on the wrong articles, and changes the figures
+    readers see.
 - **Way round.** Pick the date in the calendar, or type it again
   correctly; opening the window again shows what was stored.
 
-Medium: a date other than the one typed is stored and sent to the
-reviewer while the screen reports a normal save, on a narrow input (a
-typed date that does not exist) and with a way round; it would be low if
-the team judges that a mistyped date's wrong due date is of no
-consequence, since a date that exists always saves correctly.
+Medium: a date other than the one typed is stored while the screen
+reports a normal save, and it reaches a reviewer's email, a subscriber's
+access or the day an issue opens, but only on a narrow input and with a
+way round. It would be high if subscription journals' managers commonly
+type dates in another format, since subscribers would then lose access
+silently.
 
 ## Steps to reproduce
 
 Preconditions:
 
 - PKP's default test dataset, OJS `main`: journal `publicknowledge`.
-  Dates are shown as year-month-day (`date_format_short = "Y-m-d"`,
-  the dataset's setting).
+  The date boxes follow the journal's short date format (Settings ›
+  Website › Setup › "Date & Time", "Date (Short)"). The dataset leaves
+  it unset, so the boxes use the install's default, year-month-day.
 - The "Publication Facts Label plugin" is off in the dataset; step 2
   turns it on.
 - For the review window on OMP: PKP's default test dataset, OMP `main`.
@@ -94,14 +112,39 @@ in International Development"):
 
 11. Sign in as `dbarnes` and open the submission's workflow.
 12. On Julie Janssen's row under "Reviewers", press "More Actions", then
-    "Edit". "Response Due Date" and "Review Due Date" both hold the
-    dataset's date ("2026-10-28" on the day of the walk).
+    "Edit". "Response Due Date" and "Review Due Date" both hold
+    "2026-10-30".
 13. Select the date in "Review Due Date", type "2030-02-30" in its
     place, press Tab, then "OK".
 14. Press "More Actions", then "Edit" again and read "Review Due Date".
+15. Read the email Julie Janssen is sent, in her mailbox
+    (`jjanssen@mailinator.com` in the dataset).
 
-**Expected.** At steps 5, 7, 9 and 13 "OK" is refused: the window stays
-open with a message beside the date box, and nothing is saved.
+A date in another format, on the same submission. Steps 16 to 24 use
+rows that steps 12 to 15 leave alone, so they can follow step 15, or
+step 11 on a freshly loaded dataset:
+
+16. On Paul Hudson's row under "Reviewers", press "More Actions", then
+    "Edit". "Review Due Date" holds "2026-10-30".
+17. Select the date in "Review Due Date", type "11/12/2030" in its
+    place and press Tab.
+18. Press "OK".
+19. Press "More Actions", then "Edit" again and read "Review Due Date".
+20. Close the window. Under "Reviewers", press "Add Reviewer", type
+    "McCrae" in the search box and press "Select Reviewer" on Aisla
+    McCrae. "Review Due Date" holds the prefilled date ("2026-10-31"
+    on the day of the walk).
+21. Select the date in "Review Due Date", type "11/12/2030" in its
+    place and press Tab.
+22. Press "Add Reviewer".
+23. On Aisla McCrae's new row, press "More Actions", then "Edit", and
+    read "Review Due Date".
+24. Read the invitation Aisla McCrae is sent, in her mailbox
+    (`amccrae@mailinator.com`).
+
+**Expected.** At steps 5, 7, 9, 13, 18 and 22 "OK" or "Add Reviewer" is
+refused: the window stays open with a message beside the date box, and
+nothing is saved.
 
 **Observed.** Each "OK" closes the window, and no step shows a message
 about the date. In the settings window each "OK" shows:
@@ -114,12 +157,23 @@ Your changes have been saved.
 - Step 8: "Start Date" holds "2020-02-03".
 - Step 10: "Start Date" still holds "2020-02-03".
 - Step 14: "Review Due Date" holds "2030-02-03", on OJS and on OMP.
-  "Response Due Date" is unchanged. Julie Janssen is sent "Your review
-  assignment has been changed for Journal of Public Knowledge" with
-  "Submit Review By: 2030-02-03".
+  "Response Due Date" is unchanged.
+- Step 15: "Your review assignment has been changed for Journal of
+  Public Knowledge", with "Submit Review By: 2030-02-03".
+- Step 17: the box shows "11122030" and no message.
+- Step 19: "Review Due Date" still holds "2026-10-30", on OJS and on
+  OMP. Paul Hudson is sent no email.
+- Step 22: the window closes with "Aisla McCrae was assigned to review
+  this submission and sent an email notification."
+- Step 23: "Review Due Date" holds the prefilled "2026-10-31", on OJS
+  and on OMP.
+- Step 24: "Invitation to review" (OMP: "Manuscript Review Request")
+  says "your review is due by 2026-10-31".
 
 A real date typed the same way ("2021-03-04" in "Start Date") is saved
-and shown again, and an emptied "Start Date" is saved empty.
+and shown again, and an emptied "Start Date" is saved empty. Typed as
+"2030-11-12" at step 17, the date is saved, comes back at step 19 and
+reaches Paul Hudson's email ("Submit Review By: 2030-11-12").
 
 ## Cause
 
@@ -150,29 +204,36 @@ valid date or empty value, so a server check such as
 `PflSettingsForm`'s on `dateStart` never meets the typed text.
 
 The split into a visible box and a hidden posted field came with
-bc4f102bc7, which made the box follow `date_format_short`. Before it,
+bc4f102bc7, which made the box follow the short date format. Before it,
 the visible box was the posted field.
 
 Downstream of a review's due date: `EditReviewForm::execute()` stores
 the posted date, notifies the reviewer and sends `EditReviewNotify`
 (template `REVIEW_EDIT`, which prints `{$reviewDueDate}`);
-`ReviewReminder` and `ReviewAssignment::getStatus()` read the stored
-`date_due`.
+`ReviewReminder` (`classes/task/ReviewReminder.php`, line 85) and
+`ReviewAssignment::getStatus()` read the stored `date_due`.
 
 Reach, every `class="datepicker"` field in the three apps' templates:
 
 - "Start Date" in the Publication Facts Label settings, OJS: walked.
-- "Review Due Date" in a review's "Edit" window, OJS and OMP: walked.
+- "Review Due Date" in a review's "Edit" window and in the "Add
+  Reviewer" window, OJS and OMP: walked.
 - Read in the templates, not walked: "Response Due Date" in the same
-  window, and both due dates in the "Add Reviewer" and resend-request
-  forms (pkp-lib); "Date Published" in an issue's "Issue Data", the open
+  windows, and both due dates in the resend-request form
+  (`resendRequestReviewerForm.tpl`, pkp-lib); "Date Published" in an issue's "Issue Data", the open
   access date in its "Access" form, and "Start Date" and "End Date" of
   an individual or institutional subscription (OJS); "Date Published"
   in a chapter's form (OMP).
-- OPS has no template with such a field on `main`.
+- OPS: its `lib/pkp` carries the three reviewer form templates
+  (`editReviewForm.tpl`, `reviewerFormFooter.tpl`,
+  `resendRequestReviewerForm.tpl`), but no OPS screen opens them, and
+  OPS's own templates have no such box.
 - Any text the datepicker does not read as a date in the display format
-  goes the same way, for example a date typed in another order. jQuery
-  UI updates the hidden field on key events and on a calendar pick
+  goes the same way, a date typed in another format among them. jQuery
+  UI's `_doKeyPress` also drops every key that is not in the
+  format (`constrainInput`, on by default, through `_possibleChars`),
+  so the slashes never reach the box and it shows "11122030", which
+  never parses. jQuery UI updates the hidden field on key events and on a calendar pick
   only, so a text that arrives without a key press leaves it as it was.
 
 ## Proposed fix
@@ -284,7 +345,7 @@ against the app root):
  
 ```
 
-Three choices in it:
+Two choices in it:
 
 - The rule and `submitHandler_` parse through one helper,
   `parseDatepickerValue_`, which gives `$.datepicker.parseDate` the
@@ -294,12 +355,11 @@ Three choices in it:
   and the datepicker therefore agree on what a date is.
 - A box whose text is unchanged is not checked, and posts the date it
   was rendered with. `PKPString::dateformatPHP2JQueryDatepicker()`
-  translates only the PHP letters `d j l m n F Y`, so an install whose
-  `date_format_short` uses another letter renders a text the datepicker
+  translates only the PHP letters `d j l m n F Y`, so a journal whose
+  short date format uses another letter renders a text the datepicker
   cannot parse back; without this, every such form would be refused
-  with its date untouched.
-- A `change` handler runs the rule when a date is picked in the
-  calendar, so the message does not wait for "OK".
+  with its date untouched. A manager can reach that case: "Date &
+  Time" offers a "Custom" short date, set per journal and per language.
 
 Tried on OJS `main`. With the fix, steps 4, 7, 9 and 13 show "Please
 enter a valid date." beside the box when Tab is pressed, "OK" sends
@@ -308,12 +368,22 @@ nothing, the window stays open and the stored date is unchanged. After
 and "OK" saves that day. A real date ("2021-03-04") and an emptied box
 save and come back, with the fix in and out.
 
+Tried again on OJS and OMP `main` for steps 16 to 24. With the fix,
+"11122030" shows "Please enter a valid date." beside "Review Due Date"
+as soon as Tab is pressed; "OK" and "Add Reviewer" send nothing, the
+window stays open, the stored date is unchanged and Aisla McCrae is
+neither added nor emailed. "2030-11-12" typed in Paul Hudson's "Review
+Due Date" saves, comes back in "Edit" and reaches his email ("Submit
+Review By: 2030-11-12"), with the fix in and out.
+
 **Alternatives**
 
 - Post the typed text when it does not parse and let each form's server
-  check refuse it. Only some forms have such a check, and PHP's
-  `strtotime()`, which `PflSettingsForm` uses, reads "2020-02-30" as
-  the 1st of March, so a wrong date would still be stored.
+  check refuse it. Only some forms have such a check, and the
+  Publication Facts Label's lets "2020-02-30" through: `PflSettingsForm`
+  stores the typed text as it is, and `PflPlugin` reads it later with
+  PHP's `strtotime()`, which takes "2020-02-30" as 1 March 2020, so a
+  wrong date would still take effect.
 - Correct the box to the hidden field's date when the box loses focus.
   The person would see what will be saved, but a typed "2026-99-99"
   would turn into an old date or an empty box without a reason given.
@@ -322,17 +392,24 @@ save and come back, with the fix in and out.
 
 - One change in pkp-lib covers every field in the Cause's Reach, in OJS
   and OMP; no template or PHP form changes.
-- On an install whose `date_format_short` the datepicker cannot parse,
-  a date typed in that format is now refused, where today it is
-  silently not saved; the calendar still works there. Making
+- For a journal whose short date format the datepicker cannot parse, a
+  date typed in that format is now refused, where today it is silently
+  not saved; the calendar still works there. Making
   `dateformatPHP2JQueryDatepicker()` cover more letters is a separate
   change.
+- `$.validator.addClassRules('datepicker', …)` is global: once the first
+  `FormHandler` registers it, it applies to every jQuery-validated
+  field with the class `datepicker`. A field with that class that
+  `FormHandler` did not set up would always be refused, since
+  `datepicker('option', …)` gives nothing to parse with. None was found
+  in the templates (the search under "Reach" in the Cause).
 - Backport: `FormHandler.js` has the same blocks on `stable-3_5_0`,
   `stable-3_4_0` and `stable-3_3_0`; the diff was not tried there.
 - No stored data to repair: what was saved is a valid date or none,
   and nothing marks it as unintended.
-- Test: an e2e scenario that types "2030-02-30" into a review's "Review
-  Due Date" and expects the window to stay open with the message.
+- Test: an e2e scenario that types "2030-02-30", then "11/12/2030",
+  into a review's "Review Due Date" and expects the window to stay open
+  with the message each time.
 
 A proposal. Small: one rule, one helper and a few lines in one shared
 JavaScript file, following the validation the form already runs, tried.
@@ -344,8 +421,7 @@ JavaScript file, following the validation the form already runs, tried.
   the `main` and `stable-3_5_0` PostgreSQL dumps):
   [`shared/playwright/checks/issues/impossible-typed-date-saved-wrong/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/impossible-typed-date-saved-wrong/walk.js),
   with its helpers in `lib.js` beside it, run with
-  `PROBE_FEATURE=issues-ir17 PROBE_AGENT=ir17 node bin/probe.js all shared/playwright/checks/issues/impossible-typed-date-saved-wrong/walk.js`.
-  (`ONLY=ojs,omp` in front skips OPS, where the script does nothing.)
+  `ONLY=ojs,omp PROBE_FEATURE=issues-ir17 PROBE_AGENT=ir17 node bin/probe.js all shared/playwright/checks/issues/impossible-typed-date-saved-wrong/walk.js`.
   It runs steps 1 to 14 on OJS and steps 11 to 14 on OMP, types each
   date key by key into the visible box, and records the box, the hidden
   field, any message, whether "OK" sent a save, and the stored value
@@ -354,22 +430,25 @@ JavaScript file, following the validation the form already runs, tried.
   "2021-03-04" into "Start Date" and saves, empties the box and
   saves, and types "2026-99-99", picks the 15th in the calendar and
   saves.
-- The reviewer's email was read in the test install's mailbox after
-  step 13 on OJS and OMP. That reminders and the overdue status follow
-  the stored date is read in `ReviewReminder` and
-  `ReviewAssignment::getStatus()`, not driven.
+- Step 15's email was read in the test install's mailbox on OJS and
+  OMP.
 - Every save answered 200. No request failed and no page script failed
-  during the walks. The review window's "OK" shows no notice of its
-  own; the settings window's does.
-- The fix: `node bin/try-fix.js apply shared/playwright/checks/issues/impossible-typed-date-saved-wrong/fix.diff ojs`,
-  then `walk.js neighbour` on a freshly loaded install, then
-  `node bin/try-fix.js revert` with the same diff; `walk.js neighbour`
-  was also run without the fix. The fix was tried on OJS only; OMP
-  shares the file unchanged (`diff` of the two checkouts' copies).
-  Not tried: whether the message would stay after a calendar pick
-  without the fix's `change` handler; an install with a
-  `date_format_short` the datepicker cannot parse (the unchanged-text
-  branch was read, not driven).
+  during the walks, and no browser dialog opened in the 2026-10-03
+  walks. The review window's
+  "OK" shows no notice of its own; the settings window's does.
+- The fix was applied with `node bin/try-fix.js apply` and reverted
+  after each trial: on 2026-10-01 on OJS, for `walk.js neighbour`
+  (OMP's `FormHandler.js` is the same file); on 2026-10-03 on OJS and
+  OMP, for `walk-a16.js` and `walk-a16.js neighbour` (a date typed in
+  the box's own format in the Edit window). Each neighbour check was
+  also run without the fix.
+- Unverified: that, without the fix's `change` handler, the message
+  about the text typed before would stay beside a date picked in the
+  calendar. The code says so (the rule runs on Tab through
+  `onFocusOutValidation_` and on "OK", and a pick fires neither), but
+  it was not seen; with the handler, the message clears at once. Not
+  tried either: a journal with a short date format the datepicker
+  cannot parse (the unchanged-text branch was read, not driven).
 - Tips: OJS `main` bade233f73 with pkp-lib 2e377d27fc and pflPlugin
   622c85dcb1; OMP `main` 3b0ecf794 with pkp-lib 3dc90c81a6; OPS `main`
   c8af945bb7; `stable-3_5_0` OJS 92b9a16b48 and OMP 3081c9b00 with
@@ -395,9 +474,13 @@ JavaScript file, following the validation the form already runs, tried.
   2bad175b40 (2018, `pkp/pkp-lib#4216`, which scoped the setup to the
   form and added the emptied-box block) over bc4f102bc7, which replaced
   `$('.datepicker').datepicker({dateFormat: 'yy-mm-dd'})` with the
-  hidden `altField` and the `-removed` rename, and added the hidden
-  field to `textInput.tpl`. GitHub's branch list for the commit names
-  pull request 2030. How an impossible date fared before 2016, when the
+  hidden `altField` and added the hidden field to `textInput.tpl`. Its
+  `-removed` rename sat inside `if (!$(this).hasClass('hasDatepicker'))`,
+  which is always false right after `.datepicker()`, so the rename took
+  effect only with 2bad175b40. Until then both fields were posted under
+  one name and PHP kept the later one, the hidden field, so the server
+  has read the hidden field since bc4f102bc7 and the Introduced commit
+  stands. GitHub's branch list for the commit names pull request 2030. How an impossible date fared before 2016, when the
   box itself was posted, was not checked.
 - jQuery UI: `_doKeyUp` and `parseDate` ("Invalid date") in
   `js/build/jquery-ui/jquery-ui.js` of the OJS `main` checkout.
@@ -405,21 +488,38 @@ JavaScript file, following the validation the form already runs, tried.
   OPS `main` checkouts (`templates`, `plugins`, `lib/pkp/templates`),
   and the same search on the 3.5 checkouts and the 3.4 and 3.3
   branches.
-- Upstream search (2026-10-01), issues and pull requests, open and
-  closed: pkp/pkp-lib for "datepicker invalid date", "datepicker typed
-  date", "date picker manually entered", "altField", "review due date
-  wrong date typed", "FormHandler datepicker" and "date published issue
-  wrong day typing"; pkp/ojs for "datepicker"; pkp/pflPlugin for
-  "date"; pkp/ui-library for "datepicker invalid". Read and found to be
-  other faults: `pkp/pkp-lib#4216` (closed and fixed: an emptied expiry
+- Upstream search (2026-10-01 and 2026-10-03; pkp/pkp-lib, pkp/ojs,
+  pkp/omp, pkp/pflPlugin, pkp/ui-library). Read and found to be other
+  faults: `pkp/pkp-lib#4216` (closed and fixed: an emptied expiry
   date kept the old date, the same mechanism for the empty box only),
   `pkp/pkp-lib#3420` (closed: due dates wrong under a non-default
   `date_format_short`) and `pkp/pkp-lib#5823` (open: the picker is slow
-  to reach old years).
+  to reach old years), `pkp/pkp-lib#2689` (closed and fixed by
+  `pkp/pkp-lib#5760`: dates the server formatted for the box were read
+  back wrong under some short date formats).
+- Steps 16 to 24 (spec U27 A16): a second kept script,
+  [`walk-a16.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/impossible-typed-date-saved-wrong/walk-a16.js)
+  beside the first, with its helpers in the same `lib.js`, run with
+  `ONLY=ojs,omp PROBE_FEATURE=issues-k3 PROBE_AGENT=k3 node bin/probe.js all shared/playwright/checks/issues/impossible-typed-date-saved-wrong/walk-a16.js`
+  on installs freshly loaded from PKP's default test dataset
+  (pkp/datasets e8dafbc). It types each date key by key and records the
+  box, the hidden field, any message, whether the save was sent, the
+  stored `date_due` and the email each reviewer was sent. It opens the
+  workflow again for step 20 instead of closing the Edit window. On
+  2026-10-03 it ran on OJS `main` ff004d0973 with pkp-lib 987776cd04
+  and OMP `main` 3b0ecf794 with pkp-lib 3dc90c81a6, and with
+  `PKP_E2E_LINE=stable-3_5_0` on OJS c1cee76b95 with pkp-lib 771474347e
+  and OMP 9c5e24246 with pkp-lib cf3f984335, with the same results on
+  both lines and both apps. On 2026-10-03 the 3.4 and 3.3 tips were
+  pkp-lib `stable-3_4_0` 767353f4fe and `stable-3_3_0` ac3fa73402.
 - Not driven: the fields the Cause's Reach lists as read in the
-  templates; a date typed in another order; a paste from the mouse menu
+  templates; a paste from the mouse menu
   (the Steps' sentence on it rests on the jQuery UI read and on
   Playwright's `fill()`, which sets the box without key presses and
-  saved an empty date in this window); a
-  `date_format_short` other than the dataset's `Y-m-d`; MySQL (the
-  fault is in the browser and does not depend on the database).
+  left the empty "Start Date" empty); a short date format other than
+  year-month-day; the subscription, issue and label consequences "Who"
+  gives from the code (the `date_start` and `date_end` checks of
+  `IndividualSubscriptionDAO` and `InstitutionalSubscriptionDAO`,
+  `IssueAction::subscriptionRequired()`, and `PflPlugin`'s reads of
+  `dateStart`); MySQL (the fault is in the browser and does not depend
+  on the database).
