@@ -1,0 +1,14 @@
+--- a/plugins/generic/announcementFeed/AnnouncementFeedGatewayPlugin.php
++++ b/plugins/generic/announcementFeed/AnnouncementFeedGatewayPlugin.php
+@@ -130,7 +130,10 @@
+         }
+ 
+         // Get limit setting, if any
+-        $announcements = Announcement::withContextIds([$journal->getId()])->withActiveByDate();
++        $announcements = Announcement::withContextIds([$journal->getId()])
++            ->withActiveByDate()
++            ->orderBy(Announcement::CREATED_AT, 'desc')
++            ->orderBy('announcement_id', 'desc');
+         $recentItems = (int) $this->_parentPlugin->getSetting($journal->getId(), 'recentItems');
+         if ($recentItems > 0) {
+             $announcements->limit($recentItems);

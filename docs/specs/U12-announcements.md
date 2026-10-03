@@ -844,6 +844,8 @@ Left out of the scenarios above, by reason:
   - the guard for A1 (issue report `docs/issues/U12-A1-remove-announcement-type-deletes-announcements.md`): removing an announcement type with typed announcements leaves them on the list and the public site, their type cleared.
   - the guard for OMP2 (issue report `docs/issues/U12-OMP2-press-home-shows-site-announcements.md`): a press with no announcements block of its own shows no announcements on its home page while the site's announcements are on with a count.
   - the guard for A14 (issue report `docs/issues/U12-A14-french-announcement-email-english-sentence.md`): on a press and a preprint server whose primary language is French, the announcement email's body sentence arrives in French.
+  - the guard for A7 (issue report `docs/issues/U12-A7-announcement-feed-limit-keeps-oldest.md`): with "Limit feed to" set below the number of current announcements, the three feeds carry the newest ones and RSS 2.0's channel date is the newest's.
+  - the guard for A15 (issue report `docs/issues/U12-A15-announcement-feed-dates-percent-signs.md`): the Atom and RSS 1.0 feeds' dates are well-formed RFC 3339 and W3CDTF values.
 - **Nothing new to test**:
   - an unsaved tick on the settings tab kept across a tab switch and
     lost on leaving the page (Fields)
@@ -936,13 +938,13 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Removing an announcement type deletes every announcement of that type, behind a dialog that names neither the type nor its announcements | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | An image refused on "Save" (a ".jpeg" name, an upper-case extension) deletes the announcement being edited | 🐞 | user-visible | — |
 | [A3](#a3) | "Edit Announcement" prints the expiry date in the journal's short date format, which the save refuses unless that format is YYYY-MM-DD | 🐞 | user-visible | — |
-| [A7](#a7) | "Limit feed to {n} most recent announcements." keeps the first {n} the unlimited feed lists, not the most recent {OJS} | 🐞 | minor | — |
+| [A7](#a7) | A journal's announcement feeds with "Limit feed to" set carry the oldest announcements, never the newest {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Ticking "Send an email about this to all registered users." when editing an announcement sends nothing | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | An unsaved title stays on the row after the panel is closed, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A12](#a12) | A deleted announcement's image file, and the file a refused or replaced image had, stay in the public files | 🐞 | minor | — |
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On a French press or preprint server, the new-announcement email's last sentence arrives in English {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A15](#a15) | The Atom and RSS 1.0 feeds carry unreadable dates ("%2026-%09-%17UTC%UTC%259") {OJS} | 🐞 | minor | — |
+| [A15](#a15) | A journal's Atom and RSS 1.0 announcement feeds write every date with "%" signs ("%2026-%10-%03UTC%UTC%275") {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A press's home page shows the site's announcements, with links that lead nowhere {OMP} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An announcement's type is printed nowhere a reader looks | ❓ | minor | — |
 | [A6](#a6) | A chosen "Announcement Type" cannot be cleared, only changed | ❓ | minor | — |
@@ -1012,11 +1014,20 @@ the field offer "None"? Lean: yes; a type is optional on the way in and
 should be on the way out. Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — "Limit feed to" does not keep the most recent** {OJS} · 🐞 · minor.
-A manager who sets "Limit feed to 2 most recent announcements." expects
-the feeds to carry the two newest. They carry the first two they list
-without the limit, usually the two added first, and the RSS 2.0 feed's
-channel date is the first one's. Basis: probe. <sup>f-a7</sup>
+**A7 — A journal's announcement feeds with "Limit feed to" set carry the oldest announcements, never the newest** {OJS} · 🐞 · medium.
+A journal manager who sets the announcement feed plugin's "Limit feed to
+2 most recent announcements." expects the feeds to carry the two newest
+announcements. The Atom, RSS 2.0 and RSS 1.0 feeds carry the two oldest
+current announcements instead, and the RSS 2.0 feed gives the oldest
+one's time as its own date. An announcement with no expiry date stays
+current for ever, and the expiry date is optional and empty unless the
+manager fills it. So once the journal has as many announcements without
+one as the limit, the feeds are frozen: no new announcement reaches them
+again, and nobody is told. Emptying the limit brings every current
+announcement back, the newest last. It needs the "Announcement Feed
+Plugin", which is off on a new journal, and a number saved in "Limit
+feed to", which is empty until a manager sets it.
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The Announcements page works while announcements are off** · ❓ · minor.
@@ -1099,12 +1110,20 @@ lists them.
 Basis: probe, 2026-10-03. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — The Atom and RSS 1.0 feeds carry unreadable dates** {OJS} · 🐞 · minor.
-A visitor who subscribes to the Atom or RSS 1.0 feed gets entries whose
-date reads "%2026-%09-%17UTC%UTC%259" (Atom, the feed's own stamp and
-every entry alike) or "%2026-%09-%17" (RSS 1.0); a strict feed reader may
-refuse the whole feed. The RSS 2.0 feed's dates are well formed. Basis:
-probe. <sup>f-a15</sup>
+**A15 — A journal's Atom and RSS 1.0 announcement feeds write every date with "%" signs ("%2026-%10-%03UTC%UTC%275")** {OJS} · 🐞 · medium.
+A visitor who subscribes to a journal's announcements in the Atom or the
+RSS 1.0 feed gets dates that are not dates. For an announcement posted
+on 3 October 2026 at 16:27:47 UTC, the Atom feed's "updated" date and
+each entry's "updated" and "published" dates read
+"%2026-%10-%03UTC%UTC%275", where "2026-10-03T16:27:47+00:00" is
+expected; each RSS 1.0 item's date reads "%2026-%10-%03" for
+"2026-10-03". In the Atom value "UTC" is the time zone's name standing
+where the time should be, and "275" the day of the year: the time of day
+is gone. A common feed reader library keeps the feed but drops every one
+of these dates, and the W3C feed validator rejects the Atom feed. The
+RSS 2.0 feed of the same journal carries the dates correctly. It needs
+the "Announcement Feed Plugin", which is off on a new journal.
+Basis: probe, 2026-10-03. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — The browser's feed links do not follow the box until a choice is saved** {OJS} · ❓ · minor.
@@ -1975,6 +1994,7 @@ kept "Oldest call (edited)" and "Typed notice", the two oldest of four, in
 all three feeds; RSS 2.0's channel `pubDate` was the older's. Re-read
 2026-09-26: the two kept are the first two in storage order, not the
 two oldest by date; on the probe the two coincided.
+Issue report: [docs/issues/U12-A7-announcement-feed-limit-keeps-oldest.md](../issues/U12-A7-announcement-feed-limit-keeps-oldest.md).
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** `ManagementHandler::announcements()` and
@@ -2064,6 +2084,7 @@ Live-probed 2026-09-17 (A15), OJS: Atom's `<updated>` and `<published>` read
 `<dc:date>` "%2026-%09-%17", RSS 2.0's `<pubDate>` "Thu, 17 Sep 2026
 10:28:01 +0000"; the same under "Limit feed to 2". The date pattern the two
 templates pass was not read.
+Issue report: [docs/issues/U12-A15-announcement-feed-dates-percent-signs.md](../issues/U12-A15-announcement-feed-dates-percent-signs.md).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `AnnouncementFeedPlugin` adds the `<link

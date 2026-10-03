@@ -1,0 +1,40 @@
+--- a/plugins/generic/announcementFeed/templates/atom.tpl
++++ b/plugins/generic/announcementFeed/templates/atom.tpl
+@@ -13,7 +13,7 @@
+ 	{* required elements *}
+ 	<id>{$selfUrl|escape}</id>
+ 	<title>{$journal->getLocalizedName()|escape:"html"|strip}: {translate key="announcement.announcements"}</title>
+-	<updated>{$dateUpdated|date_format:"%Y-%m-%dT%T%z"|regex_replace:"/00$/":":00"}</updated>
++	<updated>{$dateUpdated|date_format:"Y-m-d\TH:i:sP"}</updated>
+ 
+ 	{* recommended elements *}
+ 	{* <author/> *}
+@@ -38,7 +38,7 @@
+ 		{* required elements *}
+ 		<id>{url page="announcement" op="view" path=$announcement->id}</id>
+ 		<title>{$announcement->getLocalizedData('fullTitle')|strip|escape:"html"}</title>
+-		<updated>{$announcement->datePosted->format("%Y-%m-%dT%T%z")|regex_replace:"/00$/":":00"}</updated>
++		<updated>{$announcement->datePosted->format("Y-m-d\TH:i:sP")}</updated>
+ 	  	<author>
+ 			<name>{$journal->getLocalizedName()|strip|escape:"html"}</name>
+         </author>
+@@ -50,7 +50,7 @@
+ 		{* optional elements *}
+ 		{* <category/> *}
+ 		{* <contributor/> *}
+-		<published>{$announcement->datePosted->format("%Y-%m-%dT%T%z")|regex_replace:"/00$/":":00"}</published>
++		<published>{$announcement->datePosted->format("Y-m-d\TH:i:sP")}</published>
+ 		{* <source/> *}
+ 		{* <rights/> *}
+ 	</entry>
+--- a/plugins/generic/announcementFeed/templates/rss.tpl
++++ b/plugins/generic/announcementFeed/templates/rss.tpl
+@@ -49,7 +49,7 @@
+ 		<description>{$announcement->getLocalizedData('description')|strip|escape:"html"}</description>
+ 		{/if}
+ 		<dc:creator>{$journal->getLocalizedName()|strip|escape:"html"}</dc:creator>
+-		<dc:date>{$announcement->datePosted->format("%Y-%m-%d")}</dc:date>
++		<dc:date>{$announcement->datePosted->format("Y-m-d")}</dc:date>
+ 	</item>
+ {/foreach}
+ 
