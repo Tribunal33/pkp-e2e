@@ -1291,7 +1291,7 @@ OMP's own code.
 
 <a id="fn-f-a1"></a>
 **f-a1** — Note g: the "description" tag is built by string concatenation with no `htmlspecialchars()`, unlike every plugin tag (which escape their content); the context API's `PKPSchemaService::sanitize()` casts to string and strips nothing. A double quote therefore closes the attribute, and a ">" closes the tag, the rest printing as page text. Live-probed 2026-09-26, all three apps: note q11.
-Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](../issues/U20-A1-home-page-description-cut-at-quote-mark.md).
+Issue report: [docs/issues/U20-A1-home-page-description-cut-at-quote-mark.md](../issues/U20-A1-home-page-description-cut-at-quote-mark.md), filed as [pkp-e2e#663](https://github.com/jardakotesovec/pkp-e2e/issues/663).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Notes a, d: `plugins.generic.googleAnalytics.description` and `…manager.settings.description` in `plugins/generic/googleAnalytics/locale/en/locale.po`, identical in the three apps (a shared plugin tree); no code or template offers a "Check Status" action. The `…authorAccount*` strings of the same file are read by no code. Live-probed 2026-09-26, all three apps: notes q1, q20, q22 (the two texts as quoted).
