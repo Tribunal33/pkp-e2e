@@ -27,7 +27,7 @@ and the hourly routine starts one only when none is running
 | [U27](../specs/U27-reviewer-assignment-and-management.md) | 24 | 0 | 6 | **Taken: issues session, VM s2, 2026-10-03**; A16 done with U13 OJS8 (pkp-e2e#230); A2, A7 done |
 | [U74](../specs/U74-onix-metadata-export.md) | 16 | 0 | 6 | A16 done with U63 A12 (pkp-e2e#258) |
 | [U15](../specs/U15-search.md) | 13 | 0 | 6 |  |
-| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md) |
+| [U04](../specs/U04-orcid-integration.md) | 8 | 0 | 6 | OPS2 done with U06 OPS1 (docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md); **A1 taken: issues session, VM s2, 2026-10-03** (its "offered before the review is complete" half, joined to U27 A1; the "confirms in silence" half stays open) |
 | [U70](../specs/U70-catalog-management.md) | 14 | 0 | 5 |  |
 | [U41](../specs/U41-contributors-and-affiliations.md) | 12 | 0 | 5 | A22 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U12](../specs/U12-announcements.md) | 11 | 0 | 5 | A11 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
