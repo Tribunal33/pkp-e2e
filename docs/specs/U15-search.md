@@ -667,6 +667,7 @@ Left out of the scenarios above, by reason:
   - on a press and a server, a published book or preprint returned to the workflow keeps its page, its place in the catalog or preprint list and its search result for a visitor (Rule 2; OMP3, OPS4)
   - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
   - a Search address whose page number is not a number, on a search that finds something, shows the first page of results (Rule 8; A13)
+  - a search that finds several items gives the screen-reader status line "Found {N} items." with the count, on a journal and on a preprint server (Rule 7; OJS1, OPS1)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -767,11 +768,11 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
-| [OJS1](#ojs1) | With more than one result, the screen-reader count reads out a raw code | 🐞 | minor | — |
+| [OJS1](#ojs1) | Screen readers hear a raw code, or "Found one item.", when a search finds several items | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP1](#omp1) | The index-rebuild tool ignores the press path it is given and rebuilds every press | 🐞 | invisible | — |
 | [OMP3](#omp3) | Returning a published book or preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
-| [OPS1](#ops1) | The screen-reader result count always says "Found one item." | 🐞 | minor | — |
+| [OPS1](#ops1) | On a preprint server the screen-reader result count always says "Found one item." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | The index-rebuild tool ignores the server path it is given and rebuilds every server | 🐞 | invisible | — |
 | [OPS4](#ops4) | Returning a posted preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Published Before" leaves out the chosen day itself | ❓ | minor | — |
@@ -1005,13 +1006,21 @@ Basis: judgment. <sup>f-a16</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — The plural result count reads out a raw code** · 🐞 · minor.
-The status line read to screen readers above the results says "Found one
-item." for a single result, but with two or more it reads the raw code
-"##search.searchResults.foundPlural##" instead of "Found {N} items.", on
-every page of the results and on the bare page. A reader using assistive
-technology hears the code.
-Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — Screen readers hear a raw code, or "Found one item.", when a search finds several items** · 🐞 · low.
+A reader who searches a journal or a preprint server, and finds more
+than one item, hears a status line before the results. It should say
+how many items were found ("Found 2 items."). Instead it reads out the
+raw code "##search.searchResults.foundPlural##"; on a preprint server
+on `main` it says "Found one item." whatever the count.
+
+The results and the visible line under them ("1 - 2 of 2 items") are
+right. The status line is hidden from sighted readers, so nobody else
+notices it.
+
+The raw code is already reported to pkp (see Upstream). The preprint
+server's "Found one item." on `main` is a second fault on the same
+line, which a fix for the raw code alone would not cure.
+Basis: probe, 2026-10-03. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen** · 🐞 · medium.
@@ -1083,11 +1092,13 @@ Basis: test run, 2026-10-03. <sup>f-omp3</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — The screen-reader count always says one** · 🐞 · minor.
-The status line read to screen readers above the results says "Found one
-item." whenever anything was found, however many items the page lists
-(seen with 3, 7 and 25).
-Basis: probe. <sup>f-ops1</sup>
+**OPS1 — On a preprint server the screen-reader result count always says "Found one item."** · 🐞 · low.
+As [OJS1](#ojs1), on a preprint server: on `main` the status line read
+to screen readers above the results says "Found one item." whatever the
+count (seen with 7 results), because the server's page never takes its
+plural branch; with that branch reached, as on 3.5, it reads out the
+raw code "##search.searchResults.foundPlural##" as a journal's does.
+Basis: probe, 2026-10-03. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — A server's does-not-post gate cannot be reached, and would show a raw code** · ❓ · minor.
@@ -1902,6 +1913,7 @@ items.") has no plural forms, so `translatePlural()` returns null and the
 key prints as `##search.searchResults.foundPlural##`. Live-probed
 2026-09-02 with 2, 3, 5, 7 and 25 results, on every page and on the bare
 page; "Found one item." with one result.
+Issue report: [docs/issues/U15-OJS1-OPS1-search-result-count-screen-reader.md](../issues/U15-OJS1-OPS1-search-result-count-screen-reader.md).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2** — fn-g, fn-i: `smartyPageLinks()` forwards `searchContext`
@@ -1956,6 +1968,7 @@ Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.m
 **f-ops1** — fn-g: `{if $results->count > 1}` reads a property the
 paginator does not have. Live-probed 2026-09-02: "Found one item." with 1,
 3, 7 and 25 results.
+Issue report: [docs/issues/U15-OJS1-OPS1-search-result-count-screen-reader.md](../issues/U15-OJS1-OPS1-search-result-count-screen-reader.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — fn-l: the policy's message key exists in no `.po` file of the

@@ -1,0 +1,15 @@
+--- a/templates/frontend/pages/search.tpl
++++ b/templates/frontend/pages/search.tpl
+@@ -79,10 +79,9 @@
+ 
+ 	{* Results pagination *}
+ 	{if $results->count()}
+-		{assign var="count" value=$results->count}
+ 		<div class="pkp_screen_reader" role="status">
+-			{if $results->count > 1}
+-				{translate key="search.searchResults.foundPlural" count=$results->count}
++			{if $results->total() > 1}
++				{translate key="search.searchResults.foundPlural" params=["count" => $results->total()]}
+ 			{else}
+ 				{translate key="search.searchResults.foundSingle"}
+ 			{/if}
