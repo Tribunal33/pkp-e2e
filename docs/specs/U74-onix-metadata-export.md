@@ -2250,7 +2250,7 @@ Live-probed 2026-09-28 (A6), two runs: notes td10 and td23; a book
 whose market had its tax type empty exported, and after a plain "Edit"
 › "OK" (stored tax type empty before, 02 after) its export failed on
 `Tax`.
-Issue report: [docs/issues/U74-A6-market-edit-fills-in-gst-tax-type.md](../issues/U74-A6-market-edit-fills-in-gst-tax-type.md).
+Issue report: [pkp-e2e#697](https://github.com/jardakotesovec/pkp-e2e/issues/697) ([docs/issues/U74-A6-market-edit-fills-in-gst-tax-type.md](../issues/U74-A6-market-edit-fills-in-gst-tax-type.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Notes f and k: `SalesRightsForm` has no territory check, the
@@ -2328,7 +2328,7 @@ note td23; "VAT (Value-added tax) (01)" with "Zero-rated (Z)" exported
 `Tax{TaxType=01; TaxRateCode=Z; TaxRatePercent=0; TaxableAmount=25}`,
 "GST (Sales tax) (02)" with "RRP including tax (02)" exported no `Tax`,
 all three lists empty exported, and "Standard rate (S)" failed.
-Issue report: [docs/issues/U74-A17-market-tax-rate-fails-native-export.md](../issues/U74-A17-market-tax-rate-fails-native-export.md).
+Issue report: [pkp-e2e#696](https://github.com/jardakotesovec/pkp-e2e/issues/696) ([docs/issues/U74-A17-market-tax-rate-fails-native-export.md](../issues/U74-A17-market-tax-rate-fails-native-export.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Notes k and m: the filter writes `ReturnsConditions` only
