@@ -3193,7 +3193,7 @@ the template into the letter's TinyMCE client-side, and a press before
 that editor has initialised, 60–177 ms after the search box shows, leaves
 the letter empty for good; a press after it filled the letter 8 times of
 8 per app. No person presses that fast.
-Issue report: [docs/issues/U27-A18-emptied-request-letter-half-adds-reviewer.md](../issues/U27-A18-emptied-request-letter-half-adds-reviewer.md).
+Issue report: [pkp-e2e#685](https://github.com/jardakotesovec/pkp-e2e/issues/685) ([docs/issues/U27-A18-emptied-request-letter-half-adds-reviewer.md](../issues/U27-A18-emptied-request-letter-half-adds-reviewer.md)).
 
 <a id="fn-a19"></a>
 **f-a19** — Live-probed 2026-08-02 (claim check; OJS with two acting roles
