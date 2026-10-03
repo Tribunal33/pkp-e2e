@@ -665,6 +665,7 @@ Left out of the scenarios above, by reason:
   - a Year alone under "Published Before", and a Year and Month without a Day, limit the results and come back showing the date applied (Rule 9; A1)
   - on the site-wide Search page, a journal chosen under "By Journal" stays selected after the search and its page 2 lists that journal's articles only (Rule 10; OJS2)
   - on a press and a server, a published book or preprint returned to the workflow keeps its page, its place in the catalog or preprint list and its search result for a visitor (Rule 2; OMP3, OPS4)
+  - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -763,7 +764,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A3](#a3) | Search never finds the corrected title, abstract or added contributor of an already published article | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | The configuration file lists two search settings that nothing reads | 🐞 | latent | — |
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A12](#a12) | A sort by published date, typed into the address, answers an error page | 🐞 | latent | — |
+| [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A page number in the address that is not a number answers a completely empty page | 🐞 | latent | — |
 | [OJS1](#ojs1) | With more than one result, the screen-reader count reads out a raw code | 🐞 | minor | — |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -936,13 +937,18 @@ index without the galley text.
 Since: 2025-08 (about a year). Basis: probe, 2026-10-03. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The sort by published date answers an error page** · 🐞 · latent.
-A reader who opens a bookmarked or shared Search address that asks for the
-results sorted by published date, in either direction, gets an error page
-instead of the results, on a journal and on a preprint server. The page is
-built to accept that sort (Rule 14), and the sort by title works. Nothing
-on the page offers the sort, so only a typed or shared address meets it.
-Basis: probe. <sup>f-a12</sup>
+**A12 — A Search link that sorts the results by published date shows an empty error page** · 🐞 · low · crash: server.
+A reader who opens a Search results link that asks for the results
+sorted by published date (`orderBy=datePublished`, newest or oldest
+first) gets an empty page instead of the results: the server fails. The
+sort by title, asked for the same way, works.
+
+No control on the page offers either sort, so only a typed, bookmarked
+or shared link reaches it. Without the sort, the link lists the results.
+
+It happens only on sites whose database is PostgreSQL; MySQL accepts the
+query. No release has it: only `main`, the coming 3.6.
+Basis: probe, 2026-10-03. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A malformed page number answers a completely empty page** · 🐞 · latent.
@@ -1836,6 +1842,7 @@ Live-probed 2026-09-02 as a visitor: `…/search/search?query=&orderBy=datePubli
 and `…&orderDir=asc` answered "HTTP 500" on a journal (OJS) and a server
 (OPS); `orderBy=title` with either direction listed the results sorted.
 Not tried on a press.
+Issue report: [docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — fn-g: `PKPHandler::getRangeInfo()` passes the raw

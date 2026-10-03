@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/search/engines/DatabaseEngine.php
++++ b/lib/pkp/classes/search/engines/DatabaseEngine.php
+@@ -197,7 +197,7 @@
+             ))
+             ->when($orderBy == 'datePublished', function ($q) use ($orderBy, $orderDirection) {
+                 $q->leftJoin('publications AS cp', 's.current_publication_id', 'cp.publication_id')
+-                    ->orderBy('cp.date_published', $orderDirection);
++                    ->orderBy($q->raw('MAX(cp.date_published)'), $orderDirection);
+             })
+             ->when($orderBy == 'feature', function ($q) {
+                 $q->leftJoin('features as f', 's.submission_id', 'f.submission_id')
