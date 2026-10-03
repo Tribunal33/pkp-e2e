@@ -11,7 +11,7 @@
   - 3.3: none (code; no autosaving wizard)
 - **Introduced** `pkp/ui-library#241` for `pkp/pkp-lib#7191` · [467034aa4](https://github.com/pkp/ui-library/commit/467034aa4171bca0c46fa9e0e4b8b8dcdaa7cee2) · 2022-10-31 · Alec Smecher (asmecher), PR author; commit by Nate Wright (NateWr)
 - **Upstream** none found (2026-10-01)
-- **Tracked in** spec U21 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a19)
+- **Tracked in** spec U21 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a19); spec U75 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U75-preprint-relations.md#a7) (the hang after the refused DOI)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -273,7 +273,9 @@ out.
   change can look saved. Showing the 400's field errors on the form
   (the forms already take an `errors` prop) would close that gap. It is
   left out here because it changes what every refusal shows, not only
-  the hang.
+  the hang;
+  [U75 A7's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U75-A7-wizard-refused-doi-no-field-message.md)
+  proposes it, on top of this fix.
 - No stored data to repair, no REST API or plugin hook change.
 - Backport: the two methods are the same on `stable-3_5_0` and
   `stable-3_4_0` (3.4 differs only by a trailing comma), so the diff

@@ -1,0 +1,92 @@
+--- a/lib/ui-library/src/mixins/autosave.js
++++ b/lib/ui-library/src/mixins/autosave.js
+@@ -217,7 +217,14 @@
+ 				return;
+ 			}
+ 			setTimeout(() => {
+-				this._sendAutosave(this._getNextAutosave(), {
++				const payload = this._getNextAutosave();
++				if (!payload) {
++					// Nothing is waiting to be sent
++					connectionTimerInterval = 4000;
++					this.isDisconnected = false;
++					return;
++				}
++				this._sendAutosave(payload, {
+ 					success: (r) => {
+ 						connectionTimerInterval = 4000;
+ 						this.isDisconnected = false;
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPage.vue
+@@ -19,6 +19,7 @@
+ import {useDataChangedProvider} from '@/composables/useDataChangedProvider';
+ import {useFetch} from '@/composables/useFetch';
+ import {useModal} from '@/composables/useModal';
++import {structuredErrors} from '@/composables/useForm';
+ 
+ export default {
+ 	components: {
+@@ -359,17 +360,54 @@
+ 				return;
+ 			}
+ 
+-			if (xhr.status !== 403) {
+-				let autosaves = this.getLocalStorage(this.autosavesKey);
+-				if (autosaves.length) {
+-					this.setLocalStorage(
+-						this.autosavesKey,
+-						autosaves.filter((payload) => payload.id !== autosave.id),
+-					);
+-				}
++			if (xhr.status === 403) {
++				this.isDisconnected = true;
++				this.ajaxErrorCallback({});
++				return;
++			}
++
++			// The server refused the save. Sending it again would be refused
++			// again, so drop it and stay connected: the next change is saved.
++			let autosaves = this.getLocalStorage(this.autosavesKey);
++			if (autosaves?.length) {
++				this.setLocalStorage(
++					this.autosavesKey,
++					autosaves.filter((payload) => payload.id !== autosave.id),
++				);
++			}
++			this.isDisconnected = false;
++
++			// Field validation errors on fields of the refused form: show them
++			// there and take the author back to its step, as a form outside the
++			// wizard does (Form.vue error()). A refusal naming any other field
++			// keeps the error dialog.
++			let step;
++			let form;
++			this.steps.forEach((s) => {
++				s.sections.forEach((section) => {
++					if (section.type === 'form' && section.form.id === autosave.id) {
++						step = s;
++						form = section.form;
++					}
++				});
++			});
++			const fieldNames = form ? form.fields.map((field) => field.name) : [];
++			const errors =
++				[400, 422].includes(xhr.status) && xhr.responseJSON
++					? structuredErrors(xhr.responseJSON)
++					: {};
++			const names = Object.keys(errors);
++			if (names.length && names.every((name) => fieldNames.includes(name))) {
++				this.updateForm(autosave.id, {errors});
++				this.openStep(step.id);
++				pkp.eventBus.$emit(
++					'notify',
++					this.t('form.errors', {count: names.length}),
++					'warning',
++				);
++				return;
+ 			}
+ 
+-			this.isDisconnected = true;
+ 			this.ajaxErrorCallback({});
+ 		},
+ 

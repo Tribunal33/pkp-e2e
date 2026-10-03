@@ -589,10 +589,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | An Author cannot record that their posted preprint has been published elsewhere | 🐞 | user-visible | — |
 | [A2](#a2) | "Relations" offers an active "Save" to someone who may not edit the version, and refuses it with an unexpected-error notice | 🐞 | minor | — |
 | [A3](#a3) | Saving another status keeps the DOI of the published version | 🐞 | invisible | — |
-| [A7](#a7) | A DOI written on its own on the wizard's "For Readers" step ends in an unexpected-error window | 🐞 | user-visible · crash: script | — |
+| [A7](#a7) | A DOI written on its own on the wizard's "For Readers" step ends in an unexpected-error window | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | A preprint can be submitted without answering the required "Relation status" | 🐞 | minor | — |
 | [A9](#a9) | The Review step says "This preprint has not been published elsewhere." for a question never answered | 🐞 | minor | — |
-| [A10](#a10) | After a reload, "For Readers" shows no saved "Relation status" answer ticked | 🐞 | minor | — |
+| [A10](#a10) | After a reload, the wizard's "For Readers" shows the saved relation unticked, and answering again erases the DOI | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | The Review step's "Edit" on the "Relation status" panel does nothing | 🐞 | minor | — |
 | [A4](#a4) | "DOI of the published preprint" refuses a DOI written on its own | ❓ | minor | — |
 | [A5](#a5) | The wizard asks whether the preprint was "submitted for publication elsewhere" but offers no answer for it | ❓ | minor | — |
@@ -688,19 +688,22 @@ writes DOIs without the address part.
 Basis: code. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A DOI written on its own on the wizard's "For Readers" step ends in an unexpected-error window** · 🐞 · user-visible · crash: script.
+**A7 — A DOI written on its own on the wizard's "For Readers" step ends in an unexpected-error window** · 🐞 · medium · crash: script.
 On "For Readers" the Author ticks "This preprint has been published
 elsewhere.", types "10.1234/abcd" in "DOI of the published preprint" and
-presses "Continue". The wizard moves on to "Review" and fails there: a
-window "Error" reads "An unexpected error has occurred. Please reload
-the page and try again." with "OK", "Checking your submission" stays
-over the panels, and the footer reads "Reconnecting"; on some attempts
-the page's own script fails as well. The value is not saved: the
-Review panel reads the answer saved before, and back on "For Readers"
-the typed text is still in the box with no message under it, so the
-Author is never told that the box needs a full web address
-([A4](#a4)). Saving a full address afterwards clears the error.
-Basis: probe. <sup>f-a7</sup>
+presses "Continue". The server refuses the answer, but the wizard moves
+on to "Review" and opens a window "Error" that reads only "An unexpected
+error has occurred. Please reload the page and try again."; the footer
+stays on "Saving" and the page logs "Cannot read properties of undefined
+(reading 'url')", the hang after any refused save
+([→ the Submission wizard's A19](U21-submission-wizard.md#a19)). Back on
+"For Readers" the step still shows the ticked answer and the typed DOI
+with no message under the box, so the Author is never told that the box
+needs a full web address ([A4](#a4)). Neither is saved: after the reload
+the window asks for, "Review" reads "This preprint has not been
+published elsewhere." and "Submit" completes the submission with no
+relation at all.
+Basis: probe, 2026-10-03. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A preprint can be submitted without answering the required "Relation status"** · 🐞 · minor.
@@ -724,14 +727,19 @@ entered.", or show the question as unanswered.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — After a reload, "For Readers" shows no saved "Relation status" answer ticked** · 🐞 · minor.
-The Author saves an answer on "For Readers", "This preprint has been
-published elsewhere." with its DOI for instance, and reloads the wizard.
-Back on "For Readers" none of the three choices is ticked and no DOI box
-shows, while the Review step's panel still reads the saved answer.
-"Continue" with nothing picked keeps the saved answer, but the step
-shows the question as unanswered.
-Basis: probe. <sup>f-a10</sup>
+**A10 — After a reload, the wizard's "For Readers" shows the saved relation unticked, and answering again erases the DOI** · 🐞 · medium.
+An Author answers "Relation status" on the submission wizard's "For
+Readers" step, for instance "This preprint has been published
+elsewhere." with the published version's DOI, and the answer is saved.
+When the wizard page is loaded afresh, by a reload or by opening the
+draft again later, "For Readers" shows none of the choices ticked and no
+DOI box. Moving between steps without a new page load ("Back" from
+Review) keeps the answer on screen. The Review step still shows the
+saved answer. Left unticked, the question keeps the saved answer. An
+Author who answers it again gets an empty DOI box, which looks like a
+DOI never typed, and "Continue" saves it empty over the stored DOI.
+Nothing says a DOI was there.
+Basis: probe, 2026-10-03. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The Review step's "Edit" on the "Relation status" panel does nothing** · 🐞 · minor.
@@ -1238,6 +1246,8 @@ undefined (reading 'url')" at the wizard's `#review` address. After
 "OK" the "Relation status" panel read the earlier answer; back on "For
 Readers" the box held "10.1234/abcd" with no field message. Note d for
 the validation, note g for the panel.
+Issue report: [docs/issues/U75-A7-wizard-refused-doi-no-field-message.md](../issues/U75-A7-wizard-refused-doi-no-field-message.md).
+Issue report (the hang, shared with the Submission wizard's A19): [pkp-e2e#322](https://github.com/jardakotesovec/pkp-e2e/issues/322) ([docs/issues/U21-A19-wizard-refused-save-hangs-saving.md](../issues/U21-A19-wizard-refused-save-hangs-saving.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note d (`isRequired` set only for the wizard) and note g.
@@ -1257,6 +1267,7 @@ and the "Post the preprint" window of a preprint submitted unanswered
 constructor that does not take it, so the wizard's radio starts empty
 whatever is stored. Live-probed 2026-09-27 with "published elsewhere"
 and the address saved, and with "not entered" saved (td4).
+Issue report: [docs/issues/U75-A10-wizard-relation-answer-unticked-after-reload.md](../issues/U75-A10-wizard-relation-answer-unticked-after-reload.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Note g: `openStep('{$step.id}')` is served as `openStep('')`

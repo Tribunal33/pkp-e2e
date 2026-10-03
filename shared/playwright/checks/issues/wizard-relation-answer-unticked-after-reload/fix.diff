@@ -1,0 +1,31 @@
+--- a/classes/components/forms/publication/RelationForm.php
++++ b/classes/components/forms/publication/RelationForm.php
+@@ -31,8 +31,9 @@
+      * Constructor
+      *
+      * @param string $action URL to submit the form to
++     * @param ?Publication $publication The publication whose relation the form shows; null when the page fills the form itself
+      */
+-    public function __construct($action)
++    public function __construct($action, ?Publication $publication = null)
+     {
+         $this->action = $action;
+         $this->locales = [];
+@@ -41,7 +42,7 @@
+         $this->addField(new FieldOptions('relationStatus', [
+             'label' => __('publication.relation.label'),
+             'type' => 'radio',
+-            'value' => null,
++            'value' => $publication?->getData('relationStatus'),
+             'options' => [
+                 [
+                     'value' => Publication::PUBLICATION_RELATION_UNKNOWN,
+@@ -59,7 +60,7 @@
+         ]))
+             ->addField(new FieldText('vorDoi', [
+                 'label' => __('publication.relation.vorDoi'),
+-                'value' => null,
++                'value' => $publication?->getData('vorDoi'),
+                 'size' => 'large',
+                 'showWhen' => ['relationStatus', Publication::PUBLICATION_RELATION_PUBLISHED],
+             ]));
