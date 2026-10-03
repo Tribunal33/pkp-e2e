@@ -2277,7 +2277,7 @@ Issue report: [docs/issues/U65-OMP3-monograph-report-columns-sized-by-other-pres
 
 <a id="fn-f-omp4"></a>
 **f-omp4** — fn o (`getDecisionMessage()`). Live-probed 2026-09-28: td13.
-Issue report: [docs/issues/U65-OMP4-monograph-report-revert-decline-named-decline.md](../issues/U65-OMP4-monograph-report-revert-decline-named-decline.md).
+Issue report: [docs/issues/U65-OMP4-monograph-report-revert-decline-named-decline.md](../issues/U65-OMP4-monograph-report-revert-decline-named-decline.md), filed as [pkp-e2e#658](https://github.com/jardakotesovec/pkp-e2e/issues/658).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — fn d (the stages' names) and fn p (the attachment).
