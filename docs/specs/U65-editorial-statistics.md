@@ -2325,7 +2325,7 @@ scratch preprint server and `publicknowledge`: the same.
 **f-ops4** — fn p; OPS `locale/en/emails.po`
 `emails.statisticsReportNotification.body` keeps the line. Live-probed 2026-09-28: the line with nothing after it
 in the text and HTML parts.
-Issue report: [docs/issues/U65-OPS4-preprint-monthly-email-accepted-blank.md](../issues/U65-OPS4-preprint-monthly-email-accepted-blank.md).
+Issue report: [docs/issues/U65-OPS4-preprint-monthly-email-accepted-blank.md](../issues/U65-OPS4-preprint-monthly-email-accepted-blank.md), filed as [pkp-e2e#662](https://github.com/jardakotesovec/pkp-e2e/issues/662).
 
 ## Reference — entry points & surfaces
 
