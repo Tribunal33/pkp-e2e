@@ -1,0 +1,63 @@
+--- a/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissions/CatalogListPanel.vue
+@@ -463,11 +463,19 @@
+ 			var index = this.items.findIndex((obj) => {
+ 				return item.id == obj.id;
+ 			});
+-			if (index === this.items.length - 1) {
++			// Skip the rows hidden while ordering (not featured in this list)
++			let next = index + 1;
++			while (
++				next < this.items.length &&
++				!this.isFeaturedInList(this.items[next])
++			) {
++				next++;
++			}
++			if (next === this.items.length) {
+ 				return;
+ 			}
+ 			let items = [...this.items];
+-			items.splice(index + 1, 0, items.splice(index, 1)[0]);
++			items.splice(next, 0, items.splice(index, 1)[0]);
+ 			this.$emit('set', this.id, {items: items});
+ 		},
+ 
+@@ -480,12 +488,36 @@
+ 			var index = this.items.findIndex((obj) => {
+ 				return item.id == obj.id;
+ 			});
+-			if (index === 0) {
++			// Skip the rows hidden while ordering (not featured in this list)
++			let previous = index - 1;
++			while (
++				previous >= 0 &&
++				!this.isFeaturedInList(this.items[previous])
++			) {
++				previous--;
++			}
++			if (previous < 0) {
+ 				return;
+ 			}
+ 			let items = [...this.items];
+-			items.splice(index - 1, 0, items.splice(index, 1)[0]);
++			items.splice(previous, 0, items.splice(index, 1)[0]);
+ 			this.$emit('set', this.id, {items: items});
++		},
++
++		/**
++		 * Is the item featured in the list being viewed?
++		 *
++		 * Only these items are shown while ordering.
++		 *
++		 * @param {Object} item
++		 * @return {Boolean}
++		 */
++		isFeaturedInList(item) {
++			return (item.featured || []).some(
++				(feature) =>
++					feature.assoc_type === this.filterAssocType &&
++					feature.assoc_id === this.filterAssocId,
++			);
+ 		},
+ 
+ 		/**
