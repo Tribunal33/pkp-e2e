@@ -981,6 +981,11 @@ Left out of the scenarios above, by reason:
     Terms" on its form and "Select Files" on its list, and the "Metadata"
     tab's four lists load for the Layout Editor and the assigned Series
     editor
+  - the guard for A9 (issue report
+    `docs/issues/U73-A9-priced-file-no-payment-method-turns-readers-away.md`):
+    on a press with no currency, a "Direct Sales" save in "Set Terms for
+    Downloading" is refused with its message, and a reader who opens a
+    file priced earlier is told it is not available
   - a format file's "Edit a file" closed with its close arrow after the
     name is changed: no question, the row keeping the old name after a
     reload, and "Edit" reopening on it (Rule 11): likely a bullet in
@@ -1070,7 +1075,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A6](#a6) | An e-book's "Metadata" tab asks for page counts and dimensions, never for its file size or DRM | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A9](#a9) | A priced file on a press with no payment method shows no price and turns readers away; nothing warns the press | 🐞 | user-visible | — |
+| [A9](#a9) | A press that cannot take payments can put a book file on sale, and readers who open it are turned away without a word | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | Page counts and dimensions take any text, and the book's Native XML export then fails | 🐞 | user-visible | — |
 | [A1](#a1) | The assistant roles are offered availability, terms and "Select Files", and refused | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | The "Metadata" tab's four lists do not load for the Series editor and the assistant roles | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1201,19 +1206,24 @@ Lean: accept "10.5" and keep the two checks the same; the rule reads as an overs
 Basis: probe. <sup>f-a8</sup> <sup>td15</sup>
 
 <a id="a9"></a>
-**A9 — A priced file on a press with no payment method turns readers away** · 🐞 · user-visible.
-The terms window offers "Direct Sales" and a price whether or not the
-press has a payment method set up, and neither it nor the "Metadata"
-tab ever shows the notice the app holds for this ("A configured payment
-method is required before you can define e-commerce settings."). On a
-press with no currency and no payment method, the book's page then
-lists the priced file as a plain link reading the format's name, with
-no price, like a free file; a visitor who presses it is sent to
-"Login", and a signed-in reader to the "Catalog", with no message.
-Expected: "Direct Sales" warns, or is refused, while the press has no
-payment method, and a reader who presses a file's link is never sent
-away without a word.
-Basis: probe. <sup>f-a9</sup> <sup>td31</sup>
+**A9 — A press that cannot take payments can put a book file on sale, and readers who open it are turned away without a word** · 🐞 · medium.
+A press can set a book file to "Direct Sales" with a price while it
+cannot take payments, that is, while it has no currency, or while its
+"Manual Fee Payment" has no instructions. The "Set Terms for
+Downloading" window saves the price without a word about payments.
+Every new press is in this state until it sets up "Payments". A press
+that already sells falls into it when it empties its payment
+instructions, which the Payments tab saves without a word.
+
+From then on no reader can get the file. A visitor who opens its link
+is sent to the Login page, and a signed-in reader to the "Catalog".
+Neither page says anything about the file. On a press with a currency
+the link still reads "25.00 Purchase PDF (25.00 USD)"; without one it
+reads "PDF", like a free file.
+
+The press can get out by filling in "Payments" or by setting the file
+back to "Open Access", but nothing on screen tells it that it needs to.
+Since: 2012-03-30 (the first payment code) · Basis: probe, 2026-10-03. <sup>f-a9</sup> <sup>td31</sup>
 
 <a id="a10"></a>
 **A10 — Approving a format file changes nothing readers get** · ❓ · minor.
@@ -2333,6 +2343,7 @@ message (`notification.type.configurePaymentMethod`) and style in OMP's
 code creates such a notification in any app. The terms form's own
 `inPlaceNotification` requests none.
 Live-probed 2026-09-28: notes td28, td31.
+Issue report: [pkp-e2e#799](https://github.com/jardakotesovec/pkp-e2e/issues/799) ([docs/issues/U73-A9-priced-file-no-payment-method-turns-readers-away.md](../issues/U73-A9-priced-file-no-payment-method-turns-readers-away.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note p. pkp/pkp-lib#3467 (omp `ec7133010`, 2018-03-09, "not
