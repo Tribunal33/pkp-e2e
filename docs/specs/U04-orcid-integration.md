@@ -494,6 +494,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A4 (issue report `docs/issues/U04-A4-what-is-orcid-link-opens-sign-in.md`): Scenario 2 presses "What is ORCID?" on the profile Identity tab and the registration page and expects the "What is ORCID?" page.
+  - the guard for A2 (issue report `docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md`): a contributor who denies access at ORCID lands on the "ORCID Authorization" page and reads "You denied access to your ORCID record.", no raw key.
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -552,10 +553,10 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Send Review To ORCID" is offered before the review is complete, and confirms in silence | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A2](#a2) | The ORCID-denied landing shows a raw placeholder instead of its message | 🐞 | user-visible | — |
+| [A2](#a2) | A contributor who presses "Deny" at ORCID lands on a page showing "##orcid.authDenied##" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "What is ORCID?" beside the ORCID button opens ORCID's sign-in instead of the explanation page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An Assistant's contributor-ORCID controls are refused by the server yet report success | 🐞 | user-visible | — |
-| [A8](#a8) | The verification-failure page says "journal manager" on presses and preprint servers | 🐞 | minor | — |
+| [A8](#a8) | A press's or preprint server's ORCID verification failure page says to contact "the journal manager" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | minor | — |
 | [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | user-visible | — |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -586,14 +587,19 @@ reviewer a request for permission, also without a word to the editor
 Basis: probe, 2026-10-03. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — Denied-access landing renders a raw placeholder** · 🐞 · user-visible.
-A contributor who follows their emailed authorization link and presses "Deny"
-on ORCID's consent screen lands on the "ORCID Authorization" page. There the
-explanation line renders as a raw `##orcid.authDenied##` token, because the
-translation key the page asks for does not exist in any locale. The refusal
-itself is recorded correctly.
-Basis: code (the denial leg needs ORCID's live consent screen, unreachable
-from the test install). <sup>[f-a2](#fn-a2)</sup>
+**A2 — A contributor who presses "Deny" at ORCID lands on a page showing "##orcid.authDenied##"** · 🐞 · low.
+A contributor who follows the emailed ORCID verification link and
+presses "Deny" on ORCID's consent screen comes back to the "ORCID
+Authorization" page. Where it should explain that they refused access,
+the page shows the raw code `##orcid.authDenied##`. The refusal itself
+is recorded correctly; only the explanation is missing, and the fix is
+to render the sentence the translations already hold. The setup is any
+journal, press or preprint server with ORCID turned on. The verification
+email goes out when an editor presses "Request verification" on a
+contributor, or when a submission is accepted with the ORCID setting
+"Send e-mail to request ORCID authorization from authors when an article
+is accepted" ticked.
+Basis: probe, 2026-10-03. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Registration-connected iD arrives unverified** · ❓ · minor.
@@ -658,13 +664,16 @@ Basis: probe + code. <sup>[f-a7](#fn-a7)</sup>
 > remains [OPS2](#ops2)'s. Code-anchored, not live-probed (suites paused).
 
 <a id="a8"></a>
-**A8 — Failure page says "journal manager" on presses and preprint servers** · 🐞 · minor.
-Every failure on the "ORCID Authorization" page closes with "Please contact
-the journal manager with your name, ORCID iD, and details of your
-submission." It says so on a press or a preprint server too, where the
-reader's contact is a Press Manager or Preprint Server Manager, not a
-"journal manager".
-Basis: probe. <sup>[f-a8](#fn-a8)</sup>
+**A8 — A press's or preprint server's ORCID verification failure page says to contact "the journal manager"** · 🐞 · low.
+When a contributor's ORCID verification fails on a press or a preprint
+server (a used or stale link, a refusal at ORCID, an iD already stored),
+the "ORCID Authorization" page closes with "Please contact the journal
+manager with your name, ORCID iD, and details of your submission." A
+press has a press manager and a preprint server a preprint server
+manager; there is no journal. The fix is one English sentence. Ten other
+languages translate it, nine of them naming a journal's manager or
+editor; their translators would update them afterwards.
+Basis: probe, 2026-10-03. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Site ORCID tab on a single-journal install** · ❓ · minor.
@@ -1130,6 +1139,7 @@ branch requires ORCID's consent screen returning `error=access_denied` with
 a valid email token — orcid.org is unreachable through the dead-port
 `[proxy]` (and no real account backs the dummy credentials), so the basis
 stays code.
+Issue report: [docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md](../issues/U04-A2-orcid-denied-page-raw-placeholder.md).
 
 <a id="fn-a3"></a>
 **f-a3** — Note i: `AuthorizeUserData` case `register` only fills form
@@ -1179,6 +1189,7 @@ override still builds its own list without it, so the OPS absence stands.
 landing (`orcid.failure.contact`, note f) — no per-app recast. Live-probed
 2026-08-07: the OMP and OPS `/orcid/verify` pages both close with the
 sentence verbatim, "journal manager" unchanged.
+Issue report: [docs/issues/U04-A8-orcid-failure-page-says-journal-manager.md](../issues/U04-A8-orcid-failure-page-says-journal-manager.md).
 
 <a id="fn-a9"></a>
 **f-a9** — Note b's gate: the tab renders only while

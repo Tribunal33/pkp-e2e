@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -737,7 +737,7 @@
+ msgstr "Invalid client credentials"
+ 
+ msgid "orcid.failure.contact"
+-msgstr "Please contact the journal manager with your name, ORCID iD, and details of your submission."
++msgstr "Please contact the editorial team with your name, ORCID iD, and details of your submission."
+ 
+ msgid "orcid.fieldset"
+ msgstr "ORCID"
