@@ -1,0 +1,11 @@
+--- a/lib/pkp/templates/frontend/pages/userLogin.tpl
++++ b/lib/pkp/templates/frontend/pages/userLogin.tpl
+@@ -73,7 +73,7 @@
+ 			</div>
+ 			<div class="remember checkbox">
+ 				<label>
+-					<input type="checkbox" name="remember" id="remember" value="1" checked="$remember">
++					<input type="checkbox" name="remember" id="remember" value="1"{if $remember} checked="checked"{/if}>
+ 					<span class="label">
+ 						{translate key="user.login.rememberUsernameAndPassword"}
+ 					</span>
