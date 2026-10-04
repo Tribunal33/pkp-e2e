@@ -2132,7 +2132,7 @@ saving undid all of it.
 header. Live-probed 2026-09-24, all
 three apps: the accessibility tree lists each box as a text box with no
 name under the table "Author Information".
-Issue report: [docs/issues/U42-A14-citation-author-boxes-unnamed.md](../issues/U42-A14-citation-author-boxes-unnamed.md).
+Issue report: [pkp-e2e#874](https://github.com/jardakotesovec/pkp-e2e/issues/874) ([docs/issues/U42-A14-citation-author-boxes-unnamed.md](../issues/U42-A14-citation-author-boxes-unnamed.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15 — A15 evidence.** Note l (`identifier` `required_with:identifierType`,
