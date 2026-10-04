@@ -429,6 +429,12 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A6 (Rules 7b, 9; issue report
+    `docs/issues/U22-A6-my-submissions-french-review-counter-raw-key.md`):
+    the author's list read with the interface in French (Canada), a
+    submission in review showing the counter in French with its numbers
+    and no `##` code on the list, the "…" button's name included
 - **Rarely met**:
   - a change someone else makes showing on the list only after a workflow
     panel closes or the page reloads, and not after pressing the open
@@ -491,7 +497,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | In French a submission under review reads a raw code in place of "Review update {completed}/{total}", and the "…" button above the list is named by a raw code | 🐞 | minor | — |
+| [A6](#a6) | In French a submission under review reads a raw code in place of "Review update {completed}/{total}", and the "…" button above the list is named by a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | The author sees the review progress count ("Review update 1/2") for their submission under review | ❓ | user-visible | — |
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
 | [A3](#a3) | On a press or preprint server, nothing was found that feeds the "Scheduled for publication" view | ❓ | minor | — |
@@ -566,13 +572,18 @@ draft's own author can reach it.
 Basis: probe. <sup>a5</sup>
 
 <a id="a6"></a>
-**A6 — In French the review counter and the "…" button show raw codes** · 🐞 · minor.
+**A6 — In French the review counter and the "…" button show raw codes** · 🐞 · low.
 With the interface in French (Canada), a submission under review reads
 "##dashboard.reviewUpdateCounts##" in its Editorial Activity cell {OJS
 OMP}, where English reads "Review update 1/1" or "Review update 0/1"
-(Rule 7b), so the author loses the completed and total review counts. On
-every app a screen reader hears the "…" button above the list (English
-"More Actions", Rule 9) as "##common.moreActions##". Expected: French
+(Rule 7b), so the author loses the completed and total review counts;
+a submission waiting for the author's revisions shows its own French
+text instead. On every app a screen reader hears the "…" button above
+the list (English "More Actions", Rule 9), which everyone on the list
+gets, as "##common.moreActions##". Two faults, both French (Canada)
+texts never translated: the counter's text is released with 3.5 and
+missing in 46 languages; the button's name is shared with the other
+lists' "…" menus. Expected: French
 words, as the rest of the list shows: the views ("Soumissions actives",
 "Révisions demandées", "Soumissions incomplètes", "Publiées",
 "Refusées"), the Stage bubbles ("Incomplète", "Rejetée"), "Révision
@@ -585,7 +596,7 @@ the editorial list's own codes are
 [Submissions dashboard](U23-submissions-dashboard.md#a12)'s, and why a
 missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
-Basis: probe. <sup>a6</sup>
+Basis: probe, 2026-10-04. <sup>a6</sup>
 
 ### OMP
 
@@ -1074,6 +1085,7 @@ Trier / Soumissions / Étape / Activité éditoriale / Actions", the heading
 "Soumissions actives (6)". Neither `dashboard.reviewUpdateCounts` nor
 `common.moreActions` exists in pkp-lib's `fr_CA` locale files (U57 A4's
 fallback).
+Issue reports: the review counter, [docs/issues/U22-A6-my-submissions-french-review-counter-raw-key.md](../issues/U22-A6-my-submissions-french-review-counter-raw-key.md); the "…" button's name, [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)).
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's filter form

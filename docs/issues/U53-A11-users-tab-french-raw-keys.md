@@ -10,8 +10,8 @@
   - 3.3: none (code; the older users list, no invitations)
 - **Introduced** not traced: no change broke it. The English texts came with the role invitations (PR `pkp/pkp-lib#10472` for `pkp/pkp-lib#10459`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26), the new users list (PRs `pkp/pkp-lib#10558` and `pkp/pkp-lib#10576` for `pkp/pkp-lib#9658`, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-24, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2024-11-01) and, for `common.moreActions`, the workflow side modal (PR `pkp/pkp-lib#10454`, [be3be14eff](https://github.com/pkp/pkp-lib/commit/be3be14eff471d613a2c5509d5d605196fd83817) 2024-09-19); French (Canada) never received them
 - **Upstream** none found (2026-10-04)
-- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions"), spec U42 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a21) (the "References" page's "More Actions"), spec U43 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U43-funding.md#a14) (the "Funding" page's "More Actions")
-- **Checked** 2026-10-02, the "Author Response" table and the "References" and "Funding" pages 2026-10-04, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions"), spec U42 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a21) (the "References" page's "More Actions"), spec U43 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U43-funding.md#a14) (the "Funding" page's "More Actions"), spec U22 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U22-my-submissions.md#a6) (the "…" button above the "My Submissions" list; its review counter is reported apart)
+- **Checked** 2026-10-02, the "Author Response" table, the "References" and "Funding" pages and "My Submissions" 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -30,7 +30,8 @@ Actions" column headings "##common.moreActions##", and outside the
 "Users" tab each row's "…" menu too. Managers hear it on the "Users"
 tab's two tables and the "Categories" tab; editors on a publication's
 "Media", "References" and "Funding" pages and a journal review round's
-"Author Response" table.
+"Author Response" table; anyone on "My Submissions", on the "…" button
+above the list.
 
 The rest of the tab is French, and its buttons and menus still work, so
 a manager can get through by switching the interface to English.
@@ -54,7 +55,8 @@ counted in this report's effort.
   time they open the users list or invite someone. Also screen-reader
   users working in French (Canada): managers on the settings lists'
   hidden column headings, editors on the "…" menus and column headings
-  of the publication pages and the "Author Response" table.
+  of the publication pages and the "Author Response" table, and anyone
+  on the "…" button above their "My Submissions" list.
 - **Way round.** Switch the interface to English.
 
 Low: labels show as codes in one language while every task still gets
@@ -232,9 +234,15 @@ Reach:
   managers, the dashboard's bulk actions and the reader comments lists
   among them) and 8 on `stable-3_5_0`. It was seen on the "Users" tab,
   a publication's "Media", "References" and "Funding" pages, the
-  "Categories" tab and the "Author Response" table, which only a
-  journal's review stage has (each walked on `main` without the fix,
-  the "Users" tab on 3.5 too). The "Categories" tab's, the "References"
+  "Categories" tab, the "Author Response" table, which only a journal's
+  review stage has, and the "…" button above the "My Submissions" list,
+  which every user of that list gets, whatever their role (each walked
+  on `main` without the fix, the "Users" tab and "My Submissions" on 3.5
+  too). The same button above the editorial "Submissions" dashboard,
+  shown to managers and site administrators, takes the same text (read
+  in the code, `DashboardControlBulkActions.vue` and
+  `useDashboardBulkDelete.js`'s `bulkDeleteIsAvailableForUser`; not
+  walked; spec U23's). The "Categories" tab's, the "References"
   and "Funding" pages' and the "Author Response" table's other codes are
   texts new on `main` awaiting translation, outside this report; on 3.5
   the older categories table is French throughout (walked).
@@ -407,8 +415,13 @@ pkp-lib's tried as a diff.
   3b0ecf794c and OPS c8af945bb7 (`lib/pkp` 3dc90c81a6, `lib/ui-library`
   280f98c5) for all of them. The French (Canada) and French (France)
   files read are the same at every pkp-lib commit named.
-  `stable-3_5_0`: OJS 091fb65453, OMP 9c5e24246, OPS 38b61882d3
-  (`lib/pkp` cf3f984335, `lib/ui-library` d4e01883). `stable-3_4_0`:
+  `stable-3_5_0`: OJS 091fb65453, and c1cee76b95 (`lib/pkp` 771474347e)
+  for the "My Submissions" walk, OMP 9c5e24246, OPS 38b61882d3
+  (`lib/pkp` cf3f984335, `lib/ui-library` d4e01883); pkp-lib's
+  `invitation.po`, `userAccess.po`, `user.po` and `common.po` in
+  `locale/en`, `locale/fr` and `locale/fr_CA` are the same at 771474347e
+  and cf3f984335.
+  `stable-3_4_0`:
   `lib/pkp` 32b0f4b4af (767353f4fe for the funders read).
   `stable-3_3_0`: `lib/pkp` f6ab331645 (ac3fa73402 for the funders
   read).
@@ -499,9 +512,10 @@ pkp-lib's tried as a diff.
   Not walked on 3.5: `stable-3_5_0` has no funders list (no
   `FunderManager` in its ui-library, no `submission.funders` keys in
   pkp-lib's `locale/en`); 3.4 and 3.3 neither.
-- Unverified: the fix on the "Media" and "References" pages and the
-  "Author Response" table. The diff was not applied while walking Steps
-  7 to 10 or the "References" and table scripts. All three read
+- Unverified: the fix on the "Media" and "References" pages, the
+  "Author Response" table and "My Submissions". The diff was not
+  applied while walking Steps 7 to 10 or the "References", table and
+  "My Submissions" scripts. All four read
   `common.moreActions` from the same text bundle as the users list, where the trial gave "Plus
   d'actions", so the same result is expected there but was not seen.
 - The "Categories" tab (spec U16 A15): read by
@@ -514,3 +528,17 @@ pkp-lib's tried as a diff.
   `main` (pkp/datasets e8dafbc). On `stable-3_5_0` the older table showed no code on any of the
   three. The fix was not applied for this read: the tab takes the same
   text from the same bundle.
+- Kept script for the "…" button above "My Submissions" (spec U22 A6):
+  [`shared/playwright/checks/issues/my-submissions-french-review-counter-raw-key/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/my-submissions-french-review-counter-raw-key/walk.js),
+  the report "In French (Canada), an author's "My Submissions" list
+  shows a code instead of the review counter"'s script, which changes
+  nothing: the author (OJS `jnovak`, OMP `mpower`, OPS `ccorino`) signs
+  in, reads the "…" button above the list in English, chooses
+  "français" and reads it again:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/my-submissions-french-review-counter-raw-key/walk.js`
+  (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5). Walked 2026-10-04 on
+  `main` (OJS ff004d0973, OMP 3b0ecf794c, OPS c8af945bb7) and
+  `stable-3_5_0` (OJS c1cee76b95, OMP 9c5e24246c, OPS 38b61882d3),
+  pkp/datasets 1a5552c: on all three applications of both lines the
+  button is named `##common.moreActions##` in French and "More Actions"
+  in English; its menu reads "Supprimer les soumissions incomplètes".
