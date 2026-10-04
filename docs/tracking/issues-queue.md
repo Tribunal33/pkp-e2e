@@ -27,7 +27,7 @@ and the hourly routine starts one only when none is running
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | **Taken: issues session, workstation s0, 2026-10-04**; OMP1 done with U27 OMP3 (pkp-e2e#690) |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
 | [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | A19 done with U46 A5 (pkp-e2e#619) |
-| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | OMP1 done with U53 A14 (pkp-e2e#447) |
+| [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **OPS1 taken: issues session, workstation s0, 2026-10-04** (with U34 OPS2); OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (pkp-e2e#521) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
