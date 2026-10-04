@@ -1,0 +1,42 @@
+--- a/lib/pkp/js/controllers/TabHandler.js
++++ b/lib/pkp/js/controllers/TabHandler.js
+@@ -146,6 +146,17 @@
+ 				return false;
+ 			} else {
+ 				this.trigger('unregisterAllForms');
++				// The changes are discarded (the tab reloads its content when it
++				// is opened again), so its forms no longer hold unsaved data.
++				this.$currentTab_.find('form').each(function() {
++					var handler;
++					if ($.pkp.classes.Handler.hasHandler($(this))) {
++						handler = $.pkp.classes.Handler.getHandler($(this));
++						if (handler.formChangesTracked) {
++							handler.unregisterForm();
++						}
++					}
++				});
+ 			}
+ 		}
+ 
+--- a/lib/ui-library/src/components/Modal/AjaxModalWrapper.vue
++++ b/lib/ui-library/src/components/Modal/AjaxModalWrapper.vue
+@@ -38,8 +38,17 @@
+ // Mimicking this behaviour
+ const registerCloseCallback = inject('registerCloseCallback');
+ registerCloseCallback(() => {
+-	// eslint-disable-next-line no-unused-vars
+-	const form = $(contentDiv.value).find('form').first();
++	// Ask the form that holds unsaved changes, wherever it sits in the window
++	// (the notes window lists a delete form per note above the new note's form);
++	// with none changed, the first form hears of the close as before
++	const forms = $(contentDiv.value).find('form');
++	const changedForms = forms.filter(function () {
++		return (
++			$.pkp.classes.Handler.hasHandler($(this)) &&
++			$.pkp.classes.Handler.getHandler($(this)).formChangesTracked
++		);
++	});
++	const form = (changedForms.length ? changedForms : forms).first();
+ 
+ 	if (form.length == 1) {
+ 		const informationObject = {closePermitted: true};

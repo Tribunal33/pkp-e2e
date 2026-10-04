@@ -1,0 +1,12 @@
+--- a/lib/pkp/classes/submission/reviewer/form/PKPReviewerReviewStep3Form.php
++++ b/lib/pkp/classes/submission/reviewer/form/PKPReviewerReviewStep3Form.php
+@@ -240,7 +240,8 @@
+                 ->allowUnsubscribe($notification); // include unsubscribe link
+ 
+             Mail::send($mailable);
+-            Repo::emailLogEntry()->logMailable(SubmissionEmailLogEventType::REVIEW_COMPLETE, $mailable, $submission, $user);
++            // The context (journal or press) sends this email from its contact address: no user is its sender
++            Repo::emailLogEntry()->logMailable(SubmissionEmailLogEventType::REVIEW_COMPLETE, $mailable, $submission);
+ 
+             $receivedList[] = $userId;
+         }

@@ -508,6 +508,9 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - "Add Note" with the box empty in "Activity Log & Notes": refused, no note listed and no "Posted new note." line in "History" ([A2](#a2)): the guard the issue report proposes
+  - a "Notify" message, an "Assign" message and a discussion's email: their "History" lines name the editor who sent them under "User" (Rule 4c; [A1](#a1)): the guard the issue report proposes
+  - a Reviewer's "Submit Review": the "Review complete" lines with nothing under "User" (Rule 4c; [A5](#a5)): the guard the issue report proposes
+  - text typed in "Add Note" and not added on a submission with a note: "Close" asks; after a switch to "History" answered "OK", "Close" asks nothing; no "Leave site?" after either (Rule 10d; [A3](#a3), [A9](#a9), [A10](#a10)): the guard the issue report proposes
 - **Nothing new to test**:
   - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
   - a preprint server's file lines, from a galley's file, and its "Change File" cancelled (Rules 6, 6c)
@@ -524,13 +527,8 @@ Left out of the scenarios above, by reason:
   - a preprint server's Author, with no "Notifications" list, and the decline email listed on the editors' "History" only (Purpose)
   - the Editor and the Production editor {OJS OMP}, and the Guest Editor {OJS} (Actors row 1): the Journal Manager's and the Section Editor's offer, which scenario 1 reads
 - **Register carries it**:
-  - A1 (a discussion's, "Notify"'s and "Assign"'s email lines with an empty "User"; Rule 4c)
   - A2 (an empty note; Rule 10a)
-  - A3 (closing the window with text typed once the submission has a note; Rule 10d)
-  - A5 (the "Review complete" line naming its recipient; Rule 4c)
   - A7 (file lines read in French; Rule 8a)
-  - A9 (the stray "Leave site?" after a close dropped the text; Rule 10d)
-  - A10 ("Close" on "History" asking again after a switch discarded the text; Rule 10d)
   - OMP1 (a publication format's lines; Rule 11)
 - **No seed**:
   - a Site Administrator whose journal roles are all assistant roles: "Notes" alone, no "Delete" (Actors rows 1, 2, 4, 5; A4)
@@ -549,13 +547,13 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A discussion's emails and the Participants messages show no sender under "User" | 🐞 | minor | — |
+| [A1](#a1) | The Activity Log shows no sender for the emails an editor sends with "Notify", "Assign" or a discussion | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A3](#a3) | Once the submission has a note, closing the window drops a note typed and not added, without asking | 🐞 | minor | — |
-| [A5](#a5) | The "Review complete" email line names the editor who received it under "User" | 🐞 | minor | — |
+| [A3](#a3) | Once the submission has a note, closing the window drops a note typed and not added, without asking | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A5](#a5) | The Activity Log names the editor who received a "Review complete" email as its sender | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
-| [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | minor | — |
-| [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | minor | — |
+| [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A new or deleted publication format's line prints "{$formatName}" | 🐞 | minor | — |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
@@ -564,13 +562,23 @@ unless an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — Emails a person sent show no sender** · 🐞 · minor.
-On "History", the line "An email has been sent: {subject}" of a
-discussion's email, and of the Participants panel's "Notify" and "Assign"
-messages, has an empty "User" column, while a decision's email names the
-editor who sent it. A reader of the log cannot tell who wrote those
-emails without opening each discussion.
-Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+**A1 — The Activity Log shows no sender for the emails an editor sends with "Notify", "Assign" or a discussion** · 🐞 · low.
+Three kinds of email an editor sends from the workflow are listed on the
+submission's "Activity Log" › "History" with nothing under "User": a
+"Notify" message to a participant, the message sent with "Assign", and
+the emails of a discussion and of its replies. On 3.5 and 3.4 the
+feature is a discussion; on `main` it is "Tasks & Discussions", and a
+task's emails are listed the same way. The decision emails the same
+editor sends name the editor there.
+
+The log's other email lines already name their sender (decisions,
+review requests, an editor's reminders and thanks, the reviewer's
+answers) or are the journal's own emails, sent from its contact and
+listed with nothing under "User" by design (the acknowledgement, the
+automatic review reminders), so these three are the whole list. The
+"Review complete" email, which names the wrong person, is a separate
+report.
+Basis: probe, 2026-10-04. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes"** · 🐞 · low.
@@ -592,14 +600,15 @@ before `main`, a galley has no "More Information", so only "Activity Log
 Basis: probe, 2026-10-02. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — Closing the window drops a note not yet added, once the submission has a note** · 🐞 · minor.
-With text typed in "Add Note" and not added, closing the window asks
+**A3 — Closing the window drops a note not yet added, once the submission has a note** · 🐞 · low.
+With text typed in "Add Note" and not added, closing the window ("Close",
+Escape or a click beside it) asks
 whether to continue without saving while the submission has no note.
 Once it has one, closing drops the text at once, with no question. The
 question is expected in both cases, as on the tab switch. A file's
 "More Information" window never asks on closing, with notes or without
 ([→ Submission files' A18](U36-submission-files.md#a18)).
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+Basis: probe, 2026-10-04. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — A Site Administrator with only assistant roles gets "Notes" alone** · ❓ · latent.
@@ -611,16 +620,18 @@ Question: should a Site Administrator read "History" without a manager or editor
 Basis: probe. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
-**A5 — "Review complete" names its recipient as the sender** · 🐞 · minor.
-When a Reviewer submits a review, "History" gains "An email has been
-sent: Review complete: {reviewer} recommends {recommendation} for
-#{number} {author} — "{title}"" with the editor it went to under
-"User". Its "View Email" reads "From:" the journal's contact and "To:"
-that editor. The journal sends this email by itself, so "User" is
-expected to be empty, as for its other emails, or to name the Reviewer
-whose review it reports. A reader of the log takes the editor for the
-sender.
-Basis: probe. <sup>[f-a5](#fn-a5)</sup>
+**A5 — The Activity Log names the editor who received a "Review complete" email as its sender** · 🐞 · low.
+When a Reviewer submits a review, the journal emails "Review complete"
+to each editor of the submission, from the journal's contact. The
+submission's "Activity Log" lists one line per editor, "An email has been
+sent: Review complete: …", and each line names under "User" the editor
+who received it, as if that editor had sent it.
+
+"User" should be empty there, as it is for the journal's other automatic
+emails (the submission acknowledgement, the automatic review reminder).
+"Review complete" is the only email the log records under someone who
+did not send it.
+Basis: probe, 2026-10-04. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a7"></a>
 **A7 — File lines lose the file name in another language** · 🐞 · user-visible.
@@ -644,16 +655,16 @@ defect; the log hides a name the review type discloses.
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — A stray "Leave site?" after a note was dropped** · 🐞 · minor.
+**A9 — A stray "Leave site?" after a note was dropped** · 🐞 · low.
 After "Close" dropped typed text without asking (A3), the next page
 change or reload asks the browser's "Leave site?" although nothing is
-typed on screen. After a close that asked and was answered "OK",
+typed on screen; answering "Leave" loses nothing. After a close that asked and was answered "OK",
 leaving asks nothing. A file's window does the same
 ([→ Submission files' A18](U36-submission-files.md#a18)).
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+Basis: probe, 2026-10-04. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — "Close" asks about a note the tab switch already discarded** · 🐞 · minor.
+**A10 — "Close" asks about a note the tab switch already discarded** · 🐞 · low.
 On a submission with no note, with text typed in "Add Note", a switch to
 "History" asks whether to continue without saving, and "OK" discards the
 text. Pressing "Close" on "History" then asks the same question again,
@@ -661,7 +672,7 @@ though nothing typed is left to lose. The question is expected only
 while typed text would be lost; once "Notes" is opened again, "Close"
 rightly asks nothing. A user asked twice cannot tell whether the text
 was kept.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 ### OMP
 
@@ -1212,6 +1223,7 @@ line. Live-probed 2026-09-24
 again (all three apps): the discussion's, "Notify"'s and "Assign"'s lines had
 an empty "User" while their "View Email" read "From:" the editor who sent
 them; the decision's email line named the editor.
+Issue report: [docs/issues/U38-A1-sent-email-lines-name-no-sender.md](../issues/U38-A1-sent-email-lines-name-no-sender.md).
 
 <a id="fn-a2"></a>
 **f-a2** — Note d: `NewNoteForm` has no check on the text. Live-probed
@@ -1231,6 +1243,7 @@ does, and in a file's window the History search form
 (`eventLogFilterForm`), so that window never asks. Live-probed
 2026-09-24, all three apps: note td13; the file window did not ask on
 "Close", with notes or without, and asked on the tab switch.
+Issue report: [docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md), with A9 and A10.
 
 <a id="fn-a4"></a>
 **f-a4** — Note c. The header gate reads the active stage's roles, where
@@ -1245,6 +1258,7 @@ per notified editor. Live-probed 2026-09-24, OJS and OMP: after a
 Reviewer's "Submit Review" the line named "Eddie Editor" under "User";
 its "View Email" read "From:" "Site Admin" (the journal's contact) and
 "To:" that editor.
+Issue report: [docs/issues/U38-A5-review-complete-line-names-recipient.md](../issues/U38-A5-review-complete-line-names-recipient.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Notes j, k. Live-probed 2026-09-24, OJS and OMP ("Submission
@@ -1275,6 +1289,7 @@ the typed text on a submission with notes, the next page change raised
 the browser's page-leave question (a `beforeunload`); after a close that
 asked and was answered "OK" (no note), leaving raised none. A file's
 window, whose close never asks (f-a3), did the same.
+Issue report: [docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md), with A3 and A10.
 
 <a id="fn-a10"></a>
 **f-a10** — On "OK", `TabHandler::tabsBeforeActivate()` triggers
@@ -1291,6 +1306,7 @@ Do you wish to continue without saving?", "Cancel" kept the window on
 raised no page-leave question, and "Notes" read "There are no notes to
 display." before and after. Control: the same switch, then "Notes"
 opened again before "Close": no question.
+Issue report: [docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md), with A3 and A9.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note o. Live-probed 2026-09-23 (the submission-files claim
