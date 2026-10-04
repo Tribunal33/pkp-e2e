@@ -1934,7 +1934,7 @@ again on a second 2026-09-06: "Internal Review Guidelines" shows five
 toolbar buttons (Bold, Italic, Superscript, Subscript, Insert/edit link);
 "External Review Guidelines" and "Competing Interests" show eight (plus
 Blockquote, Bullet list, Numbered list).
-Issue report: [docs/issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md](../issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md).
+Issue report: [pkp-e2e#907](https://github.com/jardakotesovec/pkp-e2e/issues/907) ([docs/issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md](../issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md)).
 
 ## Reference — entry points & surfaces
 
