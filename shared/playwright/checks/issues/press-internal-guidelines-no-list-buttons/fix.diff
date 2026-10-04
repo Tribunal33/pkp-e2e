@@ -1,0 +1,11 @@
+--- a/classes/components/forms/context/ReviewGuidanceForm.php
++++ b/classes/components/forms/context/ReviewGuidanceForm.php
+@@ -32,6 +32,8 @@
+             'label' => __('manager.setup.internalReviewGuidelines'),
+             'value' => $context->getData('internalReviewGuidelines'),
+             'isMultilingual' => true,
++            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist',
++            'plugins' => ['link','lists'],
+         ]), [FIELD_POSITION_BEFORE, 'reviewGuidelines']);
+     }
+ }

@@ -841,6 +841,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): a
     changed "Review Recommendations" closed with "Close", then "Edit"
     and "Save", the row keeping its title from before the change
+  - the guard for OMP3 (issue report
+    `docs/issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md`): on
+    a press, Settings › Workflow › "Review" › "Reviewer Guidance" shows the
+    same toolbar (with Blockquote, Bullet list and Numbered list) on
+    "Internal Review Guidelines" as on "External Review Guidelines" and
+    "Competing Interests".
 - **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
@@ -940,7 +946,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | An "After Due Date" reminder is sent only to reviewers who were already reminded once, so with "Before Due Date" at "No reminder set" the after-due slider never sends (read from the code) | 🐞 | latent | — |
 | [A5](#a5) | Saving a form item with a text type drops its "Response Options" without the warning the app carries for it | 🐞 | minor | — |
-| [OMP3](#omp3) | On a press, a list or quote can be typed into "External Review Guidelines" but not into "Internal Review Guidelines" | 🐞 | minor | — |
+| [OMP3](#omp3) | A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
@@ -1094,13 +1100,16 @@ and the one "Competing Interests" text to both. Basis: probe.
 <sup>f-omp2</sup>
 
 <a id="omp3"></a>
-**OMP3 — The internal guidelines box has a smaller toolbar** · 🐞 · minor.
-On a press, "Internal Review Guidelines" offers Bold, Italic, Superscript,
-Subscript and Insert/edit link only, while "External Review Guidelines"
-and "Competing Interests" on the same form also offer Blockquote, Bullet
-list and Numbered list: a manager can type a list or a quote into the
-external guidelines and not into the internal ones. Basis: probe.
-<sup>f-omp3</sup>
+**OMP3 — A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one** · 🐞 · low.
+On a press, a list or quote can be typed into "External Review
+Guidelines" but not into "Internal Review Guidelines". On Settings ›
+Workflow › "Review" › "Reviewer Guidance", the internal box's toolbar
+offers Bold, Italic, Superscript, Subscript and Insert/edit link only,
+while "External Review Guidelines" and "Competing Interests" on the same
+form also offer Blockquote, Bullet list and Numbered list. A manager
+cannot make a list or a quote in the internal guidelines on screen;
+pasting a list from another document works round it. Basis: probe,
+2026-10-04. <sup>f-omp3</sup>
 
 ---
 
@@ -1925,6 +1934,7 @@ again on a second 2026-09-06: "Internal Review Guidelines" shows five
 toolbar buttons (Bold, Italic, Superscript, Subscript, Insert/edit link);
 "External Review Guidelines" and "Competing Interests" show eight (plus
 Blockquote, Bullet list, Numbered list).
+Issue report: [docs/issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md](../issues/U29-OMP3-press-internal-guidelines-no-list-buttons.md).
 
 ## Reference — entry points & surfaces
 
