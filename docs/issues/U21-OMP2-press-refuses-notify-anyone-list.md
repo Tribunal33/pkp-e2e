@@ -116,6 +116,9 @@ Reach:
   OMP's `copySubmissionAckPrimaryContact` drops pkp-lib's
   `"default": false`, so "Notify Primary Contact" arrives with neither
   choice selected on a press (code and the dataset's settings rows).
+  Reported apart, since existing presses also need an upgrade step:
+  [U56 OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md);
+  the two OMP schema deletions can go in one pull request.
 
 ## Proposed fix
 

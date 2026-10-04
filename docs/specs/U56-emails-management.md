@@ -822,6 +822,7 @@ accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OMP2 (issue report `docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md`): a new press's "Emails" tab opens with "Notify Primary Contact" at "No", as a journal's and a preprint server's do (Fields, the "Emails" tab; scenario 2)
   - the guard for A11 (issue report `docs/issues/U56-A11-french-manage-emails-raw-keys.md`): the French (Canada) "Gérer les courriels" list and its filters hold no `##` code, the emails new on `main` aside (Rule 6a)
   - the guard for A4 (issue report `docs/issues/U56-A4-add-template-window-titled-edit-template.md`): "Add Template" opens a window titled "Add Template", and an existing template's window stays "Edit Template" (Rule 12; scenario 3)
   - the guard for A5 (issue report `docs/issues/U56-A5-remove-template-confirmation-names-subject.md`): "Remove" on an added template whose name and subject differ asks about the template by the name its row shows (Rule 17; scenario 3)
@@ -910,7 +911,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
 | [A11](#a11) | In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither choice selected | 🐞 | minor | — |
+| [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither "Yes" nor "No" selected | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS1](#ops1) | Preprint server emails: "Insert Content" describes the server's initials with a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Two filters of one block narrow the list instead of widening it | ❓ | minor | — |
 | [A6](#a6) | An edited one-template email can only be restored by "Reset All" | ❓ | user-visible | — |
@@ -1102,12 +1103,22 @@ Template" for the same row; a preprint server does not list it.
 Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — "Notify Primary Contact" arrives unselected on a press** · 🐞 · minor.
-On a press the "Emails" tab opens with neither "Yes, send a copy to
-{email}" nor "No" selected, on the seeded press and on a new one, where
-a journal and a preprint server show "No". No copy goes out until
-"Yes…" is saved, but the manager sees a choice that looks unmade.
-Basis: probe, 2026-09-26. <sup>f-omp2</sup>
+**OMP2 — On a press, "Notify Primary Contact" opens with neither "Yes" nor "No" selected** · 🐞 · low.
+"Notify Primary Contact" on the workflow settings' "Emails" screen
+decides whether the press's primary contact gets a copy of the
+submission acknowledgement email. On a press, it opens with neither
+"Yes, send a copy to rvaca@mailinator.com" (the primary contact's
+address) nor "No" selected, both on an existing press and on a new
+one. A journal and a preprint server open at "No".
+No copy is sent until a manager saves "Yes", so the press behaves as if
+"No" were chosen, but the screen shows no choice. Saving the screen
+leaves both options blank until the manager picks one; from then on the
+saved choice shows.
+The fix is medium rather than small because existing presses, and
+journals and servers upgraded from 3.3, have no stored value: a new
+default fixes only presses created afterwards, and an upgrade step has
+to fill in the rest.
+Basis: probe, 2026-10-04. <sup>f-omp2</sup>
 
 ### OPS
 
@@ -1823,6 +1834,7 @@ scratch press: both "Notify Primary Contact" choices unchecked on
 arrival; the journal and the preprint server arrive at "No". OMP's
 `schemas/context.json` redefines `copySubmissionAckPrimaryContact`
 without lib/pkp's `default: false`.
+Issue report: [docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md](../issues/U56-OMP2-press-notify-primary-contact-unselected.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ContextEmailVariable::descriptions()` uses
