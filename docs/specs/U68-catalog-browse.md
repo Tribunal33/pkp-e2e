@@ -618,6 +618,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md`):
     a category's new release listed on its page, and its featured book
     set apart
+  - the guard for A4 (issue report
+    `docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md`): a
+    series' picture a link to its full-size version
 - **Nothing new to test**:
   - a signed-in user of any role, shown the same pages with the same
     books as the signed-out visitor (Actors row 1)
@@ -630,7 +633,6 @@ Left out of the scenarios above, by reason:
   - A3 (a series' missing name, description and ISSNs, its picture's
     text alternative, and its ignored "Order of monographs"; Rules 7, 9;
     Settings bullet 2)
-  - A4 (a series' picture with no link to its full size; Rule 9)
   - A5 (an inactive series, left out of the "Browse" block and still on
     its page and the "Series:" links; Rules 6, 12; Settings bullet 12)
   - A6 (the "Series position" orders comparing text; Rule 4; Settings
@@ -678,7 +680,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | One book reads "1 Titles" on the catalog, series and "New Releases" pages | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Every book summary's cover is a link a screen reader cannot name | 🐞 | minor | — |
 | [A3](#a3) | A series' page shows no name, description or ISSN, and ignores the series' order | 🐞 | user-visible | — |
-| [A4](#a4) | A series' picture does not lead to its full size | 🐞 | minor | — |
+| [A4](#a4) | A series' picture does not lead to its full size | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A press's category page never lists its new releases and never sets its featured books apart | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | In French the catalog pages and the "Browse" block show raw text codes | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The catalog's old search address answers a not-found page | 🐞 | invisible | — |
@@ -721,13 +723,14 @@ monographs" says. [Sections](U17-sections.md#omp9) holds the full entry
 Since: 2026-08-26 (one month) · Basis: probe, 2026-09-27. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The series picture is not a link** · 🐞 · minor.
+**A4 — The series picture is not a link** · 🐞 · low.
 The picture on a series' page is meant to open the full-size image; it is
 not a link, and nothing on the page leads to the full size, which answers
 only at its typed address. A category's picture is not a link either
 ([Categories](U16-categories.md#a6), its A6); on a press it does not
-even show ([Categories](U16-categories.md#omp1), its OMP1).
-Basis: probe, 2026-09-25. <sup>f-a4</sup>
+even show ([Categories](U16-categories.md#omp1), its OMP1). One fix
+makes both pictures links.
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The two series lists disagree** · ❓ · minor.
@@ -1278,6 +1281,7 @@ the code's history: the last change to `classes/section/DAO.php`,
 **f-a4** — Note e: the `.cover` wrapper is a `div` with an `href`, which
 browsers do not follow. Seen 2026-09-25 by the Sections spec (its
 f-omp9): the wrapper a `div` carrying an `href` rather than a link.
+Issue report: [pkp-e2e#599](https://github.com/jardakotesovec/pkp-e2e/issues/599) ([docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md](../issues/U16-A6-A7-category-picture-not-link-alt-null.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Notes d and h: the catalog's series list is the section

@@ -20,9 +20,10 @@
  	<div class="about_section{if $image} has_image{/if}{if $description} has_description{/if}">
  		{if $image}
 -			<div class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="series" id=$series->getId()}">
-+			<a class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="series" id=$series->getId()}">
- 				<img src="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="thumbnail" type="series" id=$series->getId()}" alt="{$series->getLocalizedTitle()|escape|default: 'null'}" />
+-				<img src="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="thumbnail" type="series" id=$series->getId()}" alt="{$series->getLocalizedTitle()|escape|default: 'null'}" />
 -			</div>
++			<a class="cover" href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="fullSize" type="series" id=$series->getId()}">
++				<img src="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="catalog" op="thumbnail" type="series" id=$series->getId()}" alt="{$series->getLocalizedTitle()|trim|escape}" />
 +			</a>
  		{/if}
  		<div class="description">
