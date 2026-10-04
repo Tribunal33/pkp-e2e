@@ -2046,7 +2046,7 @@ test install.
 **f-a7 — A7 evidence.** Note k. Live-probed 2026-09-24: the screen half,
 note k (Rule 17). The deposit half is not yet seen: it would take the OJS
 Crossref XML of an article whose references came both ways.
-Issue report: [docs/issues/U42-A7-wizard-reference-doi-not-kept.md](../issues/U42-A7-wizard-reference-doi-not-kept.md).
+Issue report: [pkp-e2e#872](https://github.com/jardakotesovec/pkp-e2e/issues/872) ([docs/issues/U42-A7-wizard-reference-doi-not-kept.md](../issues/U42-A7-wizard-reference-doi-not-kept.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** Note m. The funders list shows the same behavior
