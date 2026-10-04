@@ -604,6 +604,11 @@ Left out of the scenarios above, by reason:
     issue report
     (`docs/issues/U01-A8-login-as-after-idle-limit-server-error.md`)
     proposes, once fixed
+  - the Site Administrator's "Edit User" on a flagged account opening
+    with "Change Password" ticked, and an unchanged "OK" keeping the
+    flag ([A10](#a10)): the guard the issue report
+    (`docs/issues/U01-A10-edit-user-hides-clears-change-password.md`)
+    proposes, once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -613,7 +618,6 @@ Left out of the scenarios above, by reason:
   - a held address the user's roles do not allow ending on the access-denied page after sign-in (Rule 4): the page scenario 4 reads (Rule 17)
 - **Register carries it**:
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
-  - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
   - A12 (the next correct sign-in after a disabled account's refusal landing back on the Login page; Rule 2)
 - **No seed**:
   - a disabled account refused, with or without a reason (Rule 2)
@@ -651,7 +655,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | While signed in as another user, "Login As" is still offered, and using it strands the operator in that account | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | Signed out, the Dashboard address the monthly reminder email links to gives an empty error page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Kept logged in past the idle limit, users look signed out on the public site and "Login As" gives a blank page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
-| [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
+| [A10](#a10) | The Site Administrator's "Edit User" never shows "Change Password" ticked, and saving it removes the flag | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
@@ -843,19 +847,18 @@ management*, so the ruling is that feature's.
 Since: 2026-09-13 · Basis: test run. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — "Edit User" hides the forced-change flag and clears it on saving** · 🐞 · minor.
-On the Site Administrator's "Edit User" (Rule 11a), the "Change Password"
-box should show whether the account is already flagged. It always opens
-unticked: ticked and saved with "OK", then reopened, before or after a
-reload, it reads unticked, while the account's next sign-in does divert to
-"Change Password". Pressing "OK" on a flagged account with nothing changed
-silently removes the flag: its next sign-in lands where an ordinary one
-would, with no "Change Password". So the administrator cannot see whether
-an account is flagged, and any later edit of it undoes the flag. The window
-has behaved this way since it arrived, but a box that never shows its
-stored value, so that saving it as it opened clears that value, reads as
-an oversight, not a design.
-Since: 2013-02-14 (13 years) · Basis: probe + commit. <sup>[f-a10](#fn-a10)</sup>
+**A10 — The Site Administrator's "Edit User" never shows "Change Password" ticked, and saving it removes the flag** · 🐞 · medium.
+The Site Administrator can require a user to choose a new password at
+their next sign-in by ticking "Change Password" in the user's "Edit
+User" window (Administration › Hosted Journals › a journal's "Settings
+wizard" › "Users"). The box always opens unticked, even on an account
+that is already flagged.
+
+Pressing "OK" with the box left as it opened removes the flag, and
+nothing says so: the user's next sign-in goes straight in, with no
+"Change Password". So any later edit of a flagged account (a new email
+address, a corrected name) undoes the requirement.
+Since: 2013-02-14 (13 years) · Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — After a refused "Change Password" or "Reset Password", the browser tab loses the page's name** · 🐞 · low.
@@ -1440,6 +1443,7 @@ account's next sign-in diverts to "Change Password". A second account,
 flagged the same way, then opened with "Edit User" and saved with "OK"
 with nothing changed, signs in next straight to My Submissions with no
 "Change Password".
+Issue report: [pkp-e2e#829](https://github.com/jardakotesovec/pkp-e2e/issues/829) ([docs/issues/U01-A10-edit-user-hides-clears-change-password.md](../issues/U01-A10-edit-user-hides-clears-change-password.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-28 (OJS, OMP, OPS; two runs each; scratch
