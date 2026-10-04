@@ -725,6 +725,11 @@ Left out of the scenarios above, by reason:
     page's list ([A4](#a4); Rule 8): the guard the issue report
     (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`)
     proposes, once fixed
+  - a preprint server's site-wide Register page showing no
+    reviewing-interests question or box ([OPS1](#ops1)): the guard the
+    issue report
+    (`docs/issues/U02-OPS1-server-site-register-asks-reviewing-interests.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -732,7 +737,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A7 (Reader granted though closed to self-registration; Rule 7)
   - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
-  - OPS1 (a preprint-server site's page asks for reviewing interests with no reviewer role)
 - **No seed**:
   - every journal closed: the site-level page closes and the site Login drops the link (Rule 2)
   - a restricted journal still rendering the form, its header offering "Register" (Rule 3): what is missing is a `restrictSiteAccess` key on `POST scenarios/context` (Settings "Site Access"); a Journal Manager's tick would be set-up for a visitor's read, not a step
@@ -769,7 +773,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press site's site-wide Register page, each press's privacy consent box shows before any role is ticked | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OPS1](#ops1) | A preprint-server site's Register page asks for reviewing interests though no reviewer role exists, and the profile never shows them | 🐞 | minor | — |
+| [OPS1](#ops1) | A preprint server's site-wide Register page asks for reviewing interests, though servers have no reviewers | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | The Register page's "Login" link aims at the profile's Roles tab, but sign-in lands as usual | ❓ | minor | — |
 | [A7](#a7) | A journal-level registration grants Reader even when the Reader role is closed to self-registration | ❓ | latent | — |
 
@@ -938,14 +942,24 @@ Basis: probe, 2026-10-04. <sup>[f-omp2](#fn-omp2)</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — Reviewing interests asked for on a site with no reviewers** · 🐞 · minor.
-A preprint-server site's Register page shows "If you requested to be a
-reviewer, please enter your subject interests." although no preprint server
-has a reviewer role and no server block offers one. Interests typed there
-are accepted without complaint and then have no visible home: the server's
-profile Roles tab has no "Reviewing interests" field. The journal-level page
-correctly omits the field.
-Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
+**OPS1 — A preprint server's site-wide Register page asks for reviewing interests, though servers have no reviewers** · 🐞 · low.
+A preprint server's site-wide Register page asks "If you requested to be
+a reviewer, please enter your subject interests." and offers a box for
+them. But a preprint server has no reviewer role. The page offers none
+either: where each server is listed with the roles a visitor can tick,
+"Reader" is the only one. The server's own Register page asks nothing of
+the kind.
+
+Whatever the newcomer types is accepted without a word and kept, though
+nothing on a server uses it. On main they never see it again: their
+Profile's "Roles" tab has no "Reviewing interests" field. On 3.5 that
+tab lists the interests under "Reviewing interests". Nothing breaks, but
+the newcomer answers a question that does not apply to them and may
+wonder whether they signed up to review.
+
+A site with several servers links to this page from its own menu. On a
+site with one server it is reached only by typing its address.
+Basis: probe, 2026-10-04. <sup>[f-ops1](#fn-ops1)</sup>
 
 ---
 
@@ -1714,6 +1728,7 @@ shown while every server block on the page offered "Reader" alone and no
 the OPS page were accepted, and the resulting account's Roles tab
 (`user/profile#roles`) had no "Reviewing interests" field, where OJS and
 OMP showed two chips.
+Issue report: [pkp-e2e#839](https://github.com/jardakotesovec/pkp-e2e/issues/839) ([docs/issues/U02-OPS1-server-site-register-asks-reviewing-interests.md](../issues/U02-OPS1-server-site-register-asks-reviewing-interests.md)).
 
 ## Reference — entry points & surfaces
 
