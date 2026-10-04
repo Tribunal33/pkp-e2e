@@ -899,7 +899,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | "Editorial statistics" speaks of "the journal" on a press and a preprint server | 🐞 | minor | — |
+| [A1](#a1) | On a press or a preprint server, the "Emails" settings call editorial statistics the journal's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The three ORCID emails are listed under code names at the end of the list | 🐞 | minor | — |
 | [A4](#a4) | The "Add Template" window is titled "Edit Template" | 🐞 | minor | — |
 | [A5](#a5) | "Remove Template" names the template by its subject, not its name | 🐞 | minor | — |
@@ -918,13 +918,15 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Editorial statistics" says "the journal" everywhere** · 🐞 · minor.
-On a press and a preprint server the "Editorial statistics" choice of the
-"Emails" tab is described "Whether or not to send a monthly email to
-editors with the editorial statistics of the journal, …", while every
-other line of the tab names a press or a server. A manager expects the
-context's own word.
-Basis: probe, 2026-09-26. <sup>f-a1</sup>
+**A1 — On a press or a preprint server, the "Emails" settings call editorial statistics the journal's** · 🐞 · low.
+On a press and a preprint server, Settings › Workflow › "Emails"
+describes the "Editorial statistics" choice as "Whether or not to send a
+monthly email to editors with the editorial statistics of the journal,
+…". It should say "of the press" or "of the preprint server".
+English shows it on both apps. So do the languages that translate the
+shared text (French reads "…de la revue…"), until translators add each
+app's own wording.
+Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — ORCID emails listed under code names** · 🐞 · minor.
@@ -1680,6 +1682,7 @@ versions. Live-probed 2026-09-26, all three apps: the press and the
 preprint server read "…editorial statistics of the journal…" while the
 tab's other lines name the press or the preprint server; the journal
 reads "journal".
+Issue report: [docs/issues/U56-A1-emails-tab-editorial-statistics-says-journal.md](../issues/U56-A1-emails-tab-editorial-statistics-says-journal.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — lib/pkp `locale/en/emails.po`: `orcid.orcidCollectAuthorId.name`

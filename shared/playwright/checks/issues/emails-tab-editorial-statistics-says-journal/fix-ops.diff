@@ -1,0 +1,15 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -804,6 +804,12 @@
+ 
+ msgid "manager.manageEmails.description"
+ msgstr "Edit the messages sent in emails from this preprint server."
++
++msgid "manager.editorialStatistics.description"
++msgstr ""
++"Whether or not to send a monthly email to editors with the editorial "
++"statistics of the preprint server, such as accept and decline rates. "
++"Editors can unsubscribe from this email from their user profile."
+ 
+ msgid "mailable.postedAck.name"
+ msgstr "Posted Acknowledgement"

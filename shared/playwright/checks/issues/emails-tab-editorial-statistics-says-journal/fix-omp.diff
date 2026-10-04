@@ -1,0 +1,15 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1409,6 +1409,12 @@
+ 
+ msgid "manager.manageEmails.description"
+ msgstr "Edit the messages sent in emails from this press."
++
++msgid "manager.editorialStatistics.description"
++msgstr ""
++"Whether or not to send a monthly email to editors with the editorial "
++"statistics of the press, such as accept and decline rates. Editors can "
++"unsubscribe from this email from their user profile."
+ 
+ msgid "mailable.decision.sendInternalReview.notifyAuthor.name"
+ msgstr "Sent to Internal Review"
