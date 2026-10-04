@@ -1840,7 +1840,7 @@ mailbox, subject "A new submission needs an editor to be assigned:
 "{title}"", from "Site Admin <admin@mail.test>"; the same Manager with
 "Enable…" and the email box both ticked got the task and no email (Rule
 5b).
-Issue report: [docs/issues/U05-A10-needs-editor-email-ignores-notification-off.md](../issues/U05-A10-needs-editor-email-ignores-notification-off.md).
+Issue report: [pkp-e2e#846](https://github.com/jardakotesovec/pkp-e2e/issues/846) ([docs/issues/U05-A10-needs-editor-email-ignores-notification-off.md](../issues/U05-A10-needs-editor-email-ignores-notification-off.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — `SubEditorsDAO::assignEditors()` assigns the section's
