@@ -697,6 +697,10 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A3 (issue report
+    `docs/issues/U72-A3-new-version-chapter-files-left-behind.md`):
+    scenario 10's copied chapter reads its earlier files ticked in its
+    "Files" list
   - the guard for A4 (issue report
     `docs/issues/U50-A4-refused-save-date-published-today.md`): a chapter
     saved without a date reopens with an empty "Date Published"
@@ -741,8 +745,6 @@ Left out of the scenarios above, by reason:
     Actors row 4)
   - A2 (the work-type control and the "Publication Dates" "Save" offered
     to the assistant roles and refused; Actors rows 6, 7)
-  - A3 (a new version's chapters without their earlier files; Rule 15;
-    scenario 10 passes it)
   - A5 (the Review panel's "Edit"; Fields, the Review panel)
   - A9 (a chapter added after an Edited Volume is published; Rule 12b)
 - **Owned by another feature**:
@@ -767,7 +769,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | "Order" cannot move a chapter: a dragged chapter stays where it was | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A chapter saved without a date shows today's date in "Date Published", which "Save" does not store | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The work-type control and "Publication Dates" are offered to the assistant roles, and their choice is refused | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A3](#a3) | After "Create New Version" the new version's chapters lose their files, which no chapter of the new version can take back | 🐞 | minor | — |
+| [A3](#a3) | A book's new version leaves its chapters' files behind, and a proof made from one is linked nowhere | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Chapter authors dragged into a new order snap back on "Done" when they are among the book's first contributors | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Chapter window promises an automatic license above a chapter's own License URL and on a published book | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -810,15 +812,23 @@ roles cannot use are not offered, or shown read-only.
 Basis: probe, 2026-10-03. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A new version's chapters lose their files** · 🐞 · minor.
-After "Create New Version", each copied chapter in the new version holds
-only the proof files copied with its publication formats. The other
-files the chapter held (for example a "Chapter Manuscript" on the
-submission's file list) are not ticked in the new version's chapter
-window and are not offered there at all, because the earlier version's
-chapter still holds them. Expected: the copied chapter keeps its files,
-or can pick them again.
-Basis: probe. <sup>f-a3</sup>
+**A3 — A book's new version leaves its chapters' files behind, and a proof made from one is linked nowhere** · 🐞 · medium.
+After "Create New Version" on a book, a chapter's window in the new
+version lists, of the chapter's own files, only the proof copied with
+the book's publication format. Its manuscript and its other working
+files are neither ticked nor offered, because each file stays assigned
+to the earlier version's chapter, and a file can be assigned to one
+chapter only.
+An editor who then adds a proof to the new version with "Select Files",
+choosing one of those chapter files, publishes a file that the book's
+page links nowhere: not under its chapter and not among the book's
+downloads. Nothing says so.
+The way round is to add the file with the format's "Change File", which
+uploads it beside the format's other files, and then tick it in the
+chapter's window. A book already published this way can be repaired on
+screen: untick the proof in the earlier version's chapter window, then
+tick it in the new version's.
+Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — A chapter saved without a date shows today's date in "Date Published"** · 🐞 · medium.
@@ -1589,6 +1599,7 @@ Issue report: [pkp-e2e#705](https://github.com/jardakotesovec/pkp-e2e/issues/705
 **f-a3** — Note q. Live-probed 2026-09-28: note td15; in the stored data
 `article.pdf` keeps the old chapter's id, and the new proof file points
 at the new chapter.
+Issue report: docs/issues/U72-A3-new-version-chapter-files-left-behind.md.
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note g (the `datepicker` field). Live-probed 2026-09-28, in

@@ -1,0 +1,54 @@
+--- a/classes/publication/Repository.php
++++ b/classes/publication/Repository.php
+@@ -119,6 +119,16 @@
+         $oldPublicationId = $publication->getId();
+         $submissionId = $publication->getData('submissionId');
+ 
++        // Files linked to a chapter that belong to the submission rather than to a publication
++        // format (manuscripts, review, copyedited and production-ready files)
++        $chapterWorkingFiles = Repo::submissionFile()
++            ->getCollector()
++            ->filterBySubmissionIds([$submissionId])
++            ->getMany()
++            ->filter(fn (SubmissionFile $file) => $file->getData('chapterId')
++                && $file->getData('assocType') != Application::ASSOC_TYPE_REPRESENTATION)
++            ->collect();
++
+         $newId = parent::version($publication, $versionStage, $isMinorVersion, $submissionStatus);
+ 
+         $newPublication = $this->get($newId);
+@@ -220,10 +230,18 @@
+             }
+             $newChapterId = $chapterDao->insertChapter($newChapter);
+             $newChapter = $chapterDao->getChapter($newChapterId);
++
++            // Every version's copy of this chapter (the chapters sharing its source chapter): a file
++            // naming any of them belongs to this chapter
++            $sameChapterIds = [];
++            $chapterCopies = $chapterDao->getBySourceChapterId($oldChapter->getSourceChapterId());
++            while ($chapterCopy = $chapterCopies->next()) {
++                $sameChapterIds[] = (int) $chapterCopy->getId();
++            }
+ 
+             // Update file chapter associations for new files
+             foreach ($newSubmissionFiles as $newSubmissionFile) {
+-                if ($newSubmissionFile->getChapterId() == $oldChapter->getId()) {
++                if (in_array((int) $newSubmissionFile->getChapterId(), $sameChapterIds)) {
+                     Repo::submissionFile()
+                         ->edit(
+                             $newSubmissionFile,
+@@ -232,6 +250,14 @@
+                 }
+             }
+ 
++            // A file names one chapter only: the chapter's working files move to the new version's
++            // copy, the version created last. Each version's proofs stay with its own chapters.
++            foreach ($chapterWorkingFiles as $chapterWorkingFile) {
++                if (in_array((int) $chapterWorkingFile->getData('chapterId'), $sameChapterIds)) {
++                    Repo::submissionFile()->edit($chapterWorkingFile, ['chapterId' => $newChapter->getId()], false);
++                }
++            }
++
+             // Link the new chapter's authors using the old chapter's author associations,
+             // resolving each old author to its duplicated counterpart via $oldToNewAuthorId.
+             $oldChapterAuthors = Repo::author()->getCollector()
