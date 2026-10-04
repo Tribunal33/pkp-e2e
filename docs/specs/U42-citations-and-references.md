@@ -2154,7 +2154,7 @@ the close and the reopen, removes the blank row. A row added empty and
 saved made a reference with a DOI and a title structured, took
 "Reprocess" off its menu and moved the box to "0/2"; deleting the row and
 saving undid all of it.
-Issue report: [docs/issues/U42-A13-citation-author-row-kept-after-close.md](../issues/U42-A13-citation-author-row-kept-after-close.md).
+Issue report: [pkp-e2e#880](https://github.com/jardakotesovec/pkp-e2e/issues/880) ([docs/issues/U42-A13-citation-author-row-kept-after-close.md](../issues/U42-A13-citation-author-row-kept-after-close.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14 evidence.** `FieldAuthors.vue` renders each row's boxes as
