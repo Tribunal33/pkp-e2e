@@ -2179,7 +2179,7 @@ the select given no empty option). Live-probed 2026-09-24, all three apps:
 the list's options hold no empty entry, and clearing "Identifier" on a
 saved data citation answered 400 with "This field is required when
 identifier type is present.".
-Issue report: [docs/issues/U42-A15-data-citation-identifier-cannot-be-removed.md](../issues/U42-A15-data-citation-identifier-cannot-be-removed.md).
+Issue report: [pkp-e2e#881](https://github.com/jardakotesovec/pkp-e2e/issues/881) ([docs/issues/U42-A15-data-citation-identifier-cannot-be-removed.md](../issues/U42-A15-data-citation-identifier-cannot-be-removed.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `CitationManagerCellToggle.vue` uses the shared
