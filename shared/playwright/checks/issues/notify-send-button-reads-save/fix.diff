@@ -1,0 +1,35 @@
+--- a/lib/pkp/classes/components/forms/context/PKPNotifyUsersForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPNotifyUsersForm.php
+@@ -65,7 +65,11 @@
+ 
+         $currentUser = Application::get()->getRequest()->getUser();
+ 
++        $this->addPage(['id' => 'default', 'submitButton' => ['label' => __('manager.setup.notifyUsers.send')]]);
++        $this->addGroup(['id' => 'default', 'pageId' => 'default']);
++
+         $this->addField(new FieldOptions('userGroupIds', [
++            'groupId' => 'default',
+             'label' => __('user.roles'),
+             'description' => __('manager.setup.notifyUsers.description'),
+             'value' => [],
+@@ -73,17 +77,20 @@
+             'required' => true,
+         ]))
+             ->addField(new FieldText('subject', [
++                'groupId' => 'default',
+                 'label' => __('email.subject'),
+                 'value' => '',
+                 'required' => true,
+             ]))
+             ->addField(new FieldRichTextarea('body', [
++                'groupId' => 'default',
+                 'label' => __('email.email'),
+                 'size' => 'large',
+                 'value' => '',
+                 'required' => true,
+             ]))
+             ->addField(new FieldOptions('copy', [
++                'groupId' => 'default',
+                 'label' => __('common.copy'),
+                 'value' => 0,
+                 'options' => [

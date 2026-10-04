@@ -430,6 +430,11 @@ Left out of the scenarios above, by reason:
     Manager of scenario 1 (Actors row 2)
   - the Site Administrator sending from the tab, as the Journal Manager
     of scenario 1 does (Actors row 2)
+- **Planned**:
+  - scenario 1's send button reading "Send Email" ([A1](#a1); Fields): the guard the issue report proposes, once fixed
+  - scenario 2's "Nothing filled in": "Roles", "Subject" and "Email" marked required, and "Save" refused with each field named and no window ([A2](#a2); Rule 4): the guard the issue report proposes, once fixed
+  - a send to "Nobody role" alone, with "Copy" ticked and unticked, refused with a message under "Roles" and nothing queued ([A4](#a4); Rule 9): the guard the issue report proposes, once fixed
+  - scenario 1's "Author" + "Reader" + "Copy" window reading the number of people the emails reach ([A3](#a3); Rule 5): the guard the issue report proposes, once fixed
 - **Register carries it**:
   - A1 (the button that sends reads "Save"; Fields; scenario 1 passes it)
   - A2 (no required mark, and the window opening on "0 users" before any
@@ -458,47 +463,65 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | The button that sends the email reads "Save" | 🐞 | minor | — |
-| [A2](#a2) | No field is marked required, and the confirmation opens on "0 users" before anything is checked | 🐞 | minor | — |
-| [A3](#a3) | The confirmation's total counts a person once per ticked role and leaves out the manager's copy | 🐞 | minor | — |
-| [A4](#a4) | A send to roles with no member is accepted with "Saved" and no word that nothing was sent | 🐞 | minor | — |
+| [A1](#a1) | Users & Roles › "Notify": the button that emails whole roles reads "Save" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A2](#a2) | Users & Roles › "Notify": no field is marked required, and an empty form asks to email "0 users" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A3](#a3) | Notify users: the "Send Email" window counts a person once per ticked role and leaves out the copy | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A4](#a4) | Users & Roles › "Notify": an email to roles nobody holds is accepted with "Saved" and sent to no one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 
 ### All apps
 
 <a id="a1"></a>
-**A1 — The send button reads "Save"** · 🐞 · minor.
-The button under the "Notify" form reads "Save", the label every
-settings form uses, although it sends an email to whole roles; only the
-window that follows names the action ("Send Email"). A manager expects
-the button to say what it does.
-Since: 2020-11-25 (the tab's first version) · Basis: probe. <sup>f-a1</sup>
+**A1 — Users & Roles › "Notify": the button that emails whole roles reads "Save"** · 🐞 · low.
+On Settings › Users & Roles › "Notify", the button under the form reads
+"Save", the label every settings form uses, although it sends an email
+to everyone who holds the ticked roles. Only the window that follows
+names the action: it is titled "Send Email" and asks to confirm the
+number of recipients.
+Nothing is lost: the window stops a manager who pressed "Save" expecting
+to keep a draft, and "Cancel" sends nothing.
+Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — No required mark, and the confirmation comes before any check** · 🐞 · minor.
-"Roles", "Subject" and "Email" are all refused when empty, but none
-carries the required-field mark, and "Save" opens the confirmation
-window first: with nothing filled in it asks to send "an email to 0
-users", and the missing fields are named only after "Send Email". The
-manager expects the required fields marked and an empty form refused
-before being asked to confirm a send.
-Since: 2020-11-25 (the tab's first version) · Basis: probe. <sup>f-a2</sup>
+**A2 — Users & Roles › "Notify": no field is marked required, and an empty form asks to email "0 users"** · 🐞 · low.
+On Settings › Users & Roles › "Notify", "Roles", "Subject" and "Email"
+must all be filled in, but none of them carries the required mark.
+Pressing "Save" on an empty form opens the "Send Email" window, which
+asks to confirm "an email to 0 users". A form with roles ticked but
+"Subject" or "Email" left empty is confirmed the same way, with the real
+number of recipients. In both cases the manager learns what is missing
+only after pressing "Send Email": the window closes and each missing
+field shows its message under it.
+The cost is a confirmation that leads nowhere: the incomplete send is
+refused, and the manager fills in the named fields and tries again.
+Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The total counts a person once per ticked role** · 🐞 · minor.
-With two roles ticked, a person who holds both is counted twice in "You
-are about to send an email to {total} users", although they receive one
-email; with "Copy" ticked, the manager's own copy is not counted. The
-manager expects the number of people who will receive the email.
-Since: 2020-11-25 (the tab's first version) · Basis: probe. <sup>f-a3</sup>
+**A3 — Notify users: the "Send Email" window counts a person once per ticked role and leaves out the copy** · 🐞 · low.
+On Settings › Users & Roles › "Notify", a manager who ticks several
+roles is asked to confirm "You are about to send an email to {total}
+users", where the total counts a person once for each ticked role they
+hold. With "Copy" ticked, the manager's own copy, one more person, is
+left out, so with "Copy" ticked and no shared members the total is one
+short.
+The emails themselves reach the right people, once each; only the
+number the manager confirms is wrong. In PKP's default test data every
+Author is also a Reader, so "Author" and "Reader" together read 40 for
+20 people.
+Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — A send that reaches nobody is accepted silently** · 🐞 · minor.
-When every ticked role has no current member and "Copy" is unticked,
-"Send Email" is accepted, the form stays filled in with "Saved" beside
-the button, and no email is sent; the "queued" line of an ordinary send
-does not appear. The manager expects to be told that nobody would
-receive the email, or the send refused.
-Since: 2023-03-22 (sends became queued) · Basis: probe. <sup>f-a4</sup>
+**A4 — Users & Roles › "Notify": an email to roles nobody holds is accepted with "Saved" and sent to no one** · 🐞 · low.
+On Settings › Users & Roles › "Notify", a manager ticks only roles that
+nobody currently holds, leaves "Copy" unticked and presses "Send Email".
+The send is accepted and no email goes out, but nothing says so: the
+form stays filled in, with "Saved" beside the button. An ordinary send
+replaces the form with the "queued" line, so "Saved" appears only here.
+The manager expects to be told that nobody would receive the email, or
+expects the send to be refused. With "Copy" ticked (the box that sends
+the manager a copy of the email), the same send shows "Emails are
+successfully queued to be sent at the earliest convenience." and only
+that copy goes out, which reads like proof that the roles were reached.
+Since: 2020-11-25 (the tab's first version; the silent "Saved" since 2023-03-22) · Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 ---
 
@@ -829,6 +852,7 @@ and button (`sendLabel`). Unchanged since the form arrived with
 pkp/pkp-lib#4017 (lib/pkp `891eba202`, ui-library `eda42e56`,
 2020-11-25). Live-probed 2026-09-26, all three apps: the only button
 under the form reads "Save"; only the window says "Send Email".
+Issue report: [docs/issues/U55-A1-notify-send-button-reads-save.md](../issues/U55-A1-notify-send-button-reads-save.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The ignored `'required' => true` of note b, present since
@@ -838,6 +862,7 @@ which opens the dialog before `Form.vue::submit()` runs its
 2026-09-26, all three apps: no required mark (note b), the window on
 "0 users" for an empty form (note c), the fields named only after "Send
 Email" (note d).
+Issue report: [docs/issues/U55-A2-notify-required-fields-unchecked.md](../issues/U55-A2-notify-required-fields-unchecked.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `NotifyUsersForm.vue::nextPage()` adds the per-role counts of
@@ -848,12 +873,14 @@ members each role's count includes, not the sum. Live-probed
 2026-09-26, all three apps: "Author" + "Reader" read "4 users" for three
 emails (note c); "Nobody role" with "Copy" read "0 users" for the
 manager's one email (note f).
+Issue report: [docs/issues/U55-A3-notify-total-counts-person-per-role.md](../issues/U55-A3-notify-total-counts-person-per-role.md); the double count is `pkp/pkp-lib#12548` (open).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note f. Since pkp/pkp-lib#8734 (lib/pkp `59f33cb8d`,
 2023-03-22), which moved sending to batched jobs and made
 `totalBulkJobs` the page's only signal of success. Live-probed
 2026-09-26, all three apps (note f).
+Issue report: [docs/issues/U55-A4-notify-send-to-nobody-accepted-silently.md](../issues/U55-A4-notify-send-to-nobody-accepted-silently.md).
 
 ## Reference — entry points & surfaces
 

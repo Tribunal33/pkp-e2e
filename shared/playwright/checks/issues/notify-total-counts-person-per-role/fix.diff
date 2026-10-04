@@ -1,0 +1,286 @@
+--- a/lib/pkp/api/v1/_email/PKPEmailController.php
++++ b/lib/pkp/api/v1/_email/PKPEmailController.php
+@@ -22,6 +22,7 @@
+ use Illuminate\Http\Response;
+ use Illuminate\Support\Facades\Bus;
+ use Illuminate\Support\Facades\Route;
++use PKP\context\Context;
+ use PKP\core\PKPBaseController;
+ use PKP\core\PKPRequest;
+ use PKP\jobs\bulk\BulkEmailSender;
+@@ -62,6 +63,7 @@
+     public function getGroupRoutes(): void
+     {
+         Route::post('', $this->create(...))->name('_email.create');
++        Route::get('recipients', $this->getRecipientCount(...))->name('_email.getRecipientCount');
+     }
+ 
+     /**
+@@ -95,29 +97,8 @@
+             ], Response::HTTP_FORBIDDEN);
+         }
+ 
+-        $requestParams = $illuminateRequest->input();
++        $params = $this->getParams($illuminateRequest);
+ 
+-        $params = [];
+-        foreach ($requestParams as $param => $val) {
+-            switch ($param) {
+-                case 'userGroupIds':
+-                    if (!is_array($val)) {
+-                        $val = strlen(trim($val))
+-                            ? explode(',', $val)
+-                            : [];
+-                    }
+-                    $params[$param] = array_map(intval(...), $val);
+-                    break;
+-                case 'body':
+-                case 'subject':
+-                    $params[$param] = $val;
+-                    break;
+-                case 'copy':
+-                    $params[$param] = (bool) $val;
+-                    break;
+-            }
+-        }
+-
+         $errors = [];
+         if (empty($params['body'])) {
+             $errors['body'] = [__('api.emails.400.missingBody')];
+@@ -135,28 +116,14 @@
+             return response()->json($errors, Response::HTTP_BAD_REQUEST);
+         }
+ 
+-        foreach ($params['userGroupIds'] as $userGroupId) {
+-            if (!Repo::userGroup()->contextHasGroup($contextId, $userGroupId)
+-                    || in_array($userGroupId, (array) $context->getData('disableBulkEmailUserGroups'))) {
+-                return response()->json([
+-                    'userGroupIds' => [__('api.emails.403.notAllowedUserGroup')],
+-                ], Response::HTTP_BAD_REQUEST);
+-            }
++        if (!$this->canSendTo($context, $params['userGroupIds'])) {
++            return response()->json([
++                'userGroupIds' => [__('api.emails.403.notAllowedUserGroup')],
++            ], Response::HTTP_BAD_REQUEST);
+         }
+ 
+-        $userIds = Repo::user()->getCollector()
+-            ->filterByContextIds([$contextId])
+-            ->filterByUserGroupIds($params['userGroupIds'])
+-            ->getIds()
+-            ->toArray();
++        $userIds = $this->getRecipientIds($contextId, $params);
+ 
+-        if (!empty($params['copy'])) {
+-            $currentUserId = $this->getRequest()->getUser()->getId();
+-            if (!in_array($currentUserId, $userIds)) {
+-                $userIds[] = $currentUserId;
+-            }
+-        }
+-
+         $batches = array_chunk($userIds, Mailer::BULK_EMAIL_SIZE_LIMIT);
+         $jobs = [];
+ 
+@@ -177,4 +144,102 @@
+             'totalBulkJobs' => count($batches),
+         ], Response::HTTP_OK);
+     }
++
++    /**
++     * Get the number of users a bulk email to one or more user groups would
++     * be sent to: each user once, however many of the groups they hold, and
++     * the current user when a copy is requested
++     */
++    public function getRecipientCount(Request $illuminateRequest): JsonResponse
++    {
++        $context = $this->getRequest()->getContext();
++
++        if (!in_array($context->getId(), (array) $this->getRequest()->getSite()->getData('enableBulkEmails'))) {
++            return response()->json([
++                'error' => __('api.emails.403.disabled'),
++            ], Response::HTTP_FORBIDDEN);
++        }
++
++        $params = $this->getParams($illuminateRequest);
++
++        if (empty($params['userGroupIds'])) {
++            return response()->json(['total' => 0], Response::HTTP_OK);
++        }
++
++        if (!$this->canSendTo($context, $params['userGroupIds'])) {
++            return response()->json([
++                'userGroupIds' => [__('api.emails.403.notAllowedUserGroup')],
++            ], Response::HTTP_BAD_REQUEST);
++        }
++
++        return response()->json([
++            'total' => count($this->getRecipientIds($context->getId(), $params)),
++        ], Response::HTTP_OK);
++    }
++
++    /**
++     * Read the bulk email params from the request
++     */
++    protected function getParams(Request $illuminateRequest): array
++    {
++        $params = [];
++        foreach ($illuminateRequest->input() as $param => $val) {
++            switch ($param) {
++                case 'userGroupIds':
++                    if (!is_array($val)) {
++                        $val = strlen(trim($val))
++                            ? explode(',', $val)
++                            : [];
++                    }
++                    $params[$param] = array_map(intval(...), $val);
++                    break;
++                case 'body':
++                case 'subject':
++                    $params[$param] = $val;
++                    break;
++                case 'copy':
++                    $params[$param] = (bool) $val;
++                    break;
++            }
++        }
++
++        return $params;
++    }
++
++    /**
++     * Whether every user group belongs to the context and may receive a bulk email
++     */
++    protected function canSendTo(Context $context, array $userGroupIds): bool
++    {
++        foreach ($userGroupIds as $userGroupId) {
++            if (!Repo::userGroup()->contextHasGroup($context->getId(), $userGroupId)
++                    || in_array($userGroupId, (array) $context->getData('disableBulkEmailUserGroups'))) {
++                return false;
++            }
++        }
++
++        return true;
++    }
++
++    /**
++     * Get the ids of the users a bulk email is sent to: the active members of
++     * the user groups, each once, and the current user when a copy is requested
++     */
++    protected function getRecipientIds(int $contextId, array $params): array
++    {
++        $userIds = Repo::user()->getCollector()
++            ->filterByContextIds([$contextId])
++            ->filterByUserGroupIds($params['userGroupIds'])
++            ->getIds()
++            ->toArray();
++
++        if (!empty($params['copy'])) {
++            $currentUserId = $this->getRequest()->getUser()->getId();
++            if (!in_array($currentUserId, $userIds)) {
++                $userIds[] = $currentUserId;
++            }
++        }
++
++        return $userIds;
++    }
+ }
+--- a/lib/pkp/classes/components/forms/context/PKPNotifyUsersForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPNotifyUsersForm.php
+@@ -29,9 +29,6 @@
+     public $id = self::FORM_NOTIFY_USERS;
+     public $method = 'POST';
+ 
+-    /** @var array count of users in each group */
+-    public $userGroupCounts = [];
+-
+     /**
+      * Constructor
+      *
+@@ -44,11 +41,6 @@
+ 
+         $userGroups = UserGroup::withContextIds($context->getId())->get();
+ 
+-        // Counts are gathered in a separate query via UserGroup::withActiveUserCount() which
+-        // excludes disabled users, expired and not-yet-started role assignments.
+-        $userCounts = UserGroup::withActiveUserCount($context->getId())
+-            ->pluck('count', 'user_group_id');
+-
+         $userGroupOptions = [];
+         foreach ($userGroups as $userGroup) {
+             $userGroupId = $userGroup->id;
+@@ -59,8 +51,6 @@
+                 'value' => $userGroupId,
+                 'label' => $userGroup->getLocalizedData('name'),
+             ];
+-            
+-            $this->userGroupCounts[$userGroupId] = (int) $userCounts->get($userGroupId, 0);
+         }
+ 
+         $currentUser = Application::get()->getRequest()->getUser();
+@@ -103,7 +93,6 @@
+         $config = parent::getConfig();
+         $config['confirmLabel'] = __('manager.setup.notifyUsers.confirm');
+         $config['sendLabel'] = __('manager.setup.notifyUsers.send');
+-        $config['userGroupCounts'] = $this->userGroupCounts;
+ 
+         return $config;
+     }
+--- a/lib/ui-library/src/components/Form/context/NotifyUsersForm.vue
++++ b/lib/ui-library/src/components/Form/context/NotifyUsersForm.vue
+@@ -1,6 +1,8 @@
+ <script>
+ import PkpForm from '../Form.vue';
+ import dialog from '@/mixins/dialog.js';
++import {useFetch} from '@/composables/useFetch';
++import {useUrl} from '@/composables/useUrl';
+ 
+ export default {
+ 	name: 'NotifyUsersForm',
+@@ -11,10 +13,6 @@
+ 			type: String,
+ 			required: true,
+ 		},
+-		userGroupCounts: {
+-			type: Object,
+-			required: true,
+-		},
+ 		sendLabel: {
+ 			type: String,
+ 			required: true,
+@@ -22,22 +20,25 @@
+ 	},
+ 	methods: {
+ 		/**
+-		 * Require user confirmation before submitting the form
++		 * Require user confirmation before submitting the form, with the
++		 * number of users the email will be sent to
+ 		 */
+-		nextPage: function (pageId) {
+-			let totalUserCount = 0;
+-			if (this.submitValues.userGroupIds) {
+-				totalUserCount = this.submitValues.userGroupIds.reduce(
+-					(total, userGroupId) => {
+-						return total + this.userGroupCounts[userGroupId];
+-					},
+-					0,
+-				);
++		nextPage: async function (pageId) {
++			const {apiUrl} = useUrl('_email/recipients');
++			const {data, fetch} = useFetch(apiUrl, {
++				query: {
++					userGroupIds: this.submitValues.userGroupIds || [],
++					copy: this.submitValues.copy,
++				},
++			});
++			await fetch();
++			if (!data.value) {
++				return;
+ 			}
+ 			this.openDialog({
+ 				name: 'confirmNotify',
+ 				title: this.sendLabel,
+-				message: this.confirmLabel.replace('{$total}', totalUserCount),
++				message: this.confirmLabel.replace('{$total}', data.value.total),
+ 				actions: [
+ 					{
+ 						label: this.sendLabel,

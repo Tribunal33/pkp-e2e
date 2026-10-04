@@ -1,0 +1,27 @@
+--- a/lib/pkp/api/v1/_email/PKPEmailController.php
++++ b/lib/pkp/api/v1/_email/PKPEmailController.php
+@@ -150,6 +150,12 @@
+             ->getIds()
+             ->toArray();
+ 
++        if (empty($userIds)) {
++            return response()->json([
++                'userGroupIds' => [__('api.emails.400.noRecipients')],
++            ], Response::HTTP_BAD_REQUEST);
++        }
++
+         if (!empty($params['copy'])) {
+             $currentUserId = $this->getRequest()->getUser()->getId();
+             if (!in_array($currentUserId, $userIds)) {
+--- a/lib/pkp/locale/en/api.po
++++ b/lib/pkp/locale/en/api.po
+@@ -140,6 +140,9 @@
+ msgid "api.emails.400.missingUserGroups"
+ msgstr "You must indicate the user roles that should receive this email."
+ 
++msgid "api.emails.400.noRecipients"
++msgstr "No active user holds the selected roles, so this email would reach no one."
++
+ msgid "api.emails.403.notAllowedUserGroup"
+ msgstr "You are not allowed to send an email to users in one or more of the selected roles."
+ 

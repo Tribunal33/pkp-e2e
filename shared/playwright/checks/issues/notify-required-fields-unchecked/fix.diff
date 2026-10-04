@@ -1,0 +1,45 @@
+--- a/lib/pkp/classes/components/forms/context/PKPNotifyUsersForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPNotifyUsersForm.php
+@@ -70,18 +70,18 @@
+             'description' => __('manager.setup.notifyUsers.description'),
+             'value' => [],
+             'options' => $userGroupOptions,
+-            'required' => true,
++            'isRequired' => true,
+         ]))
+             ->addField(new FieldText('subject', [
+                 'label' => __('email.subject'),
+                 'value' => '',
+-                'required' => true,
++                'isRequired' => true,
+             ]))
+             ->addField(new FieldRichTextarea('body', [
+                 'label' => __('email.email'),
+                 'size' => 'large',
+                 'value' => '',
+-                'required' => true,
++                'isRequired' => true,
+             ]))
+             ->addField(new FieldOptions('copy', [
+                 'label' => __('common.copy'),
+--- a/lib/ui-library/src/components/Form/context/NotifyUsersForm.vue
++++ b/lib/ui-library/src/components/Form/context/NotifyUsersForm.vue
+@@ -25,6 +25,18 @@
+ 		 * Require user confirmation before submitting the form
+ 		 */
+ 		nextPage: function (pageId) {
++			// Check the required fields before asking to confirm the send,
++			// as Form.submit() does before it sends
++			const errors = this.validate();
++			if (Object.keys(errors).length) {
++				this.$emit('set', this.id, {
++					errors: {
++						...this.errors,
++						...errors,
++					},
++				});
++				return;
++			}
+ 			let totalUserCount = 0;
+ 			if (this.submitValues.userGroupIds) {
+ 				totalUserCount = this.submitValues.userGroupIds.reduce(
