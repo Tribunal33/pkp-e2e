@@ -702,6 +702,12 @@ Left out of the scenarios above, by reason:
     refusals read as sentences ([OMP1](#omp1)): the guard the issue
     report (`docs/issues/U02-OMP1-press-site-register-consent-raw-codes.md`)
     proposes, once fixed
+  - with validation required, the page the emailed activation link opens
+    and the thank-you page after "Activate Account" each named in heading,
+    breadcrumb and browser tab, the thank-you page ending with a "Login"
+    link ([A2](#a2); Rule 13): the guard the issue report
+    (`docs/issues/U02-A2-activation-pages-no-heading.md`) proposes, once
+    fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -710,7 +716,6 @@ Left out of the scenarios above, by reason:
   - A3 (the site-level notification box records nothing; Rule 6)
   - A7 (Reader granted though closed to self-registration; Rule 7)
   - A4 (closed journals listed with no roles under them; Rule 8)
-  - A2 (the activation pages carry no heading and no Login link; Rule 13)
   - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
   - OMP2 (on a press site every press's consent line is shown before a role is ticked; scenario 6 marks it)
   - OPS1 (a preprint-server site's page asks for reviewing interests with no reviewer role)
@@ -744,7 +749,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Activation links die after 3 days while the configuration's validation-timeout key promises 14 and does nothing | 🐞 | latent | — |
-| [A2](#a2) | The two activation pages have no heading, and the one after "Activate Account" offers no link to Login | 🐞 | minor | — |
+| [A2](#a2) | A new user activating their account sees two pages with no heading and no Login link | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The site-level page's notification opt-in records nothing | 🐞 | minor | — |
 | [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | minor | — |
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
@@ -768,14 +773,21 @@ of activation links onto the invitation machinery and was left behind.
 Basis: judgment (a clock, not a screen, would settle it). <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — Activation pages are headless, and the confirmation offers no way to Login** · 🐞 · minor.
-The page the emailed link opens ("Confirm and activate your account") and the
-page after "Activate Account" (the thank-you sentence) both come without a
-heading: the title area and the current breadcrumb are empty, and the browser
-tab shows only the journal's name, where the site's other message pages carry
-a title. The second page tells the user they "may now log in" yet offers no
-Login link; its only link is the breadcrumb's "Home".
-Basis: probe. <sup>[f-a2](#fn-a2)</sup>
+**A2 — A new user activating their account sees two pages with no heading and no Login link** · 🐞 · low.
+The page the emailed activation link opens ("Confirm and activate your
+account") and the page after "Activate Account" (the thank-you
+sentence) both have no heading. The title area and the current
+breadcrumb are empty, and the browser tab shows only the journal's
+name, where the other one-message pages (such as "Reset Password" or
+"Registration awaiting verification") carry a title. The second page
+says the user "may now log in" but offers no Login link; its only link
+is the breadcrumb's "Home".
+
+It happens only where an administrator has turned on email validation
+for new accounts (`require_validation` in the install's configuration
+file, off by default), on every journal, press or server of that
+install.
+Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — Site-level notification opt-in is decorative** · 🐞 · minor.
@@ -1540,6 +1552,7 @@ title, an `h1` present but empty, breadcrumb "Home /", the thank-you
 sentence and "Home" as the only link in `main`, the header still reading
 "Register Login"; by contrast the pending page carried its "Registration
 awaiting verification" title and crumb.
+Issue report: [pkp-e2e#836](https://github.com/jardakotesovec/pkp-e2e/issues/836) ([docs/issues/U02-A2-activation-pages-no-heading.md](../issues/U02-A2-activation-pages-no-heading.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — Note e: the `blocked_emailed_notification` write is inside
