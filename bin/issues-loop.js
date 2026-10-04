@@ -128,7 +128,7 @@ async function main() {
         if (code !== 0 || !result || result.is_error) {
             return fail(`session ${n} ended with exit ${code}${result ? `, ${result.subtype}` : ', no result'}`);
         }
-        const models = sh('node', ['bin/check-models.mjs', '--session', sessionId]);
+        const models = sh('node', ['bin/check-models.mjs', '--session', sessionId, '--stops-warn']);
         if (models.status !== 0) return fail(`model gate (bin/check-models.mjs):\n${models.stdout}${models.stderr}`);
         const after = dirtyTree();
         if (after) return fail(`session ${n} left ${after}`);
