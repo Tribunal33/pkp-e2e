@@ -317,7 +317,12 @@ without it, the first window stays open behind the closed inner one.
   the `update:suggestions` emit lose their only caller and can go. That
   is also the path where spec U31's
   [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U31-reviewer-suggestions.md#a9)
-  leaves its blank row.
+  leaves its blank row: with this fix in, that row cannot appear. A9's
+  own fix (`SelectReviewerListPanel.vue`) then only repeats the
+  server's `withApproved(false)` filter and does no harm. The A8 fix
+  changes the screen-reader line of this same component. The A8, A9
+  and A10 diffs apply together in any order (checked with `git apply`
+  on `main`'s files).
 - 3.5's file already has the `hasExistingReviewerRole` rename
   (backport 47cdd9ee); it differs only by the `email:` line that
   `pkp/dev-team#178` (f00671c1) added on `main`. The diff applies to
