@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerSuggestionListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerSuggestionListItem.vue
+@@ -26,7 +26,7 @@
+ 				<PkpButton v-if="canSelect" @click="select">
+ 					<span aria-hidden="true">{{ selectReviewerLabel }}</span>
+ 					<span class="-screenReader">
+-						{{ t('common.selectWithName', {name: fullName}) }}
++						{{ t('common.selectWithName', {name: localize(item.fullName)}) }}
+ 					</span>
+ 				</PkpButton>
+ 			</div>

@@ -1,0 +1,36 @@
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerListPanel.vue
+@@ -2,9 +2,9 @@
+ 	<div>
+ 		<slot>
+ 			<ListPanel
+-				v-if="suggestions.length > 0"
++				v-if="pendingSuggestions.length > 0"
+ 				class="listPanel--selectReviewer reviewer-sugestions-list"
+-				:items="suggestions"
++				:items="pendingSuggestions"
+ 			>
+ 				<template #header>
+ 					<PkpHeader>
+@@ -27,7 +27,6 @@
+ 
+ 				<template #item="{item}">
+ 					<SelectReviewerSuggestionListItem
+-						v-if="!item.approvedAt"
+ 						:key="item.id"
+ 						:item="item"
+ 						:submission-id="getParams.submissionId"
+@@ -402,6 +401,13 @@
+ 		},
+ 
+ 		/**
++		 * The suggestions not yet turned into a reviewer
++		 */
++		pendingSuggestions() {
++			return this.suggestions.filter((suggestion) => !suggestion.approvedAt);
++		},
++
++		/**
+ 		 * The user IDs of reviewers from the last round
+ 		 */
+ 		lastRoundReviewerIds() {

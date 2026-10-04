@@ -532,6 +532,14 @@ Left out of the scenarios above, by reason:
     Add Reviewer on a submission with a no-account suggestion, press "Select
     Reviewer" and then "Back to Search", and assert a single "Add Reviewer"
     window holding the suggestions list
+  - the guard for A8 (issue report
+    `docs/issues/U31-A8-suggestion-select-reviewer-named-undefined.md`):
+    open Add Reviewer on a submission with suggestions and assert each
+    suggestion entry's "Select Reviewer" button is named "Select {name}"
+  - the guard for A9 (issue report
+    `docs/issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md`): add
+    a no-account suggested person through the inner "Add Reviewer" window
+    and assert the suggestions list keeps no empty row
 - **Nothing new to test**:
   - assigned Section Editor, Guest Editor and Site Administrator (the Journal Manager's offer, scenarios 2 and 3)
   - Reviewer and Reader (no screen offers them anything)
@@ -559,8 +567,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The Funding Coordinator's "Create New Reviewer" from a suggestion does nothing when "Add Reviewer" is pressed | 🐞 | user-visible | — |
 | [A6](#a6) | The same address typed in another case is accepted as a second suggestion | 🐞 | minor | — |
 | [A7](#a7) | The default "For Reviewer Suggestion" text misspells "valuable" | 🐞 | minor | — |
-| [A8](#a8) | A suggestion's "Select Reviewer" is named "Select undefined" to screen readers | 🐞 | minor | — |
-| [A9](#a9) | An entry turned into a reviewer leaves a blank row in the Add Reviewer list | 🐞 | minor | — |
+| [A8](#a8) | In Add Reviewer's suggestions list, screen readers hear every "Select Reviewer" button as "Select undefined" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A9](#a9) | After an editor adds a suggested reviewer in the Add Reviewer window, the suggestions list keeps an empty row | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code | 🐞 | medium · crash: script | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | The help under "Reasons for suggesting reviewer" reads "mention is there are any potential conflict of interest" | 🐞 | minor | — |
 | [A2](#a2) | An ORCID iD typed on a suggestion is seen again only in the author's "Edit" window | ❓ | minor | — |
@@ -643,19 +651,31 @@ edits the box, says "provide valueable input for the editorial team".
 Basis: probe. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A suggestion's "Select Reviewer" is named "Select undefined" to screen readers** · 🐞 · minor.
+**A8 — In Add Reviewer's suggestions list, screen readers hear every "Select Reviewer" button as "Select undefined"** · 🐞 · low.
 In "Select a Reviewer from Reviewer Suggestions" every "Select Reviewer"
 button carries the hidden name "Select undefined", where the same button
-in "Locate a Reviewer" reads "Select {name}". A screen-reader user cannot
-tell the entries' buttons apart; sighted use is unaffected.
-Basis: probe. <sup>f-a8</sup>
+in "Locate a Reviewer" reads "Select {name}". That hidden name is what a
+screen reader reads out for the button, so a screen-reader user cannot
+tell the entries' buttons apart; sighted use is unaffected. The list is
+in the Add Reviewer window of a submission's review round, on a journal
+or press that has switched on "Reviewer Suggestion at Submission" and
+whose author suggested reviewers. Basis: probe, 2026-10-04.
+<sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — An entry turned into a reviewer leaves a blank row in the Add Reviewer list** · 🐞 · minor.
-After an inner "Add Reviewer" succeeds, the entry's text leaves "Select a
-Reviewer from Reviewer Suggestions" but its row stays as a gap until the
-window is closed and opened again.
-Basis: probe. <sup>f-a9</sup>
+**A9 — After an editor adds a suggested reviewer in the Add Reviewer window, the suggestions list keeps an empty row** · 🐞 · low.
+An editor turns a reviewer suggestion into a reviewer from the Add
+Reviewer window's "Select a Reviewer from Reviewer Suggestions" list:
+"Select Reviewer" on the entry opens a second "Add Reviewer" window on
+top. After pressing "Add Reviewer" in that second window, the entry's
+text leaves the list but its row stays behind as blank space, with
+nothing in it to click. Closing the window and opening it again clears
+the gap. Nothing is lost: the reviewer is added, and the remaining
+entries work. It happens for a suggested person who has no account or no
+Reviewer role; one who already holds the Reviewer role is selected in
+the same window and is unaffected. The list needs "Reviewer Suggestion
+at Submission", which is off by default. Basis: probe, 2026-10-04.
+<sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code** · 🐞 · medium · crash: script.
@@ -837,9 +857,11 @@ Basis: probe. <sup>f-omp1</sup>
 
 <a id="fn-f-a8"></a>
 **f-a8** — `SelectReviewerSuggestionListItem.vue` renders the button's screen-reader span as `{{ t('common.selectWithName', {name: fullName}) }}`, but the component defines no `fullName` property (the name is `item.fullName`, localized only inside `select()`), so the interpolation yields "undefined"; the reviewer list's `SelectReviewerListItem.vue` passes `item.fullName`. Live-probed 2026-09-06 (note h), OJS and OMP: accessible name "Select Reviewer Select undefined" on every suggestion entry, "Select Reviewer Select Rowan Reviewer" in "Locate a Reviewer".
+Issue report: [docs/issues/U31-A8-suggestion-select-reviewer-named-undefined.md](../issues/U31-A8-suggestion-select-reviewer-named-undefined.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `SelectReviewerListPanel.vue::updateReviewerSuggestionList()` marks the item approved and the item's inner `v-if="!item.approvedAt"` hides its content, while the `ListPanel`'s `li` for the item stays rendered. Live-probed 2026-09-06 (note h), OJS and OMP: `window.panels[0].items[1].lines: []` after the inner add, the row gone after the window was reopened.
+Issue report: [docs/issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md](../issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The "Back to Search" link is `ReviewerForm::getAdvancedSearchAction()`, an `AjaxAction` on `reloadReviewerForm` with `selectionType` `REVIEWER_SELECT_ADVANCED_SEARCH` that replaces the form's content inside whichever modal holds it; from the inner modal the advanced-search form, suggestions list included, renders inside the inner dialog while the outer one still shows its own, and the grid handlers are bound twice. Live-probed 2026-09-06 (note h), OJS and OMP: three, then four, "Add Reviewer" dialogs stacked; console errors `The handler "$.pkp.controllers.grid.users.reviewer.AdvancedReviewerSearchHandler" has already been bound to the selected element!` and the same for `AddReviewerFormHandler`.
