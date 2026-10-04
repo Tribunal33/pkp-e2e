@@ -2076,7 +2076,7 @@ class. Live-probed
 "https://arxiv.org/abs/1234.12345v2" saved as "1234.12345",
 "arxiv:2345.23456v3" as "2345.23456", "3456.34567v4" refused and
 "4567.45678" accepted.
-Issue report: [docs/issues/U42-A12-arxiv-id-loses-version.md](../issues/U42-A12-arxiv-id-loses-version.md).
+Issue report: [pkp-e2e#866](https://github.com/jardakotesovec/pkp-e2e/issues/866) ([docs/issues/U42-A12-arxiv-id-loses-version.md](../issues/U42-A12-arxiv-id-loses-version.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** Note h (`Citation::isStructured()` tests that
