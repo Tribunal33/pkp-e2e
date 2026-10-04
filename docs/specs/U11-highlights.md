@@ -1050,7 +1050,7 @@ status and no error text; "Save Order" shows "Error / Call to a member
 function getId() on null / OK"; the site's list reads "No items found."
 and the database holds no highlight without a context. The journals'
 panels, whose requests carry the journal, are unaffected.
-Issue report: [docs/issues/U11-A5-site-highlights-cannot-be-saved.md](../issues/U11-A5-site-highlights-cannot-be-saved.md).
+Issue report: [pkp-e2e#899](https://github.com/jardakotesovec/pkp-e2e/issues/899) ([docs/issues/U11-A5-site-highlights-cannot-be-saved.md](../issues/U11-A5-site-highlights-cannot-be-saved.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** The default theme's `js/main.js` initialises
