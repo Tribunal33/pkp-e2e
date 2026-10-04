@@ -1,0 +1,62 @@
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerSuggestionListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerSuggestionListItem.vue
+@@ -40,7 +40,6 @@
+ import ajaxError from '@/mixins/ajaxError';
+ import dialog from '@/mixins/dialog.js';
+ import {useLegacyGridUrl} from '@/composables/useLegacyGridUrl';
+-import {useLocalize} from '@/composables/useLocalize';
+ 
+ export default {
+ 	components: {
+@@ -119,27 +118,41 @@
+ 				return;
+ 			}
+ 
+-			const {t} = useLocalize();
+-
+-			const {openLegacyModal} = useLegacyGridUrl({
++			// Turn this Add Reviewer window into the suggestion's form, as the
++			// window's own "Create New Reviewer" and "Enroll an Existing User"
++			// links do, rather than stacking a second Add Reviewer window on it:
++			// the legacy reviewer forms use fixed element ids and expect to be
++			// alone on the page, and the form's "Back to Search" then returns
++			// to this search instead of nesting a new one.
++			const {url} = useLegacyGridUrl({
+ 				component: 'grid.users.reviewer.ReviewerGridHandler',
+-				op: 'showReviewerForm',
++				op: 'reloadReviewerForm',
+ 				params: {
+ 					submissionId: this.submissionId,
+ 					stageId: this.stageId,
+ 					reviewRoundId: this.reviewRoundId,
+ 					selectionType: this.item.existingUserId
+-						? this.item.hasExistingReviewerRole
+-							? pkp.const.REVIEWER_SELECT_ADVANCED_SEARCH
+-							: pkp.const.REVIEWER_SELECT_ENROLL_EXISTING
++						? pkp.const.REVIEWER_SELECT_ENROLL_EXISTING
+ 						: pkp.const.REVIEWER_SELECT_CREATE,
+ 					reviewerSuggestionId: this.item.id,
+ 				},
+ 			});
+ 
+-			openLegacyModal({title: t('editor.submission.addReviewer')}, () =>
+-				this.$emit('update:suggestions', this.item.id),
+-			);
++			$.ajax({
++				url: url.value,
++				type: 'POST',
++				data: {csrfToken: pkp.currentUser.csrfToken},
++				dataType: 'json',
++				context: this,
++				error: this.ajaxErrorCallback,
++				success(r) {
++					// The JSON events (refreshForm) reach the window's legacy handler
++					// by bubbling, as FileMetadataForm.vue hands its events on.
++					(r.events || []).forEach((e) =>
++						$(this.$el).trigger(e.name, [e.data ?? null]),
++					);
++				},
++			});
+ 		},
+ 	},
+ };

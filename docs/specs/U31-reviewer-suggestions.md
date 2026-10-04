@@ -526,6 +526,12 @@ footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A10 (issue report
+    `docs/issues/U31-A10-back-to-search-nests-add-reviewer-window.md`): open
+    Add Reviewer on a submission with a no-account suggestion, press "Select
+    Reviewer" and then "Back to Search", and assert a single "Add Reviewer"
+    window holding the suggestions list
 - **Nothing new to test**:
   - assigned Section Editor, Guest Editor and Site Administrator (the Journal Manager's offer, scenarios 2 and 3)
   - Reviewer and Reader (no screen offers them anything)
@@ -555,7 +561,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The default "For Reviewer Suggestion" text misspells "valuable" | 🐞 | minor | — |
 | [A8](#a8) | A suggestion's "Select Reviewer" is named "Select undefined" to screen readers | 🐞 | minor | — |
 | [A9](#a9) | An entry turned into a reviewer leaves a blank row in the Add Reviewer list | 🐞 | minor | — |
-| [A10](#a10) | "Back to Search" in the inner window nests a further Add Reviewer window | 🐞 | minor | — |
+| [A10](#a10) | "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code | 🐞 | medium · crash: script | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | The help under "Reasons for suggesting reviewer" reads "mention is there are any potential conflict of interest" | 🐞 | minor | — |
 | [A2](#a2) | An ORCID iD typed on a suggestion is seen again only in the author's "Edit" window | ❓ | minor | — |
 | [A3](#a3) | A matched suggestion is offered nowhere again, even after the reviewer is unassigned or cancelled | ❓ | minor | — |
@@ -652,13 +658,30 @@ window is closed and opened again.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — "Back to Search" in the inner window nests a further Add Reviewer window** · 🐞 · minor.
-An editor in a suggestion's inner "Add Reviewer" window presses "Back to
-Search" expecting the outer list. Instead a whole further Add Reviewer
-window, suggestions list included, opens inside the inner one, and a third
-can stack from it. Nothing is lost; the way back is the windows' close
-controls.
-Basis: probe. <sup>f-a10</sup>
+**A10 — "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code** · 🐞 · medium · crash: script.
+An editor opens Add Reviewer and presses "Select Reviewer" on an
+author's suggestion. A second "Add Reviewer" window opens over the
+first, on a form that would create that person's account (or give an
+existing account the Reviewer role). If the editor then decides to
+invite someone else, "Back to Search" is that form's only link back to
+the list. Pressing it does not bring the list back: the second window
+fills with a complete second copy of the Add Reviewer search (the
+submission's authors, the suggestions, "Locate a Reviewer"), while the
+first window stays open beneath it. That second search does not work.
+The editor picks a reviewer there and the window shows the choice, but
+its "Add Reviewer" takes the browser off the workflow to a page of raw
+code reading
+`{"status":false,"content":"","elementId":"0","events":[]}`. No review
+request goes to the reviewer. Nothing was created or changed before
+this: the form was only shown, so no account, role or review assignment
+exists. Pressing "Select Reviewer" on the suggestion again from the
+second copy stacks a third window. Each "Back to Search" also makes the
+page's script fail twice, which shows only in the browser's console. It
+happens on a journal or press with "Reviewer Suggestion at Submission"
+switched on, and only for a suggested person with no account or without
+the Reviewer role: only those open the second window. A person who
+already reviews for the journal is selected in the first window. Basis:
+probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The help under "Reasons for suggesting reviewer" reads "mention is there are any"** · 🐞 · minor.
@@ -820,6 +843,7 @@ Basis: probe. <sup>f-omp1</sup>
 
 <a id="fn-f-a10"></a>
 **f-a10** — The "Back to Search" link is `ReviewerForm::getAdvancedSearchAction()`, an `AjaxAction` on `reloadReviewerForm` with `selectionType` `REVIEWER_SELECT_ADVANCED_SEARCH` that replaces the form's content inside whichever modal holds it; from the inner modal the advanced-search form, suggestions list included, renders inside the inner dialog while the outer one still shows its own, and the grid handlers are bound twice. Live-probed 2026-09-06 (note h), OJS and OMP: three, then four, "Add Reviewer" dialogs stacked; console errors `The handler "$.pkp.controllers.grid.users.reviewer.AdvancedReviewerSearchHandler" has already been bound to the selected element!` and the same for `AddReviewerFormHandler`.
+Issue report: [docs/issues/U31-A10-back-to-search-nests-add-reviewer-window.md](../issues/U31-A10-back-to-search-nests-add-reviewer-window.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `lib/pkp/locale/en/submission.po`, `reviewerSuggestion.suggestionReason.description`, the `FieldRichTextarea('suggestionReason')` description (note b). Live-probed 2026-09-06 (note b; the K4 window snapshots), OJS and OMP, verbatim in the "Add Reviewer Suggestion" and "Edit" windows.
