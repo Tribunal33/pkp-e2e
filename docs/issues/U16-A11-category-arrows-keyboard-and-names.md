@@ -10,7 +10,7 @@
   - 3.3: none (code; the older list)
 - **Introduced** `pkp/ui-library#550` for `pkp/pkp-lib#10449` · [b35c06bc8b](https://github.com/pkp/ui-library/commit/b35c06bc8b87fa5aa6845ba52432efacd46c9a4b) · 2025-05-12 · Taslan A. Graham (taslangraham); the name that never changes from `pkp/ui-library#620` · [e85a63e477](https://github.com/pkp/ui-library/commit/e85a63e4778a25c451d81459ee2bc8ffbf6e335f) · 2025-06-19 · Jarda Kotěšovec (jardakotesovec)
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U16 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a11)
+- **Tracked in** spec U16 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a11), spec U42 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a16)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary
@@ -91,11 +91,35 @@ The "Select Categories" window:
 11. Press Enter on the same arrow.
 12. Read the name of the "Sociology" row's arrow (no sub-categories).
 
+The publication's "References" page (metadata lookup on; signed in as
+`dbarnes`, password `dbarnesdbarnes`, on a freshly loaded dataset):
+
+13. Open "Settings" › "Workflow" › "Metadata", tick "Enable references
+    structuring and metadata lookup" and press "Save".
+14. Open submission 4, "Computer Skill Requirements for New and Existing
+    Teachers: Implications for Policy and Practice" (OJS), 3, "The
+    Political Economy of Workplace Injury in Canada" (OMP), or 1, "The
+    influence of lactation on the quantity and quality of cashmere
+    production" (OPS), then "Publication" ("Preprint" on OPS) ›
+    "References".
+15. Type two lines into the "References" box and press "Add":
+    `u42r7 Expander structured. Test Press; 2020.` and
+    `u42r7 Expander plain. Test Press; 2020.`
+16. On the first, press "More Actions" › "Edit", fill "DOI" with
+    `10.1234/u42r7.9` and "Title" with `u42r7 Expander structured`,
+    press "Add" under "Author Information", type `Ada` and `Lovelace`,
+    and press "Save". The row now shows its title and an arrow.
+17. Focus that row's "More Actions" and press Shift+Tab: the focus is on
+    the arrow. Read its name, then press Enter, then Space.
+18. Click the arrow with the mouse, then read its name again.
+19. On the "u42r7 Expander plain" row, focus "More Actions", press
+    Shift+Tab and read what has the focus.
+
 **Expected.** Enter or Space on an arrow opens and closes its row as a
 click does. The name says what pressing does: "Expand sub-categories"
 while the row is closed, "Collapse sub-categories" while it is open (in
-the window, "Expand" and "Collapse"). A row with nothing under it has no
-arrow.
+the window and on the References page, "Expand" and "Collapse"). A row
+with nothing under it has no arrow.
 
 **Observed.** The same on the three apps:
 
@@ -114,6 +138,16 @@ arrow.
 - Step 11: nothing opens; "Computer Science" and "Engineering" stay
   hidden.
 - Step 12: an invisible button named "Collapse".
+- Step 17: the arrow is named "Collapse" with the row closed; Enter and
+  Space open nothing.
+- Step 18: the click opens the row (authors, "Publication Date:", the
+  reference's text in small print); the arrow is still named "Collapse".
+- Step 19: the focus lands on a button 0 × 0 pixels in size, with no
+  icon, named "Collapse". Every row with nothing to expand has one: every
+  row while lookup is off, and each row not yet structured while it is on.
+
+On the References page "Expand All", above the arrows, opens every
+structured row from the keyboard.
 
 No request failed and the browser logged no error.
 
@@ -156,8 +190,10 @@ Reach (every user of the component):
   categories field to the submission wizard." and the context has
   categories; off in the default dataset; code).
 - The publication's structured references,
-  `CitationManagerCellToggle.vue` (code; not walked): the same keyboard
-  failure, and a name that never changes from "Collapse".
+  `CitationManagerCellToggle.vue` (walked, three apps; steps 13 to 19):
+  the same keyboard failure, a name that never changes from "Collapse",
+  and an invisible "Collapse" button on every row with nothing to expand
+  (its `is-displayed` is lookup on and the row structured).
 
 ## Proposed fix
 
@@ -267,7 +303,20 @@ data or API change.
 - Step 12 was read in a second walk on a freshly loaded dataset: the
   first read the "Engineering" row's arrow after step 10 had closed
   "Applied Science" and hidden it.
-- Not driven: a real screen reader; the publication pages, the wizard
-  step and the structured references (code only); 3.4 and 3.3.
+- Steps 13 to 19 (spec U42 A16):
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/reference-row-expander-always-collapse/walk.js),
+  as `dbarnes` on PKP's default dataset (pkp/datasets 566bb1f,
+  2026-10-03), on `main` OJS ff004d0973 (ui-library 64d67363), OMP
+  3b0ecf794 and OPS c8af945bb7 (ui-library 280f98c5). Run:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/reference-row-expander-always-collapse/walk.js`
+  (`nb`: a mouse click opens and a second closes the row; "Expand All"
+  and "Collapse All" work). With this report's fix.diff applied, on the
+  three apps, the closed row's arrow read "Expand", Enter opened it and
+  Space closed it, the open row's arrow read "Collapse", the plain row
+  had no arrow, and the `nb` reads were unchanged.
+- Not driven: a real screen reader; the publication pages and the wizard
+  step (code only); 3.4 and 3.3. The References page does not exist on
+  3.5, 3.4 or 3.3 (one free-text References box; ui-library
+  `stable-3_5_0` d4e01883 has no `CitationManager`).
 - Unverified: a screen reader's own activation in browse mode was not
   tried. Keyboard Enter and Space were, and did nothing.

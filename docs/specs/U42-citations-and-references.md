@@ -987,7 +987,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | An author row abandoned with "Close" comes back blank, is saved, and makes the reference structured | 🐞 | minor | — |
 | [A14](#a14) | The author boxes in "Edit citation" have no names for a screen reader | 🐞 | minor | — |
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
-| [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | minor | — |
+| [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1154,13 +1154,13 @@ and add it again.
 Basis: probe, 2026-09-24. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — The row expander is always named "Collapse" and ignores the keyboard** · 🐞 · minor.
+**A16 — The row expander is always named "Collapse" and ignores the keyboard** · 🐞 · medium.
 With lookup on, a structured row's expander is named "Collapse" whether the
 row is open or closed, and Enter or Space on it does nothing; only a click
 opens the row. Every row with nothing to expand (every row with lookup off,
 unstructured rows with it on) carries a "Collapse" button with no size on
 screen that a screen reader announces and that does nothing.
-Basis: probe, 2026-09-24. <sup>f-a16</sup>
+Basis: probe, 2026-10-04. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — "Edit" accepts a repeated reference that "Add" drops** · ❓ · minor.
@@ -2125,6 +2125,7 @@ the click to the icon rather than the button, and computes its
 screen-reader text from `props.isExpanded.value`, always undefined, so the
 text is always `list.collapse` "Collapse". Live-probed 2026-09-24, all three apps (two runs on OJS): note i;
 the 0×0 buttons refused a click as outside the viewport.
+Issue report: [pkp-e2e#588](https://github.com/jardakotesovec/pkp-e2e/issues/588) ([docs/issues/U16-A11-category-arrows-keyboard-and-names.md](../issues/U16-A11-category-arrows-keyboard-and-names.md)), shared with [Categories A11](U16-categories.md#a11): the same shared expander (`TableCellTreeExpand.vue`), re-walked 2026-10-04 on main, all three apps.
 
 <a id="fn-f-a17"></a>
 **f-a17 — A17 evidence.** Note f (`PKPCitationController::edit()` runs no
