@@ -3098,7 +3098,7 @@ Kept script:
 `shared/playwright/checks/issues/export-list-selection-stops-at-page/many.js`.
 The A11 issue report names this a separate fault and leaves it out
 ([docs/issues/U63-A11-export-list-selection-stops-at-page.md](../issues/U63-A11-export-list-selection-stops-at-page.md), Evidence).
-Issue report: [docs/issues/U63-A24-export-list-repeats-submissions-across-pages.md](../issues/U63-A24-export-list-repeats-submissions-across-pages.md).
+Issue report: [pkp-e2e#919](https://github.com/jardakotesovec/pkp-e2e/issues/919) ([docs/issues/U63-A24-export-list-repeats-submissions-across-pages.md](../issues/U63-A24-export-list-repeats-submissions-across-pages.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`
