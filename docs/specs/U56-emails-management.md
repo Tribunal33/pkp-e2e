@@ -822,6 +822,7 @@ accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A4 (issue report `docs/issues/U56-A4-add-template-window-titled-edit-template.md`): "Add Template" opens a window titled "Add Template", and an existing template's window stays "Edit Template" (Rule 12; scenario 3)
   - the guard for A5 (issue report `docs/issues/U56-A5-remove-template-confirmation-names-subject.md`): "Remove" on an added template whose name and subject differ asks about the template by the name its row shows (Rule 17; scenario 3)
 - **Nothing new to test**:
   - "Signature" emptied, so that the emails carrying it end with nothing
@@ -903,7 +904,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a press or a preprint server, the "Emails" settings call editorial statistics the journal's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | "Manage Emails" lists the three ORCID emails under code names, after every other email | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A4](#a4) | The "Add Template" window is titled "Edit Template" | 🐞 | minor | — |
+| [A4](#a4) | Manage Emails: "Add Template" opens an empty window titled "Edit Template" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
 | [A11](#a11) | In French, "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | minor | — |
@@ -958,11 +959,19 @@ Lean: yes; within one block the buttons are alternatives.
 Basis: probe, 2026-09-26. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Add Template" opens a window titled "Edit Template"** · 🐞 · minor.
-Pressing "Add Template" in an email's window opens an empty form titled
-"Edit Template", the title of the window that edits an existing template.
-A manager expects the window to say it adds one.
-Basis: probe, 2026-09-26. <sup>f-a4</sup>
+**A4 — Manage Emails: "Add Template" opens an empty window titled "Edit Template"** · 🐞 · low.
+"Manage Emails" is the list of emails a manager reaches from Settings ›
+Workflow › "Emails" › "Add and edit templates". Pressing "Edit" on an
+email there opens that email's window with its templates; pressing "Add
+Template" in that window opens an empty form titled "Edit Template",
+the title of the form that edits an existing template. Nothing in the
+form says it adds one: the only sign is that its "Name", "Subject" and
+"Body" boxes are empty.
+"Save" still adds the template as a new row and leaves the default
+untouched. Every email whose window offers "Add Template" shows it:
+the decision and reviewer emails of a journal or press (about 26 each)
+and the three decision emails of a preprint server.
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name** · 🐞 · low.
@@ -1718,6 +1727,7 @@ value. Live-probed 2026-09-26, all three apps: note i.
 <a id="fn-f-a4"></a>
 **f-a4** — `ManageEmailsPage::openTemplate()`; see note m. Live-probed
 2026-09-26, all three apps.
+Issue report: [docs/issues/U56-A4-add-template-window-titled-edit-template.md](../issues/U56-A4-add-template-window-titled-edit-template.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ManageEmailsPage::confirmRemoveTemplate()` replaces

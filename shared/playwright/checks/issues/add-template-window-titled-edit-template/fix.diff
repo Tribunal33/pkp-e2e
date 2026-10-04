@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/components/Container/ManageEmailsPage.vue
++++ b/lib/ui-library/src/components/Container/ManageEmailsPage.vue
+@@ -359,7 +359,7 @@
+ 			const {openSideModal} = useModal();
+ 			this.$nextTick(() =>
+ 				openSideModal(EditTemplateModal, {
+-					title: this.currentTemplate
++					title: Object.keys(this.currentTemplate).length
+ 						? t('manager.mailables.editTemplate')
+ 						: t('manager.emails.addEmail'),
+ 					currentTemplateForm: this.currentTemplateForm,
