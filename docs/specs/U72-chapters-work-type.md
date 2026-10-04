@@ -708,6 +708,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U72-A7-chapter-author-order-change-lost.md`): a
     chapter's authors dragged into a place the save used to skip keep
     the new order after "Done" and a reload
+  - the guard for A8 (issue report
+    `docs/issues/U72-A8-chapter-license-sentence-own-address-published.md`):
+    a chapter with its own License URL, and any chapter of a published
+    Edited Volume, opens without the automatic-license sentence
   - the guard for A5 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): the Review step's "Chapters" panel's "Edit" opens "Details".
   - the guard for A2 (issue report
     `docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md`):
@@ -740,8 +744,6 @@ Left out of the scenarios above, by reason:
   - A3 (a new version's chapters without their earlier files; Rule 15;
     scenario 10 passes it)
   - A5 (the Review panel's "Edit"; Fields, the Review panel)
-  - A8 (the license sentence above a chapter's own address, and after
-    publishing; Rule 12a; scenario 8 passes it)
   - A9 (a chapter added after an Edited Volume is published; Rule 12b)
 - **Owned by another feature**:
   - the chapter window's "Identifiers" tab and who is offered it (Actors
@@ -768,7 +770,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | After "Create New Version" the new version's chapters lose their files, which no chapter of the new version can take back | 🐞 | minor | — |
 | [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Chapter authors dragged into a new order snap back on "Done" when they are among the book's first contributors | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A8](#a8) | The chapter window promises an automatic license above a box whose own address publishing keeps, and after publishing | 🐞 | minor | — |
+| [A8](#a8) | Chapter window promises an automatic license above a chapter's own License URL and on a published book | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
 | [A9](#a9) | A chapter added to a published Edited Volume may stay without a license | ❓ | minor | — |
 
@@ -875,13 +877,19 @@ the same result; "Edit Chapter" can set the order instead.
 Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The chapter window promises a license publishing will not write** · 🐞 · minor.
-On an Edited Volume the chapter window says "The license will be set
-automatically to {license} when this is published." above a box that
-already holds the chapter's own address, which publishing keeps, and
-goes on saying it once the version is published. Expected: the sentence
-shows only above an empty box on a version that is not published.
-Basis: probe. <sup>f-a8</sup>
+**A8 — Chapter window promises an automatic license above a chapter's own License URL and on a published book** · 🐞 · low.
+On an Edited Volume, the chapter window says "The license will be set
+automatically to {license} when this is published." above the chapter's
+"License URL" box. The sentence shows even when the box already holds the
+chapter's own license URL, which publishing keeps. It also shows on a
+published version, where publishing has already filled every empty box.
+An editor who reads it may believe that the chapter's own license will be
+replaced, or that something is still to happen on a book that is already
+out.
+It shows on every Edited Volume of a press that has a license set in any
+of three places: the press's default license, the version's "License
+URL", or the version's "Default Chapter License URL".
+Basis: probe, 2026-10-04. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A chapter added after publishing may stay without a license** · ❓ · minor.
@@ -1612,6 +1620,7 @@ Volume, whatever its own address or the version's status. Live-probed
 2026-09-28: note td13, two runs each before and after publishing; a
 Monograph published with a version license and then switched to Edited
 Volume showed the sentence above its empty box.
+Issue report: docs/issues/U72-A8-chapter-license-sentence-own-address-published.md.
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note o: the fill runs only on the publish hook, so a chapter

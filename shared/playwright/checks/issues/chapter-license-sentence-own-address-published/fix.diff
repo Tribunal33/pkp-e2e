@@ -1,0 +1,29 @@
+--- a/controllers/grid/users/chapter/form/ChapterForm.php
++++ b/controllers/grid/users/chapter/form/ChapterForm.php
+@@ -135,9 +135,16 @@
+      */
+     public function initData()
+     {
+-        //Create chapter license URL description
++        // Describe the license publishing will give the chapter: only on an
++        // edited volume's unpublished version, and only while the chapter has
++        // no license of its own (Repository::addChapterLicense() fills empty ones).
+         $chapterLicenseUrlDescription = '';
+-        if ($this->getMonograph()->getData('workType') === Submission::WORK_TYPE_EDITED_VOLUME) {
++        $chapter = $this->getChapter();
++        if (
++            $this->getMonograph()->getData('workType') === Submission::WORK_TYPE_EDITED_VOLUME
++            && $this->getPublication()->getData('status') !== Publication::STATUS_PUBLISHED
++            && !$chapter?->getLicenseUrl()
++        ) {
+             $licenseOptions = Application::getCCLicenseOptions();
+             $context = Application::get()->getRequest()->getContext();
+             if ($this->getPublication()->getData('chapterLicenseUrl')) {
+@@ -187,7 +194,6 @@
+         $this->setData('submissionWorkType', $this->getMonograph()->getData('workType'));
+         $this->setData('chapterLicenseUrlDescription', $chapterLicenseUrlDescription);
+ 
+-        $chapter = $this->getChapter();
+         if ($chapter) {
+             $this->setData('chapterId', $chapter->getId());
+             $this->setData('title', $chapter->getTitle());
