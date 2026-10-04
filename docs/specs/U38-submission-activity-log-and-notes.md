@@ -1302,7 +1302,7 @@ Live-probed 2026-09-27, OJS and OMP, and OPS on a galley: note td7.
 **f-a7** — Note l. Live-probed 2026-09-24, all three apps: the file lines
 of the scratch submissions, written in English, read « » in French
 (Canada) where the English reader read "article.pdf".
-Issue report: [docs/issues/U38-A7-file-lines-empty-name-other-language.md](../issues/U38-A7-file-lines-empty-name-other-language.md).
+Issue report: [pkp-e2e#896](https://github.com/jardakotesovec/pkp-e2e/issues/896) ([docs/issues/U38-A7-file-lines-empty-name-other-language.md](../issues/U38-A7-file-lines-empty-name-other-language.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — Note m. Live-probed 2026-09-24, OJS and OMP, the "Open"
