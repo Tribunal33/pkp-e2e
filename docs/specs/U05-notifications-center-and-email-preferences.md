@@ -1747,7 +1747,7 @@ of note s5 mounted: the Author's reply reached the Manager as a task row
 and an email on all three apps, with "Discussion activity." unticked
 making no difference; the controller is shared and neither app overrides
 it.
-Issue report: [docs/issues/U05-A1-discussion-activity-choice-governs-nothing.md](../issues/U05-A1-discussion-activity-choice-governs-nothing.md).
+Issue report: [pkp-e2e#848](https://github.com/jardakotesovec/pkp-e2e/issues/848) ([docs/issues/U05-A1-discussion-activity-choice-governs-nothing.md](../issues/U05-A1-discussion-activity-choice-governs-nothing.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — `PKPNotificationsUnsubscribeForm::execute()` calls
