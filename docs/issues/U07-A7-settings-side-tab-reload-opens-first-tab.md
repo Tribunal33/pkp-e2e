@@ -165,7 +165,7 @@ Reach:
   opens "Site Setup" › "Settings" (checked by typing that address on
   today's code). It needs its own one-line change, a new id for that
   side tab in pkp-lib's `templates/admin/settings.tpl`, reported in
-  [U60-A7-appearance-setup-tab-opens-site-setup.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U60-A7-appearance-setup-tab-opens-site-setup.md).
+  [pkp-e2e#887](https://github.com/jardakotesovec/pkp-e2e/issues/887).
   With this fix and that one applied together, a reload reopens every
   side and inner tab of Site Settings (walked); this fix alone leaves
   "Appearance" › "Setup" opening "Site Setup".

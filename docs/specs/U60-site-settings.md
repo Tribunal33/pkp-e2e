@@ -1733,7 +1733,7 @@ and `#settings` … `#orcidSiteSettings` their side tab. Typed, the forms
 their side tab, `#appearance/setup` "Site Setup" › "Settings". fn-b: the
 "Appearance" side tab "Setup" shares the id `setup` with the "Site Setup"
 top tab.
-Issue reports: [pkp-e2e#784](https://github.com/jardakotesovec/pkp-e2e/issues/784) ([docs/issues/U07-A7-settings-side-tab-reload-opens-first-tab.md](../issues/U07-A7-settings-side-tab-reload-opens-first-tab.md)), the reload; [docs/issues/U60-A7-appearance-setup-tab-opens-site-setup.md](../issues/U60-A7-appearance-setup-tab-opens-site-setup.md), the shared `setup` id.
+Issue reports: [pkp-e2e#784](https://github.com/jardakotesovec/pkp-e2e/issues/784) ([docs/issues/U07-A7-settings-side-tab-reload-opens-first-tab.md](../issues/U07-A7-settings-side-tab-reload-opens-first-tab.md)), the reload; [pkp-e2e#887](https://github.com/jardakotesovec/pkp-e2e/issues/887) ([docs/issues/U60-A7-appearance-setup-tab-opens-site-setup.md](../issues/U60-A7-appearance-setup-tab-opens-site-setup.md)), the shared `setup` id.
 
 <a id="fn-f-a8"></a>
 **f-a8** — `LoginHandler::_redirectAfterLogin()`: with a target context
