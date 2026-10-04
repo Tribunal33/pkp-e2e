@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -1407,7 +1407,7 @@
+ msgstr "The following is shown to authors during the contributors step. Provide a brief explanation of what information the author should provide about themselves, co-authors, and any other contributors."
+ 
+ msgid "manager.setup.workflow.reviewerSuggestionsHelp.description"
+-msgstr "The following is shown to authors during the reviewer suggestions step. Provide a brief explanation of what information the author should provide about themselves, co-authors, and any other contributors."
++msgstr "The following is shown to authors during the reviewer suggestions step, when they are invited to suggest potential reviewers. Provide a brief explanation of who would make a suitable reviewer and what information the author should provide about each one."
+ 
+ msgid "manager.setup.workflow.detailsHelp.description"
+ msgstr "The following is shown to authors during the details step, when they are asked to provide the title, abstract, and other key information about their submission."

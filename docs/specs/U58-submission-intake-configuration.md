@@ -843,6 +843,8 @@ Left out of the scenarios above, by reason:
   - "Edit" beside each section of the "Submissions" page opening the
     side tab that holds that section's box, on the three apps
     ([OMP2](#omp2)): the guard the issue report proposes
+  - each help on "Author Guidance" naming its own step and repeating no
+    other help ([A7](#a7)): the guard the issue report proposes
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -938,7 +940,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A component the manager deleted is still offered as a media type on the "Media" page | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | The "For Reviewer Suggestion" box's help describes the Contributors step | 🐞 | minor | — |
+| [A7](#a7) | The help under "For Reviewer Suggestion" in Author Guidance asks about contributors, not suggested reviewers | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | The component window's "Key" help misspells "identifier" and calls the component a "genre" | 🐞 | minor | — |
 | [A9](#a9) | A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada) | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1033,14 +1035,18 @@ too? Lean: yes; one installation, one statement.
 Basis: code. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The "For Reviewer Suggestion" help describes contributors** · 🐞 · minor.
-The help under "For Reviewer Suggestion" reads "The following is shown to
-authors during the reviewer suggestions step. Provide a brief explanation
-of what information the author should provide about themselves,
-co-authors, and any other contributors.", the second sentence copied from
-the "Contributors" box. A manager expects guidance about suggesting
+**A7 — The help under "For Reviewer Suggestion" in Author Guidance asks about contributors, not suggested reviewers** · 🐞 · low.
+In Settings › Workflow › "Submission" › "Author Guidance", the help
+under "For Reviewer Suggestion" reads "The following is shown to authors
+during the reviewer suggestions step. Provide a brief explanation of
+what information the author should provide about themselves, co-authors,
+and any other contributors." The second sentence is copied from the
+"Contributors" box. A manager expects guidance about suggesting
 reviewers.
-Basis: code. <sup>f-a7</sup>
+A manager who follows the help may write guidance about contributors
+into the box. Authors then read that guidance on the submission form's
+"Reviewer Suggestions" step, where they are asked to suggest reviewers.
+Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The "Key" help has a misspelling and a code word** · 🐞 · minor.
@@ -1762,6 +1768,7 @@ Statement" page (live-probed 2026-09-27, all three apps).
 **f-a7** — `manager.setup.workflow.reviewerSuggestionsHelp.description`
 (lib/pkp `manager.po`): its second sentence repeats
 `manager.setup.workflow.contributorsHelp.description` word for word.
+Issue report: [docs/issues/U58-A7-reviewer-suggestion-help-describes-contributors.md](../issues/U58-A7-reviewer-suggestion-help-describes-contributors.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `manager.setup.genres.key.description` (lib/pkp `manager.po`),
