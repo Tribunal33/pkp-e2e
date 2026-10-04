@@ -397,6 +397,10 @@ address are in its footnote.
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A1 (Rule 9; issue report
+    `docs/issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md`):
+    scenario 2 "Reorder the highlights" with a "Cancel" after two moves,
+    the list back in the saved order at once and after a reload
   - the guard for A3 (Rule 8; issue report
     `docs/issues/U11-A3-highlights-list-title-html-codes.md`): a title
     with one word made bold through "Formatting" and one holding "&",
@@ -463,7 +467,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | "Cancel" in ordering mode leaves the rows where the arrows moved them; only a reload shows the saved order | 🐞 | minor | — |
+| [A1](#a1) | Highlights list: "Cancel" in ordering mode keeps the moved rows, and the next "Save Order" saves them | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site's Highlights tab cannot save, order or list: "Save" does nothing, "Save Order" shows an error dialog, so no site highlight exists | 🐞 | user-visible | — |
@@ -476,13 +480,18 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Cancel" in ordering mode keeps the moved order on screen** · 🐞 · minor.
-A manager who moves rows with the arrows and then presses "Cancel" expects
-the list to fall back to the saved order. Instead the list leaves ordering
-mode with the rows still where the arrows put them, "Edit" and "Delete"
-back on each row, while the home page and a reload of the tab show the
-saved order. The manager cannot tell from the screen that nothing was
-saved. Basis: probe. <sup>f-a1</sup>
+**A1 — Highlights list: "Cancel" in ordering mode keeps the moved rows, and the next "Save Order" saves them** · 🐞 · low.
+A manager who moves highlights with the arrows in ordering mode and then
+presses "Cancel" expects the list to go back to the saved order. Instead
+the list leaves ordering mode with the rows still where the arrows put
+them. No notice says the moves were discarded, and the home page keeps
+the saved order.
+The list keeps showing the discarded order until the page is reloaded.
+The next time the manager presses "Order", ordering mode starts from it,
+and "Save Order" saves it to the home page, even when nothing was moved
+that time. The same happens after a "Save Order" the server refuses: the
+moved rows stay on the list as if they had been saved.
+Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "URL" accepts any text** · ❓ · user-visible.
@@ -985,6 +994,7 @@ mode restores the saved order on cancel. Code read 2026-09-16.
 Live-probed 2026-09-16, OJS (twice), OMP and OPS: after "Cancel" the rows
 stay moved with "Edit" and "Delete" back and no message, while the home
 page and a reload of the tab show the saved order.
+Issue report: [docs/issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md](../issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `lib/pkp/schemas/highlight.json` `url`:

@@ -1,0 +1,69 @@
+--- a/lib/ui-library/src/components/ListPanel/highlights/HighlightsListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/highlights/HighlightsListPanel.vue
+@@ -11,7 +11,7 @@
+ 								v-if="!isOrdering"
+ 								:is-active="isOrdering"
+ 								:disabled="isLoading"
+-								@click="isOrdering = true"
++								@click="startOrdering"
+ 							>
+ 								{{ t('common.order') }}
+ 							</PkpButton>
+@@ -26,7 +26,7 @@
+ 								<PkpButton
+ 									:is-warnable="true"
+ 									:disabled="isLoading"
+-									@click="isOrdering = false"
++									@click="cancelOrdering"
+ 								>
+ 									{{ t('common.cancel') }}
+ 								</PkpButton>
+@@ -153,10 +153,29 @@
+ 			activeFormTitle: '',
+ 			isLoading: false,
+ 			isOrdering: false,
++			itemsBeforeOrdering: null,
+ 		};
+ 	},
+ 	methods: {
+ 		/**
++		 * Enter ordering mode and keep the order shown, so that
++		 * cancelling can restore it
++		 */
++		startOrdering() {
++			this.itemsBeforeOrdering = [...this.items];
++			this.isOrdering = true;
++		},
++
++		/**
++		 * Leave ordering mode and discard the moves made in it
++		 */
++		cancelOrdering() {
++			this.setItems(this.itemsBeforeOrdering, this.itemsMax);
++			this.itemsBeforeOrdering = null;
++			this.isOrdering = false;
++		},
++
++		/**
+ 		 * Clear the active form when the modal is closed
+ 		 *
+ 		 * @param {Object} event
+@@ -349,13 +368,17 @@
+ 					'X-Csrf-Token': pkp.currentUser.csrfToken,
+ 					'X-Http-Method-Override': 'PUT',
+ 				},
+-				error: this.ajaxErrorCallback,
++				error: (r) => {
++					this.setItems(this.itemsBeforeOrdering, this.itemsMax);
++					this.ajaxErrorCallback(r);
++				},
+ 				success: (r) => {
+ 					this.setItems(r.items, r.itemsMax);
+ 				},
+ 				complete: () => {
+ 					this.isLoading = false;
+ 					this.isOrdering = false;
++					this.itemsBeforeOrdering = null;
+ 				},
+ 			});
+ 		},
