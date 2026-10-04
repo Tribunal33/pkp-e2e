@@ -885,7 +885,7 @@ Issue report: [pkp-e2e#849](https://github.com/jardakotesovec/pkp-e2e/issues/849
 
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/pkp/locale/en/default.po`, `default.submission.step.reviewerSuggestions`: "…provide valueable input for the editorial team…", copied into every new context's `reviewerSuggestionsHelp` by `I4787_AddReviewSuggestionHelp`. Live-probed 2026-09-06 (note c), OJS and OMP, on the step and in the "For Reviewer Suggestion" box.
-Issue report: [docs/issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md](../issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md).
+Issue report: [pkp-e2e#852](https://github.com/jardakotesovec/pkp-e2e/issues/852) ([docs/issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md](../issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `SelectReviewerSuggestionListItem.vue` renders the button's screen-reader span as `{{ t('common.selectWithName', {name: fullName}) }}`, but the component defines no `fullName` property (the name is `item.fullName`, localized only inside `select()`), so the interpolation yields "undefined"; the reviewer list's `SelectReviewerListItem.vue` passes `item.fullName`. Live-probed 2026-09-06 (note h), OJS and OMP: accessible name "Select Reviewer Select undefined" on every suggestion entry, "Select Reviewer Select Rowan Reviewer" in "Locate a Reviewer".
@@ -901,7 +901,7 @@ Issue report: [pkp-e2e#841](https://github.com/jardakotesovec/pkp-e2e/issues/841
 
 <a id="fn-f-a11"></a>
 **f-a11** — `lib/pkp/locale/en/submission.po`, `reviewerSuggestion.suggestionReason.description`, the `FieldRichTextarea('suggestionReason')` description (note b). Live-probed 2026-09-06 (note b; the K4 window snapshots), OJS and OMP, verbatim in the "Add Reviewer Suggestion" and "Edit" windows.
-Issue report: [docs/issues/U31-A11-reviewer-suggestion-reason-help-is-there.md](../issues/U31-A11-reviewer-suggestion-reason-help-is-there.md).
+Issue report: [pkp-e2e#853](https://github.com/jardakotesovec/pkp-e2e/issues/853) ([docs/issues/U31-A11-reviewer-suggestion-reason-help-is-there.md](../issues/U31-A11-reviewer-suggestion-reason-help-is-there.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note t10 (live-probed 2026-09-06, OMP: both halves hold, the internal add retires the suggestion for the External Review panel and list, that round's Reviewers table "No Items"). Note f (panel absent on `WORKFLOW_STAGE_ID_INTERNAL_REVIEW`; `atActiveReviewStage()` requires stage 3) against note h (`PKPSelectReviewerListPanel` adds the list on any stage); `ReviewerForm::execute()` matches by email whatever the stage (note i).
