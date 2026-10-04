@@ -397,6 +397,10 @@ address are in its footnote.
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A3 (Rule 8; issue report
+    `docs/issues/U11-A3-highlights-list-title-html-codes.md`): a title
+    with one word made bold through "Formatting" and one holding "&",
+    the list row showing the bold word and a plain "&"
   - the guard for A4 (Rule 6; issue report
     `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): a
     changed title closed without "Save", then "Edit" and a "Save" of
@@ -460,7 +464,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | "Cancel" in ordering mode leaves the rows where the arrows moved them; only a reload shows the saved order | 🐞 | minor | — |
-| [A3](#a3) | The list prints a formatted title's tags as text, while the slide and the delete dialog show the formatting | 🐞 | minor | — |
+| [A3](#a3) | The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site's Highlights tab cannot save, order or list: "Save" does nothing, "Save Order" shows an error dialog, so no site highlight exists | 🐞 | user-visible | — |
 | [A7](#a7) | In the French interface a press's and a server's carousel arrows read raw keys, and the fourth top tab of Settings › Website reads "##navigation.content##" | 🐞 | minor | claim check (claude), 2026-09-24 — narrowed: the tab, the list's heading and the carousel's heading now read "En vedette" |
@@ -493,11 +497,19 @@ same "Please enter a valid URL." sentence; the hint already promises it.
 Basis: probe. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The list prints a formatted title's tags** · 🐞 · minor.
-A manager who makes a word of the "Title" bold expects the list to show it
-bold, as the slide and the "Delete Highlight" sentence do. Instead the
-row prints the tags as text: a title saved with one bold word reads
-`<b>Bold title one</b>` in its row. Basis: probe. <sup>f-a3</sup>
+**A3 — The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;`** · 🐞 · low.
+A manager who makes a word of a highlight's "Title" bold expects the
+Highlights list to show it bold, as the home page's slide and the
+"Delete Highlight" question do. Instead the list prints the title's
+codes: "Special issue" with "Special" in bold reads
+`<b>Special</b> issue`, and a title typed as "Books & ideas" reads
+`Books &amp; ideas`.
+Readers are not affected: the slide on the home page shows the title
+right. In ordering mode, a screen reader hears the same codes in each
+arrow's name ("Increase position of <b>Special</b> issue").
+It shows for every title with formatting or with "&", "<" or ">", in a
+journal's, press's or server's Highlights list.
+Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it** · 🐞 · medium.
@@ -992,6 +1004,7 @@ interpolation that escapes the stored HTML, while the delete dialog's
 message and `highlights.tpl` render it. Live-probed 2026-09-16, OJS, OMP
 and OPS: a title saved as `<b>Bold title one</b>` reads that way in the
 row and bold on the slide and in the "Delete Highlight" sentence.
+Issue report: [docs/issues/U11-A3-highlights-list-title-html-codes.md](../issues/U11-A3-highlights-list-title-html-codes.md).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** Live-probed 2026-09-16, OJS (twice), OMP and OPS:

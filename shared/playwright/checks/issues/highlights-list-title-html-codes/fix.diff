@@ -1,0 +1,41 @@
+--- a/lib/ui-library/src/components/ListPanel/highlights/HighlightsListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/highlights/HighlightsListPanel.vue
+@@ -38,13 +38,13 @@
+ 					</PkpHeader>
+ 				</template>
+ 				<template #item-title="{item}">
+-					{{ localize(item.title) }}
++					<span v-strip-unsafe-html="localize(item.title)"></span>
+ 				</template>
+ 				<template #item-actions="{item}">
+ 					<Orderer
+ 						v-if="isOrdering"
+ 						:item-id="item.id"
+-						:item-title="localize(item.title)"
++						:item-title="titleAsText(item)"
+ 						@up="orderUp(item)"
+ 						@down="orderDown(item)"
+ 					></Orderer>
+@@ -372,6 +372,22 @@
+ 				items,
+ 				itemsMax,
+ 			});
++		},
++
++		/**
++		 * The highlight's title as plain text
++		 *
++		 * The title is formatted text (FieldRichText), stored with
++		 * its tags and HTML entities. Text-only places, such as the
++		 * ordering buttons' screen-reader labels, need it without them.
++		 *
++		 * @param {Object} item
++		 * @return {String}
++		 */
++		titleAsText(item) {
++			const html = this.localize(item.title) || '';
++			return new DOMParser().parseFromString(html, 'text/html').body
++				.textContent;
+ 		},
+ 
+ 		/**
