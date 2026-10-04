@@ -709,6 +709,16 @@ Left out of the scenarios above, by reason:
     sponse-empty-field-generic-error.md`): an emptied "Subject", then an
     emptied "Message", at "Submit Request" shows "This field is
     required." under the field and no "Error" dialog
+  - the guard for A7 (issue report `docs/issues/U30-A7-author-response-g
+    one-after-revisions-upload.md`): after "Request Revisions" the
+    author uploads a revised file first, and the "Author Response" card
+    stays and the decision email's "Submit Author Response" opens the
+    response form
+  - the guard for OMP1 (issue report `docs/issues/U30-OMP1-press-author-
+    response-button-leads-nowhere.md`), once the team rules that presses
+    get author responses: the "Author Response" table and card on both
+    of a press's review stages, and the decision email's button opening
+    the response form
 - **Nothing new to test**:
   - Site Administrator (the Journal Manager's offer, scenarios 1 and 3)
   - Guest Editor (the Section Editor's gate, scenario 6)
@@ -745,9 +755,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A Funding coordinator is offered "Request Response" and "Delete" on "Author Response", then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Request Author Response" page opened by its address: "Cancel" and the sent dialog lead to "404 Not Found" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | "Request Author Response" refuses an empty subject or message with "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | The decision email's "Submit Author Response" leads nowhere once revisions are uploaded | 🐞 | user-visible | — |
+| [A7](#a7) | Author who uploads revisions first can no longer respond to the reviewers, as the decision email asks | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | In French the "Author Response" table, the author's card, both windows and the request page show raw codes such as "##submission.reviewRound.authorResponse##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OMP1](#omp1) | A press author's decision email offers "Submit Author Response" that leads to nothing | 🐞 | user-visible | — |
+| [OMP1](#omp1) | Press author's "Submit Author Response" email button opens a review round with nothing to respond in | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Nobody is told when the author's response arrives | ❓ | user-visible | — |
 | [A6](#a6) | Under a minimum, the request email says every review is in while one is still due | ❓ | minor | — |
 | [A8](#a8) | A cancelled reviewer's effect on readiness and on the email was not seen | ❓ | minor | — |
@@ -848,16 +858,21 @@ reach the author later, if at all, through a further request. Basis:
 probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The decision email's "Submit Author Response" leads nowhere once revisions are uploaded** · 🐞 · user-visible.
-An author asked for revisions
-gets the email's "Submit Author Response" and the "Author Response" card on
-the round, but if they upload their revised file first, the card disappears
-with the round's new status "Revisions have been submitted and a decision
-is needed.", and the email's button then opens the round with no card and
-no window, so the response the email asked for cannot be written. The
-editor's table meanwhile reads "Ready to invite author" with "Request
-Response" enabled, so only a fresh request brings the card back (sending
-that request was not tried). Basis: probe. <sup>f-a7</sup>
+**A7 — Author who uploads revisions first can no longer respond to the reviewers, as the decision email asks** · 🐞 · medium.
+An author asked for revisions gets an email that asks them both to
+respond to the reviewers ("Submit Author Response") and to upload their
+revised files, in no set order. If they upload the revised file first,
+the round's "Author Response" card disappears. The email's button then
+opens the round with no card and no response form, so the response the
+email asked for cannot be written.
+
+The only way back is for an editor to send a separate "Request
+Response", and the round's "Author Response" table still reads "Ready to
+invite author", as if the author had never been asked.
+
+No setting turns author responses on or off, so every OJS journal on
+`main` meets this.
+Since: 2026-01-23 (pkp/pkp-lib#12207) · Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A cancelled reviewer's effect was not seen** · ❓ · minor. Rule 3
@@ -951,21 +966,23 @@ Basis: probe, 2026-10-04. <sup>f-a9</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — The press's decision email offers a response with nowhere to go** · 🐞 · user-visible.
-A press author asked for revisions receives the
-"Submit Author Response" button in the decision email, like a journal
-author (the editor sees it in the "Notify Authors" message before
-recording). Pressing it opens the monograph's External Review stage, which
-reads "Revisions have been requested." and shows "Revisions Uploaded" and
-the "Notifications" list, but no "Author Response" card and no window, so
-the author cannot do what the email asked. Neither review stage shows the
-editor's "Author Response" table, so no request can be sent from a screen;
-the "Request Author Response" page still opens by its address (Rule 14),
-sends the request email (its reviewer block reading "Recommendation:" with
-nothing after it, since a press collects none) and shows the sent dialog,
-and that email's button lands the author on the same empty stage. Since: 2026-07-31
-(seen on a press while the review stage was probed) · Basis: probe.
-<sup>f-omp1</sup>
+**OMP1 — Press author's "Submit Author Response" email button opens a review round with nothing to respond in** · 🐞 · medium.
+When a press editor records "Request Revisions" on External Review or
+Internal Review, the author's email invites them to "Submit Author
+Response", as a journal's does. Pressing the button opens the
+monograph's review round with no "Author Response" card and no response
+form, so the author cannot do what the email asks.
+
+The press's editors have no "Author Response" table on either review
+stage, so they cannot see or request a response either. The "Request
+Author Response" page still opens by its address and sends an email with
+the same button, which leads to the same empty round.
+
+Whether presses should have author responses is the team's call, and the
+fix follows from it. The recommended fix adds the table and the card to
+both of a press's review stages; the other way is to take the button out
+of the press's emails.
+Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-omp1</sup>
 
 ---
 
@@ -1050,6 +1067,7 @@ Issue report: [pkp-e2e#815](https://github.com/jardakotesovec/pkp-e2e/issues/815
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note c: the author's config shows the card only for `isAuthorResponseRequested` or a round in `REVIEW_ROUND_STATUS_REVISIONS_REQUESTED` / `REVIEW_ROUND_STATUS_ACCEPTED`; an uploaded revision moves the round to `REVIEW_ROUND_STATUS_REVISIONS_SUBMITTED` (`editor.submission.roundStatus.revisionsSubmitted`), and the Request Revisions decision sets no request flag, so the card goes and the email's `reviewResponseAction=respond` finds no card to open. Live-probed 2026-09-06 (OJS, `author.alex` on a `requestRevisions` round without a request): the card present after the decision (status "Revisions have been requested."); after the author's upload under "Revisions Uploaded", the status "Revisions have been submitted and a decision is needed." and no card; the decision email's href, still carrying `reviewResponseAction=respond`, landed with no card and no window; the editor's table read "Ready to invite author" with "Request Response" enabled.
+Issue report: [pkp-e2e#816](https://github.com/jardakotesovec/pkp-e2e/issues/816) ([docs/issues/U30-A7-author-response-gone-after-revisions-upload.md](../issues/U30-A7-author-response-gone-after-revisions-upload.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note e: `getActiveReviewAssignments()` drops declined and cancelled assignments alike, and `ReviewerComments::setupReviewerCommentsVariable()` iterates the completed assignments only, so a cancelled request should count like a declined one on both the cell and the email. Not driven: the scenario API seeds no `cancelled` reviewer status. The settling read: on a round with one completed review and one accepted request, the editor takes the accepted reviewer's "…" › "Cancel Reviewer", then reads the cell (expected "Ready to invite author", "Request Response" enabled) and opens the request page (expected one reviewer block).
@@ -1060,6 +1078,7 @@ Issue report: [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note a for the missing components; note h for the shared `DecisionRequestRevisionsNotifyAuthor` and template. Seen 2026-07-31 on a press during the review-stage probes (recorded in the review stage spec's note a: no Author Response panel in either view, console clean, while the author still received the letter inviting a response). Re-observed 2026-09-06 on the current build: no table on `workflow_3_{round}` or `workflow_2_{round}`; the typed page renders, `POST …/requestResponse` 200, the email's anchor `…mySubmissions?workflowSubmissionId={id}&workflowMenuKey=workflow_3_{round}&reviewResponseAction=respond`; the Request Revisions wizard's "Notify Authors" message and the "Your submission has been reviewed and we encourage you to submit revisions" email carry the same anchor; the author lands on External Review with the headings "Round 1 Status", "Notifications", "Revisions Uploaded", "Review Tasks & Discussions", no "Author Response" and no window, console clean (own console listeners; the kit's `screen()` does not capture it).
+Issue report: [pkp-e2e#817](https://github.com/jardakotesovec/pkp-e2e/issues/817) ([docs/issues/U30-OMP1-press-author-response-button-leads-nowhere.md](../issues/U30-OMP1-press-author-response-button-leads-nowhere.md)).
 
 ## Reference — entry points & surfaces
 
