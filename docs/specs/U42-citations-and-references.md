@@ -2048,11 +2048,11 @@ note q9; the state the entry described has no way in from the screens.
 `.empty`, `.errors` (lib/pkp `locale/en/submission.po`); no caller in
 ui-library or lib/pkp (grep 2026-09-24). Live-probed 2026-09-24: q5 and
 note e; none of the four strings appeared.
-Issue report: [docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md](../issues/U42-A2-pasted-repeat-reference-dropped-saved.md).
+Issue report: [pkp-e2e#878](https://github.com/jardakotesovec/pkp-e2e/issues/878) ([docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md](../issues/U42-A2-pasted-repeat-reference-dropped-saved.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** Note g. Live-probed 2026-09-24: q8.
-Issue report: [docs/issues/U42-A3-reference-search-keeps-rows-without-word.md](../issues/U42-A3-reference-search-keeps-rows-without-word.md).
+Issue report: [pkp-e2e#879](https://github.com/jardakotesovec/pkp-e2e/issues/879) ([docs/issues/U42-A3-reference-search-keeps-rows-without-word.md](../issues/U42-A3-reference-search-keeps-rows-without-word.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** `submission.citations.structured.citationsMetadataLookup.description`
