@@ -1620,7 +1620,7 @@ Volume, whatever its own address or the version's status. Live-probed
 2026-09-28: note td13, two runs each before and after publishing; a
 Monograph published with a version license and then switched to Edited
 Volume showed the sentence above its empty box.
-Issue report: docs/issues/U72-A8-chapter-license-sentence-own-address-published.md.
+Issue report: [pkp-e2e#855](https://github.com/jardakotesovec/pkp-e2e/issues/855) ([docs/issues/U72-A8-chapter-license-sentence-own-address-published.md](../issues/U72-A8-chapter-license-sentence-own-address-published.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Note o: the fill runs only on the publish hook, so a chapter
