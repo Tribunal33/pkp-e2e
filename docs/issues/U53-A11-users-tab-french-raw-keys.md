@@ -10,8 +10,8 @@
   - 3.3: none (code; the older users list, no invitations)
 - **Introduced** not traced: no change broke it. The English texts came with the role invitations and the new users list (`pkp/pkp-lib#9658`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-31, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2025-02-04), and French (Canada) never received them
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions")
-- **Checked** 2026-10-02, the "Author Response" table 2026-10-04, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions"), spec U42 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a21) (the "References" page's "More Actions")
+- **Checked** 2026-10-02, the "Author Response" table and the "References" page 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -26,8 +26,8 @@ role invitation pages, where every heading, step, field and button but
 "Annuler" is a code. To a screen reader, the "…" menus and hidden
 "More Actions" column headings of the workflow and settings lists read
 "##common.moreActions##" on `main` and 3.5, seen on the "Users" tab, a
-publication's "Media" page, the "Categories" tab and a journal review
-round's "Author Response" table.
+publication's "Media" and "References" pages, the "Categories" tab and
+a journal review round's "Author Response" table.
 
 The rest of the tab is French, and its buttons and menus still work, so
 a manager can get through by switching the interface to English.
@@ -214,11 +214,12 @@ Reach:
   discussion, citation, funder, category, media file and task template
   managers, the dashboard's bulk actions and the reader comments lists
   among them) and 8 on `stable-3_5_0`. It was seen on the "Users" tab,
-  a publication's "Media" page, the "Categories" tab and the "Author
-  Response" table, which only a journal's review stage has (each walked
-  on `main` without the fix, the "Users" tab on 3.5 too). The
-  "Categories" tab's and the "Author Response" table's other codes are
-  texts new on `main` awaiting translation, outside this report; on 3.5
+  a publication's "Media" and "References" pages, the "Categories" tab
+  and the "Author Response" table, which only a journal's review stage
+  has (each walked on `main` without the fix, the "Users" tab on 3.5
+  too). The "Categories" tab's, the "References" page's and the "Author
+  Response" table's other codes are texts new on `main` awaiting
+  translation, outside this report; on 3.5
   the older categories table is French throughout (walked).
   The "Media" page's visible codes (`publication.media`,
   `publication.mediaFiles.*`, `common.selectedFile`,
@@ -422,10 +423,30 @@ pkp-lib's tried as a diff.
   3.5: `stable-3_5_0` has no "Author Response" table (no
   `ReviewRoundResponseManager` in its ui-library, none of the feature's
   keys in pkp-lib's `locale/en`); 3.4 and 3.3 neither.
-- Unverified: the fix on the "Media" page and the "Author Response"
-  table. The diff was not applied while walking Steps 7 to 10 or the
-  table's script. Both read `common.moreActions` from
-  the same text bundle as the users list, where the trial gave "Plus
+- Kept script for the "References" page (spec U42 A21):
+  [`shared/playwright/checks/issues/users-tab-french-raw-keys/references.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/users-tab-french-raw-keys/references.js),
+  on an install freshly loaded from the default dataset (it adds one
+  reference): `dbarnes` opens OJS submission 5, OMP submission 4 or OPS
+  submission 1 (Production), "Publication" ("Preprint") › "References",
+  adds "Ridge, A. (2021). Tide tables u42r9." and reads the row's "…"
+  button in English, then opens the same page's address with
+  `/fr_CA/` in place of `/en/` and reads it again:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/users-tab-french-raw-keys/references.js`.
+  Walked 2026-10-04 on `main` (OJS ff004d0973, `lib/pkp` 987776cd04,
+  `lib/ui-library` 64d67363; OMP 3b0ecf794c and OPS c8af945bb7,
+  `lib/pkp` 3dc90c81a6, `lib/ui-library` 280f98c5; pkp/datasets
+  566bb1f): on all three applications the row's "…" button is named
+  `##common.moreActions##` in French and "More Actions" in English.
+  The page's other codes (`submission.citations.structured*`,
+  `list.collapse`) are texts that came to `main` with the page and wait
+  for translation, outside this report. Not walked on 3.5:
+  `stable-3_5_0`'s "References" page is the older free-text box, with no
+  row menu (no `CitationManager` in its ui-library); 3.4 and 3.3
+  neither.
+- Unverified: the fix on the "Media" and "References" pages and the
+  "Author Response" table. The diff was not applied while walking Steps
+  7 to 10 or the "References" and table scripts. All three read
+  `common.moreActions` from the same text bundle as the users list, where the trial gave "Plus
   d'actions", so the same result is expected there but was not seen.
 - The "Categories" tab (spec U16 A15): read by
   [`omp-french-catalog-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/omp-french-catalog-raw-keys/walk.js)

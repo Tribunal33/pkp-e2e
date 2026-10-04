@@ -987,7 +987,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | minor | — |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | A book or preprint with no references shows an empty "References" heading | 🐞 | minor | — |
-| [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | minor | — |
+| [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
@@ -1180,7 +1180,7 @@ under it when the item has none.
 Basis: probe, 2026-09-24. <sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — In French the References page shows raw codes** · 🐞 · minor.
+**A21 — In French the References page shows raw codes** · 🐞 · low.
 With the interface in French (Canada), the side menu's "Références"
 entry, a journal's and a press's heading "Publication : Références",
 the "Add" box's label "Références" and "* Obligatoire", the "Ajouter"
@@ -1215,7 +1215,7 @@ server's heading "##submission.publication## : Références", are
 [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
 finding, and why a missing French text shows as a code at all is the
 question [Languages & locales](U57-languages-and-locales.md#a4) asks.
-Basis: probe, 2026-09-30. <sup>f-a21</sup>
+Basis: probe, 2026-10-04. <sup>f-a21</sup>
 
 ### Retired
 
@@ -2167,6 +2167,7 @@ more sit only in attributes or hidden controls
 showed "Enregistré" and the new row, listed again after a reload; "Edit
 citation" and the "Delete all references" dialog were closed with
 "Fermer" and "Annuler". No request failed and no script error showed.
+Re-walked 2026-10-04 on main, all three apps (3.5 has no structured References page). The row menu's `common.moreActions`, a released text French (Canada) never received, joined [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)), low; the rest (`submission.citations.structured*`, `list.collapse`) are main-only texts with no report under the 2026-10-02 ruling on main-only locale keys.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where
