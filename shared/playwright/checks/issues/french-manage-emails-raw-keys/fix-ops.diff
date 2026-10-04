@@ -1,0 +1,147 @@
+--- a/lib/pkp/locale/fr_CA/emails.po
++++ b/lib/pkp/locale/fr_CA/emails.po
+@@ -541,12 +541,21 @@
+ "Ce modèle de courriel est utilisé pour demander aux auteur.e.s l'accès à "
+ "leur dossier ORCID."
+ 
++msgid "emails.orcidRequestUpdateScope.description"
++msgstr ""
++"Ce courriel est envoyé pour demander à un-e auteur-e de renouveler "
++"l'autorisation d'accès à son dossier ORCID, avec la portée OAuth de l'API "
++"membre."
++
+ msgid "orcid.orcidRequestAuthorAuthorization.name"
+ msgstr "orcidRequestAuthorAuthorization"
+ 
+ msgid "orcid.orcidCollectAuthorId.name"
+ msgstr "orcidCollectAuthorId"
+ 
++msgid "orcid.orcidRequestUpdateScope.name"
++msgstr "Demande de mise à jour de l'accès au dossier ORCID"
++
+ msgid "emailTemplate.variable.authorOrcidUrl"
+ msgstr "Lien d'autorisation OAuth ORCID"
+ 
+@@ -601,6 +610,14 @@
+ "Ce courriel est envoyé aux utilisateurs et utilisatrices afin de les aviser "
+ "que certains rôles leur ont été retirés."
+ 
++msgid "mailable.userRoleMastheadUpdateNotify.name"
++msgstr "Avis de modification de la visibilité d'un rôle dans l'entête"
++
++msgid "mailable.userRoleMastheadUpdateNotify.description"
++msgstr ""
++"Ce courriel avise un-e utilisateur-trice que la visibilité de l'un de ses "
++"rôles dans l'entête a été modifiée."
++
+ msgid "mailable.userRoleAssignmentInvitationNotify.name"
+ msgstr "Notification d'invitation à un rôle"
+ 
+--- a/lib/pkp/locale/fr_CA/manager.po
++++ b/lib/pkp/locale/fr_CA/manager.po
+@@ -3867,6 +3867,11 @@
+ msgid "mailable.changeProfileEmailInvitationNotify.name"
+ msgstr "Changer l'adresse courriel d'invitation"
+ 
++msgid "mailable.changeProfileEmailInvitationNotify.description"
++msgstr ""
++"Les utilisateurs-trices qui demandent la modification de l'adresse courriel "
++"de leur profil reçoivent ce message pour confirmer leur demande."
++
+ #, fuzzy
+ msgid "manager.highlights.urlText"
+ msgstr "Étiquette du bouton"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -549,10 +549,13 @@
+ msgstr ""
+ 
+ msgid "mailable.validateEmailContext.name"
+-msgstr ""
++msgstr "Validez l'adresse courriel (inscription au serveur)"
+ 
+ msgid "mailable.validateEmailContext.description"
+ msgstr ""
++"Ce courriel est envoyé automatiquement à un nouveau membre du serveur "
++"lorsque les paramètres exigent que l'adresse courriel des nouveaux membres "
++"soit validée."
+ 
+ msgid "doi.displayName"
+ msgstr ""
+@@ -726,10 +729,12 @@
+ msgstr ""
+ 
+ msgid "mailable.postedAck.name"
+-msgstr ""
++msgstr "Accusé de publication"
+ 
+ msgid "mailable.postedAck.description"
+ msgstr ""
++"Ce courriel est envoyé automatiquement à un-e auteur-e lorsque sa "
++"prépublication est publiée en ligne sur le serveur."
+ 
+ msgid "mailable.editorAssigned.name"
+ msgstr ""
+@@ -747,10 +752,12 @@
+ msgstr ""
+ 
+ msgid "mailable.publicationVersionNotify.name"
+-msgstr ""
++msgstr "Nouvelle version créée"
+ 
+ msgid "mailable.publicationVersionNotify.description"
+ msgstr ""
++"Ce courriel avise automatiquement les modérateurs-trices assigné-e-s "
++"lorsqu'une nouvelle version d'une prépublication a été créée."
+ 
+ msgid "mailable.submissionAck.name"
+ msgstr ""
+@@ -759,22 +766,35 @@
+ msgstr ""
+ 
+ msgid "mailable.submissionAckCanPost.name"
+-msgstr ""
++msgstr "Accusé de réception de la soumission (sans modération)"
+ 
+ msgid "mailable.submissionAckCanPost.description"
+ msgstr ""
++"Ce courriel est envoyé automatiquement à un-e auteur-e qui fait une "
++"soumission ne nécessitant pas de modération. L'auteur-e peut publier sa "
++"prépublication immédiatement."
+ 
++msgid "mailable.statisticsReportNotify.description"
++msgstr ""
++"Ce courriel est envoyé automatiquement chaque mois aux modérateurs-trices "
++"et aux gestionnaires du serveur afin de leur donner un aperçu de la santé "
++"du système."
++
+ msgid "manager.setup.workflow.forTheEditorsHelp.description"
+ msgstr ""
+ 
+ msgid "mailable.postedNewVersionAck.name"
+-msgstr ""
++msgstr "Nouvelle version publiée"
+ 
+ msgid "mailable.postedNewVersionAck.description"
+ msgstr ""
++"Ce courriel est envoyé à l'auteur-e lorsqu'une nouvelle version de sa "
++"prépublication est publiée."
+ 
+ msgid "mailable.decision.initialDecline.notifyAuthor.name"
+ msgstr ""
+ 
+ msgid "mailable.decision.initialDecline.notifyAuthor.description"
+ msgstr ""
++"Ce courriel avise l'auteur-e que sa prépublication a été refusée et ne sera "
++"pas publiée."
+--- a/locale/fr_CA/default.po
++++ b/locale/fr_CA/default.po
+@@ -58,7 +58,7 @@
+ msgstr ""
+ 
+ msgid "default.groups.name.sectionEditor"
+-msgstr ""
++msgstr "Modérateur-trice"
+ 
+ msgid "default.groups.plural.sectionEditor"
+ msgstr ""

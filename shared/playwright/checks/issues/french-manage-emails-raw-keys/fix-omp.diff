@@ -1,0 +1,119 @@
+--- a/lib/pkp/locale/fr_CA/emails.po
++++ b/lib/pkp/locale/fr_CA/emails.po
+@@ -541,12 +541,21 @@
+ "Ce modèle de courriel est utilisé pour demander aux auteur.e.s l'accès à "
+ "leur dossier ORCID."
+ 
++msgid "emails.orcidRequestUpdateScope.description"
++msgstr ""
++"Ce courriel est envoyé pour demander à un-e auteur-e de renouveler "
++"l'autorisation d'accès à son dossier ORCID, avec la portée OAuth de l'API "
++"membre."
++
+ msgid "orcid.orcidRequestAuthorAuthorization.name"
+ msgstr "orcidRequestAuthorAuthorization"
+ 
+ msgid "orcid.orcidCollectAuthorId.name"
+ msgstr "orcidCollectAuthorId"
+ 
++msgid "orcid.orcidRequestUpdateScope.name"
++msgstr "Demande de mise à jour de l'accès au dossier ORCID"
++
+ msgid "emailTemplate.variable.authorOrcidUrl"
+ msgstr "Lien d'autorisation OAuth ORCID"
+ 
+@@ -601,6 +610,14 @@
+ "Ce courriel est envoyé aux utilisateurs et utilisatrices afin de les aviser "
+ "que certains rôles leur ont été retirés."
+ 
++msgid "mailable.userRoleMastheadUpdateNotify.name"
++msgstr "Avis de modification de la visibilité d'un rôle dans l'entête"
++
++msgid "mailable.userRoleMastheadUpdateNotify.description"
++msgstr ""
++"Ce courriel avise un-e utilisateur-trice que la visibilité de l'un de ses "
++"rôles dans l'entête a été modifiée."
++
+ msgid "mailable.userRoleAssignmentInvitationNotify.name"
+ msgstr "Notification d'invitation à un rôle"
+ 
+--- a/lib/pkp/locale/fr_CA/manager.po
++++ b/lib/pkp/locale/fr_CA/manager.po
+@@ -3867,6 +3867,11 @@
+ msgid "mailable.changeProfileEmailInvitationNotify.name"
+ msgstr "Changer l'adresse courriel d'invitation"
+ 
++msgid "mailable.changeProfileEmailInvitationNotify.description"
++msgstr ""
++"Les utilisateurs-trices qui demandent la modification de l'adresse courriel "
++"de leur profil reçoivent ce message pour confirmer leur demande."
++
+ #, fuzzy
+ msgid "manager.highlights.urlText"
+ msgstr "Étiquette du bouton"
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1417,10 +1417,13 @@
+ msgstr ""
+ 
+ msgid "mailable.validateEmailContext.name"
+-msgstr ""
++msgstr "Validez l'adresse courriel (inscription à la presse)"
+ 
+ msgid "mailable.validateEmailContext.description"
+ msgstr ""
++"Ce courriel est envoyé automatiquement à un nouveau membre de la presse "
++"lorsque les paramètres exigent que l'adresse courriel des nouveaux membres "
++"soit validée."
+ 
+ msgid "doi.displayName"
+ msgstr ""
+@@ -1580,9 +1583,14 @@
+ 
+ msgid "mailable.decision.sendInternalReview.notifyAuthor.description"
+ msgstr ""
++"Ce courriel avise l'auteur-e que sa soumission est envoyée à l'étape "
++"d'évaluation interne."
+ 
+ msgid "mailable.decision.initialDecline.notifyAuthor.description"
+ msgstr ""
++"Ce courriel avise l'auteur-e que sa soumission est refusée, avant l'étape "
++"d'évaluation, car elle ne répond pas aux exigences de publication de la "
++"presse."
+ 
+ msgid "manager.institutions.noContext"
+ msgstr ""
+@@ -1591,7 +1599,7 @@
+ msgstr ""
+ 
+ msgid "mailable.decision.sendInternalReview.notifyAuthor.name"
+-msgstr ""
++msgstr "Envoyée en évaluation interne"
+ 
+ msgid "mailable.indexRequest.name"
+ msgstr ""
+@@ -1600,13 +1608,23 @@
+ msgstr ""
+ 
+ msgid "mailable.publicationVersionNotify.name"
+-msgstr ""
++msgstr "Nouvelle version créée"
+ 
+ msgid "mailable.publicationVersionNotify.description"
+ msgstr ""
++"Ce courriel avise automatiquement les rédacteurs-trices assigné-e-s "
++"lorsqu'une nouvelle version de la soumission a été créée."
+ 
+ msgid "mailable.submissionNeedsEditor.description"
++msgstr ""
++"Ce courriel est envoyé aux gestionnaires de la presse lorsqu'une nouvelle "
++"soumission est faite et qu'aucun-e rédacteur-trice n'est assigné-e."
++
++msgid "mailable.statisticsReportNotify.description"
+ msgstr ""
++"Ce courriel est envoyé automatiquement chaque mois aux rédacteurs-trices et "
++"aux gestionnaires de la presse afin de leur donner un aperçu de la santé du "
++"système."
+ 
+ #~ msgid "manager.languages.languageInstructions"
+ #~ msgstr ""

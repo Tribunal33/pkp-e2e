@@ -822,6 +822,7 @@ accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A11 (issue report `docs/issues/U56-A11-french-manage-emails-raw-keys.md`): the French (Canada) "Gérer les courriels" list and its filters hold no `##` code, the emails new on `main` aside (Rule 6a)
   - the guard for A4 (issue report `docs/issues/U56-A4-add-template-window-titled-edit-template.md`): "Add Template" opens a window titled "Add Template", and an existing template's window stays "Edit Template" (Rule 12; scenario 3)
   - the guard for A5 (issue report `docs/issues/U56-A5-remove-template-confirmation-names-subject.md`): "Remove" on an added template whose name and subject differ asks about the template by the name its row shows (Rule 17; scenario 3)
 - **Nothing new to test**:
@@ -907,7 +908,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Manage Emails: "Add Template" opens an empty window titled "Edit Template" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
-| [A11](#a11) | In French, "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | minor | — |
+| [A11](#a11) | In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither choice selected | 🐞 | minor | — |
 | [OPS1](#ops1) | Preprint server emails: "Insert Content" describes the server's initials with a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1062,47 +1063,31 @@ English text gives.
 Basis: probe, 2026-09-28. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — Codes in the French "Manage Emails"** · 🐞 · minor.
-In the French interface (Rule 6a) the "Gérer les courriels" list shows
-some emails under a code between hash signs instead of a French name or
-description; rows named by a code head the list:
-- a journal, 6 rows: "##mailable.authorPublicationPublished.name##",
-  "##mailable.reviewCancel.name##",
-  "##mailable.reviewRound.requestAuthorResponse.name##",
-  "##mailable.userRoleMastheadUpdateNotify.name##" and
-  "##orcid.orcidRequestUpdateScope.name##", each described by a code
-  too, and "Changer l'adresse courriel d'invitation", described
-  "##mailable.changeProfileEmailInvitationNotify.description##";
-- a press, 12 rows: the journal's six, then
-  "##mailable.decision.sendInternalReview.notifyAuthor.name##",
-  "##mailable.publicationVersionNotify.name##" and
-  "##mailable.validateEmailContext.name##", each described by a code,
-  and three French names described by a code: "Notification sur les
-  rapports statistiques" ("##mailable.statisticsReportNotify.description##"),
-  "Soumission en attente de rédacteur-trice"
-  ("##mailable.submissionNeedsEditor.description##") and "Soumission
-  refusée avant évaluation"
-  ("##mailable.decision.initialDecline.notifyAuthor.description##");
-- a preprint server, 7 rows: "##mailable.postedAck.name##",
-  "##mailable.postedNewVersionAck.name##",
-  "##mailable.publicationVersionNotify.name##",
-  "##mailable.submissionAckCanPost.name##" and
-  "##mailable.validateEmailContext.name##", each described by a code,
-  and "Notification sur les rapports statistiques" and "Soumission
-  refusée avant évaluation", described by the same codes as on a press.
-  Under "Envoyé par" and "Envoyé à" the Moderator's filter button reads
-  "##default.groups.name.sectionEditor##", where a journal and a press
-  read "Rédacteur-trice".
-
-A screen reader hears the code in the row's button too ("Modifier
-##mailable.postedAck.name##"); on screen every row's button reads
-"Edit", in English. The English list shows no code. A French-speaking
-manager cannot tell what these emails are. The same Moderator code
-shows on other preprint server screens
+**A11 — In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions** · 🐞 · low.
+A manager who works in French (Canada) and opens Settings › Workflow ›
+"Emails" › "Gérer les courriels" finds some emails listed under codes
+such as "##mailable.postedAck.name##" instead of a French name, each
+described by a code too, and other rows with a French name over a
+coded description. Because the list is sorted by name, the coded rows
+head it: three on a journal, nine on a press, seven on a preprint
+server. On `main`, a journal and a press show three more coded rows on
+top of these, for emails added after 3.5 that no language has
+translated yet.
+On a preprint server, the list's filters by role, which narrow it to
+the emails a role sends ("Envoyé par") or receives ("Envoyé à"), name
+the Moderator role "##default.groups.name.sectionEditor##".
+It happens on every journal, press and preprint server that offers
+French (Canada); in French (France) a journal and a press show no such
+code, and a preprint server shows the same ones. The fix is 27 French
+(Canada) texts and no code change. We propose that the French (Canada)
+translators, or a developer with an account, enter them on PKP's
+Weblate, which writes the locale files, rather than a developer
+committing them, which Weblate's next sync could undo.
+The same Moderator code shows on other preprint server screens
 ([Users management OPS1](U53-users-management.md#ops1),
 [Journal identity & about pages OPS4](U07-journal-identity-and-about-pages.md#ops4));
 the general question is [Languages & locales A4](U57-languages-and-locales.md#a4).
-Basis: probe, 2026-09-28. <sup>f-a11</sup>
+Basis: probe, 2026-10-04. <sup>f-a11</sup>
 
 ### OMP
 
@@ -1817,6 +1802,7 @@ the "Envoyé par" and "Envoyé à" button
 "##default.groups.name.sectionEditor##"; OJS and OMP read
 "Rédacteur-trice" there. The English list of the same contexts showed
 no code.
+Issue report: [docs/issues/U56-A11-french-manage-emails-raw-keys.md](../issues/U56-A11-french-manage-emails-raw-keys.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26 on the seeded press and on a new

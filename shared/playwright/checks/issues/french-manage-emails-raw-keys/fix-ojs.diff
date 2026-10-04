@@ -1,0 +1,53 @@
+--- a/lib/pkp/locale/fr_CA/emails.po
++++ b/lib/pkp/locale/fr_CA/emails.po
+@@ -541,12 +541,21 @@
+ "Ce modèle de courriel est utilisé pour demander aux auteur.e.s l'accès à "
+ "leur dossier ORCID."
+ 
++msgid "emails.orcidRequestUpdateScope.description"
++msgstr ""
++"Ce courriel est envoyé pour demander à un-e auteur-e de renouveler "
++"l'autorisation d'accès à son dossier ORCID, avec la portée OAuth de l'API "
++"membre."
++
+ msgid "orcid.orcidRequestAuthorAuthorization.name"
+ msgstr "orcidRequestAuthorAuthorization"
+ 
+ msgid "orcid.orcidCollectAuthorId.name"
+ msgstr "orcidCollectAuthorId"
+ 
++msgid "orcid.orcidRequestUpdateScope.name"
++msgstr "Demande de mise à jour de l'accès au dossier ORCID"
++
+ msgid "emailTemplate.variable.authorOrcidUrl"
+ msgstr "Lien d'autorisation OAuth ORCID"
+ 
+@@ -601,6 +610,14 @@
+ "Ce courriel est envoyé aux utilisateurs et utilisatrices afin de les aviser "
+ "que certains rôles leur ont été retirés."
+ 
++msgid "mailable.userRoleMastheadUpdateNotify.name"
++msgstr "Avis de modification de la visibilité d'un rôle dans l'entête"
++
++msgid "mailable.userRoleMastheadUpdateNotify.description"
++msgstr ""
++"Ce courriel avise un-e utilisateur-trice que la visibilité de l'un de ses "
++"rôles dans l'entête a été modifiée."
++
+ msgid "mailable.userRoleAssignmentInvitationNotify.name"
+ msgstr "Notification d'invitation à un rôle"
+ 
+--- a/lib/pkp/locale/fr_CA/manager.po
++++ b/lib/pkp/locale/fr_CA/manager.po
+@@ -3867,6 +3867,11 @@
+ msgid "mailable.changeProfileEmailInvitationNotify.name"
+ msgstr "Changer l'adresse courriel d'invitation"
+ 
++msgid "mailable.changeProfileEmailInvitationNotify.description"
++msgstr ""
++"Les utilisateurs-trices qui demandent la modification de l'adresse courriel "
++"de leur profil reçoivent ce message pour confirmer leur demande."
++
+ #, fuzzy
+ msgid "manager.highlights.urlText"
+ msgstr "Étiquette du bouton"
