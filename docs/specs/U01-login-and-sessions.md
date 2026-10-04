@@ -577,6 +577,11 @@ Left out of the scenarios above, by reason:
     ([A1](#a1)): the guard the issue report
     (`docs/issues/U03-A7-password-boxes-keep-32-characters.md`)
     proposes, once fixed
+  - the Login page's "Keep me logged in" arriving unticked, and after
+    a refused sign-in showing as the user left it, unticked or ticked
+    ([A2](#a2)): the guard the issue report
+    (`docs/issues/U01-A2-keep-me-logged-in-always-ticked.md`) proposes,
+    once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -623,7 +628,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The password boxes stop accepting input at 32 characters, so longer passwords cannot be typed | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A2](#a2) | "Keep me logged in" arrives ticked every time the Login form shows, even after a refused sign-in for which it was unticked | 🐞 | minor | Jarda 2026-08-25 |
+| [A2](#a2) | "Keep me logged in" is ticked every time the Login page shows, even after the user unticked it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
 | [A4](#a4) | "Login As" is still offered mid-impersonation (Users & Roles and the Participants panel); a second use strands the operator, because "Logout as" restores the intermediate user, not their own account | 🐞 | latent | Jarda 2026-08-25 |
 | [A7](#a7) | Signed out, the address ending at the word "dashboard" answers a blank server error instead of the Login page | 🐞 | user-visible | Jarda 2026-08-25 |
@@ -658,14 +663,20 @@ Basis: probe, 2026-10-03. <sup>[f-a1](#fn-a1)</sup>
 > safe, meaningful step up from 32).
 
 <a id="a2"></a>
-**A2 — "Keep me logged in" pre-ticked** · 🐞 · minor.
-The checkbox is ticked every time the Login form shows: on a fresh Login
-page, and on the form a refused sign-in shows again, even when the box
-was unticked for that attempt. Every user
-therefore gets a persistent multi-week session unless they notice and untick
-it, the opposite of the opt-in the label suggests.
-Basis: code inspection (a malformed template attribute renders the box
-ticked unconditionally) + observed on a running site. <sup>[f-a2](#fn-a2)</sup>
+**A2 — "Keep me logged in" is ticked every time the Login page shows, even after the user unticked it** · 🐞 · medium.
+The Login page shows "Keep me logged in" already ticked, though the
+label offers it as a choice, so every user who does not notice the box
+and untick it is kept signed in. The same fault ticks the box again
+when the page shows the form after a wrong password: a user who
+unticked it, mistyped the password and signed in on the next try is
+kept signed in anyway, without being told.
+
+Unticked, a sign-in ends after a week without a visit. Kept signed in,
+the browser stays signed in to the account for 30 days from the sign-in,
+visited or not; 30 is the default of a setting in the installation's
+configuration. On a shared computer the account stays open to the next
+person who uses that browser.
+Since: 2015-08-07 (pkp/pkp-lib#658) · Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞 — unintended
 > behaviour (the malformed attribute), and persistent sessions should be
@@ -1270,6 +1281,7 @@ renders the box ticked regardless of any prior choice. Live-confirmed
 2026-07-31: pre-ticked on a fresh Login page in OJS, OMP and OPS.
 Live-probed 2026-09-29 (OJS, OMP, OPS; two runs each): a sign-in refused
 with the box unticked shows the form again with it ticked.
+Issue report: [pkp-e2e#820](https://github.com/jardakotesovec/pkp-e2e/issues/820) ([docs/issues/U01-A2-keep-me-logged-in-always-ticked.md](../issues/U01-A2-keep-me-logged-in-always-ticked.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — Live-probed 2026-07-31 (OJS) and 2026-08-01 (OPS; the form's
