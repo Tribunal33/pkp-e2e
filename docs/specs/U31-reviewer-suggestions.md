@@ -546,6 +546,15 @@ Left out of the scenarios above, by reason:
     no-account suggestion and assert that entry offers no "Select Reviewer"
     and the panel row no "…" menu, while a suggestion holding the Reviewer
     role keeps both
+  - the guard for A7 (issue report
+    `docs/issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md`):
+    on a context created from the defaults, assert the "Reviewer
+    Suggestions" step's guidance reads "provide valuable input"
+  - the guard for A11 (issue report
+    `docs/issues/U31-A11-reviewer-suggestion-reason-help-is-there.md`):
+    assert the help under "Reasons for suggesting reviewer" in "Add Reviewer
+    Suggestion" reads "mention if there are any potential conflicts of
+    interest"
 - **Nothing new to test**:
   - assigned Section Editor, Guest Editor and Site Administrator (the Journal Manager's offer, scenarios 2 and 3)
   - Reviewer and Reader (no screen offers them anything)
@@ -572,11 +581,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | The Funding Coordinator gets an error dialog on the stage instead of the panel | 🐞 | user-visible | — |
 | [A5](#a5) | A Funding coordinator is offered "Add Reviewer" on a suggested person without an account, then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The same address typed in another case is accepted as a second suggestion | 🐞 | minor | — |
-| [A7](#a7) | The default "For Reviewer Suggestion" text misspells "valuable" | 🐞 | minor | — |
+| [A7](#a7) | The default reviewer-suggestion guidance authors read on submission misspells "valuable" as "valueable" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | In Add Reviewer's suggestions list, screen readers hear every "Select Reviewer" button as "Select undefined" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After an editor adds a suggested reviewer in the Add Reviewer window, the suggestions list keeps an empty row | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code | 🐞 | medium · crash: script | issues (claude), 2026-10-04 — re-verified |
-| [A11](#a11) | The help under "Reasons for suggesting reviewer" reads "mention is there are any potential conflict of interest" | 🐞 | minor | — |
+| [A11](#a11) | Authors suggesting a reviewer read "mention is there are any potential conflict of interest" for "if there are any potential conflicts" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | An ORCID iD typed on a suggestion is seen again only in the author's "Edit" window | ❓ | minor | — |
 | [A3](#a3) | A matched suggestion is offered nowhere again, even after the reviewer is unassigned or cancelled | ❓ | minor | — |
 | [A4](#a4) | The author loses sight of their suggestions the moment they submit | ❓ | minor | — |
@@ -655,10 +664,17 @@ case, and the check compares them letter for letter.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — The default "For Reviewer Suggestion" text misspells "valuable"** · 🐞 · minor.
-The guidance every author reads above the step's panel, until a manager
-edits the box, says "provide valueable input for the editorial team".
-Basis: probe. <sup>f-a7</sup>
+**A7 — The default reviewer-suggestion guidance authors read on submission misspells "valuable" as "valueable"** · 🐞 · low.
+On the submission form's "Reviewer Suggestions" step, the text above the
+list says "This can help streamline the review process and provide
+valueable input for the editorial team." The text is the journal's "For
+Reviewer Suggestion" guidance (Settings › Workflow › "Submission" ›
+"Author Guidance"), which every journal and press gets by default. Only
+the English text is misspelt. Each journal and press holds its own copy
+of the text, made when it was created or upgraded to 3.5. Correcting the
+default reaches only those created afterwards: existing ones keep the
+misspelt copy until a manager edits the box. Basis: probe, 2026-10-04.
+<sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — In Add Reviewer's suggestions list, screen readers hear every "Select Reviewer" button as "Select undefined"** · 🐞 · low.
@@ -714,12 +730,16 @@ already reviews for the journal is selected in the first window. Basis:
 probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The help under "Reasons for suggesting reviewer" reads "mention is there are any"** · 🐞 · minor.
-The help text every author reads under the reason box in the "Add
-Reviewer Suggestion" window says "Please share why you are recommending
-this reviewer and mention is there are any potential conflict of
-interest." ("is there" for "if there"; a sibling of A7).
-Basis: probe. <sup>f-a11</sup>
+**A11 — Authors suggesting a reviewer read "mention is there are any potential conflict of interest" for "if there are any potential conflicts"** · 🐞 · low.
+An author who suggests a reviewer on the submission form's "Reviewer
+Suggestions" step opens "Add Reviewer Suggestion" and reads, under
+"Reasons for suggesting reviewer": "Please share why you are
+recommending this reviewer and mention is there are any potential
+conflict of interest." It should say "mention if there are any potential
+conflicts of interest". The same help shows when the author presses
+"Edit" on a suggestion already in that step's list. The German and
+Slovenian translations carry slips of their own. Basis: probe,
+2026-10-04. <sup>f-a11</sup>
 
 ### OMP
 
@@ -865,6 +885,7 @@ Issue report: [pkp-e2e#849](https://github.com/jardakotesovec/pkp-e2e/issues/849
 
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/pkp/locale/en/default.po`, `default.submission.step.reviewerSuggestions`: "…provide valueable input for the editorial team…", copied into every new context's `reviewerSuggestionsHelp` by `I4787_AddReviewSuggestionHelp`. Live-probed 2026-09-06 (note c), OJS and OMP, on the step and in the "For Reviewer Suggestion" box.
+Issue report: [docs/issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md](../issues/U31-A7-reviewer-suggestion-guidance-misspells-valuable.md).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `SelectReviewerSuggestionListItem.vue` renders the button's screen-reader span as `{{ t('common.selectWithName', {name: fullName}) }}`, but the component defines no `fullName` property (the name is `item.fullName`, localized only inside `select()`), so the interpolation yields "undefined"; the reviewer list's `SelectReviewerListItem.vue` passes `item.fullName`. Live-probed 2026-09-06 (note h), OJS and OMP: accessible name "Select Reviewer Select undefined" on every suggestion entry, "Select Reviewer Select Rowan Reviewer" in "Locate a Reviewer".
@@ -880,6 +901,7 @@ Issue report: [pkp-e2e#841](https://github.com/jardakotesovec/pkp-e2e/issues/841
 
 <a id="fn-f-a11"></a>
 **f-a11** — `lib/pkp/locale/en/submission.po`, `reviewerSuggestion.suggestionReason.description`, the `FieldRichTextarea('suggestionReason')` description (note b). Live-probed 2026-09-06 (note b; the K4 window snapshots), OJS and OMP, verbatim in the "Add Reviewer Suggestion" and "Edit" windows.
+Issue report: [docs/issues/U31-A11-reviewer-suggestion-reason-help-is-there.md](../issues/U31-A11-reviewer-suggestion-reason-help-is-there.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note t10 (live-probed 2026-09-06, OMP: both halves hold, the internal add retires the suggestion for the External Review panel and list, that round's Reviewers table "No Items"). Note f (panel absent on `WORKFLOW_STAGE_ID_INTERNAL_REVIEW`; `atActiveReviewStage()` requires stage 3) against note h (`PKPSelectReviewerListPanel` adds the list on any stage); `ReviewerForm::execute()` matches by email whatever the stage (note i).

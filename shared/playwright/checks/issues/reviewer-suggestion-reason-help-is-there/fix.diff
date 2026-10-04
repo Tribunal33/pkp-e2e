@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3205,7 +3205,7 @@
+ msgstr "Reasons for suggesting reviewer"
+ 
+ msgid "reviewerSuggestion.suggestionReason.description"
+-msgstr "Please share why you are recommending this reviewer and mention is there are any potential conflict of interest."
++msgstr "Please share why you are recommending this reviewer and mention if there are any potential conflicts of interest."
+ 
+ msgid "submission.localeNotSupported"
+ msgstr "The language of the submission ({$language}) is not one of the supported submission languages. You can still edit the submission details but new submissions are not currently accepted with this language."
