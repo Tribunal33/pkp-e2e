@@ -1099,8 +1099,6 @@ Left out of the scenarios above, by reason:
     the archive's issue summary)
   - A8 ("Future Issues" comparing numbers as text; Rule 1)
   - A9 (a section dragged in the table of contents' "Order"; Rule 10a)
-  - A10 (an article dropped under another section snapping back; Rule
-    10a)
   - A11 (an interface-only language refused for an issue galley; Rule
     14a)
   - A12 (a deleted issue's articles still reading "Published" in their
@@ -1154,7 +1152,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" of the same volume and year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A10](#a10) | In an issue's "Order", an article dropped past a section heading jumps back and reorders its section | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A10](#a10) | In an issue's "Order", an article dropped past a section heading jumps back and reorders its section | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | An issue galley in an interface-only language is refused as if no language were chosen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | After "Delete" on an issue, its offline articles still read "Published" and History records no unpublishing | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | A journal's "Archives" lists its issues in no set order until a manager orders "Back Issues" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1282,7 +1280,7 @@ a section heading, then "Done" and reopening the tab, settles it. Basis:
 probe, 2026-09-25 (automated drags only). <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — In an issue's "Order", an article dropped past a section heading jumps back and reorders its section** · 🐞 · medium.
+**A10 — In an issue's "Order", an article dropped past a section heading jumps back and reorders its section** · 🐞 · high.
 In an issue's "Table of Contents", "Order" lets a journal manager drop
 an article above a section heading: its own heading when dragging it to
 the top of its section, or the next section's heading when dragging it
@@ -1295,8 +1293,9 @@ article can still be moved within its own section when it is dropped
 below the heading, to the top or anywhere else; that order is saved as
 shown, and so are the other drags made before the same "Done". The list
 redraws with the saved order after "Done", so the editor sees the result
-and can drag again.
-Basis: probe, 2026-10-02. <sup>f-a10</sup>
+and can drag again. The same fault leaves a press unable to move a
+chapter in its "Chapters" list ([→ Chapters & work type](U72-chapters-work-type.md#a6)).
+Basis: probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — An issue galley in an interface-only language is refused as if no language were chosen** · 🐞 · medium.

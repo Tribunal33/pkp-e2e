@@ -1,0 +1,12 @@
+--- a/classes/author/Collector.php
++++ b/classes/author/Collector.php
+@@ -46,6 +46,9 @@
+                 $join->on('a.author_id', '=', 'sca.author_id')
+                     ->where('sca.chapter_id', '=', $this->chapterId);
+             });
++            // An author read for a chapter carries its place in the chapter (submission_chapter_authors.seq)
++            // as its seq, as the chapters grid and the version copy expect: listed after a.*, it replaces a.seq.
++            $query->addSelect('sca.seq');
+             // Use the order specified by the submission_chapter_authors table,
+             // to ensure that the order of authors reflects the order from the manually sorted chapters grid
+             $query->orders = null;

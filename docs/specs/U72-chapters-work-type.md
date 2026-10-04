@@ -700,6 +700,14 @@ Left out of the scenarios above, by reason:
   - the guard for A4 (issue report
     `docs/issues/U50-A4-refused-save-date-published-today.md`): a chapter
     saved without a date reopens with an empty "Date Published"
+  - the guard for A6 (issue report
+    `docs/issues/U50-A10-toc-article-dropped-other-section-snaps-back.md`):
+    a chapter dragged above another with "Order" keeps its new place
+    after "Done" and a reload
+  - the guard for A7 (issue report
+    `docs/issues/U72-A7-chapter-author-order-change-lost.md`): a
+    chapter's authors dragged into a place the save used to skip keep
+    the new order after "Done" and a reload
   - the guard for A5 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): the Review step's "Chapters" panel's "Edit" opens "Details".
   - the guard for A2 (issue report
     `docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md`):
@@ -732,8 +740,6 @@ Left out of the scenarios above, by reason:
   - A3 (a new version's chapters without their earlier files; Rule 15;
     scenario 10 passes it)
   - A5 (the Review panel's "Edit"; Fields, the Review panel)
-  - A6 (a chapter dragged with "Order" stays in place; Rule 8a)
-  - A7 (a second author reorder in one visit lost; Rule 8b)
   - A8 (the license sentence above a chapter's own address, and after
     publishing; Rule 12a; scenario 8 passes it)
   - A9 (a chapter added after an Edited Volume is published; Rule 12b)
@@ -756,12 +762,12 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A6](#a6) | "Order" cannot move a chapter: a dragged chapter stays where it was | 🐞 | user-visible | — |
+| [A6](#a6) | "Order" cannot move a chapter: a dragged chapter stays where it was | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A chapter saved without a date shows today's date in "Date Published", which "Save" does not store | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The work-type control and "Publication Dates" are offered to the assistant roles, and their choice is refused | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | After "Create New Version" the new version's chapters lose their files, which no chapter of the new version can take back | 🐞 | minor | — |
 | [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A7](#a7) | A chapter's new author order is lost after an earlier "Done" in the same visit | 🐞 | minor | — |
+| [A7](#a7) | Chapter authors dragged into a new order snap back on "Done" when they are among the book's first contributors | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | The chapter window promises an automatic license above a box whose own address publishing keeps, and after publishing | 🐞 | minor | — |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
 | [A9](#a9) | A chapter added to a published Edited Volume may stay without a license | ❓ | minor | — |
@@ -838,22 +844,35 @@ Expected: "Edit" opens the Details step.
 Basis: probe, 2026-10-03. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — A chapter cannot be moved with "Order"** · 🐞 · user-visible.
+**A6 — A chapter cannot be moved with "Order"** · 🐞 · high.
 After "Order", dragging a chapter row above another does not move it: the
 row drags only within its own block, in among that chapter's authors, and
 "Done" leaves the chapter order as it was, on the page and after a
-reload. The same holds in the wizard. The chapters stay in the order they
-were added in, which is the book's table of contents. Expected: dragging
-a chapter moves it in the list, and "Done" keeps the new order.
-Basis: probe. <sup>f-a6</sup>
+reload. The same holds in the wizard. The chapter order is the book's
+table of contents, and the only way to change it is to delete chapters
+and add them again, which loses their files, date, license, identifiers
+and chapter page, on a published book too. The same fault misplaces
+articles in an issue's table of contents ([→ Issues](U50-issues.md#a10)).
+Expected: dragging a chapter moves it in the list, and "Done" keeps the
+new order.
+Basis: probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A chapter's new author order is lost after an earlier "Done"** · 🐞 · minor.
-On a chapter with two authors, "Order" › "Done", then "Order" again, the
-second author dragged above the first and "Done", shows the old order
-again, at once and after a reload. A single reorder in a visit is kept.
-Expected: the new order is kept.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Chapter authors dragged into a new order snap back on "Done" when they are among the book's first contributors** · 🐞 · medium.
+On a book's "Chapters" page, a press editor presses "Order", drags one of
+a chapter's authors above another and presses "Done". In some chapters
+the list redraws with the authors in their old order, and a reload shows
+the same. No message is shown.
+The save leaves an author at their old place when they end up n-th in
+the chapter while being (n + 1)-th on the book's Contributors list: for
+example, second in the chapter and third on the Contributors list. Each
+author is saved or left on their own, so with two authors the drag is
+undone, and with three or more the chapter can end up in a mix of the
+old and new order. Only authors near the top of the Contributors list
+can meet this, so in an edited volume whose contributors are listed
+chapter by chapter it is the first chapter or two. Dragging again gives
+the same result; "Edit Chapter" can set the order instead.
+Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The chapter window promises a license publishing will not write** · 🐞 · minor.
@@ -1580,10 +1599,12 @@ Issue report: [pkp-e2e#675](https://github.com/jardakotesovec/pkp-e2e/issues/675
 <a id="fn-f-a6"></a>
 **f-a6** — Note l: the drag a chapter row starts belongs to that
 chapter's author rows. Live-probed 2026-09-28: note td11, six runs.
+Issue report: [pkp-e2e#415](https://github.com/jardakotesovec/pkp-e2e/issues/415) ([docs/issues/U50-A10-toc-article-dropped-other-section-snaps-back.md](../issues/U50-A10-toc-article-dropped-other-section-snaps-back.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note l (`setDataElementInCategorySequence()`). Live-probed
 2026-09-28: note td11, two books.
+Issue report: docs/issues/U72-A7-chapter-author-order-change-lost.md.
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note o: the sentence is built for every chapter of an Edited
