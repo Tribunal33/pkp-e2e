@@ -1,0 +1,10 @@
+--- a/lib/pkp/pages/management/ManagementHandler.php
++++ b/lib/pkp/pages/management/ManagementHandler.php
+@@ -631,6 +631,7 @@
+         $templateMgr = TemplateManager::getManager($request);
+ 
+         $templateMgr->assign([
++            'pageTitle' => __('manager.userComment.comments'),
+             'pageWidth' => TemplateManager::PAGE_WIDTH_FULL,
+         ]);
+ 

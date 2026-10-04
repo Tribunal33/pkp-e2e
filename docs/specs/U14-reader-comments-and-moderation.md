@@ -834,6 +834,7 @@ and a preprint server. <sup>s0</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the Comments page's browser tab reading "Comments | {journal}" on each of its lists and after a reload (Rule 10; A13)
   - the comment panel and the report panel for a writer and a reporter whose ORCID iD is not verified: the iD link's address is the bare iD (Fields, the comment panel; A6)
   - a comment's deletion leaving the tasks of a report numbered like it, and of a comment numbered like one of its reports, anywhere on the site (Side effects; A11, retired)
   - under a comment on the landing page, a writer with an unverified ORCID iD: the hollow icon after the name, a link named "ORCID iD" that opens the iD's ORCID page (Rule 6b; the landing-page half A6 used to carry)
@@ -857,7 +858,6 @@ Left out of the scenarios above, by reason:
   - A8 (closing the report panel clearing both numbers from the address; Rule 15; scenario 3 marks it)
   - A9 (the Site Administrator with Reader as their only journal role: the "Error" dialog over the Comments page, and the page working after "OK"; Rule 17b)
   - A12 (moderating or reporting another journal's comment by requests made by hand; Actors rows 3 and 7)
-  - A13 (the Comments page's browser tab without the page's name; Rule 10)
   - A15 (the verified and the unverified ORCID icon under a comment sharing one name and no text; Rule 6b)
   - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rules 17a, 17c)
 - **Owned by another feature**:
@@ -882,7 +882,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | Comments page: the link to an unverified ORCID iD in the comment and report panels opens a wrong address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
-| [A13](#a13) | The Comments page's browser tab carries no page name, only the journal's | 🐞 | minor | — |
+| [A13](#a13) | On the editorial Comments page, the browser tab shows only the journal's name, not "Comments" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
 | [A2](#a2) | Approving or hiding a comment leaves every moderator's "pending review" task in place | ❓ | minor | — |
@@ -1048,18 +1048,22 @@ application keeps.
 Basis: probe; code for deleting a report. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The Comments page's browser tab carries no page name** · 🐞 · minor.
-The browser tab of the Comments page reads the journal's name alone,
-whichever of the four tabs is chosen, with a panel open and after a
-reload, for a Journal Manager and an Editor, with public comments on or
-off. The side menu's other pages name themselves first: the settings
-pages, Users & Roles, Announcements, Institutions and Manage Emails read
-"{page heading} | {journal}" ("Website Settings | {journal}",
-"Announcements | {journal}"), the dashboard "Submissions | {journal}".
-Expected "Comments | {journal}"; observed "{journal}", so a moderator
-with several browser tabs open cannot tell which one holds the Comments
-page.
-Basis: probe. <sup>f-a13</sup>
+**A13 — On the editorial Comments page, the browser tab shows only the journal's name, not "Comments"** · 🐞 · low.
+A Journal Manager or Journal editor who opens Content › Comments, the
+page for moderating readers' comments, gets a browser tab that reads the
+journal's name alone ("Journal of Public Knowledge"). Every other page
+of the editorial side menu names itself first: "Website Settings |
+Journal of Public Knowledge", "Announcements | Journal of Public
+Knowledge", "Submissions | Journal of Public Knowledge". (Journal editor
+and Press editor are the editor roles with manager rights; on a preprint
+server only the manager sees the page.)
+The page itself works. Only the browser tab, the browser history and a
+bookmark lose the page's name, so a moderator with several browser tabs
+of the journal open cannot tell which one is the Comments page. The
+browser tab shows the journal's name only whichever of the page's four
+lists (All, Approved, Hidden/Needs Approval, Reported) is chosen, and
+after a reload.
+Basis: probe, 2026-10-04. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A refused report closes like a filed one** · 🐞 · minor.
@@ -2124,6 +2128,7 @@ Emails", each followed by " | {context name}"; the dashboard "Submissions
 Settings › Website answered the Plugin Gallery's server error,
 *[Plugins management](U62-plugins-management.md#a1)*'s A1, which is not
 this entry's.
+Issue report: [docs/issues/U14-A13-comments-page-tab-no-page-name.md](../issues/U14-A13-comments-page-tab-no-page-name.md).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14.** `performCommentReport()` in ui-library
