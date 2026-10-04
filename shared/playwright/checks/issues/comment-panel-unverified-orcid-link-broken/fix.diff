@@ -1,0 +1,32 @@
+--- a/lib/pkp/api/v1/comments/resources/UserCommentReportResource.php
++++ b/lib/pkp/api/v1/comments/resources/UserCommentReportResource.php
+@@ -32,6 +32,7 @@
+             'userCommentId' => $this->userCommentId,
+             'userId' => $user->getId(),
+             'userName' => $user->getFullName(),
++            'userOrcid' => $user->getOrcid(),
+             'userOrcidDisplayValue' => $user->getOrcidDisplayValue(),
+             'note' => $this->note,
+             'createdAt' => $this->createdAt,
+--- a/lib/ui-library/src/pages/userComments/UserCommentDetailModal.vue
++++ b/lib/ui-library/src/pages/userComments/UserCommentDetailModal.vue
+@@ -54,7 +54,7 @@
+ 											<a
+ 												class="text-sm-light text-secondary"
+ 												target="_blank"
+-												:href="comment.userOrcidDisplayValue"
++												:href="comment.userOrcid"
+ 											>
+ 												{{ comment.userOrcidDisplayValue }}
+ 											</a>
+--- a/lib/ui-library/src/pages/userComments/UserCommentReportDetailModal.vue
++++ b/lib/ui-library/src/pages/userComments/UserCommentReportDetailModal.vue
+@@ -48,7 +48,7 @@
+ 											<a
+ 												class="text-sm-light text-secondary"
+ 												target="_blank"
+-												:href="report.userOrcidDisplayValue"
++												:href="report.userOrcid"
+ 											>
+ 												{{ report.userOrcidDisplayValue }}
+ 											</a>

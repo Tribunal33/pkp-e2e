@@ -834,6 +834,7 @@ and a preprint server. <sup>s0</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the comment panel and the report panel for a writer and a reporter whose ORCID iD is not verified: the iD link's address is the bare iD (Fields, the comment panel; A6)
   - a comment's deletion leaving the tasks of a report numbered like it, and of a comment numbered like one of its reports, anywhere on the site (Side effects; A11, retired)
   - under a comment on the landing page, a writer with an unverified ORCID iD: the hollow icon after the name, a link named "ORCID iD" that opens the iD's ORCID page (Rule 6b; the landing-page half A6 used to carry)
   - under a comment on the landing page, a writer with no ORCID iD and one with no affiliation: no icon after the name, no line below it (Rule 6b)
@@ -852,7 +853,6 @@ Left out of the scenarios above, by reason:
   - the "Report Comment" dialog's line with the writer's affiliation in parentheses (Rule 8): a wording variant of the line scenario 9 reads
 - **Register carries it**:
   - A3 (a second report on the same comment by the same person; Rule 8)
-  - A6 (the unverified ORCID iD's dead link in the comment panel and the report panel; Fields, the comment panel)
   - A7 (the comment's "…" button without a name for a screen reader; Rule 7)
   - A8 (closing the report panel clearing both numbers from the address; Rule 15; scenario 3 marks it)
   - A9 (the Site Administrator with Reader as their only journal role: the "Error" dialog over the Comments page, and the page working after "OK"; Rule 17b)
@@ -879,7 +879,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A6](#a6) | The unverified ORCID iD in the comment panel and the report panel links to a broken address | 🐞 | minor | upstream sync (claude), 2026-10-01 — the landing page's half fixed upstream, the panels' stands |
+| [A6](#a6) | Comments page: the link to an unverified ORCID iD in the comment and report panels opens a wrong address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | The Comments page's browser tab carries no page name, only the journal's | 🐞 | minor | — |
@@ -960,18 +960,21 @@ follow on the next page load as the landing pages do. Basis: test run.
 <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The unverified ORCID iD in the comment panel links to a broken address** · 🐞 · minor.
-In the Comments page's comment panel and report panel, a writer or
-reporter whose ORCID iD is not verified is shown a hollow icon and a link
-reading "{iD} (unauthenticated)"; the link's address is that same text,
-suffix included, so pressing it opens "{iD}%20(unauthenticated)" in a new
-tab, not the iD's ORCID page. A verified person's link reads the bare iD
-and opens it. Expected the link to lead to the iD in both cases; observed
-a dead link for the unverified one.
-Re-checked: upstream sync (claude), 2026-10-01 — the landing page had the
-same fault under a comment until the iD there became an icon that leads
-to the bare iD (pkp/pkp-lib#13422, Rule 6b); the two panels keep it.
-Basis: test run; probe for the report panel. <sup>f-a6</sup>
+**A6 — Comments page: the link to an unverified ORCID iD in the comment and report panels opens a wrong address** · 🐞 · low.
+On the Comments page, a moderator who opens a comment ("View Comment")
+or a report ("View Report") sees the writer's or reporter's ORCID iD as
+a link. When the iD is not verified, the link reads
+"https://orcid.org/0000-0001-5109-3700 (unauthenticated)", and pressing
+it opens that whole text as the address,
+`https://orcid.org/0000-0001-5109-3700%20(unauthenticated)`, not the
+person's ORCID page. A verified iD's link opens the right page.
+Nothing is lost. The link's text is the only place the iD shows, so a
+moderator who wants to check the person on ORCID copies that text and
+deletes " (unauthenticated)" from it.
+Moderators meet it on comments and reports by anyone whose account holds
+an ORCID iD that was never verified with ORCID, for example people who
+connected their iD while registering.
+Basis: probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The comment's "…" button has no name for a screen reader** · ❓ · minor.
@@ -1934,6 +1937,7 @@ stand-in for orcid.org (the install has no outside network); what ORCID
 answers to the suffixed address was not read. The panels on a press and a
 preprint server rest on the 2026-09-16 read. The profile's own display
 of an iD is *[ORCID integration](U04-orcid-integration.md)*'s.
+Issue report: [docs/issues/U14-A6-comment-panel-unverified-orcid-link-broken.md](../issues/U14-A6-comment-panel-unverified-orcid-link-broken.md).
 
 <a id="fn-f-a7"></a>
 **f-a7 — A7.** `PkpCommentsMessageActions` renders `PkpDropdownMenu` with
