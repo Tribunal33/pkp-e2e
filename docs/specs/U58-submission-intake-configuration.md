@@ -1710,7 +1710,7 @@ one journal put the two components in different orders.
 store fetches `genres` through the programming interface, which returns
 disabled rows too, and filters on `dependent` only. Live-probed
 2026-09-27, all three apps (note td8).
-Issue report: [docs/issues/U58-A2-media-page-offers-deleted-component.md](../issues/U58-A2-media-page-offers-deleted-component.md).
+Issue report: [pkp-e2e#818](https://github.com/jardakotesovec/pkp-e2e/issues/818) ([docs/issues/U58-A2-media-page-offers-deleted-component.md](../issues/U58-A2-media-page-offers-deleted-component.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes f, g and h: `deleteById()` keeps the row, `keyExists()`
@@ -1754,7 +1754,7 @@ untranslated key as the French name. Live-probed 2026-09-27, two runs
 per app, OJS the control: the list in French, and on a preprint server
 with English and French form languages the seven names in the list, in
 each "Edit" window and after "Restore Defaults".
-Issue report: [docs/issues/U58-A9-french-components-list-heading-raw-key.md](../issues/U58-A9-french-components-list-heading-raw-key.md); the component names: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
+Issue report: [pkp-e2e#819](https://github.com/jardakotesovec/pkp-e2e/issues/819) ([docs/issues/U58-A9-french-components-list-heading-raw-key.md](../issues/U58-A9-french-components-list-heading-raw-key.md)); the component names: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: the box's own check accepts spaces, and the server's
