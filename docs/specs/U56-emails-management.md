@@ -1728,7 +1728,7 @@ the subject "Beta …" is confirmed as "Are you sure you want to delete
 the template Beta …?"; a subject "Delta {$contextName} <u>k4</u>" reads
 "Delta {$contextName} k4", the placeholder unfilled and "k4"
 underlined.
-Issue report: [docs/issues/U56-A5-remove-template-confirmation-names-subject.md](../issues/U56-A5-remove-template-confirmation-names-subject.md).
+Issue report: [pkp-e2e#867](https://github.com/jardakotesovec/pkp-e2e/issues/867) ([docs/issues/U56-A5-remove-template-confirmation-names-subject.md](../issues/U56-A5-remove-template-confirmation-names-subject.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `EditTemplateModal.vue` renders the form alone; the "Reset"
