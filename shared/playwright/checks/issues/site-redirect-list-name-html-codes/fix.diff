@@ -1,0 +1,42 @@
+--- a/lib/pkp/classes/components/forms/site/PKPSiteConfigForm.php
++++ b/lib/pkp/classes/components/forms/site/PKPSiteConfigForm.php
+@@ -54,7 +54,7 @@
+         foreach ($contextsIterator as $context) {
+             $options[] = [
+                 'value' => $context->getId(),
+-                'label' => htmlspecialchars($context->getLocalizedData('name')),
++                'label' => $context->getLocalizedData('name'),
+             ];
+         }
+         if (count($options) > 1) {
+--- a/lib/pkp/classes/components/forms/context/PKPThemeForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPThemeForm.php
+@@ -63,7 +63,7 @@
+         foreach ($plugins as $plugin) {
+             $themes[] = [
+                 'value' => $plugin->getDirName(),
+-                'label' => htmlspecialchars($plugin->getDisplayName()),
++                'label' => $plugin->getDisplayName(),
+             ];
+         }
+ 
+--- a/lib/pkp/classes/components/forms/context/PKPPaymentSettingsForm.php
++++ b/lib/pkp/classes/components/forms/context/PKPPaymentSettingsForm.php
+@@ -43,7 +43,7 @@
+         foreach (Locale::getCurrencies() as $currency) {
+             $currencies[] = [
+                 'value' => $currency->getLetterCode(),
+-                'label' => htmlspecialchars($currency->getLocalName()),
++                'label' => $currency->getLocalName(),
+             ];
+         }
+ 
+@@ -53,7 +53,7 @@
+         foreach ($paymentPlugins as $plugin) {
+             $pluginList[] = [
+                 'value' => $plugin->getName(),
+-                'label' => htmlspecialchars($plugin->getDisplayName()),
++                'label' => $plugin->getDisplayName(),
+             ];
+         }
+ 

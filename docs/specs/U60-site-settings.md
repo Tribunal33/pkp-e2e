@@ -883,7 +883,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Signing in on the site's Login page lands on the journal's home page, not its Dashboard | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | Site Settings' "Journal redirect" list ignores the Hosted Journals order, and on PostgreSQL reshuffles after a journal save | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A12](#a12) | An "&" in a journal's name reads `&amp;` in the "Journal redirect" list | 🐞 | minor | — |
+| [A12](#a12) | Site Settings' "Journal redirect" list shows a journal named with "&" or an apostrophe as `&amp;` and `&#039;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On an OMP site, a saved "Site style sheet" is loaded on no page, neither the site's nor any press's | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A fresh installation has no Site Name: the site's home page has an empty title | ❓ | user-visible | — |
 | [A5](#a5) | The site's "Theme" tab offers journal home-page fields that change nothing on the site | ❓ | minor | — |
@@ -1063,13 +1063,20 @@ Up to 3.1 the list followed the Hosted Journals order.
 Basis: probe, 2026-10-04. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — An "&" in a journal's name reads `&amp;` in "Journal redirect"** · 🐞 · minor.
-A journal named "Alpha & Omega" is offered in "Journal redirect" as
-`Alpha &amp; Omega`, on the English and French pages alike, while
-"Bulk Emails" on the same page and Administration › "Hosted Journals"
-show "Alpha & Omega". The Site Administrator reads a name the journal
-does not have.
-Basis: probe. <sup>f-a12</sup>
+**A12 — Site Settings' "Journal redirect" list shows a journal named with "&" or an apostrophe as `&amp;` and `&#039;`** · 🐞 · low.
+On Administration › "Site Settings", the "Journal redirect" list
+("Press redirect", "Server redirect") writes a journal's "&" and
+apostrophes as HTML codes. A journal named "Arts & Women's Studies" is
+listed as `Arts &amp; Women&#039;s Studies`, while the "Bulk Emails"
+tab and the "Hosted Journals" page show its real name.
+The Payments settings of a journal or press have the same fault: on a
+French page, the "Currency" list shows four currency names as
+`Florin d&#039;Aruba` and the like. In both lists the setting saved is
+the right one.
+Both come from one change: an escape meant for labels the page prints
+as HTML was also added to these lists, which print plain text. The fix
+removes it from four labels.
+Basis: probe, 2026-10-04. <sup>f-a12</sup>
 
 ### OMP
 
@@ -1811,6 +1818,7 @@ text, so the name is escaped twice. Live-probed 2026-09-28 (Fields
 the option read `Alpha &amp; Omega …`, the only option whose text
 differed from its Hosted Journals name, while "Bulk Emails" read
 `Alpha & Omega …`; the drive of f-a11.
+Issue report: [docs/issues/U60-A12-site-redirect-list-name-html-codes.md](../issues/U60-A12-site-redirect-list-name-html-codes.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `TemplateManager::initialize()` has no
