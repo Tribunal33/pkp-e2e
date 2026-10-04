@@ -1947,7 +1947,7 @@ stand-in for orcid.org (the install has no outside network); what ORCID
 answers to the suffixed address was not read. The panels on a press and a
 preprint server rest on the 2026-09-16 read. The profile's own display
 of an iD is *[ORCID integration](U04-orcid-integration.md)*'s.
-Issue report: [docs/issues/U14-A6-comment-panel-unverified-orcid-link-broken.md](../issues/U14-A6-comment-panel-unverified-orcid-link-broken.md).
+Issue report: [pkp-e2e#902](https://github.com/jardakotesovec/pkp-e2e/issues/902) ([docs/issues/U14-A6-comment-panel-unverified-orcid-link-broken.md](../issues/U14-A6-comment-panel-unverified-orcid-link-broken.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7 — A7.** `PkpCommentsMessageActions` renders `PkpDropdownMenu` with
@@ -2011,7 +2011,7 @@ pressable: a comment's opened the Comments page at "?commentId={n}" under
 "Error" / "The requested resource was not found.", a report's opened the
 page at "?reportId={r}&commentId=" with no panel; the rows stayed, marked
 read.
-Issue report: [docs/issues/U14-A10-deleted-comment-tasks-stay-blank.md](../issues/U14-A10-deleted-comment-tasks-stay-blank.md).
+Issue report: [pkp-e2e#904](https://github.com/jardakotesovec/pkp-e2e/issues/904) ([docs/issues/U14-A10-deleted-comment-tasks-stay-blank.md](../issues/U14-A10-deleted-comment-tasks-stay-blank.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11 — A11 (retired).** Fixed by pkp/pkp-lib `26ae6431b5` (#12401):
@@ -2135,7 +2135,7 @@ Emails", each followed by " | {context name}"; the dashboard "Submissions
 Settings › Website answered the Plugin Gallery's server error,
 *[Plugins management](U62-plugins-management.md#a1)*'s A1, which is not
 this entry's.
-Issue report: [docs/issues/U14-A13-comments-page-tab-no-page-name.md](../issues/U14-A13-comments-page-tab-no-page-name.md).
+Issue report: [pkp-e2e#903](https://github.com/jardakotesovec/pkp-e2e/issues/903) ([docs/issues/U14-A13-comments-page-tab-no-page-name.md](../issues/U14-A13-comments-page-tab-no-page-name.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14.** `performCommentReport()` in ui-library
