@@ -655,6 +655,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - on a round with no revision request, the "Revisions Uploaded" description makes no claim about a request ([A10](#a10)): the guard the issue report proposes
   - scenario 4's first bullet read with no reload: the "Revisions Uploaded" panel listing the file as the closed upload window goes (Side effects, "Author uploads a revised file"): the OJS suite reloads the page before it reads the panel
   - after "Resubmit for Review" and the Author's first uploaded file: "Upload revisions" still offered ([A1](#a1)): the guard the issue report proposes
 - **Rarely met**:
@@ -709,7 +710,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | After "Resubmit for Review", the Author's "Upload revisions" button disappears with their first file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | On a journal, the author's "Read Review" window shows no review text; remarks shared with the author are missing (a press shows them) | 🐞 | user-visible | — |
 | [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | minor | — |
-| [A10](#a10) | The Revisions Uploaded panel says files were "submitted by the author after revisions were requested" on rounds where no revisions were requested | 🐞 | minor | — |
+| [A10](#a10) | The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The author sees the editor's status wording; the author-tailored wording exists but is never shown | ❓ | user-visible | — |
 | [A3](#a3) | What the read-review window's attachments section lists: observation recorded privately with the maintainer pending a fix | ❓ | latent | — |
 | [A4](#a4) | A round whose only reviewers declined reports "All reviews are confirmed and a decision is needed." | ❓ | user-visible | — |
@@ -853,14 +854,16 @@ Basis: probe (2026-07-31, OJS and OMP, both deleter
 roles). <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — Revisions panel claims revisions were requested when none were** · 🐞 · minor.
-The "Revisions Uploaded" panel opens with the description "These files have
-been submitted by the author after revisions were requested" on every round.
-That includes a round on which no revision request was ever recorded, where
-the sentence describes an event that never happened. The panel is empty at
-that point, so what is wrong is the explanation, not the files. Still, a
-reader is told revisions were requested when they were not.
-Since: 2026-08-02 · Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+**A10 — The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were** · 🐞 · low.
+Every review round has a "Revisions Uploaded" list. Under its heading,
+the list says "These files have been submitted by the author after
+revisions were requested". It says this on every round, including rounds
+where no revisions were ever requested.
+The editors and the author see the same sentence above an empty list.
+No file or decision is affected, and nothing else on the screen is
+wrong. A reader who trusts the sentence is told that revisions were
+asked for when they were not.
+Since: 2026-08-02 · Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — The upload window's "Cancel" removes a file the editors were already told about** · ❓ · minor.
@@ -1584,6 +1587,7 @@ after revisions were requested" rendered verbatim on an OJS Review round 1
 and an OMP External Review round 1; identical on an OMP Internal Review
 round 1 the same day. Panel mechanism in notes a and i (the editor-side
 revisions `FileManager`, ungated by round status).
+Issue report: [docs/issues/U26-A10-revisions-panel-says-revisions-requested.md](../issues/U26-A10-revisions-panel-says-revisions-requested.md).
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Probed 2026-07-31: on OJS, a free-text review

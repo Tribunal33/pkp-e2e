@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3413,7 +3413,7 @@
+ msgstr "Revisions Uploaded"
+ 
+ msgid "fileManager.revisionsUploadedDescription"
+-msgstr "These files have been submitted by the author after revisions were requested"
++msgstr "Revised files uploaded during this review round"
+ 
+ msgid "fileManager.filesForReview"
+ msgstr "Files for Review"
