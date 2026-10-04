@@ -1460,7 +1460,7 @@ their own dates.
 
 <a id="fn-a9"></a>
 **f-a9** — Note d: `Composer.vue::search()` calls `GET emailTemplates?searchPhrase=`, which the run record shows answering 401 for the sub-editor role ("You are not authorized to access the requested resource."), while the listed templates load with the page; the controller's role gate was not traced. Live-probed 2026-09-20: a Section Editor on OJS, a Series Editor on OMP, a Moderator on OPS: the "Error" window with "OK", the empty list, the phrase kept until "Clear search phrase"; the manager-level editor's search working on all three.
-Issue report: [docs/issues/U34-A9-sub-editor-find-template-not-authorized.md](../issues/U34-A9-sub-editor-find-template-not-authorized.md).
+Issue report: [pkp-e2e#859](https://github.com/jardakotesovec/pkp-e2e/issues/859) ([docs/issues/U34-A9-sub-editor-find-template-not-authorized.md](../issues/U34-A9-sub-editor-find-template-not-authorized.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — Note h: `Composer.vue::switchLocale()` reloads the template body for the new locale (`loadTemplate(initialTemplateKey)`), while the "Email Templates" list keeps the `getBodySnippet()` computed for the page's locale. Live-probed 2026-09-20 on all three apps: after "Switch to: French" the entry "Submission Declined (Pre-Review)" still shows "Dear {$recipientName},I'm sorry to inform you…".
