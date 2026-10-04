@@ -1755,7 +1755,7 @@ scratch journal as the redirect, the Site Administrator, that journal's
 Journal Manager and a Reader of another journal each signed in at the
 site's Login page, the form's `source` empty, and each landed on the
 journal's home page.
-Issue report: [docs/issues/U60-A8-site-login-lands-on-journal-home.md](../issues/U60-A8-site-login-lands-on-journal-home.md).
+Issue report: [pkp-e2e#889](https://github.com/jardakotesovec/pkp-e2e/issues/889) ([docs/issues/U60-A8-site-login-lands-on-journal-home.md](../issues/U60-A8-site-login-lands-on-journal-home.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26 (Rule 17b; Side effects; all three
