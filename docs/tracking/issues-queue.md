@@ -25,7 +25,7 @@ and the hourly routine starts one only when none is running
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
 | [U30](../specs/U30-author-response-to-reviews.md) | 7 | 0 | 3 | **Taken: issues session, workstation s0, 2026-10-04**; done: A1 (pkp-e2e#811), A3 (pkp-e2e#812), A4 (pkp-e2e#813) |
-| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
+| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | **Taken: issues session, VM s3, 2026-10-04**; A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 | A1 done with U03 A7 (pkp-e2e#795) |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
