@@ -1085,7 +1085,7 @@ Trier / Soumissions / Étape / Activité éditoriale / Actions", the heading
 "Soumissions actives (6)". Neither `dashboard.reviewUpdateCounts` nor
 `common.moreActions` exists in pkp-lib's `fr_CA` locale files (U57 A4's
 fallback).
-Issue reports: the review counter, [docs/issues/U22-A6-my-submissions-french-review-counter-raw-key.md](../issues/U22-A6-my-submissions-french-review-counter-raw-key.md); the "…" button's name, [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)).
+Issue reports: the review counter, [pkp-e2e#900](https://github.com/jardakotesovec/pkp-e2e/issues/900) ([docs/issues/U22-A6-my-submissions-french-review-counter-raw-key.md](../issues/U22-A6-my-submissions-french-review-counter-raw-key.md)); the "…" button's name, [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)).
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's filter form
