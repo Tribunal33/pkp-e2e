@@ -637,6 +637,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the only copyedited file deleted: the "Assign a copyeditor…" notice back for the assigned editor ([A7](#a7)): the guard the issue report proposes
   - the "Notification" box "Assign a copyeditor using the Assign link in the Participants list." for an assigned editor after "Accept and Skip Review", after {OMP} "Accept Submission" on Internal Review and after "Move To Copyediting" from Production ([A6](#a6); Rule 3): the guard the issue report proposes, once fixed
   - scenario 1's recommending Section Editor bullet, no notice box on a
     press (A11; Actors row 2): no assertion in the OMP suite
@@ -687,7 +688,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | The "Copyedited Files" list's "Upload/Select Files" opens a window titled "Upload Review File" | 🐞 | minor | claim check (claude), 2026-09-18 — holds |
 | [A6](#a6) | No "Assign a copyeditor" notice on Copyediting after skipped review, a press's Internal Review or a return from Production | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A7](#a7) | Deleting the last copyedited file brings no notice back | 🐞 | minor | — |
+| [A7](#a7) | Deleting the last copyedited file brings no notice back | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | The discussion opened by the "Request Copyedit" message is listed as created by the Copyeditor | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The page "Move to Review" opens is headed "Move to Submission", also on a submission going back to review | 🐞 | minor | — |
 | [A1](#a1) | "Move to Review" sends a submission accepted without review back to the Submission stage; the decision page says so, the button and the author's email still say review | ❓ | user-visible | claim check (claude), 2026-09-26 — reworded: the decision page now names the Submission stage |
@@ -795,14 +796,17 @@ The press's Internal Review path is also recorded as
 Basis: probe, 2026-10-02. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
-**A7 — The notice does not return when the last copyedited file is deleted** · 🐞 · minor.
+**A7 — The notice does not return when the last copyedited file is deleted** · 🐞 · low.
 An editor who deletes the only file in "Copyedited Files" expects the notice
-they read before it was added ("Assign a copyeditor…" or "Awaiting
-Copyedits.") to come back, since the list is empty again. No notice shows,
-on the same page, when the workflow is opened again, or later. Adding a
-copyedited file removes the notice as intended; only the removal is
-one-sided.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+they read before that file was added ("Assign a copyeditor…" or "Awaiting
+Copyedits.") to come back, since the list is empty again. No notice shows:
+not on the same page, not when the workflow is opened again, not later.
+Adding a copyedited file removes the notice as intended; only the removal is
+one-sided. The notice shows only on that submission's Copyediting page, where
+the empty list still tells the editor where the work stands. The same fault
+keeps the author's revisions task from coming back after the only revised
+file is deleted (*Review stage & rounds* [A9](U26-review-stage-and-rounds.md#a9)).
+Basis: probe, 2026-10-04. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — Deleting a copyedited file removed its copy in "Draft Files"** · ❓ · minor.
@@ -1008,6 +1012,7 @@ Issue report: [docs/issues/U71-OMP10-copyediting-no-assign-copyeditor-notice.md]
 
 <a id="fn-a7"></a>
 **f-a7** — `lib/pkp/classes/submissionFile/Repository.php::delete()`: for a `SUBMISSION_FILE_COPYEDIT` file it calls `updateNotification()` for the pair before `$this->dao->delete($submissionFile)`, so `PKPEditingProductionStatusNotificationManager` still counts the file being deleted, deletes both types, and nothing recomputes them once the row is gone. Live-probed 2026-09-18 on OJS and OMP: "Delete" › OK on the only copyedited file left "Copyedited Files" at "No Items" and both assigned editors with no notice, on the same page, re-landed and minutes later, from the "Assign a copyeditor…" state and from the "Awaiting Copyedits." state.
+Issue report: [docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md).
 
 <a id="fn-a8"></a>
 **f-a8** — `ManageSubmissionFilesForm::importFile()` clones the ticked file into the target file stage with `sourceSubmissionFileId` set to the original's id. `Repository::delete()` removes dependent files (`SUBMISSION_FILE_DEPENDENT` rows attached to the file) and the stored file only when no other row shares it, and names no source link, so the code read gives no cause; the live observation stands alone. Live-probed 2026-09-18 on OJS and OMP, once each: "Draft Files" held the copy of copyedited file 16 as row 17; after "Delete" › OK on row 16 in "Copyedited Files", "Draft Files" listed rows 14 and 13 only. The reverse direction was not driven.

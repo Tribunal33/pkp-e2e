@@ -1,0 +1,84 @@
+--- a/lib/pkp/classes/submissionFile/Repository.php
++++ b/lib/pkp/classes/submissionFile/Repository.php
+@@ -474,10 +474,44 @@
+         // Delete notes for this submission file
+         Note::withAssoc(Application::ASSOC_TYPE_SUBMISSION_FILE, $submissionFile->getId())->delete();
+ 
+-        // Update tasks
++        // Get all revision file ids before they are deleted
++        $revisions = $this->getRevisions($submissionFile->getId());
++
++        $isRevision = in_array($submissionFile->getData('fileStage'), [
++            SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION,
++            SubmissionFile::SUBMISSION_FILE_INTERNAL_REVIEW_REVISION,
++        ]);
++
++        // Get the review round before review round files are deleted
++        if ($isRevision) {
++            $reviewRoundDao = DAORegistry::getDAO('ReviewRoundDAO'); /** @var ReviewRoundDAO $reviewRoundDao */
++            $reviewRound = $reviewRoundDao->getBySubmissionFileId($submissionFile->getId());
++        }
++
++        $this->dao->delete($submissionFile);
++
++        // Delete all files that are not referenced by other submission files
++        foreach ($revisions as $revision) {
++            $countFileShares = $this
++                ->getCollector()
++                ->filterByFileIds([$revision->fileId])
++                ->includeDependentFiles(true)
++                ->getCount();
++            if (!$countFileShares) {
++                app()->get('file')->delete($revision->fileId);
++            }
++        }
++
++        // Update the review round status after deletion
++        if ($isRevision) {
++            $reviewRoundDao->updateStatus($reviewRound);
++        }
++
++        // Update tasks once the file is gone, so that they no longer count it
+         $notificationMgr = new NotificationManager();
+         switch ($submissionFile->getData('fileStage')) {
+             case SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION:
++            case SubmissionFile::SUBMISSION_FILE_INTERNAL_REVIEW_REVISION:
+                 // Replaces StageAssignmentDAO::getBySubmissionAndRoleIds
+                 $authorUserIds = StageAssignment::withSubmissionIds([$submissionFile->getData('submissionId')])
+                     ->withRoleIds([Role::ROLE_ID_AUTHOR])
+@@ -511,35 +545,6 @@
+                 break;
+         }
+ 
+-        // Get all revision file ids before they are deleted
+-        $revisions = $this->getRevisions($submissionFile->getId());
+-
+-        // Get the review round before review round files are deleted
+-        if ($submissionFile->getData('fileStage') === SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION) {
+-            $reviewRoundDao = DAORegistry::getDAO('ReviewRoundDAO'); /** @var ReviewRoundDAO $reviewRoundDao */
+-            $reviewRound = $reviewRoundDao->getBySubmissionFileId($submissionFile->getId());
+-        }
+-
+-
+-        $this->dao->delete($submissionFile);
+-
+-        // Delete all files that are not referenced by other submission files
+-        foreach ($revisions as $revision) {
+-            $countFileShares = $this
+-                ->getCollector()
+-                ->filterByFileIds([$revision->fileId])
+-                ->includeDependentFiles(true)
+-                ->getCount();
+-            if (!$countFileShares) {
+-                app()->get('file')->delete($revision->fileId);
+-            }
+-        }
+-
+-        // Update the review round status after deletion
+-        if ($submissionFile->getData('fileStage') === SubmissionFile::SUBMISSION_FILE_REVIEW_REVISION) {
+-            $reviewRoundDao->updateStatus($reviewRound);
+-        }
+-
+         // Log the deletion
+         $logEntry = Repo::eventLog()->newDataObject(array_merge(
+             $this->getSubmissionFileLogData($submissionFile),

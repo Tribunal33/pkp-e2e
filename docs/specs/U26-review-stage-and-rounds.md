@@ -655,6 +655,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - after "Request Revisions", the author's only revised file deleted: the revisions task back in the author's Tasks panel ([A9](#a9)): the guard the issue report proposes
   - on a round with no revision request, the "Revisions Uploaded" description makes no claim about a request ([A10](#a10)): the guard the issue report proposes
   - scenario 4's first bullet read with no reload: the "Revisions Uploaded" panel listing the file as the closed upload window goes (Side effects, "Author uploads a revised file"): the OJS suite reloads the page before it reads the panel
   - after "Resubmit for Review" and the Author's first uploaded file: "Upload revisions" still offered ([A1](#a1)): the guard the issue report proposes
@@ -709,7 +710,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | After "Resubmit for Review", the Author's "Upload revisions" button disappears with their first file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | On a journal, the author's "Read Review" window shows no review text; remarks shared with the author are missing (a press shows them) | 🐞 | user-visible | — |
-| [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | minor | — |
+| [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The author sees the editor's status wording; the author-tailored wording exists but is never shown | ❓ | user-visible | — |
 | [A3](#a3) | What the read-review window's attachments section lists: observation recorded privately with the maintainer pending a fix | ❓ | latent | — |
@@ -841,17 +842,17 @@ Basis: probe (2026-07-31; both mutations driven on OJS, and the retained
 controls render identically on OMP). <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — Deleting the only revised file leaves no revisions task behind** · 🐞 · minor.
+**A9 — Deleting the only revised file leaves no revisions task behind** · 🐞 · low.
 When the only revised file on a round is deleted, by the editor or by the
 author, the round's status and the author's My Submissions row correctly
 return to their revisions-requested state. The revisions task, however,
-never returns to the author's task list: the list stays silent where the
-decision had put "Revision required." The author still has the My
-Submissions cue and the upload button, so what is missing is the prompt, not
-the path. A file later added on the review stage does bring a task back,
-under different wording.
-Basis: probe (2026-07-31, OJS and OMP, both deleter
-roles). <sup>[f-a9](#fn-a9)</sup>
+never comes back: the Tasks panel shows no task where the decision had put
+"Revision required." The author's row still reads "Revision requested"
+with "Submit revisions", so what is missing is the prompt, not the path.
+The same fault keeps the editors' copyediting notice from coming back
+(*Copyediting stage* [A7](U32-copyediting-stage.md#a7)).
+Basis: probe, 2026-10-04 (OJS and OMP, both deleter
+roles; the claim check 2026-07-31). <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were** · 🐞 · low.
@@ -1563,6 +1564,7 @@ and OMP, for editor-side and author-side deletion of the only revised file;
 the later file add that re-creates a task observed live on the press and
 code-traced on the journal. The spec's prior revival claim was corrected by
 the same check.
+Issue report: [docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md).
 
 <a id="fn-a11"></a>
 **f-a11** — Test run 2026-09-12 (OJS, scenario 4, one run): after the
