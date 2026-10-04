@@ -821,6 +821,8 @@ accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the guard for A5 (issue report `docs/issues/U56-A5-remove-template-confirmation-names-subject.md`): "Remove" on an added template whose name and subject differ asks about the template by the name its row shows (Rule 17; scenario 3)
 - **Nothing new to test**:
   - "Signature" emptied, so that the emails carrying it end with nothing
     (Settings bullet 1)
@@ -902,7 +904,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | On a press or a preprint server, the "Emails" settings call editorial statistics the journal's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | "Manage Emails" lists the three ORCID emails under code names, after every other email | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The "Add Template" window is titled "Edit Template" | 🐞 | minor | — |
-| [A5](#a5) | "Remove Template" names the template by its subject, not its name | 🐞 | minor | — |
+| [A5](#a5) | On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
 | [A11](#a11) | In French, "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | minor | — |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -963,12 +965,21 @@ A manager expects the window to say it adds one.
 Basis: probe, 2026-09-26. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — "Remove Template" names the subject** · 🐞 · minor.
-The confirmation reads "Are you sure you want to delete the template
-{subject}?", quoting the template's subject line, while the row the
-manager pressed "Remove" on shows the template's name. When the two
-differ, the manager cannot tell from the confirmation which template goes.
-Basis: probe, 2026-09-26. <sup>f-a5</sup>
+**A5 — On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name** · 🐞 · low.
+On "Manage Emails", a manager opens an email ("Submission Declined
+(Pre-Review)") and presses "Remove" on a template they created for it
+with "Add Template". The confirmation reads "Are you sure you want to
+delete the template Your submission to {$contextName}?". It quotes the
+template's subject line, with the variable `{$contextName}` unfilled,
+while the row the manager pressed shows the template's name, "Short
+decline u56d".
+"Add Template" asks for the name and the subject in two separate boxes,
+so the two differ as a rule. The installed templates differ the same
+way: the default "Submission Declined (Pre-Review)" template's subject
+is "Your submission has been declined". The confirmation therefore usually does
+not say which template goes. Confirming still removes the row the
+manager pressed.
+Basis: probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — No "Reset" for one-template emails** · ❓ · user-visible.
@@ -1717,6 +1728,7 @@ the subject "Beta …" is confirmed as "Are you sure you want to delete
 the template Beta …?"; a subject "Delta {$contextName} <u>k4</u>" reads
 "Delta {$contextName} k4", the placeholder unfilled and "k4"
 underlined.
+Issue report: [docs/issues/U56-A5-remove-template-confirmation-names-subject.md](../issues/U56-A5-remove-template-confirmation-names-subject.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — `EditTemplateModal.vue` renders the form alone; the "Reset"

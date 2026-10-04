@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/components/Container/ManageEmailsPage.vue
++++ b/lib/ui-library/src/components/Container/ManageEmailsPage.vue
+@@ -126,7 +126,7 @@
+ 				title: this.i18nRemoveTemplate,
+ 				message: this.i18nRemoveTemplateMessage.replace(
+ 					'{$template}',
+-					this.localize(template.subject),
++					this.localize(template.name),
+ 				),
+ 				actions: [
+ 					{
