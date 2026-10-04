@@ -797,6 +797,7 @@ Left out of the scenarios above, by reason:
   - a Section Editor's task count in the menu under their name on the public pages (Rule 4; the guard [A3](#a3)'s issue report proposes, shared with Navigation menus & site chrome A2)
   - the "needs an editor" email staying away for a manager who unticked "Enable…" on its row (Rule 5a; scenario 3 reads the mailbox; the guard [A10](#a10)'s issue report proposes)
   - a preprint server's "needs a moderator" task opening the preprint's workflow (Rule 2c; scenario 1 presses a task; the guard [OPS3](#ops3)'s issue report proposes)
+  - a reply in a discussion with "Discussion activity." switched off reaching neither the Tasks window nor the mailbox, and with it on a row reading "… replied to …" (Rule 6; the guard [A1](#a1)'s issue report proposes)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -811,7 +812,6 @@ Left out of the scenarios above, by reason:
   - A3 (a Section Editor's bare name on the reader-side header; Rule 4)
   - A11 (the ticked editor told nothing, the manager-level roles told instead; Rule 6)
   - A8 (the "Publication Published" and "needs an editor" emails without a footer; Rule 6)
-  - A1 (a reply worded like the opening; "Discussion activity." governing nothing; Rule 6)
   - OPS1 (two rows a preprint server never raises; Rule 6; scenario 11 names it)
   - OPS2 (the "A new preprint , "Title"" wording; *Fields & validation*)
   - A7 (deleting the task killing the link; Rule 7b)
@@ -852,7 +852,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A10](#a10) | A manager who turns off the "needs an editor" notification still gets its email for every new submission | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS3](#ops3) | On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A1](#a1) | The "Discussion activity." row and its two boxes govern nothing; a reply to a discussion raises a task worded exactly like the opening one | 🐞 | minor | — |
+| [A1](#a1) | A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
 | [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -871,17 +871,22 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — "Discussion activity." governs nothing** · 🐞 · minor.
-The tab offers "Discussion activity." with both boxes, and the Unsubscribe
-page offers its email box, but nothing in the application is governed by
-them: a reply to a discussion reaches the other participants as a task and
-an email of the "Discussion added." kind, whatever the "Discussion
-activity." boxes say. That task repeats the opening message's sentence
-word for word ("{who opened it} started a discussion: {name}: {opening
-message}"), so the person cannot tell a reply from the discussion's start
-without opening it; the email does carry the reply. The person is offered
-a choice that changes nothing.
-Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+**A1 — A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start** · 🐞 · low.
+The profile's Notifications tab offers a "Discussion activity." row
+with two boxes, "Enable these types of notifications." and "Do not send
+me an email for these types of notifications.". Neither does anything.
+When someone adds a message to a discussion, every other participant
+still gets a Tasks row and an email, whatever they chose on that row.
+The Tasks row for the reply repeats the discussion's opening word for
+word ("{who opened it} started a discussion: {name}: {opening
+message}"), so it cannot be told from the opening without opening it.
+The email does carry the reply.
+On 3.5 a reply raises its own "… replied to …" row and obeys both
+"Discussion activity." boxes. Both halves of the fault came with one
+change (`pkp/pkp-lib#12323`), so one fix restores both. A press or a
+preprint server cannot save a discussion at all today
+(`pkp/pkp-lib#13072`), so it shows this only once that is fixed.
+Basis: probe, 2026-10-04. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — The Unsubscribe page re-enables emails switched off earlier** · 🐞 · latent.
@@ -1742,6 +1747,7 @@ of note s5 mounted: the Author's reply reached the Manager as a task row
 and an email on all three apps, with "Discussion activity." unticked
 making no difference; the controller is shared and neither app overrides
 it.
+Issue report: [docs/issues/U05-A1-discussion-activity-choice-governs-nothing.md](../issues/U05-A1-discussion-activity-choice-governs-nothing.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `PKPNotificationsUnsubscribeForm::execute()` calls

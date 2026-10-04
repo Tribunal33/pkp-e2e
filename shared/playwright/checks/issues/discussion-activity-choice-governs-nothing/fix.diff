@@ -1,0 +1,63 @@
+--- a/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
++++ b/lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php
+@@ -777,7 +777,7 @@
+         $genreDao = DAORegistry::getDAO('GenreDAO'); /** @var GenreDAO $genreDao */
+         $fileGenres = $genreDao->getByContextId($context->getId())->toAssociativeArray();
+ 
+-        $this->notifyParticipants($participantIds, $task, $note);
++        $this->notifyParticipants($participantIds, $task, $note, Notification::NOTIFICATION_TYPE_QUERY_ACTIVITY);
+ 
+         $newFiles = Repo::submissionFile()->getCollector()
+             ->filterByAssoc(PKPApplication::ASSOC_TYPE_NOTE, [$note->id])
+@@ -1021,9 +1021,15 @@
+      *
+      * @param array<int> $participantIds
+      * @param Note|null $note if null, it will try to find the headnote for the task/discussion
++     * @param int $notificationType NOTIFICATION_TYPE_NEW_QUERY for a new task/discussion or new participants,
++     *   NOTIFICATION_TYPE_QUERY_ACTIVITY for a reply
+      */
+-    protected function notifyParticipants(array $participantIds, EditorialTask $editorialTask, ?Note $note = null): void
+-    {
++    protected function notifyParticipants(
++        array $participantIds,
++        EditorialTask $editorialTask,
++        ?Note $note = null,
++        int $notificationType = Notification::NOTIFICATION_TYPE_NEW_QUERY
++    ): void {
+         $submission = $this->getAuthorizedContextObject(PKPApplication::ASSOC_TYPE_SUBMISSION); /** @var Submission $submission */
+         $context = $this->getRequest()->getContext();
+         $currentUser = $this->getRequest()->getUser();
+@@ -1064,13 +1070,22 @@
+                 $user->getId(),
+                 $context->getId()
+             );
+-            if (in_array(Notification::NOTIFICATION_TYPE_NEW_QUERY, $notificationSubscriptionSettings)) {
++            if ($notificationType == Notification::NOTIFICATION_TYPE_QUERY_ACTIVITY) {
++                // Replace any earlier activity notification for this task/discussion; its message shows the latest reply
++                Notification::withAssoc(PKPApplication::ASSOC_TYPE_QUERY, $editorialTask->id)
++                    ->withUserId($user->getId())
++                    ->withType(Notification::NOTIFICATION_TYPE_QUERY_ACTIVITY)
++                    ->withContextId($context->getId())
++                    ->delete();
++            }
++
++            if (in_array($notificationType, $notificationSubscriptionSettings)) {
+                 continue;
+             }
+ 
+             $notification = $notificationMgr->createNotification(
+                 $user->getId(),
+-                Notification::NOTIFICATION_TYPE_NEW_QUERY,
++                $notificationType,
+                 $context->getId(),
+                 PKPApplication::ASSOC_TYPE_QUERY,
+                 $editorialTask->id,
+@@ -1083,7 +1098,7 @@
+                 $user->getId(),
+                 $context->getId()
+             );
+-            if (in_array(Notification::NOTIFICATION_TYPE_NEW_QUERY, $emailSubscriptionSettings)) {
++            if (in_array($notificationType, $emailSubscriptionSettings)) {
+                 continue;
+             }
+ 
