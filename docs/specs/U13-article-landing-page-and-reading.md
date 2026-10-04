@@ -2902,7 +2902,7 @@ HTML reader, on an HTML galley added to the new version, read the
 notice dated the day of the walk; OMP's preview file link answered "404
 Not Found" (`CatalogBookHandler::download()` refuses an unpublished
 version), so its viewers are not reached.
-Issue report: [docs/issues/U13-A13-new-version-preview-reader-called-outdated.md](../issues/U13-A13-new-version-preview-reader-called-outdated.md).
+Issue report: [pkp-e2e#920](https://github.com/jardakotesovec/pkp-e2e/issues/920) ([docs/issues/U13-A13-new-version-preview-reader-called-outdated.md](../issues/U13-A13-new-version-preview-reader-called-outdated.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note h: `citation-styles/associacao-brasileira-de-normas-tecnicas.csl`
