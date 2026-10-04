@@ -1768,7 +1768,7 @@ Statement" page (live-probed 2026-09-27, all three apps).
 **f-a7** — `manager.setup.workflow.reviewerSuggestionsHelp.description`
 (lib/pkp `manager.po`): its second sentence repeats
 `manager.setup.workflow.contributorsHelp.description` word for word.
-Issue report: [docs/issues/U58-A7-reviewer-suggestion-help-describes-contributors.md](../issues/U58-A7-reviewer-suggestion-help-describes-contributors.md).
+Issue report: [pkp-e2e#827](https://github.com/jardakotesovec/pkp-e2e/issues/827) ([docs/issues/U58-A7-reviewer-suggestion-help-describes-contributors.md](../issues/U58-A7-reviewer-suggestion-help-describes-contributors.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — `manager.setup.genres.key.description` (lib/pkp `manager.po`),
