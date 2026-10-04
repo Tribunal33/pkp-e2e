@@ -1809,7 +1809,7 @@ the window is open, though the notification layer (`z-index` 1001) is
 painted above the window's (10); a real mouse press there left the notice
 standing and the window open, and the notice left 5.4 s after it showed
 (OJS, OMP, OPS alike).
-Issue report: [docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md).
+Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826) ([docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — OJS `templates/gateway/lockss.tpl` and `clockss.tpl` test

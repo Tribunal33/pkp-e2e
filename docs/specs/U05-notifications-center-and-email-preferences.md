@@ -1912,7 +1912,7 @@ users." after a sent "Notify" (OJS, OMP; on OPS that notice can land in
 the Production entry's own "Notification" box instead, *Stage
 participants* OPS4) within 0.11–0.14 s. The "Add a Component" window's
 refused key shows the same (*Submission intake configuration* A13).
-Issue report: [docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md).
+Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826) ([docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS's `NotificationSettingsForm` and `NotificationManager` do not

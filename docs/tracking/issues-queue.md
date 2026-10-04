@@ -24,12 +24,12 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
-| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | **Taken: issues session, VM s3, 2026-10-04**; done: A2 (pkp-e2e#818), A9 (pkp-e2e#819; the OPS component names with U57 A8, pkp-e2e#360), OJS1 with U67 A1 (pkp-e2e#822), OMP2 (pkp-e2e#823); A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
+| [U58](../specs/U58-submission-intake-configuration.md) | 10 | 0 | 2 | **Taken: issues session, VM s3, 2026-10-04**; done: A2 (pkp-e2e#818), A9 (pkp-e2e#819; the OPS component names with U57 A8, pkp-e2e#360), OJS1 with U67 A1 (pkp-e2e#822), OMP2 (pkp-e2e#823), A13 with U05 A14 (pkp-e2e#826); A10 done with U17 A6 (docs/issues/U17-A6-section-or-component-name-of-spaces-raw-code.md); A12 done with U62 A9 (pkp-e2e#511) |
 | [U01](../specs/U01-login-and-sessions.md) | 9 | 0 | 2 | **Taken: issues session, workstation s0, 2026-10-04**; A1 done with U03 A7 (pkp-e2e#795); A2 done (pkp-e2e#820); A11 done (pkp-e2e#821); A4 done (pkp-e2e#824); A7 done (pkp-e2e#825); A3 fixed upstream (`pkp/pkp-lib#13132`), an incidentals row for housekeeping |
 | [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 |  |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 |  |
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A7 done with U70 A10 (pkp-e2e#734); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
-| [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | **A14 taken: issues session, VM s3, 2026-10-04** (with U58 A13); A3 done with U08 A2 (pkp-e2e#634) |
+| [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A14 done with U58 A13 (pkp-e2e#826); A3 done with U08 A2 (pkp-e2e#634) |
 | [U72](../specs/U72-chapters-work-type.md) | 7 | 0 | 2 | A2 done with U74 A2 (pkp-e2e#705); A5 done with U75 A11 (pkp-e2e#675) |
 | [U34](../specs/U34-editorial-decision-recording.md) | 5 | 0 | 2 | OMP1 done with U27 OMP3 (pkp-e2e#690) |
 | [U26](../specs/U26-review-stage-and-rounds.md) | 4 | 0 | 2 | A1 done (pkp-e2e#520) |
