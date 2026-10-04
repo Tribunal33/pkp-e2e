@@ -986,7 +986,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | On a press or preprint server, the submission wizard's data citations and funders still read empty after a save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | An author row abandoned with "Close" comes back blank, is saved, and makes the reference structured | 🐞 | minor | — |
-| [A14](#a14) | The author boxes in "Edit citation" have no names for a screen reader | 🐞 | minor | — |
+| [A14](#a14) | A screen reader hears no name for the author boxes in "Edit citation" and the data citation panel | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1151,10 +1151,19 @@ expander, its menu loses "Reprocess", and the progress box counts it.
 Basis: probe, 2026-09-24. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — The author boxes in "Edit citation" have no names** · 🐞 · minor.
-Each author row's Given Name, Family Name and ORCID iD boxes are unnamed, so
-a screen reader announces a text box without saying which column it is in.
-Basis: probe, 2026-09-24. <sup>f-a14</sup>
+**A14 — A screen reader hears no name for the author boxes in "Edit citation" and the data citation panel** · 🐞 · low.
+In "Edit citation" (the References page with metadata lookup on), each
+row under "Author Information" has three boxes: given name, family name
+and ORCID iD. None of them has a name, so a screen reader announces a
+text box without saying which of the three it is. The column names are
+shown only in the table's header row. The "Creators" rows of the data
+citation panel ("Add Data Citation", "Edit Data Citation") are drawn by
+the same component and have the same unnamed boxes. Nothing is saved
+wrongly. The author boxes show only when the journal, press or server
+has "Enable references structuring and metadata lookup" turned on, and
+the Creators boxes only when it has data citations turned on. Both are
+off in a new install.
+Basis: probe, 2026-10-04. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — A data citation's identifier can never be removed** · 🐞 · minor.
@@ -2123,6 +2132,7 @@ saving undid all of it.
 header. Live-probed 2026-09-24, all
 three apps: the accessibility tree lists each box as a text box with no
 name under the table "Author Information".
+Issue report: [docs/issues/U42-A14-citation-author-boxes-unnamed.md](../issues/U42-A14-citation-author-boxes-unnamed.md).
 
 <a id="fn-f-a15"></a>
 **f-a15 — A15 evidence.** Note l (`identifier` `required_with:identifierType`,

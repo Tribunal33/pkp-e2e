@@ -1,0 +1,29 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldAuthors.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldAuthors.vue
+@@ -22,6 +22,8 @@
+ 				<TableRow v-for="(row, index) in currentValue" :key="index">
+ 					<TableCell>
+ 						<FieldText
++							:form-id="`${props.formId}-${props.name}-${index}`"
++							:label="t('user.givenName')"
+ 							:name="'givenName'"
+ 							:value="row.givenName"
+ 							:all-errors="{givenName: errors?.[index]?.givenName}"
+@@ -34,6 +36,8 @@
+ 					</TableCell>
+ 					<TableCell>
+ 						<FieldText
++							:form-id="`${props.formId}-${props.name}-${index}`"
++							:label="t('user.familyName')"
+ 							:name="'familyName'"
+ 							:value="row.familyName"
+ 							:all-errors="{familyName: errors?.[index]?.familyName}"
+@@ -46,6 +50,8 @@
+ 					</TableCell>
+ 					<TableCell>
+ 						<FieldText
++							:form-id="`${props.formId}-${props.name}-${index}`"
++							:label="t('user.orcid')"
+ 							:name="'orcid'"
+ 							:value="row.orcid"
+ 							:all-errors="{orcid: errors?.[index]?.orcid}"
