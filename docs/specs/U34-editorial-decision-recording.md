@@ -1112,6 +1112,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A6 (issue report `docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md`): after a real "Revert Decline", a reload of the record page or a second record of it is refused and the author receives one reversal email, and the record page opened on a submission never declined is refused (Rule 12)
   - the guard for OJS1 (issue report `docs/issues/U34-OJS1-waive-still-requests-publication-fee.md`): "Waive" on the "Request Payment" page of an accept decision gives the Author no fee task and no "Payment Request Notification", and the submission's "Payments" menu reads "Waived" (Rule 16; scenario 10, which marks it today)
   - the "Notify Reviewers" letter edited before the decision is recorded: each reviewer's email still carries that reviewer's own name alone, never the other reviewers' names (Rule 4): likely a bullet in scenario 6, whose reviewers' mailboxes are read after the accept
   - the guard for A9 (issue report `docs/issues/U34-A9-sub-editor-find-template-not-authorized.md`): a Section Editor's "Find Template" in the decision wizard lists the templates matching the phrase, as a Journal Editor's does (Rule 7)
@@ -1122,7 +1123,6 @@ Left out of the scenarios above, by reason:
   - leaving the wizard through the breadcrumb's "Dashboard" (Rule 11): the unrecorded outcome scenario 6 reads after "Cancel Decision"
   - recording under "Login As" (Side effects): the same Activity Log line, naming the editor acted as
 - **Register carries it**:
-  - A6 ("Revert Decline" typed on a submission never declined; Rule 12)
   - A11 (a review-stage decision typed with a past round's number; Rule 12)
   - A8 and OPS2 (the "Insert Content" rows shown as markup, the empty address row and the untranslated row; Rule 5; scenarios 2 and 9 mark them)
   - A2 (the wizard with no page and its closing sentence; Rule 2)
@@ -1144,7 +1144,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A6](#a6) | "Revert Decline" typed by address on a submission never declined records it and emails the author | 🐞 | minor | — |
+| [A6](#a6) | "Revert Decline" recorded on a submission that is not declined emails the author again and can drop a revisions request | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | A Section Editor's "Find Template" in a decision's email answers "You are not authorized to access the requested resource." | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | An editor's "Waive" on an accept decision still asks the Author to pay the publication fee | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Review Cancel" email reads "{$journalName}" where the press's name should be | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1214,16 +1214,24 @@ author dashboard; nothing is lost on screen.
 Basis: probe. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — "Revert Decline" recorded on a submission never declined** · 🐞 · minor.
-A Journal Manager who types the "Revert Decline" address for a queued
-submission (or for an active review round) expects the refusal a decision
-the stage does not offer gets. The wizard opens; "Record Decision" closes
-on "Submission Reactivated", the author receives "We have reversed the
-decision to decline your submission" and the Activity Log reads "{editor}
-reversed the decision to decline this submission.", though no decline was
-ever recorded; the same on a press and on a preprint server. Reachable by
-address only: the button is offered on a declined submission alone.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+**A6 — "Revert Decline" recorded on a submission that is not declined emails the author again and can drop a revisions request** · 🐞 · low.
+After an editor reverts a decline, the browser's Back button or a
+reload brings back the "Revert Decline" page, and "Record Decision"
+works a second time. A second tab where the page was already open does
+the same. Each time the page closes on "Submission Reactivated", the
+author receives "We have reversed the decision to decline your
+submission" again, and the Activity Log records another reversal. The
+editor expects a refusal, because nothing is left to revert.
+The same page also opens by its address on an active submission that
+was never declined. On a review round waiting for the author's
+revisions, the reversal then drops the revisions request. The author
+loses the "Revision required" task and "Upload revisions" and is not
+told. The editor can restore the round with "Request Revisions", which
+emails the author once more.
+The workflow offers "Revert Decline" only on a declined submission. So
+Back, a reload or a second tab only repeat a reversal the editor meant
+to make. Losing a revisions request takes an address edited by hand.
+Basis: probe, 2026-10-04. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — An emptied reviewers list is refused without a message** · ❓ · minor.
@@ -1466,6 +1474,7 @@ Issue report: [pkp-e2e#861](https://github.com/jardakotesovec/pkp-e2e/issues/861
 
 <a id="fn-a6"></a>
 **f-a6** — Note b: `DecisionStageValidPolicy` compares the submission's stage with the decision's and `DecisionAllowedPolicy` the user's assignment; nothing reads the submission's status, and `Repository::validate()` does not either. Live-probed 2026-09-20: `decision=16` typed on a queued Submission-stage submission (OJS, OMP) and on a queued preprint (OPS), and `decision=15` on an active review round: the one-page wizard, "Submission Reactivated" on record, the author's email "We have reversed the decision to decline your submission" and the log line "reversed the decision to decline this submission".
+Issue report: [docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md](../issues/U34-A6-revert-decline-typed-on-undeclined-submission.md).
 
 <a id="fn-a7"></a>
 **f-a7** — Note e: `NotifyReviewers::validateNotifyReviewersAction()` adds `validator.required` on `.recipients`, which `DecisionPage::setStepErrors()` maps into `step.errors`, but the composer renders no error slot under the "To" field. Live-probed 2026-09-20 on OJS and OMP: the banner, "View Error" opening the page, "To:" reading "None" with nothing under it.

@@ -1,0 +1,89 @@
+--- a/lib/pkp/pages/decision/DecisionHandler.php
++++ b/lib/pkp/pages/decision/DecisionHandler.php
+@@ -29,6 +29,8 @@
+ use PKP\db\DAORegistry;
+ use PKP\decision\DecisionType;
+ use PKP\decision\types\interfaces\DecisionRetractable;
++use PKP\decision\types\RevertDecline;
++use PKP\decision\types\RevertInitialDecline;
+ use PKP\security\authorization\ContextAccessPolicy;
+ use PKP\security\authorization\DecisionWritePolicy;
+ use PKP\security\authorization\internal\SubmissionRequiredPolicy;
+@@ -112,6 +114,12 @@
+ 
+         // For a retractable decision, don't allow if it can not be retracted
+         if ($this->decisionType instanceof DecisionRetractable && !$this->decisionType->canRetract($this->submission, $reviewRoundId)) {
++            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++        }
++
++        // Don't allow reverting a decline unless the submission is declined
++        if (($this->decisionType instanceof RevertDecline || $this->decisionType instanceof RevertInitialDecline)
++                && !$this->decisionType->canRevert($this->submission)) {
+             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+         }
+ 
+--- a/lib/pkp/classes/decision/types/RevertDecline.php
++++ b/lib/pkp/classes/decision/types/RevertDecline.php
+@@ -78,6 +78,14 @@
+         return __('editor.submission.decision.revertDecline.completed.description', ['title' => $submission?->getCurrentPublication()?->getLocalizedFullTitle(null, 'html') ?? '']);
+     }
+ 
++    /**
++     * Only a declined submission has a decline to revert
++     */
++    public function canRevert(Submission $submission): bool
++    {
++        return $submission->getData('status') === Submission::STATUS_DECLINED;
++    }
++
+     public function validate(array $props, Submission $submission, Context $context, Validator $validator, ?int $reviewRoundId = null)
+     {
+         // If there is no review round id, a validation error will already have been set
+@@ -87,6 +95,10 @@
+ 
+         parent::validate($props, $submission, $context, $validator, $reviewRoundId);
+ 
++        if (!$this->canRevert($submission)) {
++            $validator->errors()->add('decision', __('editor.submission.decision.revertDecline.restriction'));
++        }
++
+         if (!isset($props['actions'])) {
+             return;
+         }
+--- a/lib/pkp/classes/decision/types/RevertInitialDecline.php
++++ b/lib/pkp/classes/decision/types/RevertInitialDecline.php
+@@ -78,10 +78,22 @@
+         return __('editor.submission.decision.revertInitialDecline.completed.description', ['title' => $submission?->getCurrentPublication()?->getLocalizedFullTitle(null, 'html') ?? '']);
+     }
+ 
++    /**
++     * Only a declined submission has a decline to revert
++     */
++    public function canRevert(Submission $submission): bool
++    {
++        return $submission->getData('status') === Submission::STATUS_DECLINED;
++    }
++
+     public function validate(array $props, Submission $submission, Context $context, Validator $validator, ?int $reviewRoundId = null)
+     {
+         parent::validate($props, $submission, $context, $validator, $reviewRoundId);
+ 
++        if (!$this->canRevert($submission)) {
++            $validator->errors()->add('decision', __('editor.submission.decision.revertDecline.restriction'));
++        }
++
+         if (!isset($props['actions'])) {
+             return;
+         }
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -2052,6 +2052,9 @@
+ msgid "editor.submission.decision.revertDecline.completed.description"
+ msgstr "The submission, {$title}, is now an active submission in the review stage."
+ 
++msgid "editor.submission.decision.revertDecline.restriction"
++msgstr "Only a declined submission can have its decline reverted."
++
+ msgid "editor.submission.decision.revertDecline.notifyAuthorsDescription"
+ msgstr "Send an email to the authors to let them know that a previous decision to decline this submission has been reverted. Explain why the decision was reverted and let them know whether the submission is expected to undergo further review."
+ 
