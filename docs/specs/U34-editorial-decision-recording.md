@@ -1479,7 +1479,7 @@ Issue report: [pkp-e2e#859](https://github.com/jardakotesovec/pkp-e2e/issues/859
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Note s: OJS `classes/decision/types/Accept.php::runAdditionalActions()` (and `SkipExternalReview`'s through the shared trait) calls `requestPayment()` for every `ACTION_PAYMENT` action present, never reading the action's `requestPayment` value; `RequestPayment::validatePaymentAction()` only checks the key is set. Live-probed 2026-09-20 on OJS, twice on fresh submissions: "Waive" chosen, the author's "The publication fee is due for payment." row and the "Payment Request Notification" email arriving as with the fee requested.
-Issue report: [docs/issues/U34-OJS1-waive-still-requests-publication-fee.md](../issues/U34-OJS1-waive-still-requests-publication-fee.md).
+Issue report: [pkp-e2e#860](https://github.com/jardakotesovec/pkp-e2e/issues/860) ([docs/issues/U34-OJS1-waive-still-requests-publication-fee.md](../issues/U34-OJS1-waive-still-requests-publication-fee.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: OMP's `locale/en/emails.po` `emails.reviewCancel.body` still reads "{$journalName}", a variable `ReviewCancel` does not carry (`contextName` is the one it has). Live-probed 2026-09-20: the press's email "…agreeing to review "{title}" for {$journalName}."; the journal's names the journal.
