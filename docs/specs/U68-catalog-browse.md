@@ -614,6 +614,9 @@ catalog holds what earlier runs published. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A2 (issue report
+    `docs/issues/U68-A2-cover-link-no-name.md`): a book summary's cover
+    link out of the accessibility tree, its title link named
   - the guard for A7 (issue report
     `docs/issues/U70-A10-U68-A7-category-page-no-new-releases-or-featured.md`):
     a category's new release listed on its page, and its featured book
@@ -631,8 +634,6 @@ Left out of the scenarios above, by reason:
     same Login page as scenario 6's (Actors row 1; Settings bullet 9)
 - **Register carries it**:
   - A1 ("1 Titles" for a single book; Fields)
-  - A2 (the cover link's name for a screen reader; Fields, the book
-    summary)
   - A3 (a series' missing name, description and ISSNs, its picture's
     text alternative, and its ignored "Order of monographs"; Rules 7, 9;
     Settings bullet 2)
@@ -680,7 +681,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | One book reads "1 Titles" on the catalog, series and "New Releases" pages | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A2](#a2) | Every book summary's cover is a link a screen reader cannot name | 🐞 | minor | — |
+| [A2](#a2) | Covers in book, article, preprint and issue lists are links a screen reader announces without a name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | A series' page shows no name, description or ISSN, and ignores the series' order | 🐞 | user-visible | — |
 | [A4](#a4) | A series' picture does not lead to its full size | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A press's category page never lists its new releases and never sets its featured books apart | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -702,17 +703,24 @@ same ([Categories](U16-categories.md#a19), its A19).
 Basis: probe, 2026-10-02. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — The cover link has no name** · 🐞 · minor.
-Each book summary holds two links to the book's page, its cover and its
-title. The cover's link is named only by the cover's "Alternate text",
-which is empty until a manager types one, so a screen reader announces a
-link with no name before every title, on every list of summaries: the
-catalog page, a series' page, the "New Releases" page, a category's page
-and both home lists. A book with no "Cover Image" shows the default
-picture, whose link has no name either, and its Catalog Entry page offers
-no "Alternate text" box until an image is uploaded. Expected: a cover
-link named after the book, or one a screen reader skips.
-Basis: probe, 2026-09-27. <sup>f-a2</sup>
+**A2 — Covers in book, article, preprint and issue lists are links a screen reader announces without a name** · 🐞 · low.
+On a press's catalog page, a series' page, the "New Releases" page, a
+category's page and the home page's lists, each book shows its cover as
+a link to the book, right before its title. The title link right after
+the cover opens the same page.
+A screen reader announces that cover link with no name. The cover
+picture is the link's only content, and its "Alternate text" is empty
+unless the press typed one.
+
+A book with no "Cover Image" shows the default picture, whose
+"Alternate text" is always empty: the Catalog Entry page offers no
+"Alternate text" box until an image is uploaded. On a press that has not
+uploaded covers, every book in every list has a nameless link.
+
+A journal's article and issue lists and a preprint server's lists do the
+same for each article, issue or preprint whose cover has no "Alternate
+text".
+Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A series' page loses its details and its order** · 🐞 · user-visible.
@@ -1265,6 +1273,7 @@ cover links with no alternate text, a cover-less book's included, had no
 name; with "Alternate text" "Cover of C2" typed on the Catalog Entry
 page, the link was named "Cover of C2". The Catalog Entry page shows the
 "Alternate text" box only once an image is uploaded.
+Issue report: [docs/issues/U68-A2-cover-link-no-name.md](../issues/U68-A2-cover-link-no-name.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — [Sections](U17-sections.md#omp9) fn f-omp9: OMP

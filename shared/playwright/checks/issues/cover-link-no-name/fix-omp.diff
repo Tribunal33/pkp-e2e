@@ -1,0 +1,25 @@
+--- a/templates/frontend/objects/chapter.tpl
++++ b/templates/frontend/objects/chapter.tpl
+@@ -140,9 +140,10 @@
+ 				{/if}
+ 
+ 				{assign var="coverImage" value=$publication->getLocalizedData('coverImage')}
++				{assign var="bookTitle" value=$publication->getLocalizedFullTitle()}
+ 				<img
+ 					src="{$publication->getLocalizedCoverImageThumbnailUrl($monograph->getData('contextId'))}"
+-					alt="{$coverImage.altText|escape|default:''}"
++					alt="{$coverImage.altText|default:$bookTitle|escape}"
+ 				>
+ 				</a>
+ 			</div>
+--- a/templates/frontend/objects/monograph_summary.tpl
++++ b/templates/frontend/objects/monograph_summary.tpl
+@@ -12,7 +12,7 @@
+  *}
+ <div class="obj_monograph_summary{if $isFeatured} is_featured{/if}">
+ 	{assign var=currentPublication value=$monograph->getCurrentPublication()}
+-		<a {if $press}href="{url press=$press->getPath() page="catalog" op="book" path=$monograph->getBestId()}"{else}href="{url page="catalog" op="book" path=$monograph->getBestId()}"{/if} class="cover">
++		<a {if $press}href="{url press=$press->getPath() page="catalog" op="book" path=$monograph->getBestId()}"{else}href="{url page="catalog" op="book" path=$monograph->getBestId()}"{/if} class="cover" aria-hidden="true" tabindex="-1">
+ 			{assign var="coverImage" value=$currentPublication->getLocalizedData('coverImage')}
+ 			<img
+ 				src="{$monograph->getCurrentPublication()->getLocalizedCoverImageThumbnailUrl($monograph->getData('contextId'))}"

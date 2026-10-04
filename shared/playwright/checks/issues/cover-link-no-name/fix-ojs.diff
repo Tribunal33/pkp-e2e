@@ -1,0 +1,37 @@
+--- a/templates/frontend/objects/article_details.tpl
++++ b/templates/frontend/objects/article_details.tpl
+@@ -316,8 +316,11 @@
+ 								alt="{$coverImage.altText|escape|default:''}"
+ 							>
+ 						{else}
++							{capture assign="defaultAltText"}
++								{translate key="issue.viewIssueIdentification" identification=$issue->getIssueIdentification()|escape}
++							{/capture}
+ 							<a href="{url page="issue" op="view" path=$issue->getBestIssueId()}">
+-								<img src="{$issue->getLocalizedCoverImageUrl()|escape}" alt="{$issue->getLocalizedCoverImageAltText()|escape|default:''}">
++								<img src="{$issue->getLocalizedCoverImageUrl()|escape}" alt="{$issue->getLocalizedCoverImageAltText()|escape|default:$defaultAltText}">
+ 							</a>
+ 						{/if}
+ 					</div>
+--- a/templates/frontend/objects/article_summary.tpl
++++ b/templates/frontend/objects/article_summary.tpl
+@@ -31,7 +31,7 @@
+ <div class="obj_article_summary">
+ 	{if $publication->getLocalizedData('coverImage')}
+ 		<div class="cover">
+-			<a {if $journal}href="{url router=PKP\core\PKPApplication::ROUTE_PAGE journal=$journal->getPath() page="article" op="view" path=$articlePath}"{else}href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="article" op="view" path=$articlePath}"{/if} class="file">
++			<a {if $journal}href="{url router=PKP\core\PKPApplication::ROUTE_PAGE journal=$journal->getPath() page="article" op="view" path=$articlePath}"{else}href="{url router=PKP\core\PKPApplication::ROUTE_PAGE page="article" op="view" path=$articlePath}"{/if} class="file" aria-hidden="true" tabindex="-1">
+ 				{assign var="coverImage" value=$publication->getLocalizedData('coverImage')}
+ 				<img
+ 					src="{$publication->getLocalizedCoverImageUrl($article->getData('contextId'))|escape}"
+--- a/templates/frontend/objects/issue_summary.tpl
++++ b/templates/frontend/objects/issue_summary.tpl
+@@ -18,7 +18,7 @@
+ <div class="obj_issue_summary">
+ 
+ 	{if $issueCover}
+-		<a class="cover" href="{url op="view" path=$issue->getBestIssueId()}">
++		<a class="cover" aria-hidden="true" tabindex="-1" href="{url op="view" path=$issue->getBestIssueId()}">
+ 			<img src="{$issueCover|escape}" alt="{$issue->getLocalizedCoverImageAltText()|escape|default:''}">
+ 		</a>
+ 	{/if}
