@@ -979,7 +979,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | "Search references here" keeps rows whose visible text lacks the typed word | 🐞 | minor | — |
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The lookup's progress box counts structured references only | 🐞 | minor | — |
-| [A7](#a7) | A DOI in a reference typed while submitting is not kept when lookup is off | 🐞 | latent | — |
+| [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | A new data citation has no place in the order: none before an order is saved, the top after one | 🐞 | minor | — |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | On a press or a preprint server the wizard's Data Citations table ignores every save until a reload | 🐞 | minor | — |
@@ -1054,15 +1054,19 @@ of five when three could not be structured or are still waiting.
 Basis: probe, 2026-09-24. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A DOI in a reference typed while submitting is not kept when lookup is off** · 🐞 · latent.
-With lookup off, a reference added through the workflow's "Add" keeps the
-DOI written in its text; the same reference typed into the wizard's
-References box does not. Nothing on screen differs until lookup is switched
-on. Then only the "Add" one shows its DOI link and a filled "DOI" box in
-"Edit". The journal's Crossref deposit is expected to send the DOI for
-one and not for the other as well, though no deposit has been checked
-yet.
-Basis: probe, 2026-09-24; code for the deposit. <sup>f-a7</sup>
+**A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · 🐞 · medium.
+With "References Metadata Lookup" off, an author who types a reference
+with its DOI into the "References" box while submitting gets the
+reference saved with the DOI in its text only, not recorded as the
+reference's DOI. The same reference added later through "Add" on the
+References page gets its DOI recorded. Nothing on screen differs until a
+manager switches the lookup on. Then only the added reference shows its
+DOI as a link and in the "DOI" box of "Edit". A journal's Crossref
+deposit sends the typed reference as plain text instead of as its DOI,
+and nobody is told. Lookup is off and references are requested by
+default, so this reaches every reference an author types with a DOI
+while submitting.
+Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A new data citation has no place of its own in the order** · 🐞 · minor.
@@ -2042,6 +2046,7 @@ test install.
 **f-a7 — A7 evidence.** Note k. Live-probed 2026-09-24: the screen half,
 note k (Rule 17). The deposit half is not yet seen: it would take the OJS
 Crossref XML of an article whose references came both ways.
+Issue report: [docs/issues/U42-A7-wizard-reference-doi-not-kept.md](../issues/U42-A7-wizard-reference-doi-not-kept.md).
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** Note m. The funders list shows the same behavior
