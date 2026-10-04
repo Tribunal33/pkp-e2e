@@ -879,6 +879,7 @@ Left out of the scenarios above, by reason:
     direction and the citation
   - the guard for A4 (issue report `docs/issues/U42-A4-press-server-lookup-text-says-journal.md`): with "References Metadata Lookup" on, the References page of a press and of a preprint server describes the lookup without calling the context a journal
   - the guard for A9 (issue report `docs/issues/U42-A9-submits-without-required-data-citations.md`): with data citations at "Require the author to add data citation metadata…", an author's submission with no data citation is held back on "Review" (the problems banner, "Submit" disabled), and one with a data citation goes in
+  - the guard for A20 (issue report `docs/issues/U42-A20-book-preprint-empty-references-heading.md`): a published book on a press and a posted preprint with no references show no "References" section; with one reference they show it
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -988,7 +989,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | minor | — |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A20](#a20) | A book or preprint with no references shows an empty "References" heading | 🐞 | minor | — |
+| [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
@@ -1179,12 +1180,14 @@ are icon-only buttons with no name; a screen reader announces only
 Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — A book or preprint with no references shows an empty "References" heading** · 🐞 · minor.
+**A20 — On a press or a preprint server, a book or preprint with no references shows an empty "References" heading** · 🐞 · low.
 An item's page is expected to show "References" only when the item has
 references, as an article page does. On a press and on a preprint server
-every published item's page carries the "References" heading, with nothing
-under it when the item has none.
-Basis: probe, 2026-09-24. <sup>f-a20</sup>
+every published item's page carries the "References" heading, with
+nothing under it when the item has none. Readers see an empty section on
+the book's or preprint's page, and a screen reader announces a heading
+with no content.
+Basis: probe, 2026-10-04. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — In French the References page shows raw codes** · 🐞 · low.
@@ -2156,6 +2159,7 @@ Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619
 Live-probed 2026-09-24, OMP and OPS, two runs each: an item with no
 references showed the heading "References" over an empty block, with the
 References setting on and off; OJS showed no heading.
+Issue report: [docs/issues/U42-A20-book-preprint-empty-references-heading.md](../issues/U42-A20-book-preprint-empty-references-heading.md).
 
 <a id="fn-f-a21"></a>
 **f-a21 — A21 evidence.** None of lib/pkp's `submission.citations.structured*`
