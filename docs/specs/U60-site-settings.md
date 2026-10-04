@@ -1643,7 +1643,7 @@ templates.
 first seen 2026-09-24 (sync claim check, French). `lib/pkp/locale/fr_CA/admin.po`
 has no `admin.security` nor the `admin.settings.security.*` keys; OMP's
 `locale/fr_CA/manager.po` has an empty `manager.setup.information`.
-Issue report: [docs/issues/U60-A2-press-server-french-site-settings-raw-keys.md](../issues/U60-A2-press-server-french-site-settings-raw-keys.md).
+Issue report: [pkp-e2e#884](https://github.com/jardakotesovec/pkp-e2e/issues/884) ([docs/issues/U60-A2-press-server-french-site-settings-raw-keys.md](../issues/U60-A2-press-server-french-site-settings-raw-keys.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-26 in the Notify users test runs (OJS, OMP,

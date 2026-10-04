@@ -24,7 +24,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
-| [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 | **Taken: issues session, workstation s0, 2026-10-04** |
+| [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 | **Taken: issues session, workstation s0, 2026-10-04**; A2 done (pkp-e2e#884) |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (pkp-e2e#521) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
 | [U43](../specs/U43-funding.md) | 4 | 0 | 1 | A3 done with U41 A5 (pkp-e2e#754); A5 done: the ordering arrows with U46 A5 (pkp-e2e#619), the typed-name boxes with U41 A10 (pkp-e2e#755); A4 done with U42 A10 (pkp-e2e#873) |
