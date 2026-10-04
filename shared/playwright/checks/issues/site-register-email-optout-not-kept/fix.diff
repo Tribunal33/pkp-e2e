@@ -1,0 +1,74 @@
+--- a/lib/pkp/classes/user/form/RegistrationForm.php
++++ b/lib/pkp/classes/user/form/RegistrationForm.php
+@@ -25,6 +25,7 @@
+ use APP\notification\form\NotificationSettingsForm;
+ use APP\template\TemplateManager;
+ use PKP\config\Config;
++use PKP\context\Context;
+ use PKP\core\Core;
+ use PKP\db\DAORegistry;
+ use PKP\facades\Locale;
+@@ -325,24 +326,16 @@
+             $userFormHelper->saveRoleContent($this, $user);
+         }
+ 
+-        // Save the email notification preference
+-        if ($request->getContext() && !$this->getData('emailConsent')) {
+-            // Get the public notification types
+-            $notificationSettingsForm = new NotificationSettingsForm();
+-            $notificationCategories = $notificationSettingsForm->getNotificationSettingCategories($request->getContext());
+-            foreach ($notificationCategories as $notificationCategory) {
+-                if ($notificationCategory['categoryKey'] === 'notification.type.public') {
+-                    $publicNotifications = $notificationCategory['settings'];
+-                }
+-            }
+-            if (isset($publicNotifications)) {
+-                $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO'); /** @var NotificationSubscriptionSettingsDAO $notificationSubscriptionSettingsDao */
+-                $notificationSubscriptionSettingsDao->updateNotificationSubscriptionSettings(
+-                    'blocked_emailed_notification',
+-                    $publicNotifications,
+-                    $user->getId(),
+-                    $request->getContext()->getId()
+-                );
++        // Save the email notification preference: for the context registered with, or, on
++        // the site-wide form, for every context the new user was given a role in
++        if (!$this->getData('emailConsent')) {
++            $contextIds = $request->getContext()
++                ? [$request->getContext()->getId()]
++                : UserGroup::query()->withUserIds([$user->getId()])->get()
++                    ->pluck('contextId')->filter()->unique()->all();
++            $contextDao = Application::getContextDao();
++            foreach ($contextIds as $contextId) {
++                $this->blockPublicNotificationEmails($user->getId(), $contextDao->getById($contextId));
+             }
+         }
+ 
+@@ -351,4 +344,28 @@
+ 
+         return $userId;
+     }
++
++    /**
++     * Turn off the emails of a context's public notifications (announcements and,
++     * in OJS, issues) for a user who declined them when registering.
++     */
++    protected function blockPublicNotificationEmails(int $userId, Context $context): void
++    {
++        $notificationSettingsForm = new NotificationSettingsForm();
++        $notificationCategories = $notificationSettingsForm->getNotificationSettingCategories($context);
++        foreach ($notificationCategories as $notificationCategory) {
++            if ($notificationCategory['categoryKey'] === 'notification.type.public') {
++                $publicNotifications = $notificationCategory['settings'];
++            }
++        }
++        if (isset($publicNotifications)) {
++            $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO'); /** @var NotificationSubscriptionSettingsDAO $notificationSubscriptionSettingsDao */
++            $notificationSubscriptionSettingsDao->updateNotificationSubscriptionSettings(
++                'blocked_emailed_notification',
++                $publicNotifications,
++                $userId,
++                $context->getId()
++            );
++        }
++    }
+ }
