@@ -791,6 +791,7 @@ Left out of the scenarios above, by reason:
   - the panel's own "Clear Filters", "Close" and unapplied changes (Rules 8b, 8c)
   - the "Loaded" a screen reader hears once the list has loaded (Rule 5)
   - the guard for A10 (issue report `docs/issues/U23-A10-pager-next-lacks-spoken-label.md`): on a list with two pages, every pager button carries a "Go to …" name, "Go to Next" included
+  - the guard for A4 and A6 (issue report `docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md`): the dashboard popover of a reviewer the editor cancelled names the editor, and that of an accepted review past its deadline speaks of the review deadline
 - **Nothing new to test**:
   - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
@@ -836,9 +837,9 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A4](#a4) | The popover over an editor-cancelled review request blames the reviewer: "Reviewer cancelled review request" | 🐞 | minor | — |
+| [A4](#a4) | The popover over an editor-cancelled review request blames the reviewer: "Reviewer cancelled review request" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Switching a sort off leaves the old sort in the address, so display and address disagree until reload | 🐞 | minor | — |
-| [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | minor | — |
+| [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | Paged lists: a screen reader announces the pager's "Next" as plain "Next", unlike its "Go to …" neighbours | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | minor | — |
 | [A1](#a1) | Section Editors and assistants have no view listing declined (or published-and-gone) submissions; global search is their only way back | ❓ | user-visible | — |
@@ -893,7 +894,7 @@ app-level rewording; harmless, but it reads wrong outside OJS.
 Basis: probe + code. <sup>a3</sup>
 
 <a id="a4"></a>
-**A4 — Cancelled-by-editor popover blames the reviewer** · 🐞 · minor.
+**A4 — Cancelled-by-editor popover blames the reviewer** · 🐞 · low.
 When an editor cancels a review request ("Cancel Reviewer"), the reviewer's
 indicator popover is headlined "Reviewer cancelled review request",
 although the reviewer did nothing. Its description repeats the
@@ -902,7 +903,7 @@ Expected: wording that attributes the cancellation to the editorial side,
 as the Reviewers panel's own status ("Request Cancelled") does. Rationale
 for 🐞: the neighboring declined status has its own, correct headline, so
 the two states were meant to read differently.
-Basis: probe + code. <sup>a4</sup>
+Basis: probe + code, 2026-10-04. <sup>a4</sup>
 
 <a id="a5"></a>
 **A5 — Un-sorting leaves a stale sort in the address** · 🐞 · minor.
@@ -915,7 +916,7 @@ first two (Rule 4).
 Basis: probe. <sup>a5</sup>
 
 <a id="a6"></a>
-**A6 — The overdue-review popover talks about a response** · 🐞 · minor.
+**A6 — The overdue-review popover talks about a response** · 🐞 · low.
 Once an accepted review runs overdue, the indicator popover's headline says
 "Review overdue by {days} days", but its description reads "This reviewer
 has not completed their review. A response was due on {date}." It calls the
@@ -923,7 +924,7 @@ missed review a "response", and the date it shows is the review due date
 under that wrong name. Expected: the description speaks of the review and
 its deadline, as the headline does. The response-overdue state has this
 same sentence, where it is correct.
-Basis: probe. <sup>a6</sup>
+Basis: probe, 2026-10-04. <sup>a6</sup>
 
 <a id="a7"></a>
 **A7 — Declined and cancelled reviewers vanish for assistants** · ❓ · minor.
@@ -1785,6 +1786,7 @@ the reviewer took no action at any point — the popover read "Reviewer
 cancelled review request" / "Reviewer has cancelled the review request on
 {date}." on both apps, with "Resend Review Request" and "View details" as
 the buttons.
+Issue report: [docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md](../issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md).
 
 <a id="fn-a5"></a>
 **a5 — A5 evidence.** Live-probed 2026-08-26 (OJS, manager, 31-row view;
@@ -1805,6 +1807,7 @@ the review request. A response was due on {date}") is correct in its own
 context; the review-overdue state reuses the response sentence where a
 review sentence is needed (popover description keys per status in
 `ConfigPerStatus` — fn-k).
+Issue report: [docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md](../issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md).
 
 <a id="fn-a7"></a>
 **a7 — A7 evidence.** Live-probed 2026-08-26 (OJS + OMP, manager vs

@@ -1,0 +1,35 @@
+--- a/lib/pkp/classes/submission/reviewAssignment/ReviewAssignment.php
++++ b/lib/pkp/classes/submission/reviewAssignment/ReviewAssignment.php
+@@ -47,7 +47,7 @@
+     public const REVIEW_ASSIGNMENT_STATUS_RECEIVED = 7; // review has been submitted
+     public const REVIEW_ASSIGNMENT_STATUS_COMPLETE = 8; // review has been confirmed by an editor
+     public const REVIEW_ASSIGNMENT_STATUS_THANKED = 9; // reviewer has been thanked
+-    public const REVIEW_ASSIGNMENT_STATUS_CANCELLED = 10; // reviewer cancelled review request
++    public const REVIEW_ASSIGNMENT_STATUS_CANCELLED = 10; // editor cancelled review request
+     public const REVIEW_ASSIGNMENT_STATUS_REQUEST_RESEND = 11; // request resent to reviewer after they declined
+     public const REVIEW_ASSIGNMENT_STATUS_VIEWED = 12; // editor has viewed the review assignment, intermediate status between received and complete
+     /**
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3302,7 +3302,7 @@
+ msgstr "Review overdue by {$days} days"
+ 
+ msgid "dashboard.reviewAssignment.statusReviewOverdue.description"
+-msgstr "This reviewer has not completed their review. A response was due on <b>{$date}.</b>"
++msgstr "This reviewer has not completed their review. The review was due on <b>{$date}</b>."
+ 
+ msgid "dashboard.reviewAssignment.statusReceived.title"
+ msgstr "Review completed on {$date}"
+@@ -3320,10 +3320,10 @@
+ msgstr "The review was accepted by the editor on <b>{$date}</b>."
+ 
+ msgid "dashboard.reviewAssignment.statusCancelled.title"
+-msgstr "Reviewer cancelled review request"
++msgstr "Review request cancelled by editor"
+ 
+ msgid "dashboard.reviewAssignment.statusCancelled.description"
+-msgstr "Reviewer has cancelled the review request on <b>{$date}</b>."
++msgstr "The editor cancelled this review request on <b>{$date}</b>."
+ 
+ msgid "dashboard.reviewAssignment.statusRequestResend.title"
+ msgstr "Awaiting Response from the reviewer"
