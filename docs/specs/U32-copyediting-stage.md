@@ -1012,7 +1012,7 @@ Issue report: [docs/issues/U71-OMP10-copyediting-no-assign-copyeditor-notice.md]
 
 <a id="fn-a7"></a>
 **f-a7** — `lib/pkp/classes/submissionFile/Repository.php::delete()`: for a `SUBMISSION_FILE_COPYEDIT` file it calls `updateNotification()` for the pair before `$this->dao->delete($submissionFile)`, so `PKPEditingProductionStatusNotificationManager` still counts the file being deleted, deletes both types, and nothing recomputes them once the row is gone. Live-probed 2026-09-18 on OJS and OMP: "Delete" › OK on the only copyedited file left "Copyedited Files" at "No Items" and both assigned editors with no notice, on the same page, re-landed and minutes later, from the "Assign a copyeditor…" state and from the "Awaiting Copyedits." state.
-Issue report: [docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md).
+Issue report: [pkp-e2e#862](https://github.com/jardakotesovec/pkp-e2e/issues/862) ([docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — `ManageSubmissionFilesForm::importFile()` clones the ticked file into the target file stage with `sourceSubmissionFileId` set to the original's id. `Repository::delete()` removes dependent files (`SUBMISSION_FILE_DEPENDENT` rows attached to the file) and the stored file only when no other row shares it, and names no source link, so the code read gives no cause; the live observation stands alone. Live-probed 2026-09-18 on OJS and OMP, once each: "Draft Files" held the copy of copyedited file 16 as row 17; after "Delete" › OK on row 16 in "Copyedited Files", "Draft Files" listed rows 14 and 13 only. The reverse direction was not driven.

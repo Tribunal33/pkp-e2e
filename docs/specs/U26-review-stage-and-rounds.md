@@ -1564,7 +1564,7 @@ and OMP, for editor-side and author-side deletion of the only revised file;
 the later file add that re-creates a task observed live on the press and
 code-traced on the journal. The spec's prior revival claim was corrected by
 the same check.
-Issue report: [docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md).
+Issue report: [pkp-e2e#862](https://github.com/jardakotesovec/pkp-e2e/issues/862) ([docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md)).
 
 <a id="fn-a11"></a>
 **f-a11** — Test run 2026-09-12 (OJS, scenario 4, one run): after the
