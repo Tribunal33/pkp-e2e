@@ -2159,7 +2159,7 @@ Issue report: [pkp-e2e#619](https://github.com/jardakotesovec/pkp-e2e/issues/619
 Live-probed 2026-09-24, OMP and OPS, two runs each: an item with no
 references showed the heading "References" over an empty block, with the
 References setting on and off; OJS showed no heading.
-Issue report: [docs/issues/U42-A20-book-preprint-empty-references-heading.md](../issues/U42-A20-book-preprint-empty-references-heading.md).
+Issue report: [pkp-e2e#871](https://github.com/jardakotesovec/pkp-e2e/issues/871) ([docs/issues/U42-A20-book-preprint-empty-references-heading.md](../issues/U42-A20-book-preprint-empty-references-heading.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21 — A21 evidence.** None of lib/pkp's `submission.citations.structured*`
