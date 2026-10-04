@@ -987,7 +987,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | On a press or preprint server, the submission wizard's data citations and funders still read empty after a save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A13](#a13) | An author row abandoned with "Close" comes back blank, is saved, and makes the reference structured | 🐞 | minor | — |
+| [A13](#a13) | "Edit citation" keeps an author row added or deleted before "Close", and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A screen reader hears no name for the author boxes in "Edit citation" and the data citation panel | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1156,15 +1156,25 @@ by default.
 Basis: probe, 2026-10-04. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A blank author row is saved and counts as an author** · 🐞 · minor.
-In "Edit citation" with lookup on, an editor presses "Add" under "Author
-Information", types a name and presses "Close", expecting nothing kept. On
-the next "Edit" the panel shows an author row with empty boxes, and "Save"
-for any other change stores an author with no name, kept after a reload. An
-author row with no names counts as an author, so a reference with an
-identifier and a title becomes structured: its row shows the title and an
-expander, its menu loses "Reprocess", and the progress box counts it.
-Basis: probe, 2026-09-24. <sup>f-a13</sup>
+**A13 — "Edit citation" keeps an author row added or deleted before "Close", and the next "Save" stores it** · 🐞 · medium.
+In "Edit citation" (the References page with metadata lookup on), an
+editor presses "Add" under "Author Information", types a name, and
+leaves with "Close", expecting nothing kept, as happens to every other
+box of the panel. On the next "Edit" the panel shows an author row with
+empty boxes, and "Save" for any other change stores an author with no
+name. A reference with an identifier and a title then counts as
+structured: its row shows the title and an expander, and its menu loses
+"Reprocess", so the lookup can no longer be rerun for that reference
+alone. Deleting a row and leaving with "Close" works the same way: the
+row is missing from the next "Edit" and is deleted for good by the next
+"Save". The same happens to a data citation's "Creators" in "Edit Data
+Citation" and to a funder's grants in "Edit Funder" on the Funding page.
+The reference case needs metadata lookup on, and the creators case needs
+data citations on; both are off in a new install. The grants case needs
+only the Funding page, which a new install shows. In every case the
+change comes back only if the item is edited again before the page
+reloads or saves anything else.
+Basis: probe, 2026-10-04. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — A screen reader hears no name for the author boxes in "Edit citation" and the data citation panel** · 🐞 · low.
@@ -2144,6 +2154,7 @@ the close and the reopen, removes the blank row. A row added empty and
 saved made a reference with a DOI and a title structured, took
 "Reprocess" off its menu and moved the box to "0/2"; deleting the row and
 saving undid all of it.
+Issue report: [docs/issues/U42-A13-citation-author-row-kept-after-close.md](../issues/U42-A13-citation-author-row-kept-after-close.md).
 
 <a id="fn-f-a14"></a>
 **f-a14 — A14 evidence.** `FieldAuthors.vue` renders each row's boxes as

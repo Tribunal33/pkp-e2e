@@ -170,6 +170,74 @@ async function afterClose(page) {
     await idle(page);
 }
 
+/** Open the submission's "Funding" page (Publication › Funding) and return the workflow frame. */
+async function openFunding(page, app) {
+    const wf = workflow(page, app);
+    await wf.gotoEditorial(SUBMISSION[app.name].id);
+    await idle(page);
+    await wf.selectPage('Funding');
+    await idle(page);
+    return wf;
+}
+
+/**
+ * "Add Funder": type a funder's name and choose the typed text (the registry search is answered
+ * with no match by the caller's route), add one grant row per number, "Save".
+ */
+async function addFunder(page, wf, name, grantNumbers) {
+    await wf.dialog().getByRole('button', {name: 'Add Funder', exact: true}).first().click();
+    const panel = page.getByRole('dialog', {name: 'Add Funder'});
+    await panel.getByRole('button', {name: 'Save', exact: true}).waitFor({timeout: T});
+    const search = panel.locator('input.pkpAutosuggest__input').first();
+    await search.click();
+    await search.pressSequentially(name, {delay: 15});
+    await panel.locator('li.autosuggest__results-item').filter({hasText: name}).first().click();
+    await sleep(400);
+    const grants = panel.locator('.pkpFormField--funder-grants');
+    for (const n of grantNumbers) {
+        await grants.getByRole('button', {name: 'Add', exact: true}).click();
+        await grants.locator('tbody tr:has(input[name="grantNumber"])').last().locator('input[name="grantNumber"]').fill(n);
+    }
+    const saved = page.waitForResponse((r) => /\/funders(\/\d+)?$/.test(r.url().split('?')[0]) && r.request().method() === 'POST', {timeout: T});
+    await panel.getByRole('button', {name: 'Save', exact: true}).click();
+    const r = await saved;
+    await panel.waitFor({state: 'detached', timeout: T}).catch(() => {});
+    await afterClose(page);
+    return r.status();
+}
+
+/** The Funders table row of `name`: "More Actions" › "Edit"; returns the open "Edit Funder" panel. */
+async function editFunder(page, wf, name) {
+    const row = wf.dialog().getByRole('table', {name: 'Funders', exact: true}).locator('tbody tr').filter({hasText: name}).first();
+    await row.getByRole('button', {name: 'More Actions'}).click();
+    await page.getByRole('menuitem', {name: 'Edit', exact: true}).click();
+    const panel = page.getByRole('dialog', {name: 'Edit Funder'});
+    await panel.getByRole('button', {name: 'Save', exact: true}).waitFor({timeout: T});
+    await idle(page);
+    return panel;
+}
+
+/** The grant rows of an open funder panel: each row's three values. */
+async function grantRows(panel) {
+    const rows = panel.locator('.pkpFormField--funder-grants tbody tr:has(input[name="grantNumber"])');
+    const out = [];
+    for (let i = 0; i < (await rows.count()); i++) {
+        const r = rows.nth(i);
+        out.push({
+            grantDoi: await r.locator('input[name="grantDoi"]').inputValue(),
+            grantNumber: await r.locator('input[name="grantNumber"]').inputValue(),
+            grantName: await r.locator('input[name="grantName"]').inputValue(),
+        });
+    }
+    return out;
+}
+
+/** Read: the stored grants of the submission's funders. */
+function storedGrants(app) {
+    const sub = SUBMISSION[app.name].id;
+    return sql(app, `select f.funder_id, coalesce((select setting_value from funder_settings s where s.funder_id = f.funder_id and s.setting_name = 'grants'), '-') from funders f where f.submission_id = ${sub} order by 1`).split('\n');
+}
+
 module.exports = {
     T,
     flat,
@@ -185,4 +253,9 @@ module.exports = {
     storedCitation,
     storedDataCitation,
     afterClose,
+    openFunding,
+    addFunder,
+    editFunder,
+    grantRows,
+    storedGrants,
 };

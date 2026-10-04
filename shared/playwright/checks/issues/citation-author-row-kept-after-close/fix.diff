@@ -1,0 +1,32 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldAuthors.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldAuthors.vue
+@@ -150,11 +150,11 @@
+ });
+ 
+ function deleteRow(index) {
+-	currentValue.value.splice(index, 1);
++	currentValue.value = currentValue.value.filter((_, i) => i !== index);
+ }
+ 
+ function addRow() {
+-	currentValue.value.push(rowDataModel());
++	currentValue.value = [...currentValue.value, rowDataModel()];
+ }
+ 
+ function updateRow(rowIndex, fieldName, fieldValue) {
+--- a/lib/ui-library/src/components/Form/fields/FieldFunderGrants.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldFunderGrants.vue
+@@ -150,11 +150,11 @@
+ });
+ 
+ function deleteRow(index) {
+-	currentValue.value.splice(index, 1);
++	currentValue.value = currentValue.value.filter((_, i) => i !== index);
+ }
+ 
+ function addRow() {
+-	currentValue.value.push(rowDataModel());
++	currentValue.value = [...currentValue.value, rowDataModel()];
+ }
+ 
+ function updateRow(rowIndex, fieldName, fieldValue) {
