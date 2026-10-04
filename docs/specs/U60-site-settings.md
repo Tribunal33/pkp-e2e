@@ -1793,7 +1793,7 @@ moves whenever a journal's row is written. Every load of Site Settings
 in the drive also saw the "Plugin Gallery" list fail with a server
 error, which this list does not cause
 ([Plugins management](U62-plugins-management.md#a1), A1).
-Issue report: [docs/issues/U60-A11-site-redirect-list-ignores-journal-order.md](../issues/U60-A11-site-redirect-list-ignores-journal-order.md).
+Issue report: [pkp-e2e#888](https://github.com/jardakotesovec/pkp-e2e/issues/888) ([docs/issues/U60-A11-site-redirect-list-ignores-journal-order.md](../issues/U60-A11-site-redirect-list-ignores-journal-order.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `PKPSiteConfigForm` passes each journal's name through
