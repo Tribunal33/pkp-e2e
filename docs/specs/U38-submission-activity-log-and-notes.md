@@ -511,6 +511,7 @@ Left out of the scenarios above, by reason:
   - a "Notify" message, an "Assign" message and a discussion's email: their "History" lines name the editor who sent them under "User" (Rule 4c; [A1](#a1)): the guard the issue report proposes
   - a Reviewer's "Submit Review": the "Review complete" lines with nothing under "User" (Rule 4c; [A5](#a5)): the guard the issue report proposes
   - text typed in "Add Note" and not added on a submission with a note: "Close" asks; after a switch to "History" answered "OK", "Close" asks nothing; no "Leave site?" after either (Rule 10d; [A3](#a3), [A9](#a9), [A10](#a10)): the guard the issue report proposes
+  - a publication format created and then deleted: its two "History" lines name the format {OMP} (Rule 11; [OMP1](#omp1)): the guard the issue report proposes
 - **Nothing new to test**:
   - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
   - a preprint server's file lines, from a galley's file, and its "Change File" cancelled (Rules 6, 6c)
@@ -529,7 +530,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A2 (an empty note; Rule 10a)
   - A7 (file lines read in French; Rule 8a)
-  - OMP1 (a publication format's lines; Rule 11)
 - **No seed**:
   - a Site Administrator whose journal roles are all assistant roles: "Notes" alone, no "Delete" (Actors rows 1, 2, 4, 5; A4)
   - a reviewer's file line read by the author-editor: "Anonymous Reviewer", no file name, no "Download" (Rule 9)
@@ -554,7 +554,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OMP1](#omp1) | A new or deleted publication format's line prints "{$formatName}" | 🐞 | minor | — |
+| [OMP1](#omp1) | A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
 | [A6](#a6) | Retired: a cancelled revision left two revision lines on "History", and the first one's "Download" opened a blank page; it now leaves no line (Rule 6c) | ✅ | retired | upstream change + claim check (claude), 2026-09-27 — fixed upstream |
@@ -677,13 +677,28 @@ Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — "{$formatName}" on a publication format's line** · 🐞 · minor.
-Creating a publication format adds the line "The publication format
-"{$formatName}" was created.", and deleting one "The publication format
-"{$formatName}" was removed.": the format's name is expected where the
-placeholder prints. The press's other publication format lines name the
+**OMP1 — A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted** · 🐞 · low.
+When an editor adds a publication format to a book, or deletes one, the
+book's "Activity Log" shows a raw placeholder where the format's name
+belongs:
+
+- The publication format "{$formatName}" was created.
+- The publication format "{$formatName}" was removed.
+
+The press's other format lines, such as "is made available.", name the
 format.
-Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+
+Nothing is lost: the line is written under the right person and date,
+and the format's name is stored with it. But a reader of the log cannot
+tell from it which format was added or deleted, and a deleted format's
+name shows nowhere else.
+
+The sentence is built from the stored name each time the log is shown,
+so the fix, a corrected placeholder in two texts of each language's
+file, also corrects the lines already in the log, with no repair. Lines
+carried over by an upgrade from 3.3 show the name only while the log is
+read in the press's primary language.
+Basis: probe, 2026-10-04. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### Retired
 
@@ -1317,6 +1332,7 @@ Editor): a format created and then deleted from its row ("Delete",
 "OK") wrote "…"{$formatName}" was created." and "…"{$formatName}" was
 removed." under the editor's name, while its approval and availability
 lines named "K2 Format".
+Issue report: [docs/issues/U38-OMP1-format-created-removed-lines-placeholder.md](../issues/U38-OMP1-format-created-removed-lines-placeholder.md).
 
 ## Reference — entry points & surfaces
 

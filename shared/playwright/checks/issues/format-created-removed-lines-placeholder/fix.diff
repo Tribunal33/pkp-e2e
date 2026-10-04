@@ -1,0 +1,445 @@
+--- a/locale/bg/submission.po
++++ b/locale/bg/submission.po
+@@ -345,10 +345,10 @@
+ "Метаданните за формата на публикацията за „{$formatName}“ бяха актуализирани."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Форматът за публикация „{$formatName}“ беше създаден."
++msgstr "Форматът за публикация „{$publicationFormatName}“ беше създаден."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Форматът за публикация „{$formatName}“ беше премахнат."
++msgstr "Форматът за публикация „{$publicationFormatName}“ беше премахнат."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Изпратено за външен преглед (рецензия)"
+--- a/locale/ca/submission.po
++++ b/locale/ca/submission.po
+@@ -283,10 +283,10 @@
+ "estan actualitzades."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "S'ha creat el format de publicació «{$formatName}»."
++msgstr "S'ha creat el format de publicació «{$publicationFormatName}»."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "S'ha eliminat el format de publicació «{$formatName}»."
++msgstr "S'ha eliminat el format de publicació «{$publicationFormatName}»."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Enviar per a una revisió externa"
+--- a/locale/cs/submission.po
++++ b/locale/cs/submission.po
+@@ -274,10 +274,10 @@
+ msgstr "Metadata publikačního formátu \"{$formatName}\" byla aktualizována."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Publikační formát \"{$formatName}\" byl vytvořen."
++msgstr "Publikační formát \"{$publicationFormatName}\" byl vytvořen."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Publikační formát \"{$formatName}\" byl odstraněn."
++msgstr "Publikační formát \"{$publicationFormatName}\" byl odstraněn."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Poslat k externí recenzi"
+--- a/locale/da/submission.po
++++ b/locale/da/submission.po
+@@ -289,10 +289,10 @@
+ msgstr "Publikationsformatets metadata til \"{$formatName}\" blev opdateret."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Publikationsformatet \"{$formatName}\" blev oprettet."
++msgstr "Publikationsformatet \"{$publicationFormatName}\" blev oprettet."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Publikationsformatet \"{$formatName}\" blev fjernet."
++msgstr "Publikationsformatet \"{$publicationFormatName}\" blev fjernet."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Send til ekstern bedømmelse"
+--- a/locale/de/submission.po
++++ b/locale/de/submission.po
+@@ -291,10 +291,10 @@
+ msgstr "Die Metadaten für das Format \"{$formatName}\" wurden upgedatet."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Das Format \"{$formatName}\" wurde erstellt."
++msgstr "Das Format \"{$publicationFormatName}\" wurde erstellt."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Das Format \"{$formatName}\" wurde entfernt."
++msgstr "Das Format \"{$publicationFormatName}\" wurde entfernt."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "In externe Begutachtung geben"
+--- a/locale/el/submission.po
++++ b/locale/el/submission.po
+@@ -287,10 +287,10 @@
+ "έχουν ενημερωθεί."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Το μορφότυπο της δημοσίευσης \"{$formatName}\" έχει δημιουργηθεί."
++msgstr "Το μορφότυπο της δημοσίευσης \"{$publicationFormatName}\" έχει δημιουργηθεί."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Το μορφότυπο της δημοσίευσης \"{$formatName}\" έχει αφαιρεθεί."
++msgstr "Το μορφότυπο της δημοσίευσης \"{$publicationFormatName}\" έχει αφαιρεθεί."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr ""
+--- a/locale/en/submission.po
++++ b/locale/en/submission.po
+@@ -277,10 +277,10 @@
+ msgstr "The publication format metadata for \"{$formatName}\" was updated."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "The publication format \"{$formatName}\" was created."
++msgstr "The publication format \"{$publicationFormatName}\" was created."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "The publication format \"{$formatName}\" was removed."
++msgstr "The publication format \"{$publicationFormatName}\" was removed."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Send to External Review"
+--- a/locale/es/submission.po
++++ b/locale/es/submission.po
+@@ -286,10 +286,10 @@
+ "Se actualizaron los metadatos del formato de publicación \"{$formatName}\"."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Se creó el formato de publicación \"{$formatName}\"."
++msgstr "Se creó el formato de publicación \"{$publicationFormatName}\"."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Se eliminó el formato de publicación \"{$formatName}\"."
++msgstr "Se eliminó el formato de publicación \"{$publicationFormatName}\"."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Enviar para una revisión externa"
+--- a/locale/fi/submission.po
++++ b/locale/fi/submission.po
+@@ -278,10 +278,10 @@
+ msgstr "Julkaisumuodon \"{$formatName}\" metatiedot päivitettiin."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Julkaisumuoto \"{$formatName}\" luotiin."
++msgstr "Julkaisumuoto \"{$publicationFormatName}\" luotiin."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Julkaisumuoto \"{$formatName}\" poistettiin."
++msgstr "Julkaisumuoto \"{$publicationFormatName}\" poistettiin."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Lähetä ulkopuoliseen arviointiin"
+--- a/locale/fr/submission.po
++++ b/locale/fr/submission.po
+@@ -33,7 +33,7 @@
+ msgstr "Note de présentation pour l’éditeur"
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Le format de publication « {$formatName} » a été créé."
++msgstr "Le format de publication « {$publicationFormatName} » a été créé."
+ 
+ msgid "submission.submit.seriesPosition.description"
+ msgstr "Exemples : Livre 2, Volume 2"
+@@ -354,7 +354,7 @@
+ "jour."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Le format de publication « {$formatName} » a été supprimé."
++msgstr "Le format de publication « {$publicationFormatName} » a été supprimé."
+ 
+ msgid "workflow.review.externalReview"
+ msgstr "Évaluation externe"
+--- a/locale/fr_CA/submission.po
++++ b/locale/fr_CA/submission.po
+@@ -282,10 +282,10 @@
+ "mises à jour."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Le format de publication \"{$formatName}\" a été créé."
++msgstr "Le format de publication \"{$publicationFormatName}\" a été créé."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Le format de publication \"{$formatName}\" a été supprimé."
++msgstr "Le format de publication \"{$publicationFormatName}\" a été supprimé."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr ""
+--- a/locale/gd/submission.po
++++ b/locale/gd/submission.po
+@@ -285,10 +285,10 @@
+ "Chaidh meata-dàta an fhòrmait fhoillseachaidh “{$formatName}” ùrachadh."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Chaidh am fòrmat foillseachaidh “{$formatName}” a chruthachadh."
++msgstr "Chaidh am fòrmat foillseachaidh “{$publicationFormatName}” a chruthachadh."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Chaidh am fòrmat foillseachaidh “{$formatName}” a thoirt air falbh."
++msgstr "Chaidh am fòrmat foillseachaidh “{$publicationFormatName}” a thoirt air falbh."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Cuir airson lèirmheas air an taobh a-muigh"
+--- a/locale/gl/submission.po
++++ b/locale/gl/submission.po
+@@ -277,10 +277,10 @@
+ "Actualizáronse os metadatos do formato de publicación \"{$formatName}\"."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Creouse o formato de publicación \"{$formatName}\"."
++msgstr "Creouse o formato de publicación \"{$publicationFormatName}\"."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Eliminouse o formato de publicación \"{$formatName}\"."
++msgstr "Eliminouse o formato de publicación \"{$publicationFormatName}\"."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Enviar para revisión externa"
+--- a/locale/hr/submission.po
++++ b/locale/hr/submission.po
+@@ -165,7 +165,7 @@
+ msgstr "Metapodaci kataloga su ažurirani."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Format publikacije \"{$formatName}\" je uklonjen."
++msgstr "Format publikacije \"{$publicationFormatName}\" je uklonjen."
+ 
+ msgid "submission.list.countMonographs"
+ msgstr "{$count} monografija"
+@@ -328,7 +328,7 @@
+ msgstr "Ažurirani su metapodaci formata publikacije za \"{$formatName}\"."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Izrađen je format publikacije \"{$formatName}\"."
++msgstr "Izrađen je format publikacije \"{$publicationFormatName}\"."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Pošaljite na vanjski pregled"
+--- a/locale/hu/submission.po
++++ b/locale/hu/submission.po
+@@ -279,10 +279,10 @@
+ "A(z) \"{$formatName}\" kiadványformátum metaadatai frissítésre kerültek."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Létrejött a(z) \"{$formatName}\" kiadványformátum."
++msgstr "Létrejött a(z) \"{$publicationFormatName}\" kiadványformátum."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "A(z) \"{$formatName}\" kiadványformátum eltávolításra került."
++msgstr "A(z) \"{$publicationFormatName}\" kiadványformátum eltávolításra került."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Külső szakmai lektorálásra küldés"
+--- a/locale/id/submission.po
++++ b/locale/id/submission.po
+@@ -287,10 +287,10 @@
+ msgstr "Metadata format publikasi untuk \"{$formatName}\" telah diperbarui."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Format publikasi \"{$formatName}\" telah dibuat."
++msgstr "Format publikasi \"{$publicationFormatName}\" telah dibuat."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Format publikasi \"{$formatName}\" telah dihapus."
++msgstr "Format publikasi \"{$publicationFormatName}\" telah dihapus."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Kirim ke Peninjau Eksternal"
+--- a/locale/it/submission.po
++++ b/locale/it/submission.po
+@@ -285,10 +285,10 @@
+ msgstr "I metadati \"{$formatName}\" sono stati aggiornati."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Il formato \"{$formatName}\" è stato creato."
++msgstr "Il formato \"{$publicationFormatName}\" è stato creato."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Il formato \"{$formatName}\" è stato rimosso."
++msgstr "Il formato \"{$publicationFormatName}\" è stato rimosso."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Inviare in revisione esterna"
+--- a/locale/mk/submission.po
++++ b/locale/mk/submission.po
+@@ -277,10 +277,10 @@
+ "ажурирани."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Форматот на издавање со име \"{$formatName}\" беше креиран."
++msgstr "Форматот на издавање со име \"{$publicationFormatName}\" беше креиран."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Форматот на издавање \"{$formatName}\" беше отстранет."
++msgstr "Форматот на издавање \"{$publicationFormatName}\" беше отстранет."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Испрати на надворешна контрола"
+--- a/locale/mn/submission.po
++++ b/locale/mn/submission.po
+@@ -297,10 +297,10 @@
+ msgstr "\"{$formatName}\" форматын нийтлэх мета өгөгдөл шинэчлэгдлээ."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Нийтлэх формат \"{$formatName}\" үүсгэгдлээ."
++msgstr "Нийтлэх формат \"{$publicationFormatName}\" үүсгэгдлээ."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Нийтлэх формат \"{$formatName}\" устгагдлаа."
++msgstr "Нийтлэх формат \"{$publicationFormatName}\" устгагдлаа."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Хөндлөнгийн хяналт руу илгээх"
+--- a/locale/nb_NO/submission.po
++++ b/locale/nb_NO/submission.po
+@@ -280,10 +280,10 @@
+ msgstr "Publikasjonsformatets metadata til \"{$formatName}\" ble opdatert."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Publikasjonsformatet \"{$formatName}\" ble opprettet."
++msgstr "Publikasjonsformatet \"{$publicationFormatName}\" ble opprettet."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Publikasjonsformatet \"{$formatName}\" ble fjernet."
++msgstr "Publikasjonsformatet \"{$publicationFormatName}\" ble fjernet."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Send til ekstern bedømming"
+--- a/locale/pl/submission.po
++++ b/locale/pl/submission.po
+@@ -279,10 +279,10 @@
+ "Metadane formatu publikacji dla \"{$formatName}\" zostały zaktualizowane."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Format publikacji \"{$formatName}\" został utworzony."
++msgstr "Format publikacji \"{$publicationFormatName}\" został utworzony."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Format publikacji \"{$formatName}\"został usunięty."
++msgstr "Format publikacji \"{$publicationFormatName}\"został usunięty."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Wyślij do zewnętrznej recenzji"
+--- a/locale/pt/submission.po
++++ b/locale/pt/submission.po
+@@ -288,10 +288,10 @@
+ "Os metadados do formato de publicação de \"{$formatName}\" foram atualizados."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "O formato de publicação \"{$formatName}\" foi criado."
++msgstr "O formato de publicação \"{$publicationFormatName}\" foi criado."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "O formato de publicação \"{$formatName}\" foi removido."
++msgstr "O formato de publicação \"{$publicationFormatName}\" foi removido."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Enviar para Revisão Externa"
+--- a/locale/pt_BR/submission.po
++++ b/locale/pt_BR/submission.po
+@@ -283,10 +283,10 @@
+ "Os metadados do formato de publicação \"{$formatName}\" foram atualizados."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "O formato de publicação \"{$formatName}\" foi criado."
++msgstr "O formato de publicação \"{$publicationFormatName}\" foi criado."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "O formato de publicação \"{$formatName}\" foi excluído."
++msgstr "O formato de publicação \"{$publicationFormatName}\" foi excluído."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Enviar ao Avaliador Externo"
+--- a/locale/ro/submission.po
++++ b/locale/ro/submission.po
+@@ -270,10 +270,10 @@
+ msgstr "Metadatele catalogului au fost actualizate."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Formatul de publicație „{$formatName}” a fost creat."
++msgstr "Formatul de publicație „{$publicationFormatName}” a fost creat."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Formatul de publicație „{$formatName}” a fost înlăturat."
++msgstr "Formatul de publicație „{$publicationFormatName}” a fost înlăturat."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Trimitere către verificare externă"
+--- a/locale/ru/submission.po
++++ b/locale/ru/submission.po
+@@ -273,10 +273,10 @@
+ msgstr "Метаданные формата публикации  \"{$formatName}\" были обновлены."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Формат публикации  \"{$formatName}\" был создан."
++msgstr "Формат публикации  \"{$publicationFormatName}\" был создан."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Формат публикации  \"{$formatName}\" был удален."
++msgstr "Формат публикации  \"{$publicationFormatName}\" был удален."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Послать на внешнее рецензирование"
+--- a/locale/sl/submission.po
++++ b/locale/sl/submission.po
+@@ -283,10 +283,10 @@
+ msgstr "Metapodatki formata publikacije \"{$formatName}\" so posodobljeni."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Format publikacije \"{$formatName}\" je ustvarjen."
++msgstr "Format publikacije \"{$publicationFormatName}\" je ustvarjen."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Format publikacije \"{$formatName}\" je odstranjen."
++msgstr "Format publikacije \"{$publicationFormatName}\" je odstranjen."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Pošlji na zunanjo recenzijo"
+--- a/locale/sv/submission.po
++++ b/locale/sv/submission.po
+@@ -276,10 +276,10 @@
+ msgstr "Metadatan om publiceringsformatet \"{$formatName}\" har uppdaterats."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Publiceringsformatet \"{$formatName}\" har skapats."
++msgstr "Publiceringsformatet \"{$publicationFormatName}\" har skapats."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Publiceringsformatet \"{$formatName}\" har raderats."
++msgstr "Publiceringsformatet \"{$publicationFormatName}\" har raderats."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Skicka till extern granskning"
+--- a/locale/tr/submission.po
++++ b/locale/tr/submission.po
+@@ -273,10 +273,10 @@
+ msgstr "\"{$formatName}\" için yayın biçimi üst verileri güncellendi."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "\"{$formatName}\" yayın biçimi oluşturuldu."
++msgstr "\"{$publicationFormatName}\" yayın biçimi oluşturuldu."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "\"{$formatName}\" yayın biçimi kaldırıldı."
++msgstr "\"{$publicationFormatName}\" yayın biçimi kaldırıldı."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Dış Değerlendirmeye Gönder"
+--- a/locale/uk/submission.po
++++ b/locale/uk/submission.po
+@@ -275,10 +275,10 @@
+ msgstr "Метадані для формату публікації \"{$formatName}\" було оновлено."
+ 
+ msgid "submission.event.publicationFormatCreated"
+-msgstr "Формат публікації \"{$formatName}\" створено."
++msgstr "Формат публікації \"{$publicationFormatName}\" створено."
+ 
+ msgid "submission.event.publicationFormatRemoved"
+-msgstr "Формат публікації \"{$formatName}\" видалено."
++msgstr "Формат публікації \"{$publicationFormatName}\" видалено."
+ 
+ msgid "editor.submission.decision.sendExternalReview"
+ msgstr "Надіслати на зовнішнє рецензування"
