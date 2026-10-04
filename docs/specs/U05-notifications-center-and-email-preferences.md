@@ -799,6 +799,7 @@ Left out of the scenarios above, by reason:
   - a preprint server's "needs a moderator" task opening the preprint's workflow (Rule 2c; scenario 1 presses a task; the guard [OPS3](#ops3)'s issue report proposes)
   - a reply in a discussion with "Discussion activity." switched off reaching neither the Tasks window nor the mailbox, and with it on a row reading "… replied to …" (Rule 6; the guard [A1](#a1)'s issue report proposes)
   - unticking a box on the "Unsubscribe" page leaving the emails switched off before still off (Rule 8c; the guard [A2](#a2)'s issue report proposes)
+  - a preprint server's new-preprint row on the Notifications tab reading "A new preprint, "Title", has been submitted." (*Fields & validation*; the guard [OPS2](#ops2)'s issue report proposes)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -814,7 +815,6 @@ Left out of the scenarios above, by reason:
   - A11 (the ticked editor told nothing, the manager-level roles told instead; Rule 6)
   - A8 (the "Publication Published" and "needs an editor" emails without a footer; Rule 6)
   - OPS1 (two rows a preprint server never raises; Rule 6; scenario 11 names it)
-  - OPS2 (the "A new preprint , "Title"" wording; *Fields & validation*)
   - A7 (deleting the task killing the link; Rule 7b)
   - A5 (a mail program's own "Unsubscribe" button; Rule 7c)
   - A4 (the site-level set governing nothing; Rule 5d)
@@ -856,7 +856,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OPS2](#ops2) | The new-preprint row reads "A new preprint , "Title", has been submitted." with a space before the comma | 🐞 | minor | — |
+| [OPS2](#ops2) | On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
 | [A5](#a5) | A mail program's own "Unsubscribe" button, offered because of the emails' headers, is probably refused | ❓ | latent | — |
 | [A6](#a6) | Without an API secret in the configuration file, which a fresh install leaves empty, every footer "Unsubscribe" link opens "404 Not Found" | ❓ | user-visible | — |
@@ -1138,11 +1138,16 @@ Basis: probe (the rows are listed), judgment (nothing raises them).
 <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — A stray space in the new-preprint row** · 🐞 · minor.
-The row reads "A new preprint , "Title", has been submitted." with a space
-before the first comma, on the tab and on the Unsubscribe page; the
-journal and press rows have none.
-Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
+**OPS2 — On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma** · 🐞 · low.
+On a preprint server, the first row under "Submission Events" on a
+person's Profile › "Notifications" tab, and the same row on an email's
+"Unsubscribe" page, reads "A new preprint , "Title", has been
+submitted.", with a space before the first comma. The journal's and the
+press's rows have none.
+Only the English wording carries the space (and the Macedonian
+translation, copied from it). The fix was made on 3.3 in 2022 and never
+reached the later versions, so it is ready to port.
+Basis: probe, 2026-10-04. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
 **OPS3 — On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint** · 🐞 · medium.
@@ -1958,6 +1963,7 @@ boxes on the OPS Unsubscribe page.
 2026-09-03 and 2026-09-04 on the OPS tab (every role driven) and on the OPS
 Unsubscribe page; the second comma sits outside the quotes, unlike the OJS
 and OMP rows.
+Issue report: [docs/issues/U05-OPS2-preprint-submitted-row-space-before-comma.md](../issues/U05-OPS2-preprint-submitted-row-space-before-comma.md).
 
 <a id="fn-ops3"></a>
 **f-ops3** — `TaskNotificationsGridHandler` `markRead` with `redirect=1`

@@ -1,0 +1,22 @@
+--- a/locale/en/editor.po
++++ b/locale/en/editor.po
+@@ -14,7 +14,7 @@
+ msgid "editor.publicIdentificationExists"
+ msgstr ""
+ "The public identifier '{$publicIdentifier}' already exists for another "
+-"object (preprint , galley or file). Please choose unique identifiers within "
++"object (preprint, galley or file). Please choose unique identifiers within "
+ "your server."
+ 
+ msgid "grid.action.addGalley"
+--- a/locale/en/locale.po
++++ b/locale/en/locale.po
+@@ -459,7 +459,7 @@
+ msgstr "A moderator recommendation ({$decision}) for preprint {$submissionId} was recorded by {$editorName}."
+ 
+ msgid "notification.type.submissionSubmitted"
+-msgstr "A new preprint , \"{$title}\", has been submitted."
++msgstr "A new preprint, \"{$title}\", has been submitted."
+ 
+ msgid "notification.type.newAnnouncement"
+ msgstr "A new announcement has been created."
