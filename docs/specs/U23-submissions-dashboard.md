@@ -792,6 +792,7 @@ Left out of the scenarios above, by reason:
   - the "Loaded" a screen reader hears once the list has loaded (Rule 5)
   - the guard for A10 (issue report `docs/issues/U23-A10-pager-next-lacks-spoken-label.md`): on a list with two pages, every pager button carries a "Go to …" name, "Go to Next" included
   - the guard for A4 and A6 (issue report `docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md`): the dashboard popover of a reviewer the editor cancelled names the editor, and that of an accepted review past its deadline speaks of the review deadline
+  - the guard for A5 (issue report `docs/issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md`): in scenario 7 ("Sort and page"), a third click on "ID" leaves the address without `sortColumn` and `sortDirection`
 - **Nothing new to test**:
   - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
@@ -838,7 +839,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A4](#a4) | The popover over an editor-cancelled review request blames the reviewer: "Reviewer cancelled review request" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A5](#a5) | Switching a sort off leaves the old sort in the address, so display and address disagree until reload | 🐞 | minor | — |
+| [A5](#a5) | Submissions dashboard: a sort switched off stays in the address and comes back on reload | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | Paged lists: a screen reader announces the pager's "Next" as plain "Next", unlike its "Go to …" neighbours | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | minor | — |
@@ -906,14 +907,18 @@ the two states were meant to read differently.
 Basis: probe + code, 2026-10-04. <sup>a4</sup>
 
 <a id="a5"></a>
-**A5 — Un-sorting leaves a stale sort in the address** · 🐞 · minor.
-Clicking a sorted column's header a third time switches sorting off and the
-rows return to their default order, but the address keeps the sort it just
-left. Until the page is reloaded, the address and the displayed order
-disagree. Reloading or sharing that address re-applies the sort the person
-switched off. Expected: the address follows the third state as it does the
-first two (Rule 4).
-Basis: probe. <sup>a5</sup>
+**A5 — Submissions dashboard: a sort switched off stays in the address and comes back on reload** · 🐞 · low.
+Clicking a sortable column header ("ID", or "Days", which the address
+names `lastActivity`) on the submissions dashboard cycles it through
+descending, ascending and off. The page's address records the first two,
+but the third click leaves the address on "ascending" while the rows go
+back to their default order. Reloading the page, or opening the address
+from a bookmark or a shared link, sorts the list again by the column the
+person had switched off. Nothing is lost: one more click after the
+reload puts the list back in its default order, though the address again
+keeps the sort. The same happens on an author's My Submissions and on a
+reviewer's list of assignments, which use the same table.
+Basis: probe, 2026-10-04. <sup>a5</sup>
 
 <a id="a6"></a>
 **A6 — The overdue-review popover talks about a response** · 🐞 · low.
@@ -1786,7 +1791,7 @@ the reviewer took no action at any point — the popover read "Reviewer
 cancelled review request" / "Reviewer has cancelled the review request on
 {date}." on both apps, with "Resend Review Request" and "View details" as
 the buttons.
-Issue report: [docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md](../issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md).
+Issue report: [pkp-e2e#905](https://github.com/jardakotesovec/pkp-e2e/issues/905) ([docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md](../issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md)).
 
 <a id="fn-a5"></a>
 **a5 — A5 evidence.** Live-probed 2026-08-26 (OJS, manager, 31-row view;
@@ -1795,6 +1800,7 @@ fires the list request with no ordering parameter and the rows revert,
 while the address keeps `sortColumn`/`sortDirection` unchanged; reloading
 that address re-applied the sort. The list client is shared across the
 apps (pin evidence in fn-a), so the behavior is not marked per-app.
+Issue report: [docs/issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md](../issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md).
 
 <a id="fn-a6"></a>
 **a6 — A6 evidence.** Live-probed 2026-08-26 (OJS + OMP, same string on
@@ -1807,7 +1813,7 @@ the review request. A response was due on {date}") is correct in its own
 context; the review-overdue state reuses the response sentence where a
 review sentence is needed (popover description keys per status in
 `ConfigPerStatus` — fn-k).
-Issue report: [docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md](../issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md).
+Issue report: [pkp-e2e#905](https://github.com/jardakotesovec/pkp-e2e/issues/905) ([docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md](../issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md)).
 
 <a id="fn-a7"></a>
 **a7 — A7 evidence.** Live-probed 2026-08-26 (OJS + OMP, manager vs
