@@ -1,0 +1,14 @@
+--- a/lib/pkp/classes/observers/listeners/AssignEditors.php
++++ b/lib/pkp/classes/observers/listeners/AssignEditors.php
+@@ -77,6 +77,11 @@
+                 Notification::NOTIFICATION_LEVEL_TASK
+             );
+ 
++            // The manager turned this notification off ("Enable these types of notifications." unticked)
++            if (!$notification) {
++                continue;
++            }
++
+             // Check if subscribed to this type of emails
+             $unsubscribed = in_array(
+                 Notification::NOTIFICATION_TYPE_EDITOR_ASSIGNMENT_REQUIRED,

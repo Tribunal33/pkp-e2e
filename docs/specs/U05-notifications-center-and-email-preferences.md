@@ -795,6 +795,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - a Section Editor's task count in the menu under their name on the public pages (Rule 4; the guard [A3](#a3)'s issue report proposes, shared with Navigation menus & site chrome A2)
+  - the "needs an editor" email staying away for a manager who unticked "Enable…" on its row (Rule 5a; scenario 3 reads the mailbox; the guard [A10](#a10)'s issue report proposes)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -808,7 +809,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A3 (a Section Editor's bare name on the reader-side header; Rule 4)
   - OPS3 (a task's link landing on "A workflow stage was not specified."; Rule 2c; scenario 1 marks it)
-  - A10 (the "needs an editor" email arriving with "Enable…" unticked; Rule 5a; scenario 3 marks it)
   - A11 (the ticked editor told nothing, the manager-level roles told instead; Rule 6)
   - A8 (the "Publication Published" and "needs an editor" emails without a footer; Rule 6)
   - A1 (a reply worded like the opening; "Discussion activity." governing nothing; Rule 6)
@@ -850,7 +850,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A10](#a10) | Unticking "Enable…" under the "needs an editor" row stops the task but the email still arrives; only the email box stops it | 🐞 | user-visible | — |
+| [A10](#a10) | A manager who turns off the "needs an editor" notification still gets its email for every new submission | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS3](#ops3) | On a preprint server, pressing a submission's task in the Tasks panel lands on "A workflow stage was not specified." instead of the submission | 🐞 | user-visible | — |
 | [A1](#a1) | The "Discussion activity." row and its two boxes govern nothing; a reply to a discussion raises a task worded exactly like the opening one | 🐞 | minor | — |
 | [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
@@ -1002,18 +1002,24 @@ Lean: yes.
 Basis: probe. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
-**A10 — "Enable…" unticked does not stop the "needs an editor" email** · 🐞 · user-visible.
-A Journal Manager unticks "Enable these types of notifications." under "A
-new article has been submitted to which an editor needs to be assigned."
-and saves; the tab's own sentence promises that the event will then
-neither show up in the system nor be emailed. The next submission raises
-no task for them, as promised, but the "needs an editor" email arrives in
-their mailbox all the same. Only "Do not send me an email…" stops that
-email, and that box is greyed out while "Enable…" is unticked, so the
-Manager who wanted nothing at all gets the email and has no box left to
-stop it with. The announcement and issue emails do stop when "Enable…" is
-unticked.
-Basis: probe. <sup>[f-a10](#fn-a10)</sup>
+**A10 — A manager who turns off the "needs an editor" notification still gets its email for every new submission** · 🐞 · low.
+A journal manager unticks "Enable these types of notifications." under
+"A new article has been submitted to which an editor needs to be
+assigned." on the profile's "Notifications" tab and saves. The tab
+promises that the event will then neither show up in the system nor be
+emailed. The next submission that nobody is assigned to adds no task to
+their "Tasks", as promised. But the "A new submission needs an editor to
+be assigned" email still arrives.
+The only box that stops this email is "Do not send me an email for these
+types of notifications.", and it is greyed out while "Enable…" is
+unticked. A manager who wants neither the task nor the email cannot have
+that. The announcement
+and issue emails do stop when "Enable…" is unticked.
+The email goes to everyone with a manager-level role in the journal,
+press or server. It is sent only for a submission that nobody is assigned
+to: one in a section or series with no editors under "Editorial
+Assignments", or a book submitted with no series.
+Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — The ticked editor is told nothing; the Managers are told instead** · ❓ · user-visible.
@@ -1834,6 +1840,7 @@ mailbox, subject "A new submission needs an editor to be assigned:
 "{title}"", from "Site Admin <admin@mail.test>"; the same Manager with
 "Enable…" and the email box both ticked got the task and no email (Rule
 5b).
+Issue report: [docs/issues/U05-A10-needs-editor-email-ignores-notification-off.md](../issues/U05-A10-needs-editor-email-ignores-notification-off.md).
 
 <a id="fn-a11"></a>
 **f-a11** — `SubEditorsDAO::assignEditors()` assigns the section's
