@@ -1698,7 +1698,7 @@ last. Live-probed 2026-09-26, OJS and OMP: the three rows end the list,
 each opens "Edit Template" at once with the code name in "Name" and the
 subjects "Submission ORCID", "Requesting ORCID record access" and
 "Requesting updated ORCID record access".
-Issue report: [docs/issues/U56-A2-orcid-emails-listed-under-code-names.md](../issues/U56-A2-orcid-emails-listed-under-code-names.md).
+Issue report: [pkp-e2e#865](https://github.com/jardakotesovec/pkp-e2e/issues/865) ([docs/issues/U56-A2-orcid-emails-listed-under-code-names.md](../issues/U56-A2-orcid-emails-listed-under-code-names.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `ManageEmailsPage::currentMailables()` filters once per active
