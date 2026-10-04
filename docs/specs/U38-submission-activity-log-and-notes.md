@@ -1332,7 +1332,7 @@ Editor): a format created and then deleted from its row ("Delete",
 "OK") wrote "…"{$formatName}" was created." and "…"{$formatName}" was
 removed." under the editor's name, while its approval and availability
 lines named "K2 Format".
-Issue report: [docs/issues/U38-OMP1-format-created-removed-lines-placeholder.md](../issues/U38-OMP1-format-created-removed-lines-placeholder.md).
+Issue report: [pkp-e2e#895](https://github.com/jardakotesovec/pkp-e2e/issues/895) ([docs/issues/U38-OMP1-format-created-removed-lines-placeholder.md](../issues/U38-OMP1-format-created-removed-lines-placeholder.md)).
 
 ## Reference — entry points & surfaces
 
