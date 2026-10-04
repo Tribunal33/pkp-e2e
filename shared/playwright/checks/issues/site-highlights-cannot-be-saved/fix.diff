@@ -1,0 +1,15 @@
+--- a/lib/pkp/classes/middleware/HasRoles.php
++++ b/lib/pkp/classes/middleware/HasRoles.php
+@@ -60,7 +60,11 @@
+             ->explode('|')
+             ->map(fn($role) => (int)$role);
+ 
+-        $matcher = fn(int $roleId) => $user->hasRole($roleId, $roleId === Role::ROLE_ID_SITE_ADMIN ? Application::SITE_CONTEXT_ID : $context->getId());
++        // A site-level request (the site's own settings) carries no context: there only the
++        // site administrator role can match.
++        $matcher = fn(int $roleId) => $roleId === Role::ROLE_ID_SITE_ADMIN
++            ? $user->hasRole($roleId, Application::SITE_CONTEXT_ID)
++            : $context && $user->hasRole($roleId, $context->getId());
+         $isAuthorized = match ($rolesMatchingCriteria) {
+             static::ROLES_MATCH_LOOSE => $matchableRoles->some($matcher),
+             static::ROLES_MATCH_STRICT => $matchableRoles->every($matcher)

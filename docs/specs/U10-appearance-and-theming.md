@@ -1224,7 +1224,7 @@ otherwise; the team settles them on spec review.
 | [A3](#a3) | Screen readers misname the masthead's up arrows and every Sidebar box; clicking a role's name moves it | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A6](#a6) | In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | The "3:05PM" time choice prints most times as "3:05pm", some as "3:05PM" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | After a manager saves an empty "Custom" short date, editorial dates show only the time | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1341,8 +1341,9 @@ When the press or server turns that chart on, a French (Canada) reader
 of a book's or a preprint's page sees a code as the chart's heading, and
 the months read "##plugins.themes.default.displayStats.monthInitials##
 2026" for January and "undefined 2026" for every other month. The
-download counts show, but not which month they belong to. The settings
-save and work.
+download counts show, but not which month they belong to. On the home
+page, a screen reader names the highlights carousel's two arrows by codes
+too. The settings save and work.
 
 It happens on a press or preprint server that offers French (Canada);
 the chart is off until the manager picks one of its two chart types. A
@@ -1353,7 +1354,7 @@ a preprint server 9 of the other 16 languages lack the chart's texts
 too, French (France), Spanish and Portuguese among them. No code
 changes: PKP's French (Canada) translators, or a PKP developer with an
 account, enter the missing texts on PKP's translation platform. Basis:
-probe, 2026-10-03. <sup>f-a6</sup>
+probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled** · 🐞 · medium.

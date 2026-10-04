@@ -470,8 +470,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A1](#a1) | Highlights list: "Cancel" in ordering mode keeps the moved rows, and the next "Save Order" saves them | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
-| [A5](#a5) | The site's Highlights tab cannot save, order or list: "Save" does nothing, "Save Order" shows an error dialog, so no site highlight exists | 🐞 | user-visible | — |
-| [A7](#a7) | In the French interface a press's and a server's carousel arrows read raw keys, and the fourth top tab of Settings › Website reads "##navigation.content##" | 🐞 | minor | claim check (claude), 2026-09-24 — narrowed: the tab, the list's heading and the carousel's heading now read "En vedette" |
+| [A5](#a5) | The site administrator cannot add site highlights: "Save" leaves the panel open and "Save Order" shows an error | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
+| [A7](#a7) | In the French interface a press's and a server's carousel arrows read raw keys, and the fourth top tab of Settings › Website reads "##navigation.content##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | "URL" accepts any text although its hint asks for a full web address, so a slide's button can point nowhere | ❓ | user-visible | — |
 | [A6](#a6) | The carousel's dots do nothing when pressed and have no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | "Save Order" on an empty list shows the generic "An unexpected error has occurred…" dialog | ❓ | minor | — |
@@ -531,15 +531,19 @@ title back. The same as [Announcements A11](U12-announcements.md#a11)
 and [Institutions A2](U66-institutions.md#a2). Basis: probe, 2026-09-30. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The site's Highlights tab cannot save, order or list** · 🐞 · user-visible.
-On a site with two or more journals the Site Administrator's "Add
-Highlight" panel under Site Setup › Highlights accepts the fields, but
-"Save" leaves the panel open with no message; "Save Order" on the same
-list shows "Error / Call to a member function getId() on null / OK"; the
-list only ever reads "No items found.". Every request the site's panel
-sends is refused, so no site highlight can be created and the site's home
-page never shows a carousel. The journals' own tabs are unaffected.
-Basis: probe. <sup>f-a5</sup>
+**A5 — The site administrator cannot add site highlights: "Save" leaves the panel open and "Save Order" shows an error** · 🐞 · medium · crash: server.
+The application fails on the server when the Site Administrator saves
+or orders the site's own highlights under Site Settings › "Site Setup"
+› "Highlights". "Save" in the "Add Highlight" panel leaves the panel
+open, and the page shows "An unexpected error has occurred. Please
+reload the page and try again." for a few seconds; reloading does not
+help. "Order" is offered on the empty list, and "Save Order" shows
+"Error / Call to a member function getId() on null".
+No site highlight can be created, so the list keeps reading "No items
+found." and the site's home page shows no carousel.
+The tab is offered only on a site that hosts two or more journals
+(presses on OMP, preprint servers on OPS).
+Basis: probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The carousel's dots are not buttons** · ❓ · minor.
@@ -551,16 +555,20 @@ slide picker, and the arrows alone make a long carousel slow to page.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Raw keys in the French interface** · 🐞 · minor.
-In the French interface a screen reader hears a press's and a preprint
-server's carousel arrows as "##plugins.themes.default.prevSlide##" /
-"##plugins.themes.default.nextSlide##", where a journal's are "À la
-diapositive précédente" / "À la diapositive suivante". On every app the
-fourth tab across the top of Settings › Website, the page whose "Setup"
-tab holds Highlights, reads "##navigation.content##". The Highlights
-side tab, the list's heading and the carousel's heading read "En
-vedette", and the highlight's own French text shows.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Raw keys in the French interface** · 🐞 · low.
+In the French (Canada) interface a screen reader names a press's and a
+preprint server's home page carousel arrows by codes,
+"##plugins.themes.default.prevSlide##" and
+"##plugins.themes.default.nextSlide##", where a journal's read "À la
+diapositive précédente" and "À la diapositive suivante": the two texts
+are missing from OMP's and OPS's French (Canada) theme files, the same
+cause as [Appearance & theming A6](U10-appearance-and-theming.md#a6). On
+`main`, on every app, the fourth tab across the top of Settings ›
+Website, the page whose "Setup" tab holds Highlights, reads
+"##navigation.content##"; 3.5 has no such tab. The Highlights side tab,
+the list's heading and the carousel's heading read "En vedette", and
+the highlight's own French text shows.
+Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — "Save Order" on an empty list shows a generic error** · ❓ · minor.
@@ -1042,6 +1050,7 @@ status and no error text; "Save Order" shows "Error / Call to a member
 function getId() on null / OK"; the site's list reads "No items found."
 and the database holds no highlight without a context. The journals'
 panels, whose requests carry the journal, are unaffected.
+Issue report: [docs/issues/U11-A5-site-highlights-cannot-be-saved.md](../issues/U11-A5-site-highlights-cannot-be-saved.md).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** The default theme's `js/main.js` initialises
@@ -1073,6 +1082,7 @@ Site Setup tab "En vedette"; the fourth top tab still
 `##navigation.content##`; the arrows' `aria-label` "À la diapositive
 précédente" / "À la diapositive suivante" on OJS and the raw theme keys
 on OMP and OPS.
+Issue report: [pkp-e2e#777](https://github.com/jardakotesovec/pkp-e2e/issues/777) ([docs/issues/U10-A6-french-appearance-settings-raw-keys.md](../issues/U10-A6-french-appearance-settings-raw-keys.md)), the carousel arrows.
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** `HighlightsController::order()` answers 400 with

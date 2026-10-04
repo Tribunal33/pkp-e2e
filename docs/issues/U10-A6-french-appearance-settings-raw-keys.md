@@ -9,9 +9,13 @@
   - 3.4: OMP, OPS (code)
   - 3.3: OMP (code; no download chart)
 - **Introduced** not traced as one change. On a press, the oldest missing text is the home page's "Featured Books", added in English only in [849994307d](https://github.com/pkp/omp/commit/849994307ddd0495824d37a9cd478ff2995fabd8) (2014-09-24). On a preprint server the texts came with the download chart's option, in English only: `pkp/ops#313` for `pkp/pkp-lib#6782` · [cc159de973](https://github.com/pkp/ops/commit/cc159de973cad72af95d859a082b94db7586c342) · 2022-03-09 · Bozana Bokan (bozana)
-- **Upstream** none found (2026-10-03)
-- **Tracked in** spec U10 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a6)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-04)
+- **Tracked in** spec U10 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a6) · spec U11 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a7)
+- **Checked** 2026-10-03, and 2026-10-04 for the home page carousel, each branch's tip (the commits in Evidence)
+
+2026-10-04: the home page carousel's arrows were walked on a press and
+a preprint server (spec U11 A7): a screen reader names them by codes.
+Steps 8 to 12 are new; the proposed fix already holds both texts.
 
 ## Summary
 
@@ -28,8 +32,9 @@ When the press or server turns that chart on, a French (Canada) reader
 of a book's or a preprint's page sees a code as the chart's heading,
 and the months read "##plugins.themes.default.displayStats.monthInitials## 2026"
 for January and "undefined 2026" for every other month. The download
-counts show, but not which month they belong to. The settings save and
-work.
+counts show, but not which month they belong to. On the home page, a
+screen reader names the highlights carousel's two arrows by codes too.
+The settings save and work.
 
 It happens on a press or preprint server that offers French (Canada);
 the chart is off until the manager picks one of its two chart types. A
@@ -43,15 +48,18 @@ texts on PKP's translation platform.
 
 ## Impact
 
-- **Lost.** Readers lose the months of the download chart. Staff lose
-  the names and help of the settings listed above.
+- **Lost.** Readers lose the months of the download chart, and screen
+  reader users the names of the carousel's arrows. Staff lose the names
+  and help of the settings listed above.
 - **Who.** French (Canada) readers of every book or preprint page, on
-  a press or server that shows the chart; its managers on the settings
-  tabs.
+  a press or server that shows the chart; screen reader users on the
+  home page of a press or server with highlights, where the carousel is
+  the first block under the header; its managers on the settings tabs.
 - **Way round.** The manager can switch the interface to English. A
   reader can switch the page to English with the sidebar's language
   block, which the default test data's press and preprint server both
-  show; a site without it offers none.
+  show; a site without it offers none. A screen reader user has no way
+  to learn the arrows' names.
 
 Low: the codes are untranslated text, the settings work and the chart's
 counts stay, and the chart is off by default; it would be medium if the
@@ -63,8 +71,11 @@ Preconditions:
 
 - PKP's default test dataset for OMP `main` (or OPS `main`), freshly
   loaded: the press (the server) `publicknowledge`, which offers English
-  and French (Canada). Nothing is created; step 6 changes one theme
-  setting.
+  and French (Canada). Nothing is created beforehand: step 6 changes
+  one theme setting, and steps 9 and 10 add two highlights, since the
+  dataset holds none and with one slide the carousel hides its arrows.
+  Steps 8 to 12 can follow on from step 7: step 6's setting does not
+  touch the carousel.
 
 Settings:
 
@@ -90,12 +101,31 @@ Readers:
    (`/index.php/publicknowledge/fr_CA/preprint/view/2`). Read the chart's
    heading and its months.
 
+Home page carousel:
+
+8. Open "Settings" › "Website" in English
+   (`/index.php/publicknowledge/en/management/settings/website`), the
+   top tab "Setup", then its side tab "Highlights".
+9. Press "Add Highlight". Type in the English boxes (the form's first;
+   French ones are not needed): in "Title", `First highlight u11d`; in
+   "URL", `https://example.org/u11d-1`; in "Button Label", `Read more`.
+   Press "Save".
+10. Press "Add Highlight" again: `Second highlight u11d`,
+    `https://example.org/u11d-2`, `Read more`, "Save".
+11. Open the menu under the initials at the top right and, under
+    "Change Language", choose "français".
+12. Open the home page (`/index.php/publicknowledge/fr_CA`). The
+    carousel, headed "En vedette" for a screen reader, shows the two
+    highlights. Read the names of its two arrows, as a screen reader
+    says them (the buttons' `aria-label`).
+
 **Expected.** French text in each place, as a journal shows it: "Thème
 par défaut", "Typographie", "Couleur", "Options d'affichage des
 statistiques d'utilisation" with its three choices, a press's
 thumbnail, home page lists, catalog order and cover sizes in French,
 and on the item's page the heading "Téléchargements" over months "Jan.",
-"Fév.", "Mar." and so on.
+"Fév.", "Mar." and so on. The carousel's arrows named in French, as on
+a journal.
 
 **Observed.** On OMP:
 
@@ -119,6 +149,8 @@ Step 5:  ##manager.setup.coverThumbnailsMaxWidth##    ##manager.setup.coverThumb
          ##manager.setup.coverThumbnailsMaxHeight##   ##manager.setup.coverThumbnailsMaxWidthHeight.description##
 Step 7:  ##plugins.themes.default.displayStats.downloads##
          x axis: ##plugins.themes.default.displayStats.monthInitials## 2026 | undefined 2026 | undefined 2026 | …
+Step 12: <button class="swiper-button-prev" aria-label="##plugins.themes.default.prevSlide##">
+         <button class="swiper-button-next" aria-label="##plugins.themes.default.nextSlide##">
 ```
 
 (`##…` abbreviates `##plugins.themes.default.option.`.)
@@ -127,12 +159,15 @@ Step 7:  ##plugins.themes.default.displayStats.downloads##
   "##plugins.themes.default.option.displayStats.label##" over
   "##plugins.themes.default.option.displayStats.none##", "…bar##" and
   "…line##". Steps 4 and 5 read French. Step 7 shows the same heading
-  and months as on OMP.
+  and months as on OMP, and step 12 the same two arrow names.
 - The rest of each tab reads French ("Logo", "Image de la page
   d'accueil", "Pied de page", "Barre latérale", "Contenu additionnel"),
   and the English tabs show none of these codes.
-- The same steps on OJS read French in every place named here, and the
-  chart's months read "Jan.", "Fév.", "Mar."…
+- The same steps on OJS read French in every place named here, the
+  chart's months read "Jan.", "Fév.", "Mar."…, and the arrows are named
+  "À la diapositive précédente" and "À la diapositive suivante". In
+  English a press's and a preprint server's arrows read "Previous slide"
+  and "Next slide".
 
 ## Cause
 
@@ -185,14 +220,20 @@ apps calls it at these tips.
 Reach:
 
 - On screen (`main` and 3.5): the codes in Observed, OMP and OPS.
+  Among them are the carousel arrows' texts,
+  `plugins.themes.default.nextSlide` and `.prevSlide`.
+  `DefaultThemePlugin::getSwiperI18n()` puts the two texts on the page.
+  The theme's `js/main.js` passes them to Swiper's `a11y` options, which
+  set the arrows' `aria-label`. Both apps added the texts in English
+  only, with the carousel, for `pkp/pkp-lib#9262`
+  ([328d82267e](https://github.com/pkp/omp/commit/328d82267e925a0205febc63ec4005e70a53a51a),
+  [654d005b62](https://github.com/pkp/ops/commit/654d005b629155a8df3316247db3acfdbda9f7a0),
+  2023-09-12). 3.4 has no carousel on the home page, 3.3 no highlights.
 - Read in the code, not walked:
   - `plugins.themes.default.displayStats.noStats`, the chart's "no
     figures yet" notice, which shows only until the chart has loaded
     (`templates/frontend/objects/monograph_full.tpl`,
     `preprint_details.tpl`); empty in both apps.
-  - `plugins.themes.default.nextSlide` and `.prevSlide`, which the
-    theme's `js/main.js` gives the home page's highlights carousel as
-    the names its arrows have for a screen reader; absent in both apps.
   - `plugins.themes.default.description`, the theme's description on
     "Plugiciels"; absent in OMP.
 - The Browse block's name on step 4 ("##plugins.block.browse.displayName##",
@@ -281,8 +322,10 @@ in every place named in Observed ("Thème par défaut", "Typographie",
 "Ordre des monographies", "Largeur maximale de l'image de couverture",
 "Options d'affichage des statistiques d'utilisation"). The chart read
 "Téléchargements" over the months "Jan.", "Fév.", "Mar."… on both
-apps. The one code left was the Browse block's name. The same steps in English read the same on all three
-apps with the diffs in and out.
+apps. Step 12 named both arrows in French on both apps. The one code
+left was the Browse block's name. Steps 1 to 7 in English read the same
+on all three apps with the diffs in and out, and steps 8 to 12 in
+English the same on OMP and OPS.
 
 **Alternatives**
 
@@ -315,16 +358,21 @@ Small: translations only, with no code change.
 
 - Kept script:
   [`shared/playwright/checks/issues/french-appearance-settings-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/french-appearance-settings-raw-keys/walk.js)
-  takes the Steps on OJS (the journal control), OMP and OPS. Run it on
+  takes steps 1 to 7 on OJS (the journal control), OMP and OPS, and
+  [`carousel.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/french-appearance-settings-raw-keys/carousel.js)
+  beside it steps 8 to 12 (`walk.js` replaced by `carousel.js` in the
+  command below). Run each on
   an install freshly loaded from the default dataset (step 6 changes a
-  setting):
+  setting, steps 9 and 10 add highlights):
   `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/french-appearance-settings-raw-keys/walk.js`
   (with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5). `NB=1` in front
   takes the same steps in English; the fix was tried by applying the two
   diffs and running it in French, then with `NB=1` with the diffs in and
   out.
 - Walked on `main` and `stable-3_5_0`, on PostgreSQL, from pkp/datasets
-  566bb1f (2026-10-03). The two lines read the same codes on OMP and
+  566bb1f (2026-10-03); steps 8 to 12 on 2026-10-04 from pkp/datasets
+  1a5552c, at the same tips, as a walk of their own from a freshly
+  loaded dataset rather than following on from step 7. The two lines read the same codes on OMP and
   OPS. On 3.5 a journal's "Thème" has no content organization field and
   the chart no "All time" button, so OJS reads French throughout.
 - The default test data holds no download figures, so the chart is
@@ -342,9 +390,16 @@ Small: translations only, with no code change.
   for the counts under Cause. On `stable-3_4_0`, `ThemePlugin.php` and
   `usage-stats-chart.js`, which build the months the same way. On
   `stable-3_3_0`, OMP's theme locale folders (no `fr_CA`) and both
-  apps' `DefaultThemePlugin.inc.php` (no chart option).
+  apps' `DefaultThemePlugin.inc.php` (no chart option). For the
+  carousel: on `main` and `stable-3_5_0`, each app's
+  `plugins/themes/default/js/main.js` and `DefaultThemePlugin.php`
+  (`nextSlide`, `prevSlide`) and `lib/pkp/templates/frontend/components/highlights.tpl`;
+  on `stable-3_4_0`, the theme's `js/main.js` (no Swiper) and
+  pkp-lib's `templates/frontend/components` (no highlights); on
+  `stable-3_3_0`, no highlights in pkp-lib.
 - Upstream: `pkp/pkp-lib#11092` (the chart without labels when another
-  theme is active) is a different fault.
+  theme is active) is a different fault; `pkp/pkp-lib#9262` added the
+  carousel and does not mention its translations.
 - Not driven: a chart with figures; the diffs on 3.5; languages other
   than French (Canada) and English.
 - Unverified: whether Weblate already holds French (Canada) texts for
