@@ -1824,7 +1824,7 @@ selected added a row; a saved radio item with "Yes" / "No" switched to
 reopened, "No Items" under "Response Options"; `page.on('dialog')` recorded
 nothing. Since: the elided warning was wired when the listbuilder was
 written; the age of the missing binding was not traced.
-Issue report: [docs/issues/U29-A5-review-form-item-text-type-drops-options.md](../issues/U29-A5-review-form-item-text-type-drops-options.md).
+Issue report: [pkp-e2e#910](https://github.com/jardakotesovec/pkp-e2e/issues/910) ([docs/issues/U29-A5-review-form-item-text-type-drops-options.md](../issues/U29-A5-review-form-item-text-type-drops-options.md)).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Footnote g: `Repository::getRecommendationOptions()` returns the
