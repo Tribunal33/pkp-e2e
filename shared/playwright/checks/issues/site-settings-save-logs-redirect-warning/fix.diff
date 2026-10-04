@@ -1,0 +1,25 @@
+--- a/lib/pkp/classes/site/SiteDAO.php
++++ b/lib/pkp/classes/site/SiteDAO.php
+@@ -130,6 +130,11 @@
+ 
+         $set = $params = [];
+         foreach ($this->primaryTableColumns as $propName => $column) {
++            // A column whose prop is absent keeps its stored value, as in EntityDAO::getPrimaryDbProps():
++            // _fromRow() leaves out a null column (no redirect set), so the prop may be missing.
++            if (!array_key_exists($propName, $sanitizedProps)) {
++                continue;
++            }
+             $set[] = $column . ' = ?';
+             $property = $schema->properties->{$propName};
+             $params[] = $this->convertToDb(
+@@ -139,7 +144,9 @@
+                 encrypt: $property->encrypt ?? false
+             );
+         }
+-        $this->update('UPDATE site SET ' . join(',', $set), $params);
++        if (count($set)) {
++            $this->update('UPDATE site SET ' . join(',', $set), $params);
++        }
+ 
+         $deleteSettings = [];
+         foreach ($schema->properties as $propName => $propSchema) {

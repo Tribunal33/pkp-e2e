@@ -875,7 +875,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A2](#a2) | French (Canada) Site Settings: a press's "Information" tab and a press's or preprint server's "Courriels en lot" description show codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | Most saves on Site Settings without a "Journal redirect" write a warning to the server log | 🐞 | invisible | — |
+| [A3](#a3) | Site Settings saves, and 3.5's daily scheduled tasks, log a PHP warning when no journal redirect is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The site's own save accepts an empty "Site Name" and principal contact when made outside the page | 🐞 | latent | — |
 | [A6](#a6) | A removed "Site style sheet" stays at its address | 🐞 | minor | — |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | minor | — |
@@ -922,13 +922,23 @@ among them.
 Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — A log warning on most saves** · 🐞 · invisible.
-Each "Save" on "Security", "Information", "Bulk Emails" or "Setup" (and,
-read from the code, on "Theme" when it changes the theme) writes a
-warning about the missing redirect to the server's log while no "Journal
-redirect" is set; the save answers normally and is stored. Nobody using
-the page sees it; the log fills with noise that hides real faults.
-Basis: probe. <sup>f-a3</sup>
+**A3 — Site Settings saves, and 3.5's daily scheduled tasks, log a PHP warning when no journal redirect is set** · 🐞 · low.
+A Site Administrator presses "Save" on Site Settings "Security",
+"Information", "Bulk Emails", "Statistics" or "Appearance" › "Setup".
+The page shows "Saved" and the change is stored, but each save also
+writes a PHP warning about a missing "redirectContextId" to the server's
+error log. On an install with `display_errors = On`, a development
+setting, the warning is printed into the save's answer instead: the page
+shows "An unexpected error has occurred. Please reload the page and try
+again." in place of "Saved", though the change is stored.
+On 3.5 the scheduled tasks write the same warning with nobody saving.
+The first page request of each day that starts the daily tasks logs one
+line per task and one more for recording their run times (8 a day on
+OJS). On `main` the scheduled tasks do not write it.
+It happens on every site with no "Journal redirect" ("Press redirect",
+"Server redirect") set, which is the default. A one-journal site has no
+way round.
+Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — The site's save does not require its required fields** · 🐞 · latent.
@@ -1653,6 +1663,7 @@ site service, logged `PHP Warning: Undefined array key
 and stored the list. fn-m has the cause; the same path serves every tab.
 Live-probed 2026-09-26 (Side effects; all three apps): fn-m lists which
 saves logged it.
+Issue report: [docs/issues/U60-A3-site-settings-save-logs-redirect-warning.md](../issues/U60-A3-site-settings-save-logs-redirect-warning.md).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-l: `PKPSiteService::validate()` passes the publication
