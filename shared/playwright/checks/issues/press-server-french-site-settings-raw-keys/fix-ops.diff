@@ -1,0 +1,21 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -72,6 +72,18 @@
+ 
+ msgid "admin.settings.enableBulkEmails.description"
+ msgstr ""
++"Sélectionner les serveurs devant être autorisés à envoyer des courriels en "
++"lot. Lorsque cette fonctionnalité est activée, le ou la gestionnaire du "
++"serveur peut envoyer un courriel à tous les utilisateurs et utilisatrices de "
++"son serveur.<br><br>Une utilisation abusive de cette fonctionnalité pourrait "
++"contrevenir à certaines lois anti pourriel et entrainer un blocage de votre "
++"serveur de courriel. Demandez des conseils techniques avant d'activer cette "
++"fonctionnalité. Veillez également à consulter les gestionnaires de serveurs "
++"afin de vous assurer qu'ils ou elles l'utilisent adéquatement.<br><br>Des "
++"restrictions additionnelles pour l'utilisation de cette fonctionnalité "
++"peuvent être activées pour chaque serveur en utilisant l'assistant de "
++"configuration dans la liste des <a href=\"{$hostedContextsUrl}\">serveurs "
++"hébergés</a>."
+ 
+ msgid "admin.settings.disableBulkEmailRoles.description"
+ msgstr ""

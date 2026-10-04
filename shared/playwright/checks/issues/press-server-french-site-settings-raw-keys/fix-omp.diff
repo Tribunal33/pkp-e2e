@@ -1,0 +1,32 @@
+--- a/locale/fr_CA/admin.po
++++ b/locale/fr_CA/admin.po
+@@ -128,6 +128,18 @@
+ 
+ msgid "admin.settings.enableBulkEmails.description"
+ msgstr ""
++"Sélectionner les presses devant être autorisées à envoyer des courriels en "
++"lot. Lorsque cette fonctionnalité est activée, le ou la gestionnaire de la "
++"presse peut envoyer un courriel à tous les utilisateurs et utilisatrices de "
++"sa presse.<br><br>Une utilisation abusive de cette fonctionnalité pourrait "
++"contrevenir à certaines lois anti pourriel et entrainer un blocage de votre "
++"serveur de courriel. Demandez des conseils techniques avant d'activer cette "
++"fonctionnalité. Veillez également à consulter les gestionnaires de presses "
++"afin de vous assurer qu'ils ou elles l'utilisent adéquatement.<br><br>Des "
++"restrictions additionnelles pour l'utilisation de cette fonctionnalité "
++"peuvent être activées pour chaque presse en utilisant l'assistant de "
++"configuration dans la liste des <a href=\"{$hostedContextsUrl}\">presses "
++"hébergées</a>."
+ 
+ msgid "admin.settings.disableBulkEmailRoles.description"
+ msgstr ""
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -548,7 +548,7 @@
+ msgstr ""
+ 
+ msgid "manager.setup.information"
+-msgstr ""
++msgstr "Information"
+ 
+ msgid "manager.setup.information.description"
+ msgstr ""

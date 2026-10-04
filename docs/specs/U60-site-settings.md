@@ -874,7 +874,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A2](#a2) | The French interface shows raw codes on "Security", on a press's "Information", and in the "Bulk Emails" description on a press and a preprint server | 🐞 | minor | — |
+| [A2](#a2) | French (Canada) Site Settings: a press's "Information" tab and a press's or preprint server's "Courriels en lot" description show codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Most saves on Site Settings without a "Journal redirect" write a warning to the server log | 🐞 | invisible | — |
 | [A4](#a4) | The site's own save accepts an empty "Site Name" and principal contact when made outside the page | 🐞 | latent | — |
 | [A6](#a6) | A removed "Site style sheet" stays at its address | 🐞 | minor | — |
@@ -906,12 +906,20 @@ the application's name, as the principal contact name already does.
 Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — Raw codes in the French Site Settings** · 🐞 · minor.
-A Site Administrator working in French expects the Site Settings tabs in
-French; the "Security" tab and nearly all of its form, a press's
-"Information" tab, and the "Courriels en lot" description on a press and
-a preprint server show raw codes instead (Rule 23 lists them).
-Basis: probe. <sup>f-a2</sup>
+**A2 — French (Canada) Site Settings: a press's "Information" tab and a press's or preprint server's "Courriels en lot" description show codes** · 🐞 · low.
+A Site Administrator who reads Administration › "Paramètres du site" in
+French (Canada) finds two codes where French text belongs: on a press,
+the "Information" side tab is labelled "##manager.setup.information##";
+on a press and on a preprint server, the "Courriels en lot" tab shows
+"##admin.settings.enableBulkEmails.description##" instead of its
+description. A journal shows that description in French: what allowing
+  bulk email means, a warning about anti-spam laws, and a link to the
+  hosted journals.
+The "Information" tab shows only on a site hosting two or more presses;
+the "Courriels en lot" tab shows on every site. By the code, other
+languages lack the same texts, French (France) on a preprint server
+among them.
+Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A log warning on most saves** · 🐞 · invisible.
@@ -1635,6 +1643,7 @@ templates.
 first seen 2026-09-24 (sync claim check, French). `lib/pkp/locale/fr_CA/admin.po`
 has no `admin.security` nor the `admin.settings.security.*` keys; OMP's
 `locale/fr_CA/manager.po` has an empty `manager.setup.information`.
+Issue report: [docs/issues/U60-A2-press-server-french-site-settings-raw-keys.md](../issues/U60-A2-press-server-french-site-settings-raw-keys.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Seen 2026-09-26 in the Notify users test runs (OJS, OMP,
