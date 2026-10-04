@@ -1,0 +1,76 @@
+--- a/lib/ui-library/src/pages/workflow/WorkflowPageOMP.vue
++++ b/lib/ui-library/src/pages/workflow/WorkflowPageOMP.vue
+@@ -12,6 +12,8 @@
+ 
+ import FileManager from '@/managers/FileManager/FileManager.vue';
+ import ReviewerManager from '@/managers/ReviewerManager/ReviewerManager.vue';
++import AuthorResponseManager from '@/managers/ReviewRoundResponseManager/AuthorResponseManager/AuthorResponseManager.vue';
++import AuthorResponseRequestManager from '@/managers/ReviewRoundResponseManager/AuthorResponseRequestManager/AuthorResponseRequestManager.vue';
+ import DiscussionManager from '@/managers/DiscussionManager/DiscussionManager.vue';
+ import CitationManager from '@/managers/CitationManager/CitationManager.vue';
+ import DataCitationManager from '@/managers/DataCitationManager/DataCitationManager.vue';
+@@ -53,6 +55,8 @@
+ const Components = markRaw({
+ 	FileManager,
+ 	ReviewerManager,
++	AuthorResponseManager,
++	AuthorResponseRequestManager,
+ 	CitationManager,
+ 	DataCitationManager,
+ 	FunderManager,
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOMP.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOMP.js
+@@ -205,6 +205,7 @@
+ 			selectedStageId,
+ 			selectedReviewRound,
+ 			pageInitConfig,
++			contextMinReviewsPerSubmission,
+ 		}) => {
+ 			const items = [];
+ 
+@@ -237,6 +238,17 @@
+ 					componentForms: pageInitConfig.componentForms,
+ 					isCompetingInterestsRequested:
+ 						pageInitConfig.publicationSettings.isCompetingInterestsRequested,
++				},
++			});
++
++			items.push({
++				component: 'AuthorResponseRequestManager',
++				props: {
++					submission,
++					reviewRoundId: selectedReviewRound?.id,
++					reviewRound: selectedReviewRound,
++					contextMinReviewsPerSubmission,
++					stageId: selectedStageId,
+ 				},
+ 			});
+ 
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOMP.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOMP.js
+@@ -101,6 +101,25 @@
+ 				props: {submission, submissionStageId: selectedStageId},
+ 			});
+ 
++			// As on External Review (workflowConfigAuthorOJS.js): the round's "Author Response"
++			// card, once a response was requested or revisions were requested, or the round accepted.
++			if (
++				selectedReviewRound?.isAuthorResponseRequested ||
++				[
++					pkp.const.REVIEW_ROUND_STATUS_ACCEPTED,
++					pkp.const.REVIEW_ROUND_STATUS_REVISIONS_REQUESTED,
++				].includes(selectedReviewRound?.statusId)
++			) {
++				items.push({
++					component: 'AuthorResponseManager',
++					props: {
++						submission,
++						stageId: selectedStageId,
++						reviewRound: selectedReviewRound,
++					},
++				});
++			}
++
+ 			return items;
+ 		},
+ 		getActionItems: ({submission, selectedReviewRound}) => {

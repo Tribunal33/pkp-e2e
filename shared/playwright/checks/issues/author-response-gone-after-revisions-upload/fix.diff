@@ -1,0 +1,35 @@
+--- a/lib/pkp/classes/decision/types/RequestRevisions.php
++++ b/lib/pkp/classes/decision/types/RequestRevisions.php
+@@ -18,6 +18,7 @@
+ use APP\submission\Submission;
+ use Illuminate\Validation\Validator;
+ use PKP\context\Context;
++use PKP\db\DAORegistry;
+ use PKP\decision\DecisionType;
+ use PKP\decision\Steps;
+ use PKP\decision\steps\Email;
+@@ -28,6 +29,7 @@
+ use PKP\mail\mailables\DecisionRequestRevisionsNotifyAuthor;
+ use PKP\security\Role;
+ use PKP\submission\reviewRound\ReviewRound;
++use PKP\submission\reviewRound\ReviewRoundDAO;
+ use PKP\user\User;
+ 
+ class RequestRevisions extends DecisionType
+@@ -124,6 +126,16 @@
+                         $context
+                     );
+                     $this->shareReviewAttachmentFiles($emailData->attachments, $submission, $decision->getData('reviewRoundId'));
++                    // The email asks the author to respond to the reviews ("Submit Author Response"):
++                    // record the request on the round, as a sent "Request Author Response" does, so the
++                    // response stays open after the author's revised files move the round's status on.
++                    /** @var ReviewRoundDAO $reviewRoundDao */
++                    $reviewRoundDao = DAORegistry::getDAO('ReviewRoundDAO');
++                    $reviewRound = $reviewRoundDao->getById((int) $decision->getData('reviewRoundId'));
++                    if ($reviewRound) {
++                        $reviewRound->setData('isAuthorResponseRequested', true);
++                        $reviewRoundDao->updateObject($reviewRound);
++                    }
+                     break;
+                 case $this->ACTION_NOTIFY_REVIEWERS:
+                     $this->sendReviewersEmail(
