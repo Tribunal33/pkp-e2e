@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2000,7 +2000,7 @@
+ msgstr "Key"
+ 
+ msgid "manager.setup.genres.key.description"
+-msgstr "An optional short symbolic identifer for this genre."
++msgstr "An optional short symbolic identifier for this component."
+ 
+ msgid "manager.setup.genres.key.exists"
+ msgstr "The key already exists."

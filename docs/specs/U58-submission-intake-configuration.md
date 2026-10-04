@@ -845,6 +845,8 @@ Left out of the scenarios above, by reason:
     ([OMP2](#omp2)): the guard the issue report proposes
   - each help on "Author Guidance" naming its own step and repeating no
     other help ([A7](#a7)): the guard the issue report proposes
+  - the "Add a Component" window's labels and helps reading as Fields
+    gives them ([A8](#a8)): the guard the issue report proposes
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -941,7 +943,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A component the manager deleted is still offered as a media type on the "Media" page | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | The help under "For Reviewer Suggestion" in Author Guidance asks about contributors, not suggested reviewers | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A8](#a8) | The component window's "Key" help misspells "identifier" and calls the component a "genre" | 🐞 | minor | — |
+| [A8](#a8) | The "Key" help in the "Add a Component" window misspells "identifier" and calls the component a "genre" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada) | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1049,11 +1051,15 @@ into the box. Authors then read that guidance on the submission form's
 Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The "Key" help has a misspelling and a code word** · 🐞 · minor.
+**A8 — The "Key" help in the "Add a Component" window misspells "identifier" and calls the component a "genre"** · 🐞 · low.
 The component window's "Key" help reads "An optional short symbolic
 identifer for this genre.": "identifier" is misspelled, and "genre" is a
 word the screen uses nowhere else; the screen says "component".
-Basis: code. <sup>f-a8</sup>
+The fault is in the English text alone: the French, Spanish and German
+helps are spelled right, though the Spanish and German ones keep the
+word "genre". The translations follow the English on pkp's translation
+platform.
+Basis: probe, 2026-10-04. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada)** · 🐞 · low.
@@ -1773,6 +1779,7 @@ Issue report: [pkp-e2e#827](https://github.com/jardakotesovec/pkp-e2e/issues/827
 <a id="fn-f-a8"></a>
 **f-a8** — `manager.setup.genres.key.description` (lib/pkp `manager.po`),
 "An optional short symbolic identifer for this genre.", in the three apps.
+Issue report: [docs/issues/U58-A8-component-key-help-misspelled-genre.md](../issues/U58-A8-component-key-help-misspelled-genre.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `grid.genres.title` has an empty `msgstr` in OMP's and OPS's
