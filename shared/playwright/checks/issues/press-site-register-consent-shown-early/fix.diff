@@ -1,0 +1,45 @@
+--- a/plugins/themes/default/js/main.js
++++ b/plugins/themes/default/js/main.js
+@@ -63,6 +63,20 @@
+ 		e.chartOptions.elements.bar.backgroundColor = 'rgba(0, 122, 178, 0.6)';
+ 	});
+ 
++	// Toggle display of consent checkboxes in site-wide registration
++	var $contextOptinGroup = $('#contextOptinGroup');
++	if ($contextOptinGroup.length) {
++		var $roles = $contextOptinGroup.find('.roles :checkbox');
++		$roles.change(function() {
++			var $thisRoles = $(this).closest('.roles');
++			if ($thisRoles.find(':checked').length) {
++				$thisRoles.siblings('.context_privacy').addClass('context_privacy_visible');
++			} else {
++				$thisRoles.siblings('.context_privacy').removeClass('context_privacy_visible');
++			}
++		});
++	}
++
+ 	// Show or hide the reviewer interests field on the registration form
+ 	// when a user has opted to register as a reviewer.
+ 	function reviewerInterestsToggle() {
+--- a/plugins/themes/default/styles/pages/register.less
++++ b/plugins/themes/default/styles/pages/register.less
+@@ -64,6 +64,19 @@
+ 				line-height: @line-sml;
+ 			}
+ 		}
++
++		.context_privacy {
++			position: absolute;
++			left: -9999px;
++			padding: @half 0;
++			font-size: @font-sml;
++			line-height: @line-sml;
++		}
++
++		.context_privacy_visible {
++			position: relative;
++			left: auto;
++		}
+ 	}
+ 
+ 	// Styles for form error list, which is still tied to a template shared by
