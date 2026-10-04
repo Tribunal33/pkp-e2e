@@ -1821,7 +1821,7 @@ nothing in its place; the site form still uploads and stores the file.
 Live-probed 2026-09-26 (Rule 21; OMP): the sheet saved, reloaded as
 "styleSheet.css" and opened at its address, and no page of the site or of
 a press loaded it (td16).
-Issue report: [docs/issues/U60-OMP1-press-ignores-site-style-sheet.md](../issues/U60-OMP1-press-ignores-site-style-sheet.md).
+Issue report: [pkp-e2e#890](https://github.com/jardakotesovec/pkp-e2e/issues/890) ([docs/issues/U60-OMP1-press-ignores-site-style-sheet.md](../issues/U60-OMP1-press-ignores-site-style-sheet.md)).
 Upstream: [pkp/pkp-lib#12753](https://github.com/pkp/pkp-lib/issues/12753) (open).
 
 <a id="fn-f-ops1"></a>
