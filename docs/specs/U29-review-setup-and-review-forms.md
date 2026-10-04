@@ -1738,7 +1738,7 @@ scenario API cannot advance the clock and the task runner is off on the
 fleets, so the finding is read from the code and no screen shows it; a
 re-check needs a server whose scheduler runs. Since: the reminder rewrite that introduced the four
 sliders (pkp-lib 3.5).
-Issue report: [docs/issues/U29-A1-after-due-reminders-never-sent.md](../issues/U29-A1-after-due-reminders-never-sent.md).
+Issue report: [pkp-e2e#909](https://github.com/jardakotesovec/pkp-e2e/issues/909) ([docs/issues/U29-A1-after-due-reminders-never-sent.md](../issues/U29-A1-after-due-reminders-never-sent.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `ReviewFormGridHandler::deactivateReviewForm()` tests
