@@ -1344,7 +1344,7 @@ pages/search instead", a redirect to `search`); `pages/catalog/index.php`
 still lists `results`, and `PKPPageRouter::route()` answers
 `NotFoundHttpException` for an op the handler lacks. Live-probed
 2026-09-27 (note td11): both addresses answer the bare 404 page.
-Issue report: [docs/issues/U68-A9-catalog-old-search-address-not-found.md](../issues/U68-A9-catalog-old-search-address-not-found.md).
+Issue report: [pkp-e2e#842](https://github.com/jardakotesovec/pkp-e2e/issues/842) ([docs/issues/U68-A9-catalog-old-search-address-not-found.md](../issues/U68-A9-catalog-old-search-address-not-found.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note j: `page()` refuses page 1 and a missing or non-number
