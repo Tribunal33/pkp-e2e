@@ -951,7 +951,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP4](#omp4) | A press's "Browse" block with nothing to list still shows as an empty box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [OMP4](#omp4) | A press's "Browse" block with nothing to list still shows as an empty box | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP5](#omp5) | A press's first category page opened after its catalog page, its search results or a settings save fails to load | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | A preprint server's category offers no moderator to assign automatically, only an empty "Editorial Assignments" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A category's page leaves out the articles of its sub-categories | ❓ | minor | — |
@@ -1245,9 +1245,12 @@ in the sidebar still shows its "Browse" title with nothing under it, on
 every page.
 The same happens with "New releases" unticked when the checkboxes left
 ticked have nothing to list: "Categories" on a press with no category,
-"Series" on a press with no active series. While "New releases" is
-ticked, as it is by default, the block always holds that link.
-Basis: probe, 2026-10-02. <sup>f-omp4</sup>
+"Series" on a press with no series. While "New releases" is ticked, as
+it is by default, the block always holds that link. But on a press
+whose series are all inactive, the block still shows the line "Series"
+with nothing under it; a press with no series leaves that line out
+([Catalog browse](U68-catalog-browse.md#a11), its A11).
+Basis: probe, 2026-10-04. <sup>f-omp4</sup>
 
 <a id="omp5"></a>
 **OMP5 — A press's category page fails after its catalog or a settings save** · 🐞 · user-visible · crash: server.

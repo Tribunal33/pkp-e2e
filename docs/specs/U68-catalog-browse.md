@@ -627,6 +627,9 @@ Left out of the scenarios above, by reason:
   - the guard for A9 (issue report
     `docs/issues/U68-A9-catalog-old-search-address-not-found.md`): the
     catalog's old search address opening the Search page with its words
+  - the guard for A11 (issue report
+    `docs/issues/U16-OMP4-press-browse-block-empty-box.md`): the "Browse"
+    block's "Series" line gone while every series is inactive
 - **Nothing new to test**:
   - a signed-in user of any role, shown the same pages with the same
     books as the signed-out visitor (Actors row 1)
@@ -645,8 +648,6 @@ Left out of the scenarios above, by reason:
     no "New Releases"; Rule 14)
   - A8 (the press's pages and the "Browse" block in French; Rule 15)
   - A10 (a page number typed past the last page; Rules 5, 7)
-  - A11 (every series inactive, the block's "Series" line with nothing
-    under it; Rule 12)
 - **No seed**:
   - a book whose only published version is an "Author Original": off
     the catalog, its series still among the "Series:" links (Rules 3,
@@ -687,7 +688,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A press's category page never lists its new releases and never sets its featured books apart | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | In French the catalog pages and the "Browse" block show raw text codes | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A reader on an old link to a press's catalog search gets "404 Not Found", not the Search page | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A11](#a11) | With every series inactive, the "Browse" block shows the line "Series" with nothing under it | 🐞 | minor | — |
+| [A11](#a11) | With every series inactive, the "Browse" block shows the line "Series" with nothing under it | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | The "Browse" block and the catalog's "Series:" links disagree about inactive and empty series | ❓ | minor | — |
 | [A6](#a6) | "Series position" orders compare the positions as text | ❓ | minor | — |
 | [A10](#a10) | A page typed past the last one shows the full count above "No titles have been published yet." | ❓ | minor | — |
@@ -831,11 +832,13 @@ Lean: 🐞; the message contradicts the count above it.
 Basis: probe, 2026-09-27. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — An empty "Series" line in the "Browse" block** · 🐞 · minor.
+**A11 — An empty "Series" line in the "Browse" block** · 🐞 · low.
 While every series of the press is inactive, the placed "Browse" block
 still shows the line "Series", with nothing under it. Expected: the line
-left out, as it is on a press with no series.
-Basis: probe, 2026-09-27. <sup>f-a11</sup>
+left out, as it is on a press with no series. The same fault leaves the
+whole block an empty box when it has nothing to list
+([Categories](U16-categories.md#omp4), its OMP4).
+Basis: probe, 2026-10-04. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — A deleted series' menu item stays on the Navigation tab** · ❓ · minor.
@@ -1372,6 +1375,7 @@ runs: a press whose only series was made inactive from the Series tab's
 box, and one made so from the series window, showed "Browse", "New
 Releases", "Series"; a press with no series showed "Browse", "New
 Releases".
+Issue report: [pkp-e2e#607](https://github.com/jardakotesovec/pkp-e2e/issues/607) ([docs/issues/U16-OMP4-press-browse-block-empty-box.md](../issues/U16-OMP4-press-browse-block-empty-box.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — Note k: `getDisplayStatusCallback()` hides the item from the
