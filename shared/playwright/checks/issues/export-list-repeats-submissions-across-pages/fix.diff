@@ -1,0 +1,15 @@
+--- a/lib/pkp/classes/submission/Collector.php
++++ b/lib/pkp/classes/submission/Collector.php
+@@ -532,6 +532,12 @@
+             default:
+                 $q->orderBy('s.date_submitted', $this->orderDirection);
+                 break;
++        }
++
++        // Break ties (submissions sharing a date or a sequence), so that the order is the same
++        // on every request and the pages of a paged list neither repeat nor skip a submission
++        if ($this->orderBy !== self::ORDERBY_ID) {
++            $q->orderBy('s.submission_id', $this->orderDirection);
+         }
+ 
+         if (isset($this->statuses)) {

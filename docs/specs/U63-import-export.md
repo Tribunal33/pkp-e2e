@@ -1181,6 +1181,10 @@ Left out of the scenarios above, by reason:
     more than one page, submissions ticked on two pages and "Select
     All" pressed on a page: the file holds every ticked submission,
     and the button turns into "Select None"
+  - the guard A24's issue report names, once fixed: an export list of
+    more than one page whose submissions share one submission date,
+    exported a page at a time: the files together hold every
+    submission once
   - the guard A6's issue report names, once fixed, on this feature's
     screen: on the Native XML "Import" tab, Tab stops on "Upload
     File" and Enter opens the file picker
@@ -1259,8 +1263,6 @@ Left out of the scenarios above, by reason:
   - A23 (a users file first imported on a 3.5.0 release, imported again
     after the update; Rule 24), a state only an old release's import
     leaves
-  - A24 (an export list past one page whose submissions share a
-    submission date; Rule 14)
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
@@ -1318,7 +1320,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A submission with a title prefix comes back from a Native XML export and import titled "The The …" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | A users import stops at the first user without a registration date, silently leaving the rest out | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A users file first imported on a 3.5.0 release and imported again after the update gives each ended role a second time | 🐞 | minor | — |
-| [A24](#a24) | Past one page, the Native XML export list repeats some submissions and leaves others off every page | 🐞 | minor | — |
+| [A24](#a24) | Paging the export list, the dashboard or a preprint server's archive repeats some submissions and skips others | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | DOAJ export list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1601,21 +1603,22 @@ date are not affected. {OJS OMP}
 Since: 2026-09-30 · Basis: probe, 2026-10-01. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — Past one page, the Native XML export list repeats some submissions and leaves others off every page** · 🐞 · minor.
+**A24 — Paging the export list, the dashboard or a preprint server's archive repeats some submissions and skips others** · 🐞 · medium.
 A manager who pages through the Native XML Plugin's export list expects
-to meet each submission once. The list is in order of submission date
-with nothing to settle a tie, so where many submissions share a date,
-one can show on two pages and another on none, and the order of the
-lines on a page is not fixed. Submissions brought in by a Native XML
-import often share one: the file carries the day of each submission
-date but not the time. On a press and a preprint server holding more
-than 300 such submissions, pages 1 to 3 showed 300 lines but only 289
-different monographs and 286 different preprints; a journal's list,
-sorted the same way, happened to show 300 different articles that time.
-A manager who exports one page at a time, the way round
-[A11](#a11) offers, gets files that leave some submissions out, and
-nothing says so. The search box still finds each submission.
-Basis: probe, 2026-10-01. <sup>f-a24</sup>
+to meet each submission once. Where submissions share a submission
+date, some show on two pages and others on none, and nothing says so.
+The editorial dashboard's lists and a preprint server's public
+"Archives" list do the same.
+
+"Share a date" means the same stored value. A Native XML import stores
+the day of each submission date with no time (midnight), so imported
+submissions whose dates fall on the same day tie. Submissions made on screen carry their own time
+and rarely tie. "Archives" sorts by publication date, which is a day,
+so preprints posted on the same day tie.
+
+A manager who exports one page at a time gets files that leave some
+submissions out.
+Basis: probe, 2026-10-04. <sup>f-a24</sup>
 
 ### OJS
 
@@ -3095,6 +3098,7 @@ Kept script:
 `shared/playwright/checks/issues/export-list-selection-stops-at-page/many.js`.
 The A11 issue report names this a separate fault and leaves it out
 ([docs/issues/U63-A11-export-list-selection-stops-at-page.md](../issues/U63-A11-export-list-selection-stops-at-page.md), Evidence).
+Issue report: [docs/issues/U63-A24-export-list-repeats-submissions-across-pages.md](../issues/U63-A24-export-list-repeats-submissions-across-pages.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`

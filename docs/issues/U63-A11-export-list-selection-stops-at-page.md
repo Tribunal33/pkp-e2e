@@ -79,8 +79,8 @@ Ticks on two pages:
    20 and OMP submission 18, "Transformative Impact of AI Tools on
    Modern Education: Opportunities, Challenges, and Future Directions";
    OPS submission 19, "Finocchiaro: Arguments About Arguments". Its five
-   imported copies sit on the lines just below it; its "View" link opens
-   the original's ID.
+   imported copies come after all of the dataset's own submissions; its
+   "View" link opens the original's ID.
 5. Press "2" under the list. Tick the first line on page 2.
 6. Press "Export Articles" ("Export Submissions", "Export Preprints"),
    then "Download Exported File".
