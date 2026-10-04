@@ -1834,7 +1834,7 @@ scratch press: both "Notify Primary Contact" choices unchecked on
 arrival; the journal and the preprint server arrive at "No". OMP's
 `schemas/context.json` redefines `copySubmissionAckPrimaryContact`
 without lib/pkp's `default: false`.
-Issue report: [docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md](../issues/U56-OMP2-press-notify-primary-contact-unselected.md).
+Issue report: [pkp-e2e#877](https://github.com/jardakotesovec/pkp-e2e/issues/877) ([docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md](../issues/U56-OMP2-press-notify-primary-contact-unselected.md)).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ContextEmailVariable::descriptions()` uses
