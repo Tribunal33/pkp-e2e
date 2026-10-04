@@ -1073,7 +1073,7 @@ provided"; a full page reload brought both current (the saved name then
 listed). OJS refreshed in place. Same shared `FunderManager` component on
 all three (identical ui-library commit) — the per-app difference is
 unexplained at code level.
-Issue report: [docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md](../issues/U42-A10-wizard-data-citations-funders-stale-press-server.md).
+Issue report: [pkp-e2e#873](https://github.com/jardakotesovec/pkp-e2e/issues/873) ([docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md](../issues/U42-A10-wizard-data-citations-funders-stale-press-server.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5 — A5 evidence.** Live-probed 2026-08-28 (OJS; shared ui-library

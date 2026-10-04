@@ -24,12 +24,12 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
-| [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | **Taken: issues session, VM s1, 2026-10-04**; A19 done with U46 A5 (pkp-e2e#619); A12 done (pkp-e2e#866); A21 done: `common.moreActions` joined pkp-e2e#457, the rest main-only locale texts (no report); A4 done (pkp-e2e#869); A9 done (pkp-e2e#870); A20 done (pkp-e2e#871); A16 done with U16 A11 (pkp-e2e#588); A7 done (pkp-e2e#872); A10 done with U43 A4 |
+| [U42](../specs/U42-citations-and-references.md) | 16 | 0 | 1 | **Taken: issues session, VM s1, 2026-10-04**; A19 done with U46 A5 (pkp-e2e#619); A12 done (pkp-e2e#866); A21 done: `common.moreActions` joined pkp-e2e#457, the rest main-only locale texts (no report); A4 done (pkp-e2e#869); A9 done (pkp-e2e#870); A20 done (pkp-e2e#871); A16 done with U16 A11 (pkp-e2e#588); A7 done (pkp-e2e#872); A10 done with U43 A4 (pkp-e2e#873) |
 | [U56](../specs/U56-emails-management.md) | 9 | 0 | 1 | **Taken: issues session, workstation s0, 2026-10-04**; OPS1 done with U34 OPS2 (pkp-e2e#861); OMP1 done with U53 A14 (pkp-e2e#447) |
 | [U60](../specs/U60-site-settings.md) | 9 | 0 | 1 |  |
 | [U38](../specs/U38-submission-activity-log-and-notes.md) | 8 | 0 | 1 | A2 done with U36 A10 (pkp-e2e#521) |
 | [U11](../specs/U11-highlights.md) | 5 | 0 | 1 | A4 written with U66 A2 ([pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4), the pilot) |
-| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | A3 done with U41 A5 (pkp-e2e#754); A5 done: the ordering arrows with U46 A5 (pkp-e2e#619), the typed-name boxes with U41 A10 (pkp-e2e#755); A4 done with U42 A10 |
+| [U43](../specs/U43-funding.md) | 4 | 0 | 1 | A3 done with U41 A5 (pkp-e2e#754); A5 done: the ordering arrows with U46 A5 (pkp-e2e#619), the typed-name boxes with U41 A10 (pkp-e2e#755); A4 done with U42 A10 (pkp-e2e#873) |
 | [U22](../specs/U22-my-submissions.md) | 2 | 0 | 1 |  |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |

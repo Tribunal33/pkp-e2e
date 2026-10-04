@@ -2081,7 +2081,7 @@ Issue report: [pkp-e2e#870](https://github.com/jardakotesovec/pkp-e2e/issues/870
 extend it. The funders section, built the same way, stays stale on OMP and
 OPS only too (*Funding*, A4); the cause is unexplained at code level.
 Live-probed 2026-09-24: q20.
-Issue report: [docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md](../issues/U42-A10-wizard-data-citations-funders-stale-press-server.md).
+Issue report: [pkp-e2e#873](https://github.com/jardakotesovec/pkp-e2e/issues/873) ([docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md](../issues/U42-A10-wizard-data-citations-funders-stale-press-server.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11 — A11 evidence.** Note p (no reader template renders data
