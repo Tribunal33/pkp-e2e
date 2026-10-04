@@ -1682,7 +1682,7 @@ versions. Live-probed 2026-09-26, all three apps: the press and the
 preprint server read "…editorial statistics of the journal…" while the
 tab's other lines name the press or the preprint server; the journal
 reads "journal".
-Issue report: [docs/issues/U56-A1-emails-tab-editorial-statistics-says-journal.md](../issues/U56-A1-emails-tab-editorial-statistics-says-journal.md).
+Issue report: [pkp-e2e#864](https://github.com/jardakotesovec/pkp-e2e/issues/864) ([docs/issues/U56-A1-emails-tab-editorial-statistics-says-journal.md](../issues/U56-A1-emails-tab-editorial-statistics-says-journal.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — lib/pkp `locale/en/emails.po`: `orcid.orcidCollectAuthorId.name`
