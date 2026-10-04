@@ -2056,7 +2056,7 @@ draft carrying its main file, at "Require…" with no data citation, landed
 on "Submission complete" (the Review step's own check answered 200), while
 required references kept "Submit" grayed out on the same screens (q19,
 note k).
-Issue report: [docs/issues/U42-A9-submits-without-required-data-citations.md](../issues/U42-A9-submits-without-required-data-citations.md).
+Issue report: [pkp-e2e#870](https://github.com/jardakotesovec/pkp-e2e/issues/870) ([docs/issues/U42-A9-submits-without-required-data-citations.md](../issues/U42-A9-submits-without-required-data-citations.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** `DataCitationManager` refreshes the wizard through
