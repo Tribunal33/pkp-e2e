@@ -1,0 +1,14 @@
+--- a/lib/pkp/classes/log/event/EventLogEntry.php
++++ b/lib/pkp/classes/log/event/EventLogEntry.php
+@@ -225,7 +225,10 @@
+                 continue;
+             }
+ 
+-            $params[$key] = $eventLog->getData($key, $locale);
++            // A per-language value (a file's name, a participant's name) is stored in the
++            // languages it was written in, which need not include the reader's: fall back
++            // as every other reader of these values does.
++            $params[$key] = $eventLog->getLocalizedData($key, $locale);
+         }
+ 
+         return __($message, $params, $locale);

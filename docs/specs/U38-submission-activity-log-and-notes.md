@@ -511,6 +511,7 @@ Left out of the scenarios above, by reason:
   - a "Notify" message, an "Assign" message and a discussion's email: their "History" lines name the editor who sent them under "User" (Rule 4c; [A1](#a1)): the guard the issue report proposes
   - a Reviewer's "Submit Review": the "Review complete" lines with nothing under "User" (Rule 4c; [A5](#a5)): the guard the issue report proposes
   - text typed in "Add Note" and not added on a submission with a note: "Close" asks; after a switch to "History" answered "OK", "Close" asks nothing; no "Leave site?" after either (Rule 10d; [A3](#a3), [A9](#a9), [A10](#a10)): the guard the issue report proposes
+  - a submission's "History" read in French (Canada): its file lines name the file, and its "was assigned" lines the participant (Rule 8a; [A7](#a7)): the guard the issue report proposes
   - a publication format created and then deleted: its two "History" lines name the format {OMP} (Rule 11; [OMP1](#omp1)): the guard the issue report proposes
 - **Nothing new to test**:
   - a revision cancelled with "Cancel", leaving no line of it, metadata line included, on either "History" (Rule 6c)
@@ -529,7 +530,6 @@ Left out of the scenarios above, by reason:
   - the Editor and the Production editor {OJS OMP}, and the Guest Editor {OJS} (Actors row 1): the Journal Manager's and the Section Editor's offer, which scenario 1 reads
 - **Register carries it**:
   - A2 (an empty note; Rule 10a)
-  - A7 (file lines read in French; Rule 8a)
 - **No seed**:
   - a Site Administrator whose journal roles are all assistant roles: "Notes" alone, no "Delete" (Actors rows 1, 2, 4, 5; A4)
   - a reviewer's file line read by the author-editor: "Anonymous Reviewer", no file name, no "Download" (Rule 9)
@@ -551,7 +551,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Add Note" with an empty box posts a note with no text, on a file's "Notes" and in "Activity Log & Notes" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Once the submission has a note, closing the window drops a note typed and not added, without asking | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | The Activity Log names the editor who received a "Review complete" email as its sender | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | Read in French, file lines print an empty file name | 🐞 | user-visible | — |
+| [A7](#a7) | Activity Log file lines show an empty file name when read in a language other than the submission's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -634,14 +634,25 @@ did not send it.
 Basis: probe, 2026-10-04. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a7"></a>
-**A7 — File lines lose the file name in another language** · 🐞 · user-visible.
-Read in French (Canada), the file lines written while the person acting
-worked in English print an empty name: "La révision « » a été téléversée
-pour le fichier 12." where an English reader reads "Revision
-"article.pdf" was uploaded for file 12.". The name is expected in every
-language. An editor who works in another language than the person
-who acted cannot tell from the log which file a line is about.
-Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Activity Log file lines show an empty file name when read in a language other than the submission's** · 🐞 · low.
+An editor who reads a submission's Activity Log in an interface language
+other than the submission's own sees every file line with an empty file
+name. In French (Canada), the log reads "La révision « » a été téléversée
+pour le fichier 12." where an English reader of the same line reads
+"Revision "article.pdf" was uploaded for file 12.".
+
+A file's name is stored in the submission's language, the one chosen
+when it was submitted, whoever uploads the file and in whatever
+interface language they work. Switching to the submission's language
+therefore always brings the names back. The fault needs a journal,
+press or server that offers a second interface language.
+
+On `main` only, the same fault also empties the "was assigned to this
+submission" line: a participant whose name is filled in only in another
+language appears as "(amwandenga) a été ajouté-e …". This is part of
+this report, with the same fix: one line in the shared code that builds
+every log sentence, for every log line and all three apps.
+Basis: probe, 2026-10-04. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — An "Open" review's assignment line hides the reviewer from an editor who is also the author** · ❓ · minor.
@@ -1291,6 +1302,7 @@ Live-probed 2026-09-27, OJS and OMP, and OPS on a galley: note td7.
 **f-a7** — Note l. Live-probed 2026-09-24, all three apps: the file lines
 of the scratch submissions, written in English, read « » in French
 (Canada) where the English reader read "article.pdf".
+Issue report: [docs/issues/U38-A7-file-lines-empty-name-other-language.md](../issues/U38-A7-file-lines-empty-name-other-language.md).
 
 <a id="fn-a8"></a>
 **f-a8** — Note m. Live-probed 2026-09-24, OJS and OMP, the "Open"
