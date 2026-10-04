@@ -1004,7 +1004,7 @@ interpolation that escapes the stored HTML, while the delete dialog's
 message and `highlights.tpl` render it. Live-probed 2026-09-16, OJS, OMP
 and OPS: a title saved as `<b>Bold title one</b>` reads that way in the
 row and bold on the slide and in the "Delete Highlight" sentence.
-Issue report: [docs/issues/U11-A3-highlights-list-title-html-codes.md](../issues/U11-A3-highlights-list-title-html-codes.md).
+Issue report: [pkp-e2e#897](https://github.com/jardakotesovec/pkp-e2e/issues/897) ([docs/issues/U11-A3-highlights-list-title-html-codes.md](../issues/U11-A3-highlights-list-title-html-codes.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** Live-probed 2026-09-16, OJS (twice), OMP and OPS:
