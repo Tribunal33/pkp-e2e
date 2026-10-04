@@ -593,6 +593,11 @@ Left out of the scenarios above, by reason:
     back the operator's own account ([A4](#a4)): the guard the issue
     report (`docs/issues/U01-A4-second-login-as-strands-operator.md`)
     proposes, once fixed
+  - signed out, the Dashboard address ending at the word "dashboard"
+    opening the Login page, and signing in there leading to the
+    Dashboard ([A7](#a7)): the guard the issue report
+    (`docs/issues/U01-A7-dashboard-address-signed-out-server-error.md`)
+    proposes, once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -601,7 +606,6 @@ Left out of the scenarios above, by reason:
   - a Production editor offered "Login As" (Actors row "Impersonate a user"; Rule 14): the same offer as scenario 8's Editor
   - a held address the user's roles do not allow ending on the access-denied page after sign-in (Rule 4): the page scenario 4 reads (Rule 17)
 - **Register carries it**:
-  - A7 (the address ending at the word "dashboard" answering a blank error; Rule 4)
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
   - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
   - A8 (Login As from a stale session answering a blank error; Rule 14)
@@ -640,7 +644,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | "Keep me logged in" is ticked every time the Login page shows, even after the user unticked it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
 | [A4](#a4) | While signed in as another user, "Login As" is still offered, and using it strands the operator in that account | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | Signed out, the address ending at the word "dashboard" answers a blank server error instead of the Login page | 🐞 | user-visible | Jarda 2026-08-25 |
+| [A7](#a7) | Signed out, the Dashboard address the monthly reminder email links to gives an empty error page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Login As answers a blank server error when the browser's session can no longer be fully resolved (e.g. it outlived a server-side reset) | 🐞 | minor | Jarda 2026-08-25 |
 | [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -773,15 +777,18 @@ Basis: observed on a running site + upstream design record.
 > genuine owner is the accepted cost.
 
 <a id="a7"></a>
-**A7 — The address ending at the word "dashboard" answers a blank error page when signed out** · 🐞 · user-visible.
-A signed-out visitor who opens a dashboard address cut short at the word
-"dashboard", with nothing after it (a truncated bookmark, a hand-typed URL),
-gets an entirely blank page: a server error with no content. Every other
-private address shows the Login page and continues to the destination after
-sign-in (Rule 4). Every deeper dashboard address behaves correctly. Nothing
-private is exposed, the page is simply empty, but the visitor is left with
-no way forward.
-Basis: observed on a running site. <sup>[f-a7](#fn-a7)</sup>
+**A7 — Signed out, the Dashboard address the monthly reminder email links to gives an empty error page** · 🐞 · medium · crash: server.
+The server fails when a signed-out visitor opens the Dashboard address
+that ends at the word "dashboard"
+(`…/index.php/publicknowledge/en/dashboard`). The visitor gets an empty
+error page instead of the Login page. Longer Dashboard addresses, such as
+`…/dashboard/editorial`, open the Login page and return there after
+signing in.
+
+That address is the "submission dashboard" link in the monthly
+"Outstanding editorial tasks" email to managers and section editors. A
+bookmark or a typed address cut short at "dashboard" leads there too.
+Since: 2025-01-14 (pkp/pkp-lib#10782) · Basis: probe, 2026-10-04. <sup>[f-a7](#fn-a7)</sup>
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞. Ruling: signed
 > out, the bare dashboard address must behave like every other private
@@ -1372,6 +1379,7 @@ home" via `PKPPageRouter::getHomeUrl()`, which starts from
 anonymous-reachable caller; every other caller runs just after sign-in.
 Fix per ruling: guard `getHomeUrl()` (no user → the login redirect), so
 variant resolution stays post-login.
+Issue report: [pkp-e2e#825](https://github.com/jardakotesovec/pkp-e2e/issues/825) ([docs/issues/U01-A7-dashboard-address-signed-out-server-error.md](../issues/U01-A7-dashboard-address-signed-out-server-error.md)).
 
 <a id="fn-a8"></a>
 **f-a8** — Live-probed 2026-08-25 (OJS): with an aged storage-state session
