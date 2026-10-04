@@ -1,0 +1,19 @@
+--- a/lib/pkp/api/v1/emailTemplates/PKPEmailTemplateController.php
++++ b/lib/pkp/api/v1/emailTemplates/PKPEmailTemplateController.php
+@@ -103,8 +103,15 @@
+     public function authorize(PKPRequest $request, array &$args, array $roleAssignments): bool
+     {
+         $this->addPolicy(new UserRolesRequiredPolicy($request), true);
+-        $this->addPolicy(new CanAccessSettingsPolicy());
+ 
++        // Reading templates serves the email composer of editorial screens (decisions,
++        // author response requests), so only the actions that change them require
++        // access to the settings area.
++        $illuminateRequest = $args[0]; /** @var \Illuminate\Http\Request $illuminateRequest */
++        if (!in_array(static::getRouteActionName($illuminateRequest), ['getMany', 'get'])) {
++            $this->addPolicy(new CanAccessSettingsPolicy());
++        }
++
+         $rolePolicy = new PolicySet(PolicySet::COMBINING_PERMIT_OVERRIDES);
+ 
+         // This endpoint is not available at the site-wide level

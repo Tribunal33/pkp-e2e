@@ -1113,6 +1113,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the "Notify Reviewers" letter edited before the decision is recorded: each reviewer's email still carries that reviewer's own name alone, never the other reviewers' names (Rule 4): likely a bullet in scenario 6, whose reviewers' mailboxes are read after the accept
+  - the guard for A9 (issue report `docs/issues/U34-A9-sub-editor-find-template-not-authorized.md`): a Section Editor's "Find Template" in the decision wizard lists the templates matching the phrase, as a Journal Editor's does (Rule 7)
 - **Nothing new to test**:
   - a "Signature" saved on the editor's profile, ending the letter in place of the editor's full name (Settings bullet 7; Rule 5)
   - a Section Editor or Guest Editor assigned and deciding, a Production editor, or a Site Administrator recording a decision (Actors row 1): the wizard scenario 1 walks as the Editor
@@ -1123,7 +1124,6 @@ Left out of the scenarios above, by reason:
   - A6 ("Revert Decline" typed on a submission never declined; Rule 12)
   - A11 (a review-stage decision typed with a past round's number; Rule 12)
   - A8 and OPS2 (the "Insert Content" rows shown as markup, the empty address row and the untranslated row; Rule 5; scenarios 2 and 9 mark them)
-  - A9 (a Section Editor's "Find Template" refused; Rule 7)
   - A2 (the wizard with no page and its closing sentence; Rule 2)
   - A1 (the "New Review Round" heading under "Create New Review Round"; Rule 2)
   - OJS1 ("Waive" requesting the fee; Rule 16; scenario 10 marks it)
@@ -1145,7 +1145,7 @@ entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A6](#a6) | "Revert Decline" typed by address on a submission never declined records it and emails the author | 🐞 | minor | — |
-| [A9](#a9) | A Section Editor's "Find Template" answers an "Error" window and no results | 🐞 | user-visible | — |
+| [A9](#a9) | A Section Editor's "Find Template" in a decision's email answers "You are not authorized to access the requested resource." | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | "Waive" on "Request Payment" requests the fee like "Request publication fee" | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A press's "Review Cancel" email reads "{$journalName}" where the press's name should be | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | "Insert Content" describes the server's initials with an untranslated key | 🐞 | minor | — |
@@ -1246,14 +1246,21 @@ Question: should the window render the values as the letter will? Lean:
 Basis: probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — A Section Editor's template search is refused** · 🐞 · user-visible.
-A Section Editor recording a decision expects "Find Template" to search
-like the "Email Templates" list beside it. Typing a phrase opens an
-"Error" window reading "You are not authorized to access the requested
-resource." with "OK"; after it the phrase stays in the box over an empty
-list until "Clear search phrase". A Journal Manager's or Editor's search
-works; a Moderator on a preprint server is refused the same way.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
+**A9 — A Section Editor's "Find Template" in a decision's email answers "You are not authorized to access the requested resource."** · 🐞 · medium.
+A Section Editor recording a decision types a phrase into "Find Template"
+above the email to the authors and presses Enter to search. Instead of
+the matching templates, a window "Error" opens reading "You are not
+authorized to access the requested resource.". After "OK" the phrase
+stays in the box and no templates are listed under it.
+The decision's own template comes back only after "Clear search phrase",
+and every other template of the journal, press or server stays out of
+reach. The decision can still be recorded with that template or with a
+letter typed by hand.
+A Series Editor on a press and a Moderator on a preprint server meet the
+same error. On a journal, a Section Editor also meets it on the "Request
+Author Response" page. So does a Journal Manager or Editor whose role has
+"Permit changes to Settings" turned off.
+Basis: probe, 2026-10-04. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — The template list stays in the first language after a switch** · ❓ · minor.
@@ -1453,6 +1460,7 @@ their own dates.
 
 <a id="fn-a9"></a>
 **f-a9** — Note d: `Composer.vue::search()` calls `GET emailTemplates?searchPhrase=`, which the run record shows answering 401 for the sub-editor role ("You are not authorized to access the requested resource."), while the listed templates load with the page; the controller's role gate was not traced. Live-probed 2026-09-20: a Section Editor on OJS, a Series Editor on OMP, a Moderator on OPS: the "Error" window with "OK", the empty list, the phrase kept until "Clear search phrase"; the manager-level editor's search working on all three.
+Issue report: [docs/issues/U34-A9-sub-editor-find-template-not-authorized.md](../issues/U34-A9-sub-editor-find-template-not-authorized.md).
 
 <a id="fn-a10"></a>
 **f-a10** — Note h: `Composer.vue::switchLocale()` reloads the template body for the new locale (`loadTemplate(initialTemplateKey)`), while the "Email Templates" list keeps the `getBodySnippet()` computed for the page's locale. Live-probed 2026-09-20 on all three apps: after "Switch to: French" the entry "Submission Declined (Pre-Review)" still shows "Dear {$recipientName},I'm sorry to inform you…".
