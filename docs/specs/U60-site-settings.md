@@ -1663,7 +1663,7 @@ site service, logged `PHP Warning: Undefined array key
 and stored the list. fn-m has the cause; the same path serves every tab.
 Live-probed 2026-09-26 (Side effects; all three apps): fn-m lists which
 saves logged it.
-Issue report: [docs/issues/U60-A3-site-settings-save-logs-redirect-warning.md](../issues/U60-A3-site-settings-save-logs-redirect-warning.md).
+Issue report: [pkp-e2e#885](https://github.com/jardakotesovec/pkp-e2e/issues/885) ([docs/issues/U60-A3-site-settings-save-logs-redirect-warning.md](../issues/U60-A3-site-settings-save-logs-redirect-warning.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — fn-l: `PKPSiteService::validate()` passes the publication
