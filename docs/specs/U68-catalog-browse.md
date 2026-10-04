@@ -1273,7 +1273,7 @@ cover links with no alternate text, a cover-less book's included, had no
 name; with "Alternate text" "Cover of C2" typed on the Catalog Entry
 page, the link was named "Cover of C2". The Catalog Entry page shows the
 "Alternate text" box only once an image is uploaded.
-Issue report: [docs/issues/U68-A2-cover-link-no-name.md](../issues/U68-A2-cover-link-no-name.md).
+Issue report: [pkp-e2e#843](https://github.com/jardakotesovec/pkp-e2e/issues/843) ([docs/issues/U68-A2-cover-link-no-name.md](../issues/U68-A2-cover-link-no-name.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — [Sections](U17-sections.md#omp9) fn f-omp9: OMP
