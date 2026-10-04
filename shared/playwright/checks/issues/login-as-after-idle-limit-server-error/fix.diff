@@ -1,0 +1,28 @@
+--- a/lib/pkp/classes/core/PKPSessionGuard.php
++++ b/lib/pkp/classes/core/PKPSessionGuard.php
+@@ -143,6 +143,25 @@
+     }
+ 
+     /**
++     * @copydoc \Illuminate\Auth\SessionGuard::userFromRecaller($recaller)
++     *
++     * Overridden so that a user signed back in from the "remember me" cookie,
++     * once the session itself has lapsed, gets the same session data as a
++     * password sign-in (Validation::registerUserSession()): getUserId() and
++     * Validation::isLoggedIn() read it.
++     */
++    protected function userFromRecaller($recaller)
++    {
++        $user = parent::userFromRecaller($recaller);
++
++        if ($user) {
++            $this->setUserDataToSession($user);
++        }
++
++        return $user;
++    }
++
++    /**
+      * Set the user data to session
+      */
+     public function setUserDataToSession(AuthenticatableContract|User $user): self
