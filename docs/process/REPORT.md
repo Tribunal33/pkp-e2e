@@ -41,6 +41,7 @@ never dropped.
 - **Effort** small | medium | large
 - **Kind** regression | intention gap | defect
 [- **Crash** server | script | both]
+[- **Security** unreleased]
 - **Affects**
   - main: <apps>
   - 3.5: <apps>[ (code)]
@@ -91,6 +92,10 @@ read; a label changed on GitHub is copied back into the header.
 - **Crash**, only when the app itself failed: a request behind the action
   answered a server error (`server`), or the page's own script failed in
   the browser (`script`), or both.
+- **Security**, only for a fault that could plausibly be a security
+  weakness and that no release carries (Affects names `main` alone): the
+  word `unreleased`. One in released code never gets a report; it goes to
+  the private file (RUNBOOK "What goes where").
 - **Affects**, **Introduced**, **Upstream**: below.
 - **Tracked in** links each register entry (or names the tracking row),
   and **Checked** dates the walks; the branch tips they ran on are
@@ -391,7 +396,7 @@ stands, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
 - The title is the report's title. The labels are read off the header:
   `severity: <word>`, `effort: <word>`, the kind (`regression`,
   `intention gap` or `defect`) and `crash: server` or `crash: script`
-  (both for both) from their bullets; one of `ojs`, `omp`, `ops` per
+  (both for both) and `security` from their bullets; one of `ojs`, `omp`, `ops` per
   app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
   a sub-item naming it under the Affects bullet; and `tracked upstream`
   when the Upstream bullet names a pkp issue or PR. They are a filter on
