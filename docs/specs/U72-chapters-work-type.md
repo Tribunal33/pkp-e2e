@@ -1599,7 +1599,7 @@ Issue report: [pkp-e2e#705](https://github.com/jardakotesovec/pkp-e2e/issues/705
 **f-a3** — Note q. Live-probed 2026-09-28: note td15; in the stored data
 `article.pdf` keeps the old chapter's id, and the new proof file points
 at the new chapter.
-Issue report: docs/issues/U72-A3-new-version-chapter-files-left-behind.md.
+Issue report: [pkp-e2e#857](https://github.com/jardakotesovec/pkp-e2e/issues/857) ([docs/issues/U72-A3-new-version-chapter-files-left-behind.md](../issues/U72-A3-new-version-chapter-files-left-behind.md)).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note g (the `datepicker` field). Live-probed 2026-09-28, in
