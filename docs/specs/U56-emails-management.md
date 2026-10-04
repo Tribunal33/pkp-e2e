@@ -900,7 +900,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | On a press or a preprint server, the "Emails" settings call editorial statistics the journal's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A2](#a2) | The three ORCID emails are listed under code names at the end of the list | 🐞 | minor | — |
+| [A2](#a2) | "Manage Emails" lists the three ORCID emails under code names, after every other email | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The "Add Template" window is titled "Edit Template" | 🐞 | minor | — |
 | [A5](#a5) | "Remove Template" names the template by its subject, not its name | 🐞 | minor | — |
 | [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
@@ -929,16 +929,21 @@ app's own wording.
 Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — ORCID emails listed under code names** · 🐞 · minor.
-On a journal and a press the "Manage Emails" list ends with three rows
+**A2 — "Manage Emails" lists the three ORCID emails under code names, after every other email** · 🐞 · low.
+On a journal or a press, the "Manage Emails" list ends with three rows
 named "orcidCollectAuthorId", "orcidRequestAuthorAuthorization" and
-"orcidRequestUpdateScope", after every other email instead of in
-alphabetical place. Each opens "Edit Template" at once, and its "Name"
-box reads the same code name; only the subjects ("Submission ORCID",
+"orcidRequestUpdateScope", after "Validate Email (Site)" instead of
+among the other names. Each email's "Edit Template" window shows its
+code in the "Name" box, so only the subject ("Submission ORCID",
 "Requesting ORCID record access", "Requesting updated ORCID record
-access") say what the email is. A manager looking for the ORCID emails
-expects readable names like the other rows'.
-Basis: probe, 2026-09-26. <sup>f-a2</sup>
+access") says which email it is.
+A manager can still find, open and edit the three emails. Most other
+interface languages show the codes too.
+New English strings, as the open PR `pkp/pkp-lib#13207` proposes, fix
+the list on every site at once. They do not fix the "Name" box on
+existing sites, which stored the code names when the emails were
+installed and keep them until an upgrade step rewrites them.
+Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — Filters of one block narrow each other** · ❓ · minor.
@@ -1693,6 +1698,7 @@ last. Live-probed 2026-09-26, OJS and OMP: the three rows end the list,
 each opens "Edit Template" at once with the code name in "Name" and the
 subjects "Submission ORCID", "Requesting ORCID record access" and
 "Requesting updated ORCID record access".
+Issue report: [docs/issues/U56-A2-orcid-emails-listed-under-code-names.md](../issues/U56-A2-orcid-emails-listed-under-code-names.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `ManageEmailsPage::currentMailables()` filters once per active
