@@ -980,7 +980,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A new data citation has no place in the order: none before an order is saved, the top after one | 🐞 | minor | — |
 | [A9](#a9) | "Require" for data citations warns but does not stop the submission | 🐞 | user-visible | — |
 | [A10](#a10) | On a press or a preprint server the wizard's Data Citations table ignores every save until a reload | 🐞 | minor | — |
-| [A12](#a12) | An arXiv ID typed with "arxiv:" or as an address loses its version; a data citation refuses a versioned one | 🐞 | minor | — |
+| [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | An author row abandoned with "Close" comes back blank, is saved, and makes the reference structured | 🐞 | minor | — |
 | [A14](#a14) | The author boxes in "Edit citation" have no names for a screen reader | 🐞 | minor | — |
 | [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
@@ -1101,17 +1101,23 @@ should stop promising it.
 Basis: probe, 2026-09-24. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — An arXiv ID loses its version** · 🐞 · minor.
-The "Arxiv" box of "Edit citation" offers "1234.123456v2",
-"arxiv:1234.123456v2" and "https://arxiv.org/abs/1234.123456v2" as
-equivalent examples. A bare ID keeps its version ("2101.12345v2"), but
-"arxiv:2101.12345v2" and "https://arxiv.org/abs/2101.12345v2" are both
-stored as "2101.12345". In a data citation of type "ARXIV",
-"https://arxiv.org/abs/1234.12345v2" is saved as "1234.12345", and a bare
-ID with a version is refused with ""3456.34567v4" is not a valid ARXIV
-identifier." while "4567.45678" is accepted. The cited version is lost or
-cannot be entered.
-Basis: probe, 2026-09-24. <sup>f-a12</sup>
+**A12 — An arXiv ID entered for a reference or a data citation loses its version, or is refused with it** · 🐞 · medium.
+A reference's "Edit citation" panel has an "Arxiv" box whose help text
+offers an ID in three forms: bare, after "arxiv:", and as its
+https://arxiv.org/abs/ address. Typed bare, "2101.12345v2" is kept as
+typed. Typed as "arxiv:2101.12345v2" or
+"https://arxiv.org/abs/2101.12345v2", it is saved as "2101.12345",
+without a word. When a reference's text holds "arXiv:2101.12345v2", the
+metadata lookup fills "Arxiv" with "2101.12345" from it. A data citation
+of type "ARXIV" saves "https://arxiv.org/abs/2101.12345v2" as
+"2101.12345" and refuses the bare "2101.12345v2" as not a valid ARXIV
+identifier, while the unversioned "2101.12345" is accepted. Either way
+the record loses which version of the paper or dataset the work cites.
+The reference half needs metadata lookup on, since with it off "Edit
+citation" holds only the reference's text. The data citation half needs
+data citations on. Both settings sit in Settings › Workflow and are off
+by default.
+Basis: probe, 2026-10-04. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A blank author row is saved and counts as an author** · 🐞 · minor.
@@ -2070,6 +2076,7 @@ class. Live-probed
 "https://arxiv.org/abs/1234.12345v2" saved as "1234.12345",
 "arxiv:2345.23456v3" as "2345.23456", "3456.34567v4" refused and
 "4567.45678" accepted.
+Issue report: [docs/issues/U42-A12-arxiv-id-loses-version.md](../issues/U42-A12-arxiv-id-loses-version.md).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** Note h (`Citation::isStructured()` tests that

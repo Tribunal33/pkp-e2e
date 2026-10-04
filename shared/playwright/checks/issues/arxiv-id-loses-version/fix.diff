@@ -1,0 +1,19 @@
+--- a/lib/pkp/classes/pid/Arxiv.php
++++ b/lib/pkp/classes/pid/Arxiv.php
+@@ -20,13 +20,13 @@
+ {
+     /** @copydoc BasePid::regexes */
+     public const regexes = [
+-        // arxiv:2025.12345v2 https://arxiv.org/abs/2025.12345
+-        '/(?:arxiv:\s*|https?:\/\/arxiv\.org\/(?:abs|pdf)\/)(?:\d+\.\d+|[a-z.-]+\/\d+)/i'
++        // arxiv:2025.12345v2 https://arxiv.org/abs/2025.12345, keeping a version suffix (v2) when there is one
++        '/(?:arxiv:\s*|https?:\/\/arxiv\.org\/(?:abs|pdf)\/)(?:\d+\.\d+|[a-z.-]+\/\d+)(?-i:v\d+)?/i'
+     ];
+ 
+     /** @copydoc BasePid::validationRegexes */
+     public const validationRegexes = [
+-        '/^(?:\d+\.\d+|[a-z.-]+\/\d+)$/i'
++        '/^(?:\d+\.\d+|[a-z.-]+\/\d+)(?-i:v\d+)?$/i'
+     ];
+ 
+     /** @copydoc BasePid::prefix */
