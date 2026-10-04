@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/notification/managerDelegate/SubmissionNotificationManager.php
++++ b/lib/pkp/classes/notification/managerDelegate/SubmissionNotificationManager.php
+@@ -61,7 +61,7 @@
+                 $contextDao = Application::getContextDAO();
+                 $context = $contextDao->getById($notification->contextId);
+ 
+-                return $dispatcher->url($request, PKPApplication::ROUTE_PAGE, $context->getPath(), 'workflow', 'submission', [$notification->assocId]);
++                return $dispatcher->url($request, PKPApplication::ROUTE_PAGE, $context->getPath(), 'dashboard', 'editorial', null, ['workflowSubmissionId' => $notification->assocId]);
+             case Notification::NOTIFICATION_TYPE_SUBMISSION_NEW_VERSION:
+                 // Route each recipient (including authors) to a workflow view they can access
+                 $submission = Repo::submission()->get($notification->assocId);
