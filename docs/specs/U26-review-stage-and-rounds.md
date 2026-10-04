@@ -1587,7 +1587,7 @@ after revisions were requested" rendered verbatim on an OJS Review round 1
 and an OMP External Review round 1; identical on an OMP Internal Review
 round 1 the same day. Panel mechanism in notes a and i (the editor-side
 revisions `FileManager`, ungated by round status).
-Issue report: [docs/issues/U26-A10-revisions-panel-says-revisions-requested.md](../issues/U26-A10-revisions-panel-says-revisions-requested.md).
+Issue report: [pkp-e2e#858](https://github.com/jardakotesovec/pkp-e2e/issues/858) ([docs/issues/U26-A10-revisions-panel-says-revisions-requested.md](../issues/U26-A10-revisions-panel-says-revisions-requested.md)).
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Probed 2026-07-31: on OJS, a free-text review
