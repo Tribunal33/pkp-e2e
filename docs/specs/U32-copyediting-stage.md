@@ -638,6 +638,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the only copyedited file deleted: the "Assign a copyeditor…" notice back for the assigned editor ([A7](#a7)): the guard the issue report proposes
+  - scenario 4's "Copyedited Files" › "Upload/Select Files" window titled "Upload/Select Files" ([A2](#a2); Rule 5): the guard the issue report proposes, once fixed
   - the "Notification" box "Assign a copyeditor using the Assign link in the Participants list." for an assigned editor after "Accept and Skip Review", after {OMP} "Accept Submission" on Internal Review and after "Move To Copyediting" from Production ([A6](#a6); Rule 3): the guard the issue report proposes, once fixed
   - scenario 1's recommending Section Editor bullet, no notice box on a
     press (A11; Actors row 2): no assertion in the OMP suite
@@ -686,7 +687,7 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | The "Copyedited Files" list's "Upload/Select Files" opens a window titled "Upload Review File" | 🐞 | minor | claim check (claude), 2026-09-18 — holds |
+| [A2](#a2) | Copyediting: "Upload/Select Files" on "Copyedited Files" opens a window titled "Upload Review File" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | No "Assign a copyeditor" notice on Copyediting after skipped review, a press's Internal Review or a return from Production | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Deleting the last copyedited file brings no notice back | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | The discussion opened by the "Request Copyedit" message is listed as created by the Copyeditor | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -723,13 +724,15 @@ button and the email were left behind.
 Basis: probe. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — The "Copyedited Files" window is titled "Upload Review File"** · 🐞 · minor.
-"Upload/Select Files" on "Copyedited Files" opens the file-selection window
-under the title "Upload Review File", a title from the review stage; the
-same button on "Draft Files" opens it as "Upload/Select Files". The window
-works, and the upload wizard inside it is titled "Upload Copyedited File"
-with the heading "Copyedited"; only the outer title is wrong.
-Basis: probe. <sup>[f-a2](#fn-a2)</sup>
+**A2 — Copyediting: "Upload/Select Files" on "Copyedited Files" opens a window titled "Upload Review File"** · 🐞 · low.
+On a submission's "Copyediting" stage, pressing "Upload/Select Files"
+above "Copyedited Files" opens the file window under the title "Upload
+Review File", a review-stage title. The same button above "Draft Files"
+opens the same kind of window titled "Upload/Select Files", as expected.
+Only the title is wrong. The window lists the stage's files under
+"Copyediting", and selecting or uploading copyedited files through it
+works.
+Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — The notice reads the discussions, not the participants** · ❓ · minor.
@@ -996,6 +999,7 @@ f-a11, f-a12, f-a13).
 
 <a id="fn-a2"></a>
 **f-a2** — `useFileManagerConfig.js` `COPYEDITED_FILES.uploadSelectTitleKey: tk('editor.submissionReview.uploadFile')` ("Upload Review File"), where `FINAL_DRAFT_FILES` uses `editor.submission.uploadSelectFiles` ("Upload/Select Files"); `fileSelectUpload()` passes the key straight to `openLegacyModal({title})`. Live-probed 2026-09-18 on OJS and OMP at every editorial level: the outer title "Upload Review File", the inner heading "Copyedited", the wizard "Upload Copyedited File"; uploads through it landed in the list.
+Issue report: [docs/issues/U32-A2-copyedited-files-window-titled-upload-review-file.md](../issues/U32-A2-copyedited-files-window-titled-upload-review-file.md).
 
 <a id="fn-a3"></a>
 **f-a3** — `PKPEditingProductionStatusNotificationManager::updateNotification()`, the `WORKFLOW_STAGE_ID_EDITING` branch (note d): the "copyeditor assigned" test is `EditorialTask::withAssoc(ASSOC_TYPE_SUBMISSION, $submissionId)->withStageId(WORKFLOW_STAGE_ID_EDITING)->first()`, the code's own comment reading "If a copyeditor is assigned i.e. there is a copyediting discussion"; no stage-assignment or user-group check enters it. The same proxy is used for the production notices. Live-probed 2026-09-18 on OJS and OMP: the no-message assignment left "Assign a copyeditor…" for both assigned editors; an editor's own discussion with the author, no Copyeditor on the submission, read "Awaiting Copyedits." once the workflow was reopened; the "Discussion (Copyediting)" template sent through "Assign" flipped it as the "Request Copyedit" one does.
