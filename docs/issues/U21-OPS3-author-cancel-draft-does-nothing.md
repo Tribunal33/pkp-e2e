@@ -1,4 +1,4 @@
-# A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place
+# A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it
 
 - **Severity** medium
 - **Effort** small
@@ -10,8 +10,12 @@
   - 3.3: none (code)
 - **Introduced** issue `pkp/pkp-lib#10874`, OPS PR `pkp/ops#858` · [012e900283](https://github.com/pkp/ops/commit/012e9002836356a50769792eb1368b36e98aacaf) · 2025-02-11 · Vitalii Bezsheiko (Vitaliy-1)
 - **Upstream** `pkp/pkp-lib#13410` (open, no fix PR found)
-- **Tracked in** spec U21 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#ops3)
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U21 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#ops3), spec U22 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U22-my-submissions.md#ops2)
+- **Checked** 2026-10-04 (steps 5–7), 2026-10-01 (the rest), each branch's tip (the commits in Evidence)
+
+**2026-10-04**: deleting the draft from My Submissions shows a
+permission error rather than nothing, and spec U22's OPS2 joins this
+report.
 
 ## Summary
 
@@ -19,15 +23,15 @@ On a preprint server, an author who presses "Cancel" in the submission
 wizard and confirms "Cancel submission" sees the dialog close and
 nothing else. The draft is not deleted, the wizard stays open, and no
 message says why. Deleting the draft from My Submissions with "Delete
-Incomplete Submissions" fails the same silent way.
+Incomplete Submissions" fails too, with the error "You do not have
+permission to delete this submission.", although the screen offered the
+deletion.
 
-The author cannot remove their own draft. Only a server manager can
-delete it for them.
+Only a server manager can delete the draft for the author.
 
 ## Impact
 
-- **Lost**: no work. The author's deletion is refused without a word,
-  and the draft stays in their list.
+- **Lost**: no work. The draft stays in the author's list.
 - **Who**: every author on every preprint server, each time they try to
   abandon a draft. Holding the Moderator role as well does not help;
   only the Server Manager and Site Administrator roles pass.
@@ -36,8 +40,8 @@ delete it for them.
   dashboard for its title finds it, and "Delete Incomplete Submissions"
   there deletes it. A moderator cannot delete it.
 
-Medium: the task fails for every author and the refusal is silent, so
-the author is left guessing whether the draft is gone. There is a way
+Medium: the task fails for every author, and in the wizard the refusal
+is silent, so the author is left guessing whether the draft is gone. There is a way
 round on screen, but only through a manager the author has to know to
 ask. It would be high if a leftover draft got in the author's way, for
 example by counting against a submission limit.
@@ -89,8 +93,16 @@ Deleting from My Submissions:
 
 **Expected**: the "u21ir30 neighbour" row leaves the list.
 
-**Observed**: the dialog closes and the list reloads with the row still
-in it, and no message appears. The request
+**Observed**: the confirm dialog gives way to an error dialog that
+stays open:
+
+```
+Error
+You do not have permission to delete this submission.
+OK
+```
+
+The row is still listed, and still after a reload. The request
 (`/index.php/publicknowledge/api/v1/_submissions?ids[]=<id>`, a DELETE)
 gets the same 403 and the same error.
 
@@ -102,13 +114,14 @@ and OMP (`aclark`) delete the draft.
 Both screens send the same request, `DELETE _submissions?ids=…`, to
 `PKPBackendSubmissionsController::bulkDeleteIncompleteSubmissions()`
 (`lib/pkp/api/v1/_submissions/PKPBackendSubmissionsController.php`).
-The wizard builds that address in
-`PKPSubmissionHandler::getSubmissionCancelUrl()`. For each submission
-the method calls `Repo::submission()->canCurrentUserDelete()` (line 496)
-and answers 403 when it is false.
+For each submission `bulkDeleteIncompleteSubmissions()` calls
+`Repo::submission()->canCurrentUserDelete()` (line 496) and answers 403
+when it is false. The wizard builds that address in
+`PKPSubmissionHandler::getSubmissionCancelUrl()`.
 
 `PKP\submission\Repository::canCurrentUserDelete()`
-(`lib/pkp/classes/submission/Repository.php`, line 538) lets a user who
+(`lib/pkp/classes/submission/Repository.php`, line 521; its stage
+filter is line 538) lets a user who
 is not a manager or site administrator delete an incomplete submission
 only through an author assignment whose user group is linked to the
 Submission stage:
@@ -141,7 +154,14 @@ author-group assignment on the submission, whatever its stage. The
 wizard's error handler (`SubmissionWizardPage.vue`, `cancelSubmission()`)
 closes the dialog and puts the response into `this.errors`, whose
 watcher maps only form-field names, so `{error: …}` shows nowhere. My
-Submissions reloads its list without reading the response.
+Submissions sends the request through `useFetch`
+(`useDashboardBulkDelete.js`, `apiCall()`), whose default error handling
+opens the error dialog with the response's `error`.
+
+My Submissions offers the deletion because its own check,
+`canBeDeleted()` in `useDashboardBulkDelete.js`, accepts an author
+assignment on any stage, while the server's check wants the Submission
+stage.
 
 Reach:
 
@@ -241,9 +261,18 @@ callers.
   OPS 3f0919468c (pkp-lib 1fb843f491, ui-library 7a3c244b). pkp/datasets
   27f1204 (2026-10-01). PostgreSQL; the fault does not depend on the
   database.
-- 3.5 (walked with walk.js): OPS `registry/userGroups.xml` gives the
-  Author group `stages="5"`, and pkp-lib's `canCurrentUserDelete()` has
-  the same filter at line 504.
+- Steps 5–7 again on 2026-10-04 (spec U22 OPS2), on OPS only:
+  [my-submissions-delete.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/author-cancel-draft-does-nothing/my-submissions-delete.js),
+  `node bin/probe.js ops shared/playwright/checks/issues/author-cancel-draft-does-nothing/my-submissions-delete.js`,
+  with the draft titled "u22a delete". It records every dialog the page
+  renders after "Confirm": on both lines the error dialog appears about
+  70 ms after it and is still open once the page settles. Tips: `main`
+  unchanged since the fix trial; `stable-3_5_0` OPS 38b61882d3 (pkp-lib
+  cf3f984335, ui-library d4e01883).
+- 3.5 (walked with walk.js, steps 5–7 with my-submissions-delete.js):
+  OPS `registry/userGroups.xml` gives the Author group `stages="5"`, and
+  pkp-lib's `canCurrentUserDelete()` has the same filter at line 504 on
+  both 3.5 tips.
 - 3.4 (code): OPS `upstream/stable-3_4_0` acd8ae704b gives the Author
   group `stages="1,5"`, so pkp-lib `origin/stable-3_4_0` df13621c2d's
   check (`getBySubmissionAndRoleIds(…, [Role::ROLE_ID_AUTHOR],
@@ -253,8 +282,11 @@ callers.
   group `stages="1,5"`; pkp-lib `origin/stable-3_3_0` d446601ebe's
   `PKPSubmissionService::canCurrentUserDelete()` makes the same
   Submission-stage check, which passes.
-- Introduced: `git blame` on line 538 gives 3ff0147d23d (2024-04-02),
-  which ported the 3.4 check to `StageAssignment`. It was correct then,
+- Introduced: `git blame` on line 538, the stage filter, gives
+  3ff0147d23d (2024-04-02, `pkp/pkp-lib#9674`), which only renamed
+  `withStageId(WORKFLOW_STAGE_ID_SUBMISSION)` to
+  `withStageIds([WORKFLOW_STAGE_ID_SUBMISSION])`; the query was already
+  on `StageAssignment`. The filter was correct then,
   because OPS's Author group was still linked to stage 1. 012e900283
   (`pkp/ops#858`) removed that link, and 1228378516 in the same PR added
   the upgrade migration.
@@ -266,8 +298,8 @@ callers.
   (`useDashboardBulkDelete.js`).
 - Upstream: `pkp/pkp-lib#13410` (opened 2026-09-29 from a forum report)
   describes the same fault and cause on OPS 3.5 and `main`. Searches of
-  pkp/pkp-lib, pkp/ops and pkp/ui-library on 2026-10-01 found no PR for
-  it.
+  pkp/pkp-lib, pkp/ops and pkp/ui-library on 2026-10-01 and 2026-10-04
+  found no PR for it; the issue is still open.
 - Not driven: the `SubEditorsDAO` and `LibraryFileHandler` filters (code
   only); an install upgraded from 3.4 (the migration was read, not run);
   whether the draft shows in the manager's "All Active" view (the search

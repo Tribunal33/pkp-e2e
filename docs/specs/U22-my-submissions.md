@@ -490,7 +490,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | user-visible | — |
+| [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | In French a submission under review reads a raw code in place of "Review update {completed}/{total}", and the "…" button above the list is named by a raw code | 🐞 | minor | — |
 | [A1](#a1) | The author sees the review progress count ("Review update 1/2") for their submission under review | ❓ | user-visible | — |
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
@@ -618,16 +618,18 @@ view was kept (itself broken, [OPS2](#ops2)).
 Basis: probe. <sup>ops1</sup>
 
 <a id="ops2"></a>
-**OPS2 — Draft deletion offered but always refused** · 🐞 · user-visible.
+**OPS2 — Draft deletion offered but always refused** · 🐞 · medium.
 The OPS author gets the whole cleanup flow: an enabled "Delete Incomplete
 Submissions" menu item, draft checkboxes, and the confirm dialog. Pressing
 "Confirm" always ends in an error dialog ("You do not have permission to
 delete this submission.") and the draft stays. Expected: their own drafts
-delete, as they do on a journal. Rationale for 🐞: the permission check
-demands a stage assignment no preprint ever has. That is a gap opened by
-OPS's reduced stage set, not a choice, or the offer would have been removed
-too.
-Basis: probe. <sup>ops2</sup>
+delete, as they do on a journal. Only a server manager can delete the
+draft for the author. Rationale for 🐞: the server's check wants an author
+assignment on the Submission stage, which no preprint has, while the
+list's own check accepts one on any stage, so the screen offers what the
+server refuses. The wizard's "Cancel" fails on the same check, silently
+([Submission wizard](U21-submission-wizard.md#ops3)).
+Basis: probe, 2026-10-04. <sup>ops2</sup>
 
 ---
 
@@ -1111,6 +1113,7 @@ not have permission to delete this submission. / OK", and the draft is
 still listed after a reload. Reproduced with a draft created live through
 the OPS wizard (not a seeding artifact); the identical flow on OJS deleted
 its drafts (positive control).
+Issue report: [pkp-e2e#331](https://github.com/jardakotesovec/pkp-e2e/issues/331) ([docs/issues/U21-OPS3-author-cancel-draft-does-nothing.md](../issues/U21-OPS3-author-cancel-draft-does-nothing.md)).
 
 ## Reference — entry points & surfaces
 

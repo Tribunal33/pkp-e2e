@@ -1065,7 +1065,7 @@ are the source; badges, Impact and Basis:
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
-| [OPS3](#ops3) | A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [OPS3](#ops3) | A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | A signed-in user who may not submit to a preprint server reads a raw translation key instead of the reason | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS8](#ops8) | A further galley on a reloaded draft gets stuck in its upload window and shows no file until a reload | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1468,15 +1468,16 @@ Lean: no. Enrol at creation, as the other apps do. Basis: probe.
 <sup>[c](#fn-c)</sup>
 
 <a id="ops3"></a>
-**OPS3 — A preprint author's "Cancel" on their own draft closes the dialog and leaves the draft in place** · 🐞 · medium.
+**OPS3 — A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it** · 🐞 · medium.
 On a preprint server, an author who presses "Cancel" in the submission
 wizard and confirms "Cancel submission" sees the dialog close and
 nothing else. The draft is not deleted, the wizard stays open, and no
 message says why. Deleting the draft from My Submissions with "Delete
-Incomplete Submissions" fails the same silent way.
-The author cannot remove their own draft. Only a server manager can
-delete it for them.
-Basis: probe, 2026-10-01. <sup>[o](#fn-o)</sup>
+Incomplete Submissions" fails too, with the error "You do not have
+permission to delete this submission.", although the screen offered the
+deletion.
+Only a server manager can delete the draft for the author.
+Basis: probe, 2026-10-04. <sup>[o](#fn-o)</sup>
 
 <a id="ops4"></a>
 **OPS4 — The completion screen thanks whoever is looking at it** · ❓ · latent.
