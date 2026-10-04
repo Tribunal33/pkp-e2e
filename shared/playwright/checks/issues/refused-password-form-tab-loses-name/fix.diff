@@ -1,0 +1,22 @@
+--- a/lib/pkp/pages/login/LoginHandler.php
++++ b/lib/pkp/pages/login/LoginHandler.php
+@@ -424,6 +424,9 @@
+         $this->_isBackendPage = true;
+         $this->setupTemplate($request);
+         $templateMgr = TemplateManager::getManager($request);
++        $templateMgr->assign([
++            'pageTitle' => __('user.login.resetPassword'),
++        ]);
+ 
+         $username = $request->getUserVar('username');
+         $confirmHash = $request->getUserVar('hash');
+@@ -485,6 +488,9 @@
+     {
+         $this->_isBackendPage = true;
+         $this->setupTemplate($request);
++        TemplateManager::getManager($request)->assign([
++            'pageTitle' => __('user.changePassword'),
++        ]);
+ 
+         $passwordForm = new LoginChangePasswordForm($request->getSite());
+         $passwordForm->readInputData();
