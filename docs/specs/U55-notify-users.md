@@ -852,7 +852,7 @@ and button (`sendLabel`). Unchanged since the form arrived with
 pkp/pkp-lib#4017 (lib/pkp `891eba202`, ui-library `eda42e56`,
 2020-11-25). Live-probed 2026-09-26, all three apps: the only button
 under the form reads "Save"; only the window says "Send Email".
-Issue report: [docs/issues/U55-A1-notify-send-button-reads-save.md](../issues/U55-A1-notify-send-button-reads-save.md).
+Issue report: [pkp-e2e#912](https://github.com/jardakotesovec/pkp-e2e/issues/912) ([docs/issues/U55-A1-notify-send-button-reads-save.md](../issues/U55-A1-notify-send-button-reads-save.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2** — The ignored `'required' => true` of note b, present since
@@ -862,7 +862,7 @@ which opens the dialog before `Form.vue::submit()` runs its
 2026-09-26, all three apps: no required mark (note b), the window on
 "0 users" for an empty form (note c), the fields named only after "Send
 Email" (note d).
-Issue report: [docs/issues/U55-A2-notify-required-fields-unchecked.md](../issues/U55-A2-notify-required-fields-unchecked.md).
+Issue report: [pkp-e2e#913](https://github.com/jardakotesovec/pkp-e2e/issues/913) ([docs/issues/U55-A2-notify-required-fields-unchecked.md](../issues/U55-A2-notify-required-fields-unchecked.md)).
 
 <a id="fn-f-a3"></a>
 **f-a3** — `NotifyUsersForm.vue::nextPage()` adds the per-role counts of
@@ -873,14 +873,14 @@ members each role's count includes, not the sum. Live-probed
 2026-09-26, all three apps: "Author" + "Reader" read "4 users" for three
 emails (note c); "Nobody role" with "Copy" read "0 users" for the
 manager's one email (note f).
-Issue report: [docs/issues/U55-A3-notify-total-counts-person-per-role.md](../issues/U55-A3-notify-total-counts-person-per-role.md); the double count is `pkp/pkp-lib#12548` (open).
+Issue report: [pkp-e2e#914](https://github.com/jardakotesovec/pkp-e2e/issues/914) ([docs/issues/U55-A3-notify-total-counts-person-per-role.md](../issues/U55-A3-notify-total-counts-person-per-role.md)); the double count is `pkp/pkp-lib#12548` (open).
 
 <a id="fn-f-a4"></a>
 **f-a4** — Note f. Since pkp/pkp-lib#8734 (lib/pkp `59f33cb8d`,
 2023-03-22), which moved sending to batched jobs and made
 `totalBulkJobs` the page's only signal of success. Live-probed
 2026-09-26, all three apps (note f).
-Issue report: [docs/issues/U55-A4-notify-send-to-nobody-accepted-silently.md](../issues/U55-A4-notify-send-to-nobody-accepted-silently.md).
+Issue report: [pkp-e2e#915](https://github.com/jardakotesovec/pkp-e2e/issues/915) ([docs/issues/U55-A4-notify-send-to-nobody-accepted-silently.md](../issues/U55-A4-notify-send-to-nobody-accepted-silently.md)).
 
 ## Reference — entry points & surfaces
 
