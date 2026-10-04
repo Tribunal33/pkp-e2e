@@ -249,7 +249,27 @@
  
  msgid "navigation.catalog.manage"
  msgstr "Gérer"
-@@ -1539,7 +1549,7 @@
+@@ -1439,6 +1449,9 @@
+ 
+ msgid "notification.type.formatNeedsApprovedSubmission"
+ msgstr ""
++"La monographie ne sera pas répertoriée dans le catalogue tant qu’elle n’aura "
++"pas été publiée. Pour ajouter ce livre au catalogue, cliquez sur l’onglet "
++"Publication."
+ 
+ msgid "notification.type.configurePaymentMethod.title"
+ msgstr "Aucun mode de paiement n'a été configuré."
+@@ -1453,6 +1466,9 @@
+ 
+ msgid "notification.type.visitCatalog"
+ msgstr ""
++"La monographie a été approuvée. Veuillez consulter la page Marketing et "
++"Publication pour gérer ses détails dans le catalogue, en utilisant les liens "
++"ci-dessus."
+ 
+ msgid "user.authorization.invalidReviewAssignment"
+ msgstr ""
+@@ -1539,7 +1555,7 @@
  msgstr "Il faut indiquer un prix numérique valide."
  
  msgid "payment.directSales.purchase"
@@ -258,7 +278,7 @@
  
  msgid "payment.directSales.download"
  msgstr "Télécharger"
-@@ -1558,7 +1568,7 @@
+@@ -1558,7 +1574,7 @@
  "trouver {$id}."
  
  msgid "rt.metadata.pkp.dctype"

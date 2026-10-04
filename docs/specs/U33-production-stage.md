@@ -758,10 +758,17 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the press's notice box in French: the heading "En attente
     d'approbation." on a monograph never published, "Gestion du
-    catalogue" once it is published (Rule 3d)
+    catalogue" once it is published, each over a French paragraph and
+    no `##` code (Rule 3d; the guard for OMP3, issue report
+    `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`)
   - the guard for OMP2 (issue report
     `docs/issues/U70-A6-unpublished-book-notice-still-approved.md`): the
     Production stage reads "Awaiting approval." after "Unpublish"
+  - the guard for OPS2 (issue report
+    `docs/issues/U33-OPS2-preprint-revert-decline-names-submission-stage.md`):
+    scenario 9's "Revert Decline" reads a closing text naming Production,
+    and a "Notify Authors" instruction and template name that speak of
+    no review (Rule 10)
 - **Rarely met**:
   - a second "Send To Production" bringing the earlier production ready files back beside the newly ticked ones (Rule 7b): sending a submission to production twice is not an ordinary week's action; scenario 4 stops at the hidden "Production" entry
   - "Stage Assignment" changed on the Roles screen, Production ticked for Copyeditor and unticked again (Settings bullet 1): a manager changes a role's stages rarely, not in an ordinary week
@@ -774,13 +781,11 @@ Left out of the scenarios above, by reason:
   - a preprint server's single-stage workflow (Settings bullet 4): the workflow menu scenario 8 reads
 - **Register carries it**:
   - OMP2 (the press's notice still "Catalog Management" after "Unpublish"; Rule 3d)
-  - OMP3 (the press's notice paragraph a raw code in French; Rule 3d)
   - OJS2 (a published article with no galley still showing the galley notice; Rule 3c; scenario 1 marks it)
   - OJS1 (a discussion opened from the panel with no Layout Editor assigned flipping the notice to "Awaiting Galleys."; Rule 3b; scenario 3 marks the assignment half)
   - OPS3 ("Post the preprint" still offered while the preprint stands declined; Rule 6; scenario 9 marks it)
   - A4 ("Schedule For Publication" on the "Production" entry before the stage begins; Rule 6; scenarios 2 and 4 mark it)
   - A3 (no "Assign a copyeditor…" notice after the return; Rule 7a; scenario 4 marks it)
-  - OPS2 ("Revert Decline" closing on "…active in the submission stage."; Rule 10; scenario 9 marks it)
   - A2 (the layout task outliving "Galleys Complete"; Side effects; scenario 3 marks it)
 - **Owned by another feature**:
   - a Copyeditor, Marketing and sales coordinator or Funding coordinator assigned here: "You don't currently have access to that stage of the workflow." (Actors preamble; *Workflow screen & stage access*, scenario 3)
@@ -804,9 +809,9 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [OPS2](#ops2) | "Revert Decline" on a preprint says the submission is "now active in the submission stage", a stage the server has not got | 🐞 | minor | — |
+| [OPS2](#ops2) | "Revert Decline" on a preprint says it is active "in the submission stage", and its email speaks of a review the preprint never had | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press, an unpublished book's Production stage still says the monograph has been approved | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP3](#omp3) | In French the press's Production notice keeps its French heading, but its paragraph is a raw code | 🐞 | minor | — |
+| [OMP3](#omp3) | In French the press's Production notice keeps its French heading, but its paragraph is a raw code | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A recommend-only editor is offered "Upload", "Schedule For Publication" and "Assign" on Production, and no decision or recommendation | ❓ | minor | — |
 | [A2](#a2) | The "You have been asked to review layouts" task is never cleared, not by "Galleys Complete" | ❓ | minor | — |
 | [A3](#a3) | "Move To Copyediting" raises no "Assign a copyeditor…" notice on the Copyediting stage it returns to | ❓ | minor | — |
@@ -939,7 +944,7 @@ The same fault is [Catalog management, its A6](U70-catalog-management.md#a6).
 Basis: probe, 2026-10-03. <sup>[f-omp2](#fn-omp2)</sup>
 
 <a id="omp3"></a>
-**OMP3 — In French the press's Production notice is a heading over a raw code** · 🐞 · minor.
+**OMP3 — In French the press's Production notice is a heading over a raw code** · 🐞 · medium.
 With the interface in French (Canada), the notice box of Rule 3d keeps
 its French heading, but the paragraph under it is a raw code, the text's
 internal name between hash signs:
@@ -964,8 +969,12 @@ des participants."). The workflow screen's own codes around the box are
 and why a missing French text shows as a code at all is
 [Languages & locales, its A4](U57-languages-and-locales.md#a4).
 Expected: a French paragraph under the French heading; the English
-screen shows no code.
-Basis: probe. <sup>[f-omp3](#fn-omp3)</sup>
+screen shows no code. Both paragraphs read in French (Canada) up to OMP
+3.1.2; their entries have been empty since 3.2.0. One of several French
+(Canada) texts the press lacks, with its book and chapter pages
+([→ Monograph landing page, A15](U69-monograph-landing-page.md#a15)),
+whose report covers it.
+Basis: probe, 2026-10-04. <sup>[f-omp3](#fn-omp3)</sup>
 
 ### OPS
 
@@ -980,19 +989,29 @@ application ships that way.
 Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — "Revert Decline" speaks of a submission stage** · 🐞 · minor.
-A Preprint Server Manager who reverts a decline reads, on the wizard's
-closing window, "The submission, {title}, is now active in the submission
-stage. The author has been notified, unless you chose to skip that
-email.", and the email template offered on Settings › Workflow › Emails is
-named "Reinstate Submission Declined Without Review", described there as
-"This email notifies the author that a previous decision to decline their
-submission without review is being reverted.", while the "Submission
-Declined" template beside it reads "This email notifies the author that
-their preprint has been declined and will not be posted.". A preprint
-server has no Submission stage and no review: the preprint is active at
-Production again, as the bubble says. The wording is a journal's, reused.
-Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
+**OPS2 — "Revert Decline" on a preprint says it is active "in the submission stage", and its email speaks of a review the preprint never had** · 🐞 · low.
+A Preprint Server Manager or Moderator who reverts the decline of a
+preprint reads, on the closing window, "The submission, {title}, is now
+active in the submission stage. The author has been notified, unless you
+chose to skip that email." A preprint server has no Submission stage.
+The preprint is back in Production, as its stage bubble and buttons
+show.
+
+The email this decision sends is named and described as if the preprint
+had been declined without review. The "Notify Authors" page offers the
+template "Reinstate Submission Declined Without Review" and asks the
+moderator to tell the author "whether the submission is expected to
+undergo further review". Settings › Workflow › Emails describes the
+email as "This email notifies the author that a previous decision to
+decline their submission without review is being reverted." The author
+receives the right email, "We have reversed the decision to decline your
+submission", which says "A moderator will look further at your
+submission before deciding whether to decline or post the submission."
+
+Nothing is lost, since the decline is reverted as intended. Only the
+staff's screens mislead. The template's name is stored when a server is
+installed, so existing servers keep the old name unless it is repaired.
+Basis: probe, 2026-10-04. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
 **OPS3 — "Post the preprint" is offered on a declined preprint** · ❓ · minor.
@@ -1171,12 +1190,14 @@ the French galley notice, the unassigned manager and the Author no box
 response of 500 or more and no script error. Evidence:
 `.reports/U24/ccI30frb/prod-*`, kept script
 `shared/playwright/checks/U24/I30/frb.js`.
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)) (its Steps 51 to 58, walked on main and 3.5 from the default dataset), shared with [Monograph landing page A15](U69-monograph-landing-page.md#a15); the report's severity, medium, comes from the editors' names on the book page.
 
 <a id="fn-ops1"></a>
 **f-ops1** — Notes a, d and m: `workflowConfigEditorialOPS.js` mounts no `FileManager` at Production and `WorkflowNotificationDisplay.vue` returns `null` options on OPS; `PublicationConfig.galleys` mounts `GalleyManager`. Live-probed 2026-09-19 (notes m, t15): the entry with one table, "Production Tasks & Discussions", "Participants", no notice heading, for the manager and the assigned Moderator; the "Galleys" page under "Preprint" offering "Add galley"; the journal and press entries with "Production Ready Files" beside the discussions as the control.
 
 <a id="fn-ops2"></a>
 **f-ops2** — `ops/classes/decision/types/RevertDecline.php` inherits `RevertInitialDecline::getCompletedMessage()`, which reads `editor.submission.decision.revertInitialDecline.completed.description` ("…is now active in the submission stage…", lib/pkp's `editor.po`, no OPS override), and the mailable's name key `mailable.decision.revertInitialDecline.notifyAuthor.name` ("Reinstate Submission Declined Without Review", lib/pkp's `manager.po`, no OPS override; OPS overrides the decline mailable's name to "Submission Declined" and its description, but not this one). Live-probed 2026-09-19 (note t7): the closing text verbatim; Settings › Workflow › Emails listing "Reinstate Submission Declined Without Review" with the description "This email notifies the author that a previous decision to decline their submission without review is being reverted." (one template, "Default") and "Submission Declined" with "This email notifies the author that their preprint has been declined and will not be posted.".
+Issue report: [docs/issues/U33-OPS2-preprint-revert-decline-names-submission-stage.md](../issues/U33-OPS2-preprint-revert-decline-names-submission-stage.md).
 
 <a id="fn-ops3"></a>
 **f-ops3** — Note h: the OPS `getActionItems` guards the shortcut with `getActiveStage(submission).id === WORKFLOW_STAGE_ID_PRODUCTION` only, and `Decline` sets `STATUS_DECLINED` without a stage change; the journal's Submission-stage counterpart is *Submission stage*'s A1 (probed 2026-08-02). Live-probed 2026-09-19 (note t5): on a declined preprint the manager's entry offered "Post the preprint" beside "Revert Decline" and "Delete", and pressing it landed on "Preprint: Title & Abstract" with "Status: Unposted", "Change", "Relations", "Preview" and "Post"; nothing posted. The Moderator's landing on the same page, deciding or recommend-only, offered "Change", "Relations" and "Save" with no "Post" and no "Preview" (U49's A2).
