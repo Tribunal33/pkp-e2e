@@ -1806,7 +1806,7 @@ home page; a press and a preprint server answer "404 Not Found" there.
 Live-probed 2026-09-27, OJS, two journals: no "Copyright" row without a
 copyright notice; an empty row once one was saved; the License Terms in
 it once those were saved on Settings › Distribution › "License".
-Issue report: [docs/issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md](../issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md).
+Issue report: [pkp-e2e#822](https://github.com/jardakotesovec/pkp-e2e/issues/822) ([docs/issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md](../issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `locale/en/manager.po`:
