@@ -10,8 +10,8 @@
   - 3.3: none (code; the older users list, no invitations)
 - **Introduced** not traced: no change broke it. The English texts came with the role invitations and the new users list (`pkp/pkp-lib#9658`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-31, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2025-02-04), and French (Canada) never received them
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions")
-- **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions")
+- **Checked** 2026-10-02, the "Author Response" table 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -23,8 +23,11 @@ reads "##userAccess.search##", the Invitations table is headed
 list's "Start Date" column are codes, and the window that disables a
 user is titled "##user.disabledModal.title##". The button opens the
 role invitation pages, where every heading, step, field and button but
-"Annuler" is a code. On `main`, a screen reader also reads the code for
-the "More Actions" column and buttons of a publication's "Media" page.
+"Annuler" is a code. To a screen reader, the "…" menus and hidden
+"More Actions" column headings of the workflow and settings lists read
+"##common.moreActions##" on `main` and 3.5, seen on the "Users" tab, a
+publication's "Media" page, the "Categories" tab and a journal review
+round's "Author Response" table.
 
 The rest of the tab is French, and its buttons and menus still work, so
 a manager can get through by switching the interface to English.
@@ -44,8 +47,9 @@ for their translators and are not counted in this report's effort.
   pages in French (Canada) also sees codes in place of their labels;
   that was not tried in a browser.
 - **Who.** Managers who use the interface in French (Canada), each
-  time they open the users list or invite someone. On `main`, also
-  screen-reader users on a publication's "Media" page.
+  time they open the users list or invite someone. Also screen-reader
+  users, who hear the code as the name of the "…" menus across the
+  workflow and settings lists.
 - **Way round.** Switch the interface to English.
 
 Low: labels show as codes in one language while every task still gets
@@ -203,17 +207,19 @@ Reach:
   "Invited on …" status (`userInvitation.status.invited`), and the
   acceptance pages an invited person sees (`acceptInvitation.*`, 33
   texts).
-- To a screen reader (`main` only, all three applications): a
-  publication's "Media" page names its last column and each row's "…"
-  button with `common.moreActions`. In ui-library,
-  `useMediaFileManagerConfig.js` gives that column `headerSrOnly: true`,
-  and `MediaFileManagerCellActions.vue` sets the button's `aria-label`.
-  The "Categories" tab (Settings › Journal, Press or Server ›
-  "Catégories") does the same through `useCategoryManagerConfig.js` and
-  `CategoryManagerCellMoreActions.vue` (walked on `main`, all three
-  applications, without the fix). That tab's other codes are texts that
-  came to `main` with its new table and have no French yet; on 3.5 the
-  older table is French throughout (walked).
+- To a screen reader (`main` and 3.5, all three applications):
+  `common.moreActions` names the "…" menus and the hidden last-column
+  headings of the workflow and settings lists, in 20 ui-library
+  components on `main` (the file, galley, reviewer, participant,
+  discussion, citation, funder, category, media file and task template
+  managers, the dashboard's bulk actions and the reader comments lists
+  among them) and 8 on `stable-3_5_0`. It was seen on the "Users" tab,
+  a publication's "Media" page, the "Categories" tab and the "Author
+  Response" table, which only a journal's review stage has (each walked
+  on `main` without the fix, the "Users" tab on 3.5 too). The
+  "Categories" tab's and the "Author Response" table's other codes are
+  texts new on `main` awaiting translation, outside this report; on 3.5
+  the older categories table is French throughout (walked).
   The "Media" page's visible codes (`publication.media`,
   `publication.mediaFiles.*`, `common.selectedFile`,
   `common.clickToUploadFiles`, `common.upload.addFiles`) are texts that
@@ -400,8 +406,25 @@ pkp-lib's tried as a diff.
   already holds French (Canada) texts for
   these keys that have not reached the branches; its public API did not
   answer.
-- Unverified: the fix on the "Media" page. The diff was not applied
-  while walking Steps 7 to 10. The page reads `common.moreActions` from
+- Kept script for the "Author Response" table (spec U30 A9):
+  [`shared/playwright/checks/issues/users-tab-french-raw-keys/author-response.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/users-tab-french-raw-keys/author-response.js),
+  OJS only, on an install freshly loaded from the default dataset (it
+  saves one response): `lkumiega` chooses "français", opens submission
+  13 (review round 1, revisions requested) from "Mes soumissions" and
+  submits a response from the "Author Response" card; `dbarnes` chooses
+  "français", opens submission 13 and reads the table, its row's "…"
+  button and menu, then the same table in English:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js ojs shared/playwright/checks/issues/users-tab-french-raw-keys/author-response.js`.
+  Walked 2026-10-04 on `main` (OJS ff004d0973, `lib/pkp` 987776cd04,
+  `lib/ui-library` 64d67363; pkp/datasets 566bb1f): the row's "…"
+  button is named `##common.moreActions##` in French and "More Actions"
+  in English. Not walked on
+  3.5: `stable-3_5_0` has no "Author Response" table (no
+  `ReviewRoundResponseManager` in its ui-library, none of the feature's
+  keys in pkp-lib's `locale/en`); 3.4 and 3.3 neither.
+- Unverified: the fix on the "Media" page and the "Author Response"
+  table. The diff was not applied while walking Steps 7 to 10 or the
+  table's script. Both read `common.moreActions` from
   the same text bundle as the users list, where the trial gave "Plus
   d'actions", so the same result is expected there but was not seen.
 - The "Categories" tab (spec U16 A15): read by

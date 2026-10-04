@@ -62,4 +62,43 @@ async function searchUsers(page, term) {
     return {term, status: res ? res.status() : null, heading, rows};
 }
 
-module.exports = {T, flat, openUsersTab, searchBox, usersTabFacts, searchUsers};
+/**
+ * Open submission `id`'s workflow in `lang` (`mySubmissions` for an author, else `editorial`) and
+ * wait for its review stage's "Author Response" table (editor) or card (author), named by the
+ * English text, the French text or the raw code. Returns whether it showed.
+ */
+async function openAuthorResponse(app, page, id, lang, {author = false} = {}) {
+    await page.goto('about:blank');
+    await page.goto(app.url(`/index.php/${app.contextPath}/${lang}/dashboard/${author ? 'mySubmissions' : 'editorial'}?workflowSubmissionId=${id}`));
+    await page.getByRole('dialog').first().waitFor({timeout: 60_000});
+    await idle(page);
+    const shown = await page.getByRole('heading', {name: AUTHOR_RESPONSE}).first().waitFor({timeout: 20_000}).then(() => true).catch(() => false);
+    if (shown && !author) await authorResponseTable(page).locator('tbody tr').filter({hasNotText: /No Items|Aucun/}).first().waitFor({timeout: T}).catch(() => {});
+    await idle(page);
+    return shown;
+}
+
+const AUTHOR_RESPONSE = /^(Author Response|##submission\.reviewRound\.authorResponse##|Réponse de l.auteur.*)$/;
+const authorResponseTable = (page) => page.getByRole('table', {name: AUTHOR_RESPONSE});
+
+/** The "Author Response" table as a screen reader meets it: column headings (shown and full text), each row's cells and its last button's name. */
+async function authorResponseTableFacts(page) {
+    const t = authorResponseTable(page);
+    if (!(await t.count())) return {table: false};
+    const rows = [];
+    for (const tr of await t.locator('tbody tr').all()) {
+        const b = tr.getByRole('button').last();
+        rows.push({
+            cells: (await tr.locator('td').allInnerTexts()).map((x) => flat(x, 160)),
+            button: (await b.count()) ? {ariaLabel: await b.getAttribute('aria-label'), text: flat(await b.innerText().catch(() => null), 60)} : null,
+        });
+    }
+    return {
+        table: true,
+        name: await t.first().getAttribute('aria-label').catch(() => null),
+        columns: await t.locator('thead th').evaluateAll((ths) => ths.map((th) => ({shown: th.innerText.replace(/\s+/g, ' ').trim(), text: th.textContent.replace(/\s+/g, ' ').trim()}))),
+        rows,
+    };
+}
+
+module.exports = {T, flat, openUsersTab, searchBox, usersTabFacts, searchUsers, AUTHOR_RESPONSE, openAuthorResponse, authorResponseTable, authorResponseTableFacts};
