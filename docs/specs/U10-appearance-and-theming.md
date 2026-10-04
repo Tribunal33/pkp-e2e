@@ -1223,7 +1223,7 @@ otherwise; the team settles them on spec review.
 | [A1](#a1) | A press's and a preprint server's homepage image never carries the "Alternate text" the manager typed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Screen readers misname the masthead's up arrows and every Sidebar box; clicking a role's name moves it | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | A style sheet a manager removes stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A5](#a5) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | The "3:05PM" time choice prints most times as "3:05pm", some as "3:05PM" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1308,22 +1308,23 @@ block comes back unticked. The same holds for a custom block
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A style sheet a manager removes stops loading but stays online at its old address** · 🐞 · low.
-A manager who presses "Remove" under "Journal style sheet" and saves
-expects the file to be gone. The public pages stop loading it, but the
-file stays in the journal's public files and still opens at its old
-address, for anyone, signed in or not. Nothing on the site links to it
-any more, so it is reached through an old saved copy of a page, a
-search index, or by someone who knows the address.
+**A5 — A removed journal or site style sheet stops loading but stays online at its old address** · 🐞 · low.
+A manager who presses "Remove" under "Journal style sheet" and saves,
+or a Site Administrator who does the same under "Site style sheet" in
+Site Settings, expects the file to be gone. The public pages stop
+loading it, but the file stays in the journal's or the site's public
+files and still opens at its old address, for anyone, signed in or not.
+Nothing on the site links to it any more, so it is reached through an
+old saved copy of a page, a search index, or by someone who knows the
+address.
 
 Nothing on screen shows that the file is still there, and no screen can
-delete it. It matters when the file held something the journal meant
-to withdraw.
+delete it. It matters when the file held something the journal or the
+site meant to withdraw.
 
-Only style sheets are left behind: a removed "Logo", "Homepage
-Image", "Favicon" or site header image is deleted as it should be. The
-site's own style sheet, under Administration › Site Settings, is left
-behind in the same way. Basis: probe, 2026-10-03. <sup>f-a5</sup>
+Only style sheets are left behind: a removed "Logo", "Homepage Image"
+or "Favicon" of a journal, and the site's "Logo", are deleted as they
+should be. Basis: probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · 🐞 · low.

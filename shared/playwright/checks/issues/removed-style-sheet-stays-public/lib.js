@@ -59,4 +59,27 @@ async function save(page, b) {
     return {saveStatus: r ? r.status() : null};
 }
 
-module.exports = {...A7, makeFiles, storedAddresses, openAddress, pressRemove, save};
+/** site-walk.js's files under <dir>/files: the site's style sheet, a second one (the neighbour's) and a PNG logo. */
+function makeSiteFiles(dir) {
+    const d = path.join(dir, 'files');
+    fs.mkdirSync(d, {recursive: true});
+    const css = path.join(d, 'u60d-site.css');
+    const css2 = path.join(d, 'u60d-site-2.css');
+    const png = path.join(d, 'u60d-logo.png');
+    fs.writeFileSync(css, 'h2 { color: red; }\n');
+    fs.writeFileSync(css2, 'h2 { color: blue; }\n');
+    fs.copyFileSync(path.join(FIXTURES, 'profile-image-400.png'), png);
+    return {css, css2, png};
+}
+
+/** The addresses Site Settings › "Appearance" › "Setup" shows: "Site style sheet"'s link, the English "Logo"'s picture. */
+async function siteStoredAddresses(form) {
+    const cssLink = form.styleSheet.fileLink.first();
+    const logoImg = form.logo('en').thumbnail.first();
+    return {
+        styleSheet: (await cssLink.count()) ? {text: (await cssLink.innerText()).trim(), href: await cssLink.getAttribute('href')} : null,
+        logo: (await logoImg.count()) ? {src: await logoImg.getAttribute('src')} : null,
+    };
+}
+
+module.exports = {...A7, makeFiles, storedAddresses, openAddress, pressRemove, save, makeSiteFiles, siteStoredAddresses};

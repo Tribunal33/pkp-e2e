@@ -877,7 +877,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | French (Canada) Site Settings: a press's "Information" tab and a press's or preprint server's "Courriels en lot" description show codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Site Settings saves, and 3.5's daily scheduled tasks, log a PHP warning when no journal redirect is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The site's own save accepts an empty "Site Name" and principal contact when made outside the page | 🐞 | latent | — |
-| [A6](#a6) | A removed "Site style sheet" stays at its address | 🐞 | minor | — |
+| [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | minor | — |
 | [A8](#a8) | Under a "Journal redirect", the Site Administrator's sign-in lands on the journal's home page, not its Dashboard | 🐞 | minor | — |
 | [A11](#a11) | The "Journal redirect" list follows neither name nor the Hosted Journals order, and shifts after a save there | 🐞 | minor | — |
@@ -959,11 +959,22 @@ the fields that change its pages.
 Basis: probe. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — A removed site style sheet stays online** · 🐞 · minor.
-"Remove" and "Save" on "Site style sheet" take the file off the pages, but
-the file is not deleted: it still opens at its old address. A Site
-Administrator who removed a sheet expects it gone.
-Basis: probe. <sup>f-a6</sup>
+**A6 — A removed journal or site style sheet stops loading but stays online at its old address** · 🐞 · low.
+A manager who presses "Remove" under "Journal style sheet" and saves,
+or a Site Administrator who does the same under "Site style sheet" in
+Site Settings, expects the file to be gone. The public pages stop
+loading it, but the file stays in the journal's or the site's public
+files and still opens at its old address, for anyone, signed in or not.
+Nothing on the site links to it any more, so it is reached through an
+old saved copy of a page, a search index, or by someone who knows the
+address.
+Nothing on screen shows that the file is still there, and no screen can
+delete it. It matters when the file held something the journal or the
+site meant to withdraw.
+Only style sheets are left behind: a removed "Logo", "Homepage Image"
+or "Favicon" of a journal, and the site's "Logo", are deleted as they
+should be.
+Basis: probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Some side tabs do not survive a reload** · 🐞 · minor.
@@ -1688,6 +1699,7 @@ deletes nothing; the logo passes its `uploadName` and is deleted.
 Live-probed 2026-09-26 (Rule 21; all three apps, OMP included): after
 "Remove" and "Save", `/public/site/styleSheet.css` still answered 200 with
 the file's text (td16).
+Issue report: [pkp-e2e#780](https://github.com/jardakotesovec/pkp-e2e/issues/780) ([docs/issues/U10-A5-removed-style-sheet-stays-public.md](../issues/U10-A5-removed-style-sheet-stays-public.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — Live-probed 2026-09-26 (Rule 1; all three apps, two runs
