@@ -857,11 +857,11 @@ Basis: probe. <sup>f-omp1</sup>
 
 <a id="fn-f-a8"></a>
 **f-a8** — `SelectReviewerSuggestionListItem.vue` renders the button's screen-reader span as `{{ t('common.selectWithName', {name: fullName}) }}`, but the component defines no `fullName` property (the name is `item.fullName`, localized only inside `select()`), so the interpolation yields "undefined"; the reviewer list's `SelectReviewerListItem.vue` passes `item.fullName`. Live-probed 2026-09-06 (note h), OJS and OMP: accessible name "Select Reviewer Select undefined" on every suggestion entry, "Select Reviewer Select Rowan Reviewer" in "Locate a Reviewer".
-Issue report: [docs/issues/U31-A8-suggestion-select-reviewer-named-undefined.md](../issues/U31-A8-suggestion-select-reviewer-named-undefined.md).
+Issue report: [pkp-e2e#844](https://github.com/jardakotesovec/pkp-e2e/issues/844) ([docs/issues/U31-A8-suggestion-select-reviewer-named-undefined.md](../issues/U31-A8-suggestion-select-reviewer-named-undefined.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `SelectReviewerListPanel.vue::updateReviewerSuggestionList()` marks the item approved and the item's inner `v-if="!item.approvedAt"` hides its content, while the `ListPanel`'s `li` for the item stays rendered. Live-probed 2026-09-06 (note h), OJS and OMP: `window.panels[0].items[1].lines: []` after the inner add, the row gone after the window was reopened.
-Issue report: [docs/issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md](../issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md).
+Issue report: [pkp-e2e#845](https://github.com/jardakotesovec/pkp-e2e/issues/845) ([docs/issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md](../issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — The "Back to Search" link is `ReviewerForm::getAdvancedSearchAction()`, an `AjaxAction` on `reloadReviewerForm` with `selectionType` `REVIEWER_SELECT_ADVANCED_SEARCH` that replaces the form's content inside whichever modal holds it; from the inner modal the advanced-search form, suggestions list included, renders inside the inner dialog while the outer one still shows its own, and the grid handlers are bound twice. Live-probed 2026-09-06 (note h), OJS and OMP: three, then four, "Add Reviewer" dialogs stacked; console errors `The handler "$.pkp.controllers.grid.users.reviewer.AdvancedReviewerSearchHandler" has already been bound to the selected element!` and the same for `AddReviewerFormHandler`.
