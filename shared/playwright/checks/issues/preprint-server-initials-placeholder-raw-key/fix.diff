@@ -1,0 +1,12 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -554,6 +554,9 @@
+ msgid "emailTemplate.variable.context.contactName"
+ msgstr "The name of the server's primary contact"
+ 
++msgid "emailTemplate.variable.context.contextAcronym"
++msgstr "The server's initials"
++
+ msgid "emailTemplate.variable.context.contextSignature"
+ msgstr "The server's email signature for automated emails"
+ 

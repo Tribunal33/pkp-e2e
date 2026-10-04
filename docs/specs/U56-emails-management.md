@@ -907,7 +907,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | In French, "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | minor | — |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither choice selected | 🐞 | minor | — |
-| [OPS1](#ops1) | A preprint server's initials placeholder is described by a raw key | 🐞 | minor | — |
+| [OPS1](#ops1) | Preprint server emails: "Insert Content" describes the server's initials with a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Two filters of one block narrow the list instead of widening it | ❓ | minor | — |
 | [A6](#a6) | An edited one-template email can only be restored by "Reset All" | ❓ | user-visible | — |
 | [A7](#a7) | The manual payment email is not on the list | ❓ | latent | — |
@@ -1100,13 +1100,20 @@ Basis: probe, 2026-09-26. <sup>f-omp2</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — Initials placeholder described by a raw key** · 🐞 · minor.
-In every "Insert Content" window of a preprint server (the "Signature" of
-the "Emails" tab, the body of "Edit Template") the row for the server's
-initials is described "##emailTemplate.variable.context.contextAcronym##"
-instead of a sentence. The decision wizard's window shows the same
-([Editorial decision recording OPS2](U34-editorial-decision-recording.md#ops2)).
-Basis: probe, 2026-09-26. <sup>f-ops1</sup>
+**OPS1 — Preprint server emails: "Insert Content" describes the server's initials with a raw code** · 🐞 · low.
+On a preprint server, every "Insert Content" window in an email lists
+the server's initials with the description
+"##emailTemplate.variable.context.contextAcronym##" instead of a
+sentence. A journal reads "The journal's initials", a press "The
+press's initials".
+The row's "Insert" button still works, and every other row reads as a
+sentence. The raw code shows in a decision's email (such as "Decline
+Submission"), in the server's "Signature" under Settings › Workflow ›
+"Emails", and in the body of "Edit Template" on the Emails page.
+It shows in every interface language, because no language of OPS has
+the sentence. Released servers have shown it since OPS 3.5.0-2.
+The decision wizard's window is the same fault ([Editorial decision recording OPS2](U34-editorial-decision-recording.md#ops2)).
+Basis: probe, 2026-10-04. <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — "Submission Accepted" listed on a preprint server** · ❓ · latent.
@@ -1809,6 +1816,7 @@ other placeholder description resolves in all three apps (checked across
 and in "Edit Template"'s "Insert Content" on a preprint server; the
 journal reads "The journal's initials", the press "The press's
 initials".
+Issue report: [docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — OPS `APP\mail\Repository::map()` lists

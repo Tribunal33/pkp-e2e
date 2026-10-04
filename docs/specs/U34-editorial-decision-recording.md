@@ -1148,7 +1148,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A Section Editor's "Find Template" in a decision's email answers "You are not authorized to access the requested resource." | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | An editor's "Waive" on an accept decision still asks the Author to pay the publication fee | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Review Cancel" email reads "{$journalName}" where the press's name should be | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OPS2](#ops2) | "Insert Content" describes the server's initials with an untranslated key | 🐞 | minor | — |
+| [OPS2](#ops2) | Preprint server emails: "Insert Content" describes the server's initials with a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | "Create New Review Round" opens a wizard headed "New Review Round" | ❓ | minor | — |
 | [A2](#a2) | A decision with no author assigned opens a wizard with no page, and its closing window still reports an email | ❓ | minor | — |
 | [A4](#a4) | The discussion a recommendation opens lists the deciding editors, not the editor who wrote it | ❓ | minor | — |
@@ -1336,11 +1336,19 @@ roster of Rule 2.
 Basis: probe. <sup>[f-ops1](#fn-ops1)</sup>
 
 <a id="ops2"></a>
-**OPS2 — An untranslated row in "Insert Content"** · 🐞 · minor.
-On a preprint server the "Insert Content" row for the server's initials is
-described "##emailTemplate.variable.context.contextAcronym##"; a journal's
-reads "The journal's initials", a press's "The press's initials".
-Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
+**OPS2 — Preprint server emails: "Insert Content" describes the server's initials with a raw code** · 🐞 · low.
+On a preprint server, every "Insert Content" window in an email lists
+the server's initials with the description
+"##emailTemplate.variable.context.contextAcronym##" instead of a
+sentence. A journal reads "The journal's initials", a press "The
+press's initials".
+The row's "Insert" button still works, and every other row reads as a
+sentence. The raw code shows in a decision's email (such as "Decline
+Submission"), in the server's "Signature" under Settings › Workflow ›
+"Emails", and in the body of "Edit Template" on the Emails page.
+It shows in every interface language, because no language of OPS has
+the sentence. Released servers have shown it since OPS 3.5.0-2.
+Basis: probe, 2026-10-04. <sup>[f-ops2](#fn-ops2)</sup>
 
 ### Retired
 
@@ -1454,6 +1462,7 @@ their own dates.
 
 <a id="fn-ops2"></a>
 **f-ops2** — Note g: the OPS locale has no text for `emailTemplate.variable.context.contextAcronym`, so `Mailable::getDataDescriptions()` hands the window the key between `##`. Live-probed 2026-09-20 on OPS (the "Insert Content" row's description); OJS reads "The journal's initials", OMP "The press's initials".
+Issue report: [docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md).
 
 <a id="fn-a6"></a>
 **f-a6** — Note b: `DecisionStageValidPolicy` compares the submission's stage with the decision's and `DecisionAllowedPolicy` the user's assignment; nothing reads the submission's status, and `Repository::validate()` does not either. Live-probed 2026-09-20: `decision=16` typed on a queued Submission-stage submission (OJS, OMP) and on a queued preprint (OPS), and `decision=15` on an active review round: the one-page wizard, "Submission Reactivated" on record, the author's email "We have reversed the decision to decline your submission" and the log line "reversed the decision to decline this submission".
