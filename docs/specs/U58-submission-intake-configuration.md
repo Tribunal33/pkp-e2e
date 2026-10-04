@@ -1830,7 +1830,7 @@ copyright notice's `editLink.tpl` include passes
 `submission/instructions`; `workflow.tpl` has no side tab `authorGuidelines`.
 Live-probed 2026-09-27, OMP with journal and server controls (note
 td10).
-Issue report: [docs/issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md](../issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md).
+Issue report: [pkp-e2e#823](https://github.com/jardakotesovec/pkp-e2e/issues/823) ([docs/issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md](../issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md)).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — OMP `registry/genres.xml` (note f); OMP `schemas/context.json`
