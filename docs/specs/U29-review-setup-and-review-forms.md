@@ -847,6 +847,11 @@ Left out of the scenarios above, by reason:
     same toolbar (with Blockquote, Bullet list and Numbered list) on
     "Internal Review Guidelines" as on "External Review Guidelines" and
     "Competing Interests".
+  - the guard for A5 (issue report
+    `docs/issues/U29-A5-review-form-item-text-type-drops-options.md`): a
+    review form item with "Response Options" switched from a choice type to
+    a text type raises the confirmation, and "Cancel" keeps the type and its
+    options.
 - **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
@@ -945,7 +950,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Reviewers get no "After Due Date" reminder unless an earlier reminder was sent | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
-| [A5](#a5) | Saving a form item with a text type drops its "Response Options" without the warning the app carries for it | 🐞 | minor | — |
+| [A5](#a5) | Switching a review form item to a text box deletes its answer options on Save, with no warning | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OMP3](#omp3) | A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
@@ -1011,12 +1016,17 @@ defect, since the address names the side tab and a "Submission" side tab
 comes back from the same kind of address. Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — A type change drops the answer options silently** · 🐞 · minor.
-An item's "Response Options" rows stay listed when "Item type" is changed
-to a text type, and "Save" then discards them with no warning; the app
-carries the warning "Changing the form item type..." for exactly this
-change, and it never shows. A manager who switches a choice item to a text
-box and back has to retype every option. Basis: probe. <sup>f-a5</sup>
+**A5 — Switching a review form item to a text box deletes its answer options on Save, with no warning** · 🐞 · medium.
+A manager edits a review form item that offers answers to choose from
+(radio buttons, checkboxes or a drop-down) and changes its "Item type"
+to a text box. No warning appears, and the "Response Options" stay
+listed with "Add Item" as if they were kept. "Save" reports "Your
+changes have been saved." and deletes every option. The loss shows when
+the manager switches the item back to a choice type, after catching a
+wrong type later or while trying types out: "Response Options" reads "No
+Items" and every option has to be typed again, in each of the form's
+languages. The app has a text key for a warning about this change, but
+nothing ever shows it. Basis: probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — A deactivated recommendation reads "-" in the editor's window** · ❓ · user-visible.
@@ -1814,6 +1824,7 @@ selected added a row; a saved radio item with "Yes" / "No" switched to
 reopened, "No Items" under "Response Options"; `page.on('dialog')` recorded
 nothing. Since: the elided warning was wired when the listbuilder was
 written; the age of the missing binding was not traced.
+Issue report: [docs/issues/U29-A5-review-form-item-text-type-drops-options.md](../issues/U29-A5-review-form-item-text-type-drops-options.md).
 
 <a id="fn-f-a6"></a>
 **f-a6** — Footnote g: `Repository::getRecommendationOptions()` returns the

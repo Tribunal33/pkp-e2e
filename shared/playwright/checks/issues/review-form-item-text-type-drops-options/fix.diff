@@ -1,0 +1,84 @@
+--- a/lib/pkp/controllers/grid/settings/reviewForms/form/ReviewFormElementForm.php
++++ b/lib/pkp/controllers/grid/settings/reviewForms/form/ReviewFormElementForm.php
+@@ -79,7 +79,6 @@
+             'reviewFormId' => $this->reviewFormId,
+             'reviewFormElementId' => $this->reviewFormElementId,
+             'multipleResponsesElementTypes' => $reviewFormElement->getMultipleResponsesElementTypes(),
+-            'multipleResponsesElementTypesString' => ';' . implode(';', $reviewFormElement->getMultipleResponsesElementTypes()) . ';',
+             'reviewFormElementTypeOptions' => $reviewFormElement->getReviewFormElementTypeOptions(),
+         ]);
+         return parent::fetch($request, $template, $display);
+--- a/lib/pkp/templates/manager/reviewForms/reviewFormElementForm.tpl
++++ b/lib/pkp/templates/manager/reviewForms/reviewFormElementForm.tpl
+@@ -12,22 +12,30 @@
+ 	$(function() {ldelim}
+ 		// Attach the form handler.
+ 		$('#reviewFormElementForm').pkpHandler('$.pkp.controllers.form.AjaxFormHandler');
+-	{rdelim});
+-</script>
+ 
+-<script type="text/javascript">
+-<!--
+-function togglePossibleResponses(newValue, multipleResponsesElementTypesString) {ldelim}
+-	if (multipleResponsesElementTypesString.indexOf(';'+newValue+';') != -1) {ldelim}
+-		document.getElementById('reviewFormElementForm').addResponse.disabled=false;
+-	{rdelim} else {ldelim}
+-		if (document.getElementById('reviewFormElementForm').addResponse.disabled == false) {ldelim}
+-			alert({translate|json_encode key="manager.reviewFormElement.changeType"});
+-		{rdelim}
+-		document.getElementById('reviewFormElementForm').addResponse.disabled=true;
+-	{rdelim}
+-{rdelim}
+-// -->
++		// Offer "Response Options" only for the item types that use them, and ask
++		// before a change to another type, which deletes the listed options on save.
++		var multipleResponsesElementTypes = {$multipleResponsesElementTypes|json_encode},
++			$elementType = $('select[name="elementType"]', '#reviewFormElementForm'),
++			$elementOptions = $('#elementOptions'),
++			previousType = $elementType.val(),
++			usesResponses = function(type) {ldelim}
++				return $.inArray(parseInt(type, 10), multipleResponsesElementTypes) !== -1;
++			{rdelim};
++
++		$elementOptions.toggle(usesResponses(previousType));
++		$elementType.change(function() {ldelim}
++			var newType = $elementType.val();
++			if (usesResponses(previousType) && !usesResponses(newType) &&
++					$('#elementOptionsListbuilderContainer tbody tr.gridRow').length &&
++					!confirm({translate|json_encode key="manager.reviewFormElement.changeType"})) {ldelim}
++				$elementType.val(previousType);
++				return;
++			{rdelim}
++			previousType = newType;
++			$elementOptions.toggle(usesResponses(newType));
++		{rdelim});
++	{rdelim});
+ </script>
+ 
+ <form class="pkp_form" id="reviewFormElementForm" method="post" action="{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="grid.settings.reviewForms.ReviewFormElementsGridHandler" op="updateReviewFormElement" anchor="possibleResponses"}">
+@@ -71,13 +79,10 @@
+ 
+ 		<!-- element type drop-down -->
+ 		{fbvFormSection for="elementType" list=true}
+-			<!-- when user makes a selection (onchange), warn them if necessary. -->
+-			<!-- also display/hide options list builder if appropriate. -->
+-			<!-- look to see how this is done elsewhere under the new JS framework -->
+ 			{fbvElement type="select" label="manager.reviewFormElements.elementType" id="elementType" defaultLabel="" from=$reviewFormElementTypeOptions selected=$elementType size=$fbvStyles.size.MEDIUM required=true}
+ 		{/fbvFormSection}
+ 
+-		<!-- Options listbuilder. Activated for some element types. -->
++		<!-- Options listbuilder. Shown for the element types that use it (see above). -->
+ 		<div id="elementOptions" class="full left">
+ 			<div id="elementOptionsContainer" class="full left">
+ 				{capture assign=elementOptionsUrl}{url router=PKP\core\PKPApplication::ROUTE_COMPONENT component="listbuilder.settings.reviewForms.ReviewFormElementResponseItemListbuilderHandler" op="fetch" reviewFormId=$reviewFormId reviewFormElementId=$reviewFormElementId escape=false}{/capture}
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -2126,7 +2126,7 @@
+ msgstr "Title"
+ 
+ msgid "manager.reviewFormElement.changeType"
+-msgstr "Changing the form item type..."
++msgstr "Warning: Changing the review form element type from a multiple-choice type to an open-ended type will result in the deletion of the multiple choice options."
+ 
+ msgid "manager.reviewFormElements"
+ msgstr "Form Items"
