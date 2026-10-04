@@ -1474,7 +1474,7 @@ Issue report: [pkp-e2e#861](https://github.com/jardakotesovec/pkp-e2e/issues/861
 
 <a id="fn-a6"></a>
 **f-a6** — Note b: `DecisionStageValidPolicy` compares the submission's stage with the decision's and `DecisionAllowedPolicy` the user's assignment; nothing reads the submission's status, and `Repository::validate()` does not either. Live-probed 2026-09-20: `decision=16` typed on a queued Submission-stage submission (OJS, OMP) and on a queued preprint (OPS), and `decision=15` on an active review round: the one-page wizard, "Submission Reactivated" on record, the author's email "We have reversed the decision to decline your submission" and the log line "reversed the decision to decline this submission".
-Issue report: [docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md](../issues/U34-A6-revert-decline-typed-on-undeclined-submission.md).
+Issue report: [pkp-e2e#863](https://github.com/jardakotesovec/pkp-e2e/issues/863) ([docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md](../issues/U34-A6-revert-decline-typed-on-undeclined-submission.md)).
 
 <a id="fn-a7"></a>
 **f-a7** — Note e: `NotifyReviewers::validateNotifyReviewersAction()` adds `validator.required` on `.recipients`, which `DecisionPage::setStepErrors()` maps into `step.errors`, but the composer renders no error slot under the "To" field. Live-probed 2026-09-20 on OJS and OMP: the banner, "View Error" opening the page, "To:" reading "None" with nothing under it.
