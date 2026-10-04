@@ -908,7 +908,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | "Manage Emails" lists the three ORCID emails under code names, after every other email | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | Manage Emails: "Add Template" opens an empty window titled "Edit Template" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A10](#a10) | A press's and a preprint server's French submission confirmation speaks of "la revue" | 🐞 | minor | — |
+| [A10](#a10) | A press's or preprint server's French submission confirmation thanks the author for choosing "notre revue" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither "Yes" nor "No" selected | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1044,24 +1044,25 @@ successful save of a change that was not kept.
 Basis: probe, 2026-09-26. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The French submission confirmation speaks of "la revue" on a press and a server** · 🐞 · minor.
-On a press and a preprint server with French as a form language, the
-French body of the submission confirmation ("Submission Confirmation";
-on a preprint server "Submission Acknowledgement (Pending Moderation)")
-is a journal's text, word for word: "Nous vous remercions d'avoir soumis
-le manuscrit intitulé « {$submissionTitle} » à la revue
-{$contextName}.", "… en accédant au site Web de la revue :" and "Nous
-vous remercions d'avoir pensé à notre revue pour la publication de vos
-travaux.". A French-speaking author of a press or a server is thanked
-for choosing "notre revue". On a preprint server the French text also
-says nothing of the moderator the English body announces, and its French
-"Name" reads "Confirmation de soumission". In the French interface
-(Rule 6a) the list of a press and of a server describes this email as
-sent once a manuscript's submission "à la revue" is complete, and
-"Création de l'utilisateur-trice" as welcoming the new user "à la
-revue". A manager expects the press's or the server's own word, as the
-English text gives.
-Basis: probe, 2026-09-28. <sup>f-a10</sup>
+**A10 — A press's or preprint server's French submission confirmation thanks the author for choosing "notre revue"** · 🐞 · low.
+An author whose interface is in French (Canada) submits to a press or a
+preprint server. The confirmation email they receive is written for a
+journal. It thanks them for submitting "à la revue Press de la
+connaissance du public", points them to "le site Web de la revue" and
+thanks them for choosing "notre revue". On a preprint server it also
+leaves out what the English email says: a moderator must approve the
+preprint before it is posted.
+The email still arrives, and its link and username are right. In the
+French list of emails, the descriptions of this email and of
+"Création de l'utilisateur-trice" also speak of "la revue". That second
+email itself names the press or the server.
+A corrected translation fixes the list's descriptions at once, since
+they are read from the language files on each visit. The email's
+French name, subject and body are copied into the database when an
+install is set up or French is added to it. So presses and servers
+that already have French keep the journal text until a manager edits
+it, unless an upgrade step rewrites the stored copy.
+Basis: probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions** · 🐞 · low.
@@ -1795,6 +1796,7 @@ English list reads "This email is automatically sent to an author when
 they make a submission and a moderator must approve it.", and
 "Création de l'utilisateur-trice" "… pour lui souhaiter la bienvenue à
 la revue …".
+Issue report: [docs/issues/U56-A10-french-submission-confirmation-names-journal.md](../issues/U56-A10-french-submission-confirmation-names-journal.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — A text the language's translation lacks prints as

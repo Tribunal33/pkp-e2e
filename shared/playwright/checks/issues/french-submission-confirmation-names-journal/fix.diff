@@ -1,0 +1,44 @@
+--- a/lib/pkp/locale/fr_CA/emails.po
++++ b/lib/pkp/locale/fr_CA/emails.po
+@@ -20,17 +20,17 @@
+ msgid "emails.submissionAck.body"
+ msgstr ""
+ "<p>{$recipientName},</p><p>Nous vous remercions d'avoir soumis le manuscrit "
+-"intitulé « {$submissionTitle} » à la revue {$contextName}. Nous l'avons bien "
++"intitulé « {$submissionTitle} » à {$contextName}. Nous l'avons bien "
+ "reçu et un membre de notre équipe éditorial le prendre en charge sous peu. "
+ "Grâce à notre système de gestion en ligne, vous pourrez suivre votre "
+-"soumission tout au long du processus d'édition en accédant au site Web de la "
+-"revue :</p>\n"
++"soumission tout au long du processus d'édition en accédant à notre site "
++"Web :</p>\n"
+ "<br />\n"
+ "URL de la soumission : <a href=\"{$authorSubmissionUrl}\">{$authorSubmissionUrl}</a><br />\n"
+ "Nom d'utilisateur-trice : {$recipientUsername}<br />\n"
+ "<br />\n"
+ "Si vous avez des questions, n'hésitez pas à communiquer avec nous. Nous vous "
+-"remercions d'avoir pensé à notre revue pour la publication de vos "
++"remercions d'avoir pensé à {$contextName} pour la publication de vos "
+ "travaux.<br />\n"
+ "<br />\n"
+ "{$contextSignature}"
+--- a/lib/pkp/locale/fr_CA/manager.po
++++ b/lib/pkp/locale/fr_CA/manager.po
+@@ -3491,7 +3491,7 @@
+ msgid "mailable.userRegister.description"
+ msgstr ""
+ "Ce courriel est envoyé à l'utilisateur-trice nouvellement inscrit-e pour lui "
+-"souhaiter la bienvenue à la revue et l'informer de son nom d'utilisateur-"
++"souhaiter la bienvenue dans le système et l'informer de son nom d'utilisateur-"
+ "trice et de son mot de passe."
+ 
+ msgid "mailable.reviewerRegister.name"
+@@ -3517,7 +3517,7 @@
+ msgid "mailable.submissionAck.description"
+ msgstr ""
+ "Ce courriel, lorsqu'activé, est envoyé automatiquement à un-e auteur-e quand "
+-"le processus de soumission d'un manuscrit à la revue a été complété. Le "
++"le processus de soumission d'un manuscrit a été complété. Le "
+ "courriel explique comment suivre la soumission à travers le processus "
+ "éditorial, et remercie l'auteur-e pour sa soumission."
+ 
