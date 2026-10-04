@@ -803,6 +803,8 @@ journals with throwaway accounts. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - scenario 11 on a press: the site's style sheet loaded on the site's
+    and a press's pages, the guard OMP1's report names (Rule 21; OMP1)
   - the site's save (`PUT index/api/v1/site`) sent with an empty "Email
     of principal contact" refused with 400, the guard A4's report names
     (Rule 22; A4)
@@ -844,8 +846,6 @@ Left out of the scenarios above, by reason:
     Hosted Journals save; Fields)
   - A12 (an "&" in a journal's name in the "Journal redirect" list;
     Fields)
-  - OMP1 (the style sheet loaded nowhere on a press; Rule 21; scenario
-    11 names it)
   - OPS1 (the "Reviewer statistics" box changing nothing on a preprint
     server; Rule 9; scenario 10 names it)
 - **No seed**:
@@ -884,7 +884,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | Signing in on the site's Login page lands on the journal's home page, not its Dashboard | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | Site Settings' "Journal redirect" list ignores the Hosted Journals order, and on PostgreSQL reshuffles after a journal save | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An "&" in a journal's name reads `&amp;` in the "Journal redirect" list | 🐞 | minor | — |
-| [OMP1](#omp1) | A press never loads the "Site style sheet" | 🐞 | user-visible | — |
+| [OMP1](#omp1) | On an OMP site, a saved "Site style sheet" is loaded on no page, neither the site's nor any press's | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A fresh installation has no Site Name: the site's home page has an empty title | ❓ | user-visible | — |
 | [A5](#a5) | The site's "Theme" tab offers journal home-page fields that change nothing on the site | ❓ | minor | — |
 | [A9](#a9) | A saved "Theme" change does not reach a browser that already opened the site | ❓ | user-visible | — |
@@ -1074,13 +1074,16 @@ Basis: probe. <sup>f-a12</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A press never loads the site style sheet** · 🐞 · user-visible.
-The Site Administrator of a press uploads a "Site style sheet", sees it
-saved, and no page changes: neither the site's own pages nor any press's
-load it, while a journal site and a preprint server load it on every
-public page.
-Presses loaded it until 2018 (read from the code's history): a regression.
-Since: 2018-12-21 · Basis: probe, commit. <sup>f-omp1</sup>
+**OMP1 — On an OMP site, a saved "Site style sheet" is loaded on no page, neither the site's nor any press's** · 🐞 · medium.
+The Site Administrator of an OMP site uploads a "Site style sheet",
+sees "Saved", and no page changes: neither the site's own pages nor any
+press's load it, while a journal site and a preprint server load it on
+every public page.
+Nothing says the sheet is ignored: the "Site style sheet" field even
+names the stored file after a reload.
+Site Settings offers the field on an OMP install that hosts two or more
+presses, or none yet; an install with one press never sees it.
+Since: 2018-12-21 · Basis: probe, commit, 2026-10-04. <sup>f-omp1</sup>
 
 ### OPS
 
@@ -1818,6 +1821,8 @@ nothing in its place; the site form still uploads and stores the file.
 Live-probed 2026-09-26 (Rule 21; OMP): the sheet saved, reloaded as
 "styleSheet.css" and opened at its address, and no page of the site or of
 a press loaded it (td16).
+Issue report: [docs/issues/U60-OMP1-press-ignores-site-style-sheet.md](../issues/U60-OMP1-press-ignores-site-style-sheet.md).
+Upstream: [pkp/pkp-lib#12753](https://github.com/pkp/pkp-lib/issues/12753) (open).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn-f: the box is built by the shared `PKPSiteConfigForm` on

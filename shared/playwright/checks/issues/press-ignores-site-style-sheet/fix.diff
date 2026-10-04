@@ -1,0 +1,17 @@
+--- a/classes/template/TemplateManager.php
++++ b/classes/template/TemplateManager.php
+@@ -54,6 +54,14 @@
+             $this->assign('sitePublicFilesDir', $siteFilesDir);
+             $this->assign('publicFilesDir', $siteFilesDir); // May be overridden by press
+ 
++            if ($site->getData('styleSheet')) {
++                $this->addStyleSheet(
++                    'siteStylesheet',
++                    $request->getBaseUrl() . '/' . $publicFileManager->getSiteFilesPath() . '/' . $site->getData('styleSheet')['uploadName'],
++                    ['priority' => self::STYLE_SEQUENCE_LATE]
++                );
++            }
++
+             // Pass app-specific details to template
+             $this->assign([
+                 'brandImage' => 'templates/images/omp_brand.png',
