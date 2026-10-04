@@ -982,7 +982,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Pasting a reference already in the list drops it silently, and the References page still says "Saved" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | "Search references here" keeps references whose text does not contain the typed word | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | The lookup's progress box counts structured references only | 🐞 | minor | — |
+| [A6](#a6) | References page: the lookup's progress box counts only structured references and says "All 2 done" over five | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | A data citation added after the Data Citations table was ordered appears first, not last | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1061,12 +1061,21 @@ Since: 2026-09-14 (the failed state was added then) · Basis: probe for the
 waiting row, 2026-09-24; code for the failed one. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The progress box counts structured references only** · 🐞 · minor.
-The box under the "Add" box is expected to report on the whole list. It
-counts only the references that are already structured: it is absent while
-none is, and it reads "All 2 references successfully processed" over a list
-of five when three could not be structured or are still waiting.
-Basis: probe, 2026-09-24. <sup>f-a6</sup>
+**A6 — References page: the lookup's progress box counts only structured references and says "All 2 done" over five** · 🐞 · low.
+With metadata lookup on, an editor who adds references expects the box
+under "Add" to report on the whole list while the lookup runs. The box
+counts only structured references: those whose details (identifier,
+title and authors) are filled in, by the lookup or by hand. It is absent
+while none is. With two of five structured it reads "Processing
+references - 0/2". Once those two are done it reads "All 2 references
+successfully processed" while the other three are still waiting. While
+the box is absent or says "All … processed", the page stops refreshing
+itself, so the rows still being looked up change only on a reload. On
+`main` today the box also shows when no lookup is running. A reference
+added while lookup was off, then filled in by hand after it was switched
+on, shows "Processing references - 0/1" for good. That is the symptom
+`pkp/pkp-lib#12155` set out to remove.
+Basis: probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · 🐞 · medium.
@@ -2095,6 +2104,7 @@ not count it.
 five unstructured references and "Processing references - 0/2" with two of
 the five structured (note i). The "All {total}" wording is unreachable on a
 test install.
+Issue report: [docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md).
 
 <a id="fn-f-a7"></a>
 **f-a7 — A7 evidence.** Note k. Live-probed 2026-09-24: the screen half,
