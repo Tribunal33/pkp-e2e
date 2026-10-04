@@ -1,0 +1,19 @@
+--- a/lib/pkp/controllers/grid/users/reviewer/form/EditReviewForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/EditReviewForm.php
+@@ -111,6 +111,16 @@
+             while ($reviewForm = $reviewFormsIterator->next()) {
+                 $reviewForms[$reviewForm->getId()] = $reviewForm->getLocalizedTitle();
+             }
++            // A form deactivated after it was given keeps serving this assignment
++            // (deactivation only withholds it from new ones): list it too, so the
++            // window shows it and saving the window keeps it.
++            $currentReviewFormId = $this->_reviewAssignment->getReviewFormId();
++            if ($currentReviewFormId && !isset($reviewForms[$currentReviewFormId])) {
++                $currentReviewForm = $reviewFormDao->getById($currentReviewFormId, Application::getContextAssocType(), $context->getId());
++                if ($currentReviewForm) {
++                    $reviewForms[$currentReviewFormId] = $currentReviewForm->getLocalizedTitle();
++                }
++            }
+             $templateMgr->assign([
+                 'reviewForms' => $reviewForms,
+                 'reviewFormId' => $this->_reviewAssignment->getReviewFormId(),

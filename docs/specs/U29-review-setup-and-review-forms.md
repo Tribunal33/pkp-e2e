@@ -852,6 +852,11 @@ Left out of the scenarios above, by reason:
     review form item with "Response Options" switched from a choice type to
     a text type raises the confirmation, and "Cancel" keeps the type and its
     options.
+  - the guard for A9 (issue report
+    `docs/issues/U29-A9-edit-review-drops-deactivated-form.md`): a form a
+    request carries deactivated, then "OK" in the reviewer row's "Edit"
+    window with nothing changed: the window lists the carried form selected,
+    and the request and the reviewer's step 3 keep it.
 - **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
@@ -952,7 +957,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | Reviewers get no "After Due Date" reminder unless an earlier reminder was sent | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Switching a review form item to a text box deletes its answer options on Save, with no warning | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OMP3](#omp3) | A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
+| [A9](#a9) | Saving a reviewer's "Edit" window silently takes a deactivated review form off the review | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
@@ -1063,14 +1068,26 @@ Question: intended? Lean: intended; a declined request holds no answers,
 so nothing is lost. Basis: probe. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The "Edit" window drops a deactivated form** · 🐞 · minor.
-When a form carried by an open request is deactivated, the reviewer
-row's "More Actions" › "Edit" window opens with "None / Free Form Review"
-selected and lists only the still-active forms, with no sign of the form
-the request carries. "OK" with nothing changed detaches it: the
-reviewer's step 3 shows the free-text boxes instead of the questions and
-the form's "In Review" count drops by one. Expected: the window shows the
-carried form and "OK" leaves it alone. Basis: probe. <sup>f-a9</sup>
+**A9 — Saving a reviewer's "Edit" window silently takes a deactivated review form off the review** · 🐞 · medium.
+A journal or press deactivates a review form while a review request
+still carries it. Deactivating promises only that the form "will no
+longer be available for new review assignments". But when an editor then
+opens that reviewer's "More Actions" › "Edit" window, its "Review Form"
+list leaves the form out and shows "None / Free Form Review" selected.
+Pressing "OK", even with nothing changed, takes the form off the review,
+silently. The reviewer's "3. Download & Review" step then shows the
+free-text boxes instead of the form's questions, and the answers already
+saved there disappear from it. The answers come back if the form is
+attached again while it still exists: a manager activates it again and
+the editor attaches it again in the same window. But the form now reads
+0 under "In Review" and "Completed" and offers "Delete", as for a form
+no one uses. Deleting it, which that count invites, removes the
+reviewer's saved answers for good. It needs a form deactivated while a
+request carrying it is still open. That is how a journal revises a form
+in use: a form in use cannot be edited, so the journal copies it, edits
+the copy and deactivates the old one. Any later "OK" in the window, such
+as one to move a due date, then detaches the old form. Basis: probe,
+2026-10-04. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — What gives "Save" back after a refused save** · ❓ · minor.
@@ -1899,6 +1916,7 @@ answered 200, the form's "In Review" went 1 → 0, and the reviewer's step 3
 showed "For author and editor" and "For editor" instead of the questions.
 The count still read 1 before the "OK", so the window's save does the
 detaching. First seen 2026-09-05 by the earlier build of this spec.
+Issue report: [docs/issues/U29-A9-edit-review-drops-deactivated-form.md](../issues/U29-A9-edit-review-drops-deactivated-form.md).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Folded 2026-10-01 from the issue report's walk (Rule 18;
