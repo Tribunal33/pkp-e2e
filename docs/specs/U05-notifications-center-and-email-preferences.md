@@ -1767,7 +1767,7 @@ before inserting the ticked boxes; the template checks every box
 (`checked="checked"`). Live-probed 2026-09-04 on OJS, OMP and OPS (note f):
 a row switched off on the tab came back ticked on the page, and
 "Unsubscribe" with it unticked switched it on again on the tab.
-Issue report: [docs/issues/U05-A2-unsubscribe-page-reenables-emails.md](../issues/U05-A2-unsubscribe-page-reenables-emails.md).
+Issue report: [pkp-e2e#850](https://github.com/jardakotesovec/pkp-e2e/issues/850) ([docs/issues/U05-A2-unsubscribe-page-reenables-emails.md](../issues/U05-A2-unsubscribe-page-reenables-emails.md)).
 
 <a id="fn-a3"></a>
 **f-a3** — Note c: the role list in `setNMIDisplayTitles()` omits
