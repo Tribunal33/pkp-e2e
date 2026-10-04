@@ -842,7 +842,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | Submissions dashboard: a sort switched off stays in the address and comes back on reload | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | Paged lists: a screen reader announces the pager's "Next" as plain "Next", unlike its "Go to …" neighbours | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | minor | — |
+| [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | Section Editors and assistants have no view listing declined (or published-and-gone) submissions; global search is their only way back | ❓ | user-visible | — |
 | [A2](#a2) | Editors are offered "Complete submission" on other people's incomplete submissions, landing them in the author's wizard | ❓ | minor | — |
 | [A3](#a3) | The author/reviewer conflict notice always says "as a Journal Manager", whoever is looking, on presses and preprint servers too | ❓ | minor | — |
@@ -999,7 +999,7 @@ names one value ("Section: Shut") and its X removes it.
 Basis: code. <sup>a11</sup>
 
 <a id="a12"></a>
-**A12 — In French the dashboard shows raw codes** · 🐞 · minor.
+**A12 — In French the dashboard shows raw codes** · 🐞 · low.
 With the interface in French (Canada), a few of the dashboard's texts
 read raw codes where French words belong:
 - the "…" button above the list and the menu it opens are named
@@ -1008,14 +1008,15 @@ read raw codes where French words belong:
   "Supprimer les soumissions incomplètes", "Annuler", and the
   confirmation window "Confirmez la suppression des soumissions
   incomplètes". A Section Editor has no such button (Rule 12);
-- each time the list finishes loading (on arrival, after a search or a
-  sort), a screen reader hears "##common.loaded##" (English "Loaded"),
-  for the Journal Manager and the Section Editor alike;
+- each time the list reloads (on choosing a view, a search, a filter,
+  a sort or a page), a screen reader hears "##common.loaded##" (English
+  "Loaded"), for the Journal Manager and the Section Editor alike;
 - a journal and a press: the indicator of a reviewer who has accepted
-  reads "##dashboard.reviewAssignment.statusAccepted.title##" in the
-  Editorial Activity cell, beside the days count, and as the headline of
-  the popover it opens (English "Ongoing review - request accepted"),
-  for the Journal Manager. The popover's sentence and buttons read French
+  is named "##dashboard.reviewAssignment.statusAccepted.title##" for a
+  screen reader in the Editorial Activity cell, beside the days count,
+  and the popover it opens shows the code as its headline (English
+  "Ongoing review - request accepted"), for the Journal Manager.
+  The popover's sentence and buttons read French
   ("L'évaluateur-trice a accepté la demande d'évaluation…", "Modifier la
   date d'échéance", "Voir les détails", "Retirer l'évaluateur-trice"), and
   a completed review reads French throughout ("Évaluation complétée le
@@ -1037,7 +1038,7 @@ the Author's own list shows the same "…" code
 ([→ My Submissions](U22-my-submissions.md)), and why a missing French
 text shows as a code at all is the question
 [Languages & locales A4](U57-languages-and-locales.md#a4) asks.
-Basis: probe + code. <sup>a12</sup>
+Basis: probe + code, 2026-10-04. <sup>a12</sup>
 
 <a id="a13"></a>
 **A13 — The recommending editors' line may read a code in French** · ❓ · minor.
@@ -1907,6 +1908,9 @@ recommendation on OJS only (Rule 10). OMP's Filters label read the code
 in both runs. No response of 500 or more and no page error. The
 indicator's French "Afficher plus de details" lacks the accent on
 "détails", a translation typo rather than a code.
+Issue report: [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)), for `common.moreActions` and `common.loaded`.
+Issue report: [pkp-e2e#900](https://github.com/jardakotesovec/pkp-e2e/issues/900) ([docs/issues/U22-A6-my-submissions-french-review-counter-raw-key.md](../issues/U22-A6-my-submissions-french-review-counter-raw-key.md)), for the accepted reviewer's indicator.
+Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)), for a press's "Assigned To Editor" field.
 
 <a id="fn-a13"></a>
 **a13 — A13 evidence.** `useDashboardConfigEditorialActivity.js` shows

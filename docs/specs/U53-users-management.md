@@ -1049,24 +1049,33 @@ reads "##userAccess.search##", the Invitations table is headed
 "##invitation.header## (0)" with the button
 "##invitation.inviteToRole.btn##", two of its columns and the users
 list's "Start Date" column are codes, and the window that disables a
-user is titled "##user.disabledModal.title##". The button opens the
-role invitation pages, where every heading, step, field and button but
-"Annuler" is a code. To a screen reader, the "…" menus and hidden
-"More Actions" column headings of the workflow and settings lists read
-"##common.moreActions##" on `main` and 3.5, seen on the "Users" tab, a
-publication's "Media" page, the "Categories" tab and a journal review
-round's "Author Response" table.
+user is titled "##user.disabledModal.title##". The button opens the role
+invitation pages, where every heading, step, field and button but
+"Annuler" is a code.
+
+In French (Canada), a screen reader also names the lists' hidden "More
+Actions" column headings "##common.moreActions##", and outside the
+"Users" tab each row's "…" menu too. Managers hear it on the "Users"
+tab's two tables and the "Categories" tab; editors on a publication's
+"Media", "References" and "Funding" pages and a journal review round's
+"Author Response" table; anyone on "My Submissions", and managers and
+site administrators on the editorial "Submissions" list, on the "…"
+button above the list. On the editorial "Submissions" list, everyone who
+uses it hears "##common.loaded##" where English says "Loaded", each time
+the list reloads on choosing a view, searching, filtering, sorting or
+paging.
 
 The rest of the tab is French, and its buttons and menus still work, so
 a manager can get through by switching the interface to English.
 
-The fix covers French (Canada) only: its missing texts, entered on
-PKP's Weblate by the French (Canada) translators or a developer, or
-committed as the tried diff, with no code change. Every journal, press
-and preprint server that offers French (Canada) shows these codes. The
-same five tab texts are also missing in 50 other languages; French
-(France) is not among them, as it has all five. Those languages are
-for their translators and are not counted in this report's effort.
+The fix covers French (Canada) only: its missing texts, entered on PKP's
+Weblate by the French (Canada) translators or a developer, or committed
+as the tried diff, with no code change. Every journal, press and
+preprint server that offers French (Canada) shows these codes. The same
+five tab texts are also missing in 49 other languages, the "More
+Actions" name in 36 and the "Loaded" notice in 38; French (France) is
+not among them, as it has all of them. Those languages are for their
+translators and are not counted in this report's effort.
 Basis: probe, 2026-10-02 and 2026-10-04. <sup>f-a11</sup>
 
 <a id="a12"></a>

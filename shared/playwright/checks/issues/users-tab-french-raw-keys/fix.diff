@@ -1,12 +1,15 @@
 --- a/lib/pkp/locale/fr_CA/common.po
 +++ b/lib/pkp/locale/fr_CA/common.po
-@@ -2392,3 +2392,6 @@
+@@ -2392,3 +2392,9 @@
  
  msgid "common.refreshingData"
  msgstr "Actualiser les données"
 +
 +msgid "common.moreActions"
 +msgstr "Plus d'actions"
++
++msgid "common.loaded"
++msgstr "Chargé"
 --- a/lib/pkp/locale/fr_CA/invitation.po
 +++ b/lib/pkp/locale/fr_CA/invitation.po
 @@ -1,2 +1,441 @@

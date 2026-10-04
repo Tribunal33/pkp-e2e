@@ -10,3 +10,13 @@
  msgid "dashboard.startNewSubmission"
  msgstr "Créer une nouvelle soumission"
  
+@@ -3292,6 +3295,9 @@
+ msgid "dashboard.submissions.incomplete.bulkDelete.button"
+ msgstr "Supprimer les soumissions incomplètes"
+ 
++msgid "dashboard.reviewAssignment.statusAccepted.title"
++msgstr "Évaluation en cours - demande acceptée"
++
+ msgid "dashboard.reviewAssignment.statusAccepted.description"
+ msgstr ""
+ "L'évaluateur-trice a accepté la demande d'évaluation. Son évaluation doit "

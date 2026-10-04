@@ -582,7 +582,7 @@ text instead. On every app a screen reader hears the "…" button above
 the list (English "More Actions", Rule 9), which everyone on the list
 gets, as "##common.moreActions##". Two faults, both French (Canada)
 texts never translated: the counter's text is released with 3.5 and
-missing in 46 languages; the button's name is shared with the other
+missing in 43 of 70 languages; the button's name is shared with the other
 lists' "…" menus. Expected: French
 words, as the rest of the list shows: the views ("Soumissions actives",
 "Révisions demandées", "Soumissions incomplètes", "Publiées",

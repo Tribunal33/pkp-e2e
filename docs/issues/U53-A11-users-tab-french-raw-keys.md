@@ -8,10 +8,10 @@
   - 3.5: OJS, OMP, OPS (no "Media" page)
   - 3.4: none (code; the older users list, no invitations)
   - 3.3: none (code; the older users list, no invitations)
-- **Introduced** not traced: no change broke it. The English texts came with the role invitations (PR `pkp/pkp-lib#10472` for `pkp/pkp-lib#10459`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26), the new users list (PRs `pkp/pkp-lib#10558` and `pkp/pkp-lib#10576` for `pkp/pkp-lib#9658`, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-24, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2024-11-01) and, for `common.moreActions`, the workflow side modal (PR `pkp/pkp-lib#10454`, [be3be14eff](https://github.com/pkp/pkp-lib/commit/be3be14eff471d613a2c5509d5d605196fd83817) 2024-09-19); French (Canada) never received them
+- **Introduced** not traced: no change broke it. The English texts came with the role invitations (PR `pkp/pkp-lib#10472` for `pkp/pkp-lib#10459`, [7e3a26ea83](https://github.com/pkp/pkp-lib/commit/7e3a26ea83db5428a8747b7dba574259e749cf98) 2024-09-26), the new users list (PRs `pkp/pkp-lib#10558` and `pkp/pkp-lib#10576` for `pkp/pkp-lib#9658`, [e8bdca4673](https://github.com/pkp/pkp-lib/commit/e8bdca46737fb77d39a7a041cec5f7526dd07835) 2024-10-24, [4729a3cd9c](https://github.com/pkp/pkp-lib/commit/4729a3cd9cabc98712aaf91a227d984bdce7dcb9) 2024-11-01) and, for `common.moreActions`, the workflow side modal (PR `pkp/pkp-lib#10454`, [be3be14eff](https://github.com/pkp/pkp-lib/commit/be3be14eff471d613a2c5509d5d605196fd83817) 2024-09-19) and, for `common.loaded`, the first submissions dashboard (`pkp/pkp-lib#8880`, [ad14de61fa](https://github.com/pkp/pkp-lib/commit/ad14de61fa5d283dae1a93269310c942169d52d9) 2023-05-02); French (Canada) never received them
 - **Upstream** none found (2026-10-04)
-- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions"), spec U42 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a21) (the "References" page's "More Actions"), spec U43 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U43-funding.md#a14) (the "Funding" page's "More Actions"), spec U22 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U22-my-submissions.md#a6) (the "…" button above the "My Submissions" list; its review counter is reported apart)
-- **Checked** 2026-10-02, the "Author Response" table, the "References" and "Funding" pages and "My Submissions" 2026-10-04, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U53 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a11), spec U47 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a7) (the "Media" page's "More Actions"), spec U16 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a15) (the "Categories" tab's "More Actions"), spec U30 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U30-author-response-to-reviews.md#a9) (the journal review stage's "Author Response" table's "More Actions"), spec U42 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a21) (the "References" page's "More Actions"), spec U43 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U43-funding.md#a14) (the "Funding" page's "More Actions"), spec U22 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U22-my-submissions.md#a6) (the "…" button above the "My Submissions" list; its review counter is reported apart), spec U23 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U23-submissions-dashboard.md#a12) (the "…" button above the editorial "Submissions" list and the "Loaded" a screen reader hears; the dashboard's other codes are reported apart)
+- **Checked** 2026-10-02, the "Author Response" table, the "References" and "Funding" pages, "My Submissions" and the editorial "Submissions" dashboard 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -30,8 +30,11 @@ Actions" column headings "##common.moreActions##", and outside the
 "Users" tab each row's "…" menu too. Managers hear it on the "Users"
 tab's two tables and the "Categories" tab; editors on a publication's
 "Media", "References" and "Funding" pages and a journal review round's
-"Author Response" table; anyone on "My Submissions", on the "…" button
-above the list.
+"Author Response" table; anyone on "My Submissions", and managers and site administrators on
+the editorial "Submissions" list, on the "…" button above the list.
+On the editorial "Submissions" list, everyone who uses it hears
+"##common.loaded##" where English says "Loaded", each time the list
+reloads on choosing a view, searching, filtering, sorting or paging.
 
 The rest of the tab is French, and its buttons and menus still work, so
 a manager can get through by switching the interface to English.
@@ -40,9 +43,9 @@ The fix covers French (Canada) only: its missing texts, entered on
 PKP's Weblate by the French (Canada) translators or a developer, or
 committed as the tried diff, with no code change. Every journal, press
 and preprint server that offers French (Canada) shows these codes. The
-same five tab texts are also missing in 49 other languages, and the
-"More Actions" name in 36; French (France) is not among them, as it
-has all of them. Those languages are for their translators and are not
+same five tab texts are also missing in 49 other languages, the
+"More Actions" name in 36 and the "Loaded" notice in 38; French
+(France) is not among them, as it has all of them. Those languages are for their translators and are not
 counted in this report's effort.
 
 ## Impact
@@ -55,8 +58,11 @@ counted in this report's effort.
   time they open the users list or invite someone. Also screen-reader
   users working in French (Canada): managers on the settings lists'
   hidden column headings, editors on the "…" menus and column headings
-  of the publication pages and the "Author Response" table, and anyone
-  on the "…" button above their "My Submissions" list.
+  of the publication pages and the "Author Response" table, anyone
+  on the "…" button above their "My Submissions" list, managers and
+  site administrators on the "…" button above the editorial
+  "Submissions" list, and everyone who uses that list on its loading
+  notice.
 - **Way round.** Switch the interface to English.
 
 Low: labels show as codes in one language while every task still gets
@@ -122,8 +128,11 @@ Users list columns:    NOM  COURRIEL  RÔLES  ##USERACCESS.TABLEHEADER.STARTDATE
 
 The columns are upper-cased by the page's style, so the codes show in
 capitals. To a screen reader the last column of both tables is also
-"##common.moreActions##". No request failed and no script error showed.
-The same page in English shows English labels throughout.
+"##common.moreActions##". Read in the code, not recorded by the walk:
+as soon as the tab opens, and after each search or page, a screen
+reader also hears "##common.loaded##" (Reach). No request failed and no
+script error showed. The same page in English shows English labels
+throughout.
 
 "Media" page (`main` only):
 
@@ -169,6 +178,43 @@ On screen, the page also shows codes for its own texts: the heading
 "##publication.mediaFiles.add##". Those are outside this report (Cause,
 Reach). In English, both names read "More Actions".
 
+Editorial "Submissions" dashboard (`main` and 3.5):
+
+Preconditions:
+
+- The same dataset.
+
+11. Sign in as `dbarnes` and open "Submissions"
+    (`/index.php/publicknowledge/en/dashboard/editorial`).
+12. Open the menu under the initials and, under "Change Language",
+    choose "français". The dashboard reopens in French.
+13. In the side menu, choose "Soumissions actives". With a screen
+    reader, listen to what it says once the list has loaded. (The
+    notice comes when the view changes, here from "Assigned to me";
+    the page's first load announces nothing.)
+14. With a screen reader, read the name of the "…" button above the
+    list. Press it, read its menu, and press Escape.
+15. Type the ID of a listed submission (OJS "12", OMP "17", OPS "1") in
+    the list's search box ("Rechercher des soumissions, des
+    identifiants, des auteurs ou autrices, etc.") and press Enter.
+    Listen again once the list has loaded.
+
+**Expected.** "Chargé" (pkp-lib's French (France) text) at steps 13 and
+15, and "Plus d'actions" for the button and its menu at step 14, as the
+list's heading and buttons read French ("Soumissions actives",
+"Filtres", "Afficher").
+
+**Observed.** On all three applications:
+
+```
+Steps 13 and 15, the screen reader:  ##common.loaded##
+Step 14, the "…" button and menu:    ##common.moreActions##
+Step 14, its one entry:              Supprimer les soumissions incomplètes
+```
+
+In English the same steps read "Loaded" and "More Actions". The list's
+other codes are outside this report (Cause, Reach).
+
 ## Cause
 
 pkp-lib's French (Canada) translation has no text for these keys.
@@ -180,7 +226,8 @@ on. `locale/fr_CA/userAccess.po` holds one of its three texts ("Nom"),
 leaving out `userAccess.search` and `userAccess.tableHeader.startDate`.
 `locale/fr_CA/user.po` lacks `user.disabledModal.title`,
 `user.disabledModal.description` and `user.enabledModal.title`, and
-`locale/fr_CA/common.po` lacks `common.moreActions`.
+`locale/fr_CA/common.po` lacks `common.moreActions` and
+`common.loaded`.
 
 `Locale::translate()` (`lib/pkp/classes/i18n/Locale.php`) does not fall
 back to another language for a missing text, so the page prints
@@ -202,7 +249,10 @@ The French (Canada) files were created on Weblate on 2026-09-23:
 merged into `stable-3_5_0` in 25182919bf. `userAccess.po` received
 "Nom" the same day; `invitation.po` is still a header only. pkp-lib's
 French (France) files have 120 of the 121 invitation texts and all
-three of `userAccess.po`.
+three of `userAccess.po`. `common.loaded` came with the first
+submissions dashboard
+([ad14de61fa](https://github.com/pkp/pkp-lib/commit/ad14de61fa5d283dae1a93269310c942169d52d9),
+`pkp/pkp-lib#8880`, 2023-05-02) and no French (Canada) file has held it.
 
 Reach:
 
@@ -238,11 +288,11 @@ Reach:
   review stage has, and the "…" button above the "My Submissions" list,
   which every user of that list gets, whatever their role (each walked
   on `main` without the fix, the "Users" tab and "My Submissions" on 3.5
-  too). The same button above the editorial "Submissions" dashboard,
-  shown to managers and site administrators, takes the same text (read
-  in the code, `DashboardControlBulkActions.vue` and
-  `useDashboardBulkDelete.js`'s `bulkDeleteIsAvailableForUser`; not
-  walked; spec U23's). The "Categories" tab's, the "References"
+  too). The same button above the editorial "Submissions" list
+  (`DashboardControlBulkActions.vue`), shown to managers and site
+  administrators (`useDashboardBulkDelete.js`'s
+  `bulkDeleteIsAvailableForUser`), reads the same code (walked on
+  `main` and 3.5, all three applications; spec U23's). The "Categories" tab's, the "References"
   and "Funding" pages' and the "Author Response" table's other codes are
   texts new on `main` awaiting translation, outside this report; on 3.5
   the older categories table is French throughout (walked).
@@ -254,13 +304,24 @@ Reach:
   (2026-05-06); no language has them yet because Weblate translates
   `stable-3_5_0`, which does not hold them, so they are not this
   report's.
+- To a screen reader, `common.loaded` (`main` and 3.5, all three
+  applications): ui-library's `useAnnouncer()` writes it into the
+  page's live region (`Announcer.vue`, `#announcer`) each time a list
+  has loaded, in `dashboardPageStore.js` (the editorial "Submissions"
+  list, "My Submissions" and the reviewer's list, on a change of view,
+  search, filter, sort or page, not on the page's first load),
+  `UserAccessManagerStore.js` (the "Users" tab,
+  on arrival and on each search or page), `UserInvitationManagerStore.js`
+  and `AcceptInvitationPageStore.js`. Heard on the editorial
+  "Submissions" list (walked); the others read in the code.
 - Other languages (code, `main`), for their translators: the five
   texts of step 4 are missing in 50 of pkp-lib's 70 other languages,
   French (Canada) included (Catalan, Greek, Spanish (Mexico), Italian,
   Russian and Chinese among them), and partly in Polish; 19 have them
   all, French (France) among them. `common.moreActions` is missing in
   37 of the 70, French (Canada) included, and present in French
-  (France).
+  (France); `common.loaded` is missing in 39 of the 70, French (Canada)
+  included, and present in French (France).
 - Not this fault:
   - The row button's name `##userAccess.management.options##`, a key no
     language defines (spec U53
@@ -279,8 +340,14 @@ Reach:
     pages' step list for a screen reader, which no language defines
     (a code in English too).
   - Codes in the page's frame on every editorial page (`common.help`,
-    `editor.submission.searchGlobal`, `navigation.content`,
-    `common.loaded`), which belong to other screens.
+    `editor.submission.searchGlobal`, `navigation.content`), which
+    belong to other screens.
+  - The editorial "Submissions" list's other codes: an accepted
+    reviewer's indicator (the report "In French (Canada), an author's
+    "My Submissions" list shows a code instead of the review counter")
+    and a press's "Assigned To Editor" filter (the report "In French
+    (Canada), a press's catalog, book and chapter pages and Roles list
+    show codes, even for editors' names").
 
 ## Proposed fix
 
@@ -295,11 +362,11 @@ not in the diff). The diff's paths start at the application root
 
 Part 1 goes in four components of Weblate's `pkp-lib` project, French
 (Canada): `invitation`, `useraccess`, `user` and `common`. The diff
-holds 126 texts, each copied from pkp-lib's French (France) file of the
+holds 127 texts, each copied from pkp-lib's French (France) file of the
 same name: the 120 of `invitation.po` that French (France) has, each
 written once, `userAccess.search` and `userAccess.tableHeader.startDate`, the
-three disable and enable window texts of `user.po`, and
-`common.moreActions`. The 120 include `invitation.management.options`,
+three disable and enable window texts of `user.po`,
+`common.moreActions` and `common.loaded` ("Chargé"). The 120 include `invitation.management.options`,
 the name of an Invitations row's "…" button:
 
 ```diff
@@ -334,7 +401,13 @@ its description line, which is part 2's. The English tab, window and
 page read the same with the diff in and out. On the "Funding" page the
 funders list's hidden last column and its row's "…" button read "Plus
 d'actions" with the diff, while the row menu kept "Modifier" and
-"Supprimer" and the English names stayed "More Actions".
+"Supprimer" and the English names stayed "More Actions". On the
+editorial "Submissions" list (steps 11 to 15) the screen reader heard
+"Chargé" and the "…" button and its menu were named "Plus d'actions"
+on all three applications; the English list read "Loaded" and "More
+Actions", and the filters' labels and, on a journal and a press, a
+completed review's indicator read the same French, with the diff in and
+out.
 
 Part 2, not in the tried diff: 18 of the invitation texts are each
 application's own (`locale/en/invitation.po` of OJS, OMP and OPS):
@@ -542,3 +615,28 @@ pkp-lib's tried as a diff.
   pkp/datasets 1a5552c: on all three applications of both lines the
   button is named `##common.moreActions##` in French and "More Actions"
   in English; its menu reads "Supprimer les soumissions incomplètes".
+- Kept script for the editorial "Submissions" list (spec U23 A12,
+  steps 11 to 15):
+  [`shared/playwright/checks/issues/editorial-dashboard-french-raw-keys/walk.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/editorial-dashboard-french-raw-keys/walk.js)
+  with its
+  [`lib.js`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/editorial-dashboard-french-raw-keys/lib.js),
+  on an install freshly loaded from the default dataset (on OJS and OMP
+  it first has `phudson` accept a review request, for the indicator
+  reported apart): `dbarnes` opens "Submissions", chooses "français",
+  "Soumissions actives", reads the live region, the "…" button and its
+  menu, the "Filtres" panel, searches the list and reads the live region
+  again, then takes the same steps in English:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/editorial-dashboard-french-raw-keys/walk.js`
+  (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5; `MODE=nb` in front
+  reads the list in English and French and changes nothing, the
+  neighbour check). Walked 2026-10-04 on `main` (OJS ff004d0973, OMP
+  3b0ecf794c, OPS c8af945bb7) and `stable-3_5_0` (OJS c1cee76b95, OMP
+  9c5e24246c, OPS 38b61882d3), pkp/datasets 1a5552c, with the same
+  codes on both lines. The fix was tried on `main` together with the
+  diff of the "My Submissions" review counter report (on OMP also that
+  of the press's French texts report), the diffs joined in one file and
+  applied with `node bin/try-fix.js apply`, one application at a time:
+  the script on a
+  fresh install, `MODE=nb` with the diffs in, `revert`, and `MODE=nb`
+  again. The live region was read from the page's markup
+  (`#announcer`), not with a screen reader.

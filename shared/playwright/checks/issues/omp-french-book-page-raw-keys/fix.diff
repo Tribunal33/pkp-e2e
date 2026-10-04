@@ -1,3 +1,14 @@
+--- a/locale/fr_CA/editor.po
++++ b/locale/fr_CA/editor.po
+@@ -214,7 +214,7 @@
+ msgstr ""
+ 
+ msgid "editor.submissions.assignedTo"
+-msgstr ""
++msgstr "Assignée au,à la rédacteur-trice"
+ 
+ #~ msgid "editor.pressSignoff"
+ #~ msgstr "Fermeture de session de la presse"
 --- a/locale/fr_CA/locale.po
 +++ b/locale/fr_CA/locale.po
 @@ -49,7 +49,7 @@
