@@ -1,0 +1,136 @@
+--- a/lib/pkp/api/v1/reviewers/suggestions/formRequests/AddReviewerSuggestion.php
++++ b/lib/pkp/api/v1/reviewers/suggestions/formRequests/AddReviewerSuggestion.php
+@@ -16,7 +16,8 @@
+ namespace PKP\API\v1\reviewers\suggestions\formRequests;
+ 
+ use APP\core\Application;
+-use Illuminate\Database\Query\Builder;
++use Closure;
++use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+ use Illuminate\Validation\Rule;
+ use Illuminate\Foundation\Http\FormRequest;
+ use PKP\submission\reviewer\suggestion\ReviewerSuggestion;
+@@ -81,8 +82,7 @@
+             'email' => [
+                 'required',
+                 'email',
+-                Rule::unique((new ReviewerSuggestion)->getTable())
+-                    ->where(fn (Builder $query) => $query->where('submission_id', [$this->route('submissionId')])),
++                $this->uniqueEmailRule(),
+             ],
+             'affiliation' => [
+                 'required',
+@@ -100,6 +100,28 @@
+     }
+ 
+     /**
++     * The email address may be suggested only once per submission, in any letter case
++     */
++    protected function uniqueEmailRule(): Closure
++    {
++        return function (string $attribute, mixed $value, Closure $fail): void {
++            if (is_string($value) && $this->suggestionsWithEmail($value)->exists()) {
++                $fail(__('validator.unique', ['attribute' => $attribute]));
++            }
++        };
++    }
++
++    /**
++     * The submission's suggestions that carry the email address
++     */
++    protected function suggestionsWithEmail(string $email): EloquentBuilder
++    {
++        return ReviewerSuggestion::query()
++            ->withSubmissionIds((int) $this->route('submissionId'))
++            ->withEmail($email);
++    }
++
++    /**
+      * Prepare the data for validation.
+      */
+     protected function prepareForValidation(): void
+--- a/lib/pkp/api/v1/reviewers/suggestions/formRequests/EditReviewerSuggestion.php
++++ b/lib/pkp/api/v1/reviewers/suggestions/formRequests/EditReviewerSuggestion.php
+@@ -15,10 +15,9 @@
+ 
+ namespace PKP\API\v1\reviewers\suggestions\formRequests;
+ 
+-use Illuminate\Database\Query\Builder;
++use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+ use Illuminate\Http\Response;
+ use Illuminate\Http\Exceptions\HttpResponseException;
+-use Illuminate\Validation\Rule;
+ use PKP\submission\reviewer\suggestion\ReviewerSuggestion;
+ use PKP\API\v1\reviewers\suggestions\formRequests\AddReviewerSuggestion;
+ 
+@@ -39,9 +38,7 @@
+             'email' => [
+                 'required',
+                 'email',
+-                Rule::unique((new ReviewerSuggestion)->getTable())
+-                    ->ignore($this->route('suggestionId'), (new ReviewerSuggestion)->getKeyName())
+-                    ->where(fn (Builder $query) => $query->where('submission_id', [$this->route('submissionId')])),
++                $this->uniqueEmailRule(),
+             ],
+             'affiliation' => [
+                 'required',
+@@ -59,6 +56,17 @@
+     }
+ 
+     /**
++     * @copydoc AddReviewerSuggestion::suggestionsWithEmail()
++     *
++     * The suggestion being edited may keep its own address.
++     */
++    protected function suggestionsWithEmail(string $email): EloquentBuilder
++    {
++        return parent::suggestionsWithEmail($email)
++            ->where((new ReviewerSuggestion)->getKeyName(), '!=', (int) $this->route('suggestionId'));
++    }
++
++    /**
+      * Handle a passed validation attempt.
+      */
+     protected function passedValidation(): void
+--- a/lib/pkp/classes/submission/reviewer/suggestion/ReviewerSuggestion.php
++++ b/lib/pkp/classes/submission/reviewer/suggestion/ReviewerSuggestion.php
+@@ -270,11 +270,12 @@
+     }
+ 
+     /**
+-     * Scope a query to only include reviewer suggestions with given email address
++     * Scope a query to only include reviewer suggestions with given email address,
++     * compared case-insensitively as users' email addresses are (see PKP\user\DAO::getByEmail())
+      */
+     public function scopeWithEmail(Builder $query, string $email): Builder
+     {
+-        return $query->where('email', $email);
++        return $query->whereRaw('LOWER(email) = LOWER(?)', [$email]);
+     }
+ 
+     /**
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
+@@ -413,11 +413,17 @@
+         if ($this->reviewerSuggestion?->hasExistingReviewerRole
+             && $this->reviewerSuggestion->existingUser->getId() == $reviewerId) {
+ 
+-            $this->reviewerSuggestion->approveAndAttachReviewer(
+-                Carbon::now(),
+-                $reviewerId,
+-                $currentUser->getId()
+-            );
++            // The same person may be suggested more than once (the same address in another letter
++            // case): approve every pending suggestion of theirs on the submission, not only this one
++            $approvedAt = Carbon::now();
++            $suggestions = ReviewerSuggestion::query()
++                ->withSubmissionIds([$this->getSubmission()->getId()])
++                ->withApproved(false)
++                ->withEmail($this->reviewerSuggestion->email)
++                ->get();
++            foreach ($suggestions as $suggestion) {
++                $suggestion->approveAndAttachReviewer($approvedAt, $reviewerId, $currentUser->getId());
++            }
+         }
+ 
+         return $reviewAssignment;

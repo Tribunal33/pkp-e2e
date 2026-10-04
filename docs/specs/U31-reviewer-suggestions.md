@@ -555,6 +555,11 @@ Left out of the scenarios above, by reason:
     assert the help under "Reasons for suggesting reviewer" in "Add Reviewer
     Suggestion" reads "mention if there are any potential conflicts of
     interest"
+  - the guard for A6 (issue report
+    `docs/issues/U31-A6-reviewer-suggestion-same-address-other-case.md`): in
+    the wizard, add a suggestion and then the same address in other
+    capitals, and assert the second is refused with "The email has already
+    been taken."
 - **Nothing new to test**:
   - assigned Section Editor, Guest Editor and Site Administrator (the Journal Manager's offer, scenarios 2 and 3)
   - Reviewer and Reader (no screen offers them anything)
@@ -580,7 +585,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | The Funding Coordinator gets an error dialog on the stage instead of the panel | 🐞 | user-visible | — |
 | [A5](#a5) | A Funding coordinator is offered "Add Reviewer" on a suggested person without an account, then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | The same address typed in another case is accepted as a second suggestion | 🐞 | minor | — |
+| [A6](#a6) | A reviewer suggested twice in other capitals stays pending after being added, and adding them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | The default reviewer-suggestion guidance authors read on submission misspells "valuable" as "valueable" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | In Add Reviewer's suggestions list, screen readers hear every "Select Reviewer" button as "Select undefined" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After an editor adds a suggested reviewer in the Add Reviewer window, the suggestions list keeps an empty row | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -656,12 +661,23 @@ refusal (read in the code, not walked). It needs "Reviewer Suggestion at
 Submission" switched on. Basis: probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — The same address in another case is accepted as a second suggestion** · 🐞 · minor.
-An author adds a suggestion and then another with the same address typed
-in capitals. The author expects the refusal "The email has already been
-taken." and instead gets a second entry: the two addresses differ only in
-case, and the check compares them letter for letter.
-Basis: probe. <sup>f-a6</sup>
+**A6 — A reviewer suggested twice in other capitals stays pending after being added, and adding them again fails** · 🐞 · medium · crash: server.
+An author suggesting reviewers while submitting adds a person, then adds
+them again with the address typed in other capitals
+("Kay.Suggested@Mailinator.com" after "kay.suggested@mailinator.com").
+The same address typed exactly is refused with "The email has already
+been taken."; this one is accepted as a second entry for the same
+person. The editors then see the person twice in "Reviewers Suggested by
+Author", with nothing to tell the two apart. Once an editor adds the
+person as a reviewer from one entry, the other stays in the panel as a
+pending suggestion for good: its "Add Reviewer" opens on the person's
+new account, and pressing "Add Reviewer" there fails on the server with
+no message and the window left open. No screen removes the entry. It
+happens on journals and presses whose database is PostgreSQL. The same
+stuck entry follows from a single suggestion whose address differs only
+in capitals from a reviewer's existing account, once the editor adds
+that reviewer through the Add Reviewer window's list of suggestions.
+Basis: probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — The default reviewer-suggestion guidance authors read on submission misspells "valuable" as "valueable"** · 🐞 · low.
@@ -882,6 +898,7 @@ Issue report: [pkp-e2e#849](https://github.com/jardakotesovec/pkp-e2e/issues/849
 
 <a id="fn-f-a6"></a>
 **f-a6** — `AddReviewerSuggestion::rules()`'s `Rule::unique` on `reviewer_suggestions` is a plain SQL equality on the stored `email`, case-sensitive on the test installs' Postgres (a MySQL collation may fold case); nothing lower-cases the input. Live-probed 2026-09-06 (note b), OJS and OMP: "KAY.…@MAIL.TEST" saved beside "kay.…@mail.test" on the same draft.
+Issue report: [docs/issues/U31-A6-reviewer-suggestion-same-address-other-case.md](../issues/U31-A6-reviewer-suggestion-same-address-other-case.md).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/pkp/locale/en/default.po`, `default.submission.step.reviewerSuggestions`: "…provide valueable input for the editorial team…", copied into every new context's `reviewerSuggestionsHelp` by `I4787_AddReviewSuggestionHelp`. Live-probed 2026-09-06 (note c), OJS and OMP, on the step and in the "For Reviewer Suggestion" box.
