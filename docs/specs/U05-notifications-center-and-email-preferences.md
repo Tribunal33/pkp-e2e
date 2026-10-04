@@ -1958,7 +1958,7 @@ pressing the sentence and the title alike; `dateRead` was set (no badge
 afterwards, the row read). OJS and OMP land on
 `dashboard/editorial?workflowSubmissionId=<id>…` with the workflow panel
 open. Not seen on the discussion or "published" tasks; same redirect.
-Issue report: [docs/issues/U05-OPS3-ops-task-link-workflow-stage-not-specified.md](../issues/U05-OPS3-ops-task-link-workflow-stage-not-specified.md).
+Issue report: [pkp-e2e#847](https://github.com/jardakotesovec/pkp-e2e/issues/847) ([docs/issues/U05-OPS3-ops-task-link-workflow-stage-not-specified.md](../issues/U05-OPS3-ops-task-link-workflow-stage-not-specified.md)).
 
 ## Reference — entry points & surfaces
 
