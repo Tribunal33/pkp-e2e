@@ -1800,7 +1800,7 @@ fires the list request with no ordering parameter and the rows revert,
 while the address keeps `sortColumn`/`sortDirection` unchanged; reloading
 that address re-applied the sort. The list client is shared across the
 apps (pin evidence in fn-a), so the behavior is not marked per-app.
-Issue report: [docs/issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md](../issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md).
+Issue report: [pkp-e2e#906](https://github.com/jardakotesovec/pkp-e2e/issues/906) ([docs/issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md](../issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md)).
 
 <a id="fn-a6"></a>
 **a6 — A6 evidence.** Live-probed 2026-08-26 (OJS + OMP, same string on
