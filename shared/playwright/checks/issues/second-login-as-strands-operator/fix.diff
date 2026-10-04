@@ -1,0 +1,39 @@
+--- a/lib/pkp/classes/security/Validation.php
++++ b/lib/pkp/classes/security/Validation.php
+@@ -492,8 +492,8 @@
+         int $currentUserId,
+         ?int $contextId = null
+     ): bool {
+-        // prevent self-login
+-        if ($targetUserId === $currentUserId) {
++        // prevent self-login, and a second Login As while one is already active
++        if ($targetUserId === $currentUserId || self::loggedInAs()) {
+             return false;
+         }
+         return self::getAdministrationLevel($targetUserId, $currentUserId, $contextId) === self::ADMINISTRATION_FULL;
+--- a/lib/pkp/classes/user/maps/Schema.php
++++ b/lib/pkp/classes/user/maps/Schema.php
+@@ -273,6 +273,11 @@
+             return false;
+         }
+ 
++        // no second Login As while one is already active
++        if (Validation::loggedInAs()) {
++            return false;
++        }
++
+         $isSiteAdmin = (bool) ($auxiliaryData['isSiteAdmin'] ?? Validation::isSiteAdmin());
+         if ($isSiteAdmin) {
+             return true;
+--- a/lib/pkp/classes/core/PKPSessionGuard.php
++++ b/lib/pkp/classes/core/PKPSessionGuard.php
+@@ -113,7 +113,8 @@
+         $auth = app()->get('auth'); /** @var \PKP\core\PKPAuthManager $auth */
+ 
+         $this->session->put([
+-            'signedInAs' => $this->getUserId(),
++            // keep the original account when already signed in as another user, so "Logout as" returns to it
++            'signedInAs' => $this->session->get('signedInAs') ?: $this->getUserId(),
+             'password_hash_'.$auth->getDefaultDriver() => $user->getPassword(),
+         ]);
+ 
