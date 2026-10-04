@@ -1,0 +1,11 @@
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -492,7 +492,7 @@
+ 
+ msgid "submission.citations.structured.citationsMetadataLookup.description"
+ msgstr ""
+-"Structuring and Metadata Lookup is enabled for this Journal. "
++"Structuring and Metadata Lookup is enabled. "
+ "The system will process your references and retrieve DOIs and other metadata from external sources. "
+ "This may take some time, but you can continue working on your submission and return to this page later to view the updated structured citations. "
+ 

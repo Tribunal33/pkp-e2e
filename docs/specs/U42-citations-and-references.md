@@ -877,6 +877,7 @@ Left out of the scenarios above, by reason:
     `docs/issues/U46-A5-ordering-arrows-unnamed.md`): in ordering mode each
     data citation row's up and down arrows carry names that say the
     direction and the citation
+  - the guard for A4 (issue report `docs/issues/U42-A4-press-server-lookup-text-says-journal.md`): with "References Metadata Lookup" on, the References page of a press and of a preprint server describes the lookup without calling the context a journal
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -974,7 +975,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A pasted reference already in the list is dropped, and the page still says "Saved" | 🐞 | minor | — |
 | [A3](#a3) | "Search references here" keeps rows whose visible text lacks the typed word | 🐞 | minor | — |
-| [A4](#a4) | The lookup text says "this Journal" on a press or a preprint server | 🐞 | minor | — |
+| [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The lookup's progress box counts structured references only | 🐞 | minor | — |
 | [A7](#a7) | A DOI in a reference typed while submitting is not kept when lookup is off | 🐞 | latent | — |
 | [A8](#a8) | A new data citation has no place in the order: none before an order is saved, the top after one | 🐞 | minor | — |
@@ -1019,11 +1020,15 @@ at all.
 Basis: probe, 2026-09-24. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The lookup text says "this Journal" on a press or a preprint server** · 🐞 · minor.
-With lookup on, the References page of a press or a preprint server reads
-"Structuring and Metadata Lookup is enabled for this Journal." The app's own
-word (press, server) is expected.
-Basis: probe, 2026-09-24. <sup>f-a4</sup>
+**A4 — On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal"** · 🐞 · low.
+With "References Metadata Lookup" on, the References page of a press or
+a preprint server reads "Structuring and Metadata Lookup is enabled for
+this Journal." Editors and authors who open a submission's "References"
+page see the sentence above the "Add" box. Nothing else on the page is
+affected, and lookup itself works the same. It shows only once a manager
+has ticked "Enable references structuring and metadata lookup" (Settings
+› Workflow › "Metadata"), which is off in a new press or server.
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A reference whose lookup failed for good looks like one still waiting** · ❓ · minor.
@@ -2009,6 +2014,7 @@ note e; none of the four strings appeared.
 **f-a4 — A4 evidence.** `submission.citations.structured.citationsMetadataLookup.description`
 exists only in lib/pkp's `locale/en/submission.po`; neither OMP's nor OPS's
 `locale/en` overrides it. Live-probed 2026-09-24: q12.
+Issue report: [docs/issues/U42-A4-press-server-lookup-text-says-journal.md](../issues/U42-A4-press-server-lookup-text-says-journal.md).
 
 <a id="fn-f-a5"></a>
 **f-a5 — A5 evidence.** Notes h and i: `CitationLookupJob::failed()` stores
