@@ -1,0 +1,10 @@
+--- a/lib/pkp/controllers/grid/settings/user/form/UserDetailsForm.php
++++ b/lib/pkp/controllers/grid/settings/user/form/UserDetailsForm.php
+@@ -173,6 +173,7 @@
+                 'biography' => $user->getBiography(null), // Localized
+                 'interests' => Repo::userInterest()->getInterestsForUser($user),
+                 'locales' => $user->getLocales(),
++                'mustChangePassword' => (bool) $user->getMustChangePassword(),
+             ];
+             $data['canCurrentUserGossip'] = Repo::user()->canCurrentUserGossip($user->getId());
+             if ($data['canCurrentUserGossip']) {
