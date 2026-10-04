@@ -715,6 +715,12 @@ Left out of the scenarios above, by reason:
     tab ([A3](#a3); Rule 6): the guard the issue report
     (`docs/issues/U02-A3-site-register-email-optout-not-kept.md`)
     proposes, once fixed
+  - on a press site's site-wide Register page, the press's privacy
+    consent line off-screen until "Reader" is ticked under it and gone
+    again when it is unticked ([OMP2](#omp2); scenario 6): the guard the
+    issue report
+    (`docs/issues/U02-OMP2-press-site-register-consent-shown-early.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -723,7 +729,6 @@ Left out of the scenarios above, by reason:
   - A7 (Reader granted though closed to self-registration; Rule 7)
   - A4 (closed journals listed with no roles under them; Rule 8)
   - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
-  - OMP2 (on a press site every press's consent line is shown before a role is ticked; scenario 6 marks it)
   - OPS1 (a preprint-server site's page asks for reviewing interests with no reviewer role)
 - **No seed**:
   - every journal closed: the site-level page closes and the site Login drops the link (Rule 2)
@@ -760,7 +765,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | minor | — |
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OMP2](#omp2) | On a press site, every press's consent line is on screen before any role is ticked | 🐞 | minor | — |
+| [OMP2](#omp2) | On a press site's site-wide Register page, each press's privacy consent box shows before any role is ticked | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS1](#ops1) | A preprint-server site's Register page asks for reviewing interests though no reviewer role exists, and the profile never shows them | 🐞 | minor | — |
 | [A5](#a5) | The Register page's "Login" link aims at the profile's Roles tab, but sign-in lands as usual | ❓ | minor | — |
 | [A7](#a7) | A journal-level registration grants Reader even when the Reader role is closed to self-registration | ❓ | latent | — |
@@ -906,15 +911,22 @@ can type one only when the site does not host exactly one press.
 Basis: probe, 2026-10-04. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
-**OMP2 — Press consent lines shown before any role is ticked** · 🐞 · minor.
-On a press site's site-level Register page, the line "Yes, I agree to have
-my data collected and stored according to this press's privacy statement."
-is on screen under every press that has a statement from the moment the
-page opens, ticked role or not, where a journal or preprint-server site
-keeps each line hidden until a role of that journal is ticked. The visitor
-is shown consent boxes for presses they never chose; the refusal itself
-(Rule 5) is the same on every app.
-Basis: probe. <sup>[f-omp2](#fn-omp2)</sup>
+**OMP2 — On a press site's site-wide Register page, each press's privacy consent box shows before any role is ticked** · 🐞 · low.
+On the site-wide Register page of a press installation, the line "Yes, I
+agree to have my data collected and stored according to this press's
+privacy statement." is on screen under every press from the moment the
+page opens, before the visitor has ticked any role. Ticking and
+unticking a role under the press changes nothing. On a journal or
+preprint server site the line under each journal or server stays hidden
+until one of its roles is ticked, and goes again when the role is
+unticked.
+
+The visitor is asked to consent for presses they never chose, though
+the consent is only required for a press whose role is ticked.
+
+Every press shows the line unless its privacy statement has been
+emptied, since a new press gets a default one.
+Basis: probe, 2026-10-04. <sup>[f-omp2](#fn-omp2)</sup>
 
 ### OPS
 
@@ -1678,6 +1690,7 @@ statement: on OJS and OPS the line was at `left: -9999px` until "Reader" was
 ticked, then in view with the extra class; on OMP it was in normal flow
 before any tick and the class did not change on tick. Which OMP theme file
 lacks the toggle was not traced.
+Issue report: [pkp-e2e#838](https://github.com/jardakotesovec/pkp-e2e/issues/838) ([docs/issues/U02-OMP2-press-site-register-consent-shown-early.md](../issues/U02-OMP2-press-site-register-consent-shown-early.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note k: `userRegister.tpl` renders the
