@@ -1916,7 +1916,7 @@ answered 200, the form's "In Review" went 1 → 0, and the reviewer's step 3
 showed "For author and editor" and "For editor" instead of the questions.
 The count still read 1 before the "OK", so the window's save does the
 detaching. First seen 2026-09-05 by the earlier build of this spec.
-Issue report: [docs/issues/U29-A9-edit-review-drops-deactivated-form.md](../issues/U29-A9-edit-review-drops-deactivated-form.md).
+Issue report: [pkp-e2e#911](https://github.com/jardakotesovec/pkp-e2e/issues/911) ([docs/issues/U29-A9-edit-review-drops-deactivated-form.md](../issues/U29-A9-edit-review-drops-deactivated-form.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — Folded 2026-10-01 from the issue report's walk (Rule 18;
