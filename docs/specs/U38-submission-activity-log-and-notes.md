@@ -1223,7 +1223,7 @@ line. Live-probed 2026-09-24
 again (all three apps): the discussion's, "Notify"'s and "Assign"'s lines had
 an empty "User" while their "View Email" read "From:" the editor who sent
 them; the decision's email line named the editor.
-Issue report: [docs/issues/U38-A1-sent-email-lines-name-no-sender.md](../issues/U38-A1-sent-email-lines-name-no-sender.md).
+Issue report: [pkp-e2e#893](https://github.com/jardakotesovec/pkp-e2e/issues/893) ([docs/issues/U38-A1-sent-email-lines-name-no-sender.md](../issues/U38-A1-sent-email-lines-name-no-sender.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — Note d: `NewNoteForm` has no check on the text. Live-probed
@@ -1243,7 +1243,7 @@ does, and in a file's window the History search form
 (`eventLogFilterForm`), so that window never asks. Live-probed
 2026-09-24, all three apps: note td13; the file window did not ask on
 "Close", with notes or without, and asked on the tab switch.
-Issue report: [docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md), with A9 and A10.
+Issue report: [pkp-e2e#892](https://github.com/jardakotesovec/pkp-e2e/issues/892) ([docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md)), with A9 and A10.
 
 <a id="fn-a4"></a>
 **f-a4** — Note c. The header gate reads the active stage's roles, where
@@ -1258,7 +1258,7 @@ per notified editor. Live-probed 2026-09-24, OJS and OMP: after a
 Reviewer's "Submit Review" the line named "Eddie Editor" under "User";
 its "View Email" read "From:" "Site Admin" (the journal's contact) and
 "To:" that editor.
-Issue report: [docs/issues/U38-A5-review-complete-line-names-recipient.md](../issues/U38-A5-review-complete-line-names-recipient.md).
+Issue report: [pkp-e2e#894](https://github.com/jardakotesovec/pkp-e2e/issues/894) ([docs/issues/U38-A5-review-complete-line-names-recipient.md](../issues/U38-A5-review-complete-line-names-recipient.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Notes j, k. Live-probed 2026-09-24, OJS and OMP ("Submission
@@ -1289,7 +1289,7 @@ the typed text on a submission with notes, the next page change raised
 the browser's page-leave question (a `beforeunload`); after a close that
 asked and was answered "OK" (no note), leaving raised none. A file's
 window, whose close never asks (f-a3), did the same.
-Issue report: [docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md), with A3 and A10.
+Issue report: [pkp-e2e#892](https://github.com/jardakotesovec/pkp-e2e/issues/892) ([docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md)), with A3 and A10.
 
 <a id="fn-a10"></a>
 **f-a10** — On "OK", `TabHandler::tabsBeforeActivate()` triggers
@@ -1306,7 +1306,7 @@ Do you wish to continue without saving?", "Cancel" kept the window on
 raised no page-leave question, and "Notes" read "There are no notes to
 display." before and after. Control: the same switch, then "Notes"
 opened again before "Close": no question.
-Issue report: [docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md), with A3 and A9.
+Issue report: [pkp-e2e#892](https://github.com/jardakotesovec/pkp-e2e/issues/892) ([docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md)), with A3 and A9.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note o. Live-probed 2026-09-23 (the submission-files claim
