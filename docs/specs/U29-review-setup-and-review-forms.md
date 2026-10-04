@@ -944,7 +944,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | An "After Due Date" reminder is sent only to reviewers who were already reminded once, so with "Before Due Date" at "No reminder set" the after-due slider never sends (read from the code) | 🐞 | latent | — |
+| [A1](#a1) | Reviewers get no "After Due Date" reminder unless an earlier reminder was sent | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Saving a form item with a text type drops its "Response Options" without the warning the app carries for it | 🐞 | minor | — |
 | [OMP3](#omp3) | A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | Once a form carried by an open request is deactivated, the reviewer row's "Edit" window shows "None / Free Form Review", and "OK" there detaches the form and lowers its "In Review" count | 🐞 | minor | — |
@@ -962,14 +962,19 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — The after-due reminder needs an earlier reminder** · 🐞 · latent.
-The "Review Request Response - After Due Date" and "Review Submission -
-After Due Date" sliders read as independent clocks. They are not: the
-install sends an after-due reminder only when the assignment already
-carries a "Reminder" date, which the "Before Due Date" clock or an editor's
-"Send Reminder" stamps. A journal that sets only the after-due sliders gets
-no automatic reminder at all. Latent on the test installs, where the daily
-clock is off, so no screen shows it. Basis: code. <sup>f-a1</sup>
+**A1 — Reviewers get no "After Due Date" reminder unless an earlier reminder was sent** · 🐞 · high.
+A journal or press that sets "Review Request Response - After Due Date"
+or "Review Submission - After Due Date" expects a reminder to go out
+when a reviewer has not responded, or has not submitted, by the due
+date. No such reminder is ever sent to a reviewer who was not already
+reminded before the due date. Settings keeps showing "1 days after due
+date", and nobody is told that nothing went out. So with the two "Before
+Due Date" sliders at "No reminder set", the automatic reminders stop
+completely. Every journal and press that used reminders in 3.4 is in
+that state after upgrading to 3.5 or later, and so is a new install
+whose manager sets only the "After Due Date" sliders. Setting a "Before
+Due Date" reminder too, or reminding reviewers by hand before the due
+date, gets round it. Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Deactivating a form in use** · ❓ · minor.
@@ -1733,6 +1738,7 @@ scenario API cannot advance the clock and the task runner is off on the
 fleets, so the finding is read from the code and no screen shows it; a
 re-check needs a server whose scheduler runs. Since: the reminder rewrite that introduced the four
 sliders (pkp-lib 3.5).
+Issue report: [docs/issues/U29-A1-after-due-reminders-never-sent.md](../issues/U29-A1-after-due-reminders-never-sent.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — `ReviewFormGridHandler::deactivateReviewForm()` tests

@@ -1,0 +1,74 @@
+--- a/lib/pkp/classes/task/ReviewReminder.php
++++ b/lib/pkp/classes/task/ReviewReminder.php
+@@ -100,20 +100,21 @@
+                         // ACTION:-> we need to send BEFORE REVIEW REQUEST RESPONSE reminder
+                         $mailable = ReviewResponseRemindAuto::class;
+                     }
+-                } else {
+-                    // There has been a reminder already sent
+-                    // need to check should we sent a AFTER REVIEW REQUEST RESPONSE reminder
+-
+-                    $dateReminded = Carbon::parse($reviewAssignment->getDateReminded());
+-
+-                    if ($numDaysAfterReviewResponseReminderDue > 0 &&
+-                        $currentDate->gt($dateResponseDue) &&
+-                        $dateReminded->lt($dateResponseDue) &&
+-                        (int)abs($currentDate->diffInDays($dateResponseDue)) >= $numDaysAfterReviewResponseReminderDue) {
+-                    
+-                        // ACTION:-> we need to send AFTER REVIEW REQUEST RESPONSE reminder
+-                        $mailable = ReviewResponseRemindAuto::class;
+-                    }
++                }
++
++                // need to check should we sent a AFTER REVIEW REQUEST RESPONSE reminder:
++                // once, whether or not a reminder was sent before the due date
++                $dateReminded = $reviewAssignment->getDateReminded() === null
++                    ? null
++                    : Carbon::parse($reviewAssignment->getDateReminded());
++
++                if ($numDaysAfterReviewResponseReminderDue > 0 &&
++                    $currentDate->gt($dateResponseDue) &&
++                    ($dateReminded === null || $dateReminded->lt($dateResponseDue)) &&
++                    (int)abs($currentDate->diffInDays($dateResponseDue)) >= $numDaysAfterReviewResponseReminderDue) {
++
++                    // ACTION:-> we need to send AFTER REVIEW REQUEST RESPONSE reminder
++                    $mailable = ReviewResponseRemindAuto::class;
+                 }
+             } else {
+                 // REVIEW REQUEST has been responded
+@@ -129,20 +130,21 @@
+                         // ACTION:-> we need to sent a BEFORE REVIEW SUBMIT reminder
+                         $mailable = ReviewRemindAuto::class;
+                     }
+-                } else {
+-                    // There has been already sent a reminder after responding to REVIEW REQUEST
+-                    // need to check should we sent a AFTER REVIEW SUBMIT reminder
+-
+-                    $dateReminded = Carbon::parse($reviewAssignment->getDateReminded());
+-
+-                    if ($numDaysAfterReviewSubmitReminderDue > 0 &&
+-                        $currentDate->gt($dateDue) &&
+-                        $dateReminded->lt($dateDue) &&
+-                        (int)abs($currentDate->diffInDays($dateDue)) >= $numDaysAfterReviewSubmitReminderDue) {
+-                    
+-                        // ACTION:-> we need to send AFTER REVIEW SUBMIT reminder
+-                        $mailable = ReviewRemindAuto::class;
+-                    }
++                }
++
++                // need to check should we sent a AFTER REVIEW SUBMIT reminder:
++                // once, whether or not a reminder was sent before the due date
++                $dateReminded = $reviewAssignment->getDateReminded() === null
++                    ? null
++                    : Carbon::parse($reviewAssignment->getDateReminded());
++
++                if ($numDaysAfterReviewSubmitReminderDue > 0 &&
++                    $currentDate->gt($dateDue) &&
++                    ($dateReminded === null || $dateReminded->lt($dateDue)) &&
++                    (int)abs($currentDate->diffInDays($dateDue)) >= $numDaysAfterReviewSubmitReminderDue) {
++
++                    // ACTION:-> we need to send AFTER REVIEW SUBMIT reminder
++                    $mailable = ReviewRemindAuto::class;
+                 }
+             }
+ 
