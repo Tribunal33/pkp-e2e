@@ -621,6 +621,9 @@ Left out of the scenarios above, by reason:
   - the guard for A4 (issue report
     `docs/issues/U16-A6-A7-category-picture-not-link-alt-null.md`): a
     series' picture a link to its full-size version
+  - the guard for A9 (issue report
+    `docs/issues/U68-A9-catalog-old-search-address-not-found.md`): the
+    catalog's old search address opening the Search page with its words
 - **Nothing new to test**:
   - a signed-in user of any role, shown the same pages with the same
     books as the signed-out visitor (Actors row 1)
@@ -640,7 +643,6 @@ Left out of the scenarios above, by reason:
   - A7 (a press's category page, its featured books not set apart and
     no "New Releases"; Rule 14)
   - A8 (the press's pages and the "Browse" block in French; Rule 15)
-  - A9 (the catalog's old search address; Rule 2a)
   - A10 (a page number typed past the last page; Rules 5, 7)
   - A11 (every series inactive, the block's "Series" line with nothing
     under it; Rule 12)
@@ -683,7 +685,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A series' picture does not lead to its full size | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A press's category page never lists its new releases and never sets its featured books apart | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | In French the catalog pages and the "Browse" block show raw text codes | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | The catalog's old search address answers a not-found page | 🐞 | invisible | — |
+| [A9](#a9) | A reader on an old link to a press's catalog search gets "404 Not Found", not the Search page | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | With every series inactive, the "Browse" block shows the line "Series" with nothing under it | 🐞 | minor | — |
 | [A5](#a5) | The "Browse" block and the catalog's "Series:" links disagree about inactive and empty series | ❓ | minor | — |
 | [A6](#a6) | "Series position" orders compare the positions as text | ❓ | minor | — |
@@ -796,13 +798,15 @@ Expected: French throughout.
 Basis: probe, 2026-10-02. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — The catalog's old search address answers a not-found page** · 🐞 · invisible.
-Until January 2026 the press's address followed by "catalog/results"
-forwarded to the Search page, an address kept since 2020 for old links.
-The forwarding was removed, but the address is still listed among the
-catalog's pages, so it now answers a not-found page. No page links to it.
-Expected: the leftover removed, or the forwarding kept.
-Since: 2026-01-14 · Basis: probe, 2026-09-27; its start, commit. <sup>f-a9</sup>
+**A9 — A reader on an old link to a press's catalog search gets "404 Not Found", not the Search page** · 🐞 · low.
+A press's search box once sent readers to the press's address followed
+by "catalog/results", and links and bookmarks to that address still
+exist. Older releases forward it to the Search page. Now it answers a
+bare page that reads only "404 Not Found", with no menus and no link.
+
+To search, the reader has to shorten the address to the press's home
+page, open Search from there and type the search again.
+Since: 2026-01-14 · Basis: probe, 2026-10-04; its start, commit. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A page past the last one shows the full count and no books** · ❓ · minor.
@@ -1340,6 +1344,7 @@ pages/search instead", a redirect to `search`); `pages/catalog/index.php`
 still lists `results`, and `PKPPageRouter::route()` answers
 `NotFoundHttpException` for an op the handler lacks. Live-probed
 2026-09-27 (note td11): both addresses answer the bare 404 page.
+Issue report: [docs/issues/U68-A9-catalog-old-search-address-not-found.md](../issues/U68-A9-catalog-old-search-address-not-found.md).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note j: `page()` refuses page 1 and a missing or non-number

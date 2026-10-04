@@ -1,0 +1,24 @@
+--- a/pages/catalog/CatalogHandler.php
++++ b/pages/catalog/CatalogHandler.php
+@@ -204,6 +204,21 @@
+     }
+ 
+     /**
++     * Forward the catalog's old search address (OMP 3.2.0 and earlier) to the
++     * Search page, keeping the reader's search words.
++     *
++     * @deprecated Since OMP 3.2.1, use pages/search instead.
++     *
++     * @param array $args
++     * @param Request $request
++     */
++    public function results($args, $request)
++    {
++        $query = (string) $request->getUserVar('query');
++        $request->redirect(null, 'search', 'search', null, $query !== '' ? ['query' => $query] : null);
++    }
++
++    /**
+      * Serve the image for a category or series.
+      */
+     public function fullSize($args, $request)
