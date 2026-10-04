@@ -495,7 +495,7 @@ are the source; badges, Impact and Basis:
 | [A3](#a3) | A registry funder picked while the server cannot reach the registry errors and saves nameless until the install's registry copy gains it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | minor | — |
+| [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | "Require the author to add funder metadata" warns on the Review step without blocking the submission | ❓ | user-visible | — |
 | [A2](#a2) | Every publication version shows and edits the same funders list, though the screen presents funding per version | ❓ | minor | — |
 | [A6](#a6) | The typed-text suggestion looks like a registry match, so real funders get saved unlinked without anyone noticing | ❓ | user-visible | — |
@@ -656,7 +656,7 @@ from.
 Basis: probe. <sup>f-a12</sup>
 
 <a id="a14"></a>
-**A14 — In French the funders list and its panel show raw codes** · 🐞 · minor.
+**A14 — In French the funders list and its panel show raw codes** · 🐞 · low.
 With the interface in French (Canada), the funders list and the "Add
 Funder" / "Edit Funder" panel read raw codes where French words belong,
 on a journal, a press and a preprint server:
@@ -690,7 +690,7 @@ panel's fields ask for, though a funder still saves. The side-menu entry
 [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s
 codes, and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
-Basis: probe. <sup>f-a14</sup>
+Basis: probe, 2026-10-04. <sup>f-a14</sup>
 
 ### OPS
 
@@ -1177,6 +1177,7 @@ Funder" panel before and after the typed text was picked and in the
 header and as each row's "…" button name. The English control read
 "Funders", "Add Funder", "Funder Name", "No funders have been added."
 and the panel's English labels.
+Re-walked 2026-10-04 on main, all three apps (3.5 has no funders list). The list's hidden "More Actions" column header and each row's "…" button name, `common.moreActions`, a released text French (Canada) never received, joined [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)), low; the rest (`submission.funders*`, which came with `pkp/pkp-lib#12392`) are main-only texts with no report under the 2026-10-02 ruling on main-only locale keys.
 
 <a id="fn-f-ops1"></a>
 **f-ops1 — OPS1 evidence.** Live-probed 2026-08-28: the OPS submitting
