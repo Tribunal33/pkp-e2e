@@ -2073,7 +2073,7 @@ Issue report: [pkp-e2e#872](https://github.com/jardakotesovec/pkp-e2e/issues/872
 after a saved order (*Funding*, A7). Live-probed 2026-09-24 (the data
 citation added after a saved order): note m. Code read 2026-09-26 (the
 order before a save): note m; not yet seen out of order on screen.
-Issue report: [docs/issues/U42-A8-data-citation-added-after-order-goes-first.md](../issues/U42-A8-data-citation-added-after-order-goes-first.md).
+Issue report: [pkp-e2e#876](https://github.com/jardakotesovec/pkp-e2e/issues/876) ([docs/issues/U42-A8-data-citation-added-after-order-goes-first.md](../issues/U42-A8-data-citation-added-after-order-goes-first.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9 — A9 evidence.** `Context::getRequiredMetadata()` includes
