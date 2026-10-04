@@ -1963,7 +1963,7 @@ boxes on the OPS Unsubscribe page.
 2026-09-03 and 2026-09-04 on the OPS tab (every role driven) and on the OPS
 Unsubscribe page; the second comma sits outside the quotes, unlike the OJS
 and OMP rows.
-Issue report: [docs/issues/U05-OPS2-preprint-submitted-row-space-before-comma.md](../issues/U05-OPS2-preprint-submitted-row-space-before-comma.md).
+Issue report: [pkp-e2e#851](https://github.com/jardakotesovec/pkp-e2e/issues/851) ([docs/issues/U05-OPS2-preprint-submitted-row-space-before-comma.md](../issues/U05-OPS2-preprint-submitted-row-space-before-comma.md)).
 
 <a id="fn-ops3"></a>
 **f-ops3** — `TaskNotificationsGridHandler` `markRead` with `redirect=1`
