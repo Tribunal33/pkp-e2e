@@ -1,0 +1,21 @@
+--- a/lib/pkp/pages/dashboard/PKPDashboardHandler.php
++++ b/lib/pkp/pages/dashboard/PKPDashboardHandler.php
+@@ -43,6 +43,7 @@
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\authorization\PKPSiteAccessPolicy;
+ use PKP\security\Role;
++use PKP\security\Validation;
+ use PKP\submission\DashboardView;
+ use PKP\submission\Genre;
+ use PKP\submission\reviewAssignment\ReviewAssignment;
+@@ -115,6 +116,10 @@
+     public function authorize($request, &$args, $roleAssignments)
+     {
+         if (!$this->dashboardPage) {
++            // Which dashboard is home depends on the user's roles: a signed-out visitor signs in first
++            if (!$request->getUser()) {
++                Validation::redirectLogin();
++            }
+             $pkpPageRouter = $request->getRouter();  /** @var \PKP\core\PKPPageRouter $pkpPageRouter */
+             $pkpPageRouter->redirectHome($request);
+         }
