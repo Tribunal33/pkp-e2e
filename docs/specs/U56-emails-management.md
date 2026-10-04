@@ -1727,7 +1727,7 @@ value. Live-probed 2026-09-26, all three apps: note i.
 <a id="fn-f-a4"></a>
 **f-a4** — `ManageEmailsPage::openTemplate()`; see note m. Live-probed
 2026-09-26, all three apps.
-Issue report: [docs/issues/U56-A4-add-template-window-titled-edit-template.md](../issues/U56-A4-add-template-window-titled-edit-template.md).
+Issue report: [pkp-e2e#868](https://github.com/jardakotesovec/pkp-e2e/issues/868) ([docs/issues/U56-A4-add-template-window-titled-edit-template.md](../issues/U56-A4-add-template-window-titled-edit-template.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — `ManageEmailsPage::confirmRemoveTemplate()` replaces
