@@ -941,7 +941,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
-| [OJS1](#ojs1) | The LOCKSS and CLOCKSS pages print the License Terms under "Copyright" | 🐞 | minor | — |
+| [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its copyright box reads "Copyright notice" | 🐞 | minor | — |
 | [OMP2](#omp2) | A press's "Edit" under "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | minor | — |
 | [A1](#a1) | A new component lands at the top of the list, sharing first place with the first component | ❓ | minor | — |
@@ -1110,14 +1110,23 @@ Basis: test run. <sup>f-a13</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — The archiving pages print the License Terms as "Copyright"** · 🐞 · minor.
-On a journal with LOCKSS or CLOCKSS switched on, a reader of the LOCKSS
-and CLOCKSS permission pages expects the "Copyright" row to carry the
-journal's copyright notice. The row appears only once a "Copyright
-Notice" is saved on "Author Guidance", and then prints the License Terms
-of Settings › Distribution › "License", empty while those are unset; the
-copyright notice's own text appears on neither page.
-Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set** · 🐞 · low.
+On a journal with LOCKSS or CLOCKSS switched on, the journal's LOCKSS
+and CLOCKSS pages have a "Copyright" row that prints the journal's
+License Terms (Settings › Distribution › "License"). The row appears
+only while a "Copyright Notice" is saved on Settings › Workflow ›
+Submission › "Author Guidance", a separate text that submitting authors
+agree to.
+So a journal with License Terms and no Copyright Notice gets no
+"Copyright" row on either page. A journal with a Copyright Notice and no
+License Terms gets a "Copyright" row with nothing in it. The Copyright
+Notice's own text appears on neither page.
+Preservation goes on either way. The archiving software both networks
+use crawls from the page's links to the issues and reads nothing in its
+table, and LOCKSS accepts the journal by the permission sentence at the
+foot of the page, which is always there.
+The same fault: [Archiving & preservation](U67-archiving-preservation.md#a1).
+Basis: probe, 2026-10-04. <sup>f-ojs1</sup>
 
 ### OMP
 
@@ -1797,6 +1806,7 @@ home page; a press and a preprint server answer "404 Not Found" there.
 Live-probed 2026-09-27, OJS, two journals: no "Copyright" row without a
 copyright notice; an empty row once one was saved; the License Terms in
 it once those were saved on Settings › Distribution › "License".
+Issue report: [docs/issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md](../issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `locale/en/manager.po`:

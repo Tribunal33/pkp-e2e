@@ -536,6 +536,10 @@ are in the footnote.
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - a journal with License Terms and no Copyright Notice showing the
+    "Copyright" row with the License Terms on the LOCKSS and CLOCKSS
+    pages ([A1](#a1)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Description" set on Settings › Distribution › "Search Indexing",
     its text in the "Description" row (Settings bullet 6; Rule 10)
@@ -570,7 +574,7 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | The manifest's "Copyright" row prints the "License Terms", and only while a "Copyright Notice" exists | 🐞 | minor | — |
+| [A1](#a1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The manifest's "Rights" row prints an open-access sentence no settings screen shows or changes | 🐞 | minor | — |
 | [A3](#a3) | With the PN plugin installed but disabled, the PN tab asks for it to be installed and offers no way to enable it | 🐞 | latent | — |
 | [A4](#a4) | On a journal that requires sign-in, the manifest pages send the preservation network to the Login page | ❓ | minor | — |
@@ -578,15 +582,23 @@ an entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a1"></a>
-**A1 — The "Copyright" row prints the License Terms** · 🐞 · minor.
-A manager who reads the "Copyright" row of the LOCKSS or CLOCKSS page
-expects the journal's copyright statement. The row holds the "License
-Terms" of Settings › Distribution › "License" instead, and it shows only
-while the unrelated "Copyright Notice" of Settings › Workflow is set: a
-journal with License Terms and no Copyright Notice gets no row, and one
-with a Copyright Notice and no License Terms gets a "Copyright" row with
-nothing in it.
-Since: 2019-01-16, a date read from the code's history · Basis: probe, 2026-09-28. <sup>[f-a1](#fn-a1)</sup>
+**A1 — LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set** · 🐞 · low.
+On a journal with LOCKSS or CLOCKSS switched on, the journal's LOCKSS
+and CLOCKSS pages have a "Copyright" row that prints the journal's
+License Terms (Settings › Distribution › "License"). The row appears
+only while a "Copyright Notice" is saved on Settings › Workflow ›
+Submission › "Author Guidance", a separate text that submitting authors
+agree to.
+So a journal with License Terms and no Copyright Notice gets no
+"Copyright" row on either page. A journal with a Copyright Notice and no
+License Terms gets a "Copyright" row with nothing in it. The Copyright
+Notice's own text appears on neither page.
+Preservation goes on either way. The archiving software both networks
+use crawls from the page's links to the issues and reads nothing in its
+table, and LOCKSS accepts the journal by the permission sentence at the
+foot of the page, which is always there.
+The same fault: [Submission intake configuration](U58-submission-intake-configuration.md#ojs1).
+Since: 2019-01-16, a date read from the code's history · Basis: probe, 2026-10-04. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — The "Rights" row prints a text nobody can edit** · 🐞 · minor.
@@ -713,6 +725,7 @@ Code read 2026-09-28 on ojs `9d9f116f38` (lib/pkp `fab29cfeca`, ui-library `1980
 
 <a id="fn-a1"></a>
 **f-a1** — `templates/gateway/lockss.tpl` and `clockss.tpl`: `{if $journal->getLocalizedData('copyrightNotice')}` wraps the row whose value is `{$journal->getLocalizedData('licenseTerms')|nl2br}`. Before ojs `fdff6af2e5` (2019-01-16, pkp/pkp-lib#1908 "fix CLOCKSS and LOCKSS manifest display issues") the row was printed unconditionally with the license terms; that commit added the `copyrightNotice` condition. Live-probed 2026-09-28 on both pages: "License Terms" alone gave no "Copyright" row; with a "Copyright Notice" added, the row showed the License Terms text; with the License Terms emptied and the notice kept, the row showed with nothing in it.
+Issue report: [docs/issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md](../issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md).
 
 <a id="fn-a2"></a>
 **f-a2** — `openAccessPolicy` is in lib/pkp `schemas/context.json` with `defaultLocaleKey` `default.contextSettings.openAccessPolicy` (ojs `locale/en/default.po`), filled in at journal creation by `PKPContextService::add()` → `PKPSchemaService::setDefaults()`. No form component, handler or template of OJS, lib/pkp or ui-library other than the two manifest templates reads or writes it: the field was retired from the setup forms in the 3.1 settings consolidation (ojs `6482428c54`, 2016; `1b3e4f625c`, 2017, migrating old values into the About text). Live-probed 2026-09-28: the row read the sentence on a new journal and on a journal seeded with "Publishing Mode" subscription (its "Access" tab on "The journal will require subscriptions…"); no tab or side tab of Settings › Journal, Website, Workflow, Distribution or Users & Roles held it, as text, a box's value or a rich-text box, and neither did the About page. The "About the Journal" help on Settings › Journal › "Masthead" reads "…This could include your open access policy, the focus and scope of the journal, copyright notice, sponsorship disclosure, history of the journal, a privacy statement, and inclusion in any LOCKSS or CLOCKSS archival system." On a journal created with French as an interface language, the French page shows the French default text (Rule 11).
