@@ -598,6 +598,12 @@ Left out of the scenarios above, by reason:
     Dashboard ([A7](#a7)): the guard the issue report
     (`docs/issues/U01-A7-dashboard-address-signed-out-server-error.md`)
     proposes, once fixed
+  - a user signed in with "Keep me logged in" and back after the idle
+    limit seeing their name, not "Register" and "Login", in the public
+    header, and "Login As" impersonating ([A8](#a8)): the guard the
+    issue report
+    (`docs/issues/U01-A8-login-as-after-idle-limit-server-error.md`)
+    proposes, once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -608,7 +614,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
   - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
-  - A8 (Login As from a stale session answering a blank error; Rule 14)
   - A12 (the next correct sign-in after a disabled account's refusal landing back on the Login page; Rule 2)
 - **No seed**:
   - a disabled account refused, with or without a reason (Rule 2)
@@ -645,7 +650,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
 | [A4](#a4) | While signed in as another user, "Login As" is still offered, and using it strands the operator in that account | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | Signed out, the Dashboard address the monthly reminder email links to gives an empty error page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
-| [A8](#a8) | Login As answers a blank server error when the browser's session can no longer be fully resolved (e.g. it outlived a server-side reset) | 🐞 | minor | Jarda 2026-08-25 |
+| [A8](#a8) | Kept logged in past the idle limit, users look signed out on the public site and "Login As" gives a blank page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
@@ -797,16 +802,24 @@ Since: 2025-01-14 (pkp/pkp-lib#10782) · Basis: probe, 2026-10-04. <sup>[f-a7](#
 > as it already does for every other route.
 
 <a id="a8"></a>
-**A8 — Login As answers a blank server error in a half-resolved session** · 🐞 · minor.
-When the browser carries a session the site can no longer fully resolve,
-opening the Login As address (from a row action or directly) answers an
-entirely blank server error: no impersonation, no refusal, no way forward.
-This was observed with a session that outlived a server-side database reset;
-the pages themselves still rendered as signed in. A fresh sign-in makes the
-same action work normally, and a signed-out visitor is properly redirected
-to Login. Only the half-resolved state crashes. Nothing private is exposed.
-Since: 2026-08-25 · Basis: observed on a running site + code inspection.
-<sup>[f-a8](#fn-a8)</sup>
+**A8 — Kept logged in past the idle limit, users look signed out on the public site and "Login As" gives a blank page** · 🐞 · medium · crash: server.
+A user who signed in with "Keep me logged in" and comes back after the
+idle limit (seven days without a visit, by default) is still signed
+in to the dashboard and the other editorial pages. But the journal's
+public pages offer "Register" and "Login" as if they were signed out,
+and the Login page shows its form instead of taking them to the
+dashboard. For a manager it goes further: "Login As" on a user fails on
+the server, and the browser shows a blank page.
+
+Signing in again, on that Login page or after signing out, clears both.
+Until then nothing tells the user why the site treats them as signed
+out, or why "Login As" shows nothing.
+
+"Keep me logged in" is ticked when the Login page opens, so every user
+who signs in the default way and is away a week meets this. The public
+pages and "Login As" fail for one reason, so this report covers and
+rates both, and its fix clears both.
+Since: 2024-04-17 (pkp/pkp-lib#9596) · Basis: probe, 2026-10-04. <sup>[f-a8](#fn-a8)</sup>
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞 (filed on
 > review). Ruling: a session whose user cannot be resolved is treated like
@@ -1391,6 +1404,7 @@ that state) into the int-typed second parameter of
 GET → 302 to Login; freshly signed-in session → impersonation proceeds
 (200 → dashboard). Fix per ruling: treat an unresolvable session user as
 signed out (redirect to Login) before the administration-level check.
+Issue report: [pkp-e2e#828](https://github.com/jardakotesovec/pkp-e2e/issues/828) ([docs/issues/U01-A8-login-as-after-idle-limit-server-error.md](../issues/U01-A8-login-as-after-idle-limit-server-error.md)).
 
 <a id="fn-a9"></a>
 **f-a9** — `dateLastLogin`, set by `Validation::registerUserSession()` and
