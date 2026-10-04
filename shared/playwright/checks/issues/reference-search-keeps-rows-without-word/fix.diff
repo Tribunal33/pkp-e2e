@@ -1,0 +1,62 @@
+--- a/lib/ui-library/src/managers/CitationManager/citationManagerStore.js
++++ b/lib/ui-library/src/managers/CitationManager/citationManagerStore.js
+@@ -207,19 +207,49 @@
+ 
+ 			return searchWords.length > 0
+ 				? data.filter((citation) => {
+-						// remove all keys from object and search in values only
+-						let values = Object.values(citation).map((value) => {
+-							if (Array.isArray(value)) {
+-								return value.map((innerObj) => Object.values(innerObj));
+-							}
+-							return value;
+-						});
+-						return searchWords.every((word) => {
+-							return JSON.stringify(values).toLowerCase().includes(word);
+-						});
++						const text = getSearchableText(citation);
++						return searchWords.every((word) => text.includes(word));
+ 					})
+ 				: data;
+ 		});
++		/**
++		 * The text a reference's row shows, expanded or not
++		 * (CitationManagerCellCitation): the raw text alone while lookup is
++		 * off; with lookup on also the identifiers and, for a structured
++		 * reference, its details. Not the whole record, which also holds the
++		 * API address, ids, flags and fields no row displays.
++		 */
++		function getSearchableText(citation) {
++			const values = [citation.rawCitation];
++			if (citationsMetadataLookup.value) {
++				values.push(
++					citation.doi,
++					citation.url,
++					citation.arxiv,
++					citation.handle,
++					citation.urn,
++				);
++				if (citation.isStructured) {
++					values.push(
++						citation.title,
++						citation.sourceName,
++						citation.date,
++						citation.volume,
++						citation.issue,
++						citation.firstPage,
++						citation.lastPage,
++						...(citation.authors || []).flatMap((author) => [
++							author?.givenName,
++							author?.familyName,
++						]),
++					);
++				}
++			}
++			return values
++				.filter((value) => value !== null && value !== undefined)
++				.join(' ')
++				.toLowerCase();
++		}
+ 		function setSearchPhrase(value) {
+ 			searchPhrase.value = value;
+ 		}

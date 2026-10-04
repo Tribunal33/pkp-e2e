@@ -1,0 +1,36 @@
+--- a/lib/ui-library/src/managers/CitationManager/useCitationManagerFormAddRawCitation.js
++++ b/lib/ui-library/src/managers/CitationManager/useCitationManagerFormAddRawCitation.js
+@@ -12,14 +12,30 @@
+ 		`${apiPathSubmissions}/importAdditionalCitations`,
+ 	);
+ 
+-	const {form, initEmptyForm, setValue, addPage, addGroup, addFieldTextArea} =
++	const {form, initEmptyForm, set, setValue, addPage, addGroup, addFieldTextArea} =
+ 		useForm({});
+ 
+ 	initEmptyForm('addCitations', {
+ 		action: actionUrl.value,
+ 		spacingVariant: 'fullWidth',
+-		onSuccess: () => {
+-			setValue('rawCitations', '');
++		// The one field's message sits under the box; a footer summary
++		// ("Please correct one error.") would sit beside "Saved".
++		showErrorFooter: false,
++		onSuccess: (rejectedCitations) => {
++			// The API answers with the lines it did not add because the list
++			// already holds them: keep those in the box, with the message under it.
++			const duplicates =
++				typeof rejectedCitations === 'string' ? rejectedCitations.trim() : '';
++			setValue('rawCitations', duplicates);
++			set('addCitations', {
++				errors: duplicates
++					? {
++							rawCitations: [
++								t('submission.citations.structured.addRaw.partialSuccess'),
++							],
++						}
++					: {},
++			});
+ 			onSuccess();
+ 		},
+ 		canSubmit: canEditPublication.value,

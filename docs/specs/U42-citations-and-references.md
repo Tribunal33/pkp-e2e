@@ -881,6 +881,8 @@ Left out of the scenarios above, by reason:
   - the guard for A9 (issue report `docs/issues/U42-A9-submits-without-required-data-citations.md`): with data citations at "Require the author to add data citation metadata…", an author's submission with no data citation is held back on "Review" (the problems banner, "Submit" disabled), and one with a data citation goes in
   - the guard for A20 (issue report `docs/issues/U42-A20-book-preprint-empty-references-heading.md`): a published book on a press and a posted preprint with no references show no "References" section; with one reference they show it
   - the guard for A10 (issue report `docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md`): on a press and a preprint server, a data citation added in the submission wizard's "Data" section shows in its table and on "Review" at once, without a reload
+  - the guard for A2 (issue report `docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md`): "Add" with a paste that repeats a listed reference keeps the repeated line in the box and says it was skipped, while the new lines are added
+  - the guard for A3 (issue report `docs/issues/U42-A3-reference-search-keeps-rows-without-word.md`): "Search references here" with a word no row shows (such as "http" or "citations") keeps no row, and a word a row shows keeps that row
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -976,8 +978,8 @@ entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | A pasted reference already in the list is dropped, and the page still says "Saved" | 🐞 | minor | — |
-| [A3](#a3) | "Search references here" keeps rows whose visible text lacks the typed word | 🐞 | minor | — |
+| [A2](#a2) | Pasting a reference already in the list drops it silently, and the References page still says "Saved" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A3](#a3) | "Search references here" keeps references whose text does not contain the typed word | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The lookup's progress box counts structured references only | 🐞 | minor | — |
 | [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1002,25 +1004,36 @@ entry notes otherwise; the team settles them on spec review.
 ### All apps
 
 <a id="a2"></a>
-**A2 — A pasted reference already in the list is dropped without a word** · 🐞 · minor.
-An editor who pastes several references into "Add" expects each to be added,
-or to be told why not. A line whose text matches an existing reference, or
-an earlier line of the same paste, is dropped. The box empties and "Saved"
-shows beside **Add** exactly as after a full success, even when every line
-was dropped, and nothing says that anything was skipped. The app ships a
-message for exactly this case ("The citations above are duplicates. All
-other citations are added to the list below.") that the page never shows.
-Basis: probe, 2026-09-24. <sup>f-a2</sup>
+**A2 — Pasting a reference already in the list drops it silently, and the References page still says "Saved"** · 🐞 · low.
+An editor who pastes several references into "Add" expects each to be
+added, or to be told why not. A line whose text matches an existing
+reference, or an earlier line of the same paste, is dropped. The box
+empties and "Saved" shows beside "Add" exactly as after a full success,
+even when every line was dropped, and nothing says that anything was
+skipped. The app ships a message for exactly this case ("The citations
+above are duplicates. All other citations are added to the list below.")
+that the page never shows. The server tidies each pasted line (spaces
+and tabs at its ends removed, runs of them inside shrunk to one space)
+and compares it with the stored references as they stand: only the same
+text, capitals included, counts as a repeat on PostgreSQL, while on
+MySQL the comparison also ignores capitals and accents (read in the
+code, not walked).
+Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
-**A3 — The reference search matches text the row does not show** · 🐞 · minor.
-Typing a word into "Search references here" is expected to keep the rows that
-show it. The search also looks in data the row never displays (the
-reference's internal address, its numbers, a yes/no flag, hidden structured
-fields), so "citations" or "http" keep every row, "false" keeps every row
-not yet structured, and a digit such as "0" keeps rows that show no digit
-at all.
-Basis: probe, 2026-09-24. <sup>f-a3</sup>
+**A3 — "Search references here" keeps references whose text does not contain the typed word** · 🐞 · low.
+Typing a word into "Search references here" is expected to keep the rows
+that show it. The search also looks in data no row displays: a web
+address stored with each reference, its numbers, and a yes/no value
+saying whether the reference's details (authors, title, DOI) have been
+filled in. So "citations" or "http" keep every row, "false" keeps every
+reference whose details are not filled in, and a digit such as "0" keeps
+rows that show no digit at all. Nothing is changed or lost: the search
+keeps rows it should have hidden, and clearing it shows the whole list
+again. A search for a word or a year a reference's text holds still
+keeps the right rows; the extra rows come with words and digits the
+stored data also holds.
+Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal"** · 🐞 · low.
@@ -2035,9 +2048,11 @@ note q9; the state the entry described has no way in from the screens.
 `.empty`, `.errors` (lib/pkp `locale/en/submission.po`); no caller in
 ui-library or lib/pkp (grep 2026-09-24). Live-probed 2026-09-24: q5 and
 note e; none of the four strings appeared.
+Issue report: [docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md](../issues/U42-A2-pasted-repeat-reference-dropped-saved.md).
 
 <a id="fn-f-a3"></a>
 **f-a3 — A3 evidence.** Note g. Live-probed 2026-09-24: q8.
+Issue report: [docs/issues/U42-A3-reference-search-keeps-rows-without-word.md](../issues/U42-A3-reference-search-keeps-rows-without-word.md).
 
 <a id="fn-f-a4"></a>
 **f-a4 — A4 evidence.** `submission.citations.structured.citationsMetadataLookup.description`
