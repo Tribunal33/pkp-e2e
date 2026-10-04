@@ -994,7 +994,7 @@ mode restores the saved order on cancel. Code read 2026-09-16.
 Live-probed 2026-09-16, OJS (twice), OMP and OPS: after "Cancel" the rows
 stay moved with "Edit" and "Delete" back and no message, while the home
 page and a reload of the tab show the saved order.
-Issue report: [docs/issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md](../issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md).
+Issue report: [pkp-e2e#898](https://github.com/jardakotesovec/pkp-e2e/issues/898) ([docs/issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md](../issues/U11-A1-highlights-cancel-ordering-keeps-moved-rows.md)).
 
 <a id="fn-f-a2"></a>
 **f-a2 — A2 evidence.** `lib/pkp/schemas/highlight.json` `url`:
