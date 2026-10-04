@@ -36,7 +36,7 @@ and the hourly routine starts one only when none is running
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 |  |
 | [U23](../specs/U23-submissions-dashboard.md) | 5 | 0 | 0 |  |
 | [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
-| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A9 done with U35 A5 (pkp-e2e#343); A6 done with U71 OMP10 (pkp-e2e#560) |
+| [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | **A7 taken: issues session, VM s0, 2026-10-04** (joined to U26 A9); A9 done with U35 A5 (pkp-e2e#343); A6 done with U71 OMP10 (pkp-e2e#560) |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 | OMP2 done with U70 A6 (pkp-e2e#744) |
 | [U67](../specs/U67-archiving-preservation.md) | 3 | 0 | 0 | A1 done with U58 OJS1 (pkp-e2e#822) |
