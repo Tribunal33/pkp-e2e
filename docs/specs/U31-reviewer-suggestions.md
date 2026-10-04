@@ -843,7 +843,7 @@ Basis: probe. <sup>f-omp1</sup>
 
 <a id="fn-f-a10"></a>
 **f-a10** — The "Back to Search" link is `ReviewerForm::getAdvancedSearchAction()`, an `AjaxAction` on `reloadReviewerForm` with `selectionType` `REVIEWER_SELECT_ADVANCED_SEARCH` that replaces the form's content inside whichever modal holds it; from the inner modal the advanced-search form, suggestions list included, renders inside the inner dialog while the outer one still shows its own, and the grid handlers are bound twice. Live-probed 2026-09-06 (note h), OJS and OMP: three, then four, "Add Reviewer" dialogs stacked; console errors `The handler "$.pkp.controllers.grid.users.reviewer.AdvancedReviewerSearchHandler" has already been bound to the selected element!` and the same for `AddReviewerFormHandler`.
-Issue report: [docs/issues/U31-A10-back-to-search-nests-add-reviewer-window.md](../issues/U31-A10-back-to-search-nests-add-reviewer-window.md).
+Issue report: [pkp-e2e#841](https://github.com/jardakotesovec/pkp-e2e/issues/841) ([docs/issues/U31-A10-back-to-search-nests-add-reviewer-window.md](../issues/U31-A10-back-to-search-nests-add-reviewer-window.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — `lib/pkp/locale/en/submission.po`, `reviewerSuggestion.suggestionReason.description`, the `FieldRichTextarea('suggestionReason')` description (note b). Live-probed 2026-09-06 (note b; the K4 window snapshots), OJS and OMP, verbatim in the "Add Reviewer Suggestion" and "Edit" windows.
