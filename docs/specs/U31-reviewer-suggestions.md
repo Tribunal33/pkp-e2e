@@ -898,7 +898,7 @@ Issue report: [pkp-e2e#849](https://github.com/jardakotesovec/pkp-e2e/issues/849
 
 <a id="fn-f-a6"></a>
 **f-a6** — `AddReviewerSuggestion::rules()`'s `Rule::unique` on `reviewer_suggestions` is a plain SQL equality on the stored `email`, case-sensitive on the test installs' Postgres (a MySQL collation may fold case); nothing lower-cases the input. Live-probed 2026-09-06 (note b), OJS and OMP: "KAY.…@MAIL.TEST" saved beside "kay.…@mail.test" on the same draft.
-Issue report: [docs/issues/U31-A6-reviewer-suggestion-same-address-other-case.md](../issues/U31-A6-reviewer-suggestion-same-address-other-case.md).
+Issue report: [pkp-e2e#856](https://github.com/jardakotesovec/pkp-e2e/issues/856) ([docs/issues/U31-A6-reviewer-suggestion-same-address-other-case.md](../issues/U31-A6-reviewer-suggestion-same-address-other-case.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7** — `lib/pkp/locale/en/default.po`, `default.submission.step.reviewerSuggestions`: "…provide valueable input for the editorial team…", copied into every new context's `reviewerSuggestionsHelp` by `I4787_AddReviewSuggestionHelp`. Live-probed 2026-09-06 (note c), OJS and OMP, on the step and in the "For Reviewer Suggestion" box.
