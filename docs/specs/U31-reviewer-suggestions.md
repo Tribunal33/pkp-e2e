@@ -540,6 +540,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U31-A9-suggestion-added-reviewer-leaves-blank-row.md`): add
     a no-account suggested person through the inner "Add Reviewer" window
     and assert the suggestions list keeps no empty row
+  - the guard for A5 (issue report
+    `docs/issues/U31-A5-funding-coordinator-create-reviewer-from-suggestion-does-nothing.md`):
+    as the Funding coordinator, open Add Reviewer on a submission with a
+    no-account suggestion and assert that entry offers no "Select Reviewer"
+    and the panel row no "…" menu, while a suggestion holding the Reviewer
+    role keeps both
 - **Nothing new to test**:
   - assigned Section Editor, Guest Editor and Site Administrator (the Journal Manager's offer, scenarios 2 and 3)
   - Reviewer and Reader (no screen offers them anything)
@@ -564,7 +570,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | The Funding Coordinator gets an error dialog on the stage instead of the panel | 🐞 | user-visible | — |
-| [A5](#a5) | The Funding Coordinator's "Create New Reviewer" from a suggestion does nothing when "Add Reviewer" is pressed | 🐞 | user-visible | — |
+| [A5](#a5) | A Funding coordinator is offered "Add Reviewer" on a suggested person without an account, then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The same address typed in another case is accepted as a second suggestion | 🐞 | minor | — |
 | [A7](#a7) | The default "For Reviewer Suggestion" text misspells "valuable" | 🐞 | minor | — |
 | [A8](#a8) | In Add Reviewer's suggestions list, screen readers hear every "Select Reviewer" button as "Select undefined" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -625,16 +631,20 @@ otherwise invisible to them.
 Basis: probe. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — The Funding Coordinator's "Create New Reviewer" from a suggestion does nothing** · 🐞 · user-visible.
-A Funding Coordinator presses "Select Reviewer" on a suggestion whose
-person has no account and gets the "Create New Reviewer" form, filled in.
-Pressing its "Add Reviewer" changes nothing: the form stays open, no
-message shows and the Reviewers panel still reads "No Items". The same
-role's "Select Reviewer" on a person holding a Reviewer role works. The
-Add Reviewer window never shows this role its own "Create New Reviewer"
-and "Enroll Existing User" links (*Reviewer assignment & management*); the
-suggestions list offers a form the role cannot complete, and says nothing.
-Basis: probe. <sup>f-a5</sup>
+**A5 — A Funding coordinator is offered "Add Reviewer" on a suggested person without an account, then refused** · 🐞 · low.
+A Funding coordinator assigned to a submission whose author suggested
+reviewers is offered to turn a suggested person who has no account into
+a reviewer. "Select Reviewer" in the "Add Reviewer" window, or "Add
+Reviewer" in the person's menu under "Reviewers Suggested by Author",
+opens a form on "Create New Reviewer", filled in. Its "Add Reviewer" is
+refused with a browser alert, "The current role does not have access to
+this operation.", and the form stays open. The coordinator's role may
+not create reviewer accounts, and for that reason the "Add Reviewer"
+window does not show the coordinator its own "Create New Reviewer" link.
+A suggested person who has an account but no reviewer role opens the
+"Enroll an Existing User as Reviewer" form instead and meets the same
+refusal (read in the code, not walked). It needs "Reviewer Suggestion at
+Submission" switched on. Basis: probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The same address in another case is accepted as a second suggestion** · 🐞 · minor.
@@ -839,6 +849,7 @@ Basis: probe. <sup>f-omp1</sup>
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPReviewerGridHandler::__construct()` grants `ROLE_ID_ASSISTANT` the review-round operations minus `createReviewer`, `enrollReviewer` and `gossip` (note a), and `AdvancedSearchReviewerForm::fetch()` adds the "Create New Reviewer" / "Enroll Existing User" link actions only for `ROLE_ID_MANAGER` and `ROLE_ID_SUB_EDITOR`, but `SelectReviewerSuggestionListItem.vue::select()` opens `showReviewerForm` with `selectionType` `REVIEWER_SELECT_CREATE` for any role that reached the window. Live-probed 2026-09-06, OJS (two runs) and OMP (one run): the Funding Coordinator's "Select Reviewer" on a no-account suggestion opened "Create New Reviewer" prefilled; its "Add Reviewer" posted `reviewer-grid/create-reviewer`, answered 200, and the form neither closed nor complained, the Reviewers table still "No Items". The role's "Select Reviewer" on an enrolled reviewer gave the "Selected Reviewer … Change" request form. The Enroll path was not driven for this role.
+Issue report: [docs/issues/U31-A5-funding-coordinator-create-reviewer-from-suggestion-does-nothing.md](../issues/U31-A5-funding-coordinator-create-reviewer-from-suggestion-does-nothing.md).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note t16 (live-probed 2026-09-06: the saved iD in the "Edit" window's box only). `CreateReviewerForm::initData()` copies `familyName`, `givenName`, `email`, `affiliation` only; `ReviewerSuggestionManager.vue`, `SelectReviewerSuggestionListItem.vue`, `ReviewerSuggestionsListPanel.vue` and `review-reviewer-suggestions.tpl` render no `orcidId`; `ReviewerSuggestionsListPanel.vue::openEditModal()` fills the form from `GET …/suggestions/{id}`, which carries it.

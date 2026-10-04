@@ -1,0 +1,157 @@
+--- a/lib/pkp/api/v1/reviewers/suggestions/resources/ReviewerSuggestionResource.php
++++ b/lib/pkp/api/v1/reviewers/suggestions/resources/ReviewerSuggestionResource.php
+@@ -20,6 +20,7 @@
+ use Illuminate\Http\Request;
+ use PKP\security\Validation;
+ use Illuminate\Http\Resources\Json\JsonResource;
++use PKP\controllers\grid\users\reviewer\PKPReviewerGridHandler;
+ 
+ class ReviewerSuggestionResource extends JsonResource
+ {
+@@ -43,6 +44,7 @@
+             'approvedAt' => $this->approvedAt,
+             'existingUserId' => $this->existingUser?->getId(),
+             'hasExistingReviewerRole' => $this->hasExistingReviewerRole,
++            'canCurrentUserAddAsReviewer' => $this->hasExistingReviewerRole || $this->canCurrentUserCreateOrEnrollReviewer(),
+             'reviewerId' => $this->reviewerId,
+         ];
+ 
+@@ -57,4 +59,20 @@
+         }
+         return $suggestion;
+     }
++
++    /**
++     * Whether the current user may create the suggested person as a reviewer or
++     * enroll them as one: the roles PKPReviewerGridHandler grants createReviewer
++     * and enrollReviewer, held in the submission's context or the site.
++     */
++    protected function canCurrentUserCreateOrEnrollReviewer(): bool
++    {
++        $user = Application::get()->getRequest()->getUser();
++        if (!$user) {
++            return false;
++        }
++
++        return $user->hasRole(PKPReviewerGridHandler::REVIEWER_ACCOUNT_ROLES, $this->submission->getData('contextId'))
++            || $user->hasRole(PKPReviewerGridHandler::REVIEWER_ACCOUNT_ROLES, Application::SITE_CONTEXT_ID);
++    }
+ }
+--- a/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
++++ b/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
+@@ -84,6 +84,9 @@
+     public const REVIEWER_SELECT_CREATE = 2;
+     public const REVIEWER_SELECT_ENROLL_EXISTING = 3;
+ 
++    /** Roles that may create a new user, or enroll an existing one, as a reviewer */
++    public const REVIEWER_ACCOUNT_ROLES = [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_SUB_EDITOR];
++
+     /** @var Submission */
+     public $_submission;
+ 
+@@ -106,7 +109,7 @@
+         $allOperations = array_merge($this->_getReviewAssignmentOps(), $this->_getReviewRoundOps());
+ 
+         $this->addRoleAssignment(
+-            [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_SUB_EDITOR],
++            self::REVIEWER_ACCOUNT_ROLES,
+             $allOperations
+         );
+ 
+--- a/lib/ui-library/src/components/ListPanel/users/SelectReviewerSuggestionListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/users/SelectReviewerSuggestionListItem.vue
+@@ -96,6 +96,10 @@
+ 				return false;
+ 			}
+ 
++			if (!this.item.canCurrentUserAddAsReviewer) {
++				return false;
++			}
++
+ 			if (this.approvedAt === null || this.approvedAt === undefined) {
+ 				return true;
+ 			}
+--- a/lib/ui-library/src/managers/ReviewerSuggestionManager/reviewerSuggestionManagerStore.js
++++ b/lib/ui-library/src/managers/ReviewerSuggestionManager/reviewerSuggestionManagerStore.js
+@@ -57,6 +57,8 @@
+ 						suggestionReason: localize(reviewerSuggestion.suggestionReason),
+ 						hasExistingReviewerRole: reviewerSuggestion.hasExistingReviewerRole,
+ 						existingUserId: reviewerSuggestion.existingUserId,
++						canCurrentUserAddAsReviewer:
++							reviewerSuggestion.canCurrentUserAddAsReviewer,
+ 					});
+ 				});
+ 
+@@ -69,7 +71,9 @@
+ 
+ 		const _actionFns = useReviewerSuggestionManagerActions();
+ 
+-		const itemActions = computed(() => _actionFns.getItemActions({}));
++		function getItemActions(reviewerSuggestion) {
++			return _actionFns.getItemActions({reviewerSuggestion});
++		}
+ 
+ 		function atActiveReviewStage() {
+ 			return (
+@@ -99,7 +103,7 @@
+ 		return {
+ 			reviewerSuggestionsList,
+ 			_actionFns,
+-			itemActions,
++			getItemActions,
+ 			reviewerSuggestionApprove,
+ 			atActiveReviewStage,
+ 		};
+--- a/lib/ui-library/src/managers/ReviewerSuggestionManager/ReviewerSuggestionManager.vue
++++ b/lib/ui-library/src/managers/ReviewerSuggestionManager/ReviewerSuggestionManager.vue
+@@ -36,9 +36,16 @@
+ 							></div>
+ 						</div>
+ 					</div>
+-					<div v-if="reviewerSuggestionManagerStore.atActiveReviewStage()">
++					<div
++						v-if="
++							reviewerSuggestionManagerStore.atActiveReviewStage() &&
++							reviewerSuggestion.canCurrentUserAddAsReviewer
++						"
++					>
+ 						<DropdownActions
+-							:actions="reviewerSuggestionManagerStore.itemActions"
++							:actions="
++								reviewerSuggestionManagerStore.getItemActions(reviewerSuggestion)
++							"
+ 							:label="`${reviewerSuggestion.fullName} ${t('common.moreActions')}`"
+ 							button-variant="ellipsis"
+ 							@action="
+--- a/lib/ui-library/src/managers/ReviewerSuggestionManager/useReviewerSuggestionManagerActions.js
++++ b/lib/ui-library/src/managers/ReviewerSuggestionManager/useReviewerSuggestionManagerActions.js
+@@ -34,10 +34,14 @@
+ 		);
+ 	}
+ 
+-	function getItemActions() {
++	function getItemActions({reviewerSuggestion}) {
+ 		const {t} = useLocalize();
+ 		const actions = [];
+ 
++		if (!reviewerSuggestion.canCurrentUserAddAsReviewer) {
++			return actions;
++		}
++
+ 		actions.push({
+ 			label: t('editor.submission.addReviewer'),
+ 			name: Actions.REVIEWER_SUGGESTION_APPROVE,
+--- a/schemas/submission.json
++++ b/schemas/submission.json
+@@ -117,6 +117,11 @@
+ 						"apiSummary": true,
+ 						"description": "Whether the existing user already has a reviewer role when there is an existing user association."
+ 					},
++					"canCurrentUserAddAsReviewer": {
++						"type": "boolean",
++						"apiSummary": true,
++						"description": "Whether the current user may turn this suggestion into a reviewer: always when the person already has a reviewer role, otherwise only with a role that may create or enroll reviewers."
++					},
+ 					"reviewerId": {
+ 						"type": "integer",
+ 						"apiSummary": true,
