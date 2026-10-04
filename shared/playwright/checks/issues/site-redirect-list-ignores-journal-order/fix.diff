@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/services/queryBuilders/PKPContextQueryBuilder.php
++++ b/lib/pkp/classes/services/queryBuilders/PKPContextQueryBuilder.php
+@@ -134,7 +134,6 @@
+                     ->where('cst.setting_name', '=', 'name')
+                     ->where('cst.locale', '=', DB::raw('c.primary_locale'));
+             })
+-            ->orderBy('c.seq')
+             ->get()
+             ->toArray();
+     }
+@@ -203,6 +202,9 @@
+             }
+         });
+ 
++        // List the contexts in the site's order (Administration > Hosted Journals)
++        $q->orderBy('c.seq')->orderBy('c.' . $this->dbIdColumn);
++
+         // Add app-specific query statements
+         Hook::call('Context::getContexts::queryObject', [&$q, $this]);
+         $q->select($this->columns);

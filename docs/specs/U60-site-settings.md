@@ -882,7 +882,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Under a "Journal redirect", the Site Administrator's sign-in lands on the journal's home page, not its Dashboard | 🐞 | minor | — |
-| [A11](#a11) | The "Journal redirect" list follows neither name nor the Hosted Journals order, and shifts after a save there | 🐞 | minor | — |
+| [A11](#a11) | Site Settings' "Journal redirect" list ignores the Hosted Journals order, and on PostgreSQL reshuffles after a journal save | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An "&" in a journal's name reads `&amp;` in the "Journal redirect" list | 🐞 | minor | — |
 | [OMP1](#omp1) | A press never loads the "Site style sheet" | 🐞 | user-visible | — |
 | [A1](#a1) | A fresh installation has no Site Name: the site's home page has an empty title | ❓ | user-visible | — |
@@ -1041,16 +1041,22 @@ publicly and one not would show the difference on screen.
 Basis: code. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — The "Journal redirect" list has no order** · 🐞 · minor.
-The Site Administrator looking for a journal in "Journal redirect"
-expects the journals by name, or in the order of Administration ›
-"Hosted Journals", which "Bulk Emails" on the same page follows; the
-list follows neither. After one journal is moved above another there
-with "Order" and "Done", or one is enabled publicly in its "Edit"
-window, journals sit at other places in the list, still not in the new
-order. On a site with many journals, finding one means scanning the
-whole list.
-Basis: probe. <sup>f-a11</sup>
+**A11 — Site Settings' "Journal redirect" list ignores the Hosted Journals order, and on PostgreSQL reshuffles after a journal save** · 🐞 · low.
+The Site Administrator opens Administration › "Site Settings" ›
+"Settings" and expects the "Journal redirect" list to show the journals
+in the order set under Administration › "Hosted Journals", as "Bulk
+Emails" on the same page and the site's home page do. On every
+database, the list instead follows the order in which the database
+stores the journals, and an order set with "Order" on Hosted Journals
+never reaches it. On MySQL that is, by the code, the order the journals
+were created in.
+On PostgreSQL the list also reshuffles: after a journal's "Edit" window
+is saved, even with nothing changed, that journal moves to the end of
+the list.
+Nothing is lost, and the redirect saves as chosen, but on a site with
+many journals the administrator has to scan the whole list to find one.
+Up to 3.1 the list followed the Hosted Journals order.
+Basis: probe, 2026-10-04. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — An "&" in a journal's name reads `&amp;` in "Journal redirect"** · 🐞 · minor.
@@ -1787,6 +1793,7 @@ moves whenever a journal's row is written. Every load of Site Settings
 in the drive also saw the "Plugin Gallery" list fail with a server
 error, which this list does not cause
 ([Plugins management](U62-plugins-management.md#a1), A1).
+Issue report: [docs/issues/U60-A11-site-redirect-list-ignores-journal-order.md](../issues/U60-A11-site-redirect-list-ignores-journal-order.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — `PKPSiteConfigForm` passes each journal's name through
