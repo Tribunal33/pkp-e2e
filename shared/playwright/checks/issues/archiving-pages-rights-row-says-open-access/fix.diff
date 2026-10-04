@@ -1,0 +1,30 @@
+--- a/templates/gateway/clockss.tpl
++++ b/templates/gateway/clockss.tpl
+@@ -106,12 +106,6 @@
+ 	<td class="value">{$journal->getLocalizedData('licenseTerms')|nl2br}</td>
+ </tr>
+ {/if}
+-{if $journal->getLocalizedData('openAccessPolicy')}
+-<tr>
+-	<td class="label">Rights</td>
+-	<td class="value">{$journal->getLocalizedData('openAccessPolicy')|nl2br}</td>
+-</tr>
+-{/if}
+ </table>
+ {/if}
+ 
+--- a/templates/gateway/lockss.tpl
++++ b/templates/gateway/lockss.tpl
+@@ -106,12 +106,6 @@
+ 	<td class="value">{$journal->getLocalizedData('licenseTerms')|nl2br}</td>
+ </tr>
+ {/if}
+-{if $journal->getLocalizedData('openAccessPolicy')}
+-<tr>
+-	<td class="label">Rights</td>
+-	<td class="value">{$journal->getLocalizedData('openAccessPolicy')|nl2br}</td>
+-</tr>
+-{/if}
+ </table>
+ {/if}
+ 

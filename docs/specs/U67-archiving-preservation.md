@@ -540,6 +540,13 @@ Left out of the scenarios above, by reason:
   - a journal with License Terms and no Copyright Notice showing the
     "Copyright" row with the License Terms on the LOCKSS and CLOCKSS
     pages ([A1](#a1)): the guard the issue report proposes
+  - a journal's LOCKSS and CLOCKSS pages with no "Rights" row, on an
+    open access journal and on one that requires subscriptions
+    ([A2](#a2)): the guard the issue report proposes
+  - the PN plugin installed, disabled and then enabled, the side tab
+    offering the "Enable the PKP PN plugin" box unticked and then
+    ticked ([A3](#a3)): the guard the issue report proposes, once a
+    test install can carry the plugin
 - **Nothing new to test**:
   - "Description" set on Settings › Distribution › "Search Indexing",
     its text in the "Description" row (Settings bullet 6; Rule 10)
@@ -554,8 +561,8 @@ Left out of the scenarios above, by reason:
     "License Terms"; Settings bullet 7)
   - A2 (a subscription journal's "Rights" row still reading the open
     access text; Fields, row "Rights"; scenario 1 reads the row)
-  - A3 (the PN plugin installed and disabled, the side tab asking for it
-    to be installed; Rule 2a)
+  - A3 (the PN plugin installed, disabled or enabled, the side tab asking
+    for it to be installed; Rule 2a)
 - **No seed**:
   - the PN plugin installed and enabled, the side tab offering "Enable
     the PKP PN plugin" (Rule 2a; Settings bullet 9)
@@ -575,8 +582,8 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A2](#a2) | The manifest's "Rights" row prints an open-access sentence no settings screen shows or changes | 🐞 | minor | — |
-| [A3](#a3) | With the PN plugin installed but disabled, the PN tab asks for it to be installed and offers no way to enable it | 🐞 | latent | — |
+| [A2](#a2) | LOCKSS and CLOCKSS pages of a subscription journal say it provides immediate open access | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A3](#a3) | Archiving settings tell managers to install the PKP|PN plugin when it is already installed | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | On a journal that requires sign-in, the manifest pages send the preservation network to the Login page | ❓ | minor | — |
 
 ### All apps
@@ -601,28 +608,37 @@ The same fault: [Submission intake configuration](U58-submission-intake-configur
 Since: 2019-01-16, a date read from the code's history · Basis: probe, 2026-10-04. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — The "Rights" row prints a text nobody can edit** · 🐞 · minor.
-The "Rights" row of every new journal's manifest reads "This journal
-provides immediate open access to its content…", a text the journal
-receives when it is created. No settings screen shows or changes it.
-Settings › Journal › "Masthead" tells the manager to put the open access
-policy in "About the Journal" ("…This could include your open access
-policy, …"), but the row never reads "About the Journal", so a
-subscription journal, or one that rewrote its open access policy there,
-still tells the
-preservation network it provides immediate open access.
-Basis: probe, 2026-09-28. <sup>[f-a2](#fn-a2)</sup>
+**A2 — LOCKSS and CLOCKSS pages of a subscription journal say it provides immediate open access** · 🐞 · low.
+On a journal with LOCKSS or CLOCKSS switched on, the journal's LOCKSS
+and CLOCKSS pages, public addresses anyone can open, end their
+"Metadata" table with a "Rights" row: "This journal provides immediate
+open access to its content on the principle that making research freely
+available to the public supports a greater global exchange of
+knowledge." Every new journal receives this text. No settings screen
+shows it or lets anyone edit it; ticking a language for forms, or "Reload
+defaults", only writes the default back.
+So a journal that requires subscriptions still tells the preservation
+networks it provides immediate open access. The Masthead screen tells
+journals to put their access policy in "About the Journal", but the row
+never shows that text.
+Preservation goes on either way: the networks' software reads nothing
+in the table. The proposed fix removes the row.
+Since: 2016-05-12, a date read from the code's history · Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — A disabled PN plugin reads as not installed** · 🐞 · latent.
-On an install where the Site Administrator has installed the PKP|PN
-plugin but it is not enabled in the journal, the PN side tab still says
-"ask your administrator to install the PKP|PN Plugin from the Plugin
-Gallery." and shows no box, although the box of Rule 2a exists to
-enable it. The manager has to find the plugin under Settings › Website ›
-"Plugins" instead. The test installs carry no PN plugin, so this is read
-from the code.
-Basis: code, 2026-09-28. <sup>[f-a3](#fn-a3)</sup>
+**A3 — Archiving settings tell managers to install the PKP|PN plugin when it is already installed** · 🐞 · medium.
+A site administrator installs the PKP|PN plugin, and the Journal Manager
+opens Settings › Distribution › "Archiving" › "PKP Preservation Network
+(PN)". The tab still says "To archive your journal in the PN, ask your
+administrator to install the PKP|PN Plugin from the Plugin Gallery." It
+shows no "Enable the PKP PN plugin" box, whether the plugin is enabled in
+the journal or not.
+So the tab never offers what it was built for: the switch for the plugin
+and the link to accept the network's terms of use.
+Both states fail with every release of the plugin that the Plugin
+Gallery offers for OJS 3.4 and 3.5. With the 3.3 release, only the
+disabled plugin reads as not installed.
+Since: 2019-12-11, a date read from the code's history · Basis: probe, 2026-10-04. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — A journal that requires sign-in cannot be archived** · ❓ · minor.
@@ -728,10 +744,12 @@ Code read 2026-09-28 on ojs `9d9f116f38` (lib/pkp `fab29cfeca`, ui-library `1980
 Issue report: [pkp-e2e#822](https://github.com/jardakotesovec/pkp-e2e/issues/822) ([docs/issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md](../issues/U58-OJS1-archiving-pages-copyright-row-license-terms.md)).
 
 <a id="fn-a2"></a>
-**f-a2** — `openAccessPolicy` is in lib/pkp `schemas/context.json` with `defaultLocaleKey` `default.contextSettings.openAccessPolicy` (ojs `locale/en/default.po`), filled in at journal creation by `PKPContextService::add()` → `PKPSchemaService::setDefaults()`. No form component, handler or template of OJS, lib/pkp or ui-library other than the two manifest templates reads or writes it: the field was retired from the setup forms in the 3.1 settings consolidation (ojs `6482428c54`, 2016; `1b3e4f625c`, 2017, migrating old values into the About text). Live-probed 2026-09-28: the row read the sentence on a new journal and on a journal seeded with "Publishing Mode" subscription (its "Access" tab on "The journal will require subscriptions…"); no tab or side tab of Settings › Journal, Website, Workflow, Distribution or Users & Roles held it, as text, a box's value or a rich-text box, and neither did the About page. The "About the Journal" help on Settings › Journal › "Masthead" reads "…This could include your open access policy, the focus and scope of the journal, copyright notice, sponsorship disclosure, history of the journal, a privacy statement, and inclusion in any LOCKSS or CLOCKSS archival system." On a journal created with French as an interface language, the French page shows the French default text (Rule 11).
+**f-a2** — `openAccessPolicy` is in lib/pkp `schemas/context.json` with `defaultLocaleKey` `default.contextSettings.openAccessPolicy` (ojs `locale/en/default.po`), filled in at journal creation by `PKPContextService::add()` → `PKPSchemaService::setDefaults()`. The two manifest templates are its only readers in OJS, lib/pkp and ui-library; no form edits it, and `PKPContextService::restoreLocaleDefaults()` writes the default back when a language is ticked for forms or submissions or its defaults are reloaded. The "Open Access Policy" field was retired before 3.0 in the settings consolidation (lib/pkp `96737f1130`, ojs `6482428c54`, 2016, pkp/pkp-lib#1397), and the 3.1.0 upgrade moved old values into "About the Journal" and deleted the setting (ojs `1b3e4f625c`). Live-probed 2026-09-28: the row read the sentence on a new journal and on a journal seeded with "Publishing Mode" subscription (its "Access" tab on "The journal will require subscriptions…"); no tab or side tab of Settings › Journal, Website, Workflow, Distribution or Users & Roles held it, as text, a box's value or a rich-text box, and neither did the About page. The "About the Journal" help on Settings › Journal › "Masthead" reads "…This could include your open access policy, the focus and scope of the journal, copyright notice, sponsorship disclosure, history of the journal, a privacy statement, and inclusion in any LOCKSS or CLOCKSS archival system." On a journal created with French as an interface language, the French page shows the French default text (Rule 11).
+Issue report: [docs/issues/U67-A2-archiving-pages-rights-row-says-open-access.md](../issues/U67-A2-archiving-pages-rights-row-says-open-access.md).
 
 <a id="fn-a3"></a>
-**f-a3** — Note d: `PluginRegistry::getPlugin('generic', 'plnplugin')` is null for a disabled plugin because generic plugins are loaded enabled-only at dispatch, so the `FieldArchivingPn` branch (whose value is hard-wired to `(bool) $plnPlugin`, true) is reached only while the plugin is enabled. No screen of the test installs reaches it: none carries the PN plugin, and the Plugin Gallery cannot install one there, so the entry is read from the code.
+**f-a3** — Note d. OJS `SettingsHandler::distribution()` decides with `PluginRegistry::getPlugin('generic', 'plnplugin')`. A disabled plugin is never registered (generic plugins load enabled-only at dispatch), and an enabled release for 3.4 or 3.5 registers as `PlnPlugin` (its own `getName()` since pkp/pln 12a26eb993, 3.0.0.0), which the case-sensitive lookup misses; the 3.3 release is named `plnplugin`, so there only the disabled plugin fails. The test installs carry no PN plugin: the issue report's walk installed pln 4.0.1.0 with the installer's `installPluginVersion.php` from outside the app folder and enabled it as `LazyLoadPlugin::setEnabled()` writes it; on `main` and 3.5 the tab showed the install text in both states.
+Issue report: [docs/issues/U67-A3-pn-tab-asks-to-install-installed-plugin.md](../issues/U67-A3-pn-tab-asks-to-install-installed-plugin.md).
 
 <a id="fn-a4"></a>
 **f-a4** — Note k. The manifest's issue links lead to `issue/view/{id}`, under the same policy. Live-probed 2026-09-28: on a journal requiring sign-in with both boxes saved ticked, both addresses sent a signed-out visitor to Login; the site's lists named the journal and their links led to the same Login page; the journal's "LOCKSS and CLOCKSS" tab showed the two boxes and "Save" and no warning; its issue page sent a signed-out visitor to Login.

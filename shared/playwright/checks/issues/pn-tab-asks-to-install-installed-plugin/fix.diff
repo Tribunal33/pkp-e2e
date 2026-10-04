@@ -1,0 +1,50 @@
+--- a/pages/management/SettingsHandler.php
++++ b/pages/management/SettingsHandler.php
+@@ -34,6 +34,7 @@
+ use PKP\components\forms\context\PKPSearchIndexingForm;
+ use PKP\core\PKPApplication;
+ use PKP\core\PKPRequest;
++use PKP\db\DAORegistry;
+ use PKP\pages\management\ManagementHandler;
+ use PKP\plugins\Hook;
+ use PKP\plugins\PluginRegistry;
+@@ -139,7 +140,14 @@
+         // form loads a single field which enables/disables the plugin, and does
+         // not need to be submitted. It's a dirty hack, but we can change this once
+         // an API is in place for plugins and plugin settings.
+-        $plnPlugin = PluginRegistry::getPlugin('generic', 'plnplugin');
++        // The box shows whenever the plugin is installed, enabled or not. The
++        // registry holds only enabled plugins, under the name each plugin gives
++        // itself, so the plugin is created from its install record instead,
++        // without registering it.
++        $versionDao = DAORegistry::getDAO('VersionDAO'); /** @var \PKP\site\VersionDAO $versionDao */
++        $plnVersion = $versionDao->getCurrentVersion('plugins.generic', 'pln');
++        $plnClass = $plnVersion ? '\\APP\\plugins\\generic\\pln\\' . $plnVersion->getProductClassName() : null;
++        $plnPlugin = $plnClass && class_exists($plnClass) ? new $plnClass() : null;
+         $archivePnForm = new \PKP\components\forms\FormComponent('archivePn', 'PUT', 'dummy', $locales);
+         $archivePnForm->addPage([
+             'id' => 'default',
+@@ -151,10 +159,10 @@
+             ]);
+ 
+         if ($plnPlugin) {
+-            $plnPlugin = PluginRegistry::getPlugin('generic', 'plnplugin');
+-            $pnEnablePluginUrl = $dispatcher->url($request, PKPApplication::ROUTE_COMPONENT, null, 'grid.settings.plugins.SettingsPluginGridHandler', 'enable', null, ['plugin' => 'plnplugin', 'category' => 'generic']);
+-            $pnDisablePluginUrl = $dispatcher->url($request, PKPApplication::ROUTE_COMPONENT, null, 'grid.settings.plugins.SettingsPluginGridHandler', 'disable', null, ['plugin' => 'plnplugin', 'category' => 'generic']);
+-            $pnSettingsUrl = $dispatcher->url($request, PKPApplication::ROUTE_COMPONENT, null, 'grid.settings.plugins.SettingsPluginGridHandler', 'manage', null, ['verb' => 'settings', 'plugin' => 'plnplugin', 'category' => 'generic']);
++            $plnPluginName = $plnPlugin->getName();
++            $pnEnablePluginUrl = $dispatcher->url($request, PKPApplication::ROUTE_COMPONENT, null, 'grid.settings.plugins.SettingsPluginGridHandler', 'enable', null, ['plugin' => $plnPluginName, 'category' => 'generic']);
++            $pnDisablePluginUrl = $dispatcher->url($request, PKPApplication::ROUTE_COMPONENT, null, 'grid.settings.plugins.SettingsPluginGridHandler', 'disable', null, ['plugin' => $plnPluginName, 'category' => 'generic']);
++            $pnSettingsUrl = $dispatcher->url($request, PKPApplication::ROUTE_COMPONENT, null, 'grid.settings.plugins.SettingsPluginGridHandler', 'manage', null, ['verb' => 'settings', 'plugin' => $plnPluginName, 'category' => 'generic']);
+ 
+             $archivePnForm->addField(new \APP\components\forms\FieldArchivingPn('pn', [
+                 'label' => __('manager.setup.plnPluginArchiving'),
+@@ -166,7 +174,7 @@
+                         'label' => __('manager.setup.plnPluginEnable'),
+                     ],
+                 ],
+-                'value' => (bool) $plnPlugin,
++                'value' => (bool) $plnPlugin->getEnabled(),
+                 'enablePluginUrl' => $pnEnablePluginUrl,
+                 'disablePluginUrl' => $pnDisablePluginUrl,
+                 'settingsUrl' => $pnSettingsUrl,
