@@ -1802,7 +1802,7 @@ the "Envoyé par" and "Envoyé à" button
 "##default.groups.name.sectionEditor##"; OJS and OMP read
 "Rédacteur-trice" there. The English list of the same contexts showed
 no code.
-Issue report: [docs/issues/U56-A11-french-manage-emails-raw-keys.md](../issues/U56-A11-french-manage-emails-raw-keys.md).
+Issue report: [pkp-e2e#875](https://github.com/jardakotesovec/pkp-e2e/issues/875) ([docs/issues/U56-A11-french-manage-emails-raw-keys.md](../issues/U56-A11-french-manage-emails-raw-keys.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26 on the seeded press and on a new
