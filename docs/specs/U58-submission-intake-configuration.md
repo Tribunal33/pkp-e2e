@@ -1779,7 +1779,7 @@ Issue report: [pkp-e2e#827](https://github.com/jardakotesovec/pkp-e2e/issues/827
 <a id="fn-f-a8"></a>
 **f-a8** — `manager.setup.genres.key.description` (lib/pkp `manager.po`),
 "An optional short symbolic identifer for this genre.", in the three apps.
-Issue report: [docs/issues/U58-A8-component-key-help-misspelled-genre.md](../issues/U58-A8-component-key-help-misspelled-genre.md).
+Issue report: [pkp-e2e#830](https://github.com/jardakotesovec/pkp-e2e/issues/830) ([docs/issues/U58-A8-component-key-help-misspelled-genre.md](../issues/U58-A8-component-key-help-misspelled-genre.md)).
 
 <a id="fn-f-a9"></a>
 **f-a9** — `grid.genres.title` has an empty `msgstr` in OMP's and OPS's
