@@ -883,6 +883,7 @@ Left out of the scenarios above, by reason:
   - the guard for A10 (issue report `docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md`): on a press and a preprint server, a data citation added in the submission wizard's "Data" section shows in its table and on "Review" at once, without a reload
   - the guard for A2 (issue report `docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md`): "Add" with a paste that repeats a listed reference keeps the repeated line in the box and says it was skipped, while the new lines are added
   - the guard for A3 (issue report `docs/issues/U42-A3-reference-search-keeps-rows-without-word.md`): "Search references here" with a word no row shows (such as "http" or "citations") keeps no row, and a word a row shows keeps that row
+  - the guard for A15 (issue report `docs/issues/U42-A15-data-citation-identifier-cannot-be-removed.md`): on "Edit Data Citation", choosing the empty "Identifier type" and clearing "Identifier" removes the identifier, and a cleared "Repository", "Year" or "URL" is gone on the next "Edit"
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -989,7 +990,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | "Edit citation" keeps an author row added or deleted before "Close", and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A screen reader hears no name for the author boxes in "Edit citation" and the data citation panel | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A15](#a15) | A data citation's identifier can never be removed | 🐞 | minor | — |
+| [A15](#a15) | Editing a data citation, its identifier cannot be removed and a cleared Repository, Year or URL is kept | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1192,13 +1193,21 @@ off in a new install.
 Basis: probe, 2026-10-04. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — A data citation's identifier can never be removed** · 🐞 · minor.
-An editor who wants to drop a data citation's identifier finds no way to do
-it: "Identifier type" has no empty entry, and clearing "Identifier" on
-"Edit Data Citation" is refused with "This field is required when
-identifier type is present.". The only way is to delete the data citation
-and add it again.
-Basis: probe, 2026-09-24. <sup>f-a15</sup>
+**A15 — Editing a data citation, its identifier cannot be removed and a cleared Repository, Year or URL is kept** · 🐞 · medium.
+An editor who wants to drop a data citation's identifier finds no way to
+do it on "Edit Data Citation": "Identifier type" has no empty entry, and
+clearing "Identifier" is refused with "This field is required when
+identifier type is present.". Replacing the identifier with another one
+works; only removing it is blocked. Emptying "Repository", "Year" or
+"URL" on the same panel looks like it worked: "Save" closes the panel
+without a message. But the old value is still there when "Edit" opens
+again, and it stays in the publication's metadata. It needs data
+citations turned on ("Enable data citation metadata", off by default). A
+kept repository, year or URL shows in "View Data Citation" and in a
+journal's JATS export. A kept URL also goes out in a journal's Crossref
+and DataCite deposits and a preprint server's Crossref deposit, for a
+data citation without an identifier.
+Basis: probe, 2026-10-04. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — The row expander is always named "Collapse" and ignores the keyboard** · 🐞 · medium.
@@ -2170,6 +2179,7 @@ the select given no empty option). Live-probed 2026-09-24, all three apps:
 the list's options hold no empty entry, and clearing "Identifier" on a
 saved data citation answered 400 with "This field is required when
 identifier type is present.".
+Issue report: [docs/issues/U42-A15-data-citation-identifier-cannot-be-removed.md](../issues/U42-A15-data-citation-identifier-cannot-be-removed.md).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `CitationManagerCellToggle.vue` uses the shared

@@ -1,0 +1,77 @@
+--- a/lib/pkp/classes/components/forms/dataCitation/DataCitationEditForm.php
++++ b/lib/pkp/classes/components/forms/dataCitation/DataCitationEditForm.php
+@@ -38,6 +38,8 @@
+ 
+         $types = ['DOI', 'Accession', 'PURL', 'ARK', 'URI', 'ARXIV', 'ECLI', 'Handle', 'ISSN', 'ISBN', 'PMID', 'PMCID', 'UUID'];
+         $identifierTypes = array_map(fn($type) => ['value' => $type, 'label' => $type], $types);
++        // An empty entry, so that a saved identifier can be removed
++        array_unshift($identifierTypes, ['value' => '', 'label' => '']);
+ 
+         $types = ['supporting', 'generated', 'analyzed', 'non-analyzed'];
+         $relationshipTypes = array_map(
+--- a/lib/pkp/classes/core/traits/EntityUpdate.php
++++ b/lib/pkp/classes/core/traits/EntityUpdate.php
+@@ -161,9 +161,10 @@
+                 if ($value !== [] && $value !== null) {
+                     continue;
+                 }
+-                if (!$this->isMultilingual($propName)) {
++                if (!$this->isMultilingual($propName) && $value !== null) {
+                     // Non-multilingual settings: an empty array is a value, not
+                     // a clear-all signal. The upsert pass already wrote it.
++                    // A null clears it, as it does a multilingual one.
+                     continue;
+                 }
+                 $explicitClears[] = $propName;
+--- a/lib/pkp/classes/dataCitation/Repository.php
++++ b/lib/pkp/classes/dataCitation/Repository.php
+@@ -54,6 +54,15 @@
+     {
+         $schema = DataCitation::getSchemaName();
+ 
++        // On every edit, check the identifier and its type as a pair: a half the request leaves out comes from the stored record
++        if ($dataCitation) {
++            foreach (['identifier', 'identifierType'] as $prop) {
++                if (!array_key_exists($prop, $props)) {
++                    $props[$prop] = $dataCitation->getAttribute($prop);
++                }
++            }
++        }
++
+         $validator = ValidatorFactory::make(
+             $props,
+             $this->schemaService->getValidationRules($schema, [])
+--- a/lib/pkp/classes/announcement/Announcement.php
++++ b/lib/pkp/classes/announcement/Announcement.php
+@@ -111,6 +111,8 @@
+     public function save(array $options = [])
+     {
+         $newlyCreated = !$this->exists;
++        // The image as stored before this save: a removed image's row is gone once parent::save() returns
++        $storedImage = $newlyCreated ? null : $this->getOriginal('image');
+         $saved = parent::save($options);
+ 
+         if (!$saved) {
+@@ -137,8 +139,8 @@
+ 
+         // If there is no new image and image data exists in DB and it's now removed as part of update
+         // need to delete the image for this announcement model instance
+-        if (!$hasNewImage && !$this?->image && $this->fresh()->image) {
+-            $this->deleteImage();
++        if (!$hasNewImage && !$this?->image && $storedImage) {
++            $this->deleteImage($storedImage);
+             DB::table($this->getSettingsTable())
+                 ->where($this->getkeyName(), $this->getKey())
+                 ->where('setting_name', 'image')
+@@ -297,9 +299,9 @@
+     /**
+      * Delete the image related to announcement
+      */
+-    protected function deleteImage(): void
++    protected function deleteImage(?object $image = null): void
+     {
+-        $image = $this->fresh()->image;
++        $image ??= $this->fresh()->image;
+ 
+         if ($image && isset($image->uploadName)) {
+             $publicFileManager = new PublicFileManager();
