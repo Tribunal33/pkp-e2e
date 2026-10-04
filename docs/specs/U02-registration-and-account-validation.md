@@ -730,13 +730,18 @@ Left out of the scenarios above, by reason:
     issue report
     (`docs/issues/U02-OPS1-server-site-register-asks-reviewing-interests.md`)
     proposes, once fixed
+  - with validation required and `[invitations] expiration_days = 0`, the
+    emailed activation link still opening "Confirm and activate your
+    account" within `validation_timeout`, and activating the account
+    ([A1](#a1); Rule 14): the guard the issue report
+    (`docs/issues/U02-A1-activation-link-expires-before-validation-timeout.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
   - the User Registration option's wording on a press and a preprint server (Settings; scenario 5's option)
 - **Register carries it**:
   - A7 (Reader granted though closed to self-registration; Rule 7)
-  - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
 - **No seed**:
   - every journal closed: the site-level page closes and the site Login drops the link (Rule 2)
   - a restricted journal still rendering the form, its header offering "Register" (Rule 3): what is missing is a `restrictSiteAccess` key on `POST scenarios/context` (Settings "Site Access"); a Journal Manager's tick would be set-up for a visitor's read, not a step
@@ -766,7 +771,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | Activation links die after 3 days while the configuration's validation-timeout key promises 14 and does nothing | 🐞 | latent | — |
+| [A1](#a1) | Account activation links stop working after 3 days, not the 14 days the configuration file sets | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | A new user activating their account sees two pages with no heading and no Login link | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Registering on the site-wide Register page ignores an unticked "notify me" box: announcement emails stay on | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -780,15 +785,24 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 ### All apps
 
 <a id="a1"></a>
-**A1 — Validation link lifetime does not follow its configuration key** · 🐞 · latent.
-The configuration file's email section carries `validation_timeout = 14`,
-described as "the number of days a user has to validate their account before
-their access key expires". The activation link actually lives as long as any
-invitation, 3 days by default, and changing the key changes nothing. A
-registrant who opens the email on day four is told the invitation is
-unavailable, with no way to have a new link sent. The key predates the move
-of activation links onto the invitation machinery and was left behind.
-Basis: judgment (a clock, not a screen, would settle it). <sup>[f-a1](#fn-a1)</sup>
+**A1 — Account activation links stop working after 3 days, not the 14 days the configuration file sets** · 🐞 · medium.
+Where new accounts must confirm their email address, the emailed
+activation link stops working three days after registration. The
+configuration file sets 14 days for it (`validation_timeout`, "the
+number of days a user has to validate their account"), and changing
+that value changes nothing.
+
+A newcomer who opens the email on day four sees "Invitation
+Unavailable". Signing in is refused with a message telling them to
+follow the email they already used, and registering again is refused
+because the username and email are taken. Only a Journal Manager who
+enables the account by hand lets them in.
+
+It happens only where an administrator has turned on email validation
+(`require_validation`, off by default). The link follows the lifetime
+of all invitations instead (`[invitations] expiration_days`, 3 by
+default).
+Basis: probe, 2026-10-04. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
 **A2 — A new user activating their account sees two pages with no heading and no Login link** · 🐞 · low.
@@ -1583,6 +1597,7 @@ scopes `notExpired()`. Pre-invitation releases used an access key with
 `validation_timeout` as its lifetime; the key stayed in the template after
 the flow moved (basis: code reading 2026-09-02, upstream archaeology not
 done).
+Issue report: [pkp-e2e#840](https://github.com/jardakotesovec/pkp-e2e/issues/840) ([docs/issues/U02-A1-activation-link-expires-before-validation-timeout.md](../issues/U02-A1-activation-link-expires-before-validation-timeout.md)).
 
 <a id="fn-a2"></a>
 **f-a2** — `RegistrationHandler::activateUser()` assigns only `message`
