@@ -1,0 +1,13 @@
+--- a/lib/pkp/classes/services/PKPSiteService.php
++++ b/lib/pkp/classes/services/PKPSiteService.php
+@@ -118,8 +118,8 @@
+         ValidatorFactory::required(
+             $validator,
+             EntityWriteInterface::VALIDATE_ACTION_EDIT,
+-            $schemaService->getRequiredProps(PKPSchemaService::SCHEMA_PUBLICATION),
+-            $schemaService->getMultilingualProps(PKPSchemaService::SCHEMA_PUBLICATION),
++            $schemaService->getRequiredProps(PKPSchemaService::SCHEMA_SITE),
++            $schemaService->getMultilingualProps(PKPSchemaService::SCHEMA_SITE),
+             $allowedLocales,
+             $primaryLocale
+         );

@@ -802,6 +802,10 @@ journals with throwaway accounts. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - the site's save (`PUT index/api/v1/site`) sent with an empty "Email
+    of principal contact" refused with 400, the guard A4's report names
+    (Rule 22; A4)
 - **Nothing new to test**:
   - the minimum password length on the Register page, a password reset
     and an invitation's acceptance, as on Profile › Password (Rule 10)
@@ -826,8 +830,6 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A2 (the French interface's raw codes; Rule 23)
   - A3 (the server-log warning on most saves; Side effects)
-  - A4 (required fields left empty by a save made outside the page;
-    Rule 22)
   - A5 (the journal-only theme fields changing nothing on the site;
     Rule 17a)
   - A6 (the removed style sheet still at its address; Rule 21;
@@ -876,7 +878,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A2](#a2) | French (Canada) Site Settings: a press's "Information" tab and a press's or preprint server's "Courriels en lot" description show codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Site Settings saves, and 3.5's daily scheduled tasks, log a PHP warning when no journal redirect is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A4](#a4) | The site's own save accepts an empty "Site Name" and principal contact when made outside the page | 🐞 | latent | — |
+| [A4](#a4) | A site save sent outside Site Settings stores an empty contact email, and password resets then fail | 🐞 | low · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | minor | — |
 | [A8](#a8) | Under a "Journal redirect", the Site Administrator's sign-in lands on the journal's home page, not its Dashboard | 🐞 | minor | — |
@@ -941,13 +943,26 @@ way round.
 Basis: probe, 2026-10-04. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The site's save does not require its required fields** · 🐞 · latent.
-The page refuses an empty "Site Name", "Name of principal contact" or
-"Email of principal contact" before sending, but the site's own save
-request checks another record's required fields instead of the site's,
-so a save made outside the page stores them empty. With an empty contact
-address the site's own emails would have no sender.
-Basis: code. <sup>f-a4</sup>
+**A4 — A site save sent outside Site Settings stores an empty contact email, and password resets then fail** · 🐞 · low · crash: server.
+The site's save request, `PUT /index.php/index/api/v1/site` (the
+request every Site Settings form sends), stores an empty "Site Name",
+"Name of principal contact" and "Email of principal contact". The
+Site Settings page refuses these empty fields before it sends anything,
+so only the same request sent another way gets them through: by a Site
+Administrator from the browser's console, or by a REST API client with
+a Site Administrator's API token where the installation turns API
+tokens on.
+On an installation whose mail settings set no default envelope sender
+(the configuration template's default), every "Forgot your password?"
+request on any journal of the site then fails on the server once the
+contact email is empty: the user gets an empty page and no email, and
+nobody is told why.
+On a site with two or more journals the Site Administrator can type the
+address back on Site Settings › "Information". A site with one journal
+does not show that tab, so its Site Administrator has to send the
+request again with the address, or create a second journal to reach
+the tab.
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — Journal home-page fields on the site's "Theme" tab** · ❓ · minor.
@@ -1682,6 +1697,7 @@ schema's required and multilingual props to
 `ValidatorFactory::required()`. No screen reaches it: the page refuses
 first (fn-c), and only a direct request gets there; fn-l has the test
 tooling's request that stored an empty Site Name.
+Issue report: [docs/issues/U60-A4-site-save-stores-empty-contact-email.md](../issues/U60-A4-site-save-stores-empty-contact-email.md).
 
 <a id="fn-f-a5"></a>
 **f-a5** — fn-j: the default theme declares its home-page and
