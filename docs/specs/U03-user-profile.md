@@ -1006,7 +1006,9 @@ Left out of the scenarios above, by reason:
     proposes, once fixed
   - a journal closed to registrations not listed in another journal's
     "Register with other journals", on the site-level profile or on the
-    site-wide Register page ([A4](#a4); Rules 8a and 8c): the guard the
+    site-wide Register page, and "Save" on the Roles tab of the closed
+    journal's profile keeping the user's roles in the one open journal
+    ([A4](#a4); Rules 8a and 8c): the guard the
     issue report
     (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`)
     proposes, once fixed
@@ -1066,7 +1068,7 @@ unless its Basis line says otherwise.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A .gif too large for the profile image is refused, yet the user's current picture is removed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A4](#a4) | A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A4](#a4) | Saving Roles in a journal closed to registrations ends the user's roles in another journal; the closed one stays listed | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | An email change asked for on the site-wide Profile page sends a message signed "Kind regards, Array" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | After a successful password change the previous attempt's error notice stays on screen beside the saved message | 🐞 | minor | — |
@@ -1106,23 +1108,27 @@ A .jpg or .png never meets this, because the browser shrinks it to
 Basis: probe, 2026-10-03. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a4"></a>
-**A4 — A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page** · 🐞 · low.
+**A4 — Saving Roles in a journal closed to registrations ends the user's roles in another journal; the closed one stays listed** · 🐞 · medium.
 When a journal's manager closes it to registrations ("The Journal
-Manager will register all user accounts…" under Site Access Options),
-its role boxes disappear everywhere, but its name does not. Other
-journals' profiles list it under "Register with other journals" with
-nothing to tick, and so do the site-level profile's Roles tab and the
-site-wide Register page, under "Which journals on this site would you
-like to register with?".
+Manager will register all user accounts…" under Site Access Options)
+and exactly one other journal on the site accepts registrations, a user
+who presses "Save" on the Roles tab of their profile opened in the
+closed journal is told "Your changes have been saved.", and their
+Reader, Author and Reviewer roles in the open journal end silently.
+That tab has no "Register with other journals", so the open journal is
+not offered there. The user can tick the roles again on the open
+journal's own profile, once they notice.
 
-A visitor or a user reads it as a journal they could join, and finds no
-way to. The journals that accept registrations keep their boxes.
+On any site where the closed journal sits beside other journals, it is
+also still listed by name with nothing to tick under it: on other
+journals' profiles under "Register with other journals", on the
+site-level profile's Roles tab, and on the site-wide Register page under
+"Which journals on this site would you like to register with?". A
+visitor or a user reads it as a journal they could join, and finds no
+way to.
 
-It needs a site with two or more journals, one of them closed to
-registrations. Where exactly one other journal accepts registrations,
-the profile opened in the closed journal does not offer that journal
-either: its Roles tab has no "Register with other journals" at all.
-Basis: probe, 2026-10-03. <sup>[f-a4](#fn-a4)</sup>
+Both come from the same code, and one fix covers both.
+Basis: probe, 2026-10-04. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — The scheduled-role banner ignores which journal is open** · ❓ · minor.

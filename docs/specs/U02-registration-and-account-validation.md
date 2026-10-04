@@ -721,13 +721,16 @@ Left out of the scenarios above, by reason:
     issue report
     (`docs/issues/U02-OMP2-press-site-register-consent-shown-early.md`)
     proposes, once fixed
+  - a journal closed to registrations left out of the site-wide Register
+    page's list ([A4](#a4); Rule 8): the guard the issue report
+    (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
   - the User Registration option's wording on a press and a preprint server (Settings; scenario 5's option)
 - **Register carries it**:
   - A7 (Reader granted though closed to self-registration; Rule 7)
-  - A4 (closed journals listed with no roles under them; Rule 8)
   - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
   - OPS1 (a preprint-server site's page asks for reviewing interests with no reviewer role)
 - **No seed**:
@@ -762,7 +765,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | Activation links die after 3 days while the configuration's validation-timeout key promises 14 and does nothing | 🐞 | latent | — |
 | [A2](#a2) | A new user activating their account sees two pages with no heading and no Login link | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Registering on the site-wide Register page ignores an unticked "notify me" box: announcement emails stay on | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | minor | — |
+| [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press site's site-wide Register page, each press's privacy consent box shows before any role is ticked | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -822,15 +825,19 @@ page is reached only by typing its address.
 Basis: probe, 2026-10-04. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — Closed journals listed with nothing to tick** · 🐞 · minor.
+**A4 — Closed journals listed with nothing to tick** · 🐞 · medium.
 Under "Which journals on this site would you like to register with?" every
 enabled journal is listed by name, including one that closed registration.
-Such a journal shows the "Request the following roles." heading with no
-checkbox under it, an invitation the page cannot honor, while its privacy
-consent line is still part of the block. A disabled journal, by contrast, is
-left out. Expected: journals with closed registration are left out the same
-way.
-Basis: probe. <sup>[f-a4](#fn-a4)</sup>
+Such a journal shows its name with no role to tick under it (a screen
+reader also reads "Request the following roles."), an invitation the page
+cannot honor; on a press site its privacy consent box shows there too,
+with nothing above it to consent for ([OMP2](#omp2)). A disabled journal,
+by contrast, is left out. Expected: journals with closed registration are
+left out the same way. The same unfiltered list reaches the profile's
+Roles tabs, where saving the closed journal's tab ends the user's roles
+in the one other open journal; the shared issue report rates the fault
+medium for that.
+Basis: probe, 2026-10-04. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — The "Login" link's destination is dropped** · ❓ · minor.
@@ -1611,6 +1618,7 @@ checked separately); every other open context kept its boxes. Restoring
 "Visitors can register a user account with the journal." brought the
 context's role boxes back. A context disabled on Administration › Hosted
 Journals was absent from the list in the same run.
+Issue report: [pkp-e2e#794](https://github.com/jardakotesovec/pkp-e2e/issues/794) ([docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md](../issues/U03-A4-closed-journal-listed-on-roles-tab.md)), shared with spec U03 A4.
 
 <a id="fn-a5"></a>
 **f-a5** — Note h: `{url page="login" source=$rolesProfileUrl}` with

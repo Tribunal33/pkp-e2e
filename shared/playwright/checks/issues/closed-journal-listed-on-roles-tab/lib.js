@@ -132,4 +132,73 @@ async function readSiteRegister(page, app, names = []) {
     return {status: res && res.status(), ...data};
 }
 
-module.exports = {WORDS, scratchNames, createJournal, closeRegistration, openRoles, readRoles, openFold, readSiteRegister, flat};
+/**
+ * Steps 11-12 (role loss): the journal's own Register page, filled as a newcomer would and sent
+ * (the journal grants "Reader"); then that journal's Profile, "Roles", "Author" ticked, "Save".
+ */
+async function registerAndTakeAuthor(page, app, who) {
+    const {registerReader} = require('../login-from-journal-not-public-forgets-page/lib.js');
+    const reg = await registerReader(page, app, who);
+    const {ProfilePage} = require('../../../pages/ProfilePage.js');
+    const profile = new ProfilePage(page, app.contextPath);
+    await profile.goto('roles');
+    await idle(page).catch(() => {});
+    const author = profile.roleBox('Author');
+    const had = {count: await author.count()};
+    if (had.count) {
+        await author.check();
+        await profile.save().catch((e) => (had.saveError = String(e).slice(0, 300)));
+    }
+    return {register: reg, author: had};
+}
+
+/** Step 13: the Profile page of a context, "Roles", "Save" pressed without touching anything. */
+async function saveRolesUnchanged(page, contextPath) {
+    const profile = await openRoles(page, contextPath);
+    const save = profile.saveButton();
+    if (!(await save.count())) return {save: false};
+    let error = null;
+    await profile.save().catch((e) => (error = String(e).slice(0, 300)));
+    await idle(page).catch(() => {});
+    const notice = await page.locator('.pkp_notification, [role="status"]').allInnerTexts().catch(() => []);
+    return {save: true, error, notice: notice.map((t) => flat(t, 120)).filter(Boolean)};
+}
+
+/** The current context's own role boxes on its Roles tab: label and ticked. */
+async function ownRoleBoxes(page, contextPath) {
+    await openRoles(page, contextPath);
+    return page.evaluate(() => {
+        const area = document.querySelector('#userGroups');
+        if (!area) return null;
+        const first = area.querySelector('.section');
+        return first ? [...first.querySelectorAll('input[type=checkbox]')].map((i) => ({label: ((i.closest('li') || i.parentElement).innerText || '').trim(), checked: i.checked})) : [];
+    });
+}
+
+/**
+ * Step 15: Settings › Users & Roles (`management/settings/access`) of a context, signed in as a
+ * manager or `admin`: search the user's email and read their row as shown.
+ */
+async function usersRow(page, app, contextPath, email) {
+    const loc = app.line && /3_[34]/.test(app.line) ? '' : '/en';
+    await page.goto(app.url(`/index.php/${contextPath}${loc}/management/settings/access`));
+    await idle(page).catch(() => {});
+    const box = page.getByRole('searchbox', {name: /Enter a user's name/});
+    if (await box.count()) {
+        await box.fill(email);
+        const answer = page.waitForResponse((r) => /\/api\/v1\/users\?/.test(r.url()) && r.url().includes('searchPhrase='), {timeout: 30_000}).catch(() => null);
+        await box.press('Enter');
+        await answer;
+    } else {
+        const legacy = page.locator('input[name="search"]').first();
+        await legacy.waitFor({state: 'visible', timeout: 30_000});
+        await legacy.fill(email);
+        await legacy.press('Enter');
+    }
+    await idle(page).catch(() => {});
+    await sleep(800);
+    const rows = await page.locator('tr', {hasText: email}).allInnerTexts().catch(() => []);
+    return {rows: rows.map((r) => flat(r, 400))};
+}
+
+module.exports = {WORDS, scratchNames, createJournal, closeRegistration, openRoles, readRoles, openFold, readSiteRegister, registerAndTakeAuthor, saveRolesUnchanged, ownRoleBoxes, usersRow, flat};

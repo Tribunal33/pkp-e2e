@@ -1,6 +1,6 @@
-# A journal closed to registrations is still listed, with nothing to tick, on Roles tabs and the Register page
+# Saving Roles in a journal closed to registrations ends the user's roles in another journal; the closed one stays listed
 
-- **Severity** low
+- **Severity** medium
 - **Effort** small
 - **Kind** regression
 - **Affects**
@@ -8,50 +8,59 @@
   - 3.5: OJS, OMP, OPS
   - 3.4: OJS, OMP, OPS (code)
   - 3.3: OJS, OMP, OPS (code)
-- **Introduced** `pkp/pkp-lib#2225` for `pkp/pkp-lib#2039` · [638c16d79e](https://github.com/pkp/pkp-lib/commit/638c16d79eb300cab28d0738a9deaab5f5a60dd2) · 2017-01-24 · Nate Wright (NateWr)
-- **Upstream** none found (2026-10-03)
-- **Tracked in** spec U03 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a4)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Introduced** `pkp/pkp-lib#2225` for `pkp/pkp-lib#2039` · [638c16d79e](https://github.com/pkp/pkp-lib/commit/638c16d79eb300cab28d0738a9deaab5f5a60dd2) · 2017-01-24 · Nate Wright (NateWr); it replaced the site-level pages' list of journals open to registration, which had left closed journals out
+- **Upstream** none found (2026-10-04)
+- **Tracked in** spec U03 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a4) · spec U02 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U02-registration-and-account-validation.md#a4)
+- **Checked** 2026-10-03; the site-wide Register page and steps 11 to 15 on 2026-10-04; each branch's tip (the commits in Evidence)
 
 ## Summary
 
 When a journal's manager closes it to registrations ("The Journal
-Manager will register all user accounts…" under Site Access Options),
-its role boxes disappear everywhere, but its name does not. Other
-journals' profiles list it under "Register with other journals" with
-nothing to tick, and so do the site-level profile's Roles tab and the
-site-wide Register page, under "Which journals on this site would you
-like to register with?".
+Manager will register all user accounts…" under Site Access Options)
+and exactly one other journal on the site accepts registrations, a user
+who presses "Save" on the Roles tab of their profile opened in the
+closed journal is told "Your changes have been saved.", and their
+Reader, Author and Reviewer roles in the open journal end silently.
+That tab has no "Register with other journals", so the open journal is
+not offered there. The user can tick the roles again on the open
+journal's own profile, once they notice.
 
-A visitor or a user reads it as a journal they could join, and finds no
-way to. The journals that accept registrations keep their boxes.
+On any site where the closed journal sits beside other journals, it is
+also still listed by name with nothing to tick under it: on other
+journals' profiles under "Register with other journals", on the
+site-level profile's Roles tab, and on the site-wide Register page under
+"Which journals on this site would you like to register with?". A
+visitor or a user reads it as a journal they could join, and finds no
+way to.
 
-It needs a site with two or more journals, one of them closed to
-registrations. Where exactly one other journal accepts registrations,
-the profile opened in the closed journal does not offer that journal
-either: its Roles tab has no "Register with other journals" at all.
+Both come from the same code, and one fix covers both.
 
 ## Impact
 
-- **Lost**: no data and no role. In the second case the user loses the
-  route, from the closed journal's profile, to register with the one
-  journal that accepts registrations.
-- **Who**: every signed-in user who opens "Register with other
-  journals" on another journal's profile, and every visitor on the
-  site-wide Register page. A visitor reaches that page from the site
-  homepage's "Register" on any site with several journals, unless the
-  homepage is redirected to one journal ("Journal redirect" in the site
-  settings); then only by its address. The site-level profile shows the
-  list to the site administrator always, and to a user with roles in
-  two or more journals. The second case reaches a user on the closed
-  journal's profile when exactly one other journal is open.
-- **Way round**: in the second case, the open journal's own profile
-  ("Roles") or its Register page offers its boxes.
+- **Lost**: the listing loses nothing; the listed name misleads. With
+  the role loss the user's self-registered roles in the open journal
+  end, nobody is told, and that journal's Users & Roles list then shows the
+  user with no role.
+- **Who**: the listing meets every signed-in user who opens "Register
+  with other journals" on another journal's profile, and every visitor
+  on the site-wide Register page. On a site with several journals the
+  site homepage's "Register" leads there; when the site sends its
+  homepage straight to one journal ("Journal redirect" in the site
+  settings), a visitor reaches the page only by typing its address. The
+  site-level profile shows the list to the site administrator always,
+  and to a user with roles in two or more journals. The role loss
+  meets a user with a role in the open journal who saves the Roles tab
+  of their profile opened in the closed journal, for instance to change
+  their reviewing interests there.
+- **Way round**: for the role loss the open journal's own profile
+  ("Roles") offers the boxes again, and its manager can give the roles
+  back in Users & Roles, but only once someone notices they are gone.
 
-Low: the listed name misleads without blocking anything, and the one
-missing route has a way round one page away. It would be medium if
-visitors were found to give up on registering because the list misled
-them.
+Medium: roles in another journal end silently while the save reports
+success, though only in a rarely met setup (a closed
+journal beside exactly one open one), and the roles can be given back
+on screen. It would be high if that setup were found common on sites
+with several journals.
 
 ## Steps to reproduce
 
@@ -100,13 +109,32 @@ Only one other journal open:
 10. Sign in as `dbarnes`, open the profile in u03rfclosed and press
     "Roles".
 
+Saving the closed journal's Roles tab (after step 9):
+
+11. Sign out. Open publicknowledge's Register page
+    (`/index.php/publicknowledge/en/user/register`) and register: Given
+    Name "Una", Family Name "Newcomer", Affiliation "Newcomer", Country
+    "Canada", Email "u03rfnew@mailinator.com", Username "u03rfnew", a
+    password twice, the privacy box ticked; "Register". The page reads
+    "Registration complete" and Una is signed in, as a Reader.
+12. Open the profile in publicknowledge, press "Roles", tick "Author",
+    "Save".
+13. Open the profile in u03rfclosed, press "Roles", then "Save" without
+    changing anything.
+14. Open the profile in publicknowledge and press "Roles".
+15. Sign out, and sign in as `admin`. Open publicknowledge's Settings ›
+    Users & Roles (`/index.php/publicknowledge/en/management/settings/access`)
+    and search "u03rfnew@mailinator.com".
+
 **Expected**: a journal closed to registrations is not offered anywhere.
 At step 6 the fold lists "u03rf Open Journal" with "Reader", "Author"
 and "Reviewer", and nothing else. At step 7 the list holds "Journal of
 Public Knowledge" and "u03rf Open Journal", each with its boxes. At step
 8, under "Which journals on this site would you like to register with?",
 the same two journals. At step 10, "Register with other journals"
-offers "Journal of Public Knowledge" with its boxes.
+offers "Journal of Public Knowledge" with its boxes. At step 14
+"Reader" and "Author" are still ticked, and at step 15 Una's row lists
+"Reader" and "Author".
 
 **Observed**: at step 6 the fold lists "u03rf Open Journal" with its
 three boxes, then "u03rf Closed Journal" with nothing under it. At step
@@ -115,14 +143,22 @@ it. At step 8 the Register page lists "Journal of Public Knowledge" and
 "u03rf Open Journal" with "Reader" and "Reviewer", then "u03rf Closed
 Journal" with nothing under it; a screen reader also reads its prompt
 "Request the following roles.", which the default theme hides from
-sight. At step 10 the Roles tab holds only "Reviewing interests" (OJS,
+sight. On OMP the closed press's block also shows a box, "Yes, I agree
+to have my data collected and stored according to this press's privacy
+statement.", with no role above it to consent for; OJS and OPS keep that
+line off-screen until one of the journal's roles is ticked. At step 10
+the Roles tab holds only "Reviewing interests" (OJS,
 OMP) or nothing but the "Roles" heading (OPS). On OMP the lists read
-"u03rf Closed Press", on OPS "u03rf Closed Server".
+"u03rf Closed Press", on OPS "u03rf Closed Server". At step 13 the Save
+answers "Your changes have been saved.". At step 14 no box is ticked,
+and at step 15 Una's row has an empty Roles column and no start date.
 
 At step 5 the closed journal's own tab looks right: "Roles", then
 "Register with other journals" with the two open journals and their
 boxes. The page still holds an empty section for u03rf Closed Journal,
-which shows nothing only because of a separate fault (Cause).
+which shows nothing only because of a separate fault (Cause). A journal
+created with "Enable this journal to appear publicly on the site" left
+unticked is not listed on the Register page at all.
 
 ## Cause
 
@@ -152,9 +188,15 @@ and print each context's name with its groups under it:
 `lib/pkp/templates/user/userGroups.tpl` (the profile's other-journal
 fold and the site-level list) and
 `lib/pkp/templates/frontend/components/registrationFormContexts.tpl`
-(the site-wide Register page, which also prints the legend "Request
-the following roles." per context). A closed context has no groups, so
-it gets its name and nothing under it. Both templates document
+(the site-wide Register page, which also prints per context the legend
+"Request the following roles." and, when the context has a privacy
+statement, its consent line). A closed context has no groups, so it
+gets its name and nothing under it but the legend and the consent line.
+OMP's default theme shows that consent line from the start, where OJS's
+and OPS's move it off-screen until a role is ticked, so on a press site
+the closed press's consent box is on screen. A disabled context is never
+listed, since `getAll(true)` returns enabled contexts only. Both
+templates document
 `$contexts` as "List of journals/presses on this site that have enabled
 registration", and the app's `TemplateManager::initialize()` assigns
 exactly that list on site-level pages (`$contextsForRegistration`).
@@ -191,7 +233,13 @@ registration:
   current one included, and asks for more than one. When the profile is
   opened in a closed journal and only one other journal is open, the
   count is 1, so the "Register with other journals" link is not shown
-  at all (step 10).
+  at all (step 10). The fold's boxes are then not in the form either,
+  and `saveRoleContent()` ends, through
+  `Repo::userGroup()->endAssignments()`, every self-registration group
+  the user holds in an open context that the posted form leaves out. So
+  the Save at step 13 ends the user's roles in the open journal. On
+  `stable-3_4_0` and `stable-3_3_0` the same loop removes the user from
+  the group (`removeUserFromGroup()`).
 
 Reach:
 
@@ -284,11 +332,18 @@ visible change the team should decide on its own.
 Tried on OJS, OMP and OPS `main`: steps 6, 7 and 8 then listed the two
 open journals with their boxes and not the closed one, step 5 held no
 empty section, and step 10 offered "Register with other journals" with
-"Journal of Public Knowledge" and its boxes. What the fix must leave
+"Journal of Public Knowledge" and its boxes; after step 13's Save, Una
+still held "Reader" and "Author" at steps 14 and 15. What the fix must leave
 alone was checked with it in and out, with the same result both times:
 publicknowledge's own boxes; a "Reader" ticked under "u03rf Open
 Journal" in the fold and saved, still ticked after a reload; and the
-Register page offering both open journals with their boxes.
+Register page offering both open journals with their boxes. A second
+check on the site-wide Register page, with a closed and a disabled
+journal of its own (Evidence): with the fix, the closed journal's block left
+the page, its consent box with it on OMP, and the dataset's journal kept
+its boxes; a newcomer registering there with "Reader" and the consent
+box ticked under the dataset's journal got "Registration complete" and
+the Reader role, the same with the fix in and out.
 
 **Alternatives**:
 
@@ -307,18 +362,25 @@ Register page offering both open journals with their boxes.
   build the list of open contexts; `PKPSitemapHandler::_createContextSitemap()`
   and the navigation menu's "Register" item check one context each. No
   other code lists closed contexts (code).
-- Nothing stored changes, and saving is untouched. A theme or plugin
+- Saving changes only where the role loss happens: the fold's boxes are now in
+  the form, so the user's roles in the open journal stay. Roles already
+  ended this way cannot be told from ones the user removed, so no
+  repair is proposed. A theme or plugin
   that overrides `registrationFormContexts.tpl` or `userGroups.tpl`
   receives the list its docblock already promises.
 - Backport: the same code is on `stable-3_5_0`, where the diff applies
   as it stands. On `stable-3_4_0` the group queries in the context lines
   differ (`Repo::userGroup()->getByRoleIds()`), so the hunk is applied
-  by hand; on `stable-3_3_0` the file is `UserFormHelper.inc.php`,
-  indented with tabs, and 3.3 supports PHP 7.3, so the arrow functions
-  become closures.
+  by hand. On `stable-3_3_0` it is a hand port too: the file is
+  `UserFormHelper.inc.php`, indented with tabs; its group lookups use
+  `DAORegistry::getDAO('UserGroupDAO')`, `getByRoleId(...)->toArray()`
+  and `array()`, with a one-line `disableUserReg` skip; and 3.3 supports
+  PHP 7.3, so the arrow functions become closures.
 - The guard: an e2e check that a journal closed to registrations is not
   listed in another journal's fold, on the site-level profile or on the
-  site-wide Register page (a Planned item in spec U03).
+  site-wide Register page, and that saving the closed journal's Roles
+  tab keeps the user's roles in the open journal (a Planned item in
+  spec U03).
 
 Small: a few lines in one pkp-lib method and one template condition,
 following a filter the code base already has.
@@ -334,11 +396,30 @@ following a filter the code base already has.
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/closed-journal-listed-on-roles-tab/walk.js`
   takes steps 1 to 8; with `neighbour` it takes steps 1 to 3, the
   checks of what the fix leaves alone (on the way `dbarnes` takes
-  "Reader" in u03rfopen), then steps 9 and 10.
+  "Reader" in u03rfopen), then steps 9 and 10; with `roleloss` it
+  takes steps 1 to 3, 9, and 11 to 15.
+- Kept script for the site-wide Register page (spec U02 A4):
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/site-register-closed-journal-listed/walk.js)
+  and
+  [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/site-register-closed-journal-listed/lib.js),
+  on the same dataset:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/site-register-closed-journal-listed/walk.js`
+  as `admin` creates "u02e Closed Journal" (public, then closed as in
+  step 3) and "u02e Hidden Journal" (not enabled), then reads step 8's
+  page signed out: each listed journal's boxes and whether its consent
+  line is on screen. With `neighbour` it takes the same set-up, then
+  registers a newcomer there with "Reader" under the dataset's journal
+  and reads that journal's Roles tab.
 - Walked: steps 1 to 8 on `main` and `stable-3_5_0`, OJS, OMP and OPS,
   the same on all six. Steps 9 and 10 on `main`, three apps, with the
   fix out and in; on `stable-3_5_0` they rest on the code read (the
-  same `assignRoleContent()`).
+  same `assignRoleContent()`). The site-wide Register page script on
+  `main` and `stable-3_5_0`, OJS, OMP and OPS, the same on all six, and
+  its neighbour on `main` with the fix out and in. Steps 11 to 15 on
+  `main` and `stable-3_5_0`, OJS, OMP and OPS, the same on all six, and
+  on `main` again with the fix in; the script also reads the user's
+  rows in `user_user_groups` before and after step 13 (`date_end` set
+  on both groups at step 13 without the fix, left empty with it).
 - Branch tips: `main`: OJS ff004d0973 (lib/pkp 987776cd04), OMP
   3b0ecf794c (lib/pkp 3dc90c81a6), OPS c8af945bb7 (lib/pkp 3dc90c81a6).
   `stable-3_5_0`: OJS c1cee76b95 (lib/pkp 771474347e), OMP 9c5e24246c
@@ -359,15 +440,23 @@ following a filter the code base already has.
   `UserFormHelper` (`'contexts' => $contexts` and the same count),
   `userGroups.tpl`, `registrationFormContexts.tpl`, `formSection.tpl`
   (the same `$FBV_Label`) and `RegistrationForm`, and each app's
-  `TemplateManager`; no app overrides the templates.
+  `TemplateManager`; no app overrides the templates. For the consent
+  line: `registrationFormContexts.tpl` on every line (the
+  `context_privacy` block inside the per-context loop) and each app's
+  default theme `register.less` (OJS and OPS move `.context_privacy`
+  off-screen; OMP's has no such rule, on `main`, `stable-3_5_0`,
+  `stable-3_4_0` and `stable-3_3_0`).
 - Introduced: `git blame` on the `'contexts' => $contexts` line stops at
   e3f570bc37 (2021, PSR-12 reformatting); `git log -S` on
   `contextsWithUserRegistration` finds 638c16d79e, whose PR is
   `pkp/pkp-lib#2225`. 19b1636052 (no PR) is found by `git log -S
   disableUserReg` on the class.
-- Upstream search (2026-10-03): pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops
-  and pkp/ui-library, by the symptom's words and by `disableUserReg`,
+- Upstream search (2026-10-03, again 2026-10-04 for the Register
+  page): pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and pkp/ui-library, by
+  the symptom's words (closed or disabled registration on the site
+  register page, a press's privacy consent) and by `disableUserReg`,
   `UserFormHelper`, `assignRoleContent`, `userGroups.tpl` and
   `registrationFormContexts`. `pkp/pkp-lib#1847`, `#2039` and `#2375`
-  are the history above, all closed.
+  are the history above, all closed. `pkp/pkp-lib#3856` added the
+  per-context consent line and is not this fault.
 - MySQL not checked; nothing here depends on the database.

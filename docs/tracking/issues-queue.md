@@ -24,7 +24,7 @@ and the hourly routine starts one only when none is running
 | [U16](../specs/U16-categories.md) | 22 | 1 | 4 | OMP5: open report docs/reports/2026-09-30-php-gh20469-segfaults.md (the rest of U16 written up by the issues session, VM s0, 2026-10-02) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
-| [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 | **Taken: issues session, workstation s0, 2026-10-04**; A6 done (pkp-e2e#833, #834); OMP1 done (pkp-e2e#835); A2 done (pkp-e2e#836); A3 done (pkp-e2e#837); OMP2 done (pkp-e2e#838) |
+| [U02](../specs/U02-registration-and-account-validation.md) | 8 | 0 | 2 | **Taken: issues session, workstation s0, 2026-10-04**; A6 done (pkp-e2e#833, #834); OMP1 done (pkp-e2e#835); A2 done (pkp-e2e#836); A3 done (pkp-e2e#837); OMP2 done (pkp-e2e#838); A4 done with U03 A4 (pkp-e2e#794) |
 | [U31](../specs/U31-reviewer-suggestions.md) | 8 | 0 | 2 | **Taken: issues session, VM s2, 2026-10-04** |
 | [U68](../specs/U68-catalog-browse.md) | 8 | 0 | 2 | A7 done with U70 A10 (pkp-e2e#734); A1 done with U16 A19 (pkp-e2e#587); A8 done with U16 A15 (pkp-e2e#291) |
 | [U05](../specs/U05-notifications-center-and-email-preferences.md) | 7 | 0 | 2 | A14 done with U58 A13 (pkp-e2e#826); A3 done with U08 A2 (pkp-e2e#634) |

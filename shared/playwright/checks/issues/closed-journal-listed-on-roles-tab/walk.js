@@ -17,13 +17,22 @@
 //   n4  (reach) u03rfopen closed as well: u03rfclosed's own tab, where publicknowledge is the
 //       only other journal accepting registrations
 //
+// `roleloss` as argument takes steps 1-3 and 9 (u03rfopen closed, publicknowledge the one journal
+// open), then the report's "Saving the closed journal's Roles tab" group:
+//   11  signed out: publicknowledge's Register page, a newcomer registers ("Reader")
+//   12  publicknowledge's Profile, "Roles", "Author" ticked, "Save"
+//   13  u03rfclosed's Profile, "Roles", "Save" with nothing touched
+//   14  publicknowledge's Profile, "Roles": which boxes are still ticked
+//   15  `admin`: publicknowledge's Settings › Users & Roles, the newcomer's row
+//
 // Reset first:  npm run fleet-prep -- --feature issues-u03f --dataset 2 --reset
 // Run (main):   PROBE_FEATURE=issues-u03f PROBE_AGENT=u03f node bin/probe.js all shared/playwright/checks/issues/closed-journal-listed-on-roles-tab/walk.js [neighbour]
 // 3.5:          prefix both with PKP_E2E_LINE=stable-3_5_0 (feature issues-u03f-3_5), PROBE_RUN=r35
-const {forEachApp, launch, signIn, signOut, screen, shot, record, serverLog} = require('../../../probe');
+const {forEachApp, launch, signIn, signOut, screen, shot, record, serverLog, sql} = require('../../../probe');
 const L = require('./lib.js');
 
 const neighbour = process.argv.slice(2).includes('neighbour');
+const roleloss = process.argv.slice(2).includes('roleloss');
 
 async function setup(app, page, fact) {
     const s = L.scratchNames(app);
@@ -104,8 +113,33 @@ async function neighbourChecks(app, page, fact) {
     await shot(page, 'n4-closed-own-one-other');
 }
 
+async function roleLoss(app, page, fact) {
+    const s = await setup(app, page, fact);
+    await signIn(page, 'admin'); // 9
+    fact('9-close-open', await L.closeRegistration(page, app, s.open.path));
+    await signOut(page);
+    const who = {givenName: 'Una', familyName: 'Newcomer', username: 'u03rfnew'};
+    const email = `${who.username}@mailinator.com`;
+    fact('11-12-register-author', await L.registerAndTakeAuthor(page, app, who)); // 11, 12
+    fact('12-publicknowledge-before', await L.ownRoleBoxes(page, app.contextPath));
+    fact('12-db-before', sql(app, `SELECT ug.user_group_id, ug.role_id, uug.date_start, uug.date_end FROM user_user_groups uug JOIN user_groups ug ON ug.user_group_id = uug.user_group_id JOIN users u ON u.user_id = uug.user_id WHERE u.username = '${who.username}' ORDER BY 1`));
+    fact('13-save', await L.saveRolesUnchanged(page, s.closed.path)); // 13
+    fact('13-closed-own', await L.readRoles(page, namesOf(app, s)));
+    record('13-closed-own-saved', await screen(page));
+    await shot(page, '13-closed-own-saved');
+    fact('14-publicknowledge-after', await L.ownRoleBoxes(page, app.contextPath)); // 14
+    record('14-publicknowledge-after', await screen(page));
+    await shot(page, '14-publicknowledge-after');
+    fact('14-db-after', sql(app, `SELECT ug.user_group_id, ug.role_id, uug.date_start, uug.date_end FROM user_user_groups uug JOIN user_groups ug ON ug.user_group_id = uug.user_group_id JOIN users u ON u.user_id = uug.user_id WHERE u.username = '${who.username}' ORDER BY 1`));
+    await signOut(page);
+    await signIn(page, 'admin'); // 15
+    fact('15-users-row', await L.usersRow(page, app, app.contextPath, email).catch((e) => ({error: String(e).slice(0, 300)})));
+    record('15-users-row', await screen(page));
+    await shot(page, '15-users-row');
+}
+
 forEachApp(async (app) => {
-    const name = neighbour ? 'neighbour-facts' : 'walk-facts';
+    const name = neighbour ? 'neighbour-facts' : roleloss ? 'roleloss-facts' : 'walk-facts';
     const fact = (k, v) => {
         record(name, {[k]: v}, {merge: true});
         const shown = v && typeof v === 'object' && 'html' in v ? {...v, html: '…'} : v;
@@ -117,6 +151,7 @@ forEachApp(async (app) => {
     const {page, close} = await launch(app);
     try {
         if (neighbour) await neighbourChecks(app, page, fact);
+        else if (roleloss) await roleLoss(app, page, fact);
         else await steps(app, page, fact);
     } catch (error) {
         fact('error', String(error.stack || error).slice(0, 1500));
