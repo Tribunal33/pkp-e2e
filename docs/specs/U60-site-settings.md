@@ -1697,7 +1697,7 @@ schema's required and multilingual props to
 `ValidatorFactory::required()`. No screen reaches it: the page refuses
 first (fn-c), and only a direct request gets there; fn-l has the test
 tooling's request that stored an empty Site Name.
-Issue report: [docs/issues/U60-A4-site-save-stores-empty-contact-email.md](../issues/U60-A4-site-save-stores-empty-contact-email.md).
+Issue report: [pkp-e2e#886](https://github.com/jardakotesovec/pkp-e2e/issues/886) ([docs/issues/U60-A4-site-save-stores-empty-contact-email.md](../issues/U60-A4-site-save-stores-empty-contact-email.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — fn-j: the default theme declares its home-page and
