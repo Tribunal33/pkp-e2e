@@ -1026,6 +1026,9 @@ catcher's address, background-jobs command and tooling recipe. <sup>s0</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A4 (issue report
+    `docs/issues/U50-A4-refused-save-date-published-today.md`): a refused
+    "Create Issue" keeps an empty "Date Published" empty
   - the guard for A14 (issue report
     `docs/issues/U69-A16-earlier-url-path-server-error.md`): an issue's
     address naming a galley the issue does not have, forwarding to the
@@ -1090,8 +1093,6 @@ Left out of the scenarios above, by reason:
     notice; Rule 3; scenario 1 passes the ticked box)
   - A2 (unpublishing a back issue that is not current leaving no
     current issue; Rule 18)
-  - A4 (today's date shown in "Date Published" after a refused "Save";
-    Fields; scenarios 1 and 2 pass it)
   - A5 (a "Volume" of 99999 failing the save; Fields)
   - A6 (a "Year" with letters saved as its leading digits; Fields)
   - A7 (an archive cover with no alternate text read as nothing; Fields,
@@ -1149,7 +1150,7 @@ unreviewed unless an entry notes otherwise; the team settles them on spec review
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | "Create Issue" arrives with "Title" ticked and refuses an untitled issue with only a passing notice | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Unpublishing an older back issue leaves the journal with no current issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A4](#a4) | After a refused "Save" on an issue's form, an empty "Date Published" shows today's date | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A4](#a4) | After a refused "Save" on an issue's form, an empty "Date Published" shows today's date | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | A "Volume" of 99999 leaves "Create Issue" open with nothing shown | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | "Year" accepts letters: "20a6" is saved as 20 without a message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | "Future Issues" lists "No. 10" before "No. 2" of the same volume and year | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1214,7 +1215,7 @@ published ones? Lean: warn with the existing text; a published issue is
 better unpublished first. Basis: probe, 2026-09-25. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — After a refused "Save" on an issue's form, an empty "Date Published" shows today's date** · 🐞 · low.
+**A4 — After a refused "Save" on an issue's form, an empty "Date Published" shows today's date** · 🐞 · medium.
 A journal manager or editor leaves "Date Published" empty on "Create
 Issue" or "Issue Data", and "Save" is refused for another reason, such
 as a "Volume" that is not a number. The form comes back with today's
@@ -1223,8 +1224,10 @@ stay empty. The date is only shown, never saved. If the editor fixes the
 other error and saves again without touching the box, the issue is saved
 with no Date Published. On a published issue whose date was emptied, the
 next "Save" is refused again with "Date Published is required when the
-issue is published.", because the shown date is not sent.
-Basis: probe, 2026-10-02. <sup>f-a4</sup>
+issue is published.", because the shown date is not sent. The same
+fault shows in a press's chapter window after any "Save" ([→ Chapters &
+work type](U72-chapters-work-type.md#a4)).
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — A large "Volume" fails the save** · 🐞 · medium · crash: server.

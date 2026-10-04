@@ -697,6 +697,9 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A4 (issue report
+    `docs/issues/U50-A4-refused-save-date-published-today.md`): a chapter
+    saved without a date reopens with an empty "Date Published"
   - the guard for A5 (issue report `docs/issues/U75-A11-review-panel-edit-stays-on-review.md`): the Review step's "Chapters" panel's "Edit" opens "Details".
   - the guard for A2 (issue report
     `docs/issues/U74-A2-assistant-marketing-and-work-type-refused.md`):
@@ -728,8 +731,6 @@ Left out of the scenarios above, by reason:
     to the assistant roles and refused; Actors rows 6, 7)
   - A3 (a new version's chapters without their earlier files; Rule 15;
     scenario 10 passes it)
-  - A4 (today's date in an undated chapter's "Date Published"; Fields;
-    scenario 6 passes it)
   - A5 (the Review panel's "Edit"; Fields, the Review panel)
   - A6 (a chapter dragged with "Order" stays in place; Rule 8a)
   - A7 (a second author reorder in one visit lost; Rule 8b)
@@ -756,7 +757,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A6](#a6) | "Order" cannot move a chapter: a dragged chapter stays where it was | 🐞 | user-visible | — |
-| [A4](#a4) | A chapter's "Date Published" shows today's date when the chapter has none, and "Save" does not store it | 🐞 | user-visible | — |
+| [A4](#a4) | A chapter saved without a date shows today's date in "Date Published", which "Save" does not store | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | The work-type control and "Publication Dates" are offered to the assistant roles, and their choice is refused | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | After "Create New Version" the new version's chapters lose their files, which no chapter of the new version can take back | 🐞 | minor | — |
 | [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -812,13 +813,18 @@ or can pick them again.
 Basis: probe. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — "Date Published" shows today's date on a chapter that has none** · 🐞 · user-visible.
-With "Each chapter may have its own publication date." saved, the window
-of a chapter that has no date shows today's date in "Date Published".
-"Save" leaves the chapter without a date, and the next opening shows
-today's date again, so a user who wants today's date believes it is set
-when it is not. Expected: an empty box.
-Basis: probe. <sup>f-a4</sup>
+**A4 — A chapter saved without a date shows today's date in "Date Published"** · 🐞 · medium.
+With "Each chapter may have its own publication date." saved, a chapter
+whose window is saved with "Date Published" empty shows today's date
+there at every later opening, though the chapter has no date; a chapter
+never saved opens with the box empty. Saving again with the shown date
+does not store it, and the chapter's page keeps the book's date, so an
+editor who wants today's date believes it is set when it is not. Picking
+the date in the calendar stores it; typing today's date over the shown
+one does not, on the 1st to the 9th of a month. The same fault shows on
+a journal's issue form after a refused "Save" ([→ Issues](U50-issues.md#a4)).
+Expected: an empty box.
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — The Review panel's "Edit" does nothing for chapters** · 🐞 · low.
@@ -1563,6 +1569,7 @@ two processes: "Harbours", undated, on both versions of a book with
 dates per chapter showed "2026-09-28" in "Date Published" while its
 stored date was empty; "Save" with the box untouched posted an empty
 date, and the next opening showed the date again.
+Issue report: [pkp-e2e#416](https://github.com/jardakotesovec/pkp-e2e/issues/416) ([docs/issues/U50-A4-refused-save-date-published-today.md](../issues/U50-A4-refused-save-date-published-today.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5** — Note h: the panel's "Edit" calls `openStep('')`.
