@@ -1,0 +1,90 @@
+--- a/classes/decision/types/traits/RequestPayment.php
++++ b/classes/decision/types/traits/RequestPayment.php
+@@ -18,11 +18,13 @@
+ use APP\facades\Repo;
+ use APP\mail\mailables\PaymentRequest;
+ use APP\notification\NotificationManager;
++use APP\payment\ojs\OJSCompletedPaymentDAO;
+ use APP\payment\ojs\OJSPaymentManager;
+ use APP\submission\Submission;
+ use Illuminate\Support\Facades\Mail;
+ use Illuminate\Validation\Validator;
+ use PKP\context\Context;
++use PKP\db\DAORegistry;
+ use PKP\decision\steps\Form;
+ use PKP\notification\Notification;
+ use PKP\user\User;
+@@ -54,10 +56,51 @@
+             $validator->errors()->add($actionErrorKey . '.requestPayment', __('payment.requestPublicationFee.notEnabled'));
+         } elseif (!isset($action['requestPayment'])) {
+             $validator->errors()->add($actionErrorKey . '.requestPayment', __('validator.required'));
++        } elseif (filter_var($action['requestPayment'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
++            $validator->errors()->add($actionErrorKey . '.requestPayment', __('validator.boolean'));
+         }
+     }
+ 
+     /**
++     * Request or waive the publication fee, as the editor chose on the payment step
++     */
++    protected function runPaymentAction(array $action, Submission $submission, User $editor, Context $context): void
++    {
++        // The decision page posts form-encoded data, so "Waive" arrives as the string "false";
++        // validatePaymentAction() has refused anything that is not a boolean
++        if (filter_var($action['requestPayment'], FILTER_VALIDATE_BOOLEAN)) {
++            $this->requestPayment($submission, $editor, $context);
++        } else {
++            $this->waivePayment($submission, $editor, $context);
++        }
++    }
++
++    /**
++     * Record the publication fee as waived, as the workflow's "Payments" menu does,
++     * unless the fee is already recorded as paid or waived
++     */
++    protected function waivePayment(Submission $submission, User $editor, Context $context): void
++    {
++        $completedPaymentDao = DAORegistry::getDAO('OJSCompletedPaymentDAO'); /** @var OJSCompletedPaymentDAO $completedPaymentDao */
++        if ($completedPaymentDao->getByAssoc(null, OJSPaymentManager::PAYMENT_TYPE_PUBLICATION, $submission->getId())) {
++            return;
++        }
++
++        $request = Application::get()->getRequest();
++        $paymentManager = Application::get()->getPaymentManager($context);
++        $queuedPayment = $paymentManager->createQueuedPayment(
++            $request,
++            OJSPaymentManager::PAYMENT_TYPE_PUBLICATION,
++            $editor->getId(),
++            $submission->getId(),
++            0,
++            '' // Zero amount, no currency
++        );
++        $paymentManager->queuePayment($queuedPayment);
++        $paymentManager->fulfillQueuedPayment($request, $queuedPayment, 'ManualPayment');
++    }
++
++    /**
+      * Request payment from authors
+      */
+     protected function requestPayment(Submission $submission, User $editor, Context $context)
+--- a/classes/decision/types/Accept.php
++++ b/classes/decision/types/Accept.php
+@@ -53,7 +53,7 @@
+         foreach ($actions as $action) {
+             switch ($action['id']) {
+                 case self::ACTION_PAYMENT:
+-                    $this->requestPayment($submission, $editor, $context);
++                    $this->runPaymentAction($action, $submission, $editor, $context);
+                     break;
+             }
+         }
+--- a/classes/decision/types/SkipExternalReview.php
++++ b/classes/decision/types/SkipExternalReview.php
+@@ -53,7 +53,7 @@
+         foreach ($actions as $action) {
+             switch ($action['id']) {
+                 case self::ACTION_PAYMENT:
+-                    $this->requestPayment($submission, $editor, $context);
++                    $this->runPaymentAction($action, $submission, $editor, $context);
+                     break;
+             }
+         }

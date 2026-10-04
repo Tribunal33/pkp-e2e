@@ -1112,6 +1112,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OJS1 (issue report `docs/issues/U34-OJS1-waive-still-requests-publication-fee.md`): "Waive" on the "Request Payment" page of an accept decision gives the Author no fee task and no "Payment Request Notification", and the submission's "Payments" menu reads "Waived" (Rule 16; scenario 10, which marks it today)
   - the "Notify Reviewers" letter edited before the decision is recorded: each reviewer's email still carries that reviewer's own name alone, never the other reviewers' names (Rule 4): likely a bullet in scenario 6, whose reviewers' mailboxes are read after the accept
   - the guard for A9 (issue report `docs/issues/U34-A9-sub-editor-find-template-not-authorized.md`): a Section Editor's "Find Template" in the decision wizard lists the templates matching the phrase, as a Journal Editor's does (Rule 7)
 - **Nothing new to test**:
@@ -1126,7 +1127,6 @@ Left out of the scenarios above, by reason:
   - A8 and OPS2 (the "Insert Content" rows shown as markup, the empty address row and the untranslated row; Rule 5; scenarios 2 and 9 mark them)
   - A2 (the wizard with no page and its closing sentence; Rule 2)
   - A1 (the "New Review Round" heading under "Create New Review Round"; Rule 2)
-  - OJS1 ("Waive" requesting the fee; Rule 16; scenario 10 marks it)
   - A5 (the author notices no screen shows; Side effects)
   - A4 (the recommendation's discussion without its writer; Rule 13; scenario 5 marks it)
   - A12 (the "Select Files" row's uploader shown by username; Rule 9; scenario 1 marks it)
@@ -1146,7 +1146,7 @@ entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A6](#a6) | "Revert Decline" typed by address on a submission never declined records it and emails the author | 🐞 | minor | — |
 | [A9](#a9) | A Section Editor's "Find Template" in a decision's email answers "You are not authorized to access the requested resource." | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [OJS1](#ojs1) | "Waive" on "Request Payment" requests the fee like "Request publication fee" | 🐞 | user-visible | — |
+| [OJS1](#ojs1) | An editor's "Waive" on an accept decision still asks the Author to pay the publication fee | 🐞 | high | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Review Cancel" email reads "{$journalName}" where the press's name should be | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | "Insert Content" describes the server's initials with an untranslated key | 🐞 | minor | — |
 | [A1](#a1) | "Create New Review Round" opens a wizard headed "New Review Round" | ❓ | minor | — |
@@ -1297,13 +1297,19 @@ Basis: test run. <sup>[f-a12](#fn-a12)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — "Waive" requests the fee** · 🐞 · user-visible.
-An Editor who chooses "Waive" on the "Request Payment" page expects the
-decision recorded with no fee. The fee is queued all the same, the
-author's header Tasks panel gains "The publication fee is due for
-payment." and the "Payment Request Notification" email arrives, exactly as
-with "Request publication fee".
-Basis: probe. <sup>[f-ojs1](#fn-ojs1)</sup>
+**OJS1 — An editor's "Waive" on an accept decision still asks the Author to pay the publication fee** · 🐞 · high.
+An Editor accepts a submission with "Accept Submission" or "Accept and
+Skip Review" and, on the "Request Payment" page, chooses "Waive". The
+choice is ignored: the fee is requested just as if "Request publication
+fee" had been chosen.
+Every Author with an account on the submission gets a "Payment Request
+Notification" email and the task "The publication fee is due for
+payment.", which opens a page asking for the fee. The fee is not
+recorded as waived either, so the article cannot be published until an
+editor records the waiver in the submission's "Payments" menu. Nothing
+tells the Editor, and the email cannot be taken back.
+It happens on every journal that charges a publication fee.
+Basis: probe, 2026-10-04. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 ### OMP
 
@@ -1473,6 +1479,7 @@ Issue report: [pkp-e2e#859](https://github.com/jardakotesovec/pkp-e2e/issues/859
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Note s: OJS `classes/decision/types/Accept.php::runAdditionalActions()` (and `SkipExternalReview`'s through the shared trait) calls `requestPayment()` for every `ACTION_PAYMENT` action present, never reading the action's `requestPayment` value; `RequestPayment::validatePaymentAction()` only checks the key is set. Live-probed 2026-09-20 on OJS, twice on fresh submissions: "Waive" chosen, the author's "The publication fee is due for payment." row and the "Payment Request Notification" email arriving as with the fee requested.
+Issue report: [docs/issues/U34-OJS1-waive-still-requests-publication-fee.md](../issues/U34-OJS1-waive-still-requests-publication-fee.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: OMP's `locale/en/emails.po` `emails.reviewCancel.body` still reads "{$journalName}", a variable `ReviewCancel` does not carry (`contextName` is the one it has). Live-probed 2026-09-20: the press's email "…agreeing to review "{title}" for {$journalName}."; the journal's names the journal.
