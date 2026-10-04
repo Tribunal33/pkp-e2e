@@ -708,12 +708,18 @@ Left out of the scenarios above, by reason:
     link ([A2](#a2); Rule 13): the guard the issue report
     (`docs/issues/U02-A2-activation-pages-no-heading.md`) proposes, once
     fixed
+  - registering on the site-wide Register page with a journal's role and
+    "Yes, I would like to be notified of new publications and
+    announcements." unticked, then every "Do not send me an email…" box
+    under "Public Announcements" ticked on that journal's Notifications
+    tab ([A3](#a3); Rule 6): the guard the issue report
+    (`docs/issues/U02-A3-site-register-email-optout-not-kept.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
   - the User Registration option's wording on a press and a preprint server (Settings; scenario 5's option)
 - **Register carries it**:
-  - A3 (the site-level notification box records nothing; Rule 6)
   - A7 (Reader granted though closed to self-registration; Rule 7)
   - A4 (closed journals listed with no roles under them; Rule 8)
   - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
@@ -750,7 +756,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Activation links die after 3 days while the configuration's validation-timeout key promises 14 and does nothing | 🐞 | latent | — |
 | [A2](#a2) | A new user activating their account sees two pages with no heading and no Login link | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | The site-level page's notification opt-in records nothing | 🐞 | minor | — |
+| [A3](#a3) | Registering on the site-wide Register page ignores an unticked "notify me" box: announcement emails stay on | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | minor | — |
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -790,14 +796,25 @@ install.
 Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — Site-level notification opt-in is decorative** · 🐞 · minor.
-The site-level Register page offers "Yes, I would like to be notified of new
-publications and announcements.", the same box as a journal's page, but the
-answer is never recorded: an account registered from the site page with the
-box unticked keeps every journal's public notification emails on, where the
-same choice on a journal's page switches them off. Nothing tells the visitor
-their choice was dropped.
-Basis: probe. <sup>[f-a3](#fn-a3)</sup>
+**A3 — Registering on the site-wide Register page ignores an unticked "notify me" box: announcement emails stay on** · 🐞 · medium.
+The site-wide Register page offers "Yes, I would like to be notified of
+new publications and announcements.", the same box as a journal's own
+Register page, but the answer is never recorded. A visitor who registers
+there, ticks a role under a journal and leaves the box unticked keeps
+that journal's public notification emails on: new announcements, and on
+a journal also published and open-access issues. The same choice on the
+journal's own Register page switches those emails off.
+
+Nothing tells the visitor that their choice was dropped. The box starts
+unticked, so a visitor who leaves it alone has declined and still gets
+the emails.
+
+On a site with several journals, the site's own pages link to the
+site-wide Register page (the "Register" item of the site's menu). On a
+site with one journal, the site's home page forwards to the journal,
+whose links lead to the journal's own Register page, so the site-wide
+page is reached only by typing its address.
+Basis: probe, 2026-10-04. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — Closed journals listed with nothing to tick** · 🐞 · minor.
@@ -1562,6 +1579,7 @@ site-level account registered with the box unticked has the same
 Notifications tab as the journal-level control registered with it ticked,
 while the journal-level account registered with it unticked has every
 "Do not send me an email…" box under "Public Announcements" ticked.
+Issue report: [pkp-e2e#837](https://github.com/jardakotesovec/pkp-e2e/issues/837) ([docs/issues/U02-A3-site-register-email-optout-not-kept.md](../issues/U02-A3-site-register-email-optout-not-kept.md)).
 
 <a id="fn-a4"></a>
 **f-a4** — Note c: `assignRoleContent()` assigns `contexts` =
