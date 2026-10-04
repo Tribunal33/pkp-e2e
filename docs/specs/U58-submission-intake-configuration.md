@@ -840,6 +840,9 @@ Left out of the scenarios above, by reason:
   - a press's and a preprint server's "Soumission" tab in French
     (Canada) showing no `##` code in its side tabs or its components
     list ([A9](#a9)): the guard the issue report proposes
+  - "Edit" beside each section of the "Submissions" page opening the
+    side tab that holds that section's box, on the three apps
+    ([OMP2](#omp2)): the guard the issue report proposes
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -943,7 +946,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its copyright box reads "Copyright notice" | 🐞 | minor | — |
-| [OMP2](#omp2) | A press's "Edit" under "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | minor | — |
+| [OMP2](#omp2) | On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A new component lands at the top of the list, sharing first place with the first component | ❓ | minor | — |
 | [A3](#a3) | A deleted component keeps its key and can come back, though the confirmation says the delete cannot be undone | ❓ | minor | — |
 | [A4](#a4) | "Multimedia" arrives with both "File Type" boxes ticked, whose sentences contradict each other | ❓ | minor | — |
@@ -1140,13 +1143,18 @@ Notice".
 Basis: code. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — The press's copyright "Edit" link opens the wrong side tab** · 🐞 · minor.
-On a press's "Submissions" page, "Edit" under "Author Guidelines" and
-"Submission Preparation Checklist" opens "Author Guidance", where the
-texts are. "Edit" under "Copyright Notice" opens the "Submission" tab on
-"Disable Submissions", and the manager has to find "Author Guidance"
-themselves.
-Basis: probe. <sup>f-omp2</sup>
+**OMP2 — On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance"** · 🐞 · low.
+A press's public "Submissions" page (About › Submissions) shows managers
+an "Edit" link beside each section's heading. "Edit" beside "Author
+Guidelines" and beside "Submission Preparation Checklist" opens Settings
+› Workflow › "Submission" › "Author Guidance", where those texts are
+written. So a manager who clicks "Edit" beside "Copyright Notice"
+expects the same side tab, which holds the "Copyright notice" box.
+Instead the "Submission" tab opens on "Disable Submissions".
+The link shows only once the press has a copyright notice, since the
+"Copyright Notice" section and its "Edit" appear only then. On 3.4,
+journals and preprint servers show the same.
+Basis: probe, 2026-10-04. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — A press's components and "Type" default** · ✅ · intended divergence.
@@ -1822,6 +1830,7 @@ copyright notice's `editLink.tpl` include passes
 `submission/instructions`; `workflow.tpl` has no side tab `authorGuidelines`.
 Live-probed 2026-09-27, OMP with journal and server controls (note
 td10).
+Issue report: [docs/issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md](../issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — OMP `registry/genres.xml` (note f); OMP `schemas/context.json`
