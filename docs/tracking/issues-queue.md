@@ -25,7 +25,7 @@ and the hourly routine starts one only when none is running
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |
 | [U14](../specs/U14-reader-comments-and-moderation.md) | 5 | 0 | 0 | **A12 taken: issues session, workstation s0, 2026-10-04**; A14: open report docs/reports/2026-09-29-ui-library-992.md; A12 open: reader comments exist only on `main`, in no release, so by RUNBOOK "What goes where" (maintainer, 2026-10-04) it is an ordinary finding and gets a public report (the rest of U14 written up by the issues session, workstation s0, 2026-10-04) |
-| [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
+| [U29](../specs/U29-review-setup-and-review-forms.md) | 5 | 0 | 0 | **Taken: issues session, VM s2, 2026-10-04**; A11 joined pkp-e2e#4 by the housekeeping fold (2026-10-01); the report's "Tracked in" line does not list it yet |
 | [U32](../specs/U32-copyediting-stage.md) | 5 | 0 | 0 | A7 done with U26 A9 (pkp-e2e#862); A9 done with U35 A5 (pkp-e2e#343); A6 done with U71 OMP10 (pkp-e2e#560) |
 | [U55](../specs/U55-notify-users.md) | 4 | 0 | 0 |  |
 | [U33](../specs/U33-production-stage.md) | 3 | 0 | 0 | OMP2 done with U70 A6 (pkp-e2e#744) |
