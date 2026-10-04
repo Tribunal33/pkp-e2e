@@ -38,9 +38,10 @@ function answers(url) {
  * Serve the fleet's install (its database, files and code) on `port` under a copy of the
  * fleet's config with `require_validation = On`, `base_url` on that port (the activation link
  * is built from it) and a session cookie of its own; `smtpPort` points the mail at another
- * port (a dead one stands for an unreachable mail server). Returns {url, log, mark(), since(m), stop()}.
+ * port (a dead one stands for an unreachable mail server); `keys` sets other existing keys of the
+ * copy ({expiration_days: 0}). Returns {url, log, mark(), since(m), stop()}.
  */
-async function validationServer(app, {port, smtpPort, name = 'validation'}) {
+async function validationServer(app, {port, smtpPort, name = 'validation', keys = {}}) {
     const src = fs.readFileSync(path.resolve(REPO_ROOT, app.configFile), 'utf8');
     const url = `http://127.0.0.1:${port}`;
     let text = src
@@ -48,6 +49,11 @@ async function validationServer(app, {port, smtpPort, name = 'validation'}) {
         .replace(/^base_url\s*=.*$/m, `base_url = "${url}"`)
         .replace(/^session_cookie_name\s*=\s*(\S+)\s*$/m, (m, v) => `session_cookie_name = ${v.replace(/"/g, '')}V${port}`);
     if (smtpPort) text = text.replace(/^smtp_port\s*=.*$/m, `smtp_port = ${smtpPort}`);
+    for (const [k, v] of Object.entries(keys)) {
+        const re = new RegExp(`^${k}\\s*=.*$`, 'm');
+        if (!re.test(text)) throw new Error(`no ${k} key in the config`);
+        text = text.replace(re, `${k} = ${v}`);
+    }
     if (!/^require_validation = On$/m.test(text)) throw new Error('no require_validation key in the config');
     const config = outFile(`config-${name}.inc.php`);
     fs.writeFileSync(config, text);

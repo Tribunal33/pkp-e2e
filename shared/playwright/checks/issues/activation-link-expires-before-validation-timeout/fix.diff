@@ -1,0 +1,27 @@
+--- a/lib/pkp/classes/invitation/invitations/registrationAccess/RegistrationAccessInvite.php
++++ b/lib/pkp/classes/invitation/invitations/registrationAccess/RegistrationAccessInvite.php
+@@ -17,6 +17,7 @@
+ use APP\facades\Repo;
+ use Exception;
+ use Illuminate\Mail\Mailable;
++use PKP\config\Config;
+ use PKP\core\Core;
+ use PKP\invitation\core\contracts\IBackofficeHandleable;
+ use PKP\invitation\core\contracts\IMailableUrlUpdateable;
+@@ -57,6 +58,16 @@
+         return parent::getPayload();
+     }
+ 
++    /**
++     * An activation link lives as long as `[email] validation_timeout` says, as the
++     * access key it replaced did; unset or 0 (a link dead on arrival) means the invitations' own lifetime.
++     */
++    protected function getExpiryDays(): int
++    {
++        $days = (int) Config::getVar('email', 'validation_timeout');
++        return $days > 0 ? $days : parent::getExpiryDays();
++    }
++
+     public function updateMailableWithUrl(Mailable $mailable): void
+     {
+         $url = $this->getActionURL(InvitationAction::ACCEPT);
