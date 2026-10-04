@@ -880,7 +880,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A6](#a6) | Comments page: the link to an unverified ORCID iD in the comment and report panels opens a wrong address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A10](#a10) | A comment deleted with its submission or its writer's account leaves its moderation tasks behind, blank and dead | 🐞 | minor | — |
+| [A10](#a10) | A comment deleted with its article or its writer's merged account leaves blank, dead rows in every moderator's Tasks | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | On the editorial Comments page, the browser tab shows only the journal's name, not "Comments" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
@@ -1017,17 +1017,23 @@ Comments page's dialog or the dashboard's) settled: the side menu's.
 Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — A comment deleted with its submission or its writer's account leaves its tasks behind** · 🐞 · minor.
-After a submission carrying comments is deleted, or a writer's account is
-merged away, every moderator's Tasks panel keeps the "A comment has been
-submitted and is pending review by a moderator." and "A report was
-submitted for a comment and requires review by a moderator." rows about
-those comments, with an empty line where the comment's text was. Pressing
-a comment's row opens the Comments page under "Error" / "The requested
-resource was not found."; pressing a report's opens the page with no
-panel. Expected the rows to go with the comment, as they do when the
-comment is deleted on its own; observed they stay, blank and dead.
-Basis: test run. <sup>f-a10</sup>
+**A10 — A comment deleted with its article or its writer's merged account leaves blank, dead rows in every moderator's Tasks** · 🐞 · low.
+With public comments on, every new comment raises a task for each
+moderator: "A comment has been submitted and is pending review by a
+moderator." Every report on a comment raises "A report was submitted
+for a comment and requires review by a moderator." Approving a comment
+leaves its task in place. After a submission carrying comments
+is deleted, or a writer's account is merged into another, these rows
+stay in every moderator's Tasks panel with an empty line where the
+comment's text was. Pressing a comment's row opens the Comments page
+with the dialog "Error" / "The requested resource was not found.";
+pressing a report's opens the page with no panel.
+The moderators expect the rows to go with the comment, as they do when
+a comment is deleted on its own. Each blank row counts in the number on
+"Tasks" until the moderator presses it, which marks it read. Each
+moderator can clear the rows only by ticking them and pressing "Delete"
+in the Tasks window.
+Basis: probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a12"></a>
 **A12 — Another journal's comments can be moderated and reported by requests made by hand** · 🐞 · latent.
@@ -2005,6 +2011,7 @@ pressable: a comment's opened the Comments page at "?commentId={n}" under
 "Error" / "The requested resource was not found.", a report's opened the
 page at "?reportId={r}&commentId=" with no panel; the rows stayed, marked
 read.
+Issue report: [docs/issues/U14-A10-deleted-comment-tasks-stay-blank.md](../issues/U14-A10-deleted-comment-tasks-stay-blank.md).
 
 <a id="fn-f-a11"></a>
 **f-a11 — A11 (retired).** Fixed by pkp/pkp-lib `26ae6431b5` (#12401):

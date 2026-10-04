@@ -1,0 +1,124 @@
+--- a/lib/pkp/api/v1/comments/UserCommentController.php
++++ b/lib/pkp/api/v1/comments/UserCommentController.php
+@@ -316,19 +316,11 @@
+                 'error' => __('api.403.unauthorized'),
+             ], Response::HTTP_FORBIDDEN);
+         }
+-
+-        $reportIds = $comment->reports()->pluck('user_comment_report_id')->all();
+-        $comment->delete();
+ 
+         // Delete notifications associated with the comment and its reports
+-        Notification::where('assoc_type', Application::ASSOC_TYPE_COMMENT)
+-            ->where('assoc_id', $commentId)
+-            ->delete();
++        UserComment::deleteNotifications([$commentId]);
++        $comment->delete();
+ 
+-        Notification::where('assoc_type', Application::ASSOC_TYPE_COMMENT_REPORT)
+-            ->whereIn('assoc_id', $reportIds)
+-            ->delete();
+-
+         return response()->json([], Response::HTTP_OK);
+     }
+ 
+--- a/lib/pkp/classes/publication/DAO.php
++++ b/lib/pkp/classes/publication/DAO.php
+@@ -31,6 +31,7 @@
+ use PKP\dataCitation\DataCitation;
+ use PKP\notification\Notification;
+ use PKP\services\PKPSchemaService;
++use PKP\userComment\UserComment;
+ 
+ /**
+  * @template T of Publication
+@@ -289,6 +290,11 @@
+      */
+     public function deleteById(int $publicationId): int
+     {
++        // The publication's comments and their reports go by database cascade
++        UserComment::deleteNotifications(
++            UserComment::withPublicationIds([$publicationId])->pluck('user_comment_id')->all()
++        );
++
+         $affectedRows = parent::deleteById($publicationId);
+ 
+         $this->deleteAuthors($publicationId);
+--- a/lib/pkp/classes/user/Repository.php
++++ b/lib/pkp/classes/user/Repository.php
+@@ -34,6 +34,8 @@
+ use PKP\stageAssignment\StageAssignment;
+ use PKP\submission\SubmissionCommentDAO;
+ use PKP\user\interest\UserInterest;
++use PKP\userComment\relationships\UserCommentReport;
++use PKP\userComment\UserComment;
+ use PKP\userGroup\relationships\UserUserGroup;
+ use PKP\workflow\WorkflowStageDAO;
+ use Psr\Log\LogLevel;
+@@ -130,6 +132,12 @@
+     public function delete(User $user)
+     {
+         Hook::call('User::delete::before', [&$user]);
++
++        // The user's comments and reports go by database cascade
++        UserComment::deleteNotifications(
++            UserComment::withUserIds([$user->getId()])->pluck('user_comment_id')->all(),
++            UserCommentReport::where('user_id', $user->getId())->pluck('user_comment_report_id')->all()
++        );
+ 
+         $this->dao->delete($user);
+ 
+--- a/lib/pkp/classes/userComment/UserComment.php
++++ b/lib/pkp/classes/userComment/UserComment.php
+@@ -16,12 +16,14 @@
+ 
+ namespace PKP\userComment;
+ 
++use APP\core\Application;
+ use APP\facades\Repo;
+ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+ use Illuminate\Database\Eloquent\Casts\Attribute;
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\Relations\HasMany;
+ use PKP\core\traits\ModelWithSettings;
++use PKP\notification\Notification;
+ use PKP\userComment\relationships\UserCommentReport;
+ 
+ /**
+@@ -124,6 +126,36 @@
+         return $this->hasMany(UserCommentReport::class, 'user_comment_id', 'user_comment_id');
+     }
+ 
++    /**
++     * Delete the moderators' notifications about these comments, about their
++     * reports and about the other reports given.
++     *
++     * Call it before the rows are deleted. A comment or a report deleted with
++     * its publication or its writer's account goes by database cascade, which
++     * cannot reach the notifications: they point at it by assoc_type and
++     * assoc_id only.
++     *
++     * @param int[] $commentIds
++     * @param int[] $reportIds
++     */
++    public static function deleteNotifications(array $commentIds, array $reportIds = []): void
++    {
++        if (!empty($commentIds)) {
++            $reportIds = array_merge(
++                $reportIds,
++                UserCommentReport::withCommentIds($commentIds)->pluck('user_comment_report_id')->all()
++            );
++            Notification::where('assoc_type', Application::ASSOC_TYPE_COMMENT)
++                ->whereIn('assoc_id', $commentIds)
++                ->delete();
++        }
++        if (!empty($reportIds)) {
++            Notification::where('assoc_type', Application::ASSOC_TYPE_COMMENT_REPORT)
++                ->whereIn('assoc_id', array_unique($reportIds))
++                ->delete();
++        }
++    }
++
+     // Scopes
+ 
+     /**
