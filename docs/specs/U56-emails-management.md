@@ -1816,7 +1816,7 @@ other placeholder description resolves in all three apps (checked across
 and in "Edit Template"'s "Insert Content" on a preprint server; the
 journal reads "The journal's initials", the press "The press's
 initials".
-Issue report: [docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md).
+Issue report: [pkp-e2e#861](https://github.com/jardakotesovec/pkp-e2e/issues/861) ([docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — OPS `APP\mail\Repository::map()` lists

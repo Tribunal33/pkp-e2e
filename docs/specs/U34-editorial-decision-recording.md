@@ -1462,7 +1462,7 @@ their own dates.
 
 <a id="fn-ops2"></a>
 **f-ops2** — Note g: the OPS locale has no text for `emailTemplate.variable.context.contextAcronym`, so `Mailable::getDataDescriptions()` hands the window the key between `##`. Live-probed 2026-09-20 on OPS (the "Insert Content" row's description); OJS reads "The journal's initials", OMP "The press's initials".
-Issue report: [docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md).
+Issue report: [pkp-e2e#861](https://github.com/jardakotesovec/pkp-e2e/issues/861) ([docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md)).
 
 <a id="fn-a6"></a>
 **f-a6** — Note b: `DecisionStageValidPolicy` compares the submission's stage with the decision's and `DecisionAllowedPolicy` the user's assignment; nothing reads the submission's status, and `Repository::validate()` does not either. Live-probed 2026-09-20: `decision=16` typed on a queued Submission-stage submission (OJS, OMP) and on a queued preprint (OPS), and `decision=15` on an active review round: the one-page wizard, "Submission Reactivated" on record, the author's email "We have reversed the decision to decline your submission" and the log line "reversed the decision to decline this submission".
