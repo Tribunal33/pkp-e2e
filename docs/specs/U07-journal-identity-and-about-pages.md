@@ -1108,7 +1108,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | A Site Administrator without a manager role in a press or preprint server is offered "Settings" and refused every page of it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A7](#a7) | Reloading or bookmarking a Settings side tab opens the page's first tab instead | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A7](#a7) | Reloading or bookmarking a Settings or Site Settings side tab opens the page's first tab | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the Submissions page, not the Privacy Statement page {OJS OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | In French (Canada), a press's and a preprint server's Masthead settings tab shows untranslated codes {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1178,22 +1178,25 @@ Page". Question: is the word "Page" meant to be in the heading? Lean: no,
 a leftover of the heading's text. Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Reloading or bookmarking a Settings side tab opens the page's first tab instead** · 🐞 · low.
+**A7 — Reloading or bookmarking a Settings or Site Settings side tab opens the page's first tab** · 🐞 · low.
 A manager who opens a side tab on a Settings page, such as Settings ›
 Website › "Setup" › "Privacy Statement", and then reloads the page or
 comes back to it from a bookmark, expects the same tab. A top tab such
 as Settings › Journal › "Contact" does come back. The side tab does not:
-the page opens on its first tab, "Appearance" › "Theme".
+the page opens on its first tab, Website › "Appearance" › "Theme".
 
-Nothing is lost, and the manager gets back by pressing the two tabs
-again. A saved or shared link to a side tab is no use, though.
+The tab is reopened by pressing the two tabs again, but a saved or
+shared link to a side tab is no use.
 
 It happens on the side tabs under every top tab except a page's first
 one (Website › "Setup" and "Content", Workflow › "Review",
-Distribution › "DOIs" among them), and on the inner tabs of Website ›
-"Plugins". Side tabs under a page's first top tab, such as "Appearance"
-› "Advanced", do come back.
-Since: 2023-10-02 (the move to Vue 3) · Basis: probe, 2026-10-03. <sup>f-a7</sup>
+Distribution › "DOIs" among them) and on the inner tabs of Website ›
+"Plugins". The Site Administrator meets it on Administration › Site
+Settings: the side tabs under the top tabs "Appearance" and
+"Announcements", and the inner tabs under "Plugins", reopen as "Site
+Setup" › "Settings". Side tabs under a page's first top tab, such as
+Website › "Appearance" › "Advanced", do come back.
+Since: 2023-10-02 (the move to Vue 3) · Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The not-accepting notice outlives the change** · ❓ · minor.

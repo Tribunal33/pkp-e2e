@@ -1,0 +1,11 @@
+--- a/lib/pkp/templates/admin/settings.tpl
++++ b/lib/pkp/templates/admin/settings.tpl
+@@ -114,7 +114,7 @@
+ 				</tab>
+ 				{/if}
+ 				{if $componentAvailability['siteAppearanceSetup']}
+-				<tab id="setup" label="{translate key="navigation.setup"}">
++				<tab id="appearance-setup" label="{translate key="navigation.setup"}">
+ 					<pkp-form
+ 						v-bind="components.{PKP\components\forms\site\PKPSiteAppearanceForm::FORM_SITE_APPEARANCE}"
+ 						@set="set"

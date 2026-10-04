@@ -880,7 +880,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | Site Settings saves, and 3.5's daily scheduled tasks, log a PHP warning when no journal redirect is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A site save sent outside Site Settings stores an empty contact email, and password resets then fail | 🐞 | low · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | minor | — |
+| [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Under a "Journal redirect", the Site Administrator's sign-in lands on the journal's home page, not its Dashboard | 🐞 | minor | — |
 | [A11](#a11) | The "Journal redirect" list follows neither name nor the Hosted Journals order, and shifts after a save there | 🐞 | minor | — |
 | [A12](#a12) | An "&" in a journal's name reads `&amp;` in the "Journal redirect" list | 🐞 | minor | — |
@@ -992,13 +992,17 @@ should be.
 Basis: probe, 2026-10-04. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Some side tabs do not survive a reload** · 🐞 · minor.
-The page shows an address for every side tab, but a reload on
-"Appearance" › "Theme" or "Setup", or on any side tab of "Announcements"
-or "Plugins", opens "Site Setup" › "Settings" instead, and so does that
-address opened again. The Site Administrator loses their place on every
-reload and cannot keep a link to those tabs.
-Basis: probe. <sup>f-a7</sup>
+**A7 — Some side tabs do not survive a reload** · 🐞 · low.
+On Administration › Site Settings, a reload or a bookmark on a side tab
+under "Appearance" or "Announcements", or on an inner tab of "Plugins",
+opens "Site Setup" › "Settings" instead, as a reload does on a
+journal's Settings pages
+([Journal identity & about pages](U07-journal-identity-and-about-pages.md#a7), A7).
+"Appearance" › "Setup" has a fault of its own besides: it and the "Site
+Setup" tab are both `#setup` in the page's address, so going back to it
+with the browser's Back button lands on "Site Setup", and with the
+first fault fixed a reload on it would still open "Site Setup".
+Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — The Site Administrator's sign-in under a redirect misses the Dashboard** · 🐞 · minor.
@@ -1729,6 +1733,7 @@ and `#settings` … `#orcidSiteSettings` their side tab. Typed, the forms
 their side tab, `#appearance/setup` "Site Setup" › "Settings". fn-b: the
 "Appearance" side tab "Setup" shares the id `setup` with the "Site Setup"
 top tab.
+Issue reports: [pkp-e2e#784](https://github.com/jardakotesovec/pkp-e2e/issues/784) ([docs/issues/U07-A7-settings-side-tab-reload-opens-first-tab.md](../issues/U07-A7-settings-side-tab-reload-opens-first-tab.md)), the reload; [docs/issues/U60-A7-appearance-setup-tab-opens-site-setup.md](../issues/U60-A7-appearance-setup-tab-opens-site-setup.md), the shared `setup` id.
 
 <a id="fn-f-a8"></a>
 **f-a8** — `LoginHandler::_redirectAfterLogin()`: with a target context

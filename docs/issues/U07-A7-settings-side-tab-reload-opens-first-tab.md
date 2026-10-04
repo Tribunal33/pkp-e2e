@@ -1,4 +1,4 @@
-# Reloading or bookmarking a Settings side tab opens the page's first tab instead
+# Reloading or bookmarking a Settings or Site Settings side tab opens the page's first tab
 
 - **Severity** low
 - **Effort** small
@@ -10,8 +10,8 @@
   - 3.3: none (code)
 - **Introduced** `pkp/pkp-lib#9280` for `pkp/pkp-lib#8919` · [da352e49d8](https://github.com/pkp/pkp-lib/commit/da352e49d820f4868917539c3f4bd6806c883708) · 2023-10-02 · Jarda Kotěšovec (jardakotesovec)
 - **Upstream** none found (2026-10-03)
-- **Tracked in** spec U07 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#a7)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Tracked in** spec U07 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#a7), spec U60 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U60-site-settings.md#a7)
+- **Checked** 2026-10-03 (Site Settings 2026-10-04), each branch's tip (the commits in Evidence)
 
 ## Summary
 
@@ -19,35 +19,41 @@ A manager who opens a side tab on a Settings page, such as Settings ›
 Website › "Setup" › "Privacy Statement", and then reloads the page or
 comes back to it from a bookmark, expects the same tab. A top tab such
 as Settings › Journal › "Contact" does come back. The side tab does not:
-the page opens on its first tab, "Appearance" › "Theme".
+the page opens on its first tab, Website › "Appearance" › "Theme".
 
-Nothing is lost, and the manager gets back by pressing the two tabs
-again. A saved or shared link to a side tab is no use, though.
+The tab is reopened by pressing the two tabs again, but a saved or
+shared link to a side tab is no use.
 
 It happens on the side tabs under every top tab except a page's first
 one (Website › "Setup" and "Content", Workflow › "Review",
-Distribution › "DOIs" among them), and on the inner tabs of Website ›
-"Plugins". Side tabs under a page's first top tab, such as "Appearance"
-› "Advanced", do come back.
+Distribution › "DOIs" among them) and on the inner tabs of Website ›
+"Plugins". The Site Administrator meets it on Administration › Site
+Settings: the side tabs under the top tabs "Appearance" and
+"Announcements", and the inner tabs under "Plugins", reopen as "Site
+Setup" › "Settings". Side tabs under a page's first top tab, such as
+Website › "Appearance" › "Advanced", do come back.
 
 ## Impact
 
 - **Lost**: the open tab. No data or settings.
-- **Who**: journal, press and server managers who reload, bookmark or
-  share a side tab's address.
+- **Who**: journal, press and server managers on their Settings pages,
+  and the Site Administrator on Site Settings, whenever they reload,
+  bookmark or share a side tab's address.
 - **Way round**: press the two tabs again.
 
-Low: the task gets done and nothing is lost; only the way back to a tab
-is broken. The "Edit" links a manager sees on the public "Submissions"
-page and the "Information" pages (for readers, authors, librarians)
-still open the right side tab.
+Low: only the way back to a tab is broken. The "Edit" links a manager
+sees on the public "Submissions" page and the "Information" pages (for
+readers, authors, librarians) still open the right side tab.
 
 ## Steps to reproduce
 
 Preconditions:
 
 - PKP's default test dataset for `main` (OJS, OMP or OPS), freshly
-  loaded. Nothing else is needed.
+  loaded. The Settings steps need nothing else; the Site Settings steps
+  need a second journal (below).
+
+Settings:
 
 1. Sign in as `rvaca`, the journal's (press's, server's) manager.
 2. Open Settings › "Website".
@@ -71,6 +77,32 @@ Controls: Settings › Journal › "Contact" writes `#contact` and comes
 back after a reload. Typing
 `…/management/settings/website#setup/privacy` opens "Setup" › "Privacy
 Statement", but the address is then rewritten to `#privacy`.
+
+Site Settings (the page shows "Appearance", "Announcements" and
+"Plugins" only while the site does not host exactly one journal, so a
+second one is created first):
+
+6. Sign in as `admin`, the Site Administrator.
+7. Open Administration › "Hosted Journals" ("Hosted Presses", "Hosted
+   Servers") › "Create Journal" ("Create Press", "Create Server"). Fill
+   in "u60e Second Journal" as the title, `U60E` as the initials, "u60e
+   Second Journal" and `u60e@mailinator.com` as the contact, "Canada" as
+   the country and `u60esecond` as the path. Tick "English" under
+   "Languages", choose "English" under "Primary locale", and tick
+   "Enable this journal to appear publicly on the site". Press "Save".
+8. Open Administration › "Site Settings". Press the top tab
+   "Announcements", then its side tab "Announcement Types". The address
+   ends in `#announcement-types`.
+9. Reload the page.
+
+**Expected**: "Announcements" › "Announcement Types" again.
+
+**Observed**: "Site Setup" › "Settings". The address still ends in
+`#announcement-types`.
+
+The same happens for "Plugins" › "Plugin Gallery" (`#pluginGallery`)
+and for "Appearance" › "Theme", which writes `#theme` when pressed,
+though it is already open under "Appearance" by default.
 
 ## Cause
 
@@ -123,21 +155,20 @@ Reach:
   journal's settings wizard: the inner tabs of "Plugins". These
   are read in the code (`website.tpl`, `workflow.tpl`,
   `distribution.tpl`, `additionalDistributionTabs.tpl`,
-  `admin/settings.tpl`, `admin/contextSettings.tpl`).
-- The side tabs under a page's first top tab (Website › "Appearance",
-  Workflow › "Submission", Site Settings › "Setup", the hosted journal
-  wizard's "Setup") come back after a reload, because the first top tab
-  opens by default (walked for "Appearance" › "Advanced", which writes
-  `#advanced`).
-- The "Edit" links on the public pages open the right side tab, and
-  the address is then rewritten to the side tab's id alone, so a reload
-  after following one loses the tab (walked by typing
-  `#setup/privacy`).
+  `admin/settings.tpl`, `admin/contextSettings.tpl`), apart from the
+  walked ones.
+- A reload after following an "Edit" link on the public pages loses
+  the tab, since the address is rewritten to the side tab's id alone.
 - Not this cause: on Administration › Site Settings, the "Appearance"
-  side tab "Setup" has the same id, `setup`, as the top tab "Setup", so
-  `#appearance/setup` opens the top "Setup" tab even with the fix (read
-  in the code, not walked). The Website page had the same clash and
-  renamed its side tab to `appearance-setup` (`pkp/pkp-lib#6209`).
+  side tab "Setup" has the same id, `setup`, as the top tab "Site
+  Setup", so `#appearance/setup`, the address the fix makes it write,
+  opens "Site Setup" › "Settings" (checked by typing that address on
+  today's code). It needs its own one-line change, a new id for that
+  side tab in pkp-lib's `templates/admin/settings.tpl`, reported in
+  [U60-A7-appearance-setup-tab-opens-site-setup.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U60-A7-appearance-setup-tab-opens-site-setup.md).
+  With this fix and that one applied together, a reload reopens every
+  side and inner tab of Site Settings (walked); this fix alone leaves
+  "Appearance" › "Setup" opening "Site Setup".
 
 ## Proposed fix
 
@@ -171,6 +202,12 @@ provide/inject, the channel the two components already use
 +					: '#' + this.currentTab;
 ```
 
+The injected id reaches the nearest `<tab>` above a `<tabs>`, not only
+its direct parent, so a `<tabs :track-history>` placed anywhere inside
+a `<tab>`, even inside another component, would get the prefix. No page
+has one today: the only other `<tabs :track-history>`, in
+`UserCommentsPage.vue`, is not inside a `<tab>`.
+
 Tried on `main` on all three apps: with the fix in, the Steps write
 `#setup/privacy`, and a reload and a new browser tab both open "Setup"
 › "Privacy Statement". "Reviewer Guidance" writes
@@ -203,7 +240,8 @@ Website › "Setup" writes `#setup`, and both come back after a reload.
   ui-library runs Vitest, for composables only, without
   `@vue/test-utils` and without a DOM environment (jsdom or happy-dom).
 
-Small: the change copies a link the two components already have, needs
+Small: the change reuses the provide/inject channel the two components
+already share, needs
 no data repair, and no API client, plugin or other screen relies on the
 address's old shape.
 
@@ -215,21 +253,15 @@ address's old shape.
   press and reload, which top tab and side tab are open and the
   address's hash; it also walks the controls (Journal › "Contact",
   Website › "Appearance" › "Advanced", Workflow › "Review" › "Reviewer
-  Guidance", the typed `#setup/privacy`). Run with pkp-e2e's tooling on
-  an install freshly loaded from the default dataset (`<feature>` names
-  the set of test installs, `<id>` the output folder):
+  Guidance", the typed `#setup/privacy`):
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/settings-side-tab-reload-opens-first-tab/walk.js`.
-  `MODE=nb` in front runs the neighbour check, what the fix must leave
-  alone: the top tabs "Contact" and Website › "Setup" with a reload, and
-  an address naming the side tab alone; it was run with the fix in and
-  out.
+- The Site Settings steps were walked with the related report's script,
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/site-settings-appearance-setup-tab-opens-site-setup/walk.js)
+  (its reload group), on 2026-10-04 on the same tips.
 - Walks: OJS, OMP and OPS on `main` without the fix and on
   `stable-3_5_0` showed the Observed; `main` with the fix showed the
-  Expected. All on PostgreSQL, with datasets from pkp/datasets 566bb1f
-  (2026-10-03).
-- Not driven: Website › "Content" and "Plugins", the Distribution, Site
-  Settings and hosted journal settings pages (the same components, read
-  in the templates); the browser's Back button.
+  Expected (Site Settings with both fixes in).
+- Not driven: the browser's Back button.
 - The branch tips the walks and code reads used:
   - **`main`:** OJS ff004d0973 (pkp-lib 987776cd04, ui-library
     64d67363), OMP 3b0ecf794c and OPS c8af945bb7 (pkp-lib 3dc90c81a6,
@@ -241,19 +273,11 @@ address's old shape.
     acd8ae704b; pkp-lib 767353f4fe, ui-library ee684b34.
   - **`stable-3_3_0`** (code): OJS ac77c9fb35, OMP 8e72fc883, OPS
     c5532e2161; pkp-lib ac3fa73402, ui-library 96959f9e.
-- Code reads:
-  - `main`: ui-library `Tabs.vue` (`updateUrl()`, the `open-tab`
-    listener), `Tab.vue`, `Container/Page.vue` (`openUrlHash()`);
-    pkp-lib `js/load.js` and `js/classes/VueRegistry.js`; the shipped
-    `js/build.js` (the `Tab` definition carries no `name`); every
-    template with `track-history` in the three apps; the "Edit" link
-    anchors in `frontend/pages/submissions.tpl` and `information.tpl`.
-  - 3.5: the same `Tabs.vue` check (line 141), `Tab.vue` without a
-    `name`, `vue` ^3.5, `VueRegistry.registerComponent('Tab', Tab)`.
-  - 3.4 and 3.3: the same `Tabs.vue` check and the same nested
-    templates, with `vue` ^2.6 and `Vue.component('Tab', Tab)` in
-    pkp-lib's `js/load.js`, which names the component `Tab`, so the
-    check matched.
+- Code reads, beyond the files the Cause names: the shipped
+  `js/build.js` on `main` (the `Tab` definition carries no `name`);
+  every template with `track-history` in the three apps; on 3.5 the
+  check at `Tabs.vue` line 141 and `vue` ^3.5; on 3.4 and 3.3 `vue`
+  ^2.6.
 - The trace: `git blame` on the check in `Tabs.vue` gives d00794e4
   ("pkp/pkp-lib#2773 Support URL history for tab navigation", Nate
   Wright, 2020-11-16), unchanged since apart from formatting. `git log -S"Vue.component('Tab', Tab)"` on pkp-lib's
