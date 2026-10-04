@@ -1,0 +1,34 @@
+--- a/lib/pkp/pages/user/RegistrationHandler.php
++++ b/lib/pkp/pages/user/RegistrationHandler.php
+@@ -182,7 +182,12 @@
+ 
+             if ($user->getDateValidated() != null) { // The user is activated
+                 $templateMgr = TemplateManager::getManager($request);
+-                $templateMgr->assign('message', 'user.login.activated');
++                $templateMgr->assign([
++                    'pageTitle' => 'user.login.activate',
++                    'message' => 'user.login.activated',
++                    'backLink' => $request->url(null, 'login'),
++                    'backLinkLabel' => 'user.login',
++                ]);
+                 return $templateMgr->display('frontend/pages/message.tpl');
+             }
+ 
+--- a/lib/pkp/templates/frontend/pages/userConfirmActivation.tpl
++++ b/lib/pkp/templates/frontend/pages/userConfirmActivation.tpl
+@@ -7,10 +7,13 @@
+  *
+  * @brief A landing page get user confirmation to activate the user account
+  *}
+- {include file="frontend/components/header.tpl"}
++ {include file="frontend/components/header.tpl" pageTitle="user.login.activate"}
+ 
+  <div class="page">
+-     {include file="frontend/components/breadcrumbs.tpl" currentTitleKey=$pageTitle}
++     {include file="frontend/components/breadcrumbs.tpl" currentTitleKey="user.login.activate"}
++     <h1>
++         {translate key="user.login.activate"}
++     </h1>
+  
+      <div class="page user_confirm_activation">
+  
