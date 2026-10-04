@@ -847,6 +847,9 @@ Left out of the scenarios above, by reason:
     other help ([A7](#a7)): the guard the issue report proposes
   - the "Add a Component" window's labels and helps reading as Fields
     gives them ([A8](#a8)): the guard the issue report proposes
+  - each app's "Disable Submissions" help naming its own kind of work,
+    and the "Author Guidance" box labels on the three apps
+    ([OMP1](#omp1)): the guards the two issue reports propose
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -949,7 +952,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its copyright box reads "Copyright notice" | 🐞 | minor | — |
+| [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its "Author Guidance" labels the copyright box "Copyright notice" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A new component lands at the top of the list, sharing first place with the first component | ❓ | minor | — |
 | [A3](#a3) | A deleted component keeps its key and can come back, though the confirmation says the delete cannot be undone | ❓ | minor | — |
@@ -1151,13 +1154,26 @@ Basis: probe, 2026-10-04. <sup>f-ojs1</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — Two wording slips on a press** · 🐞 · minor.
-A press's "Disable Submissions" help reads "Prevent users from submitting
-new articles to the press.", where a press takes monographs; and its
-"Author Guidance" box is labelled "Copyright notice", where a journal, a
-preprint server and the press's own "Submissions" page say "Copyright
-Notice".
-Basis: code. <sup>f-omp1</sup>
+**OMP1 — A press's "Disable Submissions" help speaks of "new articles", and its "Author Guidance" labels the copyright box "Copyright notice"** · 🐞 · low.
+On a press's Settings › Workflow › "Submission" › "Disable Submissions",
+the help under the box reads "Prevent users from submitting new articles
+to the press.", where a press takes monographs. A journal's help says
+"new articles to the journal" and a preprint server's "new preprints to
+the server".
+Every press manager who opens Settings › Workflow with the interface in
+English sees it, since the panel is the one the page opens on. Fourteen
+of OMP's translations repeat "articles" (the Cause names them); the fix
+is to the English text; the translations are for their translators to
+follow.
+On a press's Settings › Workflow › "Submission" › "Author Guidance", the
+copyright box is labelled "Copyright notice". A journal and a preprint
+server label the same box "Copyright Notice". The press's public About ›
+"Submissions" page heads the notice "Copyright Notice" too.
+Every press manager who opens "Author Guidance" with the interface in
+English sees it. Other languages show OMP's own translation of the
+label, which this does not touch; the fix is to the English text.
+The two have separate causes and fixes, each in its own issue report.
+Basis: probe, 2026-10-04. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance"** · 🐞 · low.
@@ -1842,6 +1858,7 @@ Issue report: [pkp-e2e#822](https://github.com/jardakotesovec/pkp-e2e/issues/822
 submitting new articles to the press. …" and `manager.setup.copyrightNotice`
 "Copyright notice"; OMP's `about.copyrightNotice` on the page reads
 "Copyright Notice".
+Issue reports: "Disable Submissions" [docs/issues/U58-OMP1-press-disable-submissions-help-says-articles.md](../issues/U58-OMP1-press-disable-submissions-help-says-articles.md); the label [docs/issues/U58-OMP1-press-copyright-notice-label-lowercase.md](../issues/U58-OMP1-press-copyright-notice-label-lowercase.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — OMP `templates/frontend/pages/submissions.tpl`: the

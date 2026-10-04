@@ -1,0 +1,11 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -321,7 +321,7 @@
+ msgstr "The Copyedit Instructions will be made available to Copyeditors, Authors, and Section Editors in the Submission Editing stage. Below is a default set of instructions in HTML, which can be modified or replaced by the Press Manager at any point (in HTML or plain text)."
+ 
+ msgid "manager.setup.copyrightNotice"
+-msgstr "Copyright notice"
++msgstr "Copyright Notice"
+ 
+ msgid "manager.setup.coverage"
+ msgstr "Coverage"

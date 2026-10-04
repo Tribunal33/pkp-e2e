@@ -1,0 +1,11 @@
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -923,7 +923,7 @@
+ msgstr "This press is not accepting submissions at this time. Visit the workflow settings to allow submissions."
+ 
+ msgid "manager.setup.disableSubmissions.description"
+-msgstr "Prevent users from submitting new articles to the press. Submissions can be disabled for individual press series on the <a href=\"{$url}\">press series</a> settings page."
++msgstr "Prevent users from submitting new monographs to the press. Submissions can be disabled for individual press series on the <a href=\"{$url}\">press series</a> settings page."
+ 
+ msgid "manager.setup.genres"
+ msgstr "Genres"
