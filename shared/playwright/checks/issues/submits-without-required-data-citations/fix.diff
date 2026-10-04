@@ -1,0 +1,27 @@
+--- a/lib/pkp/classes/submission/Repository.php
++++ b/lib/pkp/classes/submission/Repository.php
+@@ -454,10 +454,20 @@
+             if (!$schema) {
+                 continue;
+             }
+-            if (empty($schema->multilingual) && empty((string) $publication->getData($metadata))) {
+-                $errors[$metadata] = [__('validator.required')];
+-            } elseif (!empty($schema->multilingual) && empty((string) $publication->getData($metadata, $locale))) {
+-                $errors[$metadata] = [$locale => [__('validator.required')]];
++            $value = empty($schema->multilingual)
++                ? $publication->getData($metadata)
++                : $publication->getData($metadata, $locale);
++            // A list (data citations, keywords) is empty when it holds no item;
++            // anything else (a string, the Stringable citationsRaw) when its text is empty
++            $isEmpty = match (true) {
++                $value instanceof Enumerable => $value->isEmpty(),
++                is_array($value) => empty($value),
++                default => empty((string) $value),
++            };
++            if ($isEmpty) {
++                $errors[$metadata] = empty($schema->multilingual)
++                    ? [__('validator.required')]
++                    : [$locale => [__('validator.required')]];
+             }
+         }
+ 

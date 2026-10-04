@@ -878,6 +878,7 @@ Left out of the scenarios above, by reason:
     data citation row's up and down arrows carry names that say the
     direction and the citation
   - the guard for A4 (issue report `docs/issues/U42-A4-press-server-lookup-text-says-journal.md`): with "References Metadata Lookup" on, the References page of a press and of a preprint server describes the lookup without calling the context a journal
+  - the guard for A9 (issue report `docs/issues/U42-A9-submits-without-required-data-citations.md`): with data citations at "Require the author to add data citation metadata…", an author's submission with no data citation is held back on "Review" (the problems banner, "Submit" disabled), and one with a data citation goes in
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -979,7 +980,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | The lookup's progress box counts structured references only | 🐞 | minor | — |
 | [A7](#a7) | A DOI in a reference typed while submitting is not kept when lookup is off | 🐞 | latent | — |
 | [A8](#a8) | A new data citation has no place in the order: none before an order is saved, the top after one | 🐞 | minor | — |
-| [A9](#a9) | "Require" for data citations warns but does not stop the submission | 🐞 | user-visible | — |
+| [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | On a press or a preprint server the wizard's Data Citations table ignores every save until a reload | 🐞 | minor | — |
 | [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | An author row abandoned with "Close" comes back blank, is saved, and makes the reference structured | 🐞 | minor | — |
@@ -1076,13 +1077,14 @@ Basis: probe, 2026-09-24; code for the order before a save, 2026-09-26.
 <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — "Require" for data citations does not stop the submission** · 🐞 · user-visible.
-A journal set to "Require the author to add data citation metadata before
-accepting their submission." expects submissions without data citations to
-be held back. The wizard's Review step shows "Data citations are required.",
-but "Submit" completes the submission anyway. Required references, by
-contrast, do stop it.
-Basis: probe, 2026-09-24. <sup>f-a9</sup>
+**A9 — An author can submit with no data citations when the journal requires them** · 🐞 · medium.
+When a manager sets data citations to "Require the author to add data
+citation metadata…", a submission without one is expected to be held
+back. The author's "Review" step shows "Data citations are required.",
+but "Submit" stays enabled and the submission completes. Required
+references, by contrast, do stop it. The journal, press or server then
+receives submissions without the data citations it requires.
+Basis: probe, 2026-10-04. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — The wizard's Data Citations table stays stale on a press or a preprint server** · 🐞 · minor.
@@ -2054,6 +2056,7 @@ draft carrying its main file, at "Require…" with no data citation, landed
 on "Submission complete" (the Review step's own check answered 200), while
 required references kept "Submit" grayed out on the same screens (q19,
 note k).
+Issue report: [docs/issues/U42-A9-submits-without-required-data-citations.md](../issues/U42-A9-submits-without-required-data-citations.md).
 
 <a id="fn-f-a10"></a>
 **f-a10 — A10 evidence.** `DataCitationManager` refreshes the wizard through
