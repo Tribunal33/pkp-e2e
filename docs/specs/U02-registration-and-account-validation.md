@@ -685,6 +685,23 @@ in the footnote. <sup>s</sup>
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - with validation required, registering on a journal created under
+    Hosted Journals with no technical support contact, then the
+    "Registration awaiting verification" page and the "Validate Your
+    Account" email from the principal contact ([A6](#a6); Rule 12): the
+    guard the issue report
+    (`docs/issues/U02-A6-register-no-support-contact-empty-page.md`)
+    proposes, once fixed
+  - with validation required and the mail server refusing connections,
+    registering leaves no locked account behind ([A6](#a6); Rule 12):
+    the guard the issue report
+    (`docs/issues/U02-A6-register-mail-down-says-email-sent.md`)
+    proposes, once the team settles the fix
+  - on a press site's site-wide Register page, both privacy consent
+    refusals read as sentences ([OMP1](#omp1)): the guard the issue
+    report (`docs/issues/U02-OMP1-press-site-register-consent-raw-codes.md`)
+    proposes, once fixed
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -693,10 +710,8 @@ Left out of the scenarios above, by reason:
   - A3 (the site-level notification box records nothing; Rule 6)
   - A7 (Reader granted though closed to self-registration; Rule 7)
   - A4 (closed journals listed with no roles under them; Rule 8)
-  - A6 (no technical support contact: an empty page and a stranded account; Rule 12)
   - A2 (the activation pages carry no heading and no Login link; Rule 13)
   - A1 (`validation_timeout` promises 14 days and changes nothing; Rule 14)
-  - OMP1 (on a press site the site-level consent errors render as raw codes)
   - OMP2 (on a press site every press's consent line is shown before a role is ticked; scenario 6 marks it)
   - OPS1 (a preprint-server site's page asks for reviewing interests with no reviewer role)
 - **No seed**:
@@ -732,8 +747,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | The two activation pages have no heading, and the one after "Activate Account" offers no link to Login | 🐞 | minor | — |
 | [A3](#a3) | The site-level page's notification opt-in records nothing | 🐞 | minor | — |
 | [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | minor | — |
-| [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | user-visible | — |
-| [OMP1](#omp1) | On a press site, the two site-level consent errors render as raw codes | 🐞 | user-visible | — |
+| [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
+| [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press site, every press's consent line is on screen before any role is ticked | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint-server site's Register page asks for reviewing interests though no reviewer role exists, and the profile never shows them | 🐞 | minor | — |
 | [A5](#a5) | The Register page's "Login" link aims at the profile's Roles tab, but sign-in lands as usual | ❓ | minor | — |
@@ -797,19 +812,27 @@ is where an existing user "registers" with a journal.
 Basis: probe. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
-**A6 — No technical support contact: registration crashes and strands the account** · 🐞 · user-visible.
-When validation is required and the journal has no technical support contact
-(a journal whose Contact settings were never completed, the state of a fresh
-journal), pressing "Register" with a valid form ends on an empty page with no
-message at all. The account has nevertheless been created and disabled with
-the "We've sent a confirmation email…" reason, and no email was sent: signing
-in is refused with that reason, there is no link to activate, and registering
-again is refused because the username and email are taken. Expected: the
-message sent from the site's contact instead, or a page that says what is
-wrong and no account left behind. Any other failure to send (a mail-transport
-failure) strands the account the same way, behind the ordinary "Registration
-awaiting verification" page; that half is read from the code, not seen.
-Basis: probe. <sup>[f-a6](#fn-a6)</sup>
+**A6 — No technical support contact: registration crashes and strands the account** · 🐞 · medium · crash: server.
+When validation is required (an install setting, off by default) and the
+journal has no technical support contact, pressing "Register" with a valid
+form on the journal's own Register page ends on an empty page: the app
+fails on the server. That is the state of every journal created under
+Administration › Hosted Journals until its Contact settings are saved; the
+dataset's journal has a support contact, and the Contact form will not
+save without one. The account has nevertheless been created and disabled
+with the "We've sent a confirmation email…" reason, and no email was sent:
+signing in is refused with that reason, and registering again is refused
+because the username and email are taken. Adding a support contact
+afterwards helps only later registrations; an account already locked
+stays locked until a manager uses "Enable User" on it under Users & Roles.
+The site-wide Register page is not affected. Expected: the email sent from
+the journal's principal contact when it has no support contact.
+A second cause strands the account the same way behind a page that says
+the email went out: when the mail server cannot be reached, the visitor
+sees "Registration awaiting verification" and "We've sent a confirmation
+email to you at …", no email goes out, and the account stays disabled
+with that reason, with no way to have the link sent again.
+Basis: probe, 2026-10-04. <sup>[f-a6](#fn-a6)</sup>
 
 <a id="a7"></a>
 **A7 — Reader is granted even when closed to self-registration** · ❓ · latent.
@@ -829,16 +852,29 @@ Basis: probe. <sup>[f-a7](#fn-a7)</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — Consent errors appear as raw codes on a press site** · 🐞 · user-visible.
-On the site-level Register page of a press installation, submitting without
-the site's privacy consent, or without a press's consent after ticking one
-of its roles, lists the error as a bare internal code in double hash marks
-where a journal or preprint-server site prints "You must consent to this
-site's privacy statement." or "You must consent to the privacy statement for
-any press with which you are registering." The two sentences are missing
-from the press application's English text; the page's other consent text
-is present.
-Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
+**OMP1 — On a press site's site-wide Register page, the two privacy consent refusals show raw codes** · 🐞 · low.
+On the site-wide Register page of a press installation, the two privacy
+consent refusals print a bare code, such as
+`##user.register.form.missingContextConsent##`, because the press
+application lacks the two English sentences that the journal and
+preprint server applications have. One refusal shows when a visitor
+presses "Register" without ticking the site's privacy consent. The other
+shows when a visitor ticks a role under a press but leaves that press's
+own consent box unticked.
+
+A journal site prints "You must consent to this site's privacy
+statement." or "You must consent to the privacy statement for any
+journal with which you are registering." A preprint server site prints
+the same, with "server" in place of "journal". A press's own Register
+page refuses an unticked consent with a proper sentence.
+
+The refusal itself is right and nothing is stored. Only the reason is
+lost: the visitor has to work out from the code which box to tick.
+
+The press refusal can show on any press site. The site refusal shows
+only when the site has a Privacy Statement, and the Site Administrator
+can type one only when the site does not host exactly one press.
+Basis: probe, 2026-10-04. <sup>[f-omp1](#fn-omp1)</sup>
 
 <a id="omp2"></a>
 **OMP2 — Press consent lines shown before any role is ticked** · 🐞 · minor.
@@ -1570,6 +1606,7 @@ for the following reason: We've sent a confirmation email to you at
 install's mail catcher does not offer a failing transport. Whether adding a
 support contact afterwards lets those accounts be activated was not tested
 (the seeded context's settings are read-only for the campaign).
+Issue reports: [pkp-e2e#833](https://github.com/jardakotesovec/pkp-e2e/issues/833) ([docs/issues/U02-A6-register-no-support-contact-empty-page.md](../issues/U02-A6-register-no-support-contact-empty-page.md)), the missing sender; [pkp-e2e#834](https://github.com/jardakotesovec/pkp-e2e/issues/834) ([docs/issues/U02-A6-register-mail-down-says-email-sent.md](../issues/U02-A6-register-mail-down-says-email-sent.md)), the mail failure.
 
 <a id="fn-a7"></a>
 **f-a7** — Note c: `RegistrationForm::execute()` assigns
@@ -1598,6 +1635,7 @@ statement set and the box unticked, and
 `##user.register.form.missingContextConsent##` with "Reader" ticked under a
 press and its line unticked; OJS and OPS printed the sentences of note d in
 the same runs.
+Issue report: [pkp-e2e#835](https://github.com/jardakotesovec/pkp-e2e/issues/835) ([docs/issues/U02-OMP1-press-site-register-consent-raw-codes.md](../issues/U02-OMP1-press-site-register-consent-raw-codes.md)).
 
 <a id="fn-omp2"></a>
 **f-omp2** — `registrationFormContexts.tpl` renders a `.context_privacy`
