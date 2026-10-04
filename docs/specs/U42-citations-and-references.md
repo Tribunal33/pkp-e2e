@@ -981,7 +981,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | The lookup's progress box counts structured references only | 🐞 | minor | — |
 | [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A8](#a8) | A new data citation has no place in the order: none before an order is saved, the top after one | 🐞 | minor | — |
+| [A8](#a8) | A data citation added after the Data Citations table was ordered appears first, not last | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | On a press or preprint server, the submission wizard's data citations and funders still read empty after a save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1070,16 +1070,19 @@ while submitting.
 Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — A new data citation has no place of its own in the order** · 🐞 · minor.
-An editor expects the Data Citations table to keep data citations in the
-order they were added until an order is saved, and a data citation added
-after that at the end. Before any order is saved, the app keeps no order:
-the table usually shows the order added, but nothing holds it, so the rows
-can come back in another order on a later visit. After an order is saved,
-a data citation added later appears first, above every ordered row. Saving
-the order again keeps it there; only moving it with the arrows and saving
-puts it elsewhere.
-Basis: probe, 2026-09-24; code for the order before a save, 2026-09-26.
+**A8 — A data citation added after the Data Citations table was ordered appears first, not last** · 🐞 · low.
+An editor orders a publication's data citations ("Order", the arrows,
+"Save Order") and then adds another one. The new data citation appears
+first, above every row that was ordered, and stays there after a reload,
+where an editor expects it at the end. Several added after one saved
+order all go to the top, in the order they were added, above the ordered
+rows. The editor sees the new row at the top and can move it down with
+the arrows and save the order again. It needs data citations turned on
+("Enable data citation metadata", off by default). Every export of the
+publication's data citations lists them in the order the table shows: a
+journal's JATS export and its Crossref and DataCite deposits, and a
+preprint server's Crossref deposit.
+Basis: probe, 2026-10-04.
 <sup>f-a8</sup>
 
 <a id="a9"></a>
@@ -2070,6 +2073,7 @@ Issue report: [pkp-e2e#872](https://github.com/jardakotesovec/pkp-e2e/issues/872
 after a saved order (*Funding*, A7). Live-probed 2026-09-24 (the data
 citation added after a saved order): note m. Code read 2026-09-26 (the
 order before a save): note m; not yet seen out of order on screen.
+Issue report: [docs/issues/U42-A8-data-citation-added-after-order-goes-first.md](../issues/U42-A8-data-citation-added-after-order-goes-first.md).
 
 <a id="fn-f-a9"></a>
 **f-a9 — A9 evidence.** `Context::getRequiredMetadata()` includes

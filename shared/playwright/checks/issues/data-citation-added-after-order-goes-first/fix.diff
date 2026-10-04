@@ -1,0 +1,42 @@
+--- a/lib/pkp/classes/dataCitation/DataCitation.php
++++ b/lib/pkp/classes/dataCitation/DataCitation.php
+@@ -67,6 +67,13 @@
+     {
+         parent::boot();
+ 
++        // A data citation added without a place of its own goes after the publication's others
++        static::creating(function (self $model) {
++            if (empty($model->seq)) {
++                $model->seq = (int) static::where('publication_id', $model->publicationId)->max('seq') + 1;
++            }
++        });
++
+         static::saving(function (self $model) {
+             $dirty = $model->getDirty();
+             $identifierType = $dirty['identifier_type'] ?? $model->identifierType;
+@@ -104,6 +111,6 @@
+      */
+     protected function scopeOrderBySeq(EloquentBuilder $builder): EloquentBuilder
+     {
+-        return $builder->orderBy('seq');
++        return $builder->orderBy('seq')->orderBy('data_citation_id');
+     }
+ }
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -453,12 +453,14 @@
+             }
+         }
+ 
+-        // Clone data citations if any
++        // Clone data citations if any, numbered in the order they are read
+         $dataCitations = $publication->getData('dataCitations');
++        $seq = 0;
+         foreach ($dataCitations as $dataCitation) {
+             $data = $dataCitation->toArray();
+             unset($data['dataCitationId']);
+             $data['publicationId'] = $newPublication->getId();
++            $data['seq'] = ++$seq;
+             $newDataCitation = DataCitation::create($data);
+         }
+ 
