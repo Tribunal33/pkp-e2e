@@ -2014,7 +2014,7 @@ note e; none of the four strings appeared.
 **f-a4 — A4 evidence.** `submission.citations.structured.citationsMetadataLookup.description`
 exists only in lib/pkp's `locale/en/submission.po`; neither OMP's nor OPS's
 `locale/en` overrides it. Live-probed 2026-09-24: q12.
-Issue report: [docs/issues/U42-A4-press-server-lookup-text-says-journal.md](../issues/U42-A4-press-server-lookup-text-says-journal.md).
+Issue report: [pkp-e2e#869](https://github.com/jardakotesovec/pkp-e2e/issues/869) ([docs/issues/U42-A4-press-server-lookup-text-says-journal.md](../issues/U42-A4-press-server-lookup-text-says-journal.md)).
 
 <a id="fn-f-a5"></a>
 **f-a5 — A5 evidence.** Notes h and i: `CitationLookupJob::failed()` stores
