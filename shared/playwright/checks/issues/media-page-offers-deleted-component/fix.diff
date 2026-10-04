@@ -1,0 +1,113 @@
+--- a/lib/ui-library/src/managers/MediaFileManager/mediaFileManagerStore.js
++++ b/lib/ui-library/src/managers/MediaFileManager/mediaFileManagerStore.js
+@@ -34,9 +34,11 @@
+ 
+ 		const genres = computed(() => genresList.value || []);
+ 
++		// The list holds deleted (disabled) components too, so that a file's type
++		// can still be named; only enabled ones are offered for a new file.
+ 		const genreOptions = computed(() =>
+ 			genres.value
+-				?.filter((genre) => genre.dependent)
++				?.filter((genre) => genre.dependent && genre.enabled)
+ 				.map((genre) => ({
+ 					value: genre.id,
+ 					label: localize(genre.name),
+--- a/lib/ui-library/src/mocks/articleComponentGenres.js
++++ b/lib/ui-library/src/mocks/articleComponentGenres.js
+@@ -5,6 +5,7 @@
+ 		key: 'ARTICLE_TEXT',
+ 		dependent: false,
+ 		supplementary: false,
++		enabled: true,
+ 		metadataType: 'document',
+ 	},
+ 	{
+@@ -13,6 +14,7 @@
+ 		key: 'RESEARCH_INSTRUMENT',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -21,6 +23,7 @@
+ 		key: 'RESEARCH_MATERIALS',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -29,6 +32,7 @@
+ 		key: 'RESEARCH_RESULTS',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -37,6 +41,7 @@
+ 		key: 'TRANSCRIPTS',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -45,6 +50,7 @@
+ 		key: 'DATA_ANALYSIS',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -53,6 +59,7 @@
+ 		key: 'DATA_SET',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -61,6 +68,7 @@
+ 		key: 'SOURCE_TEXTS',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ 	{
+@@ -69,6 +77,7 @@
+ 		key: 'MULTIMEDIA',
+ 		dependent: true,
+ 		supplementary: false,
++		enabled: true,
+ 		supportsFileVariants: true,
+ 		metadataType: 'document',
+ 	},
+@@ -78,6 +87,7 @@
+ 		key: 'IMAGE',
+ 		dependent: true,
+ 		supplementary: false,
++		enabled: true,
+ 		supportsFileVariants: true,
+ 		metadataType: 'artwork',
+ 	},
+@@ -87,6 +97,7 @@
+ 		key: 'HTML_STYLESHEET',
+ 		dependent: true,
+ 		supplementary: false,
++		enabled: true,
+ 		metadataType: 'document',
+ 	},
+ 	{
+@@ -95,6 +106,7 @@
+ 		key: 'OTHER',
+ 		dependent: false,
+ 		supplementary: true,
++		enabled: true,
+ 		metadataType: 'supplementary',
+ 	},
+ ];

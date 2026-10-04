@@ -837,6 +837,9 @@ Left out of the scenarios above, by reason:
   - a component's "Name" of one space refused with a sentence in the
     notice, not a raw code ([A10](#a10)): the guard the issue report
     proposes
+  - a press's and a preprint server's "Soumission" tab in French
+    (Canada) showing no `##` code in its side tabs or its components
+    list ([A9](#a9)): the guard the issue report proposes
 - **Nothing new to test**:
   - the Editor and the Production Editor while their role keeps "Permit
     changes to Settings" (Actors row 1): the same tabs as the Journal
@@ -931,10 +934,10 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | The "Media" page still offers a deleted dependent component as a media type | 🐞 | user-visible | — |
+| [A2](#a2) | A component the manager deleted is still offered as a media type on the "Media" page | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | The "For Reviewer Suggestion" box's help describes the Contributors step | 🐞 | minor | — |
 | [A8](#a8) | The component window's "Key" help misspells "identifier" and calls the component a "genre" | 🐞 | minor | — |
-| [A9](#a9) | In French, a press's and a preprint server's component list shows raw text keys | 🐞 | user-visible | — |
+| [A9](#a9) | A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada) | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
@@ -965,11 +968,18 @@ another component is an accident, not a choice.
 Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
-**A2 — A deleted component stays offered on the "Media" page** · 🐞 · user-visible.
+**A2 — A component the manager deleted is still offered as a media type on the "Media" page** · 🐞 · low.
 A manager who deletes a dependent component (for example "Multimedia")
-expects it gone everywhere, as it is from the upload wizard. The "Media"
-page's "What kind of media is this?" still offers it.
-Basis: probe. <sup>f-a2</sup>
+expects it to be gone everywhere, as it is from the submission's file
+upload lists. On a publication's "Media" page, the "Upload Media File"
+window does not leave deleted components out: it still offers the
+deleted one under "What kind of media is this?".
+An editor who picks it gets the file uploaded, and the "Media Files"
+list shows the file with the deleted component as its type. The deletion
+is ignored in this one list, and nothing on the screen says the
+component was deleted. The file works as any other media file, and its
+type cannot be changed afterwards.
+Basis: probe, 2026-10-04. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A deleted component is hidden, not removed** · ❓ · minor.
@@ -1037,18 +1047,23 @@ word the screen uses nowhere else; the screen says "component".
 Basis: code. <sup>f-a8</sup>
 
 <a id="a9"></a>
-**A9 — Raw text keys in a press's and a server's French component list** · 🐞 · user-visible.
-With the interface in French, a journal's "Components" list is headed
-"Éléments de l'article" and names every component in French. A press's
-and a preprint server's list is headed "##grid.genres.title##" instead.
-On a preprint server with French among its form languages, seven
-components carry raw text keys as their French names: "Research
-Instrument", "Research Materials", "Research Results", "Transcripts",
-"Data Analysis", "Data Set" and "Source Texts" read
-"##default.genres.researchInstrument##" … "##default.genres.sourceTexts##"
-in the list and in each "Edit" window, and "Restore Defaults" writes the
-keys back.
-Basis: probe. <sup>f-a9</sup>
+**A9 — A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada)** · 🐞 · low.
+A press or preprint server manager working in French (Canada) opens
+Settings › Workflow › "Soumission". The side tab that manages file
+components is labelled with the internal text code
+"##grid.genres.title.short##", and the list it opens is headed
+"##grid.genres.title##", where a journal reads "Éléments" and "Éléments
+de l'article".
+Nothing is lost: the list works as in English. The cause is two French
+(Canada) texts missing from the press's and the server's translations;
+no code needs to change.
+Every press and preprint server that offers French (Canada) shows the
+two codes. So do presses in nine other languages that lack the same
+texts, and preprint servers in nine others, French (France) among them.
+A preprint server's seven French component names, stored as codes, are
+another fault, recorded under
+[Languages & locales](U57-languages-and-locales.md#a8).
+Basis: probe, 2026-10-04. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A name of only spaces is refused with a raw text key** · 🐞 · low.
@@ -1695,6 +1710,7 @@ one journal put the two components in different orders.
 store fetches `genres` through the programming interface, which returns
 disabled rows too, and filters on `dependent` only. Live-probed
 2026-09-27, all three apps (note td8).
+Issue report: [docs/issues/U58-A2-media-page-offers-deleted-component.md](../issues/U58-A2-media-page-offers-deleted-component.md).
 
 <a id="fn-f-a3"></a>
 **f-a3** — Notes f, g and h: `deleteById()` keeps the row, `keyExists()`
@@ -1738,6 +1754,7 @@ untranslated key as the French name. Live-probed 2026-09-27, two runs
 per app, OJS the control: the list in French, and on a preprint server
 with English and French form languages the seven names in the list, in
 each "Edit" window and after "Restore Defaults".
+Issue report: [docs/issues/U58-A9-french-components-list-heading-raw-key.md](../issues/U58-A9-french-components-list-heading-raw-key.md); the component names: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: the box's own check accepts spaces, and the server's

@@ -1,0 +1,15 @@
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -1278,10 +1278,10 @@
+ msgstr ""
+ 
+ msgid "grid.genres.title.short"
+-msgstr ""
++msgstr "Éléments"
+ 
+ msgid "grid.genres.title"
+-msgstr ""
++msgstr "Éléments de la monographie"
+ 
+ msgid "manager.setup.notifications.copyPrimaryContact"
+ msgstr ""

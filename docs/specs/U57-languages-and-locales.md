@@ -970,7 +970,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | After a manager ticks a language under "Forms", "Date & Time" shows no choices for it | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
 | [A7](#a7) | On a one-language site, typing in "Create Journal" makes the page's script fail at every keystroke | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A8](#a8) | A press's or preprint server's French (Canada) guidelines, checklist, privacy statement and role names show internal codes | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A8](#a8) | A press's or preprint server's French (Canada) guidelines, checklist, privacy statement, role and component names show internal text codes | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | "Reload defaults" is offered to the Site Administrator alone | ❓ | minor | — |
 | [A4](#a4) | A text missing from a translation shows as its internal name, not in the primary language | ❓ | user-visible | — |
 | [A9](#a9) | Two scripts of one language carry the same name, so a reader cannot tell their links apart | ❓ | minor | — |
@@ -1091,32 +1091,37 @@ The site administrator loses nothing and needs no way round.
 Basis: probe, 2026-10-01. <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
-**A8 — A press's or preprint server's French (Canada) guidelines, checklist, privacy statement and role names show internal codes** · 🐞 · medium.
+**A8 — A press's or preprint server's French (Canada) guidelines, checklist, privacy statement, role and component names show internal text codes** · 🐞 · medium.
 On a press or preprint server that offers French (Canada), the French
-"Submissions" page shows "##default.contextSettings.authorGuidelines##"
-and "##default.contextSettings.checklist##" where the author guidelines
-and the submission checklist should be. A French author starting "Make
-a Submission" is asked to confirm the checklist under that code. A
-preprint server's French "Privacy Statement" page is only
-"##default.contextSettings.privacyStatement##", and its Moderator and
+"Submissions" page shows the internal text codes
+"##default.contextSettings.authorGuidelines##" and
+"##default.contextSettings.checklist##" where the author guidelines and
+the submission checklist should be. A French author starting "Make a
+Submission" is asked to confirm the checklist under that code.
+A preprint server's French "Privacy Statement" page is only
+"##default.contextSettings.privacyStatement##". Its Moderator and
 manager roles are named "##default.groups.name.sectionEditor##" and
-"##default.groups.name.manager##" in French: on the "Editorial
+"##default.groups.name.manager##" in French: on the public "Editorial
 Masthead", on Users & Roles › "Roles" and in the users list's "Roles"
-column. A journal shows French texts.
+column. The server's list of file components, under Settings › Workflow
+› "Soumission", names seven of them by codes
+("##default.genres.researchInstrument##" and six more), and so does each
+one's "Modifier" (Edit) window.
 The codes are saved into the press's or server's settings when it is
 created with French or French is added, so they stay, and no one is
-told. "Reload defaults" for French writes the texts' codes again over a
-French text the manager typed. A manager can replace each one by typing
-a French text or renaming the role.
-Every press and server with French (Canada) has them, the default test
-dataset's included. The same happens in other languages wherever the
-application's own default texts are untranslated, journals included:
-the guidelines and checklist of a press in Catalan or Russian, a
-preprint server in Catalan, French (France) or Norwegian Bokmål as in
-French (Canada), a journal in Greek or Vietnamese (the full list under
-Cause).
-The same fault: [Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops3), [OPS4](U07-journal-identity-and-about-pages.md#ops4); [Users management](U53-users-management.md#ops1).
-Basis: probe, 2026-10-01. <sup>[f-a8](#fn-a8)</sup>
+told. "Reload defaults" for French saves the codes again over a French
+text the manager typed, and the components list's "Restaurer les valeurs
+par défaut" (Restore Defaults) saves the components' codes again. A
+manager can replace each one on screen.
+Two things combine: the press's and the server's French (Canada)
+translations lack these texts, and the code that saves default texts
+stores the code when a language has no text, where an empty box would
+show the English text. The same happens wherever an application's own
+default texts are untranslated: in about fourteen more languages on a
+press, nine on a preprint server (French (France) among them) and some
+twenty on a journal (the list under Cause).
+The same fault: [Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops3), [OPS4](U07-journal-identity-and-about-pages.md#ops4); [Users management](U53-users-management.md#ops1); [Submission intake configuration](U58-submission-intake-configuration.md#a9).
+Basis: probe, 2026-10-04. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Two scripts of one language carry the same name** · ❓ · minor.

@@ -1,0 +1,15 @@
+--- a/locale/fr_CA/manager.po
++++ b/locale/fr_CA/manager.po
+@@ -385,10 +385,10 @@
+ msgstr ""
+ 
+ msgid "grid.genres.title.short"
+-msgstr ""
++msgstr "Éléments"
+ 
+ msgid "grid.genres.title"
+-msgstr ""
++msgstr "Éléments de la prépublication"
+ 
+ msgid "plugins.importexport.common.settings"
+ msgstr ""
