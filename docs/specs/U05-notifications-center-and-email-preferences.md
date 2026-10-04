@@ -798,6 +798,7 @@ Left out of the scenarios above, by reason:
   - the "needs an editor" email staying away for a manager who unticked "Enable…" on its row (Rule 5a; scenario 3 reads the mailbox; the guard [A10](#a10)'s issue report proposes)
   - a preprint server's "needs a moderator" task opening the preprint's workflow (Rule 2c; scenario 1 presses a task; the guard [OPS3](#ops3)'s issue report proposes)
   - a reply in a discussion with "Discussion activity." switched off reaching neither the Tasks window nor the mailbox, and with it on a row reading "… replied to …" (Rule 6; the guard [A1](#a1)'s issue report proposes)
+  - unticking a box on the "Unsubscribe" page leaving the emails switched off before still off (Rule 8c; the guard [A2](#a2)'s issue report proposes)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -816,7 +817,6 @@ Left out of the scenarios above, by reason:
   - OPS2 (the "A new preprint , "Title"" wording; *Fields & validation*)
   - A7 (deleting the task killing the link; Rule 7b)
   - A5 (a mail program's own "Unsubscribe" button; Rule 7c)
-  - A2 (an unticked box re-enabling an email switched off before; Rule 8c)
   - A4 (the site-level set governing nothing; Rule 5d)
   - A9 (the Unsubscribe page keeping the statistics box with the email off; *Settings*)
   - A12 (two tasks raised within one second listed in either order; Rule 2b; scenario 2's second submission comes a second after the first)
@@ -853,7 +853,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | A manager who turns off the "needs an editor" notification still gets its email for every new submission | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS3](#ops3) | On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
+| [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS2](#ops2) | The new-preprint row reads "A new preprint , "Title", has been submitted." with a space before the comma | 🐞 | minor | — |
@@ -889,14 +889,24 @@ preprint server cannot save a discussion at all today
 Basis: probe, 2026-10-04. <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a2"></a>
-**A2 — The Unsubscribe page re-enables emails switched off earlier** · 🐞 · latent.
-A person who had ticked "Do not send me an email…" on some rows of the tab
-and later opens an Unsubscribe link sees every box ticked. Unticking one to
-keep that email, and pressing "Unsubscribe", also switches back on every
-email they had switched off on the tab before, because the page saves the
-whole set of boxes as the new choices (Rule 8c). Nothing on the page says
-that its boxes replace the tab's choices.
-Basis: probe. <sup>[f-a2](#fn-a2)</sup>
+**A2 — Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off** · 🐞 · medium.
+A person who had turned some emails off on Profile › "Notifications"
+opens the "unsubscribe" link in another email. On the "Unsubscribe"
+page a ticked box means "stop this email", and every box is ticked,
+including the emails already off. To stop only this one email, they
+untick the other boxes and press "Unsubscribe". That email does stop,
+and the page reads "You have been unsubscribed". But every unticked box
+is saved as "send me this email", so the emails they had turned off
+are switched back on, without a word.
+They find out when one of those emails arrives again, and can turn it
+off again on the profile tab.
+Many readers and authors have such emails off without ever opening the
+tab: a new account that leaves "Yes, I would like to be notified of new
+publications and announcements." unticked at registration starts with
+the issue and announcement emails off. Only sites that set an API
+secret in their configuration file can reach the page. The installer
+leaves it empty, and then every unsubscribe link opens "404 Not Found".
+Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — No reader-side count for a Section Editor** · 🐞 · low.
@@ -1757,6 +1767,7 @@ before inserting the ticked boxes; the template checks every box
 (`checked="checked"`). Live-probed 2026-09-04 on OJS, OMP and OPS (note f):
 a row switched off on the tab came back ticked on the page, and
 "Unsubscribe" with it unticked switched it on again on the tab.
+Issue report: [docs/issues/U05-A2-unsubscribe-page-reenables-emails.md](../issues/U05-A2-unsubscribe-page-reenables-emails.md).
 
 <a id="fn-a3"></a>
 **f-a3** — Note c: the role list in `setNMIDisplayTitles()` omits

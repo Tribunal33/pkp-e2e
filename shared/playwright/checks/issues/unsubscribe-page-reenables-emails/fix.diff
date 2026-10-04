@@ -1,0 +1,31 @@
+--- a/lib/pkp/classes/notification/form/PKPNotificationsUnsubscribeForm.php
++++ b/lib/pkp/classes/notification/form/PKPNotificationsUnsubscribeForm.php
+@@ -115,17 +115,22 @@
+      */
+     public function execute(...$functionArgs)
+     {
+-        $emailSettings = [];
++        /** @var NotificationSubscriptionSettingsDAO */
++        $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO');
++        $userId = $this->_notification->userId;
++        $contextId = $this->_notification->contextId;
++
++        // This page only unsubscribes: keep the emails the user has already turned off
++        // (Profile > Notifications) and add the ones ticked here. Resubscribing is done in the profile.
++        $emailSettings = $notificationSubscriptionSettingsDao->getNotificationSubscriptionSettings($notificationSubscriptionSettingsDao::BLOCKED_EMAIL_NOTIFICATION_KEY, $userId, $contextId);
+         foreach ($this->getNotificationSettingsMap() as $settingId => $notificationSetting) {
+-            // Get notifications that the user wants to be notified of by email
+-            if ($this->getData($notificationSetting['emailSettingName'])) {
++            // Get notifications that the user no longer wants to receive by email
++            if ($this->getData($notificationSetting['emailSettingName']) && !in_array($settingId, $emailSettings)) {
+                 $emailSettings[] = $settingId;
+             }
+         }
+ 
+-        /** @var NotificationSubscriptionSettingsDAO */
+-        $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO');
+-        $notificationSubscriptionSettingsDao->updateNotificationSubscriptionSettings('blocked_emailed_notification', $emailSettings, $this->_notification->userId, $this->_notification->contextId);
++        $notificationSubscriptionSettingsDao->updateNotificationSubscriptionSettings($notificationSubscriptionSettingsDao::BLOCKED_EMAIL_NOTIFICATION_KEY, $emailSettings, $userId, $contextId);
+ 
+         return true;
+     }
