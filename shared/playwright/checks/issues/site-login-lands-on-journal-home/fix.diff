@@ -1,0 +1,27 @@
+--- a/lib/pkp/pages/login/LoginHandler.php
++++ b/lib/pkp/pages/login/LoginHandler.php
+@@ -16,7 +16,6 @@
+ 
+ namespace PKP\pages\login;
+ 
+-use APP\core\Application;
+ use APP\facades\Repo;
+ use APP\handler\Handler;
+ use APP\template\TemplateManager;
+@@ -103,11 +102,14 @@
+     public function _redirectAfterLogin($request)
+     {
+         $context = $this->getTargetContext($request);
++        $user = $request->getUser();
+ 
+         // If there's a context, send them to the dashboard after login.
+-        if ($context && $request->getUserVar('source') == '' && array_intersect(
++        // The roles authorized for this request were read before the user signed in, so read the
++        // signed-in user's roles in that context instead.
++        if ($context && $user && $request->getUserVar('source') == '' && $user->hasRole(
+             [Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_AUTHOR, Role::ROLE_ID_REVIEWER, Role::ROLE_ID_ASSISTANT],
+-            (array) $this->getAuthorizedContextObject(Application::ASSOC_TYPE_USER_ROLES)
++            $context->getId()
+         )) {
+             return $request->redirect($context->getPath(), 'dashboard');
+         }

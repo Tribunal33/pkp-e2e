@@ -881,7 +881,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A site save sent outside Site Settings stores an empty contact email, and password resets then fail | 🐞 | low · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A8](#a8) | Under a "Journal redirect", the Site Administrator's sign-in lands on the journal's home page, not its Dashboard | 🐞 | minor | — |
+| [A8](#a8) | Signing in on the site's Login page lands on the journal's home page, not its Dashboard | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | Site Settings' "Journal redirect" list ignores the Hosted Journals order, and on PostgreSQL reshuffles after a journal save | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An "&" in a journal's name reads `&amp;` in the "Journal redirect" list | 🐞 | minor | — |
 | [OMP1](#omp1) | A press never loads the "Site style sheet" | 🐞 | user-visible | — |
@@ -1005,12 +1005,16 @@ first fault fixed a reload on it would still open "Site Setup".
 Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — The Site Administrator's sign-in under a redirect misses the Dashboard** · 🐞 · minor.
-With a "Journal redirect" saved, the Site Administrator who signs in on the
-site's Login page expects that journal's Dashboard, where the sign-in is
-meant to send Site Administrators; they land on the journal's home page
-instead, like every other account.
-Basis: probe. <sup>f-a8</sup>
+**A8 — Signing in on the site's Login page lands on the journal's home page, not its Dashboard** · 🐞 · low.
+On a site with a "Journal redirect" saved, or with only one journal,
+signing in on the site's Login page lands the Site Administrator,
+editors, authors and reviewers on the journal's home page, as if they
+were readers. Signing in on the journal's own Login page takes them to
+their Dashboard.
+The site's Login page is where "Logout" in the site's Administration
+leads, so the Site Administrator meets this most often. Other users
+reach that page by a bookmark or a typed address.
+Basis: probe, 2026-10-04. <sup>f-a8</sup>
 
 <a id="a9"></a>
 **A9 — A saved theme change does not reach a browser that has seen the site** · ❓ · user-visible.
@@ -1751,6 +1755,7 @@ scratch journal as the redirect, the Site Administrator, that journal's
 Journal Manager and a Reader of another journal each signed in at the
 site's Login page, the form's `source` empty, and each landed on the
 journal's home page.
+Issue report: [docs/issues/U60-A8-site-login-lands-on-journal-home.md](../issues/U60-A8-site-login-lands-on-journal-home.md).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Live-probed 2026-09-26 (Rule 17b; Side effects; all three
