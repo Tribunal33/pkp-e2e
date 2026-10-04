@@ -1,0 +1,72 @@
+--- a/lib/ui-library/src/pages/requestReviewRoundAuthorResponse/RequestReviewRoundAuthorResponse.vue
++++ b/lib/ui-library/src/pages/requestReviewRoundAuthorResponse/RequestReviewRoundAuthorResponse.vue
+@@ -46,6 +46,7 @@
+ 					:switch-to-named-language-label="t('common.switchToNamedItem')"
+ 					:variables="variables"
+ 					:attach-files-label="t('common.attachFiles')"
++					:errors="errors"
+ 					v-bind="emailComposer"
+ 					@set="(componentName, update) => updateEmail(update)"
+ 				></Composer>
+@@ -117,6 +118,12 @@
+ 
+ const emailComposer = ref({});
+ 
++/** Field errors from the server, shown under the composer's fields */
++const errors = ref({});
++
++/** The fields the composer shows an error under */
++const composerFields = ['subject', 'body', 'cc', 'bcc', 'attachments'];
++
+ const {apiUrl} = useUrl(
+ 	`reviews/${props.submissionId}/${props.reviewRoundId}/authorResponse/requestResponse`,
+ );
+@@ -126,6 +133,11 @@
+  */
+ function updateEmail(update) {
+ 	emailComposer.value = {...emailComposer.value, ...update};
++
++	// A field the user changes drops its error, as on the decision page
++	const remainingErrors = {...errors.value};
++	Object.keys(update).forEach((key) => delete remainingErrors[key]);
++	errors.value = remainingErrors;
+ }
+ 
+ const getEmailDataAsPayload = computed(() => {
+@@ -148,9 +160,11 @@
+ 	fetch: submitRequest,
+ 	isSuccess,
+ 	isLoading,
++	validationError,
+ } = useFetch(apiUrl, {
+ 	method: 'POST',
+ 	body: getEmailDataAsPayload,
++	expectValidationError: true,
+ });
+ 
+ /**
+@@ -161,8 +175,24 @@
+ 		return;
+ 	}
+ 
++	errors.value = {};
++	// useFetch() keeps the last validation error through a later failure of another kind
++	validationError.value = null;
+ 	await submitRequest();
+ 
++	if (validationError.value) {
++		const keys = Object.keys(validationError.value);
++		if (keys.length && keys.every((key) => composerFields.includes(key))) {
++			// Errors the composer shows under its fields
++			errors.value = validationError.value;
++		} else {
++			// A refusal of the request as a whole (a round whose reviews are not in),
++			// or of a value the composer has no field for: the dialog, as before
++			useModal().openDialogNetworkError({data: validationError.value});
++		}
++		return;
++	}
++
+ 	if (isSuccess.value) {
+ 		const {openDialog} = useModal();
+ 
