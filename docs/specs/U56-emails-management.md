@@ -1796,7 +1796,7 @@ English list reads "This email is automatically sent to an author when
 they make a submission and a moderator must approve it.", and
 "Création de l'utilisateur-trice" "… pour lui souhaiter la bienvenue à
 la revue …".
-Issue report: [docs/issues/U56-A10-french-submission-confirmation-names-journal.md](../issues/U56-A10-french-submission-confirmation-names-journal.md).
+Issue report: [pkp-e2e#882](https://github.com/jardakotesovec/pkp-e2e/issues/882) ([docs/issues/U56-A10-french-submission-confirmation-names-journal.md](../issues/U56-A10-french-submission-confirmation-names-journal.md)).
 
 <a id="fn-f-a11"></a>
 **f-a11** — A text the language's translation lacks prints as
