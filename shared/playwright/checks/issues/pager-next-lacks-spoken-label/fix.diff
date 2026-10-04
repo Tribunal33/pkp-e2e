@@ -1,0 +1,14 @@
+--- a/lib/ui-library/src/components/Pagination/Pagination.vue
++++ b/lib/ui-library/src/components/Pagination/Pagination.vue
+@@ -46,6 +46,11 @@
+ 			<li>
+ 				<PkpButton
+ 					:disabled="currentPage === lastPage"
++					:aria-label="
++						t('common.pagination.goToPage', {
++							page: t('common.pagination.next'),
++						})
++					"
+ 					:is-link="true"
+ 					@click="setPage('next')"
+ 				>

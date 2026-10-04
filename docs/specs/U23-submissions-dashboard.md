@@ -790,6 +790,7 @@ Left out of the scenarios above, by reason:
   - the "Section" field with inactive or editor-only sections (Fields)
   - the panel's own "Clear Filters", "Close" and unapplied changes (Rules 8b, 8c)
   - the "Loaded" a screen reader hears once the list has loaded (Rule 5)
+  - the guard for A10 (issue report `docs/issues/U23-A10-pager-next-lacks-spoken-label.md`): on a list with two pages, every pager button carries a "Go to …" name, "Go to Next" included
 - **Nothing new to test**:
   - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
@@ -838,7 +839,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | The popover over an editor-cancelled review request blames the reviewer: "Reviewer cancelled review request" | 🐞 | minor | — |
 | [A5](#a5) | Switching a sort off leaves the old sort in the address, so display and address disagree until reload | 🐞 | minor | — |
 | [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | minor | — |
-| [A10](#a10) | The pager's "Next" is announced as plain "Next", while its neighbours read "Go to Previous" and "Go to Page {n}" | 🐞 | minor | — |
+| [A10](#a10) | Paged lists: a screen reader announces the pager's "Next" as plain "Next", unlike its "Go to …" neighbours | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | minor | — |
 | [A1](#a1) | Section Editors and assistants have no view listing declined (or published-and-gone) submissions; global search is their only way back | ❓ | user-visible | — |
 | [A2](#a2) | Editors are offered "Complete submission" on other people's incomplete submissions, landing them in the author's wizard | ❓ | minor | — |
@@ -971,13 +972,17 @@ refuse them.
 Basis: probe + code. <sup>a9</sup>
 
 <a id="a10"></a>
-**A10 — The pager's "Next" lacks its spoken label** · 🐞 · minor.
-Under a list of more than 30 rows, a screen reader announces the pager's
-buttons as "Go to Previous", "Go to Page 1", "Go to Page 2" and plain
-"Next". Expected: "Go to Next", like its neighbours. Every button
-works as labelled; only the announced name differs. Rationale for 🐞: each
-neighbouring button carries a spoken label and this one was left without.
-Basis: probe + code. <sup>a10</sup>
+**A10 — Paged lists: a screen reader announces the pager's "Next" as plain "Next", unlike its "Go to …" neighbours** · 🐞 · low.
+Under a list that runs to more than one page, a screen reader announces
+the pager's buttons as "Go to Previous", "Go to Page 1", "Go to Page 2"
+and plain "Next". Expected: "Go to Next", like its neighbours. Every
+button works as labelled, so nothing is lost and no way round is needed;
+only the announced name is out of line. The same pager sits under every
+paged list of the back office: the dashboards, Users and invitations,
+Jobs, Statistics, DOIs, Announcements, Institutions, the press's
+Catalog, "Add Reviewer" and Comments. The editorial dashboard shows it
+past 30 submissions, the Users list past 25 users.
+Basis: probe + code, 2026-10-04. <sup>a10</sup>
 
 <a id="a11"></a>
 **A11 — One chip per field, or per value?** · ❓ · minor.
@@ -1861,6 +1866,7 @@ held buttons named "Go to Previous", "Go to Page 1", "Go to Page 2"
 (`aria-current` on the page showing) and "Next"; a button named "Go to
 Next" matched nothing. The same component pages the backend's other
 tables.
+Issue report: [docs/issues/U23-A10-pager-next-lacks-spoken-label.md](../issues/U23-A10-pager-next-lacks-spoken-label.md).
 
 <a id="fn-a11"></a>
 **a11 — A11 evidence.** `DashboardActiveFilters.vue` renders one chip per
