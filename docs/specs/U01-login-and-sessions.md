@@ -582,6 +582,12 @@ Left out of the scenarios above, by reason:
     ([A2](#a2)): the guard the issue report
     (`docs/issues/U01-A2-keep-me-logged-in-always-ticked.md`) proposes,
     once fixed
+  - the browser tab after a refused "OK" on "Change Password" and a
+    refused "Save" on "Reset Password" still naming the page, and the
+    reset form keeping its "Reset Password" heading ([A11](#a11)): the
+    guard the issue report
+    (`docs/issues/U01-A11-refused-password-form-tab-loses-name.md`)
+    proposes, once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -590,7 +596,6 @@ Left out of the scenarios above, by reason:
   - a Production editor offered "Login As" (Actors row "Impersonate a user"; Rule 14): the same offer as scenario 8's Editor
   - a held address the user's roles do not allow ending on the access-denied page after sign-in (Rule 4): the page scenario 4 reads (Rule 17)
 - **Register carries it**:
-  - A11 (the refused "Change Password" losing its name in the browser tab; Fields)
   - A7 (the address ending at the word "dashboard" answering a blank error; Rule 4)
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
   - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
@@ -634,7 +639,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | Signed out, the address ending at the word "dashboard" answers a blank server error instead of the Login page | 🐞 | user-visible | Jarda 2026-08-25 |
 | [A8](#a8) | Login As answers a blank server error when the browser's session can no longer be fully resolved (e.g. it outlived a server-side reset) | 🐞 | minor | Jarda 2026-08-25 |
 | [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
-| [A11](#a11) | After a refused "OK" on the forced "Change Password" page, the browser tab loses the page's name | 🐞 | minor | — |
+| [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
@@ -831,14 +836,21 @@ an oversight, not a design.
 Since: 2013-02-14 (13 years) · Basis: probe + commit. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — A refused "Change Password" loses its name in the browser tab** · 🐞 · minor.
-On the forced "Change Password" page the browser tab reads
-"Change Password | {journal name}". After "OK" is refused (a wrong
-current password), the page still reads "Change Password" with "Errors
-occurred processing this form: The current password you entered was
-incorrect.", but the tab reads only the journal's name. Same family as
-[A3](#a3).
-Basis: probe. <sup>[f-a11](#fn-a11)</sup>
+**A11 — After a refused "Change Password" or "Reset Password", the browser tab loses the page's name** · 🐞 · low.
+An administrator can require a user to choose a new password; that
+user's next sign-in then stops at a "Change Password" page. When "OK"
+there is refused (a wrong current password, say), the page comes back
+with the error, but the browser tab reads only the journal's name
+instead of "Change Password | {journal name}". The profile's own
+"Password" tab is a different form and keeps its page's title.
+
+When "Save" is refused on the "Reset Password" page the password-reset
+email links to (the two passwords differ), the tab likewise reads only
+the journal's name, and the page loses its "Reset Password" heading.
+
+A screen-reader user hears only the journal's name as the page's title,
+and on "Reset Password" finds no heading to move to.
+Since: 2020-05-13 (pkp/pkp-lib#5866) · Basis: probe, 2026-10-04. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — After a disabled account is refused, the next correct sign-in in that browser fails** · 🐞 · minor.
@@ -1414,6 +1426,7 @@ Password" and the error, and the title reads only the journal's name
 (`LoginHandler::savePassword()` re-displays
 `user/loginChangePassword.tpl` without the page title the
 `changePassword` op sets).
+Issue report: [pkp-e2e#821](https://github.com/jardakotesovec/pkp-e2e/issues/821) ([docs/issues/U01-A11-refused-password-form-tab-loses-name.md](../issues/U01-A11-refused-password-form-tab-loses-name.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — Live-probed 2026-09-29 (Rule 2; OJS, OMP, OPS identical; two
