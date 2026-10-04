@@ -1,0 +1,13 @@
+--- a/plugins/generic/pdfJsViewer/templates/display.tpl
++++ b/plugins/generic/pdfJsViewer/templates/display.tpl
+@@ -69,8 +69,8 @@
+ 		{rdelim});
+ 	</script>
+ 
+-	<div id="pdfCanvasContainer" class="galley_view{if !$isLatestPublication} galley_view_with_notice{/if}">
+-		{if !$isLatestPublication}
++	<div id="pdfCanvasContainer" class="galley_view{if !$isLatestPublication && $galleyPublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED} galley_view_with_notice{/if}">
++		{if !$isLatestPublication && $galleyPublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED}
+ 			<div class="galley_view_notice">
+ 				<div class="galley_view_notice_message" role="alert">
+ 					{$datePublished}

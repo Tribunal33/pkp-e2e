@@ -1162,11 +1162,10 @@ Left out of the scenarios above, by reason:
     the order typed on the page and in the "Metadata" form (a unit test
     in pkp-lib reads entries stored with `seq` against primary-key order)
   - the guard for A13 (Rule 12; issue report
-    `docs/issues/U13-OPS1-new-version-preview-called-outdated.md` names
-    it, its fix does not reach it), written once A13 is fixed: a new
-    version's "PDF" pressed on its preview opening the PDF reader with
-    no outdated notice, while an older published version's reader keeps
-    it
+    `docs/issues/U13-A13-new-version-preview-reader-called-outdated.md`),
+    written once A13 is fixed: a new version's "PDF" (and, on a journal,
+    "HTML") pressed on its preview opening the reader with no outdated
+    notice, while an older published version's reader keeps it
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1210,8 +1209,8 @@ Left out of the scenarios above, by reason:
     scenario 4 passes it)
   - OPS1 (a preprint server's preview of a new version with both
     notices; Rule 4)
-  - A13 (the PDF reader opened from a new version's preview, under the
-    outdated notice; Rule 12)
+  - A13 (the PDF or HTML reader opened from a new version's preview,
+    under the outdated notice; Rule 12)
   - OJS1 (other citation formats and downloads outside a published
     issue, by who is signed in {OJS}; Rule 15c)
   - A7 and A8 (the "ABNT" citation and the RIS file's dates; Rules 15,
@@ -1317,7 +1316,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A9](#a9) | "More Citation Formats" opens nothing when no additional citation format is offered, so readers cannot reach the citation downloads | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Keywords on an article, book or preprint page can appear in another order than the editor typed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | The PDF reader opened from a new version's preview says "This is an outdated version published on ." | 🐞 | low | — |
+| [A13](#a13) | The PDF or HTML reader opened from a new version's preview calls that version outdated | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1544,18 +1543,21 @@ treat the version as gone.
 Basis: probe, 2026-09-28. <sup>[f-a12](#fn-f-a12)</sup>
 
 <a id="a13"></a>
-**A13 — The PDF reader opened from a new version's preview says "This is an outdated version published on ."** · 🐞 · low.
+**A13 — The PDF or HTML reader opened from a new version's preview calls that version outdated** · 🐞 · low.
 On the preview of a new, unpublished version of a published article or
-a posted preprint, pressing "PDF" opens the PDF reader page under "This
-is an outdated version published on . Read the most recent version.",
-the notice an older version's reader carries, with the date left blank
-because the new version has none. The version is not outdated: it is
-the next one, and "most recent version" opens the published version's
-page. The editor or author checking the new version is told it is
-outdated; readers never see the preview.
+a posted preprint, pressing "PDF" opens the PDF reader under "This is
+an outdated version published on . Read the most recent version." That
+notice is meant for an older, superseded version, but this version is
+the next one. The date is blank because the new version has none.
+On a journal, the version's "HTML" opens the HTML reader under the same
+notice, dated today: "This is an outdated version published on October
+4, 2026." In both readers, the notice's "most recent version" link goes
+back to the published version's page.
+The editor checking the new version is told it is outdated. Readers
+never see the preview.
 On a journal the preview page itself shows the preview notice alone; on
 a preprint server it carries the outdated notice too ([OPS1](#ops1)).
-Basis: probe, 2026-10-01. <sup>[f-a13](#fn-f-a13)</sup>
+Basis: probe, 2026-10-04. <sup>[f-a13](#fn-f-a13)</sup>
 
 <a id="a14"></a>
 **A14 — The "ABNT" citation shortens given names to initials and, on a journal, prints no address or access date** · ❓ · minor.
@@ -2894,6 +2896,13 @@ on . Read the most recent version."; OJS's, for the unpublished version
 1.1 that the test data ships with a date of its own, read that date.
 Left out of the fix in OPS1's issue report:
 [pkp-e2e#209](https://github.com/jardakotesovec/pkp-e2e/issues/209) ([docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md)).
+Re-walked 2026-10-04, `main` and 3.5, OJS and OPS, with a new version
+made on screen: the PDF reader read the blank date on both, and OJS's
+HTML reader, on an HTML galley added to the new version, read the
+notice dated the day of the walk; OMP's preview file link answered "404
+Not Found" (`CatalogBookHandler::download()` refuses an unpublished
+version), so its viewers are not reached.
+Issue report: [docs/issues/U13-A13-new-version-preview-reader-called-outdated.md](../issues/U13-A13-new-version-preview-reader-called-outdated.md).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note h: `citation-styles/associacao-brasileira-de-normas-tecnicas.csl`

@@ -1,0 +1,36 @@
+--- a/plugins/generic/pdfJsViewer/templates/display.tpl
++++ b/plugins/generic/pdfJsViewer/templates/display.tpl
+@@ -69,8 +69,8 @@
+ 		{rdelim});
+ 	</script>
+ 
+-	<div id="pdfCanvasContainer" class="galley_view{if !$isLatestPublication} galley_view_with_notice{/if}">
+-		{if !$isLatestPublication}
++	<div id="pdfCanvasContainer" class="galley_view{if !$isLatestPublication && $galleyPublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED} galley_view_with_notice{/if}">
++		{if !$isLatestPublication && $galleyPublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED}
+ 			<div class="galley_view_notice">
+ 				<div class="galley_view_notice_message" role="alert">
+ 					{$datePublished}
+--- a/plugins/generic/htmlArticleGalley/templates/display.tpl
++++ b/plugins/generic/htmlArticleGalley/templates/display.tpl
+@@ -30,13 +30,15 @@
+ 		</a>
+ 	</header>
+ 
+-	<div id="htmlContainer" class="galley_view{if !$isLatestPublication} galley_view_with_notice{/if}" style="overflow:visible;-webkit-overflow-scrolling:touch">
++	<div id="htmlContainer" class="galley_view{if !$isLatestPublication && $galleyPublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED} galley_view_with_notice{/if}" style="overflow:visible;-webkit-overflow-scrolling:touch">
+ 		{if !$isLatestPublication}
+-			<div class="galley_view_notice">
+-				<div class="galley_view_notice_message" role="alert">
+-					{translate key="submission.outdatedVersion" datePublished=$galleyPublication->getData('datePublished')|date_format:$dateFormatLong urlRecentVersion=$articleUrl}
++			{if $galleyPublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED}
++				<div class="galley_view_notice">
++					<div class="galley_view_notice_message" role="alert">
++						{translate key="submission.outdatedVersion" datePublished=$galleyPublication->getData('datePublished')|date_format:$dateFormatLong urlRecentVersion=$articleUrl}
++					</div>
+ 				</div>
+-			</div>
++			{/if}
+ 			{capture assign="htmlUrl"}
+ 				{url page="article" op="download" path=$article->getBestId()|to_array:'version':$galleyPublication->getId():$galley->getBestGalleyId():$submissionFile->getId() inline=true}
+ 			{/capture}
