@@ -1604,7 +1604,7 @@ Issue report: [pkp-e2e#415](https://github.com/jardakotesovec/pkp-e2e/issues/415
 <a id="fn-f-a7"></a>
 **f-a7** — Note l (`setDataElementInCategorySequence()`). Live-probed
 2026-09-28: note td11, two books.
-Issue report: docs/issues/U72-A7-chapter-author-order-change-lost.md.
+Issue report: [pkp-e2e#854](https://github.com/jardakotesovec/pkp-e2e/issues/854) ([docs/issues/U72-A7-chapter-author-order-change-lost.md](../issues/U72-A7-chapter-author-order-change-lost.md)).
 
 <a id="fn-f-a8"></a>
 **f-a8** — Note o: the sentence is built for every chapter of an Edited
