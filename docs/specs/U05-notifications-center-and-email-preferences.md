@@ -855,7 +855,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | The "Discussion activity." row and its two boxes govern nothing; a reply to a discussion raises a task worded exactly like the opening one | 🐞 | minor | — |
 | [A2](#a2) | The Unsubscribe page silently switches back on emails the person had switched off before, because its boxes start ticked and an unticked box means "send" | 🐞 | latent | — |
 | [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | While a window such as Participants › "Notify" is open, a toast above it cannot be closed with its "×" and does not stay under the pointer | 🐞 | minor | — |
+| [A14](#a14) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS2](#ops2) | The new-preprint row reads "A new preprint , "Title", has been submitted." with a space before the comma | 🐞 | minor | — |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
 | [A5](#a5) | A mail program's own "Unsubscribe" button, offered because of the emails' headers, is probably refused | ❓ | latent | — |
@@ -1079,18 +1079,19 @@ Basis: test run (the desktop-width read), code (the narrow layout).
 <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — A toast over an open window cannot be closed** · 🐞 · minor.
-Every toast offers a "×", and with no window open a press on it removes
-the toast at once (Rule 9b). While a submission's "Notify" side panel is
-open, the warning toast that a refused "Notify" shows sits above the
-panel, but a press on its "×" does nothing and the pointer resting on it
-does not keep it: the toast leaves by itself about five seconds after it
-showed, and the panel stays open. The "Add a Component" window's toast
-refusing "Key" -survey behaves the same way, as
-*[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
-records for that screen. The person can neither dismiss the message nor
-keep it on screen to read it.
-Basis: probe. <sup>[f-a14](#fn-a14)</sup>
+**A14 — Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice** · 🐞 · low.
+While a window or side panel is open, a notice at the top right of the
+page cannot be closed with its "×". A manager who types a "Key" the "Add
+a Component" window does not accept, or an editor who presses "Notify"
+with an empty message, gets a notice saying so. Pressing its "×" does
+nothing, and resting the pointer on it does not keep it. It leaves by
+itself about five seconds after it showed.
+In a submission's workflow, once a window opened there has closed, a
+press on a notice's "×" reaches it, but the press also closes the window
+on top. With no other window open, that is the whole workflow: the
+editor is put back on the submissions list.
+The same fault: [Submission intake configuration](U58-submission-intake-configuration.md#a13).
+Basis: probe, 2026-10-04. <sup>[f-a14](#fn-a14)</sup>
 
 ### OPS
 
@@ -1911,6 +1912,7 @@ users." after a sent "Notify" (OJS, OMP; on OPS that notice can land in
 the Production entry's own "Notification" box instead, *Stage
 participants* OPS4) within 0.11–0.14 s. The "Add a Component" window's
 refused key shows the same (*Submission intake configuration* A13).
+Issue report: [docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md).
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS's `NotificationSettingsForm` and `NotificationManager` do not

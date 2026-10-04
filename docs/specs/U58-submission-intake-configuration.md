@@ -943,7 +943,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada) | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | The "×" of a refused key's notice cannot be pressed while the component window is open | 🐞 | minor | — |
+| [A13](#a13) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its copyright box reads "Copyright notice" | 🐞 | minor | — |
 | [OMP2](#omp2) | On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1101,14 +1101,19 @@ does "Cancel". The row stays, as it should.
 Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A refused key's notice cannot be closed** · 🐞 · minor.
-A manager whose "Key" is refused in the "Add a Component" window sees the refusal as a notice with a "×" at the window's top right,
-and expects the "×" to close it, as it closes a notice anywhere else
-([Notifications center & email preferences](U05-notifications-center-and-email-preferences.md),
-Rule 9). While the window is open, a press on the "×" does nothing: the
-notice stays until it leaves by itself after about five seconds, and the
-window stays open.
-Basis: test run. <sup>f-a13</sup>
+**A13 — Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice** · 🐞 · low.
+While a window or side panel is open, a notice at the top right of the
+page cannot be closed with its "×". A manager who types a "Key" the "Add
+a Component" window does not accept, or an editor who presses "Notify"
+with an empty message, gets a notice saying so. Pressing its "×" does
+nothing, and resting the pointer on it does not keep it. It leaves by
+itself about five seconds after it showed.
+In a submission's workflow, once a window opened there has closed, a
+press on a notice's "×" reaches it, but the press also closes the window
+on top. With no other window open, that is the whole workflow: the
+editor is put back on the submissions list.
+The same fault: [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md#a14).
+Basis: test run, 2026-10-04. <sup>f-a13</sup>
 
 ### OJS
 
@@ -1804,6 +1809,7 @@ the window is open, though the notification layer (`z-index` 1001) is
 painted above the window's (10); a real mouse press there left the notice
 standing and the window open, and the notice left 5.4 s after it showed
 (OJS, OMP, OPS alike).
+Issue report: [docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — OJS `templates/gateway/lockss.tpl` and `clockss.tpl` test
