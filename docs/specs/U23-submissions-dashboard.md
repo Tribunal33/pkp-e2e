@@ -1866,7 +1866,7 @@ held buttons named "Go to Previous", "Go to Page 1", "Go to Page 2"
 (`aria-current` on the page showing) and "Next"; a button named "Go to
 Next" matched nothing. The same component pages the backend's other
 tables.
-Issue report: [docs/issues/U23-A10-pager-next-lacks-spoken-label.md](../issues/U23-A10-pager-next-lacks-spoken-label.md).
+Issue report: [pkp-e2e#901](https://github.com/jardakotesovec/pkp-e2e/issues/901) ([docs/issues/U23-A10-pager-next-lacks-spoken-label.md](../issues/U23-A10-pager-next-lacks-spoken-label.md)).
 
 <a id="fn-a11"></a>
 **a11 — A11 evidence.** `DashboardActiveFilters.vue` renders one chip per
