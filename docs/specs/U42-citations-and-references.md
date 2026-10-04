@@ -884,6 +884,7 @@ Left out of the scenarios above, by reason:
   - the guard for A2 (issue report `docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md`): "Add" with a paste that repeats a listed reference keeps the repeated line in the box and says it was skipped, while the new lines are added
   - the guard for A3 (issue report `docs/issues/U42-A3-reference-search-keeps-rows-without-word.md`): "Search references here" with a word no row shows (such as "http" or "citations") keeps no row, and a word a row shows keeps that row
   - the guard for A15 (issue report `docs/issues/U42-A15-data-citation-identifier-cannot-be-removed.md`): on "Edit Data Citation", choosing the empty "Identifier type" and clearing "Identifier" removes the identifier, and a cleared "Repository", "Year" or "URL" is gone on the next "Edit"
+  - the guard for A6 (issue report `docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md`): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -2104,7 +2105,7 @@ not count it.
 five unstructured references and "Processing references - 0/2" with two of
 the five structured (note i). The "All {total}" wording is unreachable on a
 test install.
-Issue report: [docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md).
+Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883) ([docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md)).
 
 <a id="fn-f-a7"></a>
 **f-a7 — A7 evidence.** Note k. Live-probed 2026-09-24: the screen half,
