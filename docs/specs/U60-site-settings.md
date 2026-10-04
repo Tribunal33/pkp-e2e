@@ -1818,7 +1818,7 @@ text, so the name is escaped twice. Live-probed 2026-09-28 (Fields
 the option read `Alpha &amp; Omega …`, the only option whose text
 differed from its Hosted Journals name, while "Bulk Emails" read
 `Alpha & Omega …`; the drive of f-a11.
-Issue report: [docs/issues/U60-A12-site-redirect-list-name-html-codes.md](../issues/U60-A12-site-redirect-list-name-html-codes.md).
+Issue report: [pkp-e2e#891](https://github.com/jardakotesovec/pkp-e2e/issues/891) ([docs/issues/U60-A12-site-redirect-list-name-html-codes.md](../issues/U60-A12-site-redirect-list-name-html-codes.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP's `TemplateManager::initialize()` has no
