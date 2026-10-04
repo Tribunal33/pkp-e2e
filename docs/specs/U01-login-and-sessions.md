@@ -588,6 +588,11 @@ Left out of the scenarios above, by reason:
     guard the issue report
     (`docs/issues/U01-A11-refused-password-form-tab-loses-name.md`)
     proposes, once fixed
+  - after a "Login As", no row of Users & Roles, the Participants panel
+    or the Reviewers table offering "Login As", and "Logout as" bringing
+    back the operator's own account ([A4](#a4)): the guard the issue
+    report (`docs/issues/U01-A4-second-login-as-strands-operator.md`)
+    proposes, once fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -600,7 +605,6 @@ Left out of the scenarios above, by reason:
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
   - A10 ("Edit User" hiding the flag and clearing it on saving; Rule 11a)
   - A8 (Login As from a stale session answering a blank error; Rule 14)
-  - A4 (Login As still offered mid-impersonation; Rule 15)
   - A12 (the next correct sign-in after a disabled account's refusal landing back on the Login page; Rule 2)
 - **No seed**:
   - a disabled account refused, with or without a reason (Rule 2)
@@ -635,7 +639,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | The password boxes stop accepting input at 32 characters, so longer passwords cannot be typed | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Keep me logged in" is ticked every time the Login page shows, even after the user unticked it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
-| [A4](#a4) | "Login As" is still offered mid-impersonation (Users & Roles and the Participants panel); a second use strands the operator, because "Logout as" restores the intermediate user, not their own account | 🐞 | latent | Jarda 2026-08-25 |
+| [A4](#a4) | While signed in as another user, "Login As" is still offered, and using it strands the operator in that account | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | Signed out, the address ending at the word "dashboard" answers a blank server error instead of the Login page | 🐞 | user-visible | Jarda 2026-08-25 |
 | [A8](#a8) | Login As answers a blank server error when the browser's session can no longer be fully resolved (e.g. it outlived a server-side reset) | 🐞 | minor | Jarda 2026-08-25 |
 | [A10](#a10) | "Edit User" always opens with "Change Password" unticked, and saving it clears a flag already set | 🐞 | minor | — |
@@ -703,23 +707,21 @@ Tracked as
 > pkp/pkp-lib#13132.
 
 <a id="a4"></a>
-**A4 — Second Login As offered mid-impersonation** · 🐞 · latent.
-While an impersonation is already active, both the Users & Roles list and
-the workflow Participants panel still offer "Login As" on other users' rows,
-and choosing it starts a second impersonation. Seeing this requires
-impersonating a user who can themselves open Users & Roles or a workflow
-screen, a Journal Manager or Editor, say. The chain does not nest. One
-"Logout as" then restores the *intermediate* user, plainly signed in, with
-no impersonation banner and no further "Logout as" offered. The operator's
-own account is unreachable from the screen. The only way out is the plain
-sign-out address, copied from the user menu's "Logout" entry before
-impersonating (Rule 15), which signs everything out. The end state holds
-fewer rights than the operator started with, so nothing is gained; the cost
-is a stranded, confusing session. The application's own earlier screens
-establish the intended behavior: the previous generation of these lists
-explicitly withheld "Login As" while an impersonation was active, and the
-current screens lost that rule in their rebuild.
-Basis: observed on a running site + code inspection. <sup>[f-a4](#fn-a4)</sup>
+**A4 — While signed in as another user, "Login As" is still offered, and using it strands the operator in that account** · 🐞 · low.
+An administrator or manager who has used "Login As" to act as an editor
+or manager is still offered "Login As" on other people's rows: in
+Settings › Users & Roles, the workflow's Participants panel and the
+Reviewers table. Choosing it replaces the first "Login As" instead of
+adding to it. So "Logout as" returns to the account the operator had
+taken over, not to their own, and leaves that account plainly signed
+in, with no way back offered.
+
+The operator can see whose account they are in and gains no rights. To
+get back, they sign out and sign in again with their own password.
+
+It happens only when the account taken over may use "Login As" itself,
+such as a Journal editor's or a Journal manager's.
+Since: 2025-02-03 (pkp/pkp-lib#10477) · Basis: probe, 2026-10-04. <sup>[f-a4](#fn-a4)</sup>
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞 (upgraded from an
 > open question). The legacy grids' guard is the intended behavior; the
@@ -1323,6 +1325,7 @@ on another participant's row mid-impersonation too (its action config,
 Fix per review: return false from `getPropertyCanLoginAs` when
 `Validation::loggedInAs()` is active, so every Vue consumer inherits the
 legacy rule.
+Issue report: [pkp-e2e#824](https://github.com/jardakotesovec/pkp-e2e/issues/824) ([docs/issues/U01-A4-second-login-as-strands-operator.md](../issues/U01-A4-second-login-as-strands-operator.md)).
 
 <a id="fn-a5"></a>
 **f-a5** — Flag `user.mustChangePassword`. Live-probed 2026-07-31 (OJS,
