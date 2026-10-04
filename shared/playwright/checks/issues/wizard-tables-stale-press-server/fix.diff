@@ -1,0 +1,24 @@
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPageOMP.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPageOMP.vue
+@@ -3,6 +3,9 @@
+ 
+ export default {
+ 	extends: SubmissionWizardPage,
++	// Vue does not inherit setup() through `extends`: run the parent's, which
++	// provides the data-change refresh the wizard's managers call after a save.
++	setup: SubmissionWizardPage.setup,
+ 	data() {
+ 		return {
+ 			chapters: [],
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPageOPS.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPageOPS.vue
+@@ -3,6 +3,9 @@
+ 
+ export default {
+ 	extends: SubmissionWizardPage,
++	// Vue does not inherit setup() through `extends`: run the parent's, which
++	// provides the data-change refresh the wizard's managers call after a save.
++	setup: SubmissionWizardPage.setup,
+ 	data() {
+ 		return {
+ 			galleys: [],

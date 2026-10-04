@@ -432,6 +432,7 @@ Left out of the scenarios above, by reason:
     `docs/issues/U41-A10-name-boxes-labels-run-together.md`): a
     hand-entered funder's name boxes, each named for its own language
     alone
+  - the guard for A4 (issue report `docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md`): on a press and a preprint server, a funder added in the submission wizard shows in its table and on "Review" at once, without a reload
 - **Nothing new to test**:
   - grant validation on while the registry service is unreachable, the
     check skipped and the save going through (Settings): the save
@@ -492,7 +493,7 @@ are the source; badges, Impact and Basis:
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A3](#a3) | A registry funder picked while the server cannot reach the registry errors and saves nameless until the install's registry copy gains it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | minor | — |
+| [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | minor | — |
 | [A1](#a1) | "Require the author to add funder metadata" warns on the Review step without blocking the submission | ❓ | user-visible | — |
@@ -548,14 +549,14 @@ with no ROR link.
 Basis: probe, 2026-10-03. <sup>f-a3</sup>
 
 <a id="a4"></a>
-**A4 — The wizard does not refresh after a funder save on a press or preprint server** · 🐞 · minor.
+**A4 — The wizard does not refresh after a funder save on a press or preprint server** · 🐞 · medium.
 On OMP and OPS, saving a funder in the wizard's Funders section leaves the
 section's table reading "No funders have been added." and the Review step
 reading "None provided" until the page is reloaded. The funder is saved: the
 workflow list shows it, and a reload brings both wizard displays current. On
 OJS the same displays update in place, so the staleness reads as a defect,
 not a design.
-Basis: probe. <sup>f-a4</sup>
+Basis: probe, 2026-10-04. <sup>f-a4</sup>
 Note (claude, 2026-08-29; updated 2026-09-03): between the pkp/pkp-lib#13003
 schema move and its ui-library fix, [A13](#a13) (now retired) hid the saved
 funder on every app and masked this refresh-miss. With the fix in all three
@@ -1072,6 +1073,7 @@ provided"; a full page reload brought both current (the saved name then
 listed). OJS refreshed in place. Same shared `FunderManager` component on
 all three (identical ui-library commit) — the per-app difference is
 unexplained at code level.
+Issue report: [docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md](../issues/U42-A10-wizard-data-citations-funders-stale-press-server.md).
 
 <a id="fn-f-a5"></a>
 **f-a5 — A5 evidence.** Live-probed 2026-08-28 (OJS; shared ui-library

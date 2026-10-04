@@ -880,6 +880,7 @@ Left out of the scenarios above, by reason:
   - the guard for A4 (issue report `docs/issues/U42-A4-press-server-lookup-text-says-journal.md`): with "References Metadata Lookup" on, the References page of a press and of a preprint server describes the lookup without calling the context a journal
   - the guard for A9 (issue report `docs/issues/U42-A9-submits-without-required-data-citations.md`): with data citations at "Require the author to add data citation metadata…", an author's submission with no data citation is held back on "Review" (the problems banner, "Submit" disabled), and one with a data citation goes in
   - the guard for A20 (issue report `docs/issues/U42-A20-book-preprint-empty-references-heading.md`): a published book on a press and a posted preprint with no references show no "References" section; with one reference they show it
+  - the guard for A10 (issue report `docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md`): on a press and a preprint server, a data citation added in the submission wizard's "Data" section shows in its table and on "Review" at once, without a reload
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -982,7 +983,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | A new data citation has no place in the order: none before an order is saved, the top after one | 🐞 | minor | — |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A10](#a10) | On a press or a preprint server the wizard's Data Citations table ignores every save until a reload | 🐞 | minor | — |
+| [A10](#a10) | On a press or preprint server, the submission wizard's data citations and funders still read empty after a save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | An arXiv ID entered for a reference or a data citation loses its version, or is refused with it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | An author row abandoned with "Close" comes back blank, is saved, and makes the reference structured | 🐞 | minor | — |
 | [A14](#a14) | The author boxes in "Edit citation" have no names for a screen reader | 🐞 | minor | — |
@@ -1092,13 +1093,20 @@ receives submissions without the data citations it requires.
 Basis: probe, 2026-10-04. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — The wizard's Data Citations table stays stale on a press or a preprint server** · 🐞 · minor.
-On a press or a preprint server the wizard's Data Citations table does not
-change after any save in the "Data" section: a first add still reads "No
-data citations have been added.", a later add is missing, and an edited
-title keeps its old text. The Review step reads "None provided" (or the old
-list) until the page is reloaded. A journal updates at once.
-Basis: probe, 2026-09-24. <sup>f-a10</sup>
+**A10 — On a press or preprint server, the submission wizard's data citations and funders still read empty after a save** · 🐞 · medium.
+On a press or a preprint server, an author who adds a data citation or a
+funder on the submission wizard's "Details" step sees no change after
+"Save": the Data Citations table still reads "No data citations have
+been added.", the Funders table "No funders have been added.", and the
+"Review" step lists both as "None provided". A second data citation does
+not show either, an edited data citation keeps its old title, and a
+deleted one stays listed. Every save is stored, so an author who adds
+the entry again, as the empty table invites, submits it twice. Where the
+press or server requires data citations or funders, "Review" also warns
+that they are required, but "Submit" goes through. It happens in both
+sections. A new press or server asks for funders by default; data
+citations appear when the press or server turns them on.
+Basis: probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — Readers never see data citations** · ❓ · user-visible.
@@ -2073,6 +2081,7 @@ Issue report: [pkp-e2e#870](https://github.com/jardakotesovec/pkp-e2e/issues/870
 extend it. The funders section, built the same way, stays stale on OMP and
 OPS only too (*Funding*, A4); the cause is unexplained at code level.
 Live-probed 2026-09-24: q20.
+Issue report: [docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md](../issues/U42-A10-wizard-data-citations-funders-stale-press-server.md).
 
 <a id="fn-f-a11"></a>
 **f-a11 — A11 evidence.** Note p (no reader template renders data
