@@ -1255,4 +1255,3 @@ verdict yet) · `ready` (pushed, green at the PR ref, developer told) ·
 
 | App PR | Branch | State | Since | Note (one line) |
 |--------|--------|-------|-------|-----------------|
-| pkp/omp#2490 (head `bd8c5a28c6`) + pkp/ops#1430 (head `113172195a`); issue pkp/pkp-lib#13445 (U19 OMP4, pkp-e2e#253) | `13445-main` | ready | 2026-10-05 | PR review at @jarda.kotesovec's request: both fixes hold at the PR heads (OMP the issue report's walk on the default dataset; OPS K3 `empty` with a control at `caddbb33da`); U19 OMP4 and OPS2 and U17 OPS6 retired, the OMP4 issue report, its walk and `fix.diff` and the OPS temporary report deleted. CI 37357970102: OPS 3/3 green, OMP red only in U37 S8, `main`'s own red since omp#2487. At the merge ping: MAINTENANCE "PR review" step 8 (`range-diff`, rebase, `node bin/ci.js watch`, fast-forward), close pkp-e2e#253 with a comment naming omp#2490; land after `i12593_missing_template` (OMP U37 S8 reds until it does). |
