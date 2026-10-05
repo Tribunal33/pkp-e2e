@@ -1677,7 +1677,7 @@ a header area, and reorder or empty a menu's items, which rearranges or
 blanks the public header and user menu. Items cannot be changed and
 menus cannot be deleted this way. All three apps.
 Since: 2026-01-22 · Basis: probe, 2026-09-30. <sup>f-a26</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+Report: paused — its reporter stopped on a safety classifier in the maintainer's session (2026-10-05); not re-sent, waiting for the maintainer
 
 ### OJS
 
