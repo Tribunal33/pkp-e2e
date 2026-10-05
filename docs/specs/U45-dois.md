@@ -315,7 +315,10 @@ links under the list. <sup>g</sup>
     issue, published or not. The most recently submitted work comes
     first. <sup>l</sup> <sup>q17</sup>
 16. **An item's row.** A work's name reads "{contributors} — {title}" of
-    its current version; an issue's is its name ("Vol. 1 No. 2 (2014)").
+    its current version, with the title's formatting printed as codes: a
+    title with an italic word or an "&", such as "Okapi *forest* census
+    & tapir", reads `Lovelace — Okapi <i>forest</i> census &amp; tapir`
+    ⚠ [A24](#a24). An issue's name is its own ("Vol. 1 No. 2 (2014)").
     The link opens the public page in a new tab. The number is the
     submission's ID (the issue's). The badge reads "Unpublished" while the
     work's current version (the issue) is not published, and otherwise the
@@ -416,7 +419,8 @@ links under the list. <sup>g</sup>
     submission must be assigned to an issue before a DOI can be
     generated."; the others still get theirs. <sup>p</sup> <sup>h</sup>
 26. **"Mark DOIs Registered".** Records every DOI of each ticked
-    published item as registered by hand ("Registered", with no agency).
+    published item, those of all its versions [OMP4](#omp4), as
+    registered by hand ("Registered", with no agency).
     When any ticked item is not published, nothing at all is marked and
     the window "DOI Updates Failed" lists, per unpublished item, "Failed
     to mark the DOI registered for {title}. The submission must be
@@ -424,15 +428,17 @@ links under the list. <sup>g</sup>
     published…" on the "Issues" tab). Success: "Items successfully marked
     registered". <sup>p</sup>
 27. **"Mark DOIs Unregistered".** Sets every DOI of each ticked item,
-    published or not, back to "Unregistered". Success: "Items
+    those of all its versions [OMP4](#omp4), published or not, back to
+    "Unregistered". Success: "Items
     successfully marked unregistered". <sup>p</sup>
 28. **"Mark DOIs Needs Sync".** Its window reads "You are about to mark
     DOI metadata records for {count} item(s) as needing to be synced. The
     Needs Sync status can only be applied to previously submitted DOIs.
     Are you sure you want to mark these records as stale?" ("stale"
-    appears nowhere else on the page ⚠ [A14](#a14)). It sets "Needs
-    Sync" on each ticked published item whose DOI reads "Submitted" or
-    "Registered"; when any ticked item is not such, nothing is marked and
+    appears nowhere else on the page ⚠ [A14](#a14)). On each ticked
+    published item whose DOI reads "Submitted" or "Registered", it sets
+    every DOI, those of all its versions [OMP4](#omp4), to "Needs Sync";
+    when any ticked item is not such, nothing is marked and
     "DOI Updates Failed" lists "Failed to mark the DOI needs sync for
     {title}. The DOI cannot be marked needs sync because they have not
     yet been registered or submitted." Success: "Items successfully
@@ -457,8 +463,10 @@ links under the list. <sup>g</sup>
     - **"Deposit DOIs"** asks "You are about to send DOI metadata records
       for {count} item(s) to {agency}. Are you sure you want to deposit
       these records?". Confirmed, it sends the ticked published items to
-      the agency in the background and sets their DOIs to "Submitted" at
-      once ("Items successfully submitted for deposit"). A ticked
+      the agency in the background and shows "Items successfully
+      submitted for deposit". A work's DOIs then read "Submitted" at
+      once; on the "Issues" tab the issues are sent too, but their DOIs
+      keep their status ⚠ [OJS4](#ojs4). A ticked
       published work that has no DOI gets the same notice, yet stays
       "Needs DOI" and nothing is sent ⚠ [A15](#a15). A ticked unpublished
       item makes the whole action fail: nothing is marked, the window
@@ -469,7 +477,9 @@ links under the list. <sup>g</sup>
       with "Deposit all DOIs" and "Cancel". It sends every published
       item whose DOI reads "Unregistered", "Error" or "Needs Sync" (on a
       journal the published issues too), sets those to "Submitted" and
-      shows the same success notice. With nothing left to deposit it
+      shows the same success notice. With DataCite (Crossref untried),
+      a work whose only DOI is its galley's is not sent, yet that DOI
+      turns "Submitted" [A15](#a15). With nothing left to deposit it
       still shows "Items successfully submitted for deposit" and changes
       nothing.
 30. **The agency panel.** With an agency configured, an item's expanded
@@ -492,7 +502,10 @@ links under the list. <sup>g</sup>
 **Statuses and deposits**
 
 31. **The statuses.** Each DOI has one; an item's badge shows its first
-    row's status (Rule 17) while that row carries a DOI. The "DOI Statuses" window words them:
+    row's status (Rule 17) while that row carries a DOI, and "Needs DOI"
+    while no row carries one. On a journal, an article whose first row
+    has no DOI while a galley's row has one reads "Unregistered",
+    whatever the galley's status. The "DOI Statuses" window words them:
 
     | Badge | Meaning ("DOI Statuses") |
     |-------|---------------------------|
@@ -505,7 +518,8 @@ links under the list. <sup>g</sup>
 
     <sup>r</sup>
 32. **Statuses that change by themselves.** A DOI starts "Unregistered".
-    A deposit sets "Submitted" at once; the agency's answer to the
+    A deposit sets "Submitted" at once, except "Deposit DOIs" on the
+    "Issues" tab [OJS4](#ojs4) (Rule 29); the agency's answer to the
     background deposit then sets "Registered" or "Error" (Rule 33).
     Unpublishing a version whose DOIs read "Submitted" or "Registered", or
     publishing it or a newer version sharing them, turns them to "Needs
@@ -756,8 +770,10 @@ differs. <sup>z1</sup>
       DOI never counts.
 52. **Marks and statuses.** "Mark DOIs Registered", "Mark DOIs
     Unregistered" and "Mark DOIs Needs Sync" (Rules 26–28) set the
-    DOIs of the ticked book's chapters and formats with its own, for
-    the ticked kinds. Unpublishing a version whose chapter and format
+    DOIs of the ticked book's current version: its own, its chapters'
+    and its formats', for the ticked kinds. Under "DOI Versioning"
+    "Yes" an earlier version's DOIs keep their status ⚠ [OMP4](#omp4).
+    Unpublishing a version whose chapter and format
     DOIs read "Registered" turns them "Needs Sync" with the book's, and
     they stay "Needs Sync" when it is published again; publishing a newer
     version that shares them does the same (Rule 32). <sup>z9</sup> <sup>q34</sup>
@@ -1788,6 +1804,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A22-bulk-actions-menu-stays-open.md`): after "Assign
     DOIs" confirmed at once, the "Bulk Actions" menu closed and the first
     row's expand button pressable
+  - "Mark DOIs Registered", "Mark DOIs Needs Sync" and "Mark DOIs
+    Unregistered" on a work with two published major versions under "DOI
+    Versioning" "Yes", every block of the "View all" window changing
+    {OJS OPS} (Rules 20, 26–28)
+  - an article whose own DOI was cleared while its galley keeps one,
+    its badge reading "Unregistered" {OJS} (Rule 31)
 - **Rarely met**:
   - a press with "Chapters" or "Publication Formats" ticked and "Monographs" not: the same books listed, each with only those kinds' rows, the badge read from the first row {OMP} (Rule 46)
 - **Nothing new to test**:
@@ -1828,7 +1850,10 @@ Left out of the scenarios above, by reason:
   - OJS3 (the ISSN publish warning listed twice; Rule 39; scenario 14 passes it)
   - OJS1 ("Never" not stopping an issue's DOI at "Publish Issue"; Rule 8)
   - OJS2 (a DataCite issue export or deposit; Rule 29)
-  - A15 ("Deposit DOIs" on a published work without a DOI; Rule 29)
+  - A15 ("Deposit DOIs" on a published work without a DOI, and "Deposit All" on one whose galley carries a DOI; Rule 29)
+  - A24 (a formatted title's codes in a row's name; Rule 16)
+  - OJS4 ("Deposit DOIs" on the "Issues" tab leaving the issues' status; Rules 29, 32)
+  - OMP4 (the Mark actions on a press under "DOI Versioning" "Yes" leaving an earlier version's DOIs; Rule 52)
   - A18 (a deposit that cannot reach the agency staying "Submitted"; Rule 33)
   - A4 (a deposited item's agency panel; Rule 30; scenario 13 passes it)
   - A16 (a "Needs Sync" item's agency panel; Rule 30)
@@ -1870,10 +1895,13 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | The Crossref and DataCite pages under Tools open with an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | "Save" on the DOI "Registration" tab with no agency plugin enabled logs a PHP "Undefined array key" warning | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A24](#a24) | A title with an italic word or "&" shows its formatting codes in the DOIs page's rows | 🐞 | minor | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab reports success but leaves the issues' DOIs "Unregistered" | 🐞 | minor · crash: server | — |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
+| [OMP4](#omp4) | With "DOI Versioning" "Yes", the "Mark DOIs …" actions on a press change only the current version's DOIs | 🐞 | user-visible | — |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server's Crossref "Username" help reads "see the advise above" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | On a preprint server, a minor version's galleys get new DOIs instead of keeping their source's | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2086,8 +2114,11 @@ registration agency, and the background deposit fails on the server.
 Only the site administrator's "Failed Jobs" page shows the failure. The
 way round is to give the work a DOI first ("Assign DOIs") and deposit
 again. With DataCite, a work whose article DOI was cleared while its
-galley kept one fares worse: the galley's DOI turns "Submitted" and
-stays so, though nothing was sent. It needs a registration agency
+galley kept one fares worse: "Deposit DOIs" turns the galley's DOI
+"Submitted" and it stays so; "Failed Jobs" lists the same failure.
+"Deposit All" leaves the same state and notice but starts no deposit for
+that work, so "Failed Jobs" lists none for it; later "Deposit All"
+presses skip it. It needs a registration agency
 (Crossref, or DataCite on a journal) and a published work without an
 article or preprint DOI. Every work published before the journal or
 server set its DOI prefix is in that state, as are works whose DOI was
@@ -2234,6 +2265,20 @@ Lean: no; a journal's galley DOI typed by hand adds none, and on a
 press a chapter's or format's DOI made alone at a publish adds none.
 Basis: judgment, 2026-09-29. <sup>r</sup> <sup>q37</sup>
 
+<a id="a24"></a>
+**A24 — A title with an italic word or "&" shows its formatting codes in the DOIs page's rows** · 🐞 · minor.
+A work whose title has an italic word or an "&", such as "Okapi
+*forest* census & tapir", is listed on the DOIs page as `Lovelace —
+Okapi <i>forest</i> census &amp; tapir`: the row's name prints the
+title's formatting codes as text, where the manager expects the title
+as the work's own page shows it. A title with an "&" alone reads
+`Heron &amp; egret wading`. It shows for published and unpublished
+works alike, on a journal, a press and a preprint server. Only the
+DOIs page's rows show it: the work's page shows the title formatted,
+and the "DOI Updates Failed" window prints it plain ("Failed to mark
+the DOI registered for Narwhal tusk acoustics & echoes. …").
+Basis: probe, 2026-10-05. <sup>f-a24</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -2275,6 +2320,22 @@ reaching the copyediting stage", is inside that setup. With "Upon
 publication" the window shows no Crossref warnings at all. The Crossref
 warnings at publishing are new on `main` and in no release.
 Basis: probe, 2026-10-01. <sup>f-ojs3</sup>
+
+<a id="ojs4"></a>
+**OJS4 — "Deposit DOIs" on the "Issues" tab reports success but leaves the issues' DOIs "Unregistered"** · 🐞 · minor · crash: server.
+On a journal with Crossref or DataCite configured, a Journal Manager
+ticks published issues on the DOIs page's "Issues" tab and confirms
+"Deposit DOIs" ("…for 2 item(s) to Crossref…"). The page shows "Items
+successfully submitted for deposit" and the deposit goes ahead in the
+background, but each issue still reads "Unregistered": right after, after
+a reload and after the deposit has run. Its agency panel still reads
+"The metadata for this item has not been submitted to {agency}." with
+"Deposit DOI(s)". The manager expects "Submitted", as articles get from
+the same action, so the page shows no sign that the issues were sent.
+"Deposit All" marks the same issues "Submitted". With DataCite the
+deposit itself then fails on the server, as every DataCite issue
+deposit does ([OJS2](#ojs2)).
+Basis: probe, 2026-10-05. <sup>f-ojs4</sup>
 
 ### OMP
 
@@ -2324,6 +2385,19 @@ asks for one?
 Lean: no, a minor 🐞; the badge asks for a DOI the same view says the
 chapter cannot have.
 Basis: probe, 2026-09-29. <sup>f-omp3</sup>
+
+<a id="omp4"></a>
+**OMP4 — With "DOI Versioning" "Yes", the "Mark DOIs …" actions on a press change only the current version's DOIs** · 🐞 · user-visible.
+A press has "DOI Versioning" set to "Yes" and a book published as 1.0
+and again as 2.0, made with "Major Revision". On the DOIs page a Press
+Manager ticks the book and confirms "Mark DOIs Registered". In the
+"View all" window, 2.0's "Monograph", chapter and "Format / PDF" rows
+read "Registered", while 1.0's keep "Unregistered". "Mark DOIs Needs
+Sync" and "Mark DOIs Unregistered" act the same way. A journal and a
+preprint server change every version's DOIs. The DOIs page offers no
+other way to set a status by hand, so a press cannot record there that
+an earlier version's DOIs were registered elsewhere, or undo that mark.
+Basis: probe, 2026-10-05. <sup>f-omp4</sup>
 
 ### OPS
 
@@ -2797,6 +2871,12 @@ while "Registered" (three apps) and "Submitted" (journal), enabled again
 after "Mark DOIs Unregistered", and enabled while "Needs Sync". With a
 newer version created and unpublished the expanded view kept showing
 the published version.
+Live-probed 2026-10-05 (Rule 16; A24), all three apps, three runs: the
+link carries `target="_blank"` to the version's page (OJS
+`article/view/{id}/version/{pub}`, OMP `catalog/book/…`, OPS
+`preprint/view/…`); the number is the submission ID; the badge
+"Unpublished" for an unpublished work or issue, the status otherwise;
+issue rows "Vol. 1 No. 1 (2025)"; a plain title reads as typed.
 
 <a id="fn-n"></a>
 **n** — `DoiListItem.saveDois()`: only changed boxes; no DOI yet →
@@ -3070,8 +3150,7 @@ Live-probed 2026-09-26 (Rule 31; Side effects), all three apps: the
 "DOI Assigned"; badges seen "Needs DOI", "Unregistered", "Submitted",
 "Registered", "Needs Sync", "Unpublished"; on one DataCite work whose
 "Article" row was emptied while its "PDF" row read "Submitted", the badge
-read "Unregistered" and "Deposit All" skipped it (seen once, so the rule
-states only the case with a DOI on the first row). No email reached the
+read "Unregistered" and "Deposit All" skipped it. No email reached the
 context's users (the mail catcher held none for the manager, the editor
 or the authors) and no notification was created. The work's Activity
 Log gained "Submission metadata updated" under the manager for "Assign
@@ -3106,6 +3185,13 @@ manager recorded "Accept and Skip Review" (Notify Authors, Select Files,
 skipped the review stage and sent this submission to the copyediting
 stage.", the decision email and one "Submission metadata updated" under
 "Mia Manager".
+Live-probed 2026-10-05 (Rule 31), OJS with DataCite and "Article
+galleys" ticked, three runs: a published article whose "Article" DOI
+was emptied on screen while its "PDF" row kept a DOI read "Unregistered"
+in the list with the "PDF" row "Unregistered", and still "Unregistered"
+once "Deposit All" had turned the "PDF" row "Submitted" (at once, after
+a reload, after the queue ran). On OJS and OPS without a galley kind
+the same emptied work read "Needs DOI".
 
 <a id="fn-q21"></a>
 **q21** — Live-probed 2026-09-26 (Rule 32; A17), all three apps: a
@@ -3865,6 +3951,23 @@ same notice for a work whose article DOI was emptied): "Deposit DOIs"
 answered 200 with the notice, the row stayed "Needs DOI", and the queued
 `PKP\jobs\doi\DepositSubmission` job failed with "invalid.job.payload"
 (`DepositSubmission.php`).
+Walked 2026-10-01 (issue report), OJS DataCite, "Deposit DOIs" on a
+work whose "Article" DOI was emptied while its "PDF" kept one: the "PDF"
+row read "Submitted" on every later load, and "Failed Jobs" listed the
+same `DepositSubmission` failure, `invalid.job.payload`.
+Live-probed 2026-10-05, OJS and OPS Crossref, three runs: the same
+notice, "Needs DOI" and `invalid.job.payload` (Administration › "Failed
+Jobs" lists it). OJS DataCite, "Deposit All", three runs: the article
+whose "Article" DOI was emptied on screen and whose "PDF" galley kept
+its DOI had that galley DOI "Submitted" at once, after a reload and
+after the queue ran, with "Items successfully submitted for deposit";
+the one `DepositSubmission` queued was the other work's, and "Failed
+Jobs" listed nothing for this one; a second "Deposit All" queued
+nothing and showed the notice again. `DAO::getAllDepositableSubmissionIds()`
+picks the galley DOI by its status, and `Repository::depositAll()`
+marks every DOI it returns "Submitted" but queues a
+`DepositSubmission` only for a row that names its work, which this one
+did not (the issue report's Cause names the same query).
 Issue report: [pkp-e2e#223](https://github.com/jardakotesovec/pkp-e2e/issues/223) ([docs/issues/U45-A15-deposit-without-doi-reports-success.md](../issues/U45-A15-deposit-without-doi-reports-success.md)).
 
 <a id="fn-f-a16"></a>
@@ -3942,6 +4045,21 @@ menu to close before answering it (`docs/tracking/app-changes.md` row
 21; app code unchanged).
 Issue report: [pkp-e2e#251](https://github.com/jardakotesovec/pkp-e2e/issues/251) ([docs/issues/U45-A22-bulk-actions-menu-stays-open.md](../issues/U45-A22-bulk-actions-menu-stays-open.md)).
 
+<a id="fn-f-a24"></a>
+**f-a24** — ui-library `DoiListPanel.vue` `getItemTitleBase()` builds the
+name from `localize(currentPublication.fullTitle)`, which the publication
+map sends as HTML, and `DoiListItem.vue` prints it with
+`{{ item.title }}`, which escapes it; the stable-3_5_0 ui-library has the
+same two lines (code read only). Live-probed 2026-10-05, all three apps,
+three runs, scratch contexts as the Journal Manager, Press Manager and
+Preprint Server Manager: titles stored as `Okapi <i>forest</i> census
+&amp; tapir`, `Heron &amp; egret wading` and, unpublished, `Narwhal
+<i>tusk</i> acoustics &amp; echoes` read with their codes in the row's
+link (`.listPanel__itemTitle a`, its HTML `Okapi &lt;i&gt;forest&lt;/i&gt;
+census &amp;amp; tapir`); a plain title read as typed. The work's
+page's `h1` rendered the italic word and the "&"; the "DOI Updates
+Failed" line printed the unpublished title plain.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGridHandler::publishIssue()` calls
 `Repo::issue()->createDoi()` with no `doiCreationTime` check;
@@ -3963,6 +4081,23 @@ Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204
 **f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two
 journals.
 Issue report: [pkp-e2e#242](https://github.com/jardakotesovec/pkp-e2e/issues/242) ([docs/issues/U45-OJS3-publish-window-issn-warning-twice.md](../issues/U45-OJS3-publish-window-issn-warning-twice.md)).
+
+<a id="fn-f-ojs4"></a>
+**f-ojs4** — OJS `api/v1/dois/DoiController::depositIssues()` dispatches
+a `DepositIssue` job per issue, then calls `array_merge($doisToUpdate,
+…getDoisForIssue($issueId))` without keeping its result, so
+`markSubmitted()` receives an empty list; stable-3_5_0 has the same
+lines (code read only). The articles' twin in `PKPDoiController` and
+`Repository::depositAll()` mark the DOIs. Live-probed 2026-10-05, OJS,
+three runs, Crossref and DataCite: two published issues with DOIs
+ticked, "Deposit DOIs" confirmed; the request answered 200 with the
+notice, two `DepositIssue` jobs were queued, and the issues' DOIs stayed
+1 (unregistered) at once, after a reload and after the queue ran; a
+"Deposit All" then set them "Submitted". With Crossref the jobs failed
+at connection ([A18](#a18)); with DataCite each `DepositIssue` failed on
+the server with `DataciteXmlFilter::createFundingReferencesNode():
+Argument #2 ($publication) must be of type APP\publication\Publication,
+null given` (the [OJS2](#ojs2) error).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
@@ -4006,6 +4141,23 @@ greyed "Harbours" row read "Needs DOI" beside "Chapters without a
 landing page cannot have a DOI." on a book after its publish, under
 "Never" and after "Assign DOIs"; the "Needs DOI" filter left out a book
 missing only that chapter (q33; the filter's rule is note z8).
+
+<a id="fn-f-omp4"></a>
+**f-omp4** — The three Mark actions act on OMP
+`doi\Repository::getDoisForSubmission()`, which reads the current
+publication only (note z9); OJS and OPS collect every version's DOIs.
+The issue report for [A17](#a17) names the same method in its Cause, and
+its OMP fix covers this case. A press on stable-3_5_0 has no "DOI
+Versioning" (code read). Live-probed 2026-10-05, OMP, three runs, the
+Press Manager on a scratch press with "DOI Versioning" "Yes" and
+"Monographs", "Chapters" and "Publication Formats" ticked: a book published as 1.0 and, after "Major Revision",
+as 2.0; each Mark action set 2.0's "Monograph", "Tides" and "Format /
+PDF" rows and left 1.0's three rows "Unregistered" in "View all", right
+after and after a reload, the stored statuses matching. 1.0's rows never
+left "Unregistered", so the "Needs Sync" and "Unregistered" reads agree
+with the code reading rather than prove it alone. Controls, same
+runs: OJS ("Article", "PDF") and OPS ("Preprint", "PDF") changed both
+versions' blocks for all three actions.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ops/locale/en/manager.po`

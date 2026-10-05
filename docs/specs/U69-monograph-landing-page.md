@@ -76,8 +76,8 @@ Proofreader and Editorial Board Member. <sup>c</sup>
 | Action | Who may, and when |
 |--------|--------------------|
 | **Read a published book's page and its chapter pages** (the current version, or an older one at its own address) | • anyone, signed in or not (Rules 1–4) <sup>c</sup> |
-| **Open an unpublished version's page** (the preview) | • the Press manager, Press editor, Production editor, Series editor and the assistant roles, whether or not they are assigned to the book, and the Site Administrator, under the preview notice, and its chapter pages too (Rule 5); the workflow's "Preview" opens it for those it is offered to ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), its Rule 6)<br>• the book's Author, by typing the page's address<br>• anyone else gets the "404 Not Found" page (Rule 3): a visitor, a Reader, a Reviewer, and an Author, Volume editor, Chapter Author or Translator of the press who is not on the book<br>• a submission its author never finished answers "404 Not Found" to everyone, the Press manager, the Site Administrator and its own Author included <sup>c</sup> <sup>td5</sup> |
-| **Open a free file** ("Open Access" terms) | • anyone who may read the page (Rule 13); today only an HTML file opens [A9](#a9)<br>• on a press with "Users must be registered and log in to view open access content." ticked (Settings bullet 6): signed-in users only; a visitor who presses a free file's link gets the Login page first, and once signed in there the file's view page <sup>j</sup> <sup>td13</sup> |
+| **Open an unpublished version's page** (the preview) | • the Press manager, Press editor, Production editor, Series editor and the assistant roles, assigned or not, and the Site Administrator, under the preview notice, and its chapter pages too, though a new version's fail on a "DOI Versioning" "No" press [A19](#a19) (Rule 5); the workflow's "Preview" opens it for those it is offered to ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), its Rule 6)<br>• the book's Author, by typing the page's address<br>• anyone else gets the "404 Not Found" page (Rule 3): a visitor, a Reader, a Reviewer, and an Author, Volume editor, Chapter Author or Translator of the press who is not on the book<br>• a submission its author never finished answers "404 Not Found" to everyone, the Press manager, the Site Administrator and its own Author included <sup>c</sup> <sup>td5</sup> |
+| **Open a free file** ("Open Access" terms) | • anyone who may read the page (Rule 13); today only an HTML file opens [A9](#a9)<br>• on a preview, no one: every file's link opens the "404 Not Found" page (Rule 5c) [A24](#a24)<br>• on a press with "Users must be registered and log in to view open access content." ticked (Settings bullet 6): signed-in users only; a visitor who presses a free file's link gets the Login page first, and once signed in there the file's view page <sup>j</sup> <sup>td13</sup> |
 | **Buy a file for sale** ("Direct Sales" terms) | • a signed-in user, whatever the role (the press's own staff and the Site Administrator too), on a press whose payment method is set up and that has a currency (Rule 14)<br>• a visitor gets the Login page first, and once signed in there not the payment page but the page an ordinary sign-in opens for their role, and a newcomer who registers from that Login page "Registration complete" (Rule 14) [A18](#a18) <sup>k</sup> <sup>td14</sup> |
 | **Receive the "Manual Payment Notification"** | • the press's principal contact, when a buyer presses "Send notification of payment" (Side effects) <sup>q</sup> |
 | **Show the citation in another format; download a citation** | • anyone who may read the page, while the "Citation Style Language" plugin is on (Rule 19)<br>• on a preview, the Press manager, Press editor, Production editor, the Site Administrator and a Series editor or assistant role assigned to the book; for the book's Author, and for a Series editor or assistant role not assigned to it, another format changes nothing and a download opens the "404 Not Found" page ⚠ [A21](#a21) <sup>m</sup> <sup>td18</sup> |
@@ -199,6 +199,10 @@ page, with its images ([Media files](U47-media-files.md), its Rule 5);
 on an older version's file the outdated-version notice (Rule 13a) sits
 between them. <sup>f</sup>
 <sup>td21</sup>
+A link in the file written "omp://press", the plugin's shorthand for
+the press, opens the press's home page. A file holding a link to
+another book, written "omp://monograph/{number}", never shows: under
+the bar the page stays empty ⚠ [A25](#a25). <sup>td26</sup>
 
 **The payment page.** A buyer's "Purchase" link leads to the payment page
 of the press's method. With "Manual Fee Payment" it is headed "Manual
@@ -278,7 +282,15 @@ link, not a button. A journal's page puts the instructions under
      chapter pages open for the same people, without the preview notice
      ⚠ [A17](#a17). A new version being prepared for a published book,
      opened at its version address, carries the older-version notice of
-     Rule 6 under the preview notice, dated today ⚠ [A4](#a4).
+     Rule 6 under the preview notice ⚠ [A4](#a4). The notice is dated
+     today, or, once a "Date Published" is saved on the version's
+     "Catalog Entry", with that date. On a press whose "DOI Versioning"
+     reads "No" (Settings bullet 15), the new version's chapter links
+     open a blank server error page [A19](#a19).
+   - 5c. **Files.** The preview lists the version's formats and files
+     as a published page does (Rule 11), but every file's link opens the
+     "404 Not Found" page, for everyone who may open the preview: no file
+     can be read from a preview ⚠ [A24](#a24).
 6. **An older version's notice.** An older version's page opens with
    "This is an outdated version published on {date}. Read the most recent
    version.", the date being that version's own, in the press's short
@@ -404,7 +416,10 @@ link, not a button. A journal's page puts the instructions under
       PDF view page opens, but its viewer never shows the PDF and its
       "Download" saves nothing, and any link that downloads (an EPUB, a
       supplementary file, a PDF with the viewer off) opens a blank error
-      page. Only an HTML file shows ⚠ [A9](#a9).
+      page. Only an HTML file shows ⚠ [A9](#a9), and not every one: a
+      file that links another book stays empty (Fields, the HTML view
+      page) [A25](#a25), and on a preview no file opens (Rule 5c)
+      [A24](#a24).
     - 13c. **Sign-in for free files.** On a press with "Users must be
       registered and log in to view open access content." ticked
       (Settings bullet 6), a visitor who presses a free file's link gets
@@ -676,9 +691,10 @@ link, not a button. A journal's page puts the instructions under
     out ([Contributors & affiliations](U41-contributors-and-affiliations.md),
     its Rule 8). <sup>d</sup>
 15. **"DOI Versioning"** (Settings › Distribution › "DOIs" › "Setup",
-    [DOIs](U45-dois.md), its Rules 11 and 12). "No" on a new press: an
-    older version's chapter page shows a server error page [A19](#a19).
-    "Yes": it opens (Rules 15a, 17, 18). <sup>l</sup>
+    [DOIs](U45-dois.md), its Rules 11 and 12). "No" (the default): an
+    older version's chapter page, and a new version's (Rule 5b), shows a
+    server error page [A19](#a19). "Yes": an older version's chapter page
+    opens (Rules 15a, 17, 18); a new version's is untried. <sup>l</sup>
 
 ## Cross-feature interactions
 
@@ -1142,6 +1158,8 @@ Left out of the scenarios above, by reason:
   - the payment page's order, the press's instructions first, and
     "Send notification of payment" as an underlined link (Fields, the
     payment page)
+  - an HTML file linking the press with "omp://press", the link opening
+    the press's home page (Fields, the HTML view page)
 - **Nothing new to test**:
   - an unassigned Series editor or assistant role opening the preview
     (Actors row 2)
@@ -1170,7 +1188,8 @@ Left out of the scenarios above, by reason:
   - A1 (an address that names no book; Rule 3a)
   - A2 (a book published only as an "Author Original"; Rule 3)
   - A3 (a version address that names no version; Rule 4)
-  - A4 (a new version's preview under both notices; Rule 5b)
+  - A4 (a new version's preview under both notices, dated today or
+    with the version's saved date; Rule 5b)
   - A5 (an older version's browser tab; Rule 6; scenario 6 passes it)
   - A6 (a chapter whose authors are the book's still shows its author
     line; Rule 10)
@@ -1195,14 +1214,16 @@ Left out of the scenarios above, by reason:
     Rule 5b)
   - A18 (where a visitor who signs in or registers to buy lands; Rule
     14; scenario 4 passes it)
-  - A19 (an older version's chapter page on a press with "DOI
-    Versioning" "No"; Rule 15a)
+  - A19 (an older version's chapter page, and a new version's in its
+    preview, on a press with "DOI Versioning" "No"; Rules 5b, 15a)
   - A20 (a later version's chapter with its own date; Rule 16)
   - A21 (the book's Author or an unassigned role using a preview's
     citation; Actors row 6)
   - A22 ("APA"'s "(Vols. 3)" for a series position; Rules 19a, 19b)
   - A23 (the PDF view page's script error; Fields, the PDF view page;
     scenario 3 passes it)
+  - A24 (a preview's file links; Rule 5c)
+  - A25 (an HTML file linking another book; Fields, the HTML view page)
 - **No seed**:
   - chapters dragged into a new order on the Chapters page (Rule 10)
   - a purchase completed through PayPal (Rule 14)
@@ -1254,7 +1275,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | On a press, a book address that names no book opens the Login page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | A new version's preview also calls itself outdated, dated today | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A4](#a4) | A new version's preview also calls itself outdated, dated today or with the version's saved date | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | A book's table of contents repeats the book's authors under every chapter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1265,6 +1286,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A visitor who signs in or registers to buy a book file lands on their home page, not the payment page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
+| [A25](#a25) | A book's HTML file that links another book shows an empty page under the HTML view page's bar | 🐞 | user-visible · crash: server | — |
+| [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
 | [A21](#a21) | On a preview, "How to Cite" works only for the roles assigned to the book | ❓ | minor | — |
@@ -1319,12 +1342,14 @@ Basis: probe, 2026-10-01. <sup>f-a3</sup>
 **A4 — A new version's preview also calls itself outdated** · 🐞 · low.
 Previewing a new, unpublished version of a published book shows the
 preview notice and, under it, "This is an outdated version published on
-{today's date}. Read the most recent version." The version has no
-publication date, so the line prints the day of the preview; it is the
-newest version there is, and "most recent version" leads to the
-published version's page. A journal shows the preview notice alone. The
-editor or author checking the new version is told it is outdated and
-was published today; readers never see the line.
+{today's date}. Read the most recent version." While the version has no
+publication date the line prints the day of the preview, and once a
+"Date Published" is saved on the version's "Catalog Entry" it prints
+that date. The version is the newest there is, and "most recent
+version" leads to the published version's page. A journal shows the
+preview notice alone. The editor or author checking the new version is
+told it is outdated and already published; readers never see the
+line.
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
@@ -1545,6 +1570,9 @@ version" notice, the reader gets a blank server error page. All three
 ways in fail: the address typed, the chapter's link in the older
 version's table of contents, and the older version's link in the chapter
 page's "Versions" list.
+The same blank server error page opens from the preview of a new,
+unpublished version: each chapter's link in its table of contents
+fails, tried only as below ("Yes" and a chapter with a DOI untried).
 The older version's book page and the current version's chapter pages
 still open.
 It needs three things, and the first is the default:
@@ -1611,6 +1639,31 @@ It happens on every PDF view page while "PDF.js PDF Viewer" is on, as
 it is on a new press.
 Basis: probe, 2026-10-01. <sup>f-a23</sup>
 
+<a id="a24"></a>
+**A24 — On a preview, every file link of the book opens "404 Not Found"** · 🐞 · minor.
+A preview of an unpublished book, or of a new version of a published
+one, lists the version's files as the published page will. Pressing any
+of them, "PDF" or "HTML", opens the "404 Not Found" page instead of the
+file's view page, for everyone who may open the preview, the Press
+manager, the Site Administrator and the book's Author included. Whoever
+checks a version before publishing it cannot read its files from the
+page that previews it.
+Basis: probe, 2026-10-05. <sup>f-a24</sup>
+
+<a id="a25"></a>
+**A25 — A book's HTML file that links another book shows an empty page under the HTML view page's bar** · 🐞 · user-visible · crash: server.
+A book's HTML file holding a link written "omp://monograph/{number}",
+the "HTML Monograph File" plugin's shorthand for another book of the
+press, never shows. Its link on the book's page opens the HTML view
+page, whose bar reads as usual, but under the bar the page stays empty:
+the server fails while preparing the file. A visitor, a Reader and the
+Press manager get the same. The file's text is lost to every reader,
+not only the link. A file whose link is written "omp://press" shows,
+with that link opening the press's home page.
+Worked until a 2024 change to how the app builds its addresses, read
+from the code's history: a regression.
+Since: 2024-06-26 (two years), a date read from the code's history · Basis: probe, 2026-10-05. <sup>f-a25</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1649,6 +1702,9 @@ Basis: probe, 2026-10-01. <sup>f-a23</sup>
 <a id="fn-td21"></a>
 **td21** — Live-probed 2026-09-28 (Fields, the HTML view page; A10): tab "HTML view of the file article.html"; the bar holds only the return arrow (named "##monograph.return##", opening the book's page) and the title link (the file's version title, opening the current page), no "Download"; the HTML showed with its image. On an older version's file the notice read "This is an outdated version published on 2026-09-28. Read the most recent version.". The fixture's `article.css` answered 404.
 
+<a id="fn-td26"></a>
+**td26** — Live-probed 2026-10-05 (Fields, the HTML view page; A25; two runs): on a scratch press, the Press manager uploaded two HTML files into one "HTML" format of an unpublished book ("Change File", "Set Terms" "Open Access") and published it; the book's page listed both for a visitor, a Reader and the Press manager. The file holding only a link `omp://press` opened under the tab "HTML view of the file …" with its frame reading "Press link Visit the press.", the link's address the press's home page, followed inside the frame to the press's home page. `HtmlGalleyHelper::handleOmpUrl()` rewrites `omp://press` and `omp://monograph/{id}` links; the second fails (f-a25).
+
 <a id="fn-g"></a>
 **g** — `CatalogBookHandler::book()`: `version/{publicationId}` picks that publication from the submission's publications into the typed property `public Publication $publication` (no default), so an id matching none leaves it uninitialized and the following `!$this->publication` throws "must not be accessed before initialization" (a server error); an unpublished publication without `canPreview()` throws not found; a non-numeric first argument that is not the version's `urlPath` and has no sub-path is meant to redirect to the current `urlPath` (or id), but passes a string path to `PKPRequest::redirect()`, which takes `?array $path` since lib/pkp bee9547b49 (2024-06-26), so the redirect throws a TypeError, a server error (A16); a numeric one is never redirected. The URL Path resolves through `Repo::submission()->getByUrlPath()`. An unknown number or path fails `OmpPublishedSubmissionRequiredPolicy` with `user.authorization.invalidPublishedSubmission` "An invalid published submission was specified." (OMP `locale/en/locale.po`), and `PKPPageRouter::handleAuthorizationFailure()` sends a signed-out user to Login and a signed-in one to `user/authorizationDenied`. Submission status: `Repo::submission()->getStatusByPublications()` returns published only for a published publication whose `versionStage` is the final stage (Version of Record); the current publication is the last published one in version order (`getCurrentPublicationIdByPublications()`). Notices: `submission.viewingPreview` (link `dashboard/editorial?workflowSubmissionId={id}`) when the shown publication is not published, and `submission.outdatedVersion` whenever it is not the current publication, with `datePublished|date_format:$dateFormatShort`. Incidentals: the URL Path (U70 claim check K5, 2026-09-27: `catalog/book/{path}` opens, catalog links use the path, `catalog/book/{id}` still opens); the Author Original only (U68 claim check K2, 2026-09-27: the book's page answered 404); the unknown number (U16 claim check K4, 2026-09-25: `catalog/book/999999` landed a visitor on Login). Live-probed 2026-09-28: see td2–td8.
 
@@ -1665,7 +1721,7 @@ Basis: probe, 2026-10-01. <sup>f-a23</sup>
 **td6** — Live-probed 2026-09-28 (Rule 4; A3): older versions at `…/version/{publication id}`, the ids the "Versions" links carry; a new unpublished version's address answered 404 to a visitor and a Reader; `version/999999`, another book's version id and `version/abc` answered 500 with a blank page to a visitor, a Reader, the Press manager and the Site Administrator.
 
 <a id="fn-td7"></a>
-**td7** — Live-probed 2026-09-28 (Rule 5; A4): with no date saved the preview had no "Published" and no "Versions"; with a date saved, "Published" and the date ("Forthcoming" for 2031-01-10) and a "Versions" heading over an empty list. "View submission" (`dashboard/editorial?workflowSubmissionId={id}`) took the Press manager and the Site Administrator to the workflow, gave the book's Author the access-denied page, and an unassigned Series editor and Copyeditor the Submissions page behind an "Error" window. A new version's preview showed both notices, the second "…published on 2026-09-28.", the new version's date being empty.
+**td7** — Live-probed 2026-09-28 (Rule 5; A4): with no date saved the preview had no "Published" and no "Versions"; with a date saved, "Published" and the date ("Forthcoming" for 2031-01-10) and a "Versions" heading over an empty list. "View submission" (`dashboard/editorial?workflowSubmissionId={id}`) took the Press manager and the Site Administrator to the workflow, gave the book's Author the access-denied page, and an unassigned Series editor and Copyeditor the Submissions page behind an "Error" window. A new version's preview showed both notices, the second "…published on 2026-09-28.", the new version's date being empty. Re-probed 2026-10-05 (Rules 5, 5a, 5b; A4, A17; two runs, the Rule 5 drive four): the preview opened under "This is a preview and has not been published. View submission" for the Press manager, an assigned and an unassigned Series editor, an unassigned Copyeditor, the book's Author (typing the address) and the Site Administrator, on a book never published and on a published book's new version; a Reader and a visitor got "404 Not Found". With no date saved, no "Published" and no "Versions"; dated 2024-06-01 on a book never published, "Published" "June 1, 2024" over an empty "Versions"; dated 2031-01-10, "Forthcoming" "January 10, 2031". A new version with "Date Published" 2025-01-15 saved on its "Catalog Entry" (the box read 2025-01-15 after a reload) read "Published" "March 5, 2024 — Updated on January 15, 2025" and "Versions" "2024-03-05 (Version of Record 1.0)" alone, while the published page kept "March 5, 2024". "View submission" opened the workflow (`dashboard/editorial?workflowSubmissionId={id}…&workflowMenuKey=workflow_5`) for the Press manager, the assigned Series editor and the Site Administrator; the Author got `user/authorizationDenied` "The current role does not have access to this operation."; the unassigned Series editor and Copyeditor the Submissions page ("Assigned to me (0)") behind the "Error" window with "OK". The unpublished book's chapter page opened with no notice for every previewing role, "Published June 1, 2024" on the dated book; a Reader and a visitor typing its address got "404 Not Found".
 
 <a id="fn-td8"></a>
 **td8** — Live-probed 2026-09-28 (Rule 6; A5): the older version "Tides" opened from "Versions" read "This is an outdated version published on 2024-03-05. Read the most recent version." ("…05-03-2024." after "Date (Short)" d-m-Y); heading "Tides", tab "Tides Revised | …"; "most recent version" opened the book's address.
@@ -1839,7 +1895,7 @@ Issue report: [pkp-e2e#292](https://github.com/jardakotesovec/pkp-e2e/issues/292
 Issue report: [pkp-e2e#285](https://github.com/jardakotesovec/pkp-e2e/issues/285) ([docs/issues/U69-A3-version-address-no-version-server-error.md](../issues/U69-A3-version-address-no-version-server-error.md)).
 
 <a id="fn-f-a4"></a>
-**f-a4** — `monograph_full.tpl` prints `submission.viewingPreview` for any unpublished publication and `submission.outdatedVersion` for any publication that is not the current one, with that publication's empty `datePublished`, which prints as today (note h). Live-probed 2026-09-28 (td7).
+**f-a4** — `monograph_full.tpl` prints `submission.viewingPreview` for any unpublished publication and `submission.outdatedVersion` for any publication that is not the current one, with that publication's empty `datePublished`, which prints as today (note h). Live-probed 2026-09-28 (td7). Live-probed 2026-10-05 (Rule 5b; four runs): the new version's preview read "This is an outdated version published on 2026-10-05. Read the most recent version." with no date saved, and "…published on 2025-01-15." once "Date Published" 2025-01-15 was saved on the version's "Catalog Entry".
 Issue report: [pkp-e2e#209](https://github.com/jardakotesovec/pkp-e2e/issues/209) ([docs/issues/U13-OPS1-new-version-preview-called-outdated.md](../issues/U13-OPS1-new-version-preview-called-outdated.md)).
 
 <a id="fn-f-a5"></a>
@@ -1898,7 +1954,7 @@ Issue report: [pkp-e2e#297](https://github.com/jardakotesovec/pkp-e2e/issues/297
 Issue report: [pkp-e2e#295](https://github.com/jardakotesovec/pkp-e2e/issues/295) ([docs/issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md](../issues/U69-A18-sign-in-to-buy-file-skips-payment-page.md)).
 
 <a id="fn-f-a19"></a>
-**f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes".
+**f-a19** — Note l. Live-probed 2026-09-28 (td17): 500 at `{press}/catalog/book/{id}/version/{id}/chapter/{n}`, typed, from the older version's table of contents and from "Versions", with the book named by number or URL Path, on every press left at "DOI Versioning" "No"; the same page opened on a press seeded with it "Yes". Live-probed 2026-10-05 (Rule 5b; Actors row 2; two runs): on a press left at "DOI Versioning" "No", a published book with "Chapter One" ("Chapter Page" ticked) and a new version made with "Create New Version", the preview's "Chapter One" (`catalog/book/{id}/version/{newPubId}/chapter/{n}`) answered 500 with an empty page for the Press manager; the log read "Uncaught TypeError: count(): Argument #1 ($value) must be of type Countable|array, int given" from `ChapterDAO::getCurrentPublicationChapterDoi()` via `CatalogBookHandler::book()`, this entry's trace. "Yes" not tried for a new version.
 Issue report: [pkp-e2e#286](https://github.com/jardakotesovec/pkp-e2e/issues/286) ([docs/issues/U69-A19-older-version-chapter-page-server-error.md](../issues/U69-A19-older-version-chapter-page-server-error.md)).
 
 <a id="fn-f-a20"></a>
@@ -1914,6 +1970,12 @@ Issue report: [pkp-e2e#298](https://github.com/jardakotesovec/pkp-e2e/issues/298
 <a id="fn-f-a23"></a>
 **f-a23** — Note f: OMP's own `plugins/generic/pdfJsViewer/templates/display.tpl` loads `pdf.js/build/pdf.js` and `pdf.js/web/viewer.js` into the outer page and runs an inline script calling `PDFJS.workerSrc` and `PDFJS.getDocument()` for a `pdfCanvas` element no version of the template has; pdf.js has defined no `PDFJS` global since its version 2 (omp 02393cf8bf, 2019-05-13, updated the library and left the script), so the script throws at its first line. The viewer is the iframe `pdf.js/web/viewer.html?file=…`, which loads the library for itself. OJS's and OPS's viewer plugin (the shared pkp/pdfJsViewer) has only the iframe script (code). Walked 2026-10-01 on OMP `main` and `stable-3_5_0`, the default dataset's book 5, "Epilogue"'s "PDF", signed out: the console logged "Uncaught ReferenceError: PDFJS is not defined" each time; on 3.5 the viewer showed the PDF ("of 1") and "Download" saved `epilogue.pdf`; on `main` the file request also answered 500 (A9). Seen before: 2026-09-26 to 2026-09-28 on every PDF view page (f-a9); on 3.4 and 3.3 the same two lines (code). Upstream `pkp/pkp-lib#6425` (closed) notes the error in two comments and left it.
 Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283) ([docs/issues/U69-A9-pdf-view-page-script-error.md](../issues/U69-A9-pdf-view-page-script-error.md)).
+
+<a id="fn-f-a24"></a>
+**f-a24** — Note j: `CatalogBookHandler::download()`, which `view()` calls, answers not found for any publication that is not published and never asks `Repo::submission()->canPreview()`, where `book()` does (note c). Refused on OMP `main` and `stable-3_5_0` (walked 2026-10-04 for the issue report pkp-e2e#920, its Cause's reach) and on 3.4 and 3.3 (code, same report). Live-probed 2026-10-05 (Rule 5c; Actors row 3; two runs): a new version of a published book, its formats "PDF" (article.pdf) and "HTML" (article.html) copied with the version, links `catalog/view/{id}/version/{pubId}/{formatId}/{fileId}`: "HTML" and "PDF" pressed by the Press manager, an unassigned Series editor, an unassigned Copyeditor, the book's Author and the Site Administrator each opened "404 Not Found"; the workflow header's "Preview" led to the same page and links. A book never published (`catalog/view/{id}/{formatId}/{fileId}`): the same for the Press manager, a Series editor, the Author and the Site Administrator. A visitor typing those addresses: "404 Not Found". Control: the published version's "HTML" and "PDF" opened their view pages. A journal's and a server's new-version preview opened the "PDF" reader page (200), whose file request then answered 404 (Article landing page & reading, its Rule 12 and A2).
+
+<a id="fn-f-a25"></a>
+**f-a25** — OMP `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::handleOmpUrl()` passes `$urlParts[1]` (a string) as the path of `PKPRequest::url()`, whose path is `?array` since lib/pkp bee9547b49 (2024-06-26, the change behind A16); `Hook::call()` logs the plugin's TypeError and carries on, and `CatalogBookHandler::download()` then fails on A9's line. OJS's `htmlArticleGalley` twin passes a list. 3.5 (code): the same call in `HtmlMonographFilePlugin.php` against the same signature and the same hook catch. Fix shape as A16's: `[$urlParts[1]]`. The A16 issue report (pkp-e2e#284) names this caller in its Cause and leaves it out of its fix. Live-probed 2026-10-05 (Fields, the HTML view page; two runs; a visitor, a Reader and the Press manager): the file holding `omp://monograph/{id}` opened the tab "HTML view of the file i05-monograph-link-r1-omp.html", whose frame `catalog/download/{id}/{format}/{file}?inline=1` answered 500 and stayed empty; the log read "TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159", then "Uncaught Error: Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization in …/CatalogBookHandler.php:533". Control: td26.
 
 ## Reference — entry points & surfaces
 
