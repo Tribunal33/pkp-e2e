@@ -1885,7 +1885,7 @@ Text and Media to whoever may edit the publication at the current
 stage. 3.5 has only the JATS route, whose server rule matches its page,
 and 3.4 and 3.3 have none of these routes: not affected.
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
-Issue report: [docs/issues/U47-A8-copyeditor-changes-media-outside-production.md](../issues/U47-A8-copyeditor-changes-media-outside-production.md).
+Issue report: [pkp-e2e#926](https://github.com/jardakotesovec/pkp-e2e/issues/926) ([docs/issues/U47-A8-copyeditor-changes-media-outside-production.md](../issues/U47-A8-copyeditor-changes-media-outside-production.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note q29. `HtmlArticleGalleyPlugin`, the galley view: a
