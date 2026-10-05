@@ -1595,7 +1595,7 @@ live, then reverted). Gated requests would then also extend the window.
 3.5, 3.4 and 3.3 do not have it: none has `password_timeout` or the policy.
 Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
-Issue report: [docs/issues/U01-A13-admin-changes-skip-confirm-access.md](../issues/U01-A13-admin-changes-skip-confirm-access.md).
+Issue report: [pkp-e2e#928](https://github.com/jardakotesovec/pkp-e2e/issues/928) ([docs/issues/U01-A13-admin-changes-skip-confirm-access.md](../issues/U01-A13-admin-changes-skip-confirm-access.md)).
 
 ## Reference — entry points & surfaces
 
