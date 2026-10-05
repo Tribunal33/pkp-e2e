@@ -36,8 +36,9 @@ and the hourly routine starts one only when none is running
 | [U49](../specs/U49-publish-schedule-and-versions.md) | 11 | 2 | 0 | OJS5, OPS6: new from the housekeeping fold of 2026-10-05, no report yet (housekeeping 2026-10-05) |
 | [U59](../specs/U59-hosted-journals.md) | 10 | 2 | 0 | A11: new from the housekeeping fold of 2026-10-05, no report yet (housekeeping 2026-10-05) |
 | [U20](../specs/U20-search-engine-metadata-and-analytics.md) | 14 | 1 | 2 | OJS1, OJS2: open reports docs/reports/2026-09-26-ojs-dc-source-uri-404.md and docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md (the rest of U20 written up by the issues session, workstation s0, 2026-10-03) |
+| [U04](../specs/U04-orcid-integration.md) | 10 | 1 | 1 | A14, A15: new from the housekeeping claim check of 2026-10-05, no report yet (housekeeping 2026-10-05) |
 | [U65](../specs/U65-editorial-statistics.md) | 19 | 1 | 0 | OMP6 joins the U65-OJS3 report: its "Tracked in" list (housekeeping 2026-10-05) |
-| [U10](../specs/U10-appearance-and-theming.md) | 15 | 1 | 0 | A15, A16: new from the housekeeping fold of 2026-10-05, no report yet (housekeeping 2026-10-05) |
+| [U10](../specs/U10-appearance-and-theming.md) | 18 | 1 | 0 | A15, A16: new from the housekeeping fold of 2026-10-05, no report yet (housekeeping 2026-10-05); A17, A18, A20: new from the housekeeping claim check of 2026-10-05, no report yet; A5's report (pkp-e2e#780) wants its last Summary sentence re-synced (the thumbnail is A20) (housekeeping 2026-10-05) |
 | [U64](../specs/U64-usage-statistics.md) | 14 | 1 | 0 | A14: new from the housekeeping fold of 2026-10-05, no report yet (housekeeping 2026-10-05) |
 | [U23](../specs/U23-submissions-dashboard.md) | 8 | 1 | 0 | A15: new from the housekeeping fold of 2026-10-05, no report yet; A16 joins the U63-A24 report (pkp-e2e#919) and A17 the U39-A5 report: their "Tracked in" lists (housekeeping 2026-10-05) |
 | [U07](../specs/U07-journal-identity-and-about-pages.md) | 9 | 0 | 4 | A13: open report docs/reports/2026-09-29-pkp-lib-13370.md (the rest of U07 written up by the issues session, workstation s0, 2026-10-03) |

@@ -647,6 +647,14 @@ behind a line; that scratch is deleted after review.
   inside the submit request itself. A probe or test that needs the email
   drives the wizard. Tasks window; Mailpit. Live-probed 2026-09-04, all
   three apps (`.reports/U05/pT` P2, `pN` P32).
+- On `stable-3_5_0` a submission seeded through `POST scenarios/submission`
+  stores its contributor with no user group (`authors.user_group_id`
+  empty; the wizard always stores one); publishing it with a verified ORCID
+  iD under the member API then answers 500 in the ORCID work builder
+  (`getUserGroup()` on null) and queues no deposit. A script that publishes
+  such a seed on 3.5 sets the contributor's group first (the U04 I05 kept
+  script does it by SQL). Live-probed 2026-10-05, OJS and OPS
+  (`.reports/U04/cc-I05.md`).
 - A second `POST scenarios/context` naming an existing username enrols that
   user in the new context; `roles: []` is refused (400), and a
   context-level registration always adds Reader, so the only way to an

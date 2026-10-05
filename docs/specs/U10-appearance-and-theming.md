@@ -218,6 +218,13 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
     3), the dates do not fall back to the primary language's choice.
     <sup>y</sup> <sup>td9</sup>
 
+3c. **French times.** In French (Canada), a journal left on the default
+    "Time" writes the same moment two ways. The French choices on "Date &
+    Time" and some editorial screens, such as a discussion's messages,
+    write "a.m." and "p.m." ("2026-10-05 04:38 a.m."); a library file's
+    "Date de téléversement" writes "AM" ("2026-10-05 04:38 AM")
+    ⚠ [A19](#a19). In English both read "AM". <sup>j</sup>
+
 **The theme**
 
 4. **The theme.** The theme chosen under "Theme" draws every public page
@@ -399,7 +406,9 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
     later joins the unticked ones. Dragging a row or pressing its up or
     down arrow moves it; a screen reader hears the arrows as "Increase
     position of {block}" and "Decrease position of {block}" ⚠ [A3](#a3).
-    <sup>s</sup> <sup>td26</sup>
+    A double quote or "&" in the block's label reaches those names
+    written as HTML code: `Increase position of &quot;Developed By&quot;
+    Block` ⚠ [A17](#a17). <sup>s</sup> <sup>td26</sup>
 24. **Placing.** After "Save", every ticked block shows, in the list's
     order, in the sidebar beside the content of every public page of the
     journal; an unticked block shows nowhere. A block with nothing to
@@ -528,6 +537,12 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
     "Date (Short)" that save also leaves the editorial dates showing the
     time without the date ⚠ [A9](#a9). <sup>j</sup> <sup>td35</sup>
 
+33a. **"S" in a "Custom" pattern.** A pattern holding "S", the English
+    ordinal ending ("th" in "5th"), loses that ending on some editorial
+    screens. With "jS M Y H:i" saved under "Date & Time (Short)", a
+    library file's "Date uploaded" reads "5th Oct 2026 04:38", but a
+    discussion message "5 Oct 2026 04:38" ⚠ [A18](#a18). <sup>j</sup>
+
 **The Settings Wizard**
 
 34. **Its "Appearance" tab.** The Site Administrator's Settings Wizard of
@@ -597,9 +612,9 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
   read. <sup>c</sup>
 - Uploaded pictures and the style sheet are public files of the journal,
   open to anyone at their address. "Remove" and "Save" delete a "Logo",
-  "Homepage Image" or "Favicon" file and keep the style sheet's
-  ([A5](#a5)); whether they delete the thumbnail's is not yet checked.
-  <sup>d</sup>
+  "Homepage Image" or "Favicon" file. They keep the style sheet's file
+  ([A5](#a5)) and the thumbnail's ⚠ [A20](#a20), which still open at
+  their old address. <sup>d</sup>
 
 ## Settings that modify behavior
 
@@ -1200,6 +1215,10 @@ Left out of the scenarios above, by reason:
   - A14 (roles of the same level changing places on "Editorial Masthead" before its first save; Rule 28)
   - A15 (the refused file's hidden "Remove file" leaving "Save" disabled; Fields, the upload boxes)
   - A16 (a "Logo" the server fails on, the box left with a warning sign and no message; Fields, the upload boxes)
+  - A17 (a "Sidebar" block whose label holds a double quote or "&", its arrows' names carrying HTML code; Rule 23)
+  - A18 (a "Custom" pattern with "S", the ordinal ending missing from a discussion's messages; Rule 33a)
+  - A19 (the French time written "a.m." on a discussion's messages and "AM" on a library file; Rule 3c)
+  - A20 (a removed thumbnail's file still opening at its address; Side effects)
   - OJS2 (a first issue created on a journal that never saved "Theme", the home page switching by itself {OJS}; Rule 10)
   - OJS3 (a published issue's articles absent from "Latest Publications", the list ordered by submission {OJS}; Rule 13)
   - OJS4 (the Settings Wizard showing another organization for a journal with no issue {OJS}; Rule 34; scenario 2 marks it)
@@ -1226,7 +1245,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; A10–A12
-2026-09-28; A13, A14 2026-09-29; A15, A16 2026-10-05), unreviewed unless an entry notes
+2026-09-28; A13, A14 2026-09-29; A15–A20 2026-10-05), unreviewed unless an entry notes
 otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
@@ -1243,6 +1262,9 @@ otherwise; the team settles them on spec review.
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | After a refused file, its hidden "Remove file" frees "Upload File" but leaves "Save" disabled | 🐞 | minor | — |
 | [A16](#a16) | A "Logo" the server fails on leaves a warning sign with no message under the box | 🐞 | minor · crash: server | — |
+| [A17](#a17) | Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&" | 🐞 | minor | — |
+| [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
+| [A20](#a20) | A removed journal thumbnail stays online at its old address | 🐞 | minor | — |
 | [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | On a journal's home page, each "Latest Publications" title is a heading at the section's own level | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1250,6 +1272,7 @@ otherwise; the team settles them on spec review.
 | [A10](#a10) | A saved "Colour" does not reach a browser that has already opened the journal | ❓ | user-visible | — |
 | [A13](#a13) | Until a French "Date" is saved, a press's French pages write a book's date in the English order ("mars 5, 2024") | ❓ | minor | — |
 | [A14](#a14) | Before "Editorial Masthead" is first saved, roles of the same level change places between openings of the tab | ❓ | minor | — |
+| [A19](#a19) | In French (Canada), the same time reads "a.m." on a discussion's messages and "AM" on a library file | ❓ | minor | — |
 | [OJS2](#ojs2) | A journal's home page switches from its recent articles to an empty current-issue section when the first issue is created | ❓ | user-visible | — |
 | [OJS3](#ojs3) | "Include recent most published articles" lists only articles outside a published issue, by submission date | ❓ | minor | — |
 | [OJS4](#ojs4) | The Settings Wizard shows the current issue's table of contents ticked for a journal with no issue, and a save there stores it | ❓ | minor | — |
@@ -1335,9 +1358,10 @@ Nothing on screen shows that the file is still there, and no screen can
 delete it. It matters when the file held something the journal or the
 site meant to withdraw.
 
-Only style sheets are left behind: a removed "Logo", "Homepage Image"
-or "Favicon" of a journal, and the site's "Logo", are deleted as they
-should be. Basis: probe, 2026-10-04. <sup>f-a5</sup>
+Besides the style sheets, only a journal's thumbnail is left behind
+([A20](#a20)): a removed "Logo", "Homepage Image" or "Favicon" of a
+journal, and the site's "Logo", are deleted as they should be. Basis:
+probe, 2026-10-04. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · 🐞 · low.
@@ -1523,6 +1547,55 @@ foot reads "Please correct one error." and "Go to Logo:" with nothing
 after it. As after a refused type ([A7](#a7)), the frame's "Upload
 File" and the tab's "Save" stay disabled. Nothing is stored, and
 nothing says the picture was too large. Basis: probe, 2026-10-02. <sup>f-a16</sup>
+
+<a id="a17"></a>
+**A17 — Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&"** · 🐞 · minor.
+On Settings › Website › Appearance › "Setup" › "Sidebar", a block's up
+and down arrows should be named after the block as its box shows it.
+Where the label holds a double quote or "&", the names carry it written
+as HTML code instead. With ""Developed By" Block"'s plugin enabled
+(Settings › Website › "Plugins"), a screen reader announces its arrows
+as `Increase position of &quot;Developed By&quot; Block` and `Decrease
+position of &quot;Developed By&quot; Block`. A custom block named "News 2026 & Events", whose box
+reads "news2026&-events (Custom Block)", gets `Increase position of
+news2026&amp;-events (Custom Block)` (that name is itself a fault:
+[Custom pages & blocks](U09-custom-pages-and-blocks.md#a13)). The tick
+box, whose name takes in the arrows' names ([A3](#a3)), carries the same
+codes. The visible labels are right. Basis: probe, 2026-10-05.
+<sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages** · 🐞 · minor.
+A manager who saves "jS M Y H:i" as the "Custom" pattern of "Date &
+Time (Short)" expects every date of that group with its ordinal ending,
+as a library file's "Date uploaded" reads it: "5th Oct 2026 04:38". A
+discussion's messages leave the ending out: "5 Oct 2026 04:38". The
+same journal writes the same moment two ways; with the default pattern
+both read "2026-10-05 04:38 AM". Basis: probe, 2026-10-05.
+<sup>f-a18</sup>
+
+<a id="a19"></a>
+**A19 — In French (Canada), the same time reads "a.m." on a discussion's messages and "AM" on a library file** · ❓ · minor.
+With the interface in French (Canada) and the journal on the default
+"Time", a discussion message reads "2026-10-05 04:38 a.m." while a
+library file's "Date de téléversement" reads "2026-10-05 04:38 AM"; the
+"Date & Time" tab's French choices read "04:40 a.m." and "4:40a.m.". In
+English both read "AM". Question: should one journal write the French
+time one way? Lean: yes; "a.m." is the French-Canadian form and the
+pages that print "AM" could follow it, though which form is right is
+the product team's call. Basis: probe, 2026-10-05. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — A removed journal thumbnail stays online at its old address** · 🐞 · minor.
+A manager who presses "Remove" under "Journal thumbnail" on Settings ›
+Website › Appearance › "Setup" and saves expects the picture to be
+gone. The box stays empty after a reload, but the picture stays in the
+journal's public files and still opens at its old address, for anyone,
+signed in or not. A "Logo" removed in the same save is deleted.
+Nothing on screen shows that the thumbnail is still there, and no
+screen can delete it; as with a removed style sheet ([A5](#a5)), it
+matters when the picture was meant to be withdrawn. Basis: probe,
+2026-10-05. <sup>f-a20</sup>
 
 ### OJS
 
@@ -1718,12 +1791,15 @@ moves each temporary file into the journal's public files
 (`_saveFileParam()`: `public/journals|presses|contexts/<id>/`, stored as
 `name`, `uploadName`, `width`, `height`, `dateUploaded`, `altText`); a
 `null` value deletes the stored file (`PublicFileManager::removeContextFile()`).
-The thumbnails are saved by each app's `ContextService`; a removed
-thumbnail's file was not checked (Side effects bullet 2 leaves it out).
+The thumbnails are saved by each app's `ContextService::afterEditContext()`,
+which never deletes a removed one's file (A20, note f-a20).
 Since 2026-09-24 the test installs' public files load (seed-facts: the
 relative `public_files_dir`). Live-probed 2026-09-24 (Side effects
 bullet 2; all three apps): a saved logo's address answered a signed-out
-browser and answered "not found" after "Remove" and "Save".
+browser and answered "not found" after "Remove" and "Save". Live-probed
+2026-10-05 (Side effects bullet 2; all three apps, two runs): the same
+for the logo, while a thumbnail removed in the same save still opened
+(note f-a20).
 
 <a id="fn-e"></a>
 **e — the theme's fields.** `DefaultThemePlugin::init()` in each app's
@@ -1800,15 +1876,20 @@ five formats empty. ui-library `DateTimeForm.vue::mounted()` rewrites
 every preset's label with luxon's `DateTime.now()`, the browser's clock
 (pkp-lib#11079, 2025-03), so `g:ia` shows as "3:05PM" while PHP's `date()`
 prints "3:05pm" (A8); the French labels read "15:05", "03:05 p.m.",
-"3:05p.m.". `fieldChanged()` / `updateFields()` rewrite the combined
-preset's label and move the combined value when it equalled the old
-combination. An empty custom box saves `null` for that group and the
+"3:05p.m.": luxon writes the locale's meridiem for `a` and `A`, while
+Carbon prints "AM" or "am" in every language (A19), and ui-library
+`phpToLuxonFormat()` maps PHP's `S` to nothing (A18).
+`fieldChanged()` / `updateFields()` rewrite the combined preset's label
+and move the combined value when it equalled the old combination. An empty custom box saves `null` for that group and the
 getters fall back to the configuration file. Saved under "Date (Short)",
 the stored `datetimeFormatShort` is the time pattern alone (A9; why the
 combination drops the date was not traced). The public pages print a
 pattern with `PKPTemplateManager::smartyDateFormat`, Carbon's
 `translatedFormat`, so the one default pattern is filled with the
 visitor's month names in its English order (A13, note f-a13).
+Live-probed 2026-10-05 (Fields, "Time"; Rules 3c, 33a; all three apps,
+two runs): the French labels read "04:40", "04:40 a.m.", "4:40a.m." at
+that time; the `S` and meridiem readings are in notes f-a18 and f-a19.
 
 <a id="fn-k"></a>
 **k — the theme list.** `PKPThemeForm` fills the `themePluginPath`
@@ -2360,6 +2441,63 @@ the message is empty; any server refusal of a settings upload that
 carries `error` would show the same (not driven). Why the file is sent
 and the server error itself belong to Submission files' A21 and Custom
 pages & blocks' A18 (pkp-e2e#373).
+
+<a id="fn-f-a17"></a>
+**f-a17** — `FieldOptions.vue` prints `option.label` as HTML
+(`v-strip-unsafe-html`) but hands the same string to `Orderer` as
+`item-title`, which prints it through text interpolation, so an entity
+in the label is shown as text: the screen-reader span's source holds
+`news2026&amp;amp;-events`, and what a screen reader receives is
+`&amp;`, one level. Live-probed 2026-10-05 on all three apps, two runs,
+as a Journal Manager and as the Site Administrator through the
+manager role: the arrows' names as A17 quotes them, the boxes'
+accessible names "news2026&-events (Custom Block) Increase position of
+news2026&amp;-events (Custom Block) Decrease position of
+news2026&amp;-events (Custom Block)", the visible labels
+"news2026&-events (Custom Block)" and ""Developed By" Block". The custom
+block's row in the Custom Block Manager raised its script errors
+(Custom pages & blocks A13) during the walk; nothing else failed.
+
+<a id="fn-f-a18"></a>
+**f-a18** — Note j: ui-library `phpToLuxonFormat()` maps PHP's `S` to
+an empty string ("no direct Luxon equivalent"); the server prints with
+Carbon's `translatedFormat`. Live-probed 2026-10-05 on all three apps,
+two runs: "Custom" under "Date & Time (Short)" with `jS M Y H:i` saved
+(sent and stored as typed; the box read it after a reload); a library
+file's "Date uploaded" read "5th Oct 2026 04:38" and a discussion
+message "Message from {username} 5 Oct 2026 04:38". Control, the
+default `Y-m-d h:i A`: both read "2026-10-05 04:38 AM".
+
+<a id="fn-f-a19"></a>
+**f-a19** — Note j. Live-probed 2026-10-05 on all three apps, two
+runs, on the default `h:i A` with French (Canada) a form and interface
+language: a discussion message read "2026-10-05 04:38 a.m." (its head
+reads "##discussion.messageFrom##",
+[Tasks & discussions](U37-tasks-and-discussions.md#a15)), a
+library file's "Date de téléversement" "2026-10-05 04:38 AM"; the tab's
+French "Time" choices "04:40", "04:40 a.m.", "4:40a.m." and "Date &
+Time (Short)" "2026-10-05 04:40 a.m.". The A8 issue report names the
+same split as outside its fix.
+
+<a id="fn-f-a20"></a>
+**f-a20** — Each app's `ContextService::afterEditContext()` calls
+`_saveFileParam($newContext, null, …)` for the thumbnail with the context
+already built from the saved values, so `getData('journalThumbnail',
+$locale)` (`pressThumbnail`, `serverThumbnail`) is already `null` and
+nothing is removed; `PKPContextService::edit()` passes the old context
+for the logo, homepage image and favicon, which is why those are
+deleted. Code read 2026-10-05. Live-probed 2026-10-05 on all three
+apps, two runs: thumbnail and "Logo" uploaded and saved
+(`/public/journals/<id>/journalThumbnail_en.png`, OMP
+`/public/presses/<id>/pressThumbnail_en.png`, OPS
+`/public/contexts/<id>/serverThumbnail_en.png`, and
+`pageHeaderLogoImage_en.png`, each answering 200 `image/png` signed
+out); "Remove" on both and "Save" (200, "Saved"): both boxes empty with
+"Restore Original" on the same page and after a reload, both settings
+cleared in the database; the logo's address then answered 404 and its
+file was gone, while the thumbnail's still answered 200 `image/png`
+(in a freshly launched browser too) and its file stayed on disk. The
+site's list of journals after the removal was not read.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's

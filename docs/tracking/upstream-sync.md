@@ -20,6 +20,11 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-10-05 (housekeeping, U04 claim check I05, block I05-6): on
+  `stable-3_5_0` OPS, a preprint's Publication › "Title & Abstract" form
+  request answers a server error when the preprint's section has no word
+  count set; seen in passing on the 3.5 fleet (`.reports/U04/cc-I05.md`
+  I05-6), not on `main`. A question for the stable-line read.
 - 2026-10-05 (housekeeping, six incidentals rows seen on `stable-3_5_0`
   only by the issues sessions' 3.5 walks, 2026-10-02/03; `main` fine or
   fixed): (1) OJS: after an automatic reminder the assignment's activity

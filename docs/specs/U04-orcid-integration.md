@@ -120,21 +120,27 @@ What the field shows in the French interface: Rule 17a.
    confirmation and cancels its token at ORCID. <sup>e</sup>
 9. **The emailed link and the verification landing.** The emailed
    authorization link leads to ORCID's sign-in. ORCID then returns the
-   browser to the journal's "ORCID Authorization" page. On success the page
-   shows the verified iD and "Your ORCID iD has been verified and successfully
-   associated with the submission.", then returns the visitor to the journal
-   front page after ten seconds. A used, stale or tampered link shows "Your
-   ORCID iD could not be verified. The link is no longer valid." An iD
-   already attached to the submission answers "An ORCID iD was already stored
-   for this submission." ⚠ [A2](#a2) a visitor who pressed Deny at ORCID gets
-   a raw placeholder where the explanation should be. Every failure closes
-   with "Please contact the journal manager with your name, ORCID iD, and
-   details of your submission." ⚠ [A8](#a8) that line says "journal manager"
-   verbatim on presses and preprint servers too. <sup>f</sup>
+   browser to the journal's "ORCID Authorization" page, which answers one
+   of these: <sup>f</sup>
+   - On success: the verified iD and "Your ORCID iD has been verified and
+     successfully associated with the submission."; after ten seconds the
+     page returns the visitor to the journal front page. <sup>o</sup>
+   - An iD already attached to the submission: "An ORCID iD was already
+     stored for this submission." <sup>o</sup>
+   - A used, stale or tampered link: "Your ORCID iD could not be verified.
+     The link is no longer valid." <sup>f</sup>
+   - A visitor who pressed Deny at ORCID: ⚠ [A2](#a2) a raw placeholder
+     where the explanation should be. <sup>f</sup>
+
+   Every failure closes with "Please contact the journal manager with your
+   name, ORCID iD, and details of your submission." ⚠ [A8](#a8) that line
+   says "journal manager" verbatim on presses and preprint servers too. <sup>f</sup>
 10. **The What-is-ORCID page.** Every journal exposes a public "What is
     ORCID?" page, linked from the ORCID emails and also reachable by URL. It
     explains the iD and how the journal uses it. Its "How and why" section
-    differs between public-API and member-API journals. <sup>f</sup>
+    differs between public-API and member-API journals. ⚠ [A15](#a15) the
+    browser tab of this page and of the "ORCID Authorization" page (Rule 9)
+    reads only "| {journal name}", with no page name before it. <sup>f</sup>
 11. **Member API = deposits.** With a Member (or Member Sandbox) API
     configured, publishing an article adds it as a "work" to the ORCID record
     of every contributor holding a verified iD with a live deposit
@@ -143,8 +149,10 @@ What the field shows in the French interface: Rule 17a.
     trigger, and nothing is deposited before it. A contributor verified under
     the public API holds no deposit permission. For them the deposit pauses
     and the journal emails a request to re-authorize with the wider
-    permission (Rule 14); completing that link finishes the deposit. Works
-    deposited once are updated in place on later publishes.
+    permission (Rule 14). ⚠ [A14](#a14) that email's link, back from
+    ORCID, ends on a blank page because the app fails, so the deposit
+    never resumes. Works deposited once are updated in place on later
+    publishes.
     [OMP1](#omp1) presses request and verify iDs identically but deposit
     nothing. <sup>j</sup>
 12. **Review deposits {OJS}.** On a journal with the member API, a completed
@@ -393,8 +401,8 @@ the footnote. <sup>s</sup>
      Authorization" page answers "Your ORCID iD could not be verified. The
      link is no longer valid." and "Please contact the journal manager with
      your name, ORCID iD, and details of your submission." ⚠ [A8](#a8). A
-     stale or truncated emailed link gets an explanation, never an error
-     page.
+     stale or truncated verification link gets this explanation, never an
+     error page.
    - **Control**: `/orcid/about`, typed the same way while signed out,
      rendered its page, so the "no longer valid" answer is `/orcid/verify`'s
      own, an explanation and never an error page.
@@ -503,6 +511,7 @@ Left out of the scenarios above, by reason:
   - the guard for A12 (issue report `docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md`): in French (Canada), the site's ORCID switch and every state of the contributor's ORCID iD field show no untranslated text key (A11's switch too).
   - the guard for A5's refusal (issue report `docs/issues/U04-A5-assistant-orcid-controls-refused.md`): an Assistant whose assignment has the "Permissions" box presses "Request verification" (the email arrives) and "Delete" (the iD is gone), and one without the box is offered no "Edit".
   - the profile's "Delete" window titled "Confirm", with "OK" and "Cancel" (Rule 6c; scenario 3's "Delete" bullet).
+  - a contributor verified under the public API receiving "Requesting updated ORCID record access" from the journal's principal contact, with the personal authorization link and the What-is-ORCID link, when their article is published after the journal switched to the member API (Rules 11, 14; journals and preprint servers, a press deposits nothing, OMP1).
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -525,6 +534,8 @@ Left out of the scenarios above, by reason:
   - A11 (the French interface: both ORCID tabs named after the old plugin, the site switch in raw codes; Rule 17)
   - A12 (the French interface: the contributor's ORCID iD field in raw codes; Rule 17a)
   - A13 (no "Delete" for the owner's unauthenticated iD on the Identity tab; Actors row 4, Rule 6c; scenario 3 marks it)
+  - A14 (the re-authorization email's link failing with a server error; Rule 11)
+  - A15 (the public ORCID pages' browser tab showing no page name; Rule 10)
 - **No seed**:
   - the Site Administrator enabling ORCID site-wide (Actors row 2, Rule 2): Site Settings → ORCID is one setting shared by every test running at once, so it stays off
   - the journal tab locked read-only under the site-wide configuration (Rule 3): the same site-wide setting
@@ -536,7 +547,6 @@ Left out of the scenarios above, by reason:
   - the success landing returning to the front page after ten seconds (Rule 9): the same sign-in
   - the landing after an authorization adding "The submission has been added to your ORCID record." or promising it on publication (Side effects): the same sign-in
   - publishing depositing works to contributors with a live permission (Rule 11): deposits need ORCID's own service
-  - a public-API contributor's deposit pausing with the "Requesting updated ORCID record access" email (Rules 11, 14): the same deposit
   - works updated in place on later publishes (Rule 11): the same deposit
   - presses depositing nothing, OMP1 (Rule 11): the same deposit
   - publishing depositing the article's completed reviews (Rule 12): the same deposit
@@ -568,6 +578,8 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A8](#a8) | A press's or preprint server's ORCID verification failure page says to contact "the journal manager" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A14](#a14) | The "Requesting updated ORCID record access" link fails with a server error, so a contributor verified under the public API can never grant the deposit permission | 🐞 | user-visible · crash: server | — |
+| [A15](#a15) | The public ORCID pages' browser tab reads only "\| {journal name}", with no page name | 🐞 | minor | — |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
@@ -740,6 +752,32 @@ Lean: yes. The iD is unverified data on their own account, and the
 contributor field already allows the same removal.
 Basis: probe, 2026-10-01. <sup>[f-a13](#fn-a13)</sup>
 
+<a id="a14"></a>
+**A14 — The re-authorization link fails with a server error, so a contributor verified under the public API can never grant the deposit permission** · 🐞 · user-visible · crash: server.
+A contributor who verified their iD while the journal used the public
+API, and whose article is published after the journal switched to the
+member API, receives "Requesting updated ORCID record access" (Rule 11).
+Its link leads to ORCID's sign-in, and ORCID sends the browser back to
+the journal, where the "ORCID Authorization" page should answer. Instead
+the app fails: the browser shows a blank page with no heading, no text and no
+message, whether the contributor pressed "Authorize" or "Deny" at ORCID.
+Nothing is stored for the contributor, so the deposit never resumes.
+The verification request's link (Rule 9), answered either way at
+ORCID, lands on the "ORCID Authorization" page. A press sends no such
+email, since it deposits nothing ([OMP1](#omp1)).
+Basis: probe, 2026-10-05. <sup>[f-a14](#fn-a14)</sup>
+
+<a id="a15"></a>
+**A15 — The public ORCID pages' browser tab shows no page name** · 🐞 · minor.
+A journal's public pages such as About and Login name themselves in the
+browser tab before the journal's name ("About the Journal | {journal name}",
+"Login | {journal name}"). The "What is ORCID?" page and the "ORCID
+Authorization" page show only "| {journal name}", signed in or out,
+though their heading and the "Home / What is ORCID?" trail carry the
+name. A visitor with several tabs open, or a bookmark saved from the
+page, cannot tell which page it is (Rules 9, 10).
+Basis: probe, 2026-10-05. <sup>[f-a15](#fn-a15)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -748,9 +786,13 @@ A press collects and verifies contributor iDs exactly like a journal, with
 the same settings, the same emails and the same landing pages. Publishing a
 monograph, however, adds nothing to anyone's ORCID record, member API or
 not. The deposit machinery declares monograph deposits unsupported for now.
+Under the member API the press's What-is-ORCID page (Rule 10) still
+tells contributors "In addition, publication metadata will automatically
+be pushed to your ORCID record, enabling us to help you keep your record
+up-to-date with trusted information."
 Rationale: an acknowledged not-yet-built capability, not decay. The code
 marks it as pending future work.
-Basis: code. <sup>[f-omp1](#fn-omp1)</sup>
+Basis: code; the page's text probe, 2026-10-05. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -940,15 +982,36 @@ record."; unpublished → `submissionNotPublished`). Template
 sentence quotes this key's locale text — the branch itself needs live ORCID
 and was not rendered), `orcid.invalidClient`,
 `orcid.authFailure`, missing `orcid.authDenied` (finding A2); tail
-`orcid.failure.contact`. `updateScope` re-runs verify for work/review
-re-authorizations (`OrcidDepositType`). Deny handling:
+`orcid.failure.contact`. `updateScope` serves the re-authorization
+links (`OrcidDepositType` work or review) and, for a work, finds no
+contributor: the emailed link carries no `state`, which
+`getAuthorToVerify()` filters on, and the handler then passes the null
+identity to `VerifyIdentityWithOrcid` before the code is read (finding
+A14). Deny handling:
 `OrcidHandler::handleUserDeniedAccess()` stores `orcidAccessDenied`, clears
 token fields. Config kill-switch: `[general] sandbox` makes
 verify/authorizeOrcid/updateScope return blank (not set on the test
 installs). Live-probed 2026-08-07: about and verify render by URL inside
 the journal chrome with the stated headings and failure text (OJS; URL
 control on OMP and OPS); a member-API journal switches the about page's
-"How and why" section.
+"How and why" section. Live-probed 2026-10-05 (Actors row 8; Rules 9–10;
+scenario 6; OJS, OMP and OPS on `main`, two runs, signed out and as Site
+Administrator, Journal Manager and Author): both pages answered 200 with
+"What is ORCID?" and "ORCID Authorization" inside the context's header
+and footer; `orcid/verify` typed bare, and the verification email's link
+(`…/orcid/verify?token=…&state=…&author_id=…`, reached through
+`sandbox.orcid.org/oauth/authorize`) returned with a code ORCID did not
+issue, both read "Your ORCID iD could not be verified. The link is no
+longer valid." and the `orcid.failure.contact` line, the same words on
+OMP and OPS; `orcid/updateScope` typed bare answered the same page (200).
+"How and why" under Public Sandbox read "…confident that you are
+correctly identified…" with no deposit sentence; under Member Sandbox
+"…confident you are correctly identified…" plus "In addition, publication
+metadata will automatically be pushed to your ORCID record…" and a link
+"Six ways to make your ORCID iD work for you!". The page's links: the
+breadcrumb "Home" (the context's front page) and two info.orcid.org
+articles; the "Requesting updated ORCID record access" email links the
+page too.
 
 <a id="fn-g"></a>
 **g** — {OJS} Row action: `useReviewerManagerConfig.js` pushes
@@ -1012,7 +1075,8 @@ POST/PUT `…/work[/put-code]` with the app's work payload
 (`APP\orcid\OrcidWork` over `PKPOrcidWork`; OJS adds issue data), storing
 `orcidWorkPutCode` for updates, deleting expired/revoked tokens; a
 public-scope token instead dispatches `SendUpdateScopeMail` (JOB-020) →
-`updateScope` landing resumes the deposit. App split: OJS
+the `updateScope` landing, which fails before it can resume the deposit
+(finding A14). App split: OJS
 `canDepositSubmission()` true (+ issue); OPS true (no reviews —
 `depositReviewsForSubmission()` overridden empty); OMP false and
 `getOrcidWork()` null, with `FIXME: OMP cannot deposit submissions
@@ -1095,6 +1159,19 @@ the three apps, translates `orcid.displayName` (both tab names) as
 nor any of the nine `orcid.field.*` messages `FieldOrcid.vue` asks for
 (the ninth, `.authorEmailModal.message.noAuthor`, is the added
 contributor's sentence of Rule 8, not driven in French).
+
+<a id="fn-o"></a>
+**o** — Not observable on the test installs: these two landings need
+ORCID's own sign-in to complete, and outbound HTTP fails at the test
+config's dead-port `[proxy]` (the dummy client pair is no ORCID account
+either), as Coverage "No seed" says. Read from the code
+(`frontend/pages/orcidVerify.tpl`, note f): the success branch
+`orcid.verify.success` with its 10-second JS redirect
+(`orcid.verify.success.redirect`), and `orcid.verify.duplicateOrcid`,
+set by `getAuthorToVerify()` when the link's `author_id` names a
+contributor already verified. The links themselves were read on
+2026-10-05: they point at ORCID's authorize address with the landing as
+the return address.
 
 <a id="fn-s"></a>
 **s** — Scenario seeding: scratch journals/submissions via the scenario
@@ -1317,13 +1394,64 @@ templates are identical in their lib/pkp, with no app override, and each
 app's scenario 3 test already expects no `#deleteOrcidButton` on the
 second user's unauthenticated tab.
 
+<a id="fn-a14"></a>
+**f-a14** — Live-probed 2026-10-05 on `main` (OJS and OPS, two runs each)
+and `stable-3_5_0` (OJS and OPS, two runs each), signed out: a scratch
+context on Public Sandbox (dummy `APP-TESTCLIENTID` pair) with a
+submission whose contributor seed carries `orcid` and `orcidIsVerified:
+true` (token scope `/authenticate`); the ORCID tab switched to "Member
+Sandbox" on screen and saved; the article published on screen
+("Schedule For Publication" › "Publish"; OPS "Post"); the queue drained
+(`DepositOrcidSubmission`, then `SendUpdateScopeMail`). The contributor
+received "Requesting updated ORCID record access" from the principal
+contact ("Site Admin" on the scratch context), with ORCID's authorize
+address twice (scope `/activities/update`) and the What-is-ORCID link;
+ORCID's service is not needed for this half. Its `redirect_uri`,
+`…/orcid/updateScope?token=…&itemId=…&itemType=work&userId=…&userIdType=author`
+(no `state`), opened with `error=access_denied&error_description=…`
+(Deny) or with `code=…` (Authorize), answered 500 with an empty page
+every time, the server log reading "Uncaught TypeError:
+PKP\orcid\actions\VerifyIdentityWithOrcid::__construct(): Argument #1
+($identity) must be of type PKP\identity\Identity, null given, called in
+…/lib/pkp/pages/orcid/OrcidHandler.php"; afterwards the contributor's
+scope was still `/authenticate`, no `orcidAccessDenied` was stored and
+the email token remained. OMP (no deposits, so no email): the same
+address typed answered the same 500 on `main` and 3.5. Controls: on the
+same contexts the verification request's link (`…/orcid/verify?…&state=…`)
+returned the same two ways answered the "ORCID Authorization" page (200),
+and `updateScope` typed bare answered the "no longer valid" page (200).
+Mechanism: `SendUpdateScopeMail::handle()` builds the link without
+`state`; `OrcidHandler::updateScope()` → `getIdentityToVerify()` →
+`getAuthorToVerify()` filters the publication's authors by `state`, finds
+none, prepares the failure (`handleNoAuthorWithToken()`) and goes on,
+since `itemType` is set, to `new VerifyIdentityWithOrcid(null, …)`. The
+handler and the job are the same on `stable-3_5_0`. A reviewer's
+re-authorization (OJS `DepositOrcidReview` dispatches the same email
+with `itemType=review`; `getReviewerToVerify()` looks the user up by
+`userId` and token, without `state`) was not driven.
+
+<a id="fn-a15"></a>
+**f-a15** — Live-probed 2026-10-05 (OJS, OMP, OPS on `main`, two runs,
+signed out and as Site Administrator, Journal Manager and Author; on
+`stable-3_5_0` signed out, the same): the `<title>` of `…/orcid/about`,
+`…/orcid/verify` and `…/orcid/updateScope` read "| {context name}",
+while the same context's "About the Journal" ("About the Press", "About
+the Server") and "Login" pages read "About the Journal | {context name}"
+and "Login | {context name}". Cause: `orcidAbout.tpl` and
+`orcidVerify.tpl` include `frontend/components/header.tpl` without a
+`pageTitle` (contrast `userLogin.tpl`, `pageTitle="user.login"`).
+
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:
 `canDepositSubmission()` returns false, `getOrcidWork()` returns null;
 base `PKPSendSubmissionToOrcid::execute()` early-returns on the flag with
 `FIXME … once functionality added to OMP`. Everything identity-side is the
 shared lib/pkp path (empty-chain evidence: OMP adds no other ORCID
-overrides).
+overrides). The page text is the shared lib/pkp locale
+`orcid.about.howAndWhyMemberAPI`; live-probed 2026-10-05 (OMP, two runs,
+the ORCID tab switched to "Member Sandbox" on screen): `orcid/about` read
+the deposit sentence quoted in the entry, absent under Public Sandbox.
+The deposit absence itself was not re-driven (no publish on OMP).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note k: the trigger decisions do not exist in OPS's decision
