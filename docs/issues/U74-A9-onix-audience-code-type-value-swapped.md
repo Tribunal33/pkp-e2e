@@ -66,8 +66,9 @@ Preconditions:
   "Save".
 
 The steps read the ONIX data inside the Native XML export, because on a
-fresh `main` install the ONIX 3.0 tool's own export fails for every book
-([U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U74-A1-onix-export-fails-every-book.md)).
+fresh `main` install the ONIX 3.0 tool's own export failed for every book
+until pkp/omp#2372 (2026-10-05;
+[U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired).
 Both exports build the ONIX data with the same PHP filter.
 
 1. Open submission 4, "How Canadians Communicate: Contexts of Canadian

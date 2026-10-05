@@ -117,9 +117,9 @@ Reach:
   - With a tax-inclusive "Price Type", no `Tax` is written, so nothing
     shows.
 - The ONIX 3.0 tool's own export, read in the code only. It builds the
-  same product and so carries the same GST. On a fresh `main` install
-  that tool fails for every book anyway
-  ([U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U74-A1-onix-export-fails-every-book.md)).
+  same product and so carries the same GST. Its export works on a fresh
+  `main` install since pkp/omp#2372 (2026-10-05;
+  [U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired).
 - Other fallbacks, read in the code only. The same method falls back to
   "CAD" for an empty stored currency (line 205). That list has no empty
   choice and "Price" is required, so a saved market always has a

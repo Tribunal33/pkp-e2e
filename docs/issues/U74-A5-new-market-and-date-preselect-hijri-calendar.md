@@ -129,9 +129,9 @@ stored code at its word:
 - The ONIX product (`MonographONIX30XmlFilter`, lines 651 and 820)
   writes the stored code as `dateformat` and `DateFormat`, reproduced in
   the Native XML export. The ONIX 3.0 tool builds the same product
-  (read in the code only); on a fresh `main` install that tool fails for
-  every book anyway
-  ([U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U74-A1-onix-export-fails-every-book.md)).
+  (read in the code only); its export works on a fresh `main` install
+  since pkp/omp#2372 (2026-10-05;
+  [U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired).
 - An existing entry's "Edit" and a refused save show the stored or
   posted code, not the default, so only new entries take it (read in
   the code and checked on screen).

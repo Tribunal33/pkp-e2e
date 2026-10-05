@@ -1105,7 +1105,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | On an install with no representative yet, the first one added is not listed until the page is reloaded | 🐞 | minor · crash: server | — |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
 | [A10](#a10) | A representative's ID, and an agent's phone and email, reach no file | ❓ | minor | — |
-| [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/omp#2372's head |
+| [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book | ✅ | retired | PR review (claude), 2026-10-05 — fixed by pkp/omp#2372, merged 2026-10-05 |
 
 ### All apps
 
@@ -1379,7 +1379,7 @@ Basis: probe, 2026-10-03. <sup>f-a20</sup>
 ### Retired
 
 <a id="a1"></a>
-**A1 — On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book** · ✅ · retired. Fixed by pkp/omp#2372 (the filter group's input type), verified 2026-10-05 at the PR's head before its merge. <sup>f-a1</sup>
+**A1 — On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book** · ✅ · retired. Fixed by pkp/omp#2372 (the filter group's input type), merged 2026-10-05. <sup>f-a1</sup>
 
 ---
 
@@ -2332,7 +2332,7 @@ install upgraded to `main` exports too: its migration rewrites the
 stored type. Retired 2026-10-05: pkp/omp#2372 declares the filter
 group's input as `class::APP\submission\Submission[]` (note j); at its
 head `f3808dce1`, before its merge, the export completes (note td20).
-Issue report: [pkp-e2e#695](https://github.com/jardakotesovec/pkp-e2e/issues/695) ([docs/issues/U74-A1-onix-export-fails-every-book.md](../issues/U74-A1-onix-export-fails-every-book.md)).
+Issue report: [pkp-e2e#695](https://github.com/jardakotesovec/pkp-e2e/issues/695), closed 2026-10-05 when pkp/omp#2372 merged.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: the menu offers the page with no role test, the form

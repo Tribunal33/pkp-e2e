@@ -172,8 +172,8 @@ Reach:
 
 - The ONIX 3.0 tool's own export builds the same product with the same
   `Tax`. That was read in the code, not walked, because on a fresh
-  install the tool fails for every book anyway
-  ([U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U74-A1-onix-export-fails-every-book.md)).
+  install the tool failed for every book until pkp/omp#2372
+  (2026-10-05; [U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired).
 - "Taxation Rate" offers six codes. Only "Zero-rated (Z)" exports; the
   walk failed with "Standard rate (S)". "Higher rate (H)", "Tax paid at
   source (Italy) (P)", "Lower rate (R)" and "Super-low rate (T)" take

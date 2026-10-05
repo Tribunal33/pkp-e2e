@@ -120,11 +120,9 @@ later, in [5e0d3c7](https://github.com/pkp/omp/commit/5e0d3c7ff97d3a777956ec3368
 Reach:
 
 - Both exports build the product with this filter: the ONIX 3.0 tool
-  (read in the code) and the Native XML Plugin (walked). On a press
-  installed fresh from `main` the ONIX 3.0 tool fails for every book
-  anyway
-  ([U74-A1-onix-export-fails-every-book.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U74-A1-onix-export-fails-every-book.md));
-  an upgraded install exports, with this gap.
+  (read in the code) and the Native XML Plugin (walked). The ONIX 3.0
+  tool exports on a fresh `main` install too since pkp/omp#2372
+  (2026-10-05; [U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired), with this gap.
 - A digital format is not reached: its tab offers no "Returnable
   Indicator" and its product states none.
 - Two other fallbacks of `initData()` disagree the same way, read in

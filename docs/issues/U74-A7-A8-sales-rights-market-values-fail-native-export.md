@@ -280,8 +280,8 @@ Reach:
   a "YYYYMMDD" publication date (code). The widened check below could
   serve it too; it is left out of this fix.
 - The ONIX 3.0 tool builds the same product with the same filter
-  (code). On today's code that tool fails for every book anyway
-  ([U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U74-A1-onix-export-fails-every-book.md)).
+  (code). Its export works on a fresh `main` install since
+  pkp/omp#2372 (2026-10-05; [U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired).
 - On the tab, "12abc" as a page count fails the export too, and a size
   of 0 or -3 fails with "[facet 'minExclusive'] The value '0' must be
   greater than '0'". A page count of 0 is left out of the product and
