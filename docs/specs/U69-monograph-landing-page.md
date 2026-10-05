@@ -2016,7 +2016,7 @@ Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283
 
 <a id="fn-f-a27"></a>
 **f-a27** — Note c: the same `canPreview()` role shortcut as U13 A16, with no stage check on `main` since pkp/pkp-lib#12245 (`768b0a3991`, Alec Smecher, 2026-02-18); the fix, the release check (3.5, 3.4 and 3.3 do not have it) and the evidence are there. Live-probed 2026-09-30, OMP `main`, seeded data: unassigned `mfritz` (Copyeditor) and `cturner` (Proofreader) opened books 3, 6 and 18, before copyediting. Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
-Issue report (with U13 A16): [docs/issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md](../issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md).
+Issue report (with U13 A16): [pkp-e2e#921](https://github.com/jardakotesovec/pkp-e2e/issues/921) ([docs/issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md](../issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md)).
 
 ## Reference — entry points & surfaces
 

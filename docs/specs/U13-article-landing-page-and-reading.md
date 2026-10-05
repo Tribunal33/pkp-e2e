@@ -3202,7 +3202,7 @@ before copyediting. OPS: only preprints 1 and 4, in production, were
 walked; earlier stages by the code. The Subscription Manager: by the
 code. Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
-Issue report: [docs/issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md](../issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md).
+Issue report: [pkp-e2e#921](https://github.com/jardakotesovec/pkp-e2e/issues/921) ([docs/issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md](../issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `CitationStyleLanguagePlugin::getTemplateData()` passes
