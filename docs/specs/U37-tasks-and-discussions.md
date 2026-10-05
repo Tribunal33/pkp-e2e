@@ -539,8 +539,7 @@ one-line description under its heading (Rule 6). <sup>m</sup>
     tasks come from: <sup>aa</sup>
     - a message sent from the Participants panel's "Assign" or "Notify"
       ([→ predefined messages](U35-stage-participants.md#predefined-messages));
-      the panel lists it as created by the person it was sent to
-      ([→ Stage participants' A5](U35-stage-participants.md#a5));
+      the panel lists it as created by its sender;
     - the submission wizard's comments box (*[Submission
       wizard](U21-submission-wizard.md)*): on submit, a discussion titled
       "Comments for the Editor" ("Cover Note to Editor" on a press,
@@ -706,8 +705,8 @@ one-line description under its heading (Rule 6). <sup>m</sup>
     for Production" and "Galleys Complete";
   - on a press: the same under "Submission Stage", "External Review
     Stage", "Copyediting Stage" and "Production Stage", the Production
-    Stage also holding "Index Requested" and "Index Completed"; nothing
-    under "Internal Review Stage";
+    Stage also holding "Index Requested" and "Index Completed"; "Internal
+    Review Stage" holding "Discussion (Review)" alone;
   - on a preprint server: Production Stage "Discussion (Production)" and
     "Assign Editor".
   - The "Discussion (…)" templates' text is "Please enter your message.";
@@ -728,7 +727,8 @@ one-line description under its heading (Rule 6). <sup>m</sup>
   who adds an item on the stage sees the template. Limited, the "Add"
   window lists it only to people holding one of the ticked roles and to
   manager-level people (Rule 10); the Participants panel's predefined
-  messages follow the same limit. The roles offered are listed in Fields'
+  messages follow the same limit, which decides who is offered the
+  template, never who may receive it. The roles offered are listed in Fields'
   template-window table. <sup>i</sup>
 - **"Enter task information" and "Due Date"** (per template). Default
   off: the template makes a discussion. On, it makes a task: choosing it
@@ -1155,8 +1155,8 @@ and the tooling recipe are in the footnote. <sup>s</sup>
      These templates automatically fill in the task name, due date,
      description, and roles, giving you a head start."; the groups
      "Submission Stage", "Review Stage", "Copyediting Stage" and
-     "Production Stage" (on a press "Internal Review Stage", reading "No
-     Items", and "External Review Stage" in place of "Review Stage"; on a
+     "Production Stage" (on a press "Internal Review Stage", holding
+     "Discussion (Review)", and "External Review Stage" in place of "Review Stage"; on a
      preprint server "Production Stage" alone), each with "Add template";
      "Production Stage" lists "Discussion (Production)" and "Assign Editor"
      among its templates, under the columns "Task and discussion template
@@ -2059,7 +2059,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **ah** — `notifyParticipants()` on `WORKFLOW_STAGE_ID_EDITING` or `_PRODUCTION` calls `updateNotification()` for `NOTIFICATION_TYPE_ASSIGN_COPYEDITOR`, `AWAITING_COPYEDITS`, `ASSIGN_PRODUCTIONUSER`, `AWAITING_REPRESENTATIONS` (`PKPEditingProductionStatusNotificationManager`), whatever the participants; the same move through a Participants message was live 2026-09-22 (*Stage participants*, Side effects). The workflow page reads the notice when it loads, so the box changes on the next opening. Live-probed 2026-09-23 (Side effects; all three apps): on Copyediting (OJS, OMP) "Assign a copyeditor…" still shown after the save on the same page and "Awaiting Copyedits." on the next opening, also for a discussion between the Section Editor and the Author only; a journal's Production moving to "Awaiting Galleys." the same way, with the Layout Editor or without; a press's Production box "Awaiting approval." throughout; no box on a preprint server.
 
 <a id="fn-ai"></a>
-**ai** — `registry/taskTemplates.xml` per app (OJS and OMP 10 templates across stages 1, 3, 4, 5; OMP adds `INDEX_REQUEST`, `INDEX_COMPLETE`; OPS `DISCUSSION_NOTIFICATION_PRODUCTION`, `EDITOR_ASSIGN_PRODUCTION`), installed by `Repository::installTaskTemplates()` as type discussion, `include` false, unrestricted, no interval; names `mailable.discussionSubmission.name` "Discussion (Submission)" etc., `mailable.editorAssignedManual.name` "Assign Editor", `mailable.copyeditRequest.name` "Request Copyedit", `mailable.layoutRequest.name` "Ready for Production", `mailable.layoutComplete.name` "Galleys Complete" (OJS/OMP app locale), OMP `mailable.indexRequest.name` "Index Requested", `mailable.indexComplete.name` "Index Completed"; texts `emails.discussion.body` "Please enter your message." and the `emails.*.body` letters opening "Dear {$recipientName},". No template on OMP's Internal Review (`WORKFLOW_STAGE_ID_INTERNAL_REVIEW` appears in no entry). The same set in the Participants panel: *Stage participants* Rule 5a, live 2026-09-22. Every context carries them (seed-facts, 2026-09-11). These templates were email templates until pkp/pkp-lib#12593 (`I12593_EmailToTaskTemplates`), which is why the decision composer's "Find Template" does not reach them. Live-probed 2026-09-23 (Settings bullet 1; all three apps): the installed templates per stage and app as listed, each a discussion, unrestricted, auto-add off; the "Discussion (…)" texts "Please enter your message."; every other letter opening "Dear" and the recipient-name tag, except a preprint server's empty "Assign Editor"; the Participants panel's "Notify" listing a stage's discussion templates and none of its task templates, even for the manager.
+**ai** — `registry/taskTemplates.xml` per app (OJS and OMP 10 templates across stages 1, 3, 4, 5; OMP adds `INDEX_REQUEST`, `INDEX_COMPLETE`; OPS `DISCUSSION_NOTIFICATION_PRODUCTION`, `EDITOR_ASSIGN_PRODUCTION`), installed by `Repository::installTaskTemplates()` as type discussion, `include` false, unrestricted, no interval; names `mailable.discussionSubmission.name` "Discussion (Submission)" etc., `mailable.editorAssignedManual.name` "Assign Editor", `mailable.copyeditRequest.name` "Request Copyedit", `mailable.layoutRequest.name` "Ready for Production", `mailable.layoutComplete.name` "Galleys Complete" (OJS/OMP app locale), OMP `mailable.indexRequest.name` "Index Requested", `mailable.indexComplete.name` "Index Completed"; texts `emails.discussion.body` "Please enter your message." and the `emails.*.body` letters opening "Dear {$recipientName},". No template on OMP's Internal Review (`WORKFLOW_STAGE_ID_INTERNAL_REVIEW` appears in no entry); at pkp/omp#2487's head `e50a757bdc`, before its merge (read and live-probed 2026-10-02, *Stage participants* note f), `DISCUSSION_NOTIFICATION_INTERNAL_REVIEW` "Discussion (Review)" with `emails.discussion.body` sits there, and a press upgraded from 3.5 gets it with the same text since `ecd65eebb0` (2026-10-03; *Stage participants* OMP2, retired). The same set in the Participants panel: *Stage participants* Rule 5a, live 2026-09-22. Every context carries them (seed-facts, 2026-09-11). These templates were email templates until pkp/pkp-lib#12593 (`I12593_EmailToTaskTemplates`), which is why the decision composer's "Find Template" does not reach them. Live-probed 2026-09-23 (Settings bullet 1; all three apps): the installed templates per stage and app as listed, each a discussion, unrestricted, auto-add off; the "Discussion (…)" texts "Please enter your message."; every other letter opening "Dear" and the recipient-name tag, except a preprint server's empty "Assign Editor"; the Participants panel's "Notify" listing a stage's discussion templates and none of its task templates, even for the manager.
 
 <a id="fn-aj"></a>
 **aj** — Live-probed 2026-09-23 (Cross-feature interactions; all three apps unless named): a Copyeditor assigned on Copyediting seeing the panel there and "You don't currently have access to that stage of the workflow." at the Submission stage's address (OJS, OMP); the Author's first-stage panel, and on a preprint server the publication menu's "Production Tasks & Discussions"; the review form's panel on steps 3 and 4, a completed reviewer landing on "4. Completion" (OJS, OMP); "Assign", "Notify", the comments box and the removals of Rule 23; the decision composer's "Find Template" listing email templates for "Decline" and nothing, or only email templates, for "Discussion", "Request Copyedit" and "Assign Editor"; Profile › Notifications listing "Discussion added." and "Discussion activity.", the footer and the unsubscribe page, no "Discussion activity." row after many replies; "Submission Files" still "No Items" after message files were attached (OJS, OMP); the Activity Log's one line per email; a French panel mixing French words and raw keys.

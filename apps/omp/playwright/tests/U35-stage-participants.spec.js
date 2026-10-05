@@ -12,8 +12,6 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - A5 🐞: S1 and S6 read the message's discussion row and its window,
- *   never whose name the row lists under "Created by".
  * - A6 🐞: S1 reads the Series editor's discussion task row and asserts
  *   nothing about a task of "Assign Editor"'s own.
  * - A14 🐞: S1 and S5 read the Activity Log's event sentences, never the
@@ -21,8 +19,8 @@
  * - A15 🐞: S1 reads the "Assign Editor" email's discussion footer and its
  *   unsubscribe link, never how many footers the email carries.
  * - OMP1 🐞: S1 reads the Internal Review entry not yet initiated (no
- *   panel), never its "Assign" window's empty predefined-message list.
- * - A1 🐞, A3 🐞, A4 🐞, A7 🐞, A9 🐞, A10 🐞, A11 🐞, A12 🐞, A16 🐞, A2 ❓,
+ *   panel), never its "Assign" window's predefined-message list.
+ * - A1 🐞, A3 🐞, A4 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A16 🐞, OMP2 🐞, A2 ❓,
  *   A8 ❓, A13 ❓: no scenario reaches them here.
  * - OJS1, OPS1, OPS2, OPS3: other apps' territory.
  *

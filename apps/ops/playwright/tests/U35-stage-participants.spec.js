@@ -18,17 +18,15 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - A5 🐞: S6 reads the message's discussion row and its window, never
- *   whose name the row lists under "Created by".
  * - A14 🐞: S5 and S9 read the Activity Log's event sentences, never the
  *   "User" column of the assignment and removal lines.
  * - OPS2 🐞: S9 reads "Assign Editor" in the predefined-message list and
  *   never chooses it.
  * - OPS3 🐞: scenario 8 has no run here (see above).
- * - A1 🐞, A3 🐞, A4 🐞, A6 🐞, A7 🐞, A9 🐞, A10 🐞, A11 🐞, A12 🐞, A15 🐞,
+ * - A1 🐞, A3 🐞, A4 🐞, A6 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A15 🐞,
  *   A16 🐞, A2 ❓, A8 ❓, A13 ❓: no scenario reaches them here.
  * - OPS1 ✅: S9 reads the manager role offered in "Assign" as the spec's
- *   text. OJS1, OMP1: other apps' territory.
+ *   text. OJS1, OMP1, OMP2: other apps' territory.
  * - T-ops-1 (returned to the fold, not yet in the register): a participant
  *   notice may land in the Production entry's own "Notification" box
  *   instead of the top-right toast; S6 and S9 accept either place

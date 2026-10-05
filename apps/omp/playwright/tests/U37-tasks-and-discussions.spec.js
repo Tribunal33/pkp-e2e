@@ -1034,8 +1034,8 @@ test.describe('tasks and discussions', () => {
         const PRODUCTION_STAGE = 'Production Stage';
 
         // The screen: the table, its line, the press's stage groups with
-        // "Add template" ("Internal Review Stage" reading "No Items"), and the
-        // installed Production templates, boxes unticked.
+        // "Add template" ("Internal Review Stage" holding "Discussion
+        // (Review)"), and the installed Production templates, boxes unticked.
         const mgPage = await pageFor(asUser, p.mg.username);
         const templates = new TaskTemplatesTab(mgPage, tag);
         await templates.goto();
@@ -1047,7 +1047,7 @@ test.describe('tasks and discussions', () => {
         for (const stage of stages) {
             await expect(templates.addTemplateButton(stage)).toBeVisible();
         }
-        expect(await templates.templateNames('Internal Review Stage')).toEqual([`[${TEXT.noItems}]`]);
+        expect(await templates.templateNames('Internal Review Stage')).toEqual(['Discussion (Review)']);
         expect(await templates.templateNames('External Review Stage')).toEqual(expect.arrayContaining(['Discussion (Review)', 'Assign Editor']));
         expect(await templates.templateNames(PRODUCTION_STAGE)).toEqual(expect.arrayContaining(['Discussion (Production)', 'Assign Editor']));
         for (const name of ['Discussion (Production)', 'Assign Editor']) {

@@ -10,8 +10,6 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - A5 🐞: S1 and S6 read the message's discussion row and its window,
- *   never whose name the row lists under "Created by".
  * - A6 🐞: S1 reads the Section Editor's discussion task row and asserts
  *   nothing about a task of "Assign Editor"'s own.
  * - A14 🐞: S1 and S5 read the Activity Log's event sentences, never the
@@ -20,9 +18,9 @@
  *   unsubscribe link, never how many footers the email carries.
  * - OJS1 🐞: S8 reads the automatic email's request to send the submission
  *   for review or decline it, never the button name it quotes.
- * - A1 🐞, A3 🐞, A4 🐞, A7 🐞, A9 🐞, A10 🐞, A11 🐞, A12 🐞, A16 🐞, A2 ❓,
+ * - A1 🐞, A3 🐞, A4 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A16 🐞, A2 ❓,
  *   A8 ❓, A13 ❓: no scenario reaches them here.
- * - OMP1, OPS1, OPS2, OPS3: other apps' territory.
+ * - OMP1, OMP2, OPS1, OPS2, OPS3: other apps' territory.
  *
  * S3 acts as the shared `manager.maya`, so it reads each "OK" by the
  * save's answer (`save-participant`), never by the notice, which any
