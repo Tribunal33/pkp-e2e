@@ -13,9 +13,6 @@
  * Deliberately NOT covered, by register ID (a 🐞 is never asserted as the
  * contract, a ❓ is parked, not a gap; the spec's Coverage section is the
  * record of everything else left out):
- * - A9 🐞: S3 and S9 open the PDF view page and read its bar and frame,
- *   never what the viewer shows nor what either "Download" does; no link
- *   that downloads is followed.
  * - A23 🐞: the view page's "PDFJS is not defined" script error, not
  *   asserted.
  * - A10 🐞: S3 reads the HTML view page's return arrow by its place and
@@ -63,6 +60,7 @@
  * chart, the press's chrome left out beside the book page's.
  */
 const {test, expect} = require('../support/fixtures.js');
+const {captureDownload} = require('../../../../shared/playwright/pages/SubmissionFilesPages.js');
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
 const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 const {expectNotFoundPage, todayCandidates, longDate} = require('../../../../shared/playwright/pages/ArticleLandingPages.js');
@@ -445,8 +443,7 @@ test.describe('Monograph landing page (U69)', () => {
 
         // "PDF": the PDF view page, without the press's chrome; its bar,
         // left to right: the arrow with no visible text, the file name as
-        // plain text, "Download" (Rule 13; Fields, the PDF view page). What
-        // the viewer shows and what "Download" does is A9, not read.
+        // plain text, "Download" (Rule 13; Fields, the PDF view page).
         await book.fileLink(pdf.id, pdf.submissionFileId).click();
         await expect(page).toHaveURL(endsWith(fileUrl(tag, shorelines.submissionId, pdf.id, pdf.submissionFileId)));
         await viewer.expectLoaded();
@@ -459,6 +456,19 @@ test.describe('Monograph landing page (U69)', () => {
         await expect(viewer.fileName().locator('a')).toHaveCount(0);
         await expect(viewer.downloadLink()).toHaveAccessibleName(spoken(TEXT.downloadName));
         await expect(viewer.pdfFrameElement()).toBeVisible();
+
+        // The viewer shows article.pdf, its toolbar reading "of 1"; the bar's
+        // "Download" saves article.pdf and the page stays as it is; the
+        // viewer's own download button saves article.pdf too (Rule 13;
+        // Fields, the PDF view page).
+        await expect(viewer.pdfPageCount()).toHaveText('of 1', {timeout: 30_000});
+        await expect(viewer.pdfErrorBar()).toBeHidden();
+        const viewUrl = page.url();
+        const {download: barSaved} = await captureDownload(page, () => viewer.downloadLink().click());
+        expect(barSaved.suggestedFilename()).toBe('article.pdf');
+        expect(page.url()).toBe(viewUrl);
+        const {download: viewerSaved} = await captureDownload(page, () => viewer.pdfViewerDownload().click());
+        expect(viewerSaved.suggestedFilename()).toBe('article.pdf');
 
         // The return arrow: the book's page (Fields, the PDF view page).
         await viewer.returnArrow().click();

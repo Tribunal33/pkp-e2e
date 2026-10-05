@@ -18,9 +18,9 @@ categories, references, how to cite it), its **table of contents** (the
 chapters of the shown version), and the files readers get: each
 publication format the press made available, as a link to a remote copy
 or to its files. A free file opens in a view page of its own (a PDF in a
-PDF viewer, an HTML file in an HTML page) or is meant to download
-[A9](#a9); a file for sale leads a signed-in reader to the press's
-payment page. A chapter whose "Chapter Page" box is
+PDF viewer, an HTML file in an HTML page) or downloads under its file
+name; a file for sale leads a signed-in reader to the press's payment
+page. A chapter whose "Chapter Page" box is
 ticked gets a **chapter page** of its own, reached from the table of
 contents. This spec describes the book's page, the chapter pages, their
 addresses and versions, the two view pages, the purchase of a file up to
@@ -77,7 +77,7 @@ Proofreader and Editorial Board Member. <sup>c</sup>
 |--------|--------------------|
 | **Read a published book's page and its chapter pages** (the current version, or an older one at its own address) | • anyone, signed in or not (Rules 1–4) <sup>c</sup> |
 | **Open an unpublished version's page** (the preview) | • the Press manager, Press editor, Production editor, Series editor and the assistant roles, assigned or not, and the Site Administrator, under the preview notice, and its chapter pages too, though a new version's fail on a "DOI Versioning" "No" press [A19](#a19) (Rule 5); the workflow's "Preview" opens it for those it is offered to ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), its Rule 6)<br>• the book's Author, by typing the page's address<br>• anyone else gets the "404 Not Found" page (Rule 3): a visitor, a Reader, a Reviewer, and an Author, Volume editor, Chapter Author or Translator of the press who is not on the book<br>• a submission its author never finished answers "404 Not Found" to everyone, the Press manager, the Site Administrator and its own Author included <sup>c</sup> <sup>td5</sup> |
-| **Open a free file** ("Open Access" terms) | • anyone who may read the page (Rule 13); today only an HTML file opens [A9](#a9)<br>• on a preview, no one: every file's link opens the "404 Not Found" page (Rule 5c) [A24](#a24)<br>• on a press with "Users must be registered and log in to view open access content." ticked (Settings bullet 6): signed-in users only; a visitor who presses a free file's link gets the Login page first, and once signed in there the file's view page <sup>j</sup> <sup>td13</sup> |
+| **Open a free file** ("Open Access" terms) | • anyone who may read the page (Rule 13)<br>• on a preview, no one: every file's link opens the "404 Not Found" page (Rule 5c) [A24](#a24)<br>• on a press with "Users must be registered and log in to view open access content." ticked (Settings bullet 6): signed-in users only; a visitor who presses a free file's link gets the Login page first, and once signed in there the file's view page <sup>j</sup> <sup>td13</sup> |
 | **Buy a file for sale** ("Direct Sales" terms) | • a signed-in user, whatever the role (the press's own staff and the Site Administrator too), on a press whose payment method is set up and that has a currency (Rule 14)<br>• a visitor gets the Login page first, and once signed in there not the payment page but the page an ordinary sign-in opens for their role, and a newcomer who registers from that Login page "Registration complete" (Rule 14) [A18](#a18) <sup>k</sup> <sup>td14</sup> |
 | **Receive the "Manual Payment Notification"** | • the press's principal contact, when a buyer presses "Send notification of payment" (Side effects) <sup>q</sup> |
 | **Show the citation in another format; download a citation** | • anyone who may read the page, while the "Citation Style Language" plugin is on (Rule 19)<br>• on a preview, the Press manager, Press editor, Production editor, the Site Administrator and a Series editor or assistant role assigned to the book; for the book's Author, and for a Series editor or assistant role not assigned to it, another format changes nothing and a download opens the "404 Not Found" page ⚠ [A21](#a21) <sup>m</sup> <sup>td18</sup> |
@@ -175,17 +175,15 @@ top holds, left to right: <sup>f</sup> <sup>td22</sup>
 |------------------|-----------|-------|
 | **Return arrow** | — | An arrow with no visible text; a screen reader reads "Return to view details about {title}", the title of the file's version (an older version's own title on its file). Opens the book's current page. <sup>f</sup> |
 | **File name** | — | The file's name, plain text. <sup>f</sup> |
-| **"Download"** | — | Meant to download the PDF; a screen reader reads "Download Download PDF". Pressed today, the page stays as it is and the browser's download of a file named "{file number}.html" fails; the address opened on its own shows an empty error page [A9](#a9). <sup>f</sup> |
+| **"Download"** | — | Downloads the PDF under its file name, the page staying as it is; a screen reader reads "Download Download PDF". <sup>f</sup> |
 
-Under the bar the PDF viewer fills the page, with its own page, zoom,
-search, print and download controls. On an older version's file an
-outdated-version notice sits between the bar and the viewer (Rule 13a).
-The viewer never shows the PDF today: under its toolbar (page count "of
-0") a red bar reads "Unexpected server response." with "More
-Information" and "Close", and the viewer's own "Download" saves nothing
-[A9](#a9). Each time the page opens, its own script also fails, which
-the reader does not see: the browser's console reads "PDFJS is not
-defined" ⚠ [A23](#a23). <sup>f</sup>
+Under the bar the PDF viewer fills the page and shows the PDF, with its
+own page, zoom, search, print and download controls; the viewer's own
+download button also saves the file under its name. On an older
+version's file an outdated-version notice sits between the bar and the
+viewer (Rule 13a). Each time the page opens, its own script also fails,
+which the reader does not see: the browser's console reads "PDFJS is
+not defined" ⚠ [A23](#a23). <sup>f</sup>
 
 <a id="html-view"></a>
 **The HTML view page.** Opened from a free HTML file while "HTML
@@ -200,9 +198,10 @@ on an older version's file the outdated-version notice (Rule 13a) sits
 between them. <sup>f</sup>
 <sup>td21</sup>
 A link in the file written "omp://press", the plugin's shorthand for
-the press, opens the press's home page. A file holding a link to
-another book, written "omp://monograph/{number}", never shows: under
-the bar the page stays empty ⚠ [A25](#a25). <sup>td26</sup>
+the press, opens the press's home page. In a file that also holds a
+link to another book, written "omp://monograph/{number}", the file
+shows but none of its "omp://" links works: each keeps its written
+address, and pressing it does nothing ⚠ [A25](#a25). <sup>td26</sup>
 
 **The payment page.** A buyer's "Purchase" link leads to the payment page
 of the press's method. With "Manual Fee Payment" it is headed "Manual
@@ -401,25 +400,23 @@ link, not a button. A journal's page puts the instructions under
 
 13. **Opening a free file.** What a free file's link does depends on the
     file: <sup>j</sup> <sup>td13</sup>
-    - a PDF opens the PDF view page (Fields) while "PDF.js PDF Viewer"
-      is on (Settings bullet 1);
+    - a PDF, including one of a supplementary component such as
+      "Appendix", opens the PDF view page (Fields) while "PDF.js PDF
+      Viewer" is on (Settings bullet 1);
     - an HTML file opens the HTML view page (Fields) while "HTML
-      Monograph File" is on (Settings bullet 2); off, the link shows a
-      blank page ([→ Media files, OMP1](U47-media-files.md#omp1));
-    - any other file, or a PDF with the viewer off, is meant to download
-      under its file name.
+      Monograph File" is on (Settings bullet 2); off, its link downloads
+      the file under its file name;
+    - any other file (an EPUB, a Markdown file), or a PDF with the
+      viewer off, downloads under its file name, the browser staying on
+      the book's page.
     - 13a. **An older version's file.** Its view page carries the notice
       "This is an outdated version published on {date}. Read the most
       recent version.", the date written year-month-day ("2026-09-28"),
       whose link opens the book's current page.
-    - 13b. **What opens today.** No book file can be read or saved: the
-      PDF view page opens, but its viewer never shows the PDF and its
-      "Download" saves nothing, and any link that downloads (an EPUB, a
-      supplementary file, a PDF with the viewer off) opens a blank error
-      page. Only an HTML file shows ⚠ [A9](#a9), and not every one: a
-      file that links another book stays empty (Fields, the HTML view
-      page) [A25](#a25), and on a preview no file opens (Rule 5c)
-      [A24](#a24).
+    - 13b. **Where a file fails.** On a preview no file opens (Rule 5c)
+      [A24](#a24). An HTML file that links another book shows, but its
+      "omp://" links do nothing (Fields, the HTML view page)
+      [A25](#a25).
     - 13c. **Sign-in for free files.** On a press with "Users must be
       registered and log in to view open access content." ticked
       (Settings bullet 6), a visitor who presses a free file's link gets
@@ -593,10 +590,11 @@ link, not a button. A journal's page puts the instructions under
 
 - **Usage statistics.** Each opening of a book's page counts as a view of
   the book, and each opening of a chapter page as a view of the chapter
-  ([Usage statistics](U64-usage-statistics.md), its Rule 1). A file
-  opened or downloaded is meant to count as a file view; today none is
-  counted ([→ Usage statistics, OMP3](U64-usage-statistics.md#omp3)).
-  <sup>q</sup>
+  ([Usage statistics](U64-usage-statistics.md), its Rule 1). Each
+  opening of a file's view page, each "Download" there and each
+  download from a file's link counts as a view of the file, a
+  supplementary component's file (such as "Appendix") as a
+  "Supplementary File" (the same Rule 1). <sup>q</sup>
 - **"Manual Payment Notification"** (Rule 14). "Send notification of
   payment" emails the press's principal contact from the buyer's name and
   address, subject "Manual Payment Notification": "A manual payment needs
@@ -616,10 +614,9 @@ link, not a button. A journal's page puts the instructions under
 
 1. **"PDF.js PDF Viewer"** (Settings › Website › "Plugins" › "Installed
    Plugins", "Generic Plugins"). On for a new press: a free PDF opens the PDF view page (Rule
-   13). Off: its link is meant to download the file; today it shows a
-   blank error page [A9](#a9). <sup>r</sup>
+   13). Off: its link downloads the file under its file name. <sup>r</sup>
 2. **"HTML Monograph File"** (same list). On for a new press: a free HTML
-   file opens the HTML view page. Off: its link shows a blank page (Rule
+   file opens the HTML view page. Off: its link downloads the file (Rule
    13; [Media files](U47-media-files.md), its Settings bullet 6). <sup>r</sup>
 3. **"Citation Style Language"** (same list). Off for a new press: no
    "How to Cite" block. On: the block of Rule 19 on the book's page and
@@ -741,12 +738,13 @@ link, not a button. A journal's page puts the instructions under
   decides whether an older version's chapter page opens (Settings bullet
   15).
 - [Media files](U47-media-files.md): the images an HTML file shows, and
-  its OMP1 (the HTML plugin off).
+  what an HTML file's link does with "HTML Monograph File" off (its
+  Settings bullet 6).
 - [Search engine metadata & analytics](U20-search-engine-metadata-and-analytics.md):
   the tags of the book's page, the chapter pages and the file pages (its
-  Rules 16, 17; its OMP6 is the failing file address, [A9](#a9) here).
+  Rules 16, 17).
 - [Usage statistics](U64-usage-statistics.md): the views these pages
-  count, and its OMP3 (files never counted).
+  count, the file views included.
 - [Publish, schedule & versions](U49-publish-schedule-and-versions.md):
   publishing, scheduling, "Create New Version", the version names, and its
   A6 (the date line rewritten by a new version).
@@ -896,9 +894,10 @@ tooling recipe are in the footnote. <sup>s</sup>
      reader reads "Return to view details about Shorelines", article.pdf
      as plain text, and "Download", which a screen reader reads
      "Download Download PDF". The PDF viewer fills the page under the
-     bar; what it shows, and what either "Download" does, is
-     [A9](#a9), neither a pass nor a fail here (Rule 13; Fields, the
-     PDF view page).
+     bar and shows article.pdf, its toolbar reading "of 1". Press
+     "Download": the browser saves article.pdf and the page stays as it
+     is; the viewer's own download button saves article.pdf too
+     (Rule 13; Fields, the PDF view page).
    - **The return arrow**: press it: the book's page opens (Fields, the
      PDF view page).
    - **"HTML"**: press "HTML": the HTML view page opens without the
@@ -1160,11 +1159,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U69-A16-earlier-url-path-server-error.md`): a book whose
     later version was published under a new URL Path, opened by the
     earlier one, forwarding to the book's current address
-  - the guard for A9 (Rule 13; issue report
-    `docs/issues/U69-A9-book-file-open-download-fails.md`): a reader
-    opening a book's free PDF in the viewer and saving it with
-    "Download", and the same link downloading the file with
-    "PDF.js PDF Viewer" off
+  - a free PDF's link downloading the file under its name with "PDF.js
+    PDF Viewer" off, and a free file that is neither PDF nor HTML (an
+    EPUB, a Markdown file) downloading under its name (Rule 13; Settings
+    bullet 1)
   - the guard for A23 (issue report
     `docs/issues/U69-A9-pdf-view-page-script-error.md`): the PDF view
     page opening with no script error
@@ -1220,9 +1218,6 @@ Left out of the scenarios above, by reason:
   - A7 (a priced file's link shows its price twice; Rule 11a; scenario
     4 passes it)
   - A8 (a format with several files; Rule 11b)
-  - A9 (a free file's download, the PDF view page's viewer and
-    "Download", and "PDF.js PDF Viewer" off; Rule 13b; Settings bullet
-    1; scenario 3 passes it)
   - A10 (the HTML view page's return arrow; Fields, the HTML view page;
     scenario 3 passes it)
   - A11 (a manual purchase never completed; Rule 14)
@@ -1247,7 +1242,8 @@ Left out of the scenarios above, by reason:
   - A23 (the PDF view page's script error; Fields, the PDF view page;
     scenario 3 passes it)
   - A24 (a preview's file links; Rule 5c)
-  - A25 (an HTML file linking another book; Fields, the HTML view page)
+  - A25 (an HTML file linking another book, its "omp://" links doing
+    nothing; Fields, the HTML view page)
   - A26 (a review made public, missing from the published book's page;
     Rule 22; Settings bullet 16)
 - **No seed**:
@@ -1271,8 +1267,10 @@ Left out of the scenarios above, by reason:
   - the "Citation Style Language" "Settings" window's choices (Settings
     bullet 4; *[Article landing page &
     reading](U13-article-landing-page-and-reading.md)*, scenario 6)
-  - "HTML Monograph File" off (Settings bullet 2; *[Media
-    files](U47-media-files.md)*, its OMP1)
+  - "HTML Monograph File" off, an HTML file's link downloading the file
+    (Settings bullet 2; *[Media files](U47-media-files.md)*)
+  - the file views a file's opening or download counts (Side effects;
+    *[Usage statistics](U64-usage-statistics.md)*)
   - "Users must be registered and log in to view the press site."
     ticked, or the press not enabled (Settings bullets 7, 8; *[Journal
     identity & about pages](U07-journal-identity-and-about-pages.md)*)
@@ -1295,7 +1293,6 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | In French (Canada), a press's catalog, book and chapter pages and Roles list show codes, even for editors' names | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1311,8 +1308,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | Previewing an unpublished book, its chapter pages carry no notice that they are a preview | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A visitor who signs in or registers to buy a book file lands on their home page, not the payment page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A25](#a25) | A book's HTML file that links another book shows an empty page under the HTML view page's bar | 🐞 | user-visible · crash: server | — |
+| [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | upstream sync (claude), 2026-10-05 — re-verified |
+| [A25](#a25) | A book's HTML file that links another book shows with every "omp://" link dead | 🐞 | user-visible | upstream sync (claude), 2026-10-05 — re-checked: the file now shows, its "omp://" links do nothing |
 | [A26](#a26) | A review made public never shows on the published book's page | 🐞 | user-visible | — |
 | [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
@@ -1320,6 +1317,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | On a preview, "How to Cite" works only for the roles assigned to the book | ❓ | minor | — |
 | [A22](#a22) | "APA" prints a series position as a number of volumes | ❓ | minor | — |
 | [A14](#a14) | A chapter new in a later version is cited as older than it is | ❓ | minor | — |
+| [A9](#a9) | Retired: on a press, a reader who opened a book's PDF got an empty viewer, and no download saved the file; every free file now opens or downloads (Rule 13) | ✅ | retired | upstream sync (claude), 2026-10-05 — fixed by omp `8c807c919` (pkp/pkp-lib#13444) |
 
 ### All apps
 
@@ -1418,26 +1416,6 @@ text and as a link, and the link of a file for sale reads only its name:
 no price and no "Purchase". The reader cannot tell it from a free file
 until the link leads to the Login or payment page.
 Basis: probe, 2026-10-01. <sup>f-a8</sup>
-
-<a id="a9"></a>
-**A9 — On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file** · 🐞 · critical · crash: both.
-The server fails whenever a reader asks for a published book's PDF or
-other downloadable file. A reader who opens a book's "PDF" link gets
-the PDF view page with a red bar, "Unexpected server response.", where
-the document should be. The page's "Download" and the viewer's own
-download button save nothing.
-A file that is served as a download (a PDF with "PDF.js PDF Viewer"
-off, an EPUB, a supplementary file) opens a blank error page instead.
-A file the reader has bought fails the same way as a free one. Readers
-have no way round. No file view reaches the usage statistics, and a
-search engine that follows the file addresses in the book page's tags
-gets the same error.
-Only an HTML file still opens, and only while "HTML Monograph File" is
-on. Visitors and signed-in users are affected alike.
-The view page's script error "PDFJS is not defined" is a separate
-fault, [A23](#a23).
-Worked until the download began reporting the version to the usage statistics, a change read from the code's history: a regression.
-Since: 2026-08-26 (a month), a date read from the code's history · Basis: probe, 2026-10-01. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — On a press, the return arrow of a book's HTML view page is announced as the code "##monograph.return##"** · 🐞 · low.
@@ -1654,17 +1632,15 @@ Basis: probe, 2026-09-28. <sup>f-a22</sup>
 **A23 — A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens** · 🐞 · low · crash: script.
 Each time a reader opens a book's PDF on a press, the PDF view page's
 own script fails: the browser's console reads "PDFJS is not defined".
-The reader sees nothing of it. In OMP 3.5 the viewer under the bar
-shows the PDF and "Download" saves it; in the development version the
-test install runs, the viewer stays empty for another reason,
-[A9](#a9).
+The reader sees nothing of it: the viewer under the bar shows the PDF
+and "Download" saves it all the same.
 The page also loads and runs the PDF viewer's two scripts a second
 time outside the viewer, where nothing uses them. Nothing is lost; the
 error is noise for anyone watching a press's pages for script
 failures.
 It happens on every PDF view page while "PDF.js PDF Viewer" is on, as
 it is on a new press.
-Basis: probe, 2026-10-01. <sup>f-a23</sup>
+Basis: probe, 2026-10-05. <sup>f-a23</sup>
 
 <a id="a24"></a>
 **A24 — On a preview, every file link of the book opens "404 Not Found"** · 🐞 · minor.
@@ -1678,17 +1654,17 @@ page that previews it.
 Basis: probe, 2026-10-05. <sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — A book's HTML file that links another book shows an empty page under the HTML view page's bar** · 🐞 · user-visible · crash: server.
+**A25 — A book's HTML file that links another book shows with every "omp://" link dead** · 🐞 · user-visible.
 A book's HTML file holding a link written "omp://monograph/{number}",
 the "HTML Monograph File" plugin's shorthand for another book of the
-press, never shows. Its link on the book's page opens the HTML view
-page, whose bar reads as usual, but under the bar the page stays empty:
-the server fails while preparing the file. A visitor, a Reader and the
-Press manager get the same. The file's text is lost to every reader,
-not only the link. A file whose link is written "omp://press" shows,
-with that link opening the press's home page.
-Worked until a 2024 change to how the app builds its addresses, read
-from the code's history: a regression.
+press, opens in the HTML view page and its text shows, but its links
+written "omp://…", that one and any "omp://press" link in the same
+file, keep their written address: pressing one does nothing. A
+visitor, a Reader and the Press manager get the same. The reader cannot
+follow the file's links to the other book or to the press. A file
+whose only such link is written "omp://press" shows, with that link
+opening the press's home page.
+Worked until a 2024 change to how the app builds its addresses, read from the code's history: a regression.
 Since: 2024-06-26 (two years), a date read from the code's history · Basis: probe, 2026-10-05. <sup>f-a25</sup>
 
 <a id="a26"></a>
@@ -1705,6 +1681,11 @@ Review › "Setup" gets the same.
 A journal's article page has the same fault
 ([→ Article landing page & reading, OJS12](U13-article-landing-page-and-reading.md#ojs12)).
 Basis: probe, 2026-10-05. <sup>f-a26</sup>
+
+### Retired
+
+<a id="a9"></a>
+**A9 — On a press, a reader who opens a book's PDF gets an empty viewer, and no download saves the file** · ✅ · retired. Fixed by omp `8c807c919` (pkp/pkp-lib#13444), 2026-10-05: every free file of a book now opens in its view page or downloads under its file name, for visitors and signed-in users alike, and counts as a file view (Rule 13; Side effects). <sup>f-a9</sup>
 
 ---
 
@@ -1736,10 +1717,10 @@ Basis: probe, 2026-10-05. <sup>f-a26</sup>
 **e** — `chapter.tpl`: notice as note l; title `$chapter->getLocalizedFullTitle()`; `authors.tpl` with `$chapterAuthors` (the edited-volume swap needs `!$isChapterRequest`); DOI from `$chapterDoiObject` (the chapter's, or a sibling version's per `CatalogBookHandler`); abstract only when set; hook `Templates::Catalog::Chapter::Main`; bios of the chapter authors; side: cover wrapped in a link to `catalog/book/{id}` (current) or `…/{bestId}/version/{pid}`; the chapter's files through `publicationFormats.tpl` with `$isChapterRequest` (remote formats skipped); `.item.monograph` with `chapter.volume` "Volume" and `chapter.pages` "Pages" (OMP `locale/en/submission.po`); date and versions (note l); series, categories, copyright; license from the chapter's `licenseUrl` or the publication's, the CC badge from `getCCLicenseBadge()` of the chapter's URL when set; hook `Templates::Catalog::Chapter::Details`. Live-probed 2026-09-28 (Fields, the chapter page): tab "Tides: Low and high | {press name}"; the parts in the tables' order; an Edited Volume's chapter listed its own authors; "Pages 1-20"; the chapter's own "License URL" as a Creative Commons badge, an unknown one as a link reading "License"; the cover and "Volume" linked `…/catalog/book/{number}` (older version `…/version/{id}`), a number even with a URL Path saved. On a book with no cover the cover link had no name for a screen reader, seen in one run; what it reads with a cover is not settled.
 
 <a id="fn-f"></a>
-**f** — OMP `plugins/generic/pdfJsViewer/templates/display.tpl`: `<title>` `catalog.viewableFile.title` "{$type} view of the file {$title}" (format name, file name); `.return` link to `catalog/book/{bestId}` with screen-reader text `catalog.viewableFile.return` "Return to view details about {$monographTitle}"; `.title` a plain `span` with the file's name (OJS's template links the title instead); `.download` to `$downloadUrl` (`catalog/download/…?inline=1`) with `common.download` and `common.downloadPdf`; an inline script calling `PDFJS.getDocument()` against pdf.js 2.6.347, whose build defines no `PDFJS` global; the viewer iframe `pdf.js/web/viewer.html?file={downloadUrl}`; the outdated notice with `filePublication`'s raw `datePublished` when `!$isLatestPublication`. `plugins/generic/htmlMonographFile/templates/display.tpl`: the same `<title>`; `.return` with screen-reader text `monograph.return`, a key no locale file of OMP, lib/pkp or the plugin defines; `.title` linking `catalog/book/{bestId}/{formatBestId}/{fileBestId}`, an address `book()` reads as the current book page; the iframe loads `$downloadUrl`, which the plugin's `downloadCallback()` answers with the file's HTML (`HtmlGalleyHelper::getHTMLContents()`, media resolved) before `CatalogBookHandler::download()` reaches its failing line. Live-probed 2026-09-28: see td22 and td21. OJS and OPS galley PDFs render in their viewer and download as "article.pdf" and "preprint.pdf".
+**f** — OMP `plugins/generic/pdfJsViewer/templates/display.tpl`: `<title>` `catalog.viewableFile.title` "{$type} view of the file {$title}" (format name, file name); `.return` link to `catalog/book/{bestId}` with screen-reader text `catalog.viewableFile.return` "Return to view details about {$monographTitle}"; `.title` a plain `span` with the file's name (OJS's template links the title instead); `.download` to `$downloadUrl` (`catalog/download/…?inline=1`) with `common.download` and `common.downloadPdf`; an inline script calling `PDFJS.getDocument()` against pdf.js 2.6.347, whose build defines no `PDFJS` global; the viewer iframe `pdf.js/web/viewer.html?file={downloadUrl}`; the outdated notice with `filePublication`'s raw `datePublished` when `!$isLatestPublication`. `plugins/generic/htmlMonographFile/templates/display.tpl`: the same `<title>`; `.return` with screen-reader text `monograph.return`, a key no locale file of OMP, lib/pkp or the plugin defines; `.title` linking `catalog/book/{bestId}/{formatBestId}/{fileBestId}`, an address `book()` reads as the current book page; the iframe loads `$downloadUrl`, which the plugin's `downloadCallback()` answers with the file's HTML (`HtmlGalleyHelper::getHTMLContents()`, media resolved) and returns, firing its own `UsageEvent`; a file whose `omp://monograph/` link makes `handleOmpUrl()` throw falls through to `CatalogBookHandler::download()`, which serves the file as stored (A25). Live-probed 2026-09-28 and 2026-10-05: see td22 and td21. OJS and OPS galley PDFs render in their viewer and download as "article.pdf" and "preprint.pdf".
 
 <a id="fn-td22"></a>
-**td22** — Live-probed 2026-09-28 (Fields, the PDF view page; A9): tab "PDF view of the file article.pdf" ("Free view of the file article.pdf" for a format named "Free"); the bar, left to right, the return arrow ("Return to view details about {title}", the older version's title on an older file, opening the current page), the file name as plain text, "Download" named "Download Download PDF". Pressing "Download" left the page as it was, and the browser's download of "192.html" was cancelled; the address alone answered 500 with an empty page. The viewer's toolbar read "of 0" pages under a red bar "Unexpected server response." ("More Information" adds "Unexpected server response (500) while retrieving PDF …"); its own "Download" started "document.pdf" and failed.
+**td22** — Live-probed 2026-09-28, before omp `8c807c919` (Fields, the PDF view page; A9): tab "PDF view of the file article.pdf" ("Free view of the file article.pdf" for a format named "Free"); the bar, left to right, the return arrow ("Return to view details about {title}", the older version's title on an older file, opening the current page), the file name as plain text, "Download" named "Download Download PDF". Pressing "Download" left the page as it was, and the browser's download of "192.html" was cancelled; the address alone answered 500 with an empty page. The viewer's toolbar read "of 0" pages under a red bar "Unexpected server response." ("More Information" adds "Unexpected server response (500) while retrieving PDF …"); its own "Download" started "document.pdf" and failed. Re-driven 2026-10-05 on OMP `main` at omp `8c807c919` (two runs; a visitor, a Reader and the Press manager; also on an older version's file, a supplementary PDF and a book with a URL Path): the bar's "Download" carries the `download` attribute and `…/catalog/download/{book}/{format}/{file}?inline=1`, and pressing it saved article.pdf (243 bytes) with the page unchanged; the frame `pdf.js/web/viewer.html?file=…` fetched the file 200 `application/pdf`, `inline;filename=article.pdf`; the toolbar read "1" "of 1", one page rendered, no red bar; the viewer's own "Download" saved article.pdf. "Zoom In" moved "Automatic Zoom" to 140%, "Find in Document" opened its find bar, and "Print", "Open File", "Switch to Presentation Mode" and "Tools" were enabled; "Previous Page" and "Next Page" were disabled on the one-page file. "PDFJS is not defined" was logged on every PDF view page (A23).
 
 <a id="fn-td21"></a>
 **td21** — Live-probed 2026-09-28 (Fields, the HTML view page; A10): tab "HTML view of the file article.html"; the bar holds only the return arrow (named "##monograph.return##", opening the book's page) and the title link (the file's version title, opening the current page), no "Download"; the HTML showed with its image. On an older version's file the notice read "This is an outdated version published on 2026-09-28. Read the most recent version.". The fixture's `article.css` answered 404.
@@ -1793,10 +1774,10 @@ Basis: probe, 2026-10-05. <sup>f-a26</sup>
 **td12** — Live-probed 2026-09-28 (Rule 12): one block, for "Paperback", with the visible heading "Paperback" and the screen-reader heading "Details about the available publication format: Paperback", the labels "ISBN-13 (15)" and "Publication date (01)", "Physical Dimensions" "130mm x 200mm" ("150mm x 230mm x 20mm" with a thickness); "PDF" (approved, nothing else) no block; a single available format "Details about this monograph". "Paperback" set "Awaiting Approval": its block gone, its and a remote format's links still listed.
 
 <a id="fn-j"></a>
-**j** — `CatalogBookHandler::view()` calls `download(…, true)`. `download()` answers not found for a format that is missing, not available or remote, a publication not published or not the format's, a file not of the format or with a null `directSalesPrice`; a dependent file of an HTML file and a publication's media file are served early. For a free file (`directSalesPrice === '0'`) or one the user has paid (`OMPCompletedPaymentDAO::hasPaidPurchaseFile()`): a signed-out user on a press with `restrictMonographAccess` is sent to Login (`Validation::redirectLogin()`); `view` offers the file to `CatalogBookHandler::view` (pdfJsViewer takes `application/pdf`, htmlMonographFile `text/html`); then `CatalogBookHandler::download` (htmlMonographFile serves `text/html`; pdfJsViewer only sets `inline`); otherwise the usage event is built with `publication: $this->publication`, a typed property `download()` never sets, so every such download throws "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization" before `app()->get('file')->download()`. `restrictMonographAccess` is OMP `UserAccessForm`'s `manager.setup.restrictMonographAccess` "Users must be registered and log in to view open access content." (OMP `locale/en/manager.po`). Seed-facts (2026-09-28, U73 claim check K3, K4; U54 claim check K1, K4): every `catalog/download/…` answers 500, the view page logs "PDFJS is not defined"; U47 claim check K2 (2026-09-24): with "HTML Monograph File" off an HTML file answered 500 with a blank page. Live-probed 2026-09-28: see td13.
+**j** — `CatalogBookHandler::view()` calls `download(…, true)`. `download()` answers not found for a format that is missing, not available or remote, a publication not published or not the format's, a file not of the format or with a null `directSalesPrice`; a dependent file of an HTML file and a publication's media file are served early. For a free file (`directSalesPrice === '0'`) or one the user has paid (`OMPCompletedPaymentDAO::hasPaidPurchaseFile()`): a signed-out user on a press with `restrictMonographAccess` is sent to Login (`Validation::redirectLogin()`); `view` offers the file to `CatalogBookHandler::view` (pdfJsViewer takes `application/pdf`, htmlMonographFile `text/html`); then `CatalogBookHandler::download` (htmlMonographFile serves `text/html`; pdfJsViewer only sets `inline`); otherwise it fires the `UsageEvent` with `publication: $publication`, the local variable, and serves the file through `app()->get('file')->download()`, `inline` when `?inline=1`, as an attachment under its name otherwise. Before omp `8c807c919` (pkp/pkp-lib#13444, 2026-10-05) the event read the typed property `$this->publication`, which `download()` never sets, so every such download threw "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization" (A9, retired). `restrictMonographAccess` is OMP `UserAccessForm`'s `manager.setup.restrictMonographAccess` "Users must be registered and log in to view open access content." (OMP `locale/en/manager.po`). Before that fix (seed-facts, 2026-09-28, U73 claim check K3, K4; U54 claim check K1, K4): every `catalog/download/…` answered 500, the view page logged "PDFJS is not defined"; U47 claim check K2 (2026-09-24): with "HTML Monograph File" off an HTML file answered 500 with a blank page. Live-probed 2026-09-28 and 2026-10-05: see td13.
 
 <a id="fn-td13"></a>
-**td13** — Live-probed 2026-09-28 (Actors row 3; Rule 13; A9): signed out, "PDF" opened the PDF view page, "HTML" the HTML view page, an EPUB or a "notes.md" file's link a blank page (500); with "PDF.js PDF Viewer" or "HTML Monograph File" switched off by the Press manager, their links answered 500 with a blank page; the same on a chapter page's file link and for a signed-in Reader. On a press with "…view open access content." ticked, "PDF" sent a visitor to `login?source=/index.php/{press}/catalog/view/…`, and signing in there as a Reader landed on the PDF view page. An older version's file carried "This is an outdated version published on 2026-09-28. …" on both view pages, whose link opened the current page, while the book's date line read "September 28, 2026"; a changed short date format was not tried on the view pages.
+**td13** — Live-probed 2026-09-28, before omp `8c807c919` (Actors row 3; Rule 13; A9): signed out, "PDF" opened the PDF view page, "HTML" the HTML view page, an EPUB or a "notes.md" file's link a blank page (500); with "PDF.js PDF Viewer" or "HTML Monograph File" switched off by the Press manager, their links answered 500 with a blank page; the same on a chapter page's file link and for a signed-in Reader. On a press with "…view open access content." ticked, "PDF" sent a visitor to `login?source=/index.php/{press}/catalog/view/…`, and signing in there as a Reader landed on the PDF view page. An older version's file carried "This is an outdated version published on 2026-09-28. …" on both view pages, whose link opened the current page, while the book's date line read "September 28, 2026"; a changed short date format was not tried on the view pages. Re-driven 2026-10-05 on OMP `main` at omp `8c807c919` (Actors row 3; Rule 13; two runs; a visitor, a Reader and the Press manager): "PDF" and a supplementary "Appendix" PDF opened the PDF view page (tab "SuppPdf view of the file replacement.pdf" for the second); "HTML" the HTML view page; notes.md (a Book Manuscript file and an "Appendix" file) and the .epub answered 200 `attachment;filename=…` and were saved under their names (98 and 954 bytes), the browser staying on the book's page; with "PDF.js PDF Viewer" off article.pdf (243 bytes), and with "HTML Monograph File" off article.html (282 bytes), downloaded the same way. An older version's PDF, HTML and other file opened or downloaded; no `catalog/view` or `catalog/download` address answered 500. On the press with "…view open access content." ticked, a visitor's "PDF" landed on `login?source=%2Findex.php%2F{press}%2Fcatalog%2Fview%2F…`, and signing in there as the Reader landed on the PDF view page with the PDF shown.
 
 <a id="fn-k"></a>
 **k** — Fall-through of `CatalogBookHandler::download()` for a priced, unpaid file: no user → redirect to Login with `source` the file's `view` address; `OMPPaymentManager::isConfigured()` (the chosen plugin's `isConfigured()`, the manual plugin needing `manualInstructions`, PayPal `accountName`, and the context's `currency`) false → redirect to `catalog`; otherwise `createQueuedPayment(PAYMENT_TYPE_PURCHASE_FILE, …)` with `setRequestUrl()` `catalog/view/{submissionId}/{formatId}/{fileId}`, `queuePayment()` and the plugin's payment form. `paymentsEnabled` is read by no OMP code but the form's `showWhen`. Manual plugin (`plugins/paymethod/manual`): `paymentForm.tpl` ("Manual Fee Payment", "Title" `getPaymentName()` = the file's name, "Fee" `%.2f` with the currency code, `plugins.paymethod.manual.sendNotificationOfPayment`); `handle()` op `notify` sends `ManualPaymentNotify` and shows `message.tpl` with "Payment Notification", "Payment notification sent" and `common.continue` to the queued payment's request URL. `OMPPaymentManager::fulfillQueuedPayment()` writes the completed payment that `hasPaidPurchaseFile()` reads, reached from PayPal's return through `pages/payment/PaymentHandler::plugin()`; OMP has no `pages/payments`, and nothing in OMP completes a manual payment (Payments & APCs, its note b). The settings form: `PKPPaymentSettingsForm`. Live-probed 2026-09-28: see td14, td15. With "Paypal Fee Payment" and only "Account Name" saved ("Client ID" and "Secret" empty), a Reader's priced link opened a page with the tab "| {press name}", no heading and "A transaction error occurred. Please contact the press manager for details.", and the browser made no outside request; being sent on to PayPal, and a paid file opening free afterwards, need a live PayPal account a test install does not reach. The "Payments" tab on a new press showed "Enable" alone. The Press manager, a Series editor, a Copyeditor, a Reviewer, an Author, a Reader and the Site Administrator each got "Manual Fee Payment" from the priced link.
@@ -1832,13 +1813,13 @@ Basis: probe, 2026-10-05. <sup>f-a26</sup>
 **o** — OMP `locale/fr_CA`: empty `msgstr` for `submission.plainLanguageSummary`, `plugins.themes.default.displayStats.downloads`, `catalog.published`, `catalog.forthcoming`, `catalog.categories`, `catalog.manage.series.onlineIssn`, `catalog.manage.series.printIssn`, `catalog.viewableFile.title`, `catalog.viewableFile.return`, `doi.readerDisplayName`, `chapter.volume`, `chapter.pages`, `submission.chapterCreated`, `submission.withoutChapter`, `submission.editorName`, `submission.authorListSeparator`, `monograph.publicationFormatDetails`; `payment.directSales.purchase` reads "Achat ({$amount} {$currency})" with no format. Translated: `submission.synopsis` "Synopsis", `series.series` "Séries", lib/pkp's `submission.versions`, `common.keywords`, `submission.outdatedVersion`, `submission.viewingPreview`. Incidental (U10 claim check K1, 2026-09-24): "24.09.2026 (##publication.versionStage.display##)" and "##catalog.published##" on a press's book page, under a short date format other than the default. Live-probed 2026-09-28: see td20.
 
 <a id="fn-td20"></a>
-**td20** — Live-probed 2026-09-28 (Rule 21; A15): a new press offers no language choice in its header; the French pages were opened with "fr_CA" in the address. The raw codes Rule 21 lists; "2026-09-28 (##publication.versionStage.display##)##submission.chapterCreated##" and "##submission.withoutChapter##" alone; "25.00 Achat (25.00 USD)"; "Ceci est une version obsolète publiée le 2024-03-05. Consulter la version la plus récente." and "Ceci est un aperçu et n'a pas été publié. Afficher la soumission" translated; the English pages showed no raw code. The French file view page failed as in English (A9). The OJS and OPS French item pages read "2026-09-28 (##publication.versionStage.display##)" too.
+**td20** — Live-probed 2026-09-28 (Rule 21; A15): a new press offers no language choice in its header; the French pages were opened with "fr_CA" in the address. The raw codes Rule 21 lists; "2026-09-28 (##publication.versionStage.display##)##submission.chapterCreated##" and "##submission.withoutChapter##" alone; "25.00 Achat (25.00 USD)"; "Ceci est une version obsolète publiée le 2024-03-05. Consulter la version la plus récente." and "Ceci est un aperçu et n'a pas été publié. Afficher la soumission" translated; the English pages showed no raw code. The French file view page failed as in English (A9, before its fix of 2026-10-05). The OJS and OPS French item pages read "2026-09-28 (##publication.versionStage.display##)" too.
 
 <a id="fn-t"></a>
 **t** — Lib/pkp's `OpenReviewComponent` (the public-review display's data) is used by no OMP handler or template: `CatalogBookHandler::book()` prepares no review data and `monograph_full.tpl` mounts no review display (code read on checkout omp `3b0ecf794`, lib/pkp `3dc90c81a6`, 2026-10-05). Live-probed 2026-10-05 (Rule 22; Settings bullet 16; A26), OMP `main`, two runs, on a scratch press with "Default Review Mode" "Open" and "Publicly Show Reviewer Comments" off: Settings › Workflow › Review › "Setup" offered "Publicly Show Reviewer Comments" with the box "Make reviewer comments publicly visible with published content". Two books in External Review, each with one submitted Open review whose "For author and editor" comment carried a unique word. On the first, the reviewer row's "More Actions" › "Edit" offered "Publicly Show Reviewer Comments" unticked, to the Press manager and to the book's assigned Series editor; ticked and saved (`is_review_publicly_visible` true), it reopened ticked. "Read Review" › "Mark as Complete" read "Mark this review as complete? This review will be made publicly visible alongside the article. You can still modify this review after marking it as complete. You will have the opportunity to thank the reviewer in the next step."; confirmed, "The review has been marked as complete." and the row "Complete". The second book's review, left unticked, got the dialog without the "publicly visible" sentence. Both were accepted and published as a Version of Record. Each book's page, read by a visitor (twice, the second after a reload), and the first also by the press's Reader and the Press manager, held its title, "Authors", "Synopsis", "References", "Published", "Versions" and the copyright line: neither review's comment in the text or the page's source, no reviewer name ("Rhea Openreviewer"), no review heading, no request for review data, no failed request; the catalog page showed neither comment. Other end: a second press with "Publicly Show Reviewer Comments" on, its book seeded published with a submitted Open review whose box was ticked (not marked complete): no review on the book's page. No server error, page error or console error in either run.
 
 <a id="fn-q"></a>
-**q** — `CatalogBookHandler::book()` fires `UsageEvent` with `ASSOC_TYPE_SUBMISSION` for the book's page and `ASSOC_TYPE_CHAPTER` for a chapter page; the file download's event is the failing line of note j. `ManualPaymentNotify` (template key `MANUAL_PAYMENT_NOTIFICATION`, installed by the plugin's `emailTemplates.xml`) is sent from the user to the press's `contactEmail`/`contactName`, subject and body from `plugins/paymethod/manual/locale/en/emails.po` in the press's primary language. No other mail or notification is raised by these handlers. Live-probed 2026-09-28: see td25; the day's usage log gained one book line per book page opened and one chapter line per chapter page, and none for a file pressed ("PDF", "HTML", another file), where OJS and OPS log one per galley view and download.
+**q** — `CatalogBookHandler::book()` fires `UsageEvent` with `ASSOC_TYPE_SUBMISSION` for the book's page and `ASSOC_TYPE_CHAPTER` for a chapter page; the file download's event is note j's, the HTML plugin's its own (note f). `ManualPaymentNotify` (template key `MANUAL_PAYMENT_NOTIFICATION`, installed by the plugin's `emailTemplates.xml`) is sent from the user to the press's `contactEmail`/`contactName`, subject and body from `plugins/paymethod/manual/locale/en/emails.po` in the press's primary language. No other mail or notification is raised by these handlers. Live-probed 2026-09-28: see td25; the day's usage log gained one book line per book page opened and one chapter line per chapter page, and none for a file pressed ("PDF", "HTML", another file), where OJS and OPS log one per galley view and download (A9, before its fix). Live-probed 2026-10-05 at omp `8c807c919` (Side effects; two runs; the run's own presses): one line of type 515 per opening of a PDF or HTML view page, per bar "Download" and per download from a file's link (`catalog/download/{book}/{format}/{file}` 7 lines for three roles' PDF views and downloads and one more view), type 531 for each "Appendix" file (notes.md, replacement.pdf, 3 each); an older version's raw-file download was logged under the current version's address.
 
 <a id="fn-td25"></a>
 **td25** — Live-probed 2026-09-28 (Side effects): from "Rae Reader" at the buyer's address to "Pat Contact", the principal contact, no copy; subject "Manual Payment Notification"; the body as quoted, with the press's name, the buyer's name and username, "article.pdf" and "The cost is 25 (USD)." (the payment page "25.00 (USD)"); a second press sent a second message. "Manage Emails" has no row for it (33 rows; "Payment" finds "No items found."). The Reader's reading, file opening, citation download and payment page moved no mailbox and showed no notice.
@@ -1960,8 +1941,8 @@ Issue report: [pkp-e2e#289](https://github.com/jardakotesovec/pkp-e2e/issues/289
 Issue report: [pkp-e2e#289](https://github.com/jardakotesovec/pkp-e2e/issues/289) ([docs/issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md](../issues/U69-A7-A8-priced-file-link-price-twice-or-missing.md)).
 
 <a id="fn-f-a9"></a>
-**f-a9** — Note j: every free-file download reaches the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF shows the pdfJsViewer page, whose inline `PDFJS` script fails (A23) and whose viewer loads the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure is recorded where it shows elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off).
-Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
+**f-a9** — Before the fix (note j): every free-file download reached the `UsageEvent` built with the never-set `$this->publication`; `view` of a PDF showed the pdfJsViewer page, whose inline `PDFJS` script fails (A23) and whose viewer loaded the failing download. The typed property dates from omp `29fa88508` (2025-03-20, pkp/pkp-lib#10671); the event's `publication: $this->publication` argument from omp `591d7a0e7` (2026-08-26, pkp/pkp-lib#12311, "pass publication to usage event"), which set it in `book()` but not in `download()`. Live-probed 2026-09-26 (U20 claim check), 2026-09-27 (U64), 2026-09-28 (U73 claim check K3, K4, three runs): `GET {press}/catalog/download/{book}/{format}/{file}`, with and without `?inline=1`, current or older version, answered 500 with the log line above; the view page logged "PDFJS is not defined" and "UnexpectedResponseException". Live-probed 2026-09-28 (td13, td22; two runs of each drive): 22 download 500s and 9 view 500s across the runs, "PDFJS is not defined" and "UnexpectedResponseException" on every PDF view page; the bar's "Download" and the viewer's both cancelled; the French view page (`{press}/fr_CA/catalog/download/…?inline=1`) the same. The same failure was recorded where it showed elsewhere: Search engine metadata & analytics' OMP6, Usage statistics' OMP3, Media files' OMP1 (HTML plugin off), each retired with this entry. Fixed upstream by omp `8c807c919` (pkp/pkp-lib#13444, 2026-10-05), whose `download()` passes the local `$publication` to the event (note j). Live-probed 2026-10-05 on OMP `main` at that commit (Rule 13; two runs; a visitor, a Reader and the Press manager): no `catalog/view` or `catalog/download` address answered 500 in any phase; the viewer read "of 1", and the bar's and the viewer's download saved article.pdf (243 bytes); notes.md, an .epub, article.pdf (viewer off) and article.html (HTML plugin off) answered `attachment` with their names; an older version's files opened or downloaded; for the priced file, a completed payment row for the Reader (as PayPal's return writes it, since no screen on a test install completes one) opened its PDF view page with the PDF shown and "Download" saved it, while the Press manager without one got the "Manual Fee Payment" page; each opening and download wrote a usage-log line (note q). PKP's default test dataset walked the same day agreed. "PDFJS is not defined" is still logged (A23).
+Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) (closed).
 
 <a id="fn-f-a10"></a>
 **f-a10** — Note f: `monograph.return` is defined in no locale file of OMP, lib/pkp or the plugin. Live-probed 2026-09-28 (td21).
@@ -2013,14 +1994,14 @@ Issue report: [pkp-e2e#298](https://github.com/jardakotesovec/pkp-e2e/issues/298
 **f-a22** — Note m: `seriesPosition` is passed as the CSL `volume`, which the APA style prints as "(Vols. {n})". Live-probed 2026-09-28 (td18).
 
 <a id="fn-f-a23"></a>
-**f-a23** — Note f: OMP's own `plugins/generic/pdfJsViewer/templates/display.tpl` loads `pdf.js/build/pdf.js` and `pdf.js/web/viewer.js` into the outer page and runs an inline script calling `PDFJS.workerSrc` and `PDFJS.getDocument()` for a `pdfCanvas` element no version of the template has; pdf.js has defined no `PDFJS` global since its version 2 (omp 02393cf8bf, 2019-05-13, updated the library and left the script), so the script throws at its first line. The viewer is the iframe `pdf.js/web/viewer.html?file=…`, which loads the library for itself. OJS's and OPS's viewer plugin (the shared pkp/pdfJsViewer) has only the iframe script (code). Walked 2026-10-01 on OMP `main` and `stable-3_5_0`, the default dataset's book 5, "Epilogue"'s "PDF", signed out: the console logged "Uncaught ReferenceError: PDFJS is not defined" each time; on 3.5 the viewer showed the PDF ("of 1") and "Download" saved `epilogue.pdf`; on `main` the file request also answered 500 (A9). Seen before: 2026-09-26 to 2026-09-28 on every PDF view page (f-a9); on 3.4 and 3.3 the same two lines (code). Upstream `pkp/pkp-lib#6425` (closed) notes the error in two comments and left it.
+**f-a23** — Note f: OMP's own `plugins/generic/pdfJsViewer/templates/display.tpl` loads `pdf.js/build/pdf.js` and `pdf.js/web/viewer.js` into the outer page and runs an inline script calling `PDFJS.workerSrc` and `PDFJS.getDocument()` for a `pdfCanvas` element no version of the template has; pdf.js has defined no `PDFJS` global since its version 2 (omp 02393cf8bf, 2019-05-13, updated the library and left the script), so the script throws at its first line. The viewer is the iframe `pdf.js/web/viewer.html?file=…`, which loads the library for itself. OJS's and OPS's viewer plugin (the shared pkp/pdfJsViewer) has only the iframe script (code). Walked 2026-10-01 on OMP `main` and `stable-3_5_0`, the default dataset's book 5, "Epilogue"'s "PDF", signed out: the console logged "Uncaught ReferenceError: PDFJS is not defined" each time; on 3.5 the viewer showed the PDF ("of 1") and "Download" saved `epilogue.pdf`; on `main` the file request also answered 500 (A9, since fixed). Seen before: 2026-09-26 to 2026-09-28 on every PDF view page (f-a9); on 3.4 and 3.3 the same two lines (code). Upstream `pkp/pkp-lib#6425` (closed) notes the error in two comments and left it. Live-probed 2026-10-05 on `main` at omp `8c807c919` (two runs; a visitor, a Reader and the Press manager; the current and an older version's file, a supplementary PDF, a bought file, a book with a URL Path, the French view page): "Uncaught ReferenceError: PDFJS is not defined" on every PDF view page opened, the viewer showing the PDF ("of 1").
 Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283) ([docs/issues/U69-A9-pdf-view-page-script-error.md](../issues/U69-A9-pdf-view-page-script-error.md)).
 
 <a id="fn-f-a24"></a>
 **f-a24** — Note j: `CatalogBookHandler::download()`, which `view()` calls, answers not found for any publication that is not published and never asks `Repo::submission()->canPreview()`, where `book()` does (note c). Refused on OMP `main` and `stable-3_5_0` (walked 2026-10-04 for the issue report pkp-e2e#920, its Cause's reach) and on 3.4 and 3.3 (code, same report). Live-probed 2026-10-05 (Rule 5c; Actors row 3; two runs): a new version of a published book, its formats "PDF" (article.pdf) and "HTML" (article.html) copied with the version, links `catalog/view/{id}/version/{pubId}/{formatId}/{fileId}`: "HTML" and "PDF" pressed by the Press manager, an unassigned Series editor, an unassigned Copyeditor, the book's Author and the Site Administrator each opened "404 Not Found"; the workflow header's "Preview" led to the same page and links. A book never published (`catalog/view/{id}/{formatId}/{fileId}`): the same for the Press manager, a Series editor, the Author and the Site Administrator. A visitor typing those addresses: "404 Not Found". Control: the published version's "HTML" and "PDF" opened their view pages. A journal's and a server's new-version preview opened the "PDF" reader page (200), whose file request then answered 404 (Article landing page & reading, its Rule 12 and A2).
 
 <a id="fn-f-a25"></a>
-**f-a25** — OMP `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::handleOmpUrl()` passes `$urlParts[1]` (a string) as the path of `PKPRequest::url()`, whose path is `?array` since lib/pkp bee9547b49 (2024-06-26, the change behind A16); `Hook::call()` logs the plugin's TypeError and carries on, and `CatalogBookHandler::download()` then fails on A9's line. OJS's `htmlArticleGalley` twin passes a list. 3.5 (code): the same call in `HtmlMonographFilePlugin.php` against the same signature and the same hook catch. Fix shape as A16's: `[$urlParts[1]]`. The A16 issue report (pkp-e2e#284) names this caller in its Cause and leaves it out of its fix. Live-probed 2026-10-05 (Fields, the HTML view page; two runs; a visitor, a Reader and the Press manager): the file holding `omp://monograph/{id}` opened the tab "HTML view of the file i05-monograph-link-r1-omp.html", whose frame `catalog/download/{id}/{format}/{file}?inline=1` answered 500 and stayed empty; the log read "TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159", then "Uncaught Error: Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization in …/CatalogBookHandler.php:533". Control: td26.
+**f-a25** — OMP `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::handleOmpUrl()` passes `$urlParts[1]` (a string) as the path of `PKPRequest::url()`, whose path is `?array` since lib/pkp bee9547b49 (2024-06-26, the change behind A16); `Hook::call()` logs the plugin's TypeError and carries on, and `CatalogBookHandler::download()` then serves the file as stored, its `omp://` links unrewritten (before omp `8c807c919` it failed on A9's line instead). OJS's `htmlArticleGalley` twin passes a list. 3.5 (code): the same call in `HtmlMonographFilePlugin.php` against the same signature and the same hook catch. Fix shape as A16's: `[$urlParts[1]]`. The A16 issue report (pkp-e2e#284) names this caller in its Cause and leaves it out of its fix. Live-probed 2026-10-05 before omp `8c807c919` (Fields, the HTML view page; two runs; a visitor, a Reader and the Press manager): the file holding `omp://monograph/{id}` opened the tab "HTML view of the file i05-monograph-link-r1-omp.html", whose frame `catalog/download/{id}/{format}/{file}?inline=1` answered 500 and stayed empty; the log read "TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159", then "Uncaught Error: Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization in …/CatalogBookHandler.php:533". Re-probed the same day at omp `8c807c919` (A25's symptom; two runs; the same three users): a file holding "See also the other book and the press." with links `omp://monograph/{id}` and `omp://press` opened its HTML view page, its frame `catalog/download/{id}/{format}/{file}?inline=1` answering 200 `text/html` with the text shown; both links kept their `omp://` addresses, and pressing either changed neither the frame's nor the page's address, opened no tab and raised no page error; the server logged the TypeError above at each opening, and no request answered an error. The file whose only link is `omp://press` still had it rewritten to the press's home page and followed there. Control: td26.
 
 <a id="fn-f-a26"></a>
 **f-a26** — Note t: OMP never prepares or mounts the display; OJS's `ArticleHandler::view()` prepares it and its template never mounts it (U13 OJS12). The OJS12 issue report ([pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218), [docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md)) found the OMP twin in the code and proposes a fix for the article page's template only, which does not reach a book's page. OMP `stable-3_5_0`: not driven; OJS 3.5 has no "Publicly Show Reviewer Comments" (that report's Affects). Live-probed 2026-10-05 (two runs): note t.

@@ -9,10 +9,10 @@ The `stable-3_5_0` branch, read for regressions only, has its own file:
 
 | Repo | Last-reviewed commit | Date | Reviewed by |
 |------|----------------------|------|-------------|
-| ojs | `b84f8e2e44` | 2026-10-02 | claude (daily maintenance session) |
-| omp | `3b0ecf794` | 2026-09-30 | claude (daily maintenance session) |
-| ops | `c8af945bb7` | 2026-09-30 | claude (daily maintenance session) |
-| pkp-lib | `66bafd91d2` (`main`; ojs at `ddd8ab243a`; omp, ops at `3dc90c81a6`) | 2026-10-02 | claude (daily maintenance session); ui-library `64d67363` (`main` and ojs; omp, ops at `280f98c5`); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25) |
+| ojs | `106f847f7f` | 2026-10-05 | claude (daily maintenance session) |
+| omp | `8c807c919` | 2026-10-05 | claude (daily maintenance session) |
+| ops | `417aa734b1` | 2026-10-05 | claude (daily maintenance session) |
+| pkp-lib | `987776cd04` (`main` and ojs; omp, ops at `3dc90c81a6`) | 2026-10-05 | claude (daily maintenance session); ui-library `64d67363` (`main` and ojs; omp, ops at `280f98c5`); ojs `plugins/generic/crossref` `46a4d469bf`, ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `dfcb4ee60b` (2026-09-30), ojs `plugins/generic/googleScholar` `4cae9952f9` (2026-09-25), ojs and ops `plugins/generic/pdfJsViewer` `1d992590f0` (2026-10-05) |
 
 ## Leads
 
@@ -20,59 +20,6 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
-- 2026-10-05 (housekeeping, U04 claim check I05, block I05-6): on
-  `stable-3_5_0` OPS, a preprint's Publication › "Title & Abstract" form
-  request answers a server error when the preprint's section has no word
-  count set; seen in passing on the 3.5 fleet (`.reports/U04/cc-I05.md`
-  I05-6), not on `main`. A question for the stable-line read.
-- 2026-10-05 (housekeeping, six incidentals rows seen on `stable-3_5_0`
-  only by the issues sessions' 3.5 walks, 2026-10-02/03; `main` fine or
-  fixed): (1) OJS: after an automatic reminder the assignment's activity
-  log reads "An automatic reminder email was sent to to Julie Janssen…"
-  (U27 A15 reporter); (2) OJS: the older review window's "Confirm" on an
-  unanswered request leaves the reviewer on "1. Request" with nothing to
-  do (pkp/pkp-lib#10544, open; U27 OMP4 report's Cause); (3) OPS: a
-  galley's "Change File", then "Cancel" after the upload, answers
-  `status:false`, the window stays open and the galley keeps the new file,
-  where `main` restores it (U36 A5 reporter; maybe the 3.5 state of
-  docs/reports/2026-09-27-pkp-lib-13288.md); (4) OPS: "Create New Galley"'s
-  header "Close" after a refused "Save" fails a page script "Cannot read
-  properties of undefined (reading 'dataChanged')", fixed on `main` by
-  ui-library 1afd40a9 (U46 OPS2 walk); (5) OJS, OMP, OPS: a Site
-  Administrator whose manager role was ended (assistant left) opens a
-  workflow with no Publication pages and a page script `TypeError: object
-  is not iterable` (U40 A19 reporter, `change-language-offered-then-refused/walk.js`
-  with `PKP_E2E_LINE=stable-3_5_0`); (6) OMP: a monograph's Publication ›
-  "Identifiers" with individual URN suffixes on shows no "URN" box and
-  `TypeError: Cannot read properties of null (reading 'length')`
-  (`FieldTextUrn.js` lacks the null check OJS took in 1f04ae4160; U44 A6
-  report, Evidence). Each is a question for the stable-line read: a 3.5
-  regression report, a backport note, or dismissed.
-- 2026-10-03 (issues session, U41 A9): on `stable-3_5_0` publishing an
-  article, book or preprint logged a PHP warning, `Undefined property:
-  stdClass::$type` at lib/pkp `PKPBaseController.php` line 489, while the
-  publish answered 200; seen in passing by the A9 reporter's 3.5 walk
-  (`shared/playwright/checks/issues/ror-logo-link-unnamed/walk.js`), not
-  pursued. Whether `main` logs it too, and whether a stricter setting turns
-  it into an error, is the question for the stable-line read.
-- 2026-10-03 (issues session, U39 A5): on `main` a config file with no
-  `strict` line now runs in strict mode (`Config::getVar('general',
-  'strict', true)` since pkp-lib cb32f21f94, pkp/pkp-lib#11583; 3.5 and
-  3.4 read a missing line as Off), checked by the A5 reporter booting OJS
-  `main` from the command line with the line removed. A 3.3-era config
-  carried forward by an upgrade would then hit every bare `ASSOC_TYPE_*`
-  and other global alias (docs/issues/U39-A5-library-delete-strict-mode-error.md
-  names three). Whether the default is intended is the question for #11583.
-- 2026-10-02 (issues session, U36 A14): the open report
-  docs/reports/2026-09-27-pkp-lib-13288.md says in passing that fixing
-  the wizard's delete request (the parameter name `deleteFile` reads)
-  "would stop abandoned picks from piling up in any case". Read in the
-  code by the A14 reporter, not driven: on a revision the id the wizard
-  sends is the file being revised and `deleteFile` removes the whole
-  submission file, so the bare parameter fix would delete the original.
-  The A14 report (docs/issues/U36-A14-change-file-keeps-first-upload.md,
-  Proposed fix and Alternatives) sends no delete for a revision; the
-  regression report's remark wants the same caveat or a drive.
 - 2026-10-01 (upstream session): when OMP's `lib/pkp` pointer carries
   pkp/pkp-lib#13412 (`2e377d27fc`), OMP U63 S6's overlap line becomes
   required as on OJS (`otherLinesOptional` out of
@@ -89,6 +36,21 @@ _Newest first; one entry per sync: the date and the range per repo, then
 one line per change reviewed (commit → no impact / spec and tests touched /
 finding filed, with a link)._
 
+- **2026-10-05 (daily session, VM s2) — ojs `b84f8e2e44..106f847f7f` (2: a pointer bump and the pdfJsViewer bump), omp `3b0ecf794..8c807c919` (1), ops `c8af945bb7..417aa734b1` (1, the pdfJsViewer bump), pkp-lib `ddd8ab243a..987776cd04` (6, OJS's pointer, with `66bafd91d2` reviewed 2026-10-02; `main` holds nothing past it; omp and ops stay at `3dc90c81a6`), ojs and ops `plugins/generic/pdfJsViewer` `e69bf97c45..1d992590f0`; ui-library and the other plugins unchanged.**
+  - omp `8c807c919` (pkp/pkp-lib#13444, the team's copy of our report pkp-e2e#282: `CatalogBookHandler::download()` builds its `UsageEvent` with the local `$publication`) → **the U69 A9 failure is fixed**: the report's kept walk on a dataset fleet (`.reports/sync-ds/s05a9/`): the PDF view renders, both "Download"s save the file, each view writes its usage line, with "PDF.js PDF Viewer" off the link downloads. Specs touched, each with a claim check S05 (two runs, kept `checks/<U>/S05/s05.js`), a fold and a persona read: **U69** (39 lines driven, K1, K2, K4, K5, I05 re-run; 6 holds, 30 wrong, 3 imprecise): **A9 RETIRED**, A23 and A25 reworded (A25: the file now shows, its "omp://" links dead, no crash word), Rule 13, Actors, Fields and Coverage rewritten, one **Planned** item; S3 {OMP} gains the viewer's "of 1" and both downloads; U73 note p's stale sentence dated. **U20** (14 driven; 3 holds, 4 wrong, 3 imprecise): **OMP6 RETIRED**, Rules 12 and 17 and scenario 6 corrected, S6 {OMP} bullet "The PDF address" and its assertion. **U64** (8 driven; 3 holds, 6 wrong): **OMP3 RETIRED**, OJS2 ❓→🐞 (one HTML galley view counts once more per never-uploaded file it names), **OMP4 ❓ new** (an HTML "Appendix" file counts as a primary view while "HTML Monograph File" is on, from U47's check), one **Planned** item, three wording blockers rewritten. **U47** (8 driven; 2 holds, 3 wrong, 2 imprecise): **OMP1 RETIRED** (with the plugin off the HTML file downloads), footnote m corrected, one **Planned** item. Persona blockers in unchanged text (U20 Rule 15, U47's A6 guard) to incidentals, with U69's S05-14 (a priced file named in "citation_pdf_url") for U20. pkp-e2e#282 closed with a comment; its report, `walk.js` and `fix.diff` deleted (`lib.js` kept: four checks import it); ten filed reports that cite A9 listed in incidentals for a re-sync. `seed-facts.md`'s book-file paragraph replaced. Regression verdict in this line (no reader: a one-line fix whose callers are in the diff, and four claim checks drove every book-file surface): none.
+  - ojs and ops `plugins/generic/pdfJsViewer` `1d992590f0` ("Rewrite iframe JS setup without jQuery dependency": the inline script sets the frame's address on `DOMContentLoaded` without jQuery) → no impact; regression verdict in this line: the same element and the same address; U13's PDF reader passes on the apps' own CI at the bump (pkp/ojs 37281379539, pkp/ops 37281693571). OMP's own `display.tpl` did not move (U69 A23).
+  - pkp-lib `c530748391` + `bf20528ed1` (#13432 and its revert the same day) → nothing of their own (`git diff` empty).
+  - pkp-lib `461f9a9a45` (#13434, `SubmissionEventLogGridHandler::viewEmail()` finds the entry within the authorized submission, else "api.404.resourceNotFound") → no impact; regression verdict in this line (read here): `EmailLinkAction` is built only for rows `loadData()` lists, which carry the same assoc filter; the subclass grids list no email rows → none.
+  - pkp-lib `9b22c636cb` (#13437, the login page's `reason` HTML-escaped) → no impact; regression verdict in this line: none on screen; an ordinary failed sign-in now calls `htmlspecialchars(null)`, a PHP 8.1+ deprecation, silent at the default `error_reporting` (E_ALL without E_DEPRECATED) and an empty string as before; driven on OJS ("Invalid username/email or password. Please try again."); a TypeError only on a future PHP that drops the null coercion (the PHP/DB matrix).
+  - pkp-lib `987776cd04` (#13442, `writeOnly` on the user and author ORCID secrets and on user `apiKey`, so the API maps leave them out) → no impact; regression verdict in this line (read here, no reader: a schema flag whose readers were grepped across the three apps and ui-library): no screen or export reads them from an API answer (ui-library only in mocks; the accept-invitation store reads the invitation payload; the ORCID jobs, Native XML and the API key form read the model) → none.
+  - ojs `ff004d0973`, `106f847f7f`, ops `417aa734b1` (pointer bumps) → nothing of their own.
+  - **Lead worked (U39 A5's question, issues session 2026-10-03) → regression, medium**: since pkp-lib `cb32f21f94` (#12016 for #11583) a configuration file with no `strict` line runs in strict mode on `main` (3.5 and 3.4 read it as Off), so an install upgraded from 3.3 that keeps its file loses the global constant aliases: the dashboard's "Search submissions" answers 500 "Undefined constant \"PKP\\submission\\ASSOC_TYPE_PUBLICATION\"" and lists "Search Results (0)" on OJS, OMP and OPS, and a reviewer's files stay "Loading" (U23 A17, U39 A5). Walked on dataset fleets with the line removed and the `Off` control; 3.5 walked on OJS, fine. Fix tried (`Config::getVar('general', 'strict', false)`; an explicit `strict = On` stays strict). Report `docs/reports/2026-10-05-pkp-lib-12016.md`, ci-triage row, kept `checks/sync/pkp-lib-12016/`. No register entry (configuration and upgrade are out of scope).
+  - Leads worked and deleted: U36 A14's caveat → added to `docs/reports/2026-09-27-pkp-lib-13288.md`'s proposal; the 3.5-only leads → the stable line's log (none a regression). Kept: the U63 S6 and U06 S02 pointer leads (OMP's and OPS's pointers have not moved).
+  - Tests: OMP U20 S6 follows "citation_pdf_url" and saves article.pdf; OMP U69 S3 reads the viewer's "of 1" and both downloads (`MonographLandingPages.js` `pdfViewer()`, `pdfPageCount()`, `pdfErrorBar()`, `pdfViewerDownload()`); the U20, U47, U64, U69 suite headers drop the retired IDs. OMP U20 (9) and U69 (11) green (`.reports/sync/s05/u20-omp.log`, `u69-omp.log`); lint, `--tests` and `lint:suite` zero on the five specs.
+  - CI: pkp/ojs 37281379539 (`106f847f7f`), pkp/omp 37283929268 (`8c807c919b`), pkp/ops 37281693571 (`417aa734b1`) green. No known-red rows, no companion rows.
+  - Open regressions: #13370 re-run on a reset OJS because the range moved the invitation emails (`66bafd91d2` under the pointer): still reproduces (`.reports/sync/s05-13370/`, "will appear in the … masthead as a Reviewer"); #12994 upgrade, #13414, #13288, #12798, #13181, ojs#5813 not re-run: the range moved book downloads, the login message, the email log view and two schemas.
+  - Private file: three entries' `update:` lines (the users API secrets now `writeOnly` on both lines; #13432 reverted on both lines; the review-change window still unscoped after #13434), posted in the thread.
+  - Baselines advanced: ojs `106f847f7f`, omp `8c807c919`, ops `417aa734b1`, pkp-lib `987776cd04` (ojs), ojs and ops pdfJsViewer `1d992590f0`.
 - **2026-10-02 (daily session, VM s2) — ojs `68615b5a32..b84f8e2e44` (1, a pointer bump), pkp-lib `25562b0e1a..ddd8ab243a` (3, OJS's pointer; `main` holds nothing past it); omp, ops, ui-library (`64d67363` on `main`) and the plugins unchanged.**
   - pkp-lib `42b90e66db`, `fa353f410e`, `ddd8ab243a` (#13299, "[Invitations] Validate user group context"; rebased onto `main`, no merge commit: `InitializeInvitationUIHandler` lists the Site Administrator and Manager only and adds `CanAccessSettingsPolicy`, `UserRoleAssignmentCreateController` adds `CanAccessSettingsPolicy`, `Invitation::belongsToContext()` makes another context's invitation not found at `invitation/edit/<id>` and in the invitations API) → spec touched: U06 (no kept check covered the wizard's address; claim check S02 on OJS, two runs, 18 lines: 6 holds, 3 wrong, 6 imprecise; new kept `checks/U06/S02/s02.js`; fold; persona read, 1 fact blocker settled by the rewrite): **A1 RETIRED** (the address now admits exactly whoever opens Users & Roles: the Site Administrator and the manager-level roles with "Permit changes to Settings"; another journal's invitation shows "404 Not Found"), Actors rows 1–5 name that one gate, notes a, b and f-a1 rewritten, **A12 🐞 new** (latent, crash: server: `invitation/create/<unknown type>` answers 500 with an empty page, not this range's: `InvitationFactory::createNew()` throws), two **Planned** items; issues-queue U06 row gains A12; one incidental for U01 (the access-denied page's empty heading). Regression verdict in this line (no reader: the change narrows authorization, which is the private probe's, not a reader's; read here): the wizard's only entry points are Users & Roles' "Invite to a role" and the row menu (`UserInvitationManagerStore.js`), already behind `CanAccessSettingsPolicy`, and the only invitation type with a UI controller is userRoleAssignment, so no screen loses a path it offered; the API's context check sits behind `has.context` and the model casts `contextId` to int; the manager's and the Site Administrator's send and edit flows driven unchanged (S02) → none.
   - ojs `b84f8e2e44` (pointer bump) → nothing of its own.

@@ -311,8 +311,9 @@ in. <sup>i</sup> <sup>q14</sup>
     "What "Dublin Core Indexing Plugin" writes". The tags describe the
     item's current version and follow a change to it at the next load.
     Each plugin writes its tags whether or not the other is enabled. On
-    a press, every book file address the tags name answers a server
-    error instead of the file ⚠ [OMP6](#omp6).
+    a press, each file address the book's and the chapters' pages name
+    in "citation_pdf_url" and "citation_fulltext_html_url" answers the
+    file itself: a browser opening it saves the file.
     <sup>h</sup> <sup>i</sup> <sup>q14</sup>
 13. **Earlier versions and galleys.** The page of an earlier version
     (its link in the item page's "Versions" list) carries neither
@@ -353,9 +354,17 @@ in. <sup>i</sup> <sup>q14</sup>
     and references are the book's. Google Scholar lists the chapter's
     files in place of the book's. <sup>h</sup> <sup>i</sup>
     <sup>q18</sup>
-17. **A file's view page** {OMP}. The page a book file's link opens
-    ({journal address}/catalog/view/ and the book's, format's and file's
-    numbers) carries the Dublin Core tags alone, describing the file:
+17. **A file's view page** {OMP}. On the book's page or a chapter's, a
+    PDF file's link opens the file's view page while "PDF.js PDF
+    Viewer" is enabled, and an HTML file's link while "HTML Monograph
+    File" is; a new press has both enabled. The view page's address is
+    {journal address}/catalog/view/ and the book's, format's and file's
+    numbers. It carries the Dublin Core tags alone, describing the file.
+    Any other file's link, and a PDF or HTML file's link with its viewer
+    plugin disabled, downloads the file and opens no page, so no tag
+    describes that file. [Monograph landing
+    page](U69-monograph-landing-page.md) owns what a file's link opens
+    (its Rule 13). The view page's tags:
     <sup>i</sup> <sup>q19</sup>
     - "DC.Identifier" reads the book's "URL Path" (or its number), the
       format's number and the file's number, joined by "/";
@@ -522,9 +531,10 @@ in. <sup>i</sup> <sup>q14</sup>
   "DC.Identifier.URN" and "citation_urn" tags carry.
 - [Article landing page & reading](U13-article-landing-page-and-reading.md)
   owns the article and preprint pages the tags ride on, and the
-  addresses of a preprint with a "URL Path" (OPS1); *Monograph landing
-  page* owns the book, chapter and file pages and the file downloads
-  (OMP6); [Galleys](U46-galleys.md) owns the galley pages (Rule 13).
+  addresses of a preprint with a "URL Path" (OPS1); [Monograph landing
+  page](U69-monograph-landing-page.md) owns the book, chapter and file
+  pages and the file downloads (Rules 12, 17); [Galleys](U46-galleys.md)
+  owns the galley pages (Rule 13).
 - [Publication metadata](U40-publication-metadata.md),
   [Contributors & affiliations](U41-contributors-and-affiliations.md) and
   [Citations & references](U42-citations-and-references.md) own the
@@ -772,8 +782,11 @@ the tooling recipe are in the footnote. <sup>s</sup>
      Scholar Indexing Plugin" and no "Dublin Core Indexing Plugin". The
      preprint's page carries its "citation_" tags and no "DC." tag and no
      Dublin Core schema link (Purpose, the absence paragraph).
+   - **The PDF address** {OMP}: the visitor opens the address the book
+     page's "citation_pdf_url" gives: the browser saves the "PDF"
+     format's file, article.pdf (Rule 12).
    - **The book's file page** {OMP}: on the book's page, press the "PDF"
-     format's link: the file's page opens [OMP6](#omp6); its source
+     format's link: the file's page opens; its source
      carries "DC." tags and no "citation_" tag, and its "DC.Identifier"
      reads the three numbers at the end of the page's address, the
      book's, the format's and the file's, joined by "/" (Rule 17;
@@ -952,8 +965,6 @@ Left out of the scenarios above, by reason:
     PDF; Fields, "citation_fulltext_html_url", "citation_pdf_url")
   - OMP4 {OMP} (a new version of a published book: the chapter entries;
     Rule 2c)
-  - OMP6 {OMP} (following a book file address the tags give; Rule 12;
-    scenario 6 passes it)
   - OPS1 {OPS} (a preprint with a "URL Path": the HTML full-text tag;
     Fields, "citation_fulltext_html_url")
 - **No seed**:
@@ -976,6 +987,12 @@ Left out of the scenarios above, by reason:
     pages](U07-journal-identity-and-about-pages.md)*, Rule 5)
   - {OJS} the LOCKSS and CLOCKSS pages' "Description" row (Side effects;
     [Archiving & preservation](U67-archiving-preservation.md))
+  - {OMP} a book file's link that downloads the file instead of opening
+    a view page, so no tag describes the file: a file that is neither a
+    PDF nor HTML, or "PDF.js PDF Viewer" or "HTML Monograph File"
+    disabled (Rule 17; *[Monograph landing
+    page](U69-monograph-landing-page.md)*, its Rule 13 and Settings
+    bullets 1 and 2)
 
 ## Findings register
 
@@ -996,10 +1013,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists the book's chapter pages at addresses that answer "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP5](#omp5) | A press's book file view page names the book's page as its address in Dublin Core tags | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP6](#omp6) | Every book file address the tags give fails with a server error instead of the file | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint with a "URL Path" announces an HTML full-text address that ends on "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | The site's own "Google Analytics Plugin" box can be ticked but changes nothing | ❓ | minor | — |
 | [A4](#a4) | The three apps' sitemaps list different kinds of listing pages: only a press lists its categories, and a press omits its Search page | ❓ | minor | — |
+| [OMP6](#omp6) | Every book file address the tags give fails with a server error instead of the file | ✅ | retired | upstream sync (claude), 2026-10-05 — fixed by omp `8c807c919` (pkp/pkp-lib#13444) |
 
 ### All apps
 
@@ -1215,15 +1232,6 @@ chapter's, while "Dublin Core Indexing Plugin" is enabled, as it is on
 every new press.
 Basis: probe, 2026-10-03. <sup>f-omp5</sup>
 
-<a id="omp6"></a>
-**OMP6 — Every book file address in the tags fails** · 🐞 · critical · crash: both.
-Google Scholar following a book or chapter page's "citation_pdf_url" or
-"citation_fulltext_html_url" expects the file. The address answers a
-server error instead: the app fails, as it does for a reader opening
-any book file, whose view page shows an empty viewer. *Monograph landing
-page* owns the file downloads.
-Basis: probe, 2026-10-01. <sup>f-omp6</sup>
-
 ### OPS
 
 <a id="ops1"></a>
@@ -1236,6 +1244,11 @@ serves the file. [Article landing page &
 reading](U13-article-landing-page-and-reading.md#ops2) records the
 address fault.
 Basis: probe, 2026-10-01. <sup>f-ops1</sup>
+
+### Retired
+
+<a id="omp6"></a>
+**OMP6 — Every book file address in the tags fails** · ✅ · retired. Fixed by omp `8c807c919` (pkp/pkp-lib#13444), 2026-10-05: each book and chapter file address the tags name answers the file (Rule 12). <sup>f-omp6</sup>
 
 ---
 
@@ -1326,10 +1339,10 @@ OMP's own code.
 **q13** — Live-probed 2026-09-26 (Rule 11; Settings bullet 8), all three apps: with "Enable this journal to appear publicly on the site" unticked by the Site Administrator, the context's manager read `<meta name="robots" content="noindex,nofollow" />` on the home, item, Dashboard and Settings pages, and the Login page a signed-out visitor was sent to carried it too; ticked again, the tag was gone at the next load; an enabled context never carried it.
 
 <a id="fn-q14"></a>
-**q14** — Live-probed 2026-09-26 (Rule 12; the two tag tables; A6, A7, OMP1, OMP2, OMP6, OPS1), all three apps, signed out (the same tags as the context's Reader and manager), on scratch contexts in English and French: an item with a title and subtitle, two contributors with three affiliations, a marked-up abstract holding "&", subjects, keywords, two references, "Coverage" and "Type", a licence and a DOI prefix set before publishing, "URL Path" `sea-study`; on OJS "Pages" 12-20 in a published issue Vol. 3 No. 7 (2024); on OMP the formats "PDF", "PDF Two", "HTML", "Notes" (a Markdown file) and "Chapter PDF". Every row of the tables held as stated, at both ends where a row names a condition: ISSN none, print or online; "Journal Abbreviation" or initials; volume and number shown or hidden on the issue's "Issue Data"; "Pages" or "Article Number"; a DOI or none; an ISBN-13 on "PDF" or none; the issue's year against the publication date. "DC.Source.URI" read `{journal address}/{journal path}` on OJS, answering 404, and the press's home page on OMP. "citation_urn" and "DC.Identifier.URN" appeared after "Assign" on the item's Identifiers page. The published version's abstract, edited under "Warning: This version has been published. Editing it may impact the published content.", reached "citation_abstract" and "DC.Description" at the next load. An item submitted in French by an author whose names were entered in English: the page showed "Ada Author", both author tags "Ada" (A6). The abstract "The sea & its tides" read `content="The sea &amp;amp; its tides…"` (A7). OMP, no ISBN: one "citation_pdf_url" (the "PDF Two" file) and one "citation_fulltext_html_url" (the Markdown file); with an ISBN-13 on "PDF" alone, still one "citation_pdf_url" (OMP1, OMP2); every file address the tags named answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization" (OMP6). OPS, on the preprint with a "URL Path": `preprint/view/sea-study/{galley}` redirected to `preprint/download/{number}/{galley}` and then to `preprint/download/sea-study`, the galley dropped, answering "404 Not Found"; without a "URL Path" the same links served the file (OPS1). OJS and OPS PDF addresses answered the file.
+**q14** — Live-probed 2026-09-26 (Rule 12; the two tag tables; A6, A7, OMP1, OMP2, OMP6, OPS1), all three apps, signed out (the same tags as the context's Reader and manager), on scratch contexts in English and French: an item with a title and subtitle, two contributors with three affiliations, a marked-up abstract holding "&", subjects, keywords, two references, "Coverage" and "Type", a licence and a DOI prefix set before publishing, "URL Path" `sea-study`; on OJS "Pages" 12-20 in a published issue Vol. 3 No. 7 (2024); on OMP the formats "PDF", "PDF Two", "HTML", "Notes" (a Markdown file) and "Chapter PDF". Every row of the tables held as stated, at both ends where a row names a condition: ISSN none, print or online; "Journal Abbreviation" or initials; volume and number shown or hidden on the issue's "Issue Data"; "Pages" or "Article Number"; a DOI or none; an ISBN-13 on "PDF" or none; the issue's year against the publication date. "DC.Source.URI" read `{journal address}/{journal path}` on OJS, answering 404, and the press's home page on OMP. "citation_urn" and "DC.Identifier.URN" appeared after "Assign" on the item's Identifiers page. The published version's abstract, edited under "Warning: This version has been published. Editing it may impact the published content.", reached "citation_abstract" and "DC.Description" at the next load. An item submitted in French by an author whose names were entered in English: the page showed "Ada Author", both author tags "Ada" (A6). The abstract "The sea & its tides" read `content="The sea &amp;amp; its tides…"` (A7). OMP, no ISBN: one "citation_pdf_url" (the "PDF Two" file) and one "citation_fulltext_html_url" (the Markdown file); with an ISBN-13 on "PDF" alone, still one "citation_pdf_url" (OMP1, OMP2); every file address the tags named answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization" (OMP6; fixed 2026-10-05, f-omp6). OPS, on the preprint with a "URL Path": `preprint/view/sea-study/{galley}` redirected to `preprint/download/{number}/{galley}` and then to `preprint/download/sea-study`, the galley dropped, answering "404 Not Found"; without a "URL Path" the same links served the file (OPS1). OJS and OPS PDF addresses answered the file. Re-driven 2026-10-05 on OMP `main` after omp `8c807c919`, two runs, on a scratch press (book 50, with "PDF", "HTML", a Markdown "Notes" file and a "Chapter PDF" on chapter 9's page): the book page's "citation_pdf_url" `…/catalog/download/50/59/194` answered 200 `application/pdf` as an attachment, its "citation_fulltext_html_url" `…/catalog/download/50/61/196` 200 `text/markdown` as an attachment, the chapter page's "citation_pdf_url" `…/catalog/download/50/62/197` 200 `application/pdf`, each the same to a Googlebot and a plain user agent and sent inline with `?inline=1`; typed in the browser, the PDF addresses saved article.pdf (243 bytes) and the Markdown address notes.md (f-omp6).
 
 <a id="fn-q15"></a>
-**q15** — Live-probed 2026-09-26 (Rule 13), all three apps: after "Create New Version", a changed title and a publish, the first version's page (`…/version/{id}`, the id its link under "Versions" carries: 14 on OJS and OMP, 13 on OPS) carried no "citation_" or "DC." tag, a "robots" tag "noindex" and a "canonical" link to the current page (with the language in it); the current galley pages {OJS OPS} carried no plugin tag, the earlier version's galley pages the "robots" tag alone. OMP: the earlier version's file pages carried no tag at all; the Markdown file's earlier page and every download answered 500 (OMP6). The current version opened at its own `…/version/{id}` address (18 on OJS and OMP, 17 on OPS) carried no plugin tag, "robots" or "canonical"; no page links to that address. On OPS, an earlier version opened by number on a preprint with a "URL Path" ended on "404 Not Found", the fault [Article landing page & reading](U13-article-landing-page-and-reading.md#ops2) records.
+**q15** — Live-probed 2026-09-26 (Rule 13), all three apps: after "Create New Version", a changed title and a publish, the first version's page (`…/version/{id}`, the id its link under "Versions" carries: 14 on OJS and OMP, 13 on OPS) carried no "citation_" or "DC." tag, a "robots" tag "noindex" and a "canonical" link to the current page (with the language in it); the current galley pages {OJS OPS} carried no plugin tag, the earlier version's galley pages the "robots" tag alone. OMP: the earlier version's file pages carried no tag at all; the Markdown file's earlier page and every download answered 500 (OMP6; fixed 2026-10-05, f-omp6). The current version opened at its own `…/version/{id}` address (18 on OJS and OMP, 17 on OPS) carried no plugin tag, "robots" or "canonical"; no page links to that address. On OPS, an earlier version opened by number on a preprint with a "URL Path" ended on "404 Not Found", the fault [Article landing page & reading](U13-article-landing-page-and-reading.md#ops2) records.
 
 <a id="fn-q16"></a>
 **q16** — Live-probed 2026-09-26 (Rule 14), all three apps: English and French interfaces gave the same tags, except "DC.Rights", which read "Copyright (c) {year} {journal name}" in English and "© {journal name} {year}" in French (OJS, OMP); Dublin Core wrote the abstract, subjects, keywords, supporting agencies, "Coverage", "Type" and the other title in French too, Google Scholar the submission language's only; an item submitted in French spoke French in either interface. A discipline ("marine science"), a "Rights" and a "Source" value appeared in no tag.
@@ -1341,7 +1354,7 @@ OMP's own code.
 **q18** — Live-probed 2026-09-26 (Rule 16; Settings bullet 15), OMP: on "Chapter One Tides" (its own page ticked, with its own abstract, contributor and file), the chapter's title, its contributor with his two affiliations and its abstract; "2023-11-02" in both date tags with chapter dates on, the book's "2024-03-05" with them off, and a chapter with no date of its own the book's; "citation_doi" the book's, "DC.Identifier.DOI" the chapter's; "DC.Identifier" and "DC.Identifier.URI" the book's and "DC.Type" "Text.Book"; keywords, subjects and references the book's; "citation_pdf_url" the chapter's own file and none of the book's. Saved unticked, the book page listed the chapter without a link and its address answered "404 Not Found"; ticked, the chapter's page carried its tags.
 
 <a id="fn-q19"></a>
-**q19** — Live-probed 2026-09-26 (Rule 17; OMP3, OMP5), OMP: every file page opened from the book page carried Dublin Core tags alone: "DC.Identifier" `sea-study/13/14`, "DC.Identifier.URI" `…/catalog/book/sea-study/13/14`, which opened the book's page with the book's own tags; "DC.Identifier.ISBN" "9780306406157" on the "PDF" file's page once saved; "DC.Identifier.pageNumber" "5-9" on the chapter's file and none on the whole-book files; "DC.Source.ISSN" the series' online ISSN; "DC.Type" "Text.Chapter" on every file page, while the book page read "Text.Book". The pages' viewer showed no file, the download answering 500 and the page script failing with "PDFJS is not defined" (OMP6). "DC.Language" used the scheme "ISO639-1" there and "rfc5646" on the book page.
+**q19** — Live-probed 2026-09-26 (Rule 17; OMP3, OMP5), OMP: every file page opened from the book page carried Dublin Core tags alone: "DC.Identifier" `sea-study/13/14`, "DC.Identifier.URI" `…/catalog/book/sea-study/13/14`, which opened the book's page with the book's own tags; "DC.Identifier.ISBN" "9780306406157" on the "PDF" file's page once saved; "DC.Identifier.pageNumber" "5-9" on the chapter's file and none on the whole-book files; "DC.Source.ISSN" the series' online ISSN; "DC.Type" "Text.Chapter" on every file page, while the book page read "Text.Book". The pages' viewer showed no file, the download answering 500 and the page script failing with "PDFJS is not defined" (OMP6; fixed 2026-10-05, f-omp6). "DC.Language" used the scheme "ISO639-1" there and "rfc5646" on the book page. Re-driven 2026-10-05 on OMP `main` after omp `8c807c919`, two runs, on a scratch press (book 50): with "PDF.js PDF Viewer" and "HTML Monograph File" enabled, the "PDF" (`…/catalog/view/50/59/194`), "HTML" (`50/60/195`) and "Chapter PDF" (`50/62/197`, from the book's and the chapter's page) links opened view pages answering 200 with "DC." tags and the Dublin Core schema link, no "citation_" tag and no "gs_meta_revision"; "DC.Identifier" `50/59/194`, `50/60/195`, `50/62/197`; "DC.Type" "Text.Chapter" on all three (OMP3); "DC.Identifier.pageNumber" "5-9" on the chapter's file; `…/catalog/book/50/62/197` opened the book's page with "DC.Identifier" "50" and "DC.Type" "Text.Book" (OMP5). The Markdown "Notes" link `…/catalog/view/50/61/196` downloaded notes.md and left the book page on screen. With both viewer plugins unticked on the press, the "PDF", "Chapter PDF" and "HTML" links downloaded article.pdf and article.html the same way; both were ticked again afterwards.
 
 <a id="fn-q20"></a>
 **q20** — Live-probed 2026-09-26 (Rule 18), all three apps: "Google Analytics Plugin" unticked on a new context, on `publicknowledge` and on the site's own Plugins list, its description as the plugins table quotes; the home, item and Login pages and the Dashboard held no "googletagmanager".
@@ -1417,8 +1430,8 @@ Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](..
 Issue report: [docs/issues/U20-OMP5-book-file-page-uri-names-book-page.md](../issues/U20-OMP5-book-file-page-uri-names-book-page.md), filed as [pkp-e2e#672](https://github.com/jardakotesovec/pkp-e2e/issues/672).
 
 <a id="fn-f-omp6"></a>
-**f-omp6** — Every `GET {press address}/catalog/download/{book}/{format}/{file}`, with or without `?inline=1`, current or earlier version, answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization"; the file's view page failed in the browser with "PDFJS is not defined" and "UnexpectedResponseException". The failure is in the book file download, which *Monograph landing page* owns; the tags merely name its addresses. Live-probed 2026-09-26: notes q14, q15, q19.
-Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
+**f-omp6** — Every `GET {press address}/catalog/download/{book}/{format}/{file}`, with or without `?inline=1`, current or earlier version, answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization"; the file's view page failed in the browser with "PDFJS is not defined" and "UnexpectedResponseException". The failure is in the book file download, which *Monograph landing page* owns; the tags merely name its addresses. Live-probed 2026-09-26: notes q14, q15, q19. Fixed by omp `8c807c919` (pkp/pkp-lib#13444): `CatalogBookHandler::download()` builds its `UsageEvent` with the local `$publication`. Re-driven 2026-10-05 on OMP `main`, two runs, on a scratch press, signed out (a browser, and a cookie-less client with Googlebot's and a plain user agent) and as the press's Reader: every address the book and chapter pages' "citation_pdf_url" and "citation_fulltext_html_url" give, and every format link's download address, current version and earlier (`…/catalog/download/{book}/version/{publication}/{format}/{file}`), with and without `?inline=1`, answered its file with 200, and no catalog address answered 500. The PDF view page rendered the PDF ("of 1", one page, no error bar), and both its bar's "Download" and the viewer's own "Download" saved article.pdf. Each download wrote a usage line (assocType 515 for a Book or Chapter Manuscript file, 531 for the default "Appendix" component). The page script still logs "PDFJS is not defined" on every PDF view page, which [Monograph landing page](U69-monograph-landing-page.md#a23) A23 records. Kept check `shared/playwright/checks/U20/S05/s05.js`; notes q14, q19.
+Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) (closed 2026-10-05, fixed by omp `8c807c919`).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note h: OPS `citation_fulltext_html_url` names `preprint/view/{bestId}/{galleyBestId}`; with a "URL Path" set, the redirect to the download address drops the galley. Live-probed 2026-09-26: note q14.

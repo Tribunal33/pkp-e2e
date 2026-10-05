@@ -387,9 +387,9 @@ and the buttons "Yes" and "No" (Rule 6). <sup>k</sup> <sup>q7</sup>
 6. **{OJS OMP} The "HTML Article Galley" plugin ("HTML Monograph File"
    on a press)** (Settings › Website › "Plugins"). On at install. Off,
    a journal's HTML galley link downloads the HTML file instead of
-   showing a page, so none of the media files are shown; on
-   a press, opening a book's HTML file from the book page shows a blank
-   page ⚠ [OMP1](#omp1). <sup>m</sup> <sup>q27</sup>
+   showing a page, so none of the media files are shown; on a press,
+   the book page's link to an HTML file downloads the file the same
+   way. <sup>m</sup> <sup>q27</sup> <sup>f-omp1</sup>
 
 ## Cross-feature interactions
 
@@ -825,6 +825,7 @@ Left out of the scenarios above, by reason:
   - the guard for OMP2 (issue report `docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md`): on a press, a Copyeditor assigned to a monograph in Copyediting is not offered "Media" in the side menu, while a Layout Editor in Production keeps the page and the download.
   - the guard for A1 (issue report `docs/issues/U47-A1-media-actions-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Media" list alone (no "Add Media File", "Batch Link Media" or write actions in the row menu), while an editor whose assignment allows changes keeps every action.
   - the guard for A6 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): add a media file and check the server log holds no PHP warning for the request.
+  - {OMP} "HTML Monograph File" off, the book page's link to an HTML file: the browser downloads the file and stays on the book page, so no media file is shown (Settings bullet 6; OMP1 retired).
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
     holds only "No media types are configured. Please contact the
@@ -854,8 +855,6 @@ Left out of the scenarios above, by reason:
     late; Side effects)
   - OPS1 (a preprint server's HTML galley link downloads the file, so
     no media file reaches readers; Side effects)
-  - OMP1 ("HTML Monograph File" off, a book's HTML file opening as a
-    blank page; Settings bullet 6)
   - OMP2 (a press role outside Production pressing a file name gets a
     refusal instead of the file; Actors row 1; scenario 8 passes the
     link without pressing it)
@@ -882,11 +881,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OMP1](#omp1) | With "HTML Monograph File" off, a book's HTML file opens as a blank page | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
 | [OPS1](#ops1) | A preprint server offers the "Media" page, but no reader page shows its files | ❓ | user-visible | — |
+| [OMP1](#omp1) | Retired: with "HTML Monograph File" off, a book's HTML file opened as a blank page; the book page's link now downloads it, as a journal's does (Settings bullet 6) | ✅ | retired | upstream change + claim check (claude), 2026-10-05 — fixed upstream |
 
 ### All apps
 <a id="a1"></a>
@@ -1018,15 +1017,6 @@ it, so a correction reaches most readers only the next day.
 Basis: probe, 2026-09-24. <sup>f-ojs1</sup>
 
 ### OMP
-<a id="omp1"></a>
-**OMP1 — With "HTML Monograph File" off, a book's HTML file opens as a blank page** · 🐞 · critical · crash: both.
-With the plugin off, a reader who opens a book's HTML file from the
-book page gets a blank page: the server fails behind it, and the file
-is neither shown nor downloaded. A journal with "HTML Article Galley"
-off downloads the file instead. The reader gets neither the book's HTML
-nor a message.
-Basis: probe, 2026-10-01. <sup>f-omp1</sup>
-
 <a id="omp2"></a>
 **OMP2 — On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal** · 🐞 · low.
 On a press, the side menu offers the "Media" page to roles whose work
@@ -1056,6 +1046,11 @@ by no page), so the missing piece looks like an unfinished port rather
 than a choice.
 Basis: probe, 2026-09-24 (the download); code (the download address).
 <sup>f-ops1</sup>
+
+### Retired
+
+<a id="omp1"></a>
+**OMP1 — With "HTML Monograph File" off, a book's HTML file opens as a blank page** · ✅ · retired. Fixed by omp `8c807c919` (pkp/pkp-lib#13444), 2026-10-05: with the plugin off, the book page's link to an HTML file downloads the file, with no error, for a reader who is not signed in, a signed-in Reader and the Press Manager alike (Settings bullet 6). <sup>f-omp1</sup>
 
 ---
 
@@ -1301,7 +1296,9 @@ Flowplayer `url:` and CSS `url()` forms) to
 `article/download/{id}/version/{publicationId}/{galleyId}/{fileId}/{name}`;
 `ArticleHandler` serves a media file only when it belongs to the
 galley's publication. OMP: `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::getHTMLContents()`
-does the same for an HTML publication-format file, web variants only,
+does the same for an HTML publication-format file (the attributes and
+the Flowplayer `url:` form, plus a `url=` form; it has no CSS `url()`
+form), web variants only,
 precedence media < dependent < any proof file of the submission,
 matching the raw name, rewriting to `catalog/download/…`;
 `CatalogBookHandler` serves `ASSOC_TYPE_PUBLICATION` media files of the
@@ -1697,7 +1694,8 @@ disable this plugin?". Off, the article page's "HTML" link downloaded
 "article.html" (OJS, three runs), and the book page's HTML file link
 showed a blank page (OMP, two runs; OMP1). Ticked again, the image
 showed again on both. OPS control: its Plugins list has no HTML galley
-plugin.
+plugin. Since omp `8c807c919` (re-probed 2026-10-05) the press
+downloads the file too (note f-omp1); the rest held on that day.
 
 <a id="fn-q28"></a>
 **q28** — Live-probed 2026-09-24 (Rule 2c; A4), OJS, OMP and OPS: 3 MB
@@ -1824,16 +1822,27 @@ any other request gets `Cache::remember('htmlArticleGalley-'.$galleyId,
 server has no HTML galley plugin (note n).
 
 <a id="fn-f-omp1"></a>
-**f-omp1** — Note q27. With the plugin off, `GET
-/catalog/view/{book}/{format}/{file}` answered 500 twice with an empty
-page: `CatalogBookHandler::view()` calls `download(…, inline=true)`, no
-plugin takes the inline view, and the handler reaches the `UsageEvent`
-built with `$this->publication`, never set on that path ("Typed property
+**f-omp1** — Note q27. Probed 2026-10-01, before the fix: with the
+plugin off, `GET /catalog/view/{book}/{format}/{file}` answered 500
+twice with an empty page: `CatalogBookHandler::view()` calls
+`download(…, inline=true)`, no plugin takes the inline view, and the
+handler reached the `UsageEvent` built with `$this->publication`, never
+set on that path ("Typed property
 APP\pages\catalog\CatalogBookHandler::$publication must not be accessed
-before initialization", app log). The same path probably fails for any
-format file no viewer plugin takes; that was not driven. Control:
-plugin on, the page showed the image.
-Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
+before initialization", app log). Control: plugin on, the page showed
+the image. omp `8c807c919` (pkp/pkp-lib#13444) builds the `UsageEvent`
+with the `$publication` that `download()` looks up. Re-probed
+2026-10-05 at that commit (Settings bullet 6; two runs): with the
+plugin off, `catalog/view/…` answered 200 `text/html` with
+`Content-Disposition: attachment;filename=article.html`; the browser
+saved article.html (282 bytes) and stayed on the book page, for a
+visitor, a Reader and the Press Manager, by the link and by the typed
+address, with no notice and no server error. A format file no viewer
+plugin takes (a "Notes" format holding notes.md) downloaded from the
+book page as notes.md (200 `text/markdown`, attachment) with the plugin
+on or off, for the same three. Ticked again, the HTML view page showed
+the file with its image.
+Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) (closed 2026-10-05, fixed by omp `8c807c919`).
 
 <a id="fn-f-omp2"></a>
 **f-omp2** — Test run 2026-09-25, OMP (scenario 8): the Funding

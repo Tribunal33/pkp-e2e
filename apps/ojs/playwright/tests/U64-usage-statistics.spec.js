@@ -16,8 +16,9 @@
  *   is restricted.
  * - OJS3: S11 never types a bare volume or number.
  * - OJS6: S12 reads the Release 4 files' names only, never their inside.
- * - A1–A4, A6–A11, OJS1, OJS2, OJS4, OJS5, OMP1–OMP3, OPS1: not on these
- *   scenarios' paths (OMP and OPS IDs are the press's and the server's).
+ * - A1–A4, A6–A11, OJS1, OJS2, OJS4, OJS5, OMP1, OMP2, OMP4, OPS1: not on
+ *   these scenarios' paths (OMP and OPS IDs are the press's and the
+ *   server's).
  *
  * Seeding (footnote sc): S1 and S2 read `publicknowledge` with the roster
  * (never seeded with figures). Every other scenario builds its own scratch

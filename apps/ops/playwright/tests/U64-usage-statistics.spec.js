@@ -22,7 +22,7 @@
  * - A5: S9 never opens the Moderator's "Counter R5" while the server is
  *   restricted.
  * - A1–A4, A6–A11: not on these scenarios' paths. OJS1–OJS6: the
- *   journal's. OMP1–OMP3: the press's.
+ *   journal's. OMP1, OMP2, OMP4: the press's.
  *
  * Seeding (footnote sc): S1 and S2 read `publicknowledge` with the OPS
  * roster (never seeded with figures). Every other scenario builds its own

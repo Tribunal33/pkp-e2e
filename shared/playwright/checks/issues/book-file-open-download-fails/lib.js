@@ -1,5 +1,7 @@
-// Helpers of walk.js (issue report docs/issues/U69-A9-book-file-open-download-fails.md).
-// Requiring this file runs nothing. Every helper reads a screen a reader sees, or a file
+// Book-file helpers first written for the U69 A9 walk (pkp-e2e#282, closed 2026-10-05 when
+// omp 8c807c919 fixed the downloads; its report and walk were deleted). Kept because other
+// checks import them (U20 S05, U47 S05, issues/download-issues-stops-at-30,
+// issues/ir-a1-lists-investigation-rows). Requiring this file runs nothing. Every helper reads a screen a reader sees, or a file
 // the install writes (the usage log).
 const fs = require('fs');
 const path = require('path');

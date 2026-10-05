@@ -25,7 +25,7 @@
  *   only, never the "OJS" of another app nor the "Check Status" paragraph.
  * - A3 ❓, A4 ❓: the site's own Plugins list is never opened; S1 reads the
  *   journal's listing pages as the spec lists them.
- * - OMP1–OMP6 🐞, OPS1 🐞: a press's and a preprint server's, in those suites.
+ * - OMP1–OMP5 🐞, OPS1 🐞: a press's and a preprint server's, in those suites.
  *
  * Seeding: scenario endpoints only, as footnote s says; publicknowledge and
  * the seeded roster are only read (S4, signed out). Every other scenario

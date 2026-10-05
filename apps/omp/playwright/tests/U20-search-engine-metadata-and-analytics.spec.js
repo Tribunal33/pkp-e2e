@@ -18,9 +18,6 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - OMP6 🐞: no download address is followed, neither a file entry of the
- *   sitemap nor a "citation_pdf_url"; S6 and S7 read the file page's
- *   source only, never its viewer.
  * - OMP3 🐞, OMP5 🐞: the file page's "DC.Type" and "DC.Identifier.URI"
  *   are never read.
  * - OMP4 🐞: S7 never reads the sitemap after "Create New Version".
@@ -57,8 +54,10 @@
  * addresses both carry are built from the install's base URL, not the
  * worker's port, so every address is compared by its path. Every Settings
  * › Website › "Plugins" load fires the Plugin Gallery grid's server 500
- * (U62's finding), and a file page's viewer fails (OMP6): neither is
- * asserted here. Every absence is read settled and paired with a
+ * (U62's finding), and a file page's viewer logs "PDFJS is not defined"
+ * (U69 A23): neither is asserted here. S6 follows the book page's
+ * "citation_pdf_url"; no file entry of the sitemap is followed, and S6 and
+ * S7 read the file page's source only, never its viewer. Every absence is read settled and paired with a
  * positive control taken the same way (M4, M6): a sitemap's missing
  * entries beside the entries it lists, a missing tag beside the tags the
  * same source carries or carried one step earlier, a missing arrow beside
@@ -95,6 +94,7 @@ const {
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
 const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 const {getPassword} = require('../../../../shared/playwright/data/users.js');
+const {captureDownload} = require('../../../../shared/playwright/pages/SubmissionFilesPages.js');
 
 const DESCRIPTION_HELP =
     'Provide a brief description (50-300 characters) of the press which search engines can display when listing the press in search results.';
@@ -366,7 +366,7 @@ test.describe('Search-engine metadata & analytics', () => {
         // Published work: the book's page follows "Catalog", then the page
         // of its "PDF" file; the page of "Cat One" follows "New Releases"
         // (Rules 2, 4; Fields, "What the sitemap lists"). The file entry is
-        // read, never followed (OMP6).
+        // read, never followed.
         const catalog = sitemap.paths.indexOf(at(tag, '/catalog'));
         expect(catalog).toBeGreaterThan(0);
         expect(sitemap.paths.slice(catalog + 1, catalog + 3)).toEqual([bookPath(tag, tidalId), filePath(tag, tidalId, pdf)]);
@@ -690,8 +690,7 @@ test.describe('Search-engine metadata & analytics', () => {
 
         // Google Scholar's tags, with a press's publisher, publication date
         // and one "citation_pdf_url" (Rule 12; Fields, "What "Google Scholar
-        // Indexing Plugin" writes"). The PDF address is counted, never
-        // followed (OMP6).
+        // Indexing Plugin" writes").
         const source = await readSource(visitor, bookPage);
         expect(source.status).toBe(200);
         expect(metaContents(source, 'gs_meta_revision')).toEqual(['1.1']);
@@ -718,6 +717,13 @@ test.describe('Search-engine metadata & analytics', () => {
         expect(metaContents(source, 'DC.Description')).toEqual(['Tides follow the moon.']);
         expect(metaContents(source, 'DC.Source')).toEqual(['Sea Letters']);
         expect(metaContents(source, 'DC.Type')).toEqual(['Text.Book']);
+
+        // The PDF address: the visitor opens the address "citation_pdf_url"
+        // gives (by its path, the tags carry the install's base URL) and
+        // the browser saves the "PDF" format's file, article.pdf (Rule 12).
+        const [pdfUrl] = metaContents(source, 'citation_pdf_url');
+        const {download: saved} = await captureDownload(visitor, () => visitor.goto(pathOf(pdfUrl)).catch(() => {}));
+        expect(saved.suggestedFilename()).toBe('article.pdf');
 
         // The book's file page: the "PDF" format's link on the book's page
         // opens it; its source carries "DC." tags and no "citation_" tag, and

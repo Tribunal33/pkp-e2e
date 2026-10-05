@@ -1883,14 +1883,17 @@ catalog block only `{if $publicationFormat->getIsApproved()}`;
 format that is not available, is remote, or a file with no price.
 `PublicationFormat::getBestId()` uses the URL Path. Seed-facts (U44 claim
 check K4, 2026-09-24): the format's details block shows only once it
-reads "Approved" and "Available". Every format file's download
-currently fails with a server error, a file uploaded on screen as much
-as a seeded one: the book page's link and the file's view page open,
-and the view page's download answers 500 (the probe log:
-`CatalogBookHandler::$publication must not be accessed before
-initialization`, CatalogBookHandler.php:533; the view page also logs
-"PDFJS is not defined" and "UnexpectedResponseException"), a finding
-for *Monograph landing page*, live-probed 2026-09-28 in three runs.
+reads "Approved" and "Available". Live-probed 2026-09-28 in three
+runs: every format file's download failed with a server error, a file
+uploaded on screen as much as a seeded one: the book page's link and
+the file's view page opened, and the view page's download answered 500
+(the probe log: `CatalogBookHandler::$publication must not be accessed
+before initialization`, CatalogBookHandler.php:533; the view page also
+logged "PDFJS is not defined" and "UnexpectedResponseException"), a
+finding for *Monograph landing page*; fixed by omp `8c807c919`
+(pkp/pkp-lib#13444, 2026-10-05), after which that spec's re-probe of
+2026-10-05 found every free format file opening or downloading under
+its name, the view page still logging "PDFJS is not defined".
 OAI: Harvesting (OAI-PMH), its Rule 3a and note f-omp1. Live-probed
 2026-09-28 (Side effects, "Harvesting"), two runs: the press's OAI list
 carried an available format reading "Awaiting Approval" and left out an

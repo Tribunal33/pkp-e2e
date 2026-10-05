@@ -1,0 +1,13 @@
+diff --git a/lib/pkp/classes/core/PKPContainer.php b/lib/pkp/classes/core/PKPContainer.php
+index b60e45025a..328fdc8fe1 100644
+--- a/lib/pkp/classes/core/PKPContainer.php
++++ b/lib/pkp/classes/core/PKPContainer.php
+@@ -78,7 +78,7 @@ class PKPContainer extends Container
+             // This takes precedence over config settings
+             defined('PKP_PHPUNIT_STRICT_MODE') && PKP_PHPUNIT_STRICT_MODE === true
+                 ? true
+-                : Config::getVar('general', 'strict', true)
++                : Config::getVar('general', 'strict', false)
+         );
+     }
+ 

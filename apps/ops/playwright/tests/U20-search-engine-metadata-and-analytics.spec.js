@@ -30,7 +30,7 @@
  *   paragraph.
  * - A3 ❓, A4 ❓: the site's own Plugins list is never opened; S1 reads the
  *   server's listing pages as the spec lists them.
- * - OJS1, OJS2 🐞, OMP1–OMP6 🐞: a journal's and a press's, in those suites.
+ * - OJS1, OJS2 🐞, OMP1–OMP5 🐞: a journal's and a press's, in those suites.
  *
  * Seeding: scenario endpoints only, as footnote s says; publicknowledge and
  * the seeded roster are only read (S4, signed out). Every other scenario

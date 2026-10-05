@@ -22,7 +22,7 @@
  *   screen-reader-only button is not asserted either way.
  * - A4 🐞: no upload goes past the host's limit (seed-facts.md).
  * - OPS1 ❓: no reader page is read; S7 does not run on a preprint server.
- * - OJS1, OMP1: the journal's and the press's, in those trees.
+ * - OJS1, OMP2: the journal's and the press's, in those trees.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster
  * are read-only. S1 and S2 run on publicknowledge on their own scratch

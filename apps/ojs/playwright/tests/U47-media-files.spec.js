@@ -18,7 +18,7 @@
  * - A4 🐞: no upload goes past the host's limit (seed-facts.md).
  * - OJS1 ❓: S7's reader is signed in, the one reader who always gets the
  *   current page.
- * - OMP1, OPS1: the press's and the preprint server's, in those trees.
+ * - OMP2, OPS1: the press's and the preprint server's, in those trees.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster
  * are read-only. S1 and S2 run on publicknowledge on their own scratch

@@ -19,9 +19,7 @@
  * spec's Coverage section is the record of everything else left out):
  * - A5: S9 never opens the Series editor's "Counter R5" while the press is
  *   restricted.
- * - OMP3: no test opens a book's PDF or "Appendix" file on screen; every
- *   file figure is seeded.
- * - A1–A4, A6–A11, OMP1: not on these scenarios' paths. OJS1–OJS6 and
+ * - A1–A4, A6–A11, OMP1, OMP4: not on these scenarios' paths. OJS1–OJS6 and
  *   OPS1: the journal's and the server's.
  *
  * Seeding (footnote sc): S1 and S2 read `publicknowledge` with the roster

@@ -1018,7 +1018,11 @@ forEachApp(async (app) => {
                     const r = await safe(`usage-${label}`, fn);
                     await sleep(1000);
                     const after = readLog(app);
-                    return {file: after.file, err: after.err, lines: after.lines.slice(before).map(slimLog), result: r && r.error ? r.error : undefined};
+                    // The log is the fleet's: other agents write to it at the same time, so the slice is kept to this press's
+                    // lines, and the press's cumulative lines are kept as well (a slice by count missed a line under load, sync S05).
+                    const mine = (l) => String(l.canonicalUrl || '').includes(`/index.php/${A.path}/`);
+                    return {file: after.file, err: after.err, lines: after.lines.slice(before).filter(mine).map(slimLog),
+                        pressTotal: after.lines.filter(mine).map(slimLog), result: r && r.error ? r.error : undefined};
                 };
                 o.book = await step('book', () => bookPage(A.path, A.subs['1'].id, 'u-01-book'));
                 const ch = (A.subs['1'].chapters || [])[0];

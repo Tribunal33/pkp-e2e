@@ -19,8 +19,6 @@
  * - A3 🐞: the empty upload window is read for what shows; the
  *   screen-reader-only button is not asserted either way.
  * - A4 🐞: no upload goes past the host's limit (seed-facts.md).
- * - OMP1 🐞: "HTML Monograph File" stays on; S7's reader opens the format
- *   with the plugin as the press installs it.
  * - OJS1, OPS1: the journal's and the preprint server's.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster

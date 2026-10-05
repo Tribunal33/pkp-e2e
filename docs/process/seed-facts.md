@@ -1052,18 +1052,21 @@ config-file settings.
   ccK1, `s1-mgr-assign-form-*`, `s2-mgr-assign-deciding-assign-form-*`).
   On OPS "Preprint Server manager" is offered at Production (2026-09-26,
   U54 ccK2 `k2-21-manager-workflow_*`).
-- On a press, no publication format file can be downloaded: the book
-  page's link and the file's view page open (the view page logs "PDFJS is
-  not defined"), but `catalog/download/…` answers 500 for a seeded file and
-  for one uploaded and given terms on screen alike, signed out or signed in
-  (the log: `CatalogBookHandler::$publication must not be accessed before
-  initialization`). OMP, 2026-09-28 (U73 claim check K3 K3-8 and K4; earlier
-  U54 claim check K4 K4-6, K1 K1-13). A non-PDF, non-HTML file's own link
-  (`catalog/view/…`), and a PDF or HTML link on a press with "PDF.js PDF
-  Viewer" or "HTML Monograph File" unticked, answers 500 with an empty
-  page; an HTML file's view page shows, its images included. OMP,
-  2026-09-28 (U69 claim check K4, `r1-f-15-other-pressed`,
-  `r1-o-03-pdf-pressed`, `r1-o-05-html-pressed`).
+- On a press, a publication format file opens and downloads (since omp
+  `8c807c919`, pkp/pkp-lib#13444; before it every `catalog/download/…`
+  answered 500, `CatalogBookHandler::$publication must not be accessed
+  before initialization`): `catalog/download/{book}/{format}/{file}` and an
+  earlier version's `catalog/download/{book}/version/{publication}/{format}/{file}`
+  answer the file, as an attachment and with `?inline=1` inline, signed out
+  or signed in. A PDF's link opens its view page, whose viewer renders the
+  file and whose bar "Download" and viewer download save it (the page still
+  logs "PDFJS is not defined", U69 A23); with "PDF.js PDF Viewer" unticked
+  the link saves the file. A file no viewer takes (an "Appendix", a
+  notes.md), and an HTML file with "HTML Monograph File" unticked, download
+  as an attachment from the book page; with the plugin ticked an HTML
+  file's view page shows, its images included. Each writes its usage line.
+  OMP, 2026-10-05 (the upstream sync's S05 claim checks: U20
+  `checks/U20/S05`, U47 `checks/U47/S05`, U64 `checks/U64/S05`).
 - A reviewer seeded `reviewRounds[].reviewers[].status: 'completed'` is a
   submitted review ("Review Submitted"), not an editor-confirmed one: the
   "Minimum Confirmed Reviews Required" count of Settings › Workflow › Review

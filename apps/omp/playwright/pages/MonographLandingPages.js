@@ -522,6 +522,26 @@ class ViewableFilePage extends BasePage {
         return this.page.locator('#pdfCanvasContainer > iframe');
     }
 
+    /** The pdf.js viewer inside that frame. */
+    pdfViewer() {
+        return this.page.frameLocator('#pdfCanvasContainer > iframe');
+    }
+
+    /** The viewer toolbar's page count ("of 1"). */
+    pdfPageCount() {
+        return this.pdfViewer().locator('#numPages');
+    }
+
+    /** The viewer's error bar, shown when the file cannot be loaded. */
+    pdfErrorBar() {
+        return this.pdfViewer().locator('#errorWrapper');
+    }
+
+    /** The viewer toolbar's own download button. */
+    pdfViewerDownload() {
+        return this.pdfViewer().locator('#download');
+    }
+
     /** The HTML file's frame element and its content. */
     htmlFrameElement() {
         return this.page.locator('iframe[name="htmlFrame"]');

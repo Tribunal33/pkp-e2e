@@ -263,9 +263,10 @@ bottom, then "Save": <sup>q</sup>
 
    An article's "Total" is its abstract views plus its file views (plus
    its JATS views {OJS}). Only published items are counted, so the pages
-   list published articles and issues alone. On a press, a book's PDF or
-   "Appendix" file fails to open from the book page, so neither is ever
-   counted ⚠ [OMP3](#omp3). <sup>j</sup>
+   list published articles and issues alone. On a press, an "Appendix"
+   file counts as a "Supplementary File", except an HTML one opened in
+   its view page while "HTML Monograph File" is on, which counts as an
+   "HTML" file view ⚠ [OMP4](#omp4). <sup>j</sup>
 2. **The day's visits appear the next day.** Visits are written to a log
    as they happen. Once a day the routine task "Usage statistics file
    loader task" turns every finished day's log into figures, work no
@@ -277,8 +278,9 @@ bottom, then "Save": <sup>q</sup>
    unpublished version or issue; a Global Privacy Control signal alone
    does not stop the recording. <sup>j</sup>
    - 3a. The daily processing drops a known robot's visit, and counts the
-     same visitor opening the same item again within 30 seconds once
-     ⚠ [OJS2](#ojs2); no screen shows either. <sup>w</sup>
+     same visitor opening the same item again within 30 seconds once;
+     a repeat in the same second wrongly counts again ⚠ [OJS2](#ojs2).
+     No screen shows either. <sup>w</sup>
 4. **Where a visit came from.** While the journal collects geographical
    data (Rule 28), each visit also records the visitor's country (region,
    city) from a location database that the routine task "Update DB-IP city
@@ -1176,6 +1178,7 @@ Left out of the scenarios above, by reason:
   - a "Start Date" before the earliest possible date in a "Counter R5" report's "Report Settings": the refusal under the box names the plain date, no "##" (the guard for A3, once fixed)
   - with an article page visited and no file opened, the "Journal Article Requests (IR_A1)" file's "Metric_Type" column holds only the types its "Metric_Types" line names (the guard for OJS5, once fixed) {OJS}
   - a "COUNTER Reports" year link's XML file names its report "JR1" (and "AR1") in its "Name" attribute (the guard for OJS6, once fixed) {OJS}
+  - a reader opening a book's PDF and its "Appendix" file from the book page, each visit a line in the day's log <sup>j</sup>, of type PDF and "Supplementary File" (Rule 1; OMP3, retired) {OMP}
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
     Name", whose reports keep the journal's name (Rule 24)
@@ -1216,7 +1219,8 @@ Left out of the scenarios above, by reason:
     code alone; Rule 9a)
   - OJS1 (the Release 4 page beside "Counter R5"; Rule 25; scenario 12
     marks it)
-  - OJS2 (one HTML galley view writing three visits; Rule 3a)
+  - OJS2 (one HTML galley view counted once more per missing file it
+    names; Rule 3a)
   - OJS3 (the "Issues" search by a bare volume or number; Rule 13;
     scenario 11 marks it)
   - OJS4 (more than 30 issues in "Download Issues"; Rule 16)
@@ -1224,8 +1228,7 @@ Left out of the scenarios above, by reason:
     Rule 20)
   - OJS6 (the report name inside the Release 4 file; Rule 25a; scenario
     12 marks it)
-  - OMP3 (a book's PDF or "Appendix" file opened from the book page;
-    Rule 1)
+  - OMP4 (an HTML "Appendix" file opened in its view page; Rule 1)
 - **No seed**:
   - visits turned into figures the next day, with known robots and
     repeats within 30 seconds dropped (Rules 1–3a), since no test
@@ -1261,20 +1264,21 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A refused request for the "Articles" figures answers with a code, not a sentence | 🐞 | minor | — |
+| [OJS2](#ojs2) | One view of an HTML galley counts once more for each file it names that was never uploaded | 🐞 | minor | upstream sync (claude), 2026-10-05 — ❓ settled to 🐞 |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | "COUNTER Reports": the downloaded XML file names its report by a cut-off code path instead of "JR1" or "AR1" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [OMP3](#omp3) | A book's PDF or "Appendix" file fails to open, so its visit is never counted | 🐞 | critical · crash: both | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | Custom Range refuses an open-ended range | ❓ | minor | — |
 | [A9](#a9) | The downloaded spreadsheets carry no byte-order mark | ❓ | minor | — |
 | [A12](#a12) | The date range list does not close on Escape | ❓ | minor | — |
 | [A13](#a13) | After a preset, the "Custom Range" boxes still show the page's first range, and "Apply" on them undoes the preset | ❓ | minor | — |
 | [OJS1](#ojs1) | A journal still offers the retired COUNTER Release 4 reports beside "Counter R5" | ❓ | minor | — |
-| [OJS2](#ojs2) | One view of an HTML galley writes three visits to the day's log | ❓ | latent | — |
 | [OJS3](#ojs3) | The "Issues" search finds no issue by a bare volume or number | ❓ | minor | — |
+| [OMP4](#omp4) | An HTML "Appendix" file opened in its view page counts as an "HTML" file view, not a "Supplementary File" | ❓ | minor | — |
 | [OMP1](#omp1) | A press counts series-page visits that no page shows | ✅ | invisible | — |
 | [OMP2](#omp2) | A press offers "Filters" only while it has a series, and names abstract views "Catalog Entries" | ✅ | minor | — |
 | [OPS1](#ops1) | A preprint server offers "Filters" only with two or more sections | ✅ | minor | — |
+| [OMP3](#omp3) | Retired: a book's PDF or "Appendix" file failed to open, so its visit was never counted; both now open and count (Rule 1) | ✅ | retired | upstream sync (claude), 2026-10-05 — fixed upstream (omp `8c807c919`, pkp/pkp-lib#13444) |
 
 ### All apps
 
@@ -1520,14 +1524,19 @@ Release 4 has been superseded, and two COUNTER pages invite the wrong one.
 Basis: probe, 2026-09-27. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — One HTML galley view writes three visits** · ❓ · latent.
-On a journal, one view of an HTML galley writes three file-view lines
-for the same file in the same second to the day's usage log; a press and
-a preprint server write one. The 30-second rule (Rule 3a) should count
-them once, but no screen of a test install shows the processed figure.
-Question: does one HTML view count once? Lean: yes, harmless; the three
-lines fall inside the 30 seconds.
-Basis: probe, 2026-09-27. <sup>f-ojs2</sup>
+**OJS2 — One view of an HTML galley counts once more for each file it names that was never uploaded** · 🐞 · minor.
+On a journal, a reader opens an HTML galley whose file names a picture
+or a style sheet that was never uploaded with it. Each missing file's
+address serves the galley's own file and is recorded as another view of
+it, and the 30-second rule (Rule 3a) does not merge them, because they
+come in the same second. For a galley naming two missing files, once
+the day is processed by hand <sup>w</sup>, Statistics › "Articles" reads
+"HTML" 3 for the one view, and "Download Files" lists the HTML file
+with 3. Expected: 1. A press and a preprint server record the same view
+once. A galley whose named files were all uploaded was not tried.
+Re-checked: upstream sync (claude), 2026-10-05 — was ❓ (does one HTML
+view count once?); a processed day showed three views, so 🐞.
+Basis: probe, 2026-10-05. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
 **OJS3 — The "Issues" search ignores a bare volume or number** · ❓ · minor.
@@ -1610,14 +1619,18 @@ A press's "Articles" page ("Monographs") filters by "Series" and offers
 views "Catalog Entries". A different parameter on the same machinery.
 Basis: probe, 2026-09-27. <sup>f-omp2</sup>
 
-<a id="omp3"></a>
-**OMP3 — A book's PDF or "Appendix" file is never counted** · 🐞 · critical · crash: both.
-On a press, a reader who opens a book's PDF from the book page gets a
-viewer that stays empty, and one who opens its "Appendix" file gets a
-blank page: the app fails, so no file view is recorded. An HTML file
-opens and is counted. The failure itself is [Search engine metadata &
-analytics' OMP6](U20-search-engine-metadata-and-analytics.md#omp6).
-Basis: probe, 2026-10-01. <sup>f-omp3</sup>
+<a id="omp4"></a>
+**OMP4 — An HTML "Appendix" file counts as a primary file view** · ❓ · minor.
+On a press with "HTML Monograph File" on, a reader opens a book's HTML
+file of the "Appendix" component from the book page. Its view page
+records the visit as an "HTML" file view, counted in "File Views" and
+listed as "Primary File" once the day is processed <sup>w</sup>, where every other "Appendix" file, and the
+same file with the plugin off (it then downloads), counts as a
+"Supplementary File" (Rule 1).
+Question: should an HTML file's count follow its component, as a
+download's does? Lean: yes; the component decides everywhere else, so
+the same file should not change kind with a viewer plugin.
+Basis: probe, 2026-10-05. <sup>f-omp4</sup>
 
 ### OPS
 
@@ -1627,6 +1640,11 @@ A preprint server's "Articles" page ("Preprints") offers "Filters" only
 while the server has two or more sections, so a server with its one
 default section has none.
 Basis: probe, 2026-09-27. <sup>f-ops1</sup>
+
+### Retired
+
+<a id="omp3"></a>
+**OMP3 — A book's PDF or "Appendix" file is never counted** · ✅ · retired. Fixed upstream by omp `8c807c919` (pkp/pkp-lib#13444), verified 2026-10-05 on OMP: from the book page a book's PDF opens in its viewer and downloads, its "Appendix" file downloads, and each visit is counted, the PDF under "File Views" and "PDF" on "Monographs" and the "Appendix" file as a "Supplementary File" in "Download Files" (Rule 1). <sup>f-omp3</sup>
 
 ---
 
@@ -1932,8 +1950,12 @@ request with `DNT: 1` wrote nothing; one with `Sec-GPC: 1` alone wrote a
 line. The Journal Manager opened the unpublished work's page and (OJS)
 the unpublished issue's table of contents by address, and neither wrote
 a line. The seeded Totals read 9 on OJS (5 abstract, 3 file, 1 JATS)
-and 8 on OMP and OPS; an unpublished work was never listed. OMP's PDF
-and "Appendix" files wrote nothing (OMP3).
+and 8 on OMP and OPS; an unpublished work was never listed. Re-probed
+2026-10-05 after omp `8c807c919` (pkp/pkp-lib#13444), three apps, signed
+out and as a Reader, two runs: OMP's PDF (its view page's file and the
+bar's "Download") wrote a file line of type PDF (515), the "Appendix"
+file a supplementary line (531), the HTML file one HTML line; OJS's and
+OPS's PDF and "Data" galleys wrote 515 and 531 lines as above.
 
 <a id="fn-k"></a>
 **k** — No routine task runs on a test install; figures come only from
@@ -2170,6 +2192,20 @@ written like any other; at the install's "Do not collect any
 geographical data" no line recorded a place; the seed's processed logs
 lay uncompressed in the archive folder at the "Compress Logs" default.
 The two storage settings were saved and reopened at both ends (fn-q).
+Re-probed 2026-10-05 (Rule 3a), the "Usage statistics file loader task"
+run by name on a staged copy of the day's lines, two runs: five or six PDF
+lines of one OMP visitor, each within 30 seconds of the one before,
+became 1; three OJS lines of one HTML galley view, all in the same
+second, stayed 3, because `PKPTemporaryTotalsDAO::removeDoubleClicks()`
+deletes a repeat only when it comes more than 0 seconds after the first
+(the same on `stable-3_5_0`). The by-hand run, as the probe made it
+(`shared/playwright/checks/U64/S05/s05.js`, phase load): copy the
+visits' lines from the day's log into
+`{files_dir}/usageStats/stage/{name}_usage_events_{today}.log` with each
+line's time moved to yesterday (the task skips today's own log, refuses
+a day before the install day, and the pages end at yesterday), run
+`php lib/pkp/tools/scheduler.php test --name=APP\tasks\UsageStatsLoader`
+and then the queued jobs (the kit's `drainJobs(app)`).
 
 <a id="fn-x"></a>
 **x** — Live-probed 2026-09-27 (Cross-feature interactions, the
@@ -2551,7 +2587,21 @@ it, so this is a regression, not a choice. Named in A1's issue report
 one view of an HTML galley wrote three file-view lines of type HTML for
 the same file in the same second on OJS, one on OMP and OPS. The
 30-second rule is `RemoveDoubleClicks` (fn-j); a test install never runs
-it (Rule 5).
+it (Rule 5). Re-probed 2026-10-05, OJS scratch journal, signed out,
+two runs: the seeded HTML galley's file names `article.css` and `figure.png`,
+which the seed does not upload; the browser asked
+`article/download/{id}/{galley}/article.css` and `…/figure.png`, each
+answering 200 `text/html` with the galley file, and each wrote a 515
+line of type HTML, three in the same second from the same address. The
+"Usage statistics file loader task", run by name on a staged copy of
+the day's lines, left all three (fn-w: `removeDoubleClicks()` compares
+with `> 0` seconds): "Articles" read "HTML" 3, "File Views" 4 and
+"Total" 5, and "Download Files" listed article.html "Primary File" 3.
+OMP answered the two addresses 404, and OPS's "HTML" galley link
+downloads the file instead of showing it; each wrote one line. On a
+second scratch journal the same day, two runs, whose galley had
+figure.png uploaded and article.css missing, one view wrote two such
+lines.
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — fn-h (`_processSearchPhrase()` matches the collector's
@@ -2603,7 +2653,35 @@ and the page's script failing with "PDFJS is not defined" (a separate
 fault of the view page, [Monograph landing page, A23](U69-monograph-landing-page.md#a23))
 and "UnexpectedResponseException". Neither wrote a line to the day's usage
 log; the HTML format wrote one. The same failure is U20's OMP6.
-Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) ([docs/issues/U69-A9-book-file-open-download-fails.md](../issues/U69-A9-book-file-open-download-fails.md)).
+Re-probed 2026-10-05 after omp `8c807c919` (pkp/pkp-lib#13444), OMP
+scratch press, signed out and as a Reader, two runs: the PDF's view page
+rendered its page with no error bar,
+`catalog/download/{book}/{format}/{file}?inline=1` answering 200
+`application/pdf` (the page's script still fails with "PDFJS is not
+defined", [Monograph landing page, A23](U69-monograph-landing-page.md#a23));
+the bar's "Download", the "Appendix" link and, with "PDF.js PDF Viewer"
+unticked, the "PDF" link each saved the file. The day's usage log took a
+PDF file line (515) for the view and for "Download", a supplementary
+line (531) for "Appendix" and one HTML line for the HTML file. After the
+"Usage statistics file loader task" ran on them, "Monographs" read
+"File Views" 2 ("PDF" 1, "HTML" 1), and "Download Files" listed the PDF
+and HTML files as "Primary File" and the "Appendix" file as
+"Supplementary File".
+Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) (closed 2026-10-05, fixed by omp `8c807c919`).
+
+<a id="fn-f-omp4"></a>
+**f-omp4** — Live-probed 2026-10-05, OMP scratch press, two runs, as each
+role that opened the book page: the same article.html in the press's
+"Appendix" component wrote a usage line of type 515 (a file view) from
+its view page with "HTML Monograph File" on, both before the plugin was
+switched off and after it was switched on again, and 531 (supplementary) from its download
+with the plugin off; the same HTML in a "Book Manuscript" format wrote
+515 in both states, and notes.md ("Appendix") 531 in both.
+`HtmlMonographFilePlugin::downloadCallback()` fires
+`ASSOC_TYPE_SUBMISSION_FILE` without the genre check that
+`CatalogBookHandler::download()` makes (the same line on
+`stable-3_5_0`). OJS's `HtmlArticleGalleyPlugin` fires the same way; an
+HTML galley of a supplementary component was not tried on a journal.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn-e (OPS `StatsHandler::addSectionFilters()`,
