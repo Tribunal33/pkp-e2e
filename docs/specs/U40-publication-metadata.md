@@ -2804,8 +2804,8 @@ it: 3.5's `canEditPublication(int $submissionId, …)` locks the Author out
 of every version once one is published (`classes/submission/Repository.php:514-547`),
 and none of them has the funders API or `reviewRoundIds`.
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
-Issue report (the funders): [docs/issues/U40-A21-author-new-version-changes-published-funders.md](../issues/U40-A21-author-new-version-changes-published-funders.md).
-Issue report (the review round): [docs/issues/U40-A21-review-round-taken-from-other-version.md](../issues/U40-A21-review-round-taken-from-other-version.md).
+Issue report (the funders): [pkp-e2e#929](https://github.com/jardakotesovec/pkp-e2e/issues/929) ([docs/issues/U40-A21-author-new-version-changes-published-funders.md](../issues/U40-A21-author-new-version-changes-published-funders.md)).
+Issue report (the review round): [pkp-e2e#930](https://github.com/jardakotesovec/pkp-e2e/issues/930) ([docs/issues/U40-A21-review-round-taken-from-other-version.md](../issues/U40-A21-review-round-taken-from-other-version.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1 — OJS1 evidence.** An OJS submission whose publication is
