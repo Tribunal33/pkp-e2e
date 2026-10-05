@@ -125,9 +125,17 @@ the account's roles, never on which dashboard page it opens from:
    applies uniformly to views, search and counts. <sup>c</sup>
 4. **Addresses.** The page's address records the current state: the view,
    the search phrase, any filters, the sort, and an open workflow panel. So
-   the page can be bookmarked, shared or reloaded as it was. Two
-   exceptions: the pager's current page is never recorded (page 2 cannot
-   be bookmarked), and a switched-off sort is mis-recorded ⚠ [A5](#a5).
+   the page can be bookmarked, shared or reloaded as it was, with three
+   exceptions: <sup>e</sup>
+   - the pager's current page is never recorded (page 2 cannot be
+     bookmarked);
+   - a switched-off sort is mis-recorded ⚠ [A5](#a5);
+   - an address that names no view, or a view the account's sidebar does
+     not offer (a Journal Manager's "Needs editor" opened by a Section
+     Editor), opens the landing view, "Assigned to me", and drops the
+     search phrase and the filters: the view's full list, no chip, an
+     empty search box ⚠ [A18](#a18). <sup>a18</sup>
+
    The retired submission-list address from older versions,
    `{journal path}/submissions`, forwards to the signed-in account's home
    list. The precedence is owned by
@@ -170,11 +178,20 @@ the account's roles, never on which dashboard page it opens from:
    "Assigned To Editor" field (Rule 8) ⚠ [A12](#a12).
 <a id="search"></a>
 6. **Search within a view.** The search box above the list ("Search
-   submissions, ID, authors, keywords, etc.") narrows the *current view*.
-   The heading keeps the view's name and the count follows. An active
-   search shows as a chip above the table with an X to clear it. "Clear
-   Filters" appears beside the chips whenever panel filters are active.
-   Switching views clears the search. <sup>g</sup>
+   submissions, ID, authors, keywords, etc.") narrows the *current view*
+   when Enter is pressed; typing alone narrows nothing. The heading keeps
+   the view's name and the count follows. <sup>g</sup>
+   - **A number** lists the submission with that ID, and also every
+     submission whose title contains those digits, even inside a longer
+     number: for example, "116" lists submission 116, "Report number 116
+     on lakes" and "Code 1167 river notes". The sidebar's box (Rule 7)
+     matches a number the same way.
+   - **The chips.** An active search shows as a chip, "Search: {phrase}",
+     above the table, with an X to clear it. "Clear Filters" appears
+     beside the chips whenever panel filters are active (Rule 8b).
+   - **Switching views** clears the search: the chip goes and the box
+     empties. A phrase typed without pressing Enter stays in the box on the
+     next view, which shows its full list with no chip.
 <a id="search-view"></a>
 7. **Global search.** The sidebar's "Search submissions" box searches
    *everything the account can reach*, regardless of state: the whole
@@ -204,7 +221,8 @@ the account's roles, never on which dashboard page it opens from:
      empties its fields: the panel stays open, and the list keeps its
      chips and count. "Apply Filters" then drops every filter; "Close"
      keeps them, and the panel reopens showing them. The "Clear
-     Filters" beside the chips (Rule 6) drops every filter at once.
+     Filters" beside the chips (Rule 6) drops every filter at once and
+     keeps the search phrase with its chip.
    - 8c. **Unapplied changes.** Closing the panel without "Apply Filters"
      drops the changes made in it without asking: the list stays as it
      was and the panel reopens without them.
@@ -464,10 +482,10 @@ scenario's starting state are in its footnote.
    published submission titled "Published study".
 
    - **The search box**: type target into the box labelled "Search
-     submissions, ID, authors, keywords, etc.": the list narrows to "Search
-     target", the heading keeps the view's name and its count follows
-     ("Active submissions (1)"), and the phrase shows as a chip above the
-     table.
+     submissions, ID, authors, keywords, etc." and press Enter: the list
+     narrows to "Search target", the heading keeps the view's name and its
+     count follows ("Active submissions (1)"), and the phrase shows as a
+     chip above the table.
    - **The chip's X**: press it: the full view is back, the count with it
      ("Active submissions (3)").
    - **A filter on top of the search**: search for target again, press
@@ -480,8 +498,8 @@ scenario's starting state are in its footnote.
    - **Mailbox**: none of the above sent an email; the mail catcher holds
      nothing new.
    - **Control**: type Published study into the in-page search box on
-     "Active submissions": "Active submissions (0)"; the box narrows the
-     current view and never reaches beyond it. <sup>s3</sup>
+     "Active submissions" and press Enter: "Active submissions (0)"; the
+     box narrows the current view and never reaches beyond it. <sup>s3</sup>
 
 4. **Global search**
 
@@ -501,8 +519,8 @@ scenario's starting state are in its footnote.
    - **Clearing the filter too**: press "Clear Filters": the page returns
      to "Active submissions", the view the search started from, with its
      in-page search box back above the list.
-   - **Control**: type Declined study into that in-page search box:
-     "Active submissions (0)"; only the sidebar's search reaches a declined
+   - **Control**: type Declined study into that in-page search box and
+     press Enter: "Active submissions (0)"; only the sidebar's search reaches a declined
      submission from here. <sup>s4</sup>
 
 5. **Filter the list**
@@ -801,6 +819,9 @@ Left out of the scenarios above, by reason:
   - the guard for A10 (issue report `docs/issues/U23-A10-pager-next-lacks-spoken-label.md`): on a list with two pages, every pager button carries a "Go to …" name, "Go to Next" included
   - the guard for A4 and A6 (issue report `docs/issues/U23-A4-A6-review-popover-cancelled-overdue-wording.md`): the dashboard popover of a reviewer the editor cancelled names the editor, and that of an accepted review past its deadline speaks of the review deadline
   - the guard for A5 (issue report `docs/issues/U23-A5-dashboard-unsort-keeps-sort-in-address.md`): in scenario 7 ("Sort and page"), a third click on "ID" leaves the address without `sortColumn` and `sortDirection`
+  - a number in the search box listing the submission with that ID and those whose titles hold its digits, in either box (Rules 6, 7)
+  - the "Clear Filters" beside the chips dropping the filters and keeping the search chip (Rule 8b)
+  - a phrase typed without Enter staying in the box on the next view, over its full list with no chip (Rule 6)
 - **Nothing new to test**:
   - the "Showing {first} to {last} of {total}" line under the list, and "Previous" and "Next" that cannot be pressed at the ends of the pager (Rule 5)
   - Site Administrator holding Journal Manager in the journal, journal-wide like the Journal Manager (Actors row 2; the Journal Manager's views, scenario 2)
@@ -823,6 +844,7 @@ Left out of the scenarios above, by reason:
   - A15 (no sort state told to a screen reader; Rule 5)
   - A16 (paging repeats and skips submissions sharing one date and time; Rule 5)
   - A17 (strict mode on: the sidebar's search failing; Rule 7, Settings bullet 4)
+  - A18 (a search address with no view, or one the account lacks, opening "Assigned to me" without its search; Rule 4)
   - OMP1 (no series filter on a press)
 - **No seed**:
   - "Reviews overdue" (Rule 2) and the "Review Request overdue by {days} days" popover (Rule 10): no seed backdates a request or a review deadline
@@ -866,6 +888,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | Two values chosen in one filter field: one chip or two? | ❓ | minor | — |
 | [A13](#a13) | In French the recommending editors' line may read a raw code; never seen on screen | ❓ | minor | — |
 | [A14](#a14) | A recommending editor's row before recording; never seen on screen | ❓ | minor | — |
+| [A18](#a18) | An address with a search phrase but no view, or a view the account lacks, opens "Assigned to me" with the phrase and filters dropped | ❓ | minor | — |
 | [OMP1](#omp1) | A press's filter panel never offers a series filter, however many series exist | ❓ | minor | — |
 
 ### All apps
@@ -1110,6 +1133,24 @@ setting also breaks deleting a Submission Library file and a reviewer's
 file list ([Submission & Publisher Libraries A5](U39-submission-and-publisher-libraries.md#a5)).
 Basis: probe, 2026-10-03. <sup>a17</sup>
 
+<a id="a18"></a>
+**A18 — A search address without a usable view opens a different list** · ❓ · minor.
+A person who opens a dashboard address carrying a search phrase expects
+that search. When the address names no view, or a view the account's
+sidebar does not offer, the page opens "Assigned to me" instead and
+drops the phrase and any filters without a message: no chip, an empty
+search box, and the view's full list. A Journal Manager's "Needs editor"
+search link opened by a Section Editor shows the Section Editor's own
+assigned submissions, with nothing saying the search was dropped; a
+hand-typed address holding only a phrase shows a Journal Manager
+"Assigned to me" in full. With a view the account has, the same phrase
+and filters are kept.
+Question: should such an address keep its search, for instance on the
+landing view or under "Search Results"? Lean: 🐞; the address is the
+page's record of a search (Rule 4), and dropping it silently shows
+submissions the person did not ask for.
+Basis: probe, 2026-10-05. <sup>a18</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1266,7 +1307,7 @@ and after a fresh sign-in (live-probed 2026-09-28, all three apps; fn-a9).
 filter params, `sortColumn`/`sortDirection`, `workflowSubmissionId` (+
 `workflowMenuKey`, the open panel's menu position) — `dashboardPageStore.js` treats the URL as
 the source of truth (an unknown `currentViewId` falls back to the first
-view). Legacy page `submissions`
+view, dropping the phrase and filters: fn-a18). Legacy page `submissions`
 (`PKP\pages\dashboard\DashboardHandler::index`) redirects through the
 role-home logic — live-probed 2026-08-26 on all three apps during the
 My Submissions build and re-probed the same day from the editorial side:
@@ -1313,7 +1354,9 @@ Editor and after a search or a sort in French; it was empty on later
 reads, and the page's visible text never held it.
 
 <a id="fn-g"></a>
-**g — in-page search.** `DashboardControlSearch.vue`, label
+**g — in-page search.** `DashboardControlSearch.vue` (the shared
+`Search.vue`, which emits the phrase only on Enter, `@keydown.enter`, or
+when cleared), label
 `editor.submission.search` = "Search submissions, ID, authors, keywords,
 etc."; sets the `searchPhrase` URL param and resets to page 1; the phrase
 rides `submissionsQuery` alongside the view's own criteria — it narrows,
@@ -1325,6 +1368,35 @@ the placeholder renders verbatim; the phrase matched a title, a numeric
 submission ID and an author's family name; the chip read "Search:
 {phrase}" and its X restored the full view with the heading count
 following each way.
+Live-probed 2026-10-05 (Rule 6; OJS, OMP and OPS `main`, two runs each,
+a scratch Journal Manager and a scratch Section Editor, Series Editor or
+Moderator, on scratch journals whose titles and abstracts held no digit
+except where named): the box's accessible name and placeholder read
+"Search submissions, ID, authors, keywords, etc."; a submission's ID,
+with no digit anywhere in its text, listed it alone ("Active submissions
+(5)" → "(1)"), also through the address `?currentViewId=active&searchPhrase={ID}`;
+another's ID listed it with "Report number {ID} on lakes" and "Code
+{ID}7 river notes" ("Active submissions (3)"; OJS 116 / 1167, OMP 110 /
+1107, OPS 67 / 677); "20", which no ID or text held, gave "Active
+submissions (0)"; "Zephyr" listed only the one submission by that
+author. Abstracts holding the digits were not tried. The phrase rode the
+view's own criteria in the `_submissions` request (`status[]=1`,
+`assignedWithRoles…`, `isUnassigned`): a declined submission's ID on
+"Active submissions" gave (0); on "Needs editor" (OJS, OMP) an ID whose
+submission had an editor gave "Needs editor (0)"; the Section Editor's
+"Assigned to me" gave (1) for an assigned ID and (0) for another.
+Committing "study" from page 2 of "Active submissions (32)" landed on
+page 1 (30 rows, "1" `aria-current`, `offset=0&page=1`). The chip read
+"Search: {phrase}", its X named "Clear search phrase"; the X restored
+"Active submissions (5)" with an empty box and address, and a reload of
+a searched address kept the chip, the count and the box's text. A view
+switch with "Search: Filler" and a Days filter applied gave "Assigned to
+me (0)" with no chip, an empty box and neither parameter in the address,
+and "Active submissions (32)" on return. An ID typed without Enter, then
+"Needs editor" (OPS: "Assigned to me") pressed: the box still held the
+ID over "Needs editor (4)" (OPS "Assigned to me (0)") with no chip and
+no `searchPhrase`, and still held it back on "Active submissions (5)";
+no dialog asked.
 
 <a id="fn-h"></a>
 **h — global search and the Search Results view.**
@@ -1346,6 +1418,12 @@ search box was absent on the view and clearing the phrase returned to the
 non-default view the search started from (all three apps); clearing the
 phrase while a filter chip stayed active kept the "Search Results" view
 (OJS).
+Live-probed 2026-10-05 (Rule 6's number; OJS, OMP and OPS `main`, two
+runs each): a submission's ID gave "Search Results (1)" listing it, and
+another's ID "Search Results (3)" with the two titles holding its digits
+(fn-g); a declined and an incomplete submission were found by ID too.
+The assigned-only Section Editor's search found their assigned
+submission by ID and gave "Search Results (0)" for an unassigned one.
 
 <a id="fn-i"></a>
 **i — filters.** `PKPSubmissionFilters` (shared):
@@ -1403,6 +1481,16 @@ with no chip and a clean address; the chips row's "Clear Filters" did the
 same at once. A tick left unapplied, then "Close": no request, the list
 unchanged ("Active submissions (2)", no chip), no browser dialog, and the
 panel reopened empty; a reload read the same.
+Live-probed 2026-10-05 (Rule 8b, with a search; OJS, OMP and OPS
+`main`, two runs each, a scratch Journal Manager, 31 "Filler study"
+submissions created that day): "Search: Filler" plus "Days since last
+activity" at 1 read "Active submissions (0)" with the chips "Search:
+Filler" and "Days since last activity: 1" (its X named "Clear filter:
+Days since last activity: 1") and "Clear Filters" beside them, which a
+search alone did not show; pressing that "Clear Filters" gave "Active
+submissions (31)" with the "Search: Filler" chip alone, the address
+keeping `searchPhrase=Filler` and losing `daysInactive`; a reload read
+the same.
 
 <a id="fn-j"></a>
 **j — the activity cell.**
@@ -2041,6 +2129,33 @@ with `nb`): "Search Results (0)" and "No Items", no message; with
 `Application::ASSOC_TYPE_PUBLICATION` in that line, the same search
 listed its matches. The in-page search box was not tried.
 Issue report: [pkp-e2e#698](https://github.com/jardakotesovec/pkp-e2e/issues/698) ([docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md)), tracked in *[Submission & Publisher Libraries](U39-submission-and-publisher-libraries.md#a5)* A5.
+
+<a id="fn-a18"></a>
+**a18 — A18 evidence.** `dashboardPageStore.js`'s `currentViewId`
+computed falls back to the account's first view (`views[0]`, "Assigned
+to me") when the address's `currentViewId` is missing or not among the
+account's views, and writes that id into the address; the store's
+view-change watcher then sees a view change and runs
+`clearAllFilters()` and `resetSearchPhrase()`, as on a switch from the
+sidebar (code, OJS `main`).
+Live-probed 2026-10-05 (OJS, OMP and OPS `main`, two runs each, a
+scratch Journal Manager and a scratch Section Editor, Series Editor or
+Moderator assigned to two of six digit-free submissions): the manager's
+`?searchPhrase={an assigned-to-nobody submission's ID}`, an unknown
+`currentViewId`, `?searchPhrase=20`, and
+`?searchPhrase=Filler&daysInactive=1` each opened
+`?currentViewId=assigned-to-me` reading "Assigned to me (0)", "No
+Items", no chip and an empty box; the Section Editor's
+`?searchPhrase={an unassigned submission's ID}` and
+`?currentViewId=needs-editor&searchPhrase={the same}` opened "Assigned to
+me (1)" listing their assigned submission, no chip. Controls the same
+runs: with `currentViewId=active` the phrase and the Days filter were
+kept ("Active submissions (1)" with the chip), `currentViewId=assigned-to-me`
+kept the phrase ("Assigned to me (0)" with the chip), and
+`currentViewId=search` kept it under "Search Results". No dialog, notice,
+script error or failed request. An earlier sighting on the default
+dataset (2026-10-01, OJS and OPS, `?searchPhrase=20` listing other
+submissions) fits this fallback; that walk was not repeated.
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's

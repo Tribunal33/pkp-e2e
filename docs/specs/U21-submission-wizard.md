@@ -107,7 +107,10 @@ itself enforces before submission is Rule 13.
    "Begin Submission". Only sections open to the author (Rule 3) are
    offered. When exactly one is open, it is applied without being shown.
    A press asks for the Submission Type instead of a section
-   [OMP1](#omp1). <sup>d</sup>
+   [OMP1](#omp1). Leaving the screen before pressing "Begin Submission"
+   asks nothing, even with a title typed. In a window as narrow as a
+   phone's, the "Title" box gets no width, so no title can be typed and
+   the form cannot be sent ⚠ [A22](#a22). <sup>d</sup>
 4a. **"Submit As".** The list offers the user's roles with submission
     access, and the first one listed is selected when the form opens.
     - No app fixes the order of the list, so which role is preselected
@@ -209,6 +212,9 @@ itself enforces before submission is Rule 13.
       pixels) keeps the full rail, and so do some loads at 700 to 900
       pixels. A load at 600 pixels collapses.
     - A preprint server collapses on every load, at every width.
+
+    The "Make a Submission" start screen before the wizard has a
+    narrow-window fault of its own (Rule 4, [A22](#a22)).
     <sup>h</sup>
 9. <a id="autosave"></a>**Autosave.** The wizard saves the author's
    changes by itself, never keystroke by keystroke:
@@ -990,6 +996,7 @@ Left out of the scenarios above, by reason:
   - a journal that requires the plain language summary: the start page's title, a "Details" save before the summary is typed and the "References" box all saved, and "Submit" disabled until the summary is typed (A20; the guard its issue report names)
   - the Review step after a language change asking for the new language's title, contributor names and typed institution names, the affiliation copied from the author's profile included, with "Submit" disabled until they are typed (Rule 11): likely bullets in scenario 5, which changes the language and reaches Review
   - the timer's minute counted from the last save, not from the end of typing: scenario 3's "Saving" coming as the footer reaches "Last saved 1 minute ago", and a step with no change sending nothing (Rule 9): the suites move the page's clock on a minute after the typing, which cannot tell the two readings apart
+  - leaving the start screen with a title typed, for My Submissions, asking nothing (Rule 4): likely a bullet after scenario 1's "The start screen"
 - **Rarely met**:
   - a lost connection ("Reconnecting", the disabled "Save for Later" and "Submit", the retry, the "Unsaved Changes" dialog; Rule 9a): a dropped connection is an accident, not a state an author meets in an ordinary week of submitting
   - Submit As offered to a user with two submitting roles, with the editorial-role hint, and a submission made in an editorial role: its only participant, the Contributors note, the editor-assigned email to the submitter (Rules 4a, 5, 12b; Side effects): a second role with submission access is a grant few authors hold
@@ -1018,6 +1025,7 @@ Left out of the scenarios above, by reason:
   - A19 (the wizard hung on "Saving" after any save the server refuses, and the reload's "Unsaved Changes" after it)
   - A20 (a required plain language summary refusing saves of other fields)
   - A21 (the order of the "Submit As" roles, and so the role preselected)
+  - A22 (the start screen's "Title" box at phone width)
   - OMP2 (a second copy address on a press)
   - OPS4 (a manager reading another author's completion screen)
   - OPS8 (a further galley on a draft that already listed one when the wizard was opened)
@@ -1051,7 +1059,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-25; additions
-2026-08-26, 2026-09-07, 2026-09-28, 2026-09-30 and 2026-10-01), unreviewed unless an entry notes otherwise; the team settles
+2026-08-26, 2026-09-07, 2026-09-28, 2026-09-30, 2026-10-01 and 2026-10-05), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis:
 [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -1071,6 +1079,7 @@ are the source; badges, Impact and Basis:
 | [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | "Submit As" lists its roles in an order no app fixes, so the preselected role depends on the install | 🐞 | minor | — |
+| [A22](#a22) | At phone width the "Make a Submission" screen gives its "Title" box no width, so no submission can be started | 🐞 | user-visible | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1416,6 +1425,25 @@ did not. An author who accepts the preselection may submit under an
 editorial role they did not mean, or be refused [A14](#a14).
 Basis: probe, 2026-10-01. <sup>[fn-a21](#fn-a21)</sup>
 
+<a id="a22"></a>
+**A22 — At phone width the "Make a Submission" screen gives its "Title" box no width, so no submission can be started** · 🐞 · user-visible.
+In a window as narrow as a phone's (375 pixels), the dashboard sidebar
+takes 336 pixels and leaves the "Make a Submission" screen 39. The
+"Title" box gets no width at all: it cannot be tapped and nothing can
+be typed in it. Pressing "Begin Submission" then stays on the screen
+with "Please correct one error.", the empty box flagged "This field is
+required." and "Begin Submission" greyed out, so the author cannot
+start a submission at that width. The screen works from about 600
+pixels, where the box is 180 pixels wide.
+This hits any user who already holds a role in the journal (Author,
+Journal Manager and Reader were tried). A signed-in user with no role
+in a journal or press gets no sidebar and a usable box; a preprint
+server makes that user an Author on opening the screen [OPS2](#ops2),
+so they meet the empty box too. On 3.5 the box is 153 pixels wide and
+runs past the narrow screen: scrolling sideways reaches it, and the
+submission starts.
+Basis: probe, 2026-10-05. <sup>[fn-a22](#fn-a22)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1739,6 +1767,11 @@ your contribution to this submission." beside "Section editor" or
 and publish this submission yourself." beside "Journal editor", "Press
 editor" and "Preprint Server manager". Refusal: note fn-a14; order:
 note fn-a21.
+Live-probed 2026-10-05 (Rule 4, leaving), two runs per app on OJS, OMP
+and OPS `main` and on `stable-3_5_0`: an Author at 1280px typed a title
+on the start form and went to My Submissions; no dialog opened and the
+page landed on `dashboard/mySubmissions?currentViewId=active`. Narrow
+window: note fn-a22.
 
 <a id="fn-e"></a>
 **e** — Creation. `StartSubmissionForm.vue` strips `title` from the
@@ -2546,6 +2579,32 @@ fn-omp3 (a Series editor + Author and a Press editor + Author, four
 visits each) kept one order on every visit. Scratch contexts on
 2026-09-28 listed "Author" first on OJS (six visits) and OPS (four):
 note fn-omp3.
+
+<a id="fn-a22"></a>
+**fn-a22** — A22. First seen 2026-10-01 while walking A10, whose issue
+report starts the submission in a wider window for this reason.
+Live-probed 2026-10-05, two runs per app on OJS, OMP and OPS `main` and
+two on `stable-3_5_0` (scratch contexts with throwaway users; kept
+script `shared/playwright/checks/U21/I05/i05.js`, viewport set before
+the page load). At 375px on `main`, for an Author, a Journal/Press/
+Preprint Server manager and a Reader: the side menu (`.app__body >
+nav`) 336px, `#app-main` 39px, the Title editor
+(`#startSubmission-title-control_ifr`) 0px wide; a click on it timed
+out and nothing was typed; document scrollWidth 540. With both boxes
+ticked, "Begin Submission" sent no request and the form showed "Please
+correct one error.", the error list's button "Go to Title: This field
+is required." (its click timed out too), "Jump to next error", and
+"Begin Submission" disabled; the address stayed on the `submission`
+page. Author at 600 / 768 / 1024 / 1280px: Title box 180 / 348 / 508 /
+476px, typing landed every time; the side menu stayed 336px at every
+width, with no toggle in the header. A user with no role in the
+context: no side menu, `#app-main` 375px, box 291px, typing landed on
+OJS and OMP; on OPS the bare visit added an Author role row dated at
+the visit (OPS2, read in the database afterwards) and the side menu
+and 0px box showed on the first load. `stable-3_5_0`, the same roles:
+side menu 336px and `#app-main` 39px, but the box 153px wide, typing
+landed, and "Begin Submission" at 375px opened the wizard (POST
+`/api/v1/submissions` 200). No crashes, dialogs or notices in any run.
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds
