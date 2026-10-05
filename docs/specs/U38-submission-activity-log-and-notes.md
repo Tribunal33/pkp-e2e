@@ -507,6 +507,11 @@ footnote. <sup>s0</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A11 {OJS OMP} (issue report
+    `docs/issues/U38-A11-activity-log-view-changes-reads-any-review.md`): an
+    editor of one submission asking "View changes" for an edited review of
+    another submission is refused, while the submission's own editor still
+    reads it
   - "Add Note" with the box empty in "Activity Log & Notes": refused, no note listed and no "Posted new note." line in "History" ([A2](#a2)): the guard the issue report proposes
   - a "Notify" message, an "Assign" message and a discussion's email: their "History" lines name the editor who sent them under "User" (Rule 4c; [A1](#a1)): the guard the issue report proposes
   - a Reviewer's "Submit Review": the "Review complete" lines with nothing under "User" (Rule 4c; [A5](#a5)): the guard the issue report proposes
@@ -554,7 +559,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Activity Log file lines show an empty file name when read in a language other than the submission's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A11](#a11) | "View changes" opens any edited review on the site, not only those on the submission's own "History" | 🐞 | user-visible | — |
+| [A11](#a11) | A submission's activity log "View changes" opens any edited review on the site by its number, not only the submission's own | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [OMP1](#omp1) | A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
@@ -687,18 +692,23 @@ was kept.
 Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — "View changes" opens any edited review on the site, not only those on the submission's own "History"** {OJS OMP} · 🐞 · user-visible.
-The "View Review" window behind "View changes" is expected to show only
-the review changes listed on the submission's own "History". It shows
-any one it is asked for by number: a Section Editor assigned to one
-submission, or a Journal Manager of another journal on the same site,
-reads the old and new comments, recommendation, review form answers and
-competing interests of any review an editor has edited, anonymous ones
-included. The window names neither reviewer nor submission, but the text
-often gives it away, and an editor who is also an author can read the
-edited review of their own submission. Nothing can be changed.
-Since: 2026-08-20 · Basis: probe, 2026-09-30. <sup>[f-a11](#fn-a11)</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A11 — A submission's activity log "View changes" opens any edited review on the site by its number, not only the submission's own** {OJS OMP} · 🐞 · medium.
+When an editor edits a submitted review in the "Modify Review" window, the
+submission's "Activity Log" records the change, and its "View changes"
+link opens a "View Review" window with the review's old and new values.
+That window serves whatever change entry it is asked for by its number: a
+Section Editor assigned only to other submissions reads the old and new
+comments, recommendation, review-form answers and competing interests of
+any review an editor has edited in the journal, the content of
+double-anonymous reviews included. A manager, who may open every
+submission in the journal, reaches every edited review there, and by the
+same missing check reads other journals' edited reviews too.
+The window shows the review's content but names neither the reviewer nor
+the submission; the reader works the submission out from the text. The
+change-entry numbers run in a short sequence that anyone can step through.
+The confidentiality of review content, which is meant to hold against an
+editor who is not on the submission, does not.
+Since: 2026-08-20 · Basis: probe, 2026-10-05. <sup>[f-a11](#fn-a11)</sup>
 
 ### OMP
 
@@ -1388,6 +1398,7 @@ on 6 only) read entry 641 of submission 16. Seen again 2026-10-02 on OJS
 entry). Code only: review form and competing-interest entries, the
 author-editor case, OPS (no reviews).
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Issue report: [pkp-e2e#925](https://github.com/jardakotesovec/pkp-e2e/issues/925) ([docs/issues/U38-A11-activity-log-view-changes-reads-any-review.md](../issues/U38-A11-activity-log-view-changes-reads-any-review.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note o. Live-probed 2026-09-23 (the submission-files claim

@@ -1,0 +1,25 @@
+--- a/lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php
++++ b/lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php
+@@ -43,7 +43,21 @@
+      */
+     public function viewReviewChange($args): JSONMessage
+     {
+-        $logEntry = Repo::eventLog()->get((int)$args['logEntryId']);
++        // Authors, even those also assigned as an editor, may not read review details.
++        if ($this->_isCurrentUserAssignedAuthor) {
++            return new JSONMessage(false, __('api.403.unauthorized'));
++        }
++
++        // Serve only an entry that belongs to this submission's own review history. The log entry
++        // id is otherwise a primary key that names any review change on the site.
++        $logEntryId = (int) $args['logEntryId'];
++        $logEntry = collect($this->getReviewChangeEntries($this->getSubmission()))
++            ->first(fn (EventLogEntry $entry): bool => $entry->getId() === $logEntryId);
++
++        if (!$logEntry) {
++            return new JSONMessage(false, __('api.404.resourceNotFound'));
++        }
++
+         return new JSONMessage(true, $this->formatReviewChange($logEntry));
+     }
+ 
