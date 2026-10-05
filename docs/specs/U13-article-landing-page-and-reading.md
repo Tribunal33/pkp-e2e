@@ -286,10 +286,15 @@ Top to bottom: <sup>j</sup>
    article's address and each older one to its own address (Rule 2). A
    version not yet published, or unpublished since, is not listed. On a French page the version
    name reads "##publication.versionStage.display##" ⚠ [A1](#a1).
+   In a language whose translation has no text for the entry, Japanese
+   and Spanish (Mexico) among them, every entry reads
+   "##submission.versionIdentity##" instead, with no date and no
+   version name ⚠ [A15](#a15).
    <sup>g</sup> <sup>q5</sup>
 9. **The label line** {OPS}. Above the title, "Preprint / {date} ({version
    name})" names the shown version, its date and its name as in the
-   "Versions" list ([A1](#a1) in French). <sup>g</sup>
+   "Versions" list ([A1](#a1) in French; "##submission.versionIdentity##"
+   in Japanese and Spanish (Mexico), [A15](#a15)). <sup>g</sup>
 10. **The galley links.** The side column lists the shown version's
     galleys, in the order of the "Galleys" page
     ([→ Galleys, ordering](U46-galleys.md#order)), in two lists: first
@@ -347,13 +352,25 @@ Top to bottom: <sup>j</sup>
       is an outdated version published on October 4, 2026. Read the most
       recent version."
       <sup>q9</sup>
-13. **Galley addresses.** {OJS} The number address of a galley that has a
-    URL Path forwards to its URL Path address; on a preprint server it
-    answers the "404 Not Found" page ⚠ [OPS3](#ops3). A galley address
-    without a version part that names a galley of an older version only
-    (a URL Path changed since) opens the article's page. A galley address
-    that names no galley of the article answers the "404 Not Found" page.
-    <sup>f</sup> <sup>q10</sup>
+13. **Galley addresses.** On a journal, the number address of a galley
+    that has a URL Path forwards to the article's address followed by
+    that URL Path, dropping any version part. For a galley of the
+    current version that is its own address. For an older version's
+    galley, typed after the version's own address
+    ("…/version/{id}/{galley number}"), the reader lands on the current
+    version's galley with that URL Path, under no outdated-version
+    notice, or on the article's page when the current version's galley
+    has another URL Path ⚠ [OJS14](#ojs14). On a preprint server every
+    number address of a galley that has a URL Path answers the "404 Not
+    Found" page ⚠ [OPS3](#ops3). <sup>f</sup> <sup>q10</sup>
+    - 13a. **An older galley without the version part.** A galley address
+      with no version part that names a galley of an older version only
+      opens the article's page when it uses the galley's URL Path (one
+      changed since) or the number of a galley that has none. The number
+      of such a galley that has a URL Path answers the "404 Not Found"
+      page.
+    - 13b. **No such galley.** A galley address that names no galley of
+      the article answers the "404 Not Found" page.
 14. **The "Keywords:", "DOI:" and category lines follow the shown
     version.** An older version's page shows that version's keywords and
     categories; its DOI line is *DOIs*' rule. <sup>c</sup>
@@ -462,11 +479,25 @@ Top to bottom: <sup>j</sup>
     interface language the visitor chose, except on a preprint server's
     French page, whose keywords label reads "##preprint.subject## :"
     where the English page reads "Keywords:" ⚠ [OPS7](#ops7) (and the
-    version names of Rule 8). The article's own texts show in that
+    version names of Rule 8), and in a language marked incomplete
+    (Rule 21a). The article's own texts show in that
     language where the version has them. The contributor list, with the role under each
     name, is described in
     [Contributors & affiliations](U41-contributors-and-affiliations.md).
     <sup>c</sup> <sup>q5</sup>
+    - 21a. **A language marked incomplete.** The site's list of languages
+      (Administration › Site Settings › "Languages") marks a language
+      with "*" and the line "Marked locales may be incomplete.". On a
+      page in such a language, a label its translation lacks shows its
+      raw key. On a Japanese page the breadcrumb's "/" reads
+      "##navigation.breadcrumbSeparator##", and a preprint server's
+      label line reads "##common.publication##" for "Preprint" and its
+      date line "##submissions.published##" for "Posted". A Spanish
+      (Mexico) page shows more than a dozen such keys, among them
+      "##submission.updatedOn##" in place of a later version's dates,
+      "##submission.versions##" for "Versions", and
+      "##submission.outdatedVersion##" in place of an older version's
+      whole notice.
 22. **The article summary** (Fields). The title and cover open the
     article's address, except where the summary's text lies over the
     cover, on a screen 768 px wide or wider: on a preprint server's lists
@@ -528,8 +559,11 @@ notice above the title; that notice belongs to *Preprint relations*
    HTML galley opens the HTML reader page. Off: it downloads (Rule 11). A
    preprint server has no such plugin. <sup>o</sup>
 3. **{OJS} "eLife Lens Article Viewer"** (same list). On for a new
-   journal: an XML galley opens in the Lens reader. Off: it downloads
-   (Rule 11). A preprint server has no such plugin. <sup>o</sup>
+   journal: an article's XML galley opens in the Lens reader, while an
+   issue's XML galley (a "Full Issue" link on the issue's page,
+   [Issues](U50-issues.md), its Rule 26) downloads all the same
+   ⚠ [OJS15](#ojs15). Off: both download (Rule 11). A preprint server
+   has no such plugin. <sup>o</sup>
 4. **"Citation Style Language"** (same list). Off for a new journal and
    preprint server: no "How to Cite" block. On: the block of Rule 15, and
    the plugin row's "Settings". Ticking the row shows "The plugin
@@ -611,7 +645,9 @@ notice above the title; that notice belongs to *Preprint relations*
   page (Rules 7a, 2).
 - **[Issues](U50-issues.md)**: the issue's table of contents that lists
   articles, and its "Remove", which can unpublish an article's first
-  version (its A18; Rule 7b).
+  version (its A18; Rule 7b); its "Full Issue" links (its Rule 26),
+  whose XML galley "eLife Lens Article Viewer" does not open
+  (Settings bullet 3).
 - **[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)**:
   "Publicly Show Reviewer Comments" and "Mark as Complete", whose
   promise that a review will be shown with the article this page does
@@ -751,7 +787,7 @@ footnote. <sup>s</sup>
    - **The remote galley**: press "Remote": the browser goes to
      "https://example.org/paper" (Rule 11).
    - **No such galley**: type the article's address followed by
-     "/nosuchgalley": the "404 Not Found" page (Rule 13).
+     "/nosuchgalley": the "404 Not Found" page (Rule 13b).
    - **An article's URL Path**: type {journal address}/article/view/{number}
      with "Harbour Currents"'s number ("preprint/view/" on a preprint
      server): the browser lands on {journal
@@ -1172,6 +1208,9 @@ Left out of the scenarios above, by reason:
     written once A13 is fixed: a new version's "PDF" (and, on a journal,
     "HTML") pressed on its preview opening the reader with no outdated
     notice, while an older published version's reader keeps it
+  - an older version's galley typed by its number with no version part:
+    the article's page for a galley with no URL Path, the "404 Not
+    Found" page for one with a URL Path (Rule 13a)
 - **Rarely met**:
   - a galley whose component was made a dependent one after the galley
     was built, which the page no longer lists (Rule 10; Settings
@@ -1210,6 +1249,9 @@ Left out of the scenarios above, by reason:
     row 1)
   - a component's supplementary box changed, the listing scenario 2's
     "Data" galley already shows (Settings bullet 11; Rule 10)
+  - a page in a language the site marks "*" (incomplete), each label its
+    translation lacks shown as a raw key: a wording variant of
+    scenario 8's French page (Rule 21a)
 - **Register carries it**:
   - A5 (the Author's "View submission" on the preview; Rule 4;
     scenario 4 passes it)
@@ -1239,12 +1281,18 @@ Left out of the scenarios above, by reason:
     of its number address; Rule 1)
   - OPS3 (a galley's number address answering "404 Not Found" on a
     preprint server; Rule 13)
+  - OJS14 (an older version's galley typed by its number under the
+    version's address, landing on the current version's galley {OJS};
+    Rule 13)
+  - OJS15 (an issue's XML galley with "eLife Lens Article Viewer" on
+    {OJS}; Settings bullet 3)
   - A10 (an address in parentheses in a reference; Rule 18)
   - A11 (keywords shown in another order than typed; Fields, the
     landing page and the article summary; scenarios 1 and 10 accept
     either order)
-  - A1 and OPS7 (the version names on a French page, and the
-    preprint's French keywords label; Rules 8, 9, 21)
+  - A1, A15 and OPS7 (the version names on a French page and in a
+    language with no text for the entry, and the preprint's French
+    keywords label; Rules 8, 9, 21)
   - A4 (a galley with no file, and the additional files, in a preprint
     server's lists and in a journal's "Latest Publications" without the
     current issue; Rule 22)
@@ -1308,7 +1356,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; additions
-2026-09-28 and 2026-10-02), unreviewed unless an entry notes otherwise; the team settles them on spec review.
+2026-09-28, 2026-10-02 and 2026-10-05), unreviewed unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
@@ -1323,6 +1371,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A10](#a10) | A reference's web address written in parentheses becomes a link that includes the closing ")" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A11](#a11) | Keywords on an article, book or preprint page can appear in another order than the editor typed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The PDF or HTML reader opened from a new version's preview calls that version outdated | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A15](#a15) | In Japanese, Spanish (Mexico) and other languages whose translation lacks the entry, every "Versions" entry reads "##submission.versionIdentity##", with no date or version name | 🐞 | minor | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1334,6 +1383,8 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS9](#ojs9) | Readers opening an XML galley in the Lens reader see its TeX formulas as blanks | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [OJS10](#ojs10) | With "Recommend Similar Articles" on, article pages never show "Similar Articles" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [OJS14](#ojs14) | An older version's galley linked by its number opens the current version's galley, with no outdated notice, once the galley has a URL Path | 🐞 | user-visible | — |
+| [OJS15](#ojs15) | With "eLife Lens Article Viewer" on, an issue's XML galley downloads instead of opening in the Lens reader | 🐞 | minor · crash: server | — |
 | [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
@@ -1367,12 +1418,15 @@ reader nor an editor can tell the versions apart by name or number in
 French. The release before listed them by number in French ("2026-09-30
 (2)").
 French (Canada) was walked. By the code, every language but English
-shows the key. The text behind it is only the pattern "stage
-major.minor", which holds no word. New texts are offered to translators
-once the release branch opens, so this one would reach them before the
-release, and each language shows the key until its translators copy the
-pattern. The proposed fix builds the name in code instead, so the
-numbers show in every language at once. After it a French reader sees
+shows the key, except a language with no text for the whole entry:
+there, as walked in Japanese and Spanish (Mexico), the entry reads
+"##submission.versionIdentity##" instead ([A15](#a15)). The text behind
+the key is only the pattern "stage major.minor", which holds no word.
+New texts are offered to translators once the release branch opens, so
+this one would reach them before the release, and each language shows
+the key until its translators copy the pattern. The proposed fix builds
+the name in code instead, so the numbers show at once in every language
+that has the entry's text. After it a French reader sees
 "2026-09-30 (##publication.versionStage.authorOriginal## 2.0)": the
 stage name stays a raw key until it is translated.
 Basis: probe, 2026-10-01. <sup>[f-a1](#fn-f-a1)</sup>
@@ -1582,6 +1636,21 @@ refresh of every style file swapped in a different style that shared the
 old file's name, and nothing chose it.
 Basis: probe, 2026-10-01. <sup>[f-a14](#fn-f-a14)</sup>
 
+<a id="a15"></a>
+**A15 — In Japanese, Spanish (Mexico) and other languages whose translation lacks the entry, every "Versions" entry reads "##submission.versionIdentity##", with no date or version name** · 🐞 · minor.
+On an article, book or preprint page shown in Japanese or Spanish
+(Mexico), every entry of the "Versions" list reads
+"##submission.versionIdentity##", where the English page reads
+"2026-10-05 (Version of Record 1.1)" and "2026-10-05 (Version of Record
+1.0)". A preprint's label line above the title shows the same key where
+the English page reads "2026-10-05 (Author Original 1.1)". The links
+still open their versions, but a reader cannot tell the versions apart
+by date or by number. These languages' translations have no text for
+the entry: Japanese holds it empty, Spanish (Mexico) lacks it. The
+whole entry is therefore the key, and [A1](#a1)'s key, which French
+(Canada) shows inside the entry, never appears there.
+Basis: probe, 2026-10-05. <sup>[f-a15](#fn-f-a15)</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1787,6 +1856,41 @@ similar? Lean: yes (🐞); the list was built to match any one word, and
 3.5 still does.
 Since: 2026-07-30 (the search change) · Basis: probe, 2026-10-01. <sup>[f-ojs13](#fn-f-ojs13)</sup>
 
+<a id="ojs14"></a>
+**OJS14 — An older version's galley linked by its number opens the current version's galley, with no outdated notice, once the galley has a URL Path** · 🐞 · user-visible.
+On a journal, an address that names an older version's galley by its
+number after the version's own address
+("…/article/view/{id}/version/{version id}/{galley number}") forwards
+to the article's address followed by the galley's URL Path, once the
+galley has one. The version part is dropped: the reader lands on the
+current version's galley with that URL Path, under no "This is an
+outdated version…" notice, or on the article's page when the current
+version's galley has another URL Path. The same happens to
+"…/article/view/{article URL Path}/version/{version id}/{galley number}",
+"…/article/view/{id}/version/{version id}/{galley number}/{file id}" and
+"…/article/download/{id}/version/{version id}/{galley number}/{file id}",
+the last delivering the current version's file ({file id} ends the PDF
+reader's "Download" link address). The reader expects the older version's galley
+under the outdated notice, as its URL Path address ("…/version/{version id}/pdf") and the
+number address of a galley with no URL Path open it. A reader following
+a citation of version 1.0 reads 2.0 without being told. It needs a link
+to the galley's number, the address a galley's link carries until the
+galley is given a URL Path (Rule 10b). A preprint server answers "404
+Not Found" to the same address ([OPS3](#ops3)).
+Basis: probe, 2026-10-05. <sup>[f-ojs14](#fn-f-ojs14)</sup>
+
+<a id="ojs15"></a>
+**OJS15 — With "eLife Lens Article Viewer" on, an issue's XML galley downloads instead of opening in the Lens reader** · 🐞 · minor · crash: server.
+With "eLife Lens Article Viewer" on, an article's XML galley opens in
+the Lens reader, but an issue's XML galley does not: its "Full Issue"
+link on the issue's page downloads the file ("article.xml") and the
+browser stays on the issue's page, as with the plugin off. The app fails
+on the server as the plugin prepares the issue galley's Lens page: the
+error is caught and logged, and the file is sent instead. The reader
+still gets the file, but never the Lens view the plugin is meant to give
+it. The issue's PDF galley opens the PDF reader as usual.
+Basis: probe, 2026-10-05. <sup>[f-ojs15](#fn-f-ojs15)</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1822,7 +1926,8 @@ Basis: probe, 2026-10-01. <sup>[f-ops2](#fn-f-ops2)</sup>
 **OPS3 — A galley's ID address stops working** · 🐞 · high.
 Once a galley has a URL Path, its old ID address answers "404 Not
 Found", so a link shared before the URL Path was set breaks. A journal
-forwards the ID address to the URL Path address.
+forwards the ID address to the URL Path address, though an older
+version's galley lands on the current version's ([OJS14](#ojs14)).
 Basis: probe, 2026-10-01. <sup>[f-ops3](#fn-f-ops3)</sup>
 
 <a id="ops4"></a>
@@ -2164,7 +2269,10 @@ property unassigned, which fails (the versions spec's OJS3); the galley
 is matched by `getBestGalleyId()`, a digit-only galley path matching a
 galley's number redirects to its best id, a galley found only in another
 published publication redirects to the article's view, and anything else
-is `NotFoundHttpException`. OPS `PreprintHandler::initialize()`: the
+is `NotFoundHttpException`. That galley redirect builds
+`[$submission->getBestId(), $galley->getBestGalleyId()]`, so it drops a
+`version/{id}` part and a trailing file id, and `getBestGalleyId()`
+then names the current version's galley of that URL Path (OJS14). OPS `PreprintHandler::initialize()`: the
 redirect builds `$newArgs = $args; $newArgs[0] = $currentUrlPath;` after
 the path was shifted off `$args` (OPS2); no digit-only galley redirect
 (OPS3); `$publication` is untyped, so an unknown version is a plain
@@ -2198,7 +2306,17 @@ article's version id, answered a blank server error page on the journal
 and "404 Not Found" on the server. The field reads "URL Path" on both,
 its help "Set a custom URL for this publication, or leave blank to use
 the default." (OJS) and "An optional path to use in the URL instead of
-the ID." (OPS).
+the ID." (OPS). Live-probed 2026-10-05 (Rule 1; OPS2), OJS and OPS, two
+runs on scratch contexts, signed out, an article with two versions and
+the URL Path "i05c" on both: on the journal the number address
+forwarded to `…/view/i05c`, `…/{n}/version/{v1}` to
+`…/i05c/version/{v1}` (the older page), `…/{n}/{print galley}` to
+`…/i05c/{print galley}` and `…/{n}/version/{v1}/pdf` to
+`…/i05c/version/{v1}/pdf`, the older PDF reader under the outdated
+notice; on the server `…/{n}/version/{v1}` went to `…/i05c/{v1}`, "404
+Not Found", and `…/{n}/{print galley}` to the preprint's page. The
+version's "Publication Settings" ("Preprint entry") page showed "URL
+Path" holding "i05c" on both versions.
 
 <a id="fn-q3"></a>
 **q3** — Live-probed 2026-09-25 (Rules 3, 4; A5; OPS1), OJS and OPS:
@@ -2293,7 +2411,31 @@ keyword showed where the version had them; the preprint's keywords
 label read "##preprint.subject## : francais". The role under each
 contributor's name read "Author" on both apps' French pages; the role's
 French name on the scratch journals was not checked, and the list is
-*Contributors & affiliations*'.
+*Contributors & affiliations*'. Live-probed 2026-10-05 (Rules 8, 9, 21;
+A1; A15), OJS and OPS, two runs on scratch contexts with an article of
+two versions, and a press's book page as the control, Japanese and
+Spanish (Mexico) installed by the Site Administrator under
+Administration › Site Settings › "Languages" › "Install Locale" (listed
+with "*" beside French (Canada)) and removed afterwards: English read
+"2026-10-05 (Version of Record 1.1)" plain and "2026-10-05 (Version of
+Record 1.0)" linked ("Author Original …" on the server); French
+(Canada) read "2026-10-05 (##publication.versionStage.display##)" on
+all three, the server's label line "Prépublication / 2026-10-05
+(##publication.versionStage.display##)", the older notice "Ceci est une
+version obsolète publiée le 2026-10-05. Consulter la version la plus
+récente." and no other raw key. Japanese and Spanish (Mexico) read
+"##submission.versionIdentity##" for every entry, on the current and
+the older page, and for the server's label line, which read
+"##common.publication## ##navigation.breadcrumbSeparator##
+##submission.versionIdentity##"; the links still opened their versions.
+Other raw keys: Japanese, the breadcrumb separator (journal), also
+`common.publication` and `submissions.published` (server); Spanish
+(Mexico), the skip links, `common.search`, the breadcrumb,
+`submission.downloads`, `submissions.published` (server),
+`submission.updatedOn`, `submission.versions` and
+`submission.outdatedVersion` (the whole older notice). The press's page
+showed `submission.synopsis` and `catalog.published` in Japanese, the
+monograph page's business.
 
 <a id="fn-q8"></a>
 **q8** — Live-probed 2026-09-25 (Rule 11; Settings bullets 1–3; OPS4;
@@ -2341,7 +2483,17 @@ forwarded to `…/pdf` on the journal and answered "404 Not Found" on the
 server; "/nosuchgalley" answered "404 Not Found" on both; after "pdf"
 was changed to "pdfnew" on a new version, `…/pdf` opened the article's
 page on both, and so did an older galley's number without a version
-part.
+part when that galley had no URL Path. Live-probed 2026-10-05 (Rule 13;
+OJS14; OPS3), OJS and OPS, two runs each, signed out, an article with
+galleys "PDF" (URL Path "pdf") and "Print" (none) and a second version
+made with "Create New Version" and published (in one case the copy's
+"PDF" renamed "pdfnew" first): the current "PDF" by number forwarded to
+`…/pdf` (`…/pdfnew`) on the journal; an older galley's number without
+a version part opened the article's page for "Print" and answered "404
+Not Found" for "PDF", on both apps; every number address of a galley
+with a URL Path answered "404 Not Found" on the server, with or without
+a version part; `…/nosuchgalley` answered "404 Not Found" under the
+number and under the article's URL Path.
 
 <a id="fn-h"></a>
 **h** — "How to Cite": `plugins/generic/citationStyleLanguage/CitationStyleLanguagePlugin.php`
@@ -2701,7 +2853,15 @@ Galley", `…lensGalley.displayName` "eLife Lens Article Viewer",
 `…recommendByAuthor.displayName` "Recommend Articles by Author",
 `…recommendBySimilarity.displayName` "Recommend Similar Articles".
 Live-probed 2026-09-25 (Settings bullets 1–4, 7–9): the defaults held on
-a new journal and server, note q16.
+a new journal and server, note q16. Live-probed 2026-10-05 (Settings
+bullet 3; Rule 11; OJS15), OJS and OPS, two runs on scratch contexts:
+the new journal's list showed "eLife Lens Article Viewer" ticked; with
+it on the article's "XML" opened the Lens page, its script failing with
+"Cannot read properties of undefined (reading 'Queue')" (OJS9), and
+with it off downloaded `article.xml`, the browser staying on the
+article's page. The server's 26-row list had no "eLife Lens Article
+Viewer" and no "HTML Article Galley" row, and "PDF.JS PDF Viewer"
+ticked.
 
 <a id="fn-q16"></a>
 **q16** — Live-probed 2026-09-25 (Settings bullets 1–4, 7–9; OPS4), OJS
@@ -2787,7 +2947,11 @@ stage keys are missing from `lib/pkp/locale/fr_CA`. First seen 2026-09-24
 in passing during the appearance spec's claim check (a press's book page
 also labels its date "##catalog.published##", the monograph page's
 business); live-probed 2026-09-25 on both apps and the press (note q5),
-the date printed "2026-09-24" in French as in English.
+the date printed "2026-09-24" in French as in English. Live-probed
+2026-10-05 (note q5): the French key held on a journal, a preprint
+server and a press's book page. How new texts
+reach translators, and what the proposed fix would show, are read from
+the code: no screen on this build shows them.
 Issue report: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)).
 
 <a id="fn-f-a2"></a>
@@ -2936,6 +3100,17 @@ on the plugin's history and was not walked. Raised for the team in A7's
 issue report:
 [pkp-e2e#241](https://github.com/jardakotesovec/pkp-e2e/issues/241) ([docs/issues/U13-A7-abnt-citation-runs-text-together.md](../issues/U13-A7-abnt-citation-runs-text-together.md)).
 
+<a id="fn-f-a15"></a>
+**f-a15** — Note g: each entry is `submission.versionIdentity`
+"{$datePublished} ({$version})", a text since 3.2; `lib/pkp/locale/ja/submission.po`
+holds it with an empty `msgstr`, and `lib/pkp/locale/es_MX/submission.po`
+has no entry; `stable-3_5_0`'s files are the same, and its `locale/en`
+carries the key, so the 3.5 release shows it too (by the code, not
+walked). By the code, 25 of the 70 other languages have no text for it
+(12 lack the entry, 8 hold it empty, 5 have no `submission.po`); A1's
+proposed fix leaves them out. Live-probed 2026-10-05, note q5, two runs:
+OJS, OPS and the press's book page alike.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `CitationStyleLanguagePlugin::getTemplateData()` passes
 `issueId` only when `ArticleHandler` has an issue;
@@ -3066,6 +3241,47 @@ Development", "Social Transformation"), article 5 with both keywords was
 listed and article 15 with only "Social Transformation" was not. Left
 out of the fix in OJS10's issue report:
 [pkp-e2e#215](https://github.com/jardakotesovec/pkp-e2e/issues/215) ([docs/issues/U13-OJS10-similar-articles-list-never-shown.md](../issues/U13-OJS10-similar-articles-list-never-shown.md)).
+
+<a id="fn-f-ojs14"></a>
+**f-ojs14** — Note f: `ArticleHandler::initialize()` redirects a
+digit-only galley path matching a galley's number to
+`[$submission->getBestId(), $galley->getBestGalleyId()]`, without the
+`version/{id}` part or a trailing file id; the OPS fix proposed for
+OPS2 and OPS3 keeps them. Live-probed 2026-10-05, OJS (OPS as the
+control), two runs on scratch journals, signed out: an article with
+"PDF" (URL Path "pdf") and "Print" (none), a second version made with
+"Create New Version" and published. `…/article/view/{id}/version/{v1}/{PDF
+number}` answered a redirect to `…/article/view/{id}/pdf`, the current
+version's PDF reader with no notice; the same with a trailing file id
+(the last part of the reader's "Download" address, note f-a2) and under the article's URL Path; `…/article/download/{id}/version/{v1}/{PDF
+number}/{file}` went to `…/article/download/{id}/pdf`, the current
+galley's file; with the copy's URL Path changed to "pdfnew" before the
+second version was published, the same address opened the article's
+page. Controls: `…/version/{v1}/pdf` and `…/version/{v1}/{Print
+number}` opened the older version's reader under "This is an outdated
+version published on 2026-10-05. Read the most recent version."; the
+server answered "404 Not Found" to every such address (note q10).
+
+<a id="fn-f-ojs15"></a>
+**f-ojs15** — Note o: `LensGalleyPlugin::issueCallback()`, hooked on
+`IssueHandler::view::galley`, assigns `displayTemplatePath`, but the
+plugin's `issueGalley.tpl` includes `$displayTemplateResource`, which
+nothing sets (`articleGalley.tpl` includes `$displayTemplatePath`). The
+template engine throws, the hook runner catches and logs it, and the
+issue handler falls back to the download. The include dates from the
+plugin's Smarty 3 update (2018, 7d70165), and `stable-3_5_0` carries it
+(code, not walked). Live-probed 2026-10-05, two runs on scratch
+journals, signed out: a published issue with issue galleys "XML"
+(`article.xml`) and "PDF"; "XML" pressed or typed answered a redirect to
+`…/issue/download/{issue}/{galley}`, `article.xml` downloaded and the
+browser stayed on the issue's page, with the plugin on and off; "PDF"
+opened the PDF reader "View of Vol. 1 No. 1 (2026)"; the article's
+"XML" opened the Lens page. Server log, once per press or typed
+address: "Plugin APP\plugins\generic\lensGalley\LensGalleyPlugin failed
+to handle the hook IssueHandler::view::galley" / "TypeError:
+PKP\template\PKPTemplateManager::smartyPathToViewName(): Argument #1
+($template) must be of type string, null given". The page shows no
+error, so the run record listed no crash.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note f: `preprint_details.tpl` shows the outdated notice

@@ -18,6 +18,7 @@ and the hourly routine starts one only when none is running
 | Spec | 🐞 | crash | user-visible | Note |
 |---|---|---|---|---|
 | [U45](../specs/U45-dois.md) | 26 | 7 | 1 | A24, OJS4, OMP4: new from the housekeeping claim check of 2026-10-05, no report yet; A15 extended to "Deposit All" (its report wants a re-sync) (housekeeping 2026-10-05) |
+| [U13](../specs/U13-article-landing-page-and-reading.md) | 33 | 6 | 1 | A15, OJS14, OJS15: new from the housekeeping claim check of 2026-10-05, no report yet (housekeeping 2026-10-05) |
 | [U69](../specs/U69-monograph-landing-page.md) | 20 | 6 | 1 | A24, A25: new from the housekeeping claim check of 2026-10-05, no report yet; A19 (pkp-e2e#286) widened to a new version's preview and A4 (pkp-e2e#209) to the saved "Date Published": both reports want a re-sync (housekeeping 2026-10-05) |
 | [U19](../specs/U19-oai-pmh.md) | 28 | 5 | 2 | OMP8 and OPS5 join the U15 OMP3/OPS4 report (pkp-e2e#709): its "Tracked in" list (housekeeping 2026-10-05) |
 | [U21](../specs/U21-submission-wizard.md) | 19 | 5 | 0 | A21: new from the housekeeping fold of 2026-10-05, no report yet (housekeeping 2026-10-05) |

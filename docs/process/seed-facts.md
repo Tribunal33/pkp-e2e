@@ -218,9 +218,11 @@ behind a line; that scratch is deleted after review.
 - The site's "Install Locale" window offers 79 languages on OJS (including
   "Unknown language (und)") and 69 on OMP and OPS; installed, every one but
   English carries the "*". On the fleets one site-level language change
-  takes 5–15 s (every context is re-saved). Administration › Site Settings ›
-  Site Setup › Languages, three apps, 2026-09-27 (U57 claim check K1,
-  `.reports/U57/ccK1`).
+  takes 5–15 s (every context is re-saved), and saving two at once took
+  34 s on OJS, 36 s on OMP and 11 s on OPS (2026-10-05, U13 claim check
+  I05), so a script waits on the save's answer, not a fixed time.
+  Administration › Site Settings › Site Setup › Languages, three apps,
+  2026-09-27 (U57 claim check K1, `.reports/U57/ccK1`).
 - `publicknowledge` has no block placed in its "Sidebar" on any app, so its
   public pages show no Language block although French is a UI language.
   Public home, three apps, 2026-09-27 (U57 claim check K3).

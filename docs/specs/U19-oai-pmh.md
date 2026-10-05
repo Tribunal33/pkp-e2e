@@ -346,7 +346,9 @@ message. <sup>m</sup>
    section. A set of another journal, or one the journal does not have,
    answers "No matching records in this repository". A press given a
    set it does not have lists other records instead ⚠ [OMP3](#omp3).
-   <sup>j</sup> <sup>q10</sup>
+   {OMP} On the first press (Rule 4b), `set` with the press's path may
+   leave out the deleted records of books in a series while listing
+   those of books in no series ⚠ [OMP9](#omp9). <sup>j</sup> <sup>q10</sup>
 9. **Dates.** `from` and `until` limit a list to the records whose
    datestamp falls between them, both days included; each is written
    "YYYY-MM-DD" or "YYYY-MM-DDThh:mm:ssZ", both the same way, and `until`
@@ -364,6 +366,9 @@ message. <sup>m</sup>
    - 9d. {OJS OPS} Asked together with a section's `set`, `from` and
      `until` do not limit the deleted records: the section's deleted
      records are listed whatever the dates say ⚠ [A20](#a20).
+   - 9e. {OJS} On an install whose database is MySQL or MariaDB, an
+     article published in no issue may get no datestamp, and so be left
+     out of every list given `from` or `until` ⚠ [A26](#a26). <sup>v</sup>
 10. **Formats.** ListMetadataFormats lists the formats the address
     offers (the table "The formats"), the same for every record when an
     `identifier` is given. A ListRecords, ListIdentifiers or GetRecord in
@@ -1252,6 +1257,10 @@ Left out of the scenarios above, by reason:
     a published book and a posted preprint returned with "Return to
     Workflow" still listed with their metadata, and no deleted record
     for either {OMP OPS} (Rule 4c; once fixed)
+  - {OMP} a press with a series, one book published in it and one in no
+    series: ListSets naming the series' set "{press path}:{series path}",
+    each record's header naming its one set, the series' set listing the
+    book in it alone and the press's set both (Rules 7b, 7d, 8)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1335,6 +1344,8 @@ Left out of the scenarios above, by reason:
     fails every journal's OAI requests on the install
   - A23, A24 {OJS} (a `driver` member with no galley; the set's "Resume"
     repeating records; Rules 23, 23a; scenario 10 passes A24)
+  - A26 {OJS} (an article in no issue on MySQL or MariaDB, left out of
+    lists with `from` or `until`; Rule 9e)
   - OMP2 (a press with no "Enable OAI"; Rule 17)
   - OMP3 (a press given a set it does not have; Rule 8)
   - OMP4, OPS2 (a book or a preprint without an abstract; the Dublin
@@ -1344,6 +1355,8 @@ Left out of the scenarios above, by reason:
   - OMP8, OPS5 (a book returned to the workflow leaving the lists with no
     deleted record; a preprint returned to the workflow turned into a
     deleted record; Rule 4c)
+  - OMP9 (the first press's set and the deleted records of books in a
+    series; Rule 8)
   - OPS3 (a preprint server's "Identify items posted in this section as
     a(n)"; Settings bullet 11)
   - OPS4 (a removed preprint server leaving no deleted record; Side
@@ -1352,8 +1365,6 @@ Left out of the scenarios above, by reason:
   - the install's configuration file: the interface switched off,
     another repository identifier, another number of records per answer
     (Settings bullet 14; Rule 24)
-  - {OMP} a book in a series beside one in none, and the series' sets
-    (Rule 7b): a scratch press cannot be given a series
 - **Owned by another feature**:
   - the roles kept out of the Settings pages, and so out of "Enable OAI"
     and the plugins (Actors preamble; *[Journal identity & about
@@ -1399,8 +1410,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | "Language" writes a galley's language with an underscore {OJS OPS} | ❓ | minor | — |
 | [A21](#a21) | A section has one set identifier per language {OJS OPS} | ❓ | minor | — |
 | [A25](#a25) | Other journals' `driver` OAI sets may list journal 1's deleted records {OJS} | ❓ | minor | — |
+| [A26](#a26) | On MySQL or MariaDB, an article in no issue may get no datestamp and be left out of lists with "from" or "until" {OJS} | ❓ | user-visible | — |
 | [OMP2](#omp2) | A press cannot withhold its records: it has no "Enable OAI" | ❓ | minor | — |
 | [OMP7](#omp7) | A book's new version changes its format identifiers without leaving deleted records | ❓ | minor | — |
+| [OMP9](#omp9) | On the first press, the press's set may leave out the deleted records of books in a series | ❓ | user-visible | — |
 | [OPS3](#ops3) | "Identify items posted in this section as a(n)" reaches no record | ❓ | minor | — |
 | [OMP1](#omp1) | A press's record is a publication format, not a book | ✅ | invisible | — |
 | [OMP5](#omp5) | Retired: an address with no press answers as the whole site | ✅ | retired | — |
@@ -1776,6 +1789,24 @@ lists ([A1](#a1), Rule 23a); no walk has met one.
 Question: does the set list them? Lean: yes; it is cut from that list.
 Basis: code. <sup>f-a25</sup>
 
+<a id="a26"></a>
+**A26 — On MySQL or MariaDB, an article in no issue may get no datestamp and be left out of lists with "from" or "until"** {OJS} · ❓ · user-visible.
+A harvester that asks a journal for the records changed since its last
+visit expects an article published in no issue ("Don't Assign To An
+Issue") among them when it changed in that time. On an install whose
+database is MySQL or MariaDB, such an article may get no datestamp, and
+every list given `from` or `until` would then leave it out. The test
+installs run PostgreSQL, so this has not been seen either way.
+Question: on MySQL or MariaDB, does an article in no issue get a
+datestamp, and do `from` and `until` list it? Lean: no datestamp, so
+left out; a journal's datestamp is the latest change of the article, its
+version and its issue (Rule 5), and on those databases a missing issue
+makes that latest change empty, where PostgreSQL skips it.
+One walk settles it: on a MySQL or MariaDB install, publish an article
+in no issue, then read ListIdentifiers with `from` set to today and the
+datestamp of its record in the list without dates.
+Basis: code. <sup>f-a26</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1866,6 +1897,28 @@ The readers' side, the book's page answering "404 Not Found", is
 [Search](U15-search.md#omp3)'s entry (its OMP3).
 Since: 2026-06-09 · Basis: probe, 2026-10-03. <sup>f-omp8</sup>
 
+<a id="omp9"></a>
+**OMP9 — On the first press, the press's set may leave out the deleted records of books in a series** · ❓ · user-visible.
+A harvester that asks the installation's first press (Rule 4b) for the
+press's set, at the press's OAI address or the site-wide one, expects
+the deleted record of every book unpublished in the press. A book in a
+series leaves a deleted record in the series' set, a book in no series
+one in the press's set (Rule 7d). Asked for the press's set, the press
+may list only the second kind, so a harvester of that set keeps a
+withdrawn book in a series and is not told. A preprint server lists a
+section's deleted record under the server's set. On every other press
+this cannot show, since the press's own deleted records are left out
+whatever the set ([A1](#a1)).
+Question: does the press's set leave out the deleted records of books in
+a series? Lean: yes; a press matches a deleted record's set against the
+press's set exactly, where a journal and a preprint server also take
+their sections' sets. One walk settles it: on a first press with
+published books (the test install's has none; that of an install loaded
+with PKP's default test data has), unpublish a book in a series and one
+in no series, then read ListIdentifiers with the press's set at the
+press's address and at the site-wide one.
+Basis: code. <sup>f-omp9</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1948,7 +2001,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **d** — `OAI::identify()` writes `repositoryName` (through `prepOutput`), `baseURL` (the config's `baseUrl`, `$request->url(null, 'oai')`), `protocolVersion` "2.0", `adminEmail`, `earliestDatestamp` (`OAIUtils::UTCDate()`, which prints the current time for 0), `deletedRecord` "persistent", `granularity`, `compression` gzip and deflate when zlib is loaded, an `oai-identifier` description (scheme "oai", `repositoryIdentifier`, delimiter ":", `sampleIdentifier`) and a `toolkit` description (title, author "Public Knowledge Project", version, URL). `JournalOAI::repositoryInfo()`: with a journal, `getLocalizedName()` and `getData('contactEmail')`; without, the site's `getLocalizedTitle()` and `getLocalizedContactEmail()`; sample `articleIdToIdentifier(1)`; toolkit "Open Journal Systems", `VersionDAO::getCurrentVersion()->getVersionString()`, "https://pkp.sfu.ca/ojs/". OMP `PressOAI::repositoryInfo()`: `publicationFormatIdToIdentifier(1)`, "Open Monograph Press", `getVersionString(false)`, "https://pkp.sfu.ca/omp/". OPS `ServerOAI::repositoryInfo()`: `preprintIdToIdentifier(1)`, "Open Preprint Systems", "https://pkp.sfu.ca/ops/". `PKPOAIDAO::getEarliestDatestamp()` orders the record query by `last_modified` and takes the first row's datestamp, or 0. Journal texts: `publisherInstitution` (OJS "Publisher"), `publisher` (OMP "Press Publisher Name"), `onlineIssn`, `printIssn`, `contactEmail` (U07 Fields). Live-probed 2026-09-26 (the Identify table; Settings bullet 12), all three apps: "2.0", "persistent", "YYYY-MM-DDThh:mm:ssZ", "Admin Email" the scratch context's principal contact email, the repository identifiers `ojs-test.localhost`, `omp-test.localhost` and `ops-test.localhost`, the three sample identifiers, "3.6.0.0" and the three product addresses; `<compression>` gzip and deflate in the XML, neither word on the page; "Repository Name" in French at `…/fr_CA/oai`. "Earliest Datestamp": note f-a1.
 
 <a id="fn-e"></a>
-**e** — Record selection. OJS `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()`: `submissions` joined to their `current_publication_id` publication, `sections`, `journals`, left join `issues`; `journals.enabled = 1`, `publications.status = STATUS_PUBLISHED`, journals whose `enableOai` setting is not `1` excluded (pkp/pkp-lib#6503), journal, section, date and submission filters; datestamp `GREATEST(a.last_modified, i.last_modified, p.last_modified)`; unioned with the per-version query (note r) and the tombstone query (note n); ordered by `journal_id, submission_id, publication_id, tombstone_id`. OPS `APP\oai\ops\OAIDAO`: `submissions.status = STATUS_PUBLISHED`, the current publication's `date_published` not null, `servers.enabled = 1`, an inner join on `server_settings.enableOai = 1`; datestamp `a.last_modified`; ordered by `server_id, submission_id`. OMP `APP\oai\omp\OAIDAO`: `publication_formats` joined to the submission's current publication, `ms.status = STATUS_PUBLISHED`, `pf.is_available = 1`, `pub.date_published` not null, `presses.enabled = 1`, no `enableOai`; datestamp `ms.last_modified`; ordered by `press_id, data_object_id`. Identifiers: `JournalOAI::formatIdentifier()` "oai:{repositoryId}:article/{id}" (plus "/version/{stage}/{major}"), `PressOAI::getIdentifierPrefix()` "oai:{repositoryId}:publicationFormat/", `ServerOAI::preprintIdToIdentifier()` "oai:{repositoryId}:preprint/{id}". `record()` / `identifierExists()` restrict the lookup to the current context (`[$this->journalId]` etc.), so a context's address does not answer another context's identifier; OJS `identifierToArticleStageAndVersionMajor()` requires the exact prefix and `^(\d+)(?:/version/(AO|PMUR|VoR)/(\d+))?$`; OMP and OPS accept any identifier containing the prefix and cast the rest with `(int)` (A17). Live-probed 2026-09-26 (Rules 3, 3a, 3b, 5, 6, 15; the header table): notes q7, q9, q16.
+**e** — Record selection. OJS `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()`: `submissions` joined to their `current_publication_id` publication, `sections`, `journals`, left join `issues`; `journals.enabled = 1`, `publications.status = STATUS_PUBLISHED`, journals whose `enableOai` setting is not `1` excluded (pkp/pkp-lib#6503), journal, section, date and submission filters; datestamp `GREATEST(a.last_modified, i.last_modified, p.last_modified)` (on MySQL and MariaDB, whose `GREATEST` returns NULL for a NULL argument, NULL for an article in no issue; not run, A26); unioned with the per-version query (note r) and the tombstone query (note n); ordered by `journal_id, submission_id, publication_id, tombstone_id`. OPS `APP\oai\ops\OAIDAO`: `submissions.status = STATUS_PUBLISHED`, the current publication's `date_published` not null, `servers.enabled = 1`, an inner join on `server_settings.enableOai = 1`; datestamp `a.last_modified`; ordered by `server_id, submission_id`. OMP `APP\oai\omp\OAIDAO`: `publication_formats` joined to the submission's current publication, `ms.status = STATUS_PUBLISHED`, `pf.is_available = 1`, `pub.date_published` not null, `presses.enabled = 1`, no `enableOai`; datestamp `ms.last_modified`; ordered by `press_id, data_object_id`. Identifiers: `JournalOAI::formatIdentifier()` "oai:{repositoryId}:article/{id}" (plus "/version/{stage}/{major}"), `PressOAI::getIdentifierPrefix()` "oai:{repositoryId}:publicationFormat/", `ServerOAI::preprintIdToIdentifier()` "oai:{repositoryId}:preprint/{id}". `record()` / `identifierExists()` restrict the lookup to the current context (`[$this->journalId]` etc.), so a context's address does not answer another context's identifier; OJS `identifierToArticleStageAndVersionMajor()` requires the exact prefix and `^(\d+)(?:/version/(AO|PMUR|VoR)/(\d+))?$`; OMP and OPS accept any identifier containing the prefix and cast the rest with `(int)` (A17). Live-probed 2026-09-26 (Rules 3, 3a, 3b, 5, 6, 15; the header table): notes q7, q9, q16.
 
 <a id="fn-f"></a>
 **f** — Dublin Core: `PKPOAIMetadataFormat_DC::toXml()` extracts `Dc11Schema` metadata through each app's adapter and writes one element per statement, `xml:lang` from the locale (`_` turned into `-`). OJS `plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter::extractMetadataFromDataObject()` (at `d9b567efec`): `dc:title` `getFullTitles()` (title, ": ", subtitle; `PKPString::concatTitleFields`); `dc:creator` `getFullNames(false, true)` ("Family, Given") per author; `dc:subject` keywords then subjects, `pluck('name')`; `dc:description` the abstract (`stripAssocArray` strips tags); `dc:publisher` `publisherInstitution` else the journal's names; `dc:contributor` from `publication.sponsor` split on ";" (no such property in `schemas/publication.json`, A6); `dc:date` `datePublished` else the issue's; `dc:type` "info:eu-repo/semantics/article", the section's `identifyType` or `metadata.pkp.peerReviewed` "Peer-reviewed Article" under `Locale::getLocale()` (the default only while the stored value is null; a section saved in its window stores an empty string, A7), the publication `type`, "info:eu-repo/semantics/publishedVersion"; `dc:format` each galley's `getFileType()`; `dc:identifier` the `article/view/{bestId}` URL when `publishingMode != PUBLISHING_MODE_NONE` (or `IssueAction::subscribedUser()` of the request's user, null on OAI), then stored pub-ids (`pubIds` plugins plus `doi` when `areDoisEnabled()`; a "Publisher ID" stored as `pub-id::publisher-id` is not among them, and a DOI exists only once the journal has a "DOI Prefix"); `dc:source` "{journal name}; {issue identification}" plus "; {pages ?: articleNumber}" per locale, then the ISSNs and the issue's pub-ids; `dc:language` the galleys' `locale` as stored, such as `fr_CA` (A14), and the publication's `locale`, unique; `dc:relation` each galley's `article/view/{bestId}/{galleyBestId}` URL (same condition), galley pub-ids, the previous version (note r); `dc:coverage`; `dc:rights` `submission.copyrightStatement` "Copyright (c) {$copyrightYear} {$copyrightHolder}" when both are set, and `licenseUrl`. OPS `Dc11SchemaPreprintAdapter`: the same title, creators, subjects, description, publisher, contributor, date; `dc:type` "info:eu-repo/semantics/preprint" and "info:eu-repo/semantics/draft" only; `dc:identifier` the `preprint/view` URL always; relations when `publishingMode != NONE` (OPS stores no mode, U51 OPS1); no `dc:source`; `addLocalizedElements(…, array $localizedValues)` receives the raw abstract (OPS2). OMP `Dc11SchemaPublicationFormatAdapter`: `dc:publisher` `publisher` else the press's names; `dc:contributor` from `$monograph->getData('sponsor')` (a submission property that does not exist); `dc:type` `rt.metadata.pkp.dctype` "Book" (OMP `locale/en/locale.po`; no French text, A13) under `Locale::getLocale()` plus `type`; `dc:format` the ONIX List 150 name of the format's `entryKey`, which ends with the code, such as "(DA)"; `dc:identifier` `catalog/book/{urlPath ?? id}`, the format's pub-ids, its DOI, its identification codes; `dc:relation` the publication's pub-ids and DOI, each format file's `catalog/view/{book}/{format}/{file}`, the previous version; `dc:source` "{press name}; " plus "; {pages}"; `dc:language` `LocaleConversion::getIso3FromLocale()`; `dc:rights` the format's sales rights (`getNameForONIXCode()`); its `addLocalizedElements(…, array …)` writes empty values too and receives the raw abstract (OMP4). Publishing mode none: `Journal::PUBLISHING_MODE_NONE` (2), U51 Rule 4. "Pages" is `IssueEntryForm` `pages` ("Pages", `editor.issues.pages`); "Article Number" `submission.articleNumber`. Live-probed 2026-09-26 (the Dublin Core table; Rules 11, 11a; Settings bullets 7, 11–13): note q13.
@@ -1995,6 +2048,9 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 <a id="fn-u"></a>
 **u** — Language: every localized value is written per locale (`addLocalizedElements`), `xml:lang` from the locale key. `Locale::getLocale()` (the request's locale: the URL's segment, pkp/pkp-lib#13124) decides `getLocalizedName()` (Repository Name, journal set names), `getLocalizedAbbrev()` and `getLocalizedTitle()` (section sets) and the `metadata.pkp.peerReviewed` / `rt.metadata.pkp.dctype` words. Upstream sync (rr4, 2026-09-10/11, the pkp/pkp-lib#12375 matrix on the three apps): the bare OAI address answered one hop to `/en/`, and `/en/` and `/fr_CA/` answered in place, without a cookie. The app keeps the last language segment of a request in a `currentLocale` cookie and sends the bare address there next time (Rule 19a). Live-probed 2026-09-26 (Rules 19, 19a; the two addresses): note q19.
 
+<a id="fn-v"></a>
+**v** — Not run, read from the code (Rule 9e): the test installs run PostgreSQL only, and no MySQL or MariaDB install was at hand on 2026-10-05. OJS's datestamp takes the latest of the article's, its version's and its issue's last change, and MySQL's and MariaDB's `GREATEST` answers NULL when the article has no issue (note e; note f-a26).
+
 <a id="fn-q1"></a>
 **q1** — Live-probed 2026-09-26 (Actors preamble, rows 1–3; Rule 18), all three apps, two runs each: on a scratch context the signed-out answer and the Journal (Press, Preprint Server) Manager's, the Reader's and the Section Editor's were the same apart from the response date. With "Users must be registered and log in to view the journal site." ticked and saved on screen, a signed-out ListRecords or ListSets answered 302 to `{journal}/login?source=…`; signed in as the Manager, the Editor (OJS, OMP), the Section Editor, the Author, the Reader, the Site Administrator or a user with no role in that journal, the list answered. On a context created not enabled, signed out went to `{journal}/login`; signed in, every level got "No matching records in this repository" (OJS: the first journal's deleted records), while ListSets and Identify named the context. The Manager, the Editor and the Site Administrator opened Settings › Distribution; the Section Editor, the Author, the Reader and an Editor whose role had "Permit changes to Settings" unticked (OJS, OMP) got "The current role does not have access to this operation.".
 
@@ -2023,7 +2079,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **q9** — Live-probed 2026-09-26 (Rules 5, 6; A18), all three apps: a context lists by submission ID (OJS, OPS) or format number (OMP). OJS: an article's datestamp moved when its issue's "Number" was saved on "Issue Data", when "Prefix" was saved on its published version, and to the moment it was published again. OMP and OPS: the datestamp did not move after "Prefix" was saved on the published version, and an item published again came back with its first datestamp, older than its deleted record's (twice on each app). The site-wide ListIdentifiers, walked in full, listed the contexts one after another and every deleted record at the end (OJS 741 headers, the deleted ones at 728–740).
 
 <a id="fn-q10"></a>
-**q10** — Live-probed 2026-09-26 (Rules 7, 7a–7d, 8; OMP3, OMP6, A19), all three apps: ListSets named the context by its name and each section "{path}:{abbreviation}" by its title; "É D" listed as "{path}:ED", and `set={path}:ED` listed its article; each header named one set. OMP: series "{press path}:ser1" named " Series One" (a leading space; no prefix), a book in no series in the press's set only. A section deleted on Settings › Sections while it held a deleted record stayed listed under its old name, and asking for it answered "No matching records in this repository" at both addresses (OJS, OPS); once the record was published again, the set was gone. `set` with another journal's path, `nosuchset` or "{path}:NOPE" answered "No matching records in this repository" on OJS and OPS. OMP: an unknown series after the press's path listed all the press's records; another press's path, an unknown path or another press's series listed the records of every press; at the site-wide address another press's path listed that press's records.
+**q10** — Live-probed 2026-09-26 (Rules 7, 7a–7d, 8; OMP3, OMP6, A19), all three apps: ListSets named the context by its name and each section "{path}:{abbreviation}" by its title; "É D" listed as "{path}:ED", and `set={path}:ED` listed its article; each header named one set. OMP: series "{press path}:ser1" named " Series One" (a leading space; no prefix), a book in no series in the press's set only. A section deleted on Settings › Sections while it held a deleted record stayed listed under its old name, and asking for it answered "No matching records in this repository" at both addresses (OJS, OPS); once the record was published again, the set was gone. `set` with another journal's path, `nosuchset` or "{path}:NOPE" answered "No matching records in this repository" on OJS and OPS. OMP: an unknown series after the press's path listed all the press's records; another press's path, an unknown path or another press's series listed the records of every press; at the site-wide address another press's path listed that press's records. Re-walked 2026-10-05 (Rules 7b, 7d, 8), OMP, two runs: a scratch press seeded with a series and a book in it beside a book in none showed the same sets and headers (note f-omp9).
 
 <a id="fn-q11"></a>
 **q11** — Live-probed 2026-09-26 (Rules 9, 9a–9d; A2, A3, A20, OPS1), all three apps, two runs of the dates: `from` today listed today's records, tomorrow none; `until` yesterday none, today all; `from=…T23:59:59Z` and `until=…T00:00:00Z` listed records changed that day at other times; `from=2026-13-01` listed as with no date and `until=2026-13-01` nothing; `from=…T25:00:00Z` listed as with no date; "2026-09-31" rolled into October; `from=26-09-2026` and `until=2026/09/26` answered the "Illegal" messages; `from` after `until` and mixed granularity answered the two ordering messages. OPS: every list with `until` failed with a server error at the server's and the site-wide address; OJS and OMP answered. `set=publicknowledge:ART` (OPS `:PRE`) with `from=2030-01-01` listed that section's deleted records of the day, at both addresses (OJS, OPS; OMP not reached).
@@ -2156,6 +2212,9 @@ Issue report: [pkp-e2e#341](https://github.com/jardakotesovec/pkp-e2e/issues/341
 <a id="fn-f-a25"></a>
 **f-a25** — Not walked: note q21's scratch journals listed no deleted record in the set, and note q22 walked journal 1 itself. Code: note i (the `driver` answer filters the journal's own record query, whose deleted-record half asks for journal 1's); `DRIVERPlugin::isDRIVERRecord()` reads a deleted record's `driver` tombstone setting by its tombstone ID, whatever the journal. The question and lean are judgment.
 
+<a id="fn-f-a26"></a>
+**f-a26** — Not run: the test installs, and every install the campaign drives, run PostgreSQL; no MySQL or MariaDB was at hand on 2026-10-05. Code: note e; OJS `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` writes the datestamp as `GREATEST(a.last_modified, i.last_modified, p.last_modified)` over `leftJoin('issues AS i', …)`, so for an article in no issue `i.last_modified` is NULL; MySQL's and MariaDB's `GREATEST` returns NULL when any argument is NULL, PostgreSQL's ignores NULL arguments. Read 2026-10-01 for the issue report of A18 (its Cause and "Unverified", [docs/issues/U19-A18-oai-datestamp-stays-after-edit-republish.md](../issues/U19-A18-oai-datestamp-stays-after-edit-republish.md)), which does not copy the expression into its fix. What the record's datestamp then reads in a list without dates was not followed. The question and lean are judgment.
+
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).
 
@@ -2183,6 +2242,9 @@ Issue report: [pkp-e2e#334](https://github.com/jardakotesovec/pkp-e2e/issues/334
 <a id="fn-f-omp8"></a>
 **f-omp8** — Live-probed 2026-10-03 on OMP `main` (`3b0ecf794c`, lib/pkp `3dc90c81a6`), PKP's default test dataset (pkp/datasets `e8dafbc`), PostgreSQL: book 14 ("From Bricks to Brains: …"), published, returned with "Return to Workflow" › "Confirm" as `dbarnes`; the press's signed-out ListRecords in `oai_dc` then no longer carried the book, and held no deleted record for it. With omp `OAIDAO` reading the current publication's status in place of the submission's (the fix the issue report proposes, tried the same day), the book's record was listed again. Code: `ReturnToWorkflow::getNewStatus()` returns `PKPSubmission::STATUS_QUEUED` and the version keeps `PKPPublication::STATUS_PUBLISHED`; omp `OAIDAO` lists formats of submissions with `ms.status = STATUS_PUBLISHED`, and OMP writes format tombstones only on unpublish and on a format's availability or approval change (note n). OJS's `OAIDAO` selects on `p.status` (the publication), so a returned article stays listed (read in the code, not walked). Since: d52aa4c84b (pkp/pkp-lib#12881 for pkp/pkp-lib#12799, 2026-06-09), which created the decision. Kept walk: `shared/playwright/checks/issues/returned-item-gone-search-still-lists/walk.js` (step 4 reads the OAI list).
 Issue report (the Search spec's OMP3 and OPS4, this entry under its "Reach"): [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
+
+<a id="fn-f-omp9"></a>
+**f-omp9** — Not walked on the first press: on the test installs `publicknowledge` holds no published book, and its own ListIdentifiers answered "No matching records in this repository" on all three apps before and after the walk below. Live-probed 2026-10-05 (Rules 4b, 7b, 7d, 8; A1), OMP `main`, two runs, each on a scratch press seeded with a series `ser` and two published books, one in the series and one in none, both then unpublished with "Unpublish" as the press's Press Manager: before, ListSets named `{press}` and `{press}:ser`, the headers read `[{press}:ser]` and `[{press}]`, `set={press}:ser` listed the series book only and `set={press}` both, at both addresses; after, the site-wide list without a set gave the two deleted records with the same sets, while the press's own lists, `set={press}` and `set={press}:ser` at both addresses, answered "No matching records in this repository" and GetRecord at the press's address "No matching identifier in this repository" (A1). OPS control the same day: an unposted preprint's deleted record, set `{server}:PRE`, was listed under `set={server}` at the server's address and the site-wide one. Code: omp `APP\oai\omp\OAIDAO::getRecordsRecordSetQuery()` compares the tombstone's set with `where('dot.set_spec', '=', $set)`; OJS and OPS add `orWhere(…, 'like', $set . ':%')`; OMP on `stable-3_5_0` has the same exact match. First noted in the A1 issue report's "Left out" (2026-10-01). Kept walk: `shared/playwright/checks/U19/I05/i05.js`. The question and lean are judgment.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-26: note q11, the preprint server part. Code: note l; the column name `a.last-modified` came with ops `5df1969511` "pkp/pkp-lib#6963 Port OAI rewrite to Laravel to OPS" (2021-06-11). Postgres answers "column … does not exist".
