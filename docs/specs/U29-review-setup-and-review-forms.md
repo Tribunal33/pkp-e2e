@@ -839,6 +839,10 @@ recipe are in the footnote. <sup>s0</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A13 {OJS} (issue report
+    `docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md`): the
+    reviewer recommendation writes sent as a Section Editor and as a
+    manager-level role without settings access, each refused
   - an unsaved "Setup" edit staying through "Submission" and back to
     "Review", and a reload then dropping it (Rule 2)
   - the guard for A11 {OJS} (Rule 18; issue report
@@ -971,7 +975,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | Saving a reviewer's "Edit" window silently takes a deactivated review form off the review | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A12](#a12) | On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name | 🐞 | minor | — |
-| [A13](#a13) | A Section Editor, or a manager-level role without settings access, can add, change, delete and deactivate the journal's reviewer recommendations | 🐞 | user-visible | — |
+| [A13](#a13) | A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1137,18 +1141,22 @@ row tick boxes ([DOIs' A8](U45-dois.md#a8)).
 Basis: probe, 2026-10-05. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — A Section Editor, or a manager-level role without settings access, can change the journal's reviewer recommendations** · 🐞 · user-visible.
-On a journal, a Section Editor and a role at the Journal Manager level
-whose settings access is switched off are refused "Reviewer
-Recommendations", and should not change its list. Yet the app accepts
-their add, edit, delete, activate and deactivate requests when they are
-sent to it directly: a new entry shows at once in every reviewer's
-"Recommendation" list, an unused entry can be renamed, retyped or deleted,
-and any entry can be deactivated, one in use included (A6 then blanks it in
-the editor's "Read Review" window). An entry in use still cannot be renamed
-or deleted, and a manager sees and can undo every change on the tab.
-Since: 2025-04-29 (a year and a half) · Basis: probe, 2026-09-30. <sup>f-a13</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A13 — A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations** · 🐞 · medium.
+A Section Editor, and an editor whose role has "Permit changes to
+Settings" unticked, are refused Settings › Workflow and its "Reviewer
+Recommendations" tab. Yet the journal accepts the tab's requests from
+them when they are sent directly: they can add recommendations, rename or
+delete one no review has chosen, and deactivate or reactivate any of them.
+A deactivated recommendation disappears from every reviewer's
+"Recommendation" list. With all of them deactivated, the list is empty and
+no reviewer who has not yet chosen can submit a review: "Submit Review"
+answers "This field is required.". Nobody is told. A manager sees the
+change only by opening the tab, and can reactivate the entries there.
+A review that already carries a deactivated recommendation keeps it, and
+the editor's "Read Review" window still shows it at the top; only the
+window's "Reviewer Recommendation" section reads "-" until it is
+reactivated.
+Since: 2025-04-29 (a year and a half) · Basis: probe, 2026-10-05. <sup>f-a13</sup>
 
 ### OMP
 
@@ -2078,6 +2086,7 @@ loading. OMP and OPS `main` have no such API
 OJS 3.5, 3.4 and 3.3 have no recommendations API at all, so no release
 carries it. Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
+Issue report: [docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md](../issues/U29-A13-section-editor-changes-reviewer-recommendations.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the
