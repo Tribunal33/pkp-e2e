@@ -86,7 +86,7 @@ forEachApp(async (app) => {
     const J = (ctx, l) => `${app.baseURL}/index.php/${ctx}${l ? '/' + l : ''}`;
     const oaiUrl = (ctx, q, l) => `${J(ctx, l)}/oai${q ? '?' + q : ''}`;
     const CTX = isOJS ? 'Journal' : isOMP ? 'Press' : 'Server';
-    const REPO_ID = `${app.name}-test.localhost`;
+    const REPO_ID = `${dbName(app.name).replace(/_/g, '-')}.localhost`; // the slot's and line's install (make-test-config.js `[oai] repository_id`)
     const PDF = isOPS ? 'preprint.pdf' : 'article.pdf';
 
     // ------------------------------------------------------------------ seed
