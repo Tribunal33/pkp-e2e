@@ -3,6 +3,7 @@
 - **Severity** low
 - **Effort** small
 - **Kind** regression
+- **Security** unreleased
 - **Affects**
   - main: OJS, OMP, OPS
   - 3.5: none

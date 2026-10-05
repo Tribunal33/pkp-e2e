@@ -1389,6 +1389,7 @@ deposited to DOAJ (or marked as deposited) and its current version is
 then unpublished, published again or replaced by a newly published
 version. {OJS}
 Since: 2025-10-07 · Basis: probe, 2026-10-01. <sup>f-a5</sup>
+Report: refresh owed — security side, unreleased (`main` only; @jarda.kotesovec on Mattermost 2026-10-05: security label on the report and issue): the daily deposit also sends content that is not published, on a single-journal installation too: `getExportable()` selects `stale` items without `p.status = STATUS_PUBLISHED`, so an unpublished article and a never-published new version go to DOAJ. Walked 2026-09-30 as `rvaca` (one journal, OJS main): "Mark Registered" on submission 17, "Create New Version" (publication 22, a marker title, not published), "Unpublish" of publication 18; `doaj::status` read `stale` and the article left the tool's "Articles" list; `php lib/pkp/tools/scheduler.php test --name='APP\plugins\generic\doaj\DOAJInfoSender'` set it to `submitted` and queued a `DOAJRegister` job carrying the draft's marker title and `index.php/publicknowledge/article/view/17` (302 for a reader). The report's grouping fix closes it too (2026-10-05).
 
 <a id="a6"></a>
 **A6 — "Upload File" cannot be reached with the keyboard: no revision, galley or import upload without a mouse** · 🐞 · high.

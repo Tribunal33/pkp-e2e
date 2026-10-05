@@ -3,6 +3,7 @@
 - **Severity** high
 - **Effort** small
 - **Kind** regression
+- **Security** unreleased
 - **Affects**
   - main: OJS
   - 3.5: none (no "Needs Sync" status)

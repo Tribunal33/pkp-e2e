@@ -1146,6 +1146,7 @@ names the person who added it.
 The Copyediting stage's instance of this is that spec's
 [finding](U32-copyediting-stage.md#a9).
 Basis: probe, 2026-10-01. <sup>[f-a5](#fn-a5)</sup>
+Report: refresh owed — security side, unreleased (`main` only; @jarda.kotesovec on Mattermost 2026-10-05: security label on the report and issue): because the recipient is the creator, a recipient who is not a manager (an Author, a Copyeditor) is offered "Edit", "Add Task Details", "History" and "Delete" on that discussion and can rename it (`PUT /submissions/{id}/tasks/{taskId}` 200) and delete it (`DELETE` 200, the `edit_tasks` row gone); "Edit" › message › "Save" adds a message under the recipient's name, since the first note is stored without `is_headnote` (pkp/pkp-lib#12278's own-message guard never applies; with the U37 A9 fix the save answers 422); the sending section editor who is not a manager gets no row menu on it. Walked 2026-10-01 on OJS submission 5 (`ddiouf`), OMP 1 (`aclark`), OPS 1 (`ccorino`), and 2026-10-02 for the "Edit" save; not walked: "Assign", a Copyeditor recipient. Rows already stored on `main` keep the recipient as creator; a repair would set `created_by` to the head note's `user_id`, as `I10406_EditorialTasks` does (2026-10-05).
 
 <a id="a6"></a>
 **A6 — The "Assign Editor" message gives the new editor no "You have been assigned as an editor" task** · 🐞 · low.
