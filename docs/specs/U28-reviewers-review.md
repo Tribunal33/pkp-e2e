@@ -125,16 +125,17 @@ give no access to any screen in this spec. <sup>l</sup>
 3. **The table.** Four columns: "ID" (the submission's number, with a
    "Sort" control that does not reorder the rows ⚠ [A1](#a1)), "Submissions" (the title, plain text), "Editorial
    Activity" (one sentence about the assignment's state) and "Actions" (one
-   button, or none). Dates in the sentences are written year-month-day
+   button, or none). The sentences write dates year-month-day
    (2026-10-02). The sentence and the button follow the assignment's
-   state: <sup>c</sup>
+   state, "today" being the server's date (read with server and browser
+   in UTC): <sup>c</sup>
 
    | State | "Editorial Activity" reads | "Actions" button |
    |-------|----------------------------|----------------|
-   | request unanswered, response not yet due (also after an editor re-sent a declined request) | "Please accept or decline this request by {date}" | "Respond to request" |
-   | request unanswered, response overdue | "Deadline for responding to this request has passed. Please accept or decline this request at the earliest." | "Respond to request" |
-   | accepted, review not yet due | "Please complete this review by {date} 00:00:00." (the date carries a midnight clock time ⚠ [A5](#a5)) | "Finish review" |
-   | accepted, review overdue | "Deadline for completing this review has passed. Please complete the review at the earliest." | "Finish review" |
+   | request unanswered, "Response Due Date" today or later, "Review Due Date" after today (also a declined request the editor re-sent) | "Please accept or decline this request by {date}" | "Respond to request" |
+   | request unanswered, "Response Due Date" before today | "Deadline for responding to this request has passed. Please accept or decline this request at the earliest." | "Respond to request" |
+   | accepted, "Review Due Date" after today | "Please complete this review by {date} 00:00:00." (the date carries a midnight clock time ⚠ [A5](#a5)) | "Finish review" |
+   | accepted, "Review Due Date" today or before; also an unanswered request with both due dates today ⚠ [A18](#a18) | "Deadline for completing this review has passed. Please complete the review at the earliest." | "Finish review" |
    | review submitted (whether or not the editor has confirmed it) | "Review submitted on {date}" | "View" |
    | declined | "Request declined on {date}" | none |
    | not submitted, and the submission moved on to Copyediting or Production | "Incomplete" | none |
@@ -1008,6 +1009,7 @@ Left out of the scenarios above, by reason:
     wish to continue without saving?", "Cancel" keeping the text
     ([A15](#a15); Rule 18): the guard the issue report proposes, once
     fixed
+  - an unanswered request, response due today and review later, reading "Please accept or decline this request by {date}" with "Respond to request", and "Deadline for responding to this request has passed." from the next day (Rule 3): likely a bullet in scenario 10, beside "Response overdue"
   - {OPS} a user invited to a home-made "Reviewer"-level role beside Author landing on "Active submissions" after sign-in, with no "My Assignments as Reviewer" group and the typed reviewer-list address refused ([OPS1](#ops1); Purpose, scenario 17): the guard the issue report proposes, once fixed
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
@@ -1034,6 +1036,7 @@ Left out of the scenarios above, by reason:
   - A15 (unsaved free-form review text dropped without a warning on leaving step 3; Rule 18)
   - A16 (a refused review-form submit marking the unanswered questions on one form and none on another; Fields step 3)
   - A17 (step 3's "Reviewer Files" list on "Loading" with no "Upload File" on an install running in strict mode; Rule 12, Settings)
+  - A18 (a review reading "Deadline for completing this review has passed" on its due date, and a request whose response and review are both due today offering "Finish review"; Rule 3)
   - OMP2 (the press's review-complete email saying "recommends None"; Side effects)
   - OMP3 (the press's review-form refusal opening with a raw key; Fields)
   - OPS1 (a home-made reviewer role landing on a page headed "undefined (0)" that lists nothing under an "Error" window; Purpose, scenario 17)
@@ -1070,6 +1073,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a changed "Recommendation" or review-form answer is guarded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | With strict mode on, step 3's "Reviewer Files" list stays on "Loading" with no "Upload File" | 🐞 | low | — |
+| [A18](#a18) | On its due date, a review already reads "Deadline for completing this review has passed" in the reviewer's list, and a request due that day offers "Finish review" | 🐞 | user-visible | — |
 | [OMP2](#omp2) | {OMP} On a press, the email telling editors a review is in says the reviewer "recommends None" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | {OPS} On a preprint server, a user given a "Reviewer"-level role lands after every sign-in on a page headed "undefined (0)" under an "Error" window | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
@@ -1166,8 +1170,8 @@ reads "Please accept or decline this request by 2026-10-30", and the
 review page shows "Review Due Date" as 2026-10-30, the date alone.
 
 The reviewer reads a deadline of midnight that nobody set, since an
-editor chooses a day and no time. The day itself is not misleading: the
-list calls the review overdue from the start of the 30th.
+editor chooses a day and no time. From the 30th itself (Rule 3) the
+list calls the review overdue, a separate fault ([A18](#a18)).
 
 The clock time shows on every review the reviewer has accepted and not
 yet submitted, while it is not overdue and the submission is still in
@@ -1381,6 +1385,28 @@ fix are recorded with
 [Submission & Publisher Libraries A5](U39-submission-and-publisher-libraries.md#a5).
 Basis: probe, 2026-10-03. <sup>[f-a17](#fn-a17)</sup>
 
+<a id="a18"></a>
+**A18 — On its due date, a review already reads "Deadline for completing this review has passed"** · 🐞 · user-visible.
+An editor sets "Review Due Date" as a day, and the reviewer expects that
+day to be in time. On the due date (Rule 3), the reviewer's list
+already reads "Deadline for completing this review has passed. Please complete
+the review at the earliest." for an accepted review; the day before it
+read "Please complete this review by {date} 00:00:00.". A response date,
+by contrast, is in time on its day: an unanswered request whose
+"Response Due Date" is today still reads "Please accept or decline this
+request by {date}". The editor's row of the assignment also reads
+"Overdue" from the due date on
+([→ statuses](U27-reviewer-assignment-and-management.md#statuses)).
+
+The same sentence, with "Finish review", shows on a request not yet
+answered whose "Response Due Date" and "Review Due Date" are both today,
+though the reviewer never agreed to review; the button opens "1.
+Request" with "Accept Review, Continue to Step #2" and "Decline Review
+Request". A request's review date cannot fall before its response date,
+so this shows only when both fall on the same day, and only on
+that day.
+Basis: probe, 2026-10-05. <sup>[f-a18](#fn-a18)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1561,7 +1587,10 @@ redirect to `reviewer/submission/{submissionId}` (AFFW-057). Live-probed
 sentence prints the raw `dateDue` as "2026-10-02 00:00:00." (finding A5),
 the unanswered one "2026-10-02" with no period, the declined one
 "2026-09-04"; the two overdue sentences carry no date; "View" opens the
-wizard on "4. Completion".
+wizard on "4. Completion". Live-probed 2026-10-05 on OJS and OMP, `main`
+and `stable-3_5_0` (the table's date conditions): a response is in time
+on its due date, a review is not; the reads are in footnote
+[f-a18](#fn-a18).
 
 <a id="fn-d"></a>
 **d** — Wizard page: `PKPReviewerHandler::submission()` (lib/pkp
@@ -2606,6 +2635,35 @@ File" (scenario 7). 3.5 and 3.4 read in the code only.
 Kept walk: `shared/playwright/checks/issues/library-delete-strict-mode-error/walk.js`
 (`nb` runs the reviewer's step 3).
 Issue report: [docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md), filed as [pkp-e2e#698](https://github.com/jardakotesovec/pkp-e2e/issues/698).
+
+<a id="fn-a18"></a>
+**f-a18** — `ReviewAssignment::getStatus()` moves a due date stored with
+no time (`00:00:00`) to `23:59:59` of that day, then answers
+`REVIEW_ASSIGNMENT_STATUS_RESPONSE_OVERDUE` when the response due time is
+before `time()`, but `REVIEW_ASSIGNMENT_STATUS_REVIEW_OVERDUE` when the
+review due time is before `strtotime('tomorrow')`, which every time on
+the due date is; for an unanswered request the review comparison runs
+when the response is not overdue (the branch commented "review overdue
+but not response"), and the list maps `REVIEW_OVERDUE` to
+`.deadlineForCompletingReviewHasPassed` and "Finish review" (footnote c).
+`PKP\task\ReviewReminder` counts a review late only once the current
+date is after the due date (read in the code, not driven).
+Live-probed 2026-10-05 on OJS and OMP, `main` (two runs) and
+`stable-3_5_0` (two runs), server and browser in UTC (Rule 3): one
+External Reviewer with six requests whose dates the Journal Manager set
+in the row's "Edit" window; read on "Action Required by me (6)" and "All
+assignments (6)", each again after a reload, identical in every read.
+Accepted, review due 2026-10-04 and 2026-10-05: the overdue sentence with
+"Finish review"; review due 2026-10-06: "Please complete this review by
+2026-10-06 00:00:00.". Unanswered, response due 2026-10-04: the
+responding-overdue sentence; response due 2026-10-05 with review due
+2026-10-19: "Please accept or decline this request by 2026-10-05";
+response and review both due 2026-10-05: the review-overdue sentence with
+"Finish review", which opened `reviewer/submission/{id}` on "1. Request".
+The editor's rows read "Overdue Review due: 2026-10-05 … Send Reminder"
+for the accepted review due that day and for the request due that day,
+"Request Accepted Review due: 2026-10-06" for the one due the next day.
+The "Edit" window refuses a review due date before the response due date.
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `classes/core/Application.php::hasCustomizableReviewerRecommendation()`

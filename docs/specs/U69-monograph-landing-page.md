@@ -576,6 +576,18 @@ link, not a button. A journal's page puts the instructions under
       format's name.
     - 21a. **What is translated.** "Synopsis", "Versions", "Séries",
       "Mots-clés :" and the notices.
+22. **Open peer review.** The page carries no reviews. An "Open" review
+    can be made public: "Publicly Show Reviewer Comments" ticked in the
+    reviewer row's "Edit" window before "Mark as Complete", whose dialog
+    then adds "This review will be made publicly visible alongside the
+    article."
+    ([→ Reviewer assignment & management](U27-reviewer-assignment-and-management.md#read-review),
+    its Rule 14a), or arriving ticked on every new request of a press
+    that makes reviews public by default (Settings bullet 16). Once the
+    book is published, its page shows neither that review's comments,
+    nor the reviewer's name, nor any review heading, to a visitor, a
+    Reader or the Press manager. The page reads as for a book whose
+    review was left private ⚠ [A26](#a26). <sup>t</sup>
 
 ## Side effects
 
@@ -695,6 +707,13 @@ link, not a button. A journal's page puts the instructions under
     older version's chapter page, and a new version's (Rule 5b), shows a
     server error page [A19](#a19). "Yes": an older version's chapter page
     opens (Rules 15a, 17, 18); a new version's is untried. <sup>l</sup>
+16. **"Publicly Show Reviewer Comments"** (Settings › Workflow › Review ›
+    "Setup", the box "Make reviewer comments publicly visible with
+    published content"; [Review setup & review
+    forms](U29-review-setup-and-review-forms.md), its Rule 4). Unticked on
+    a new press. Ticked: every new review request arrives with its own
+    "Publicly Show Reviewer Comments" ticked. At either end the book's
+    page shows no review (Rule 22) [A26](#a26). <sup>t</sup>
 
 ## Cross-feature interactions
 
@@ -746,6 +765,11 @@ link, not a button. A journal's page puts the instructions under
   the plugins of Settings bullets 1–3 are switched.
 - [Sections](U17-sections.md), [Categories](U16-categories.md): the series
   and category pages the side column links to.
+- [Reviewer assignment & management](U27-reviewer-assignment-and-management.md)
+  and [Review setup & review forms](U29-review-setup-and-review-forms.md):
+  the "Publicly Show Reviewer Comments" box on a review and the press's
+  default for it, which the book's page never shows (Rule 22; Settings
+  bullet 16).
 
 ## Canonical scenarios
 
@@ -1224,6 +1248,8 @@ Left out of the scenarios above, by reason:
     scenario 3 passes it)
   - A24 (a preview's file links; Rule 5c)
   - A25 (an HTML file linking another book; Fields, the HTML view page)
+  - A26 (a review made public, missing from the published book's page;
+    Rule 22; Settings bullet 16)
 - **No seed**:
   - chapters dragged into a new order on the Chapters page (Rule 10)
   - a purchase completed through PayPal (Rule 14)
@@ -1287,6 +1313,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A25](#a25) | A book's HTML file that links another book shows an empty page under the HTML view page's bar | 🐞 | user-visible · crash: server | — |
+| [A26](#a26) | A review made public never shows on the published book's page | 🐞 | user-visible | — |
 | [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
@@ -1664,6 +1691,21 @@ Worked until a 2024 change to how the app builds its addresses, read
 from the code's history: a regression.
 Since: 2024-06-26 (two years), a date read from the code's history · Basis: probe, 2026-10-05. <sup>f-a25</sup>
 
+<a id="a26"></a>
+**A26 — A review made public never shows on the published book's page** · 🐞 · user-visible.
+The Press manager ticks "Publicly Show Reviewer Comments" on an "Open"
+review and presses "Mark as Complete", whose dialog says "This review
+will be made publicly visible alongside the article." Once the book is
+published, its page shows no review at all: no comments, no reviewer's
+name, no review heading, for a visitor, a Reader or the Press manager.
+The press believes its reviews are public, and nobody learns that
+readers never see them. No setting puts the review on the page, and a
+press that makes every new review public under Settings › Workflow ›
+Review › "Setup" gets the same.
+A journal's article page has the same fault
+([→ Article landing page & reading, OJS12](U13-article-landing-page-and-reading.md#ojs12)).
+Basis: probe, 2026-10-05. <sup>f-a26</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1791,6 +1833,9 @@ Since: 2024-06-26 (two years), a date read from the code's history · Basis: pro
 
 <a id="fn-td20"></a>
 **td20** — Live-probed 2026-09-28 (Rule 21; A15): a new press offers no language choice in its header; the French pages were opened with "fr_CA" in the address. The raw codes Rule 21 lists; "2026-09-28 (##publication.versionStage.display##)##submission.chapterCreated##" and "##submission.withoutChapter##" alone; "25.00 Achat (25.00 USD)"; "Ceci est une version obsolète publiée le 2024-03-05. Consulter la version la plus récente." and "Ceci est un aperçu et n'a pas été publié. Afficher la soumission" translated; the English pages showed no raw code. The French file view page failed as in English (A9). The OJS and OPS French item pages read "2026-09-28 (##publication.versionStage.display##)" too.
+
+<a id="fn-t"></a>
+**t** — Lib/pkp's `OpenReviewComponent` (the public-review display's data) is used by no OMP handler or template: `CatalogBookHandler::book()` prepares no review data and `monograph_full.tpl` mounts no review display (code read on checkout omp `3b0ecf794`, lib/pkp `3dc90c81a6`, 2026-10-05). Live-probed 2026-10-05 (Rule 22; Settings bullet 16; A26), OMP `main`, two runs, on a scratch press with "Default Review Mode" "Open" and "Publicly Show Reviewer Comments" off: Settings › Workflow › Review › "Setup" offered "Publicly Show Reviewer Comments" with the box "Make reviewer comments publicly visible with published content". Two books in External Review, each with one submitted Open review whose "For author and editor" comment carried a unique word. On the first, the reviewer row's "More Actions" › "Edit" offered "Publicly Show Reviewer Comments" unticked, to the Press manager and to the book's assigned Series editor; ticked and saved (`is_review_publicly_visible` true), it reopened ticked. "Read Review" › "Mark as Complete" read "Mark this review as complete? This review will be made publicly visible alongside the article. You can still modify this review after marking it as complete. You will have the opportunity to thank the reviewer in the next step."; confirmed, "The review has been marked as complete." and the row "Complete". The second book's review, left unticked, got the dialog without the "publicly visible" sentence. Both were accepted and published as a Version of Record. Each book's page, read by a visitor (twice, the second after a reload), and the first also by the press's Reader and the Press manager, held its title, "Authors", "Synopsis", "References", "Published", "Versions" and the copyright line: neither review's comment in the text or the page's source, no reviewer name ("Rhea Openreviewer"), no review heading, no request for review data, no failed request; the catalog page showed neither comment. Other end: a second press with "Publicly Show Reviewer Comments" on, its book seeded published with a submitted Open review whose box was ticked (not marked complete): no review on the book's page. No server error, page error or console error in either run.
 
 <a id="fn-q"></a>
 **q** — `CatalogBookHandler::book()` fires `UsageEvent` with `ASSOC_TYPE_SUBMISSION` for the book's page and `ASSOC_TYPE_CHAPTER` for a chapter page; the file download's event is the failing line of note j. `ManualPaymentNotify` (template key `MANUAL_PAYMENT_NOTIFICATION`, installed by the plugin's `emailTemplates.xml`) is sent from the user to the press's `contactEmail`/`contactName`, subject and body from `plugins/paymethod/manual/locale/en/emails.po` in the press's primary language. No other mail or notification is raised by these handlers. Live-probed 2026-09-28: see td25; the day's usage log gained one book line per book page opened and one chapter line per chapter page, and none for a file pressed ("PDF", "HTML", another file), where OJS and OPS log one per galley view and download.
@@ -1976,6 +2021,9 @@ Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283
 
 <a id="fn-f-a25"></a>
 **f-a25** — OMP `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::handleOmpUrl()` passes `$urlParts[1]` (a string) as the path of `PKPRequest::url()`, whose path is `?array` since lib/pkp bee9547b49 (2024-06-26, the change behind A16); `Hook::call()` logs the plugin's TypeError and carries on, and `CatalogBookHandler::download()` then fails on A9's line. OJS's `htmlArticleGalley` twin passes a list. 3.5 (code): the same call in `HtmlMonographFilePlugin.php` against the same signature and the same hook catch. Fix shape as A16's: `[$urlParts[1]]`. The A16 issue report (pkp-e2e#284) names this caller in its Cause and leaves it out of its fix. Live-probed 2026-10-05 (Fields, the HTML view page; two runs; a visitor, a Reader and the Press manager): the file holding `omp://monograph/{id}` opened the tab "HTML view of the file i05-monograph-link-r1-omp.html", whose frame `catalog/download/{id}/{format}/{file}?inline=1` answered 500 and stayed empty; the log read "TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159", then "Uncaught Error: Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization in …/CatalogBookHandler.php:533". Control: td26.
+
+<a id="fn-f-a26"></a>
+**f-a26** — Note t: OMP never prepares or mounts the display; OJS's `ArticleHandler::view()` prepares it and its template never mounts it (U13 OJS12). The OJS12 issue report ([pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218), [docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md)) found the OMP twin in the code and proposes a fix for the article page's template only, which does not reach a book's page. OMP `stable-3_5_0`: not driven; OJS 3.5 has no "Publicly Show Reviewer Comments" (that report's Affects). Live-probed 2026-10-05 (two runs): note t.
 
 ## Reference — entry points & surfaces
 

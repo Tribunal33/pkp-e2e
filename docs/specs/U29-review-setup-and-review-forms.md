@@ -109,8 +109,9 @@ required for the form item. (English)" and nothing under the box:
 
 **"Reviewer Recommendations" tab {OJS}.** A table titled "Reviewer
 Recommendations" with the button "Add Recommendation", the columns
-"Recommendations" and "Activate" (a tick per row), and an unnamed third
-column holding the "More Actions" menu of a row not in use. Its window
+"Recommendations" and "Activate" (a tick per row, with no name for a
+screen reader ⚠ [A12](#a12)), and an unnamed third column holding the
+"More Actions" menu of a row not in use. Its window
 ("Add Recommendation" / "Edit Recommendation") has one button, "Save"; a
 refused save shows "This field is required." under each empty required
 box and, at the foot, "Please correct 2 errors." (or "Please correct one
@@ -121,7 +122,7 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
 |------------------|-----------|-------|
 | "Review Recommendations" (help "e.g. accept, reject") | yes | Text, one box per form language: the words the reviewer picks. Refused empty |
 | "Recommendation type" | yes | A list: "Approved", "Not Approved", "Revisions Requested", "With Comments"; nothing is preselected, and the entry is refused without a choice. The type is shown nowhere else: not to the reviewer, not in the editor's review windows, not in the table |
-| The unlabelled list under it | yes | A list: "Active Upon Saving" (preselected) or "Deactivate": whether the entry is offered to reviewers as soon as it is saved (Rule 17) |
+| The unlabelled list under it | yes | A list: "Active Upon Saving" (preselected) or "Deactivate": whether the entry is offered to reviewers as soon as it is saved (Rule 17). A screen reader announces it with no name [A12](#a12) |
 
 ## Rules & state
 
@@ -383,8 +384,11 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
     on the wizard's step 3; an inactive entry is hidden there, except on a
     review that already carries it. "Add Recommendation" opens the window
     of Fields; saving closes it and the new entry appears in the table,
-    active or not as the last list said. The "Activate" tick asks "Are you sure you want
-    to activate the recommendation {title}" (window "Activate Reviewer
+    active or not as the last list said. Closed with the "Close" at its
+    top instead, even after typing, the window shuts with no question and
+    no notice, and nothing is added: the table keeps its rows, also after
+    a reload. The "Activate" tick asks "Are you sure you want to activate
+    the recommendation {title}" (window "Activate Reviewer
     Recommendation") or "Are you sure you want to deactivate the
     recommendation {title}" ("Deactivate Reviewer Recommendation"), with
     "Yes" / "No". Neither the table nor the reviewer's list has a fixed
@@ -857,6 +861,9 @@ Left out of the scenarios above, by reason:
     request carries deactivated, then "OK" in the reviewer row's "Edit"
     window with nothing changed: the window lists the carried form selected,
     and the request and the reviewer's step 3 keep it.
+  - "Add Recommendation" closed with "Close" after typing in "Review
+    Recommendations" {OJS}: no question, no notice, and the table keeping
+    its rows, also after a reload (Rule 17)
 - **Rarely met**:
   - ordering the forms and a form's items with "Order", "Done" and "Cancel
     ordering", and the editors' "Review Form" lists following the order
@@ -910,6 +917,8 @@ Left out of the scenarios above, by reason:
     Rule 12a)
   - A11 ("Edit Recommendation" closed with "Close" leaving the
     unsaved title on the row for the next "Save" to store; Rule 18)
+  - A12 (the "Activate" tick boxes and the "Active Upon Saving" list
+    without a name for a screen reader; Fields "Reviewer Recommendations")
   - OMP3 (the "Internal Review Guidelines" toolbar without quote and list
     buttons; Fields)
 - **No seed**:
@@ -959,6 +968,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP3](#omp3) | A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | Saving a reviewer's "Edit" window silently takes a deactivated review form off the review | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
+| [A12](#a12) | On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name | 🐞 | minor | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1108,6 +1118,20 @@ there, even with nothing else changed, stores the title the manager had
 abandoned.
 The same fault as [Institutions' A2](U66-institutions.md#a2).
 Since: 2026-09-24 (a week) · Basis: probe, 2026-09-30. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name** · 🐞 · minor.
+No row's "Activate" tick box has a label, so a screen reader announces
+"checkbox" and its state with nothing more, for the Journal Manager and
+the Site Administrator alike. A manager who cannot see the screen can
+tell which recommendation a box switches only from the row's name, read
+just before the box. The list under "Recommendation type" in the "Add
+Recommendation" window ("Active Upon Saving" / "Deactivate") has no name
+either, so nothing says what it decides. Both controls work from the
+keyboard: Space on a ticked box opens "Deactivate Reviewer
+Recommendation", as a click does. The same mistake as the DOIs page's
+row tick boxes ([DOIs' A8](U45-dois.md#a8)).
+Basis: probe, 2026-10-05. <sup>f-a12</sup>
 
 ### OMP
 
@@ -1548,6 +1572,13 @@ and "Review Viewed" once the review had been opened) while "Read Review" /
 "Review Details" kept its "Recommendation:" summary line and printed "-"
 in its "Reviewer Recommendation" section; reactivated, the section printed
 the title again (finding A6; re-read 2026-09-06).
+Live-probed 2026-10-05 (Rule 17; OJS `main`, a scratch journal's
+throwaway Journal Manager, two runs): "Add Recommendation" opened,
+"Review Recommendations" filled, "Recommendation type" left unchosen, the
+window left by its "Close" (the button at its top): no dialog, no notice,
+the window gone, and the table listed the six starting rows, the same
+after a reload. Kept script
+`shared/playwright/checks/U28/I05/i05.js` (phase `recs`).
 
 <a id="fn-h"></a>
 **h** — `HasReviewDueDate` trait (lib/pkp
@@ -1959,6 +1990,28 @@ list on close only after a save; before it every close reloaded the list
 and hid the fault (read in the code, not reproduced). Not on 3.5, which
 has no such manager. A press has no "Reviewer Recommendations" tab
 (OMP1). Issue report: [pkp-e2e#4](https://github.com/jardakotesovec/pkp-e2e/issues/4) ([docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md](../issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md)).
+
+<a id="fn-f-a12"></a>
+**f-a12** — `ReviewerRecommendationManager.vue` (lib/ui-library
+`src/managers/ReviewerRecommendationManager/`) wraps each row's
+`<input type="checkbox" name="recommendation_status[]">` in a `<label>`
+that holds nothing else, with no `aria-label`, `title` or `label[for]`;
+`ReviewerRecommendationForm`'s `status` `FieldSelect` has no label
+(footnote g). Live-probed 2026-10-05 on OJS `main` (lib/ui-library
+`64d67363`), a scratch journal, as its throwaway Journal Manager and as
+the Site Administrator, two runs: Chromium's accessibility tree gave all
+six starting rows' boxes the role checkbox, focusable, with an empty name
+(the only name source the empty label); the page's accessibility snapshot
+read `rowheader "Accept Submission"`, then `checkbox [checked]`, then
+`button "More Actions"` on every row, and in "Add Recommendation" a
+`combobox` with no name holding "Active Upon Saving" [selected] and
+"Deactivate". The first box, reached with Tab and pressed with Space,
+opened "Deactivate Reviewer Recommendation" / "Are you sure you want to
+deactivate the recommendation Accept Submission"; "No" left it ticked and
+nothing was sent. No server error, page error or console error in either
+run. Kept script `shared/playwright/checks/U28/I05/i05.js` (phase `recs`).
+First noted 2026-10-01 in the code by the DOIs page's A8 write-up, which
+names it as outside that fix (`docs/issues/U45-A8-doi-page-controls-unnamed.md`).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the
