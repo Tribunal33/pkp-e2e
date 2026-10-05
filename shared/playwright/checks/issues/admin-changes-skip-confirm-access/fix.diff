@@ -1,0 +1,171 @@
+--- a/lib/pkp/api/v1/contexts/PKPContextController.php
++++ b/lib/pkp/api/v1/contexts/PKPContextController.php
+@@ -34,6 +34,7 @@
+ use PKP\plugins\PluginRegistry;
+ use PKP\security\authorization\CanAccessSettingsPolicy;
+ use PKP\security\authorization\PolicySet;
++use PKP\security\authorization\ReauthenticationRequiredPolicy;
+ use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
+ use PKP\security\authorization\UserRolesRequiredPolicy;
+ use PKP\security\Role;
+@@ -128,6 +129,11 @@
+         }
+         $this->addPolicy($rolePolicy);
+ 
++        // Adding and deleting a context are Administration's alone.
++        if (in_array(static::getRouteActionName($args[0]), ['add', 'delete'])) {
++            $this->addPolicy(new ReauthenticationRequiredPolicy($request));
++        }
++
+         return parent::authorize($request, $args, $roleAssignments);
+     }
+ 
+--- a/lib/pkp/api/v1/jobs/PKPJobController.php
++++ b/lib/pkp/api/v1/jobs/PKPJobController.php
+@@ -23,6 +23,8 @@
+ use Illuminate\Http\Response;
+ use Illuminate\Support\Facades\Route;
+ use PKP\core\PKPBaseController;
++use PKP\core\PKPRequest;
++use PKP\security\authorization\ReauthenticationRequiredPolicy;
+ use PKP\security\Role;
+ 
+ class PKPJobController extends PKPBaseController
+@@ -57,6 +59,16 @@
+     }
+ 
+     /**
++     * @copydoc \PKP\core\PKPBaseController::authorize()
++     */
++    public function authorize(PKPRequest $request, array &$args, array $roleAssignments): bool
++    {
++        $this->addPolicy(new ReauthenticationRequiredPolicy($request));
++
++        return parent::authorize($request, $args, $roleAssignments);
++    }
++
++    /**
+      * @copydoc \PKP\core\PKPBaseController::getGroupRoutes()
+      */
+     public function getGroupRoutes(): Void
+--- a/lib/pkp/api/v1/site/PKPSiteController.php
++++ b/lib/pkp/api/v1/site/PKPSiteController.php
+@@ -26,6 +26,7 @@
+ use PKP\plugins\PluginRegistry;
+ use PKP\plugins\ThemePlugin;
+ use PKP\security\authorization\PolicySet;
++use PKP\security\authorization\ReauthenticationRequiredPolicy;
+ use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
+ use PKP\security\authorization\UserRolesRequiredPolicy;
+ use PKP\security\Role;
+@@ -90,6 +91,8 @@
+ 
+         $this->addPolicy($rolePolicy);
+ 
++        $this->addPolicy(new ReauthenticationRequiredPolicy($request));
++
+         return parent::authorize($request, $args, $roleAssignments);
+     }
+ 
+--- a/lib/pkp/classes/security/authorization/ReauthenticationRequiredPolicy.php
++++ b/lib/pkp/classes/security/authorization/ReauthenticationRequiredPolicy.php
+@@ -18,6 +18,8 @@
+ namespace PKP\security\authorization;
+ 
+ use APP\core\Application;
++use PKP\core\APIRouter;
++use PKP\core\PKPPageRouter;
+ use PKP\core\PKPRequest;
+ 
+ class ReauthenticationRequiredPolicy extends AuthorizationPolicy
+@@ -46,6 +48,23 @@
+             return AuthorizationPolicy::AUTHORIZATION_PERMIT;
+         }
+ 
++        // A request a page sends in place (the API, a legacy grid or form) cannot be sent
++        // to the Confirm Access page: refuse it with a message instead. The next page
++        // load asks for the password.
++        $router = $this->request->getRouter();
++        if (!($router instanceof PKPPageRouter)) {
++            $this->setAdvice(AuthorizationPolicy::AUTHORIZATION_ADVICE_DENY_MESSAGE, 'user.confirmAccess.required');
++            if ($router instanceof APIRouter) {
++                // Answer 403 with the message, which the forms show; the API's default
++                // refusal is a 401, which they show as an unknown error.
++                $this->setAdvice(
++                    AuthorizationPolicy::AUTHORIZATION_ADVICE_CALL_ON_DENY,
++                    [$router, 'handleAuthorizationFailure', [$this->request, 'user.confirmAccess.required']]
++                );
++            }
++            return AuthorizationPolicy::AUTHORIZATION_DENY;
++        }
++
+         // User needs to re-authenticate
+         $this->setAdvice(
+             AuthorizationPolicy::AUTHORIZATION_ADVICE_CALL_ON_DENY,
+--- a/lib/pkp/controllers/grid/admin/context/ContextGridHandler.php
++++ b/lib/pkp/controllers/grid/admin/context/ContextGridHandler.php
+@@ -28,6 +28,7 @@
+ use PKP\linkAction\LinkAction;
+ use PKP\linkAction\request\AjaxModal;
+ use PKP\security\authorization\PolicySet;
++use PKP\security\authorization\ReauthenticationRequiredPolicy;
+ use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
+ use PKP\security\Role;
+ 
+@@ -62,6 +63,7 @@
+             $rolePolicy->addPolicy(new RoleBasedHandlerOperationPolicy($request, $role, $operations));
+         }
+         $this->addPolicy($rolePolicy);
++        $this->addPolicy(new ReauthenticationRequiredPolicy($request));
+ 
+         return parent::authorize($request, $args, $roleAssignments);
+     }
+--- a/lib/pkp/controllers/grid/admin/languages/AdminLanguageGridHandler.php
++++ b/lib/pkp/controllers/grid/admin/languages/AdminLanguageGridHandler.php
+@@ -33,6 +33,7 @@
+ use PKP\linkAction\request\AjaxModal;
+ use PKP\notification\Notification;
+ use PKP\security\authorization\PolicySet;
++use PKP\security\authorization\ReauthenticationRequiredPolicy;
+ use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
+ use PKP\security\Role;
+ use PKP\services\interfaces\EntityWriteInterface;
+@@ -72,6 +73,7 @@
+             $rolePolicy->addPolicy(new RoleBasedHandlerOperationPolicy($request, $role, $operations));
+         }
+         $this->addPolicy($rolePolicy);
++        $this->addPolicy(new ReauthenticationRequiredPolicy($request));
+ 
+         return parent::authorize($request, $args, $roleAssignments);
+     }
+--- a/lib/pkp/controllers/grid/admin/plugins/AdminPluginGridHandler.php
++++ b/lib/pkp/controllers/grid/admin/plugins/AdminPluginGridHandler.php
+@@ -22,6 +22,7 @@
+ use PKP\core\PKPRequest;
+ use PKP\security\authorization\PluginAccessPolicy;
+ use PKP\security\authorization\PolicySet;
++use PKP\security\authorization\ReauthenticationRequiredPolicy;
+ use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
+ use PKP\security\Role;
+ 
+@@ -80,6 +81,8 @@
+             $this->addPolicy($rolePolicy);
+         }
+ 
++        $this->addPolicy(new ReauthenticationRequiredPolicy($request));
++
+         return parent::authorize($request, $args, $roleAssignments);
+     }
+ }
+--- a/lib/pkp/locale/en/user.po
++++ b/lib/pkp/locale/en/user.po
+@@ -902,6 +902,9 @@
+ msgid "user.confirmAccess.description"
+ msgstr "Signed in as <strong>{$userFullName}</strong>. Please enter your password to continue."
+ 
++msgid "user.confirmAccess.required"
++msgstr "Your access to Administration has expired. Reload the page and confirm your password to continue."
++
+ msgid "user.lastAction.incomplete"
+ msgstr "Your last action was not completed. Please try again."
+ 

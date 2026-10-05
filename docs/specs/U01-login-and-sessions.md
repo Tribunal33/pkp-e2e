@@ -589,6 +589,11 @@ tooling recipe are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A13 (issue report
+    `docs/issues/U01-A13-admin-changes-skip-confirm-access.md`): with
+    re-authentication on and the confirmation period run out, a Site
+    Settings save, a journal's removal and its creation from an
+    Administration page left open are refused and change nothing
   - a 40-character password chosen while accepting a role invitation,
     then the Login page's "Password" box taking all 40 and signing in
     ([A1](#a1)): the guard the issue report
@@ -675,7 +680,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | The Site Administrator's "Edit User" never shows "Change Password" ticked, and saving it removes the flag | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
-| [A13](#a13) | With re-authentication on, the Site Administrator's session adds and deletes journals and saves Site Settings without Confirm Access; only opening Administration's screens asks | 🐞 | user-visible | — |
+| [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A6](#a6) | With rate limiting on, even the correct password is refused as "Invalid username/email or password" during the cool-down; the concealment is intended | ✅ | latent | Jarda 2026-08-25 |
@@ -914,17 +919,23 @@ the next correct sign-in lands at once.
 Basis: probe. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
-**A13 — With re-authentication on, Administration's changes go through without Confirm Access** · 🐞 · user-visible.
-The configured gate (Rule 16) is meant to make the Site Administrator
-re-enter the password before working in Administration. It asks only when
-an Administration screen opens or one of its page buttons reloads it. In a
-session that never confirmed, or whose window lapsed, an Administration tab
-left open still adds and deletes journals in Hosted Journals, saves Site
-Settings, manages its Languages and Plugins, and retries or deletes failed
-jobs, with no password asked. Someone at an unattended administrator's
-browser can delete a journal without knowing the password.
-Since: 2026-04-09 (pkp/pkp-lib#12338) · Basis: probe, 2026-09-30. <sup>[f-a13](#fn-a13)</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A13 — With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password** · 🐞 · medium.
+An installation can make the Site Administrator re-enter the password
+("Confirm Access") before working in Administration; the password then
+holds for a set number of minutes, the confirmation period. When that
+period has run out, opening any Administration page asks again. But the
+changes made on a page that is already open do not ask. On an
+Administration page left open in a browser tab past the confirmation
+period, anyone at that browser can still create and delete journals in
+Hosted Journals, save Site Settings (the site's password rules
+included), manage Languages and Plugins, and retry or delete failed
+jobs, without the password.
+So someone at an administrator's unattended browser can delete a journal
+with all its contents, or weaken the site's password rules, without
+knowing the password. Nothing on screen or in the logs says the
+password was skipped.
+The setting, `password_timeout`, is off by default.
+Since: 2026-04-09 (pkp/pkp-lib#12338) · Basis: probe, 2026-10-05. <sup>[f-a13](#fn-a13)</sup>
 
 ---
 
@@ -1584,6 +1595,7 @@ live, then reverted). Gated requests would then also extend the window.
 3.5, 3.4 and 3.3 do not have it: none has `password_timeout` or the policy.
 Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
+Issue report: [docs/issues/U01-A13-admin-changes-skip-confirm-access.md](../issues/U01-A13-admin-changes-skip-confirm-access.md).
 
 ## Reference — entry points & surfaces
 
