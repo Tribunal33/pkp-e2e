@@ -1148,6 +1148,7 @@ and any entry can be deactivated, one in use included (A6 then blanks it in
 the editor's "Read Review" window). An entry in use still cannot be renamed
 or deleted, and a manager sees and can undo every change on the tab.
 Since: 2025-04-29 (a year and a half) · Basis: probe, 2026-09-30. <sup>f-a13</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OMP
 

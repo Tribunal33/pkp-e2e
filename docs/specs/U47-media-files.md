@@ -1023,6 +1023,7 @@ the page and the server disagree rather than a new right opening; one
 of the two should change. A journal's body text behaves the same way
 ([JATS XML & body text](U48-jats-and-body-text.md)).
 Since: 2026-09-17 · Basis: probe, 2026-09-30. <sup>f-a8</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OJS
 <a id="ojs1"></a>

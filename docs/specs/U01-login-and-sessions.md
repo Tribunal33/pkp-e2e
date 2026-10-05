@@ -924,6 +924,7 @@ Settings, manages its Languages and Plugins, and retries or deletes failed
 jobs, with no password asked. Someone at an unattended administrator's
 browser can delete a journal without knowing the password.
 Since: 2026-04-09 (pkp/pkp-lib#12338) · Basis: probe, 2026-09-30. <sup>[f-a13](#fn-a13)</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ---
 

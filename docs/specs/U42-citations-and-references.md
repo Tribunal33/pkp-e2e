@@ -1307,6 +1307,7 @@ not through a screen), and afterwards while they may edit its metadata
 Assistant who clicks the icon follows the Author's link, not an ORCID
 profile. The published page does not show it.
 Since: 2025-09-16 · Basis: probe, 2026-09-30. <sup>f-a22</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### Retired
 

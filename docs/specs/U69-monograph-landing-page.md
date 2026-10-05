@@ -1689,6 +1689,7 @@ Basis: probe, 2026-10-05. <sup>f-a26</sup>
 **A27 — A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included** · 🐞 · user-visible.
 An unassigned Series editor or assistant role opens an unpublished book's page by its address while the book is still in submission or review, or after it was declined, as on an article's page, where the full entry stands ([→ Article landing page & reading, A16](U13-article-landing-page-and-reading.md#a16)).
 Since: 2026-02-18 · Basis: probe, 2026-09-30. <sup>f-a27</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### Retired
 

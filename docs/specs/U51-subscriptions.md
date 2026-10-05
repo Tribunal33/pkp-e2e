@@ -1929,6 +1929,7 @@ text, and the article's page shows its galley link without a padlock.
 The Journal Manager is not warned, and no setting restricts such an
 article: an article's "Open Access" box exists only in an issue's table
 of contents. Since: 2025-06-10 · Basis: probe, 2026-09-30. <sup>f-a30</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OPS
 

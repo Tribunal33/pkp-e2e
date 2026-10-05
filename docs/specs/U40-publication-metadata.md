@@ -1282,6 +1282,7 @@ published version's review round, a choice the screen offers disabled.
 Expected: both stay as published, like the title. Funders being one list
 for every version is *[Funding](U43-funding.md#a2)* A2.
 Since: 2026-09-08 · Basis: probe, 2026-09-30 (OJS); code (OMP, OPS). <sup>f-a21</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OJS
 

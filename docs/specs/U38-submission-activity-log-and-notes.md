@@ -698,6 +698,7 @@ included. The window names neither reviewer nor submission, but the text
 often gives it away, and an editor who is also an author can read the
 edited review of their own submission. Nothing can be changed.
 Since: 2026-08-20 · Basis: probe, 2026-09-30. <sup>[f-a11](#fn-a11)</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OMP
 

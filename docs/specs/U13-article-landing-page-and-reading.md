@@ -1669,6 +1669,7 @@ same people download it at the same stages. Nothing can be changed;
 files, reviews and discussions stay closed. A preprint server was seen
 only with preprints in production, so there it rests on the code.
 Since: 2026-02-18 (the earlier-stage preview change) · Basis: probe, 2026-09-30. <sup>[f-a16](#fn-f-a16)</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OJS
 

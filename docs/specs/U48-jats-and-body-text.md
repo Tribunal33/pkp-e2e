@@ -1125,6 +1125,7 @@ downloads only for those who may open the galleys
 ([Subscriptions](U51-subscriptions.md), its Rule 11). Only unticking the
 box closes it, and its confirmation says nothing about subscriptions.
 Since: 2026-02-13 · Basis: probe, 2026-09-30. <sup>f-a22</sup>
+Report: paused — taken in the maintainer's session (2026-10-05)
 
 ### OMP
 
