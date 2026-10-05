@@ -66,7 +66,7 @@ The first three are each one form with "Save" at its foot (Rule 2). <sup>a</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Disable Submissions": a heading and one box with the same label. Help: "Prevent users from submitting new articles to the journal. Submissions can be disabled for individual journal sections on the journal sections settings page." ("…new articles to the press. … for individual press series on the press series settings page." ⚠ [OMP1](#omp1); "…new preprints to the server. … for individual server sections on the server sections settings page."), the words "journal sections" ("press series", "server sections") a link | no | Unticked on a new journal. Effect: Rules 4–6 |
+| "Disable Submissions": a heading and one box with the same label. Help: "Prevent users from submitting new articles to the journal. Submissions can be disabled for individual journal sections on the journal sections settings page." ("…new articles to the press. … for individual press series on the press series settings page." ⚠ [OMP1](#omp1); "…new preprints to the server. … for individual server sections on the server sections settings page."), the words "journal sections" ("press series", "server sections") a link. With the interface in French (Canada), a press shows a raw code in place of the help ⚠ [A14](#a14) | no | Unticked on a new journal. Effect: Rules 4–6 |
 
 **"Author Guidance" tab.** Every box is a formatted-text box with no
 length limit, empty allowed. "Where it shows" names the screen that
@@ -137,7 +137,7 @@ fields are marked with an asterisk: *". <sup>f</sup>
 | "Name" | yes | Text, one box per form language, at most 80 characters (the box takes no more). Saved empty, the window stays open with "This field is required." under the box. A name of only spaces is refused with a raw text key ⚠ [A10](#a10) <sup>td4</sup> |
 | "File Type": box "These are dependent files, such as images displayed by a HTML file, and will not be displayed with published content." | no | Ticked at install on "Multimedia", "Image" and "HTML Stylesheet" ("Image" and "HTML Stylesheet" on a press). Unticked in a new component's window |
 | "File Type": box "These are supplementary files, such as data sets and research materials, and will be displayed separately from the main publication files." | no | Ticked at install on "Research Instrument" through "Source Texts", "Multimedia" and "Other" on a journal or preprint server, "Multimedia" thus arriving with both "File Type" boxes ticked ⚠ [A4](#a4); on a press on "Appendix", "Bibliography", "Glossary", "Index", "Preface", "Prospectus", "Table", "Figure", "Photo", "Illustration" and "Other". Unticked in a new component's window |
-| "File Variants": box "These files support file variants types, such as 'web' or 'high resolution' images." | no | Ticked at install on "Image" alone |
+| "File Variants": box "These files support file variants types, such as 'web' or 'high resolution' images." In French (Canada) the heading and box show raw codes, expected, not defects: no released version has these texts yet. Seen on a preprint server; a journal and a press were read in the code, not driven <sup>td14</sup> | no | Ticked at install on "Image" alone |
 | "File Metadata" (help "Select the type of metadata that these files may receive. …"): list "Document", "Artwork", "Supplementary Content" | yes (one is always chosen) | "Document" in a new component's window. The install values are listed in [Submission files](U36-submission-files.md), Settings |
 | "Require with Submissions" (help "Should at least one of these files be required with every new submission? If you select yes, authors will not be allowed to submit until they have uploaded at least one file of this type."): choices "Yes, require submitting authors to upload one or more of these files." and "No, allow new submissions without these files." | yes (one is always chosen) | "Yes" at install on "Article Text" ("Book Manuscript", "Preprint Text") alone; "No" in a new component's window |
 | "Key" (help "An optional short symbolic identifer for this genre." ⚠ [A8](#a8)) | no | At most 30 characters (the box takes no more). Letters, digits, hyphens and underscores, starting and ending with a letter or digit; anything else is refused with "The key can contain only alphanumeric characters, underscores, and hyphens, and must begin and end with an alphanumeric character.". A key another component of the journal already carries is refused with "The key already exists." (Rule 16). Shown but not editable on the components a new journal arrives with, which carry fixed keys |
@@ -881,6 +881,7 @@ Left out of the scenarios above, by reason:
   - A8 (the "Key" help; Fields)
   - A9 (a press's and a preprint server's "Components" list in French;
     Fields)
+  - A14 (a press's "Disable Submissions" help in French; Fields)
   - OMP1 (a press's "Disable Submissions" help and "Copyright notice"
     label; Fields; scenario 3 names it)
   - OMP2 (a press's "Edit" beside "Copyright Notice"; Rule 25; scenario 3
@@ -951,6 +952,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A14](#a14) | In French (Canada), a press's "Disable Submissions" help reads a raw code | 🐞 | minor | — |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its "Author Guidance" labels the copyright box "Copyright notice" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1129,6 +1131,18 @@ on top. With no other window open, that is the whole workflow: the
 editor is put back on the submissions list.
 The same fault: [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md#a14).
 Basis: test run, 2026-10-04. <sup>f-a13</sup>
+
+<a id="a14"></a>
+**A14 — In French (Canada), a press's "Disable Submissions" help reads a raw code** · 🐞 · minor.
+A press manager working in French (Canada) opens Settings › Workflow,
+which opens on the "Disable Submissions" panel. Where the English panel
+shows the help under the box (Fields; [OMP1](#omp1)), the French panel
+shows "##manager.setup.disableSubmissions.description##" in its place.
+Every press manager working in French (Canada) meets it, since the page
+opens on this panel. The press's French (Canada) translation leaves the
+text empty, the same kind of gap as the components tab's in
+[A9](#a9).
+Basis: probe, 2026-10-04. <sup>f-a14</sup>
 
 ### OJS
 
@@ -1747,6 +1761,21 @@ continue without saving?" and, accepted, closed with the old name kept;
 leaving the page with the changed window open raised the browser's
 leave-page question.
 
+<a id="fn-td14"></a>
+**td14** — Live-probed 2026-10-04 (Fields, "File Variants"), OPS `main`,
+PKP's default test dataset, the manager `rvaca` with the interface in
+French (Canada), the second row's "Modifier" window: the heading read
+`##manager.setup.genres.supportsFileVariants.title##` and the box
+`##manager.setup.genres.supportsFileVariants.label##` (kept script
+`shared/playwright/checks/issues/french-components-list-heading-raw-key/walk.js`).
+The keys are lib/pkp's, added on `main` with the media files
+(`pkp/pkp-lib#12251`, 2026-02-13); lib/pkp `locale/fr_CA/manager.po` has
+neither, and `stable-3_5_0` has neither the keys nor the box. Unreleased
+3.6 texts waiting for Weblate, which so far translates `stable-3_5_0`
+only: not a defect (issues session ruling, 2026-10-02). Code read only,
+not driven: OJS and OMP open the same window and lack the same two
+French texts.
+
 <a id="fn-f-a1"></a>
 **f-a1** — `GenreDAO::insertObject()` stores `(float) $genre->getSequence()`,
 0 for a new component, the sequence `installDefaults()` gives the first
@@ -1840,6 +1869,20 @@ painted above the window's (10); a real mouse press there left the notice
 standing and the window open, and the notice left 5.4 s after it showed
 (OJS, OMP, OPS alike).
 Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826) ([docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md)).
+
+<a id="fn-f-a14"></a>
+**f-a14** — Note c: OMP `locale/fr_CA/manager.po` holds
+`manager.setup.disableSubmissions.description` with an empty `msgstr`;
+`LocaleFile::loadArray()` drops an empty text and `Locale::translate()`
+falls back to no other language, as for A9. Live-probed 2026-10-04, OMP
+`main`, PKP's default test dataset, the manager `rvaca` with the
+interface in French (Canada): the help read
+`##manager.setup.disableSubmissions.description##` (kept script
+`shared/playwright/checks/issues/press-disable-submissions-help-says-articles/walk.js`,
+`WALK_MODE=nb`). Code read only, not driven: OMP `stable-3_5_0`
+(9c5e24246c) leaves the same text empty, and so does OPS's
+`locale/fr_CA/manager.po` on `main` (c8af945bb7) and `stable-3_5_0`;
+OJS's has a text.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — OJS `templates/gateway/lockss.tpl` and `clockss.tpl` test

@@ -145,7 +145,10 @@ the account's roles, never on which dashboard page it opens from:
    it reads "Production" {OPS}. A sortable header cycles through three
    states as it is clicked: descending, ascending, then unsorted. The
    address follows for the first two; switching the sort off leaves the
-   old sort in the address ⚠ [A5](#a5). The list pages at 30 rows. Under
+   old sort in the address ⚠ [A5](#a5). A screen reader is never told
+   which of these states a header is in ⚠ [A15](#a15). The list pages at
+   30 rows; paging a view whose submissions share a submission date and
+   time repeats some and skips others {OJS OMP} ⚠ [A16](#a16). Under
    it a line reads "Showing {first} to {last} of {total}": "Showing 1 to
    30 of 31", on page 2 "Showing 31 to 31 of 31", on an empty view
    "Showing 0 to 0 of 0". Beside that line, a view holding more than 30
@@ -186,7 +189,8 @@ the account's roles, never on which dashboard page it opens from:
    leaves the view only when the phrase and every filter are cleared; it
    then returns to the view the search started from. Clearing the phrase
    alone, with a filter chip still active, stays on "Search Results".
-   <sup>h</sup>
+   On an install running in strict mode (Settings bullet 4), every
+   search from this box fails ⚠ [A17](#a17). <sup>h</sup>
 <a id="filters"></a>
 8. **Filters.** The "Filters" button opens a side panel titled "Filters":
    "Close" at its top, the Fields table's fields, and "Clear Filters" and
@@ -371,6 +375,10 @@ the account's roles, never on which dashboard page it opens from:
   which filter fields appear (Fields table). Disabling submissions hides
   the neighboring "Start A New Submission" entry (owned by
   *[Submission wizard](U21-submission-wizard.md)*).
+- **The install's strict mode** (the configuration file's "strict"
+  option, set in that file only; no screen shows or changes it). Install
+  default: Off. On, every search from the sidebar's "Search submissions"
+  box fails (Rule 7) [A17](#a17). <sup>a17</sup>
 
 ## Cross-feature interactions
 
@@ -812,6 +820,9 @@ Left out of the scenarios above, by reason:
   - A12 (raw codes in French; Rule 5)
   - A13 (the recommending editors' line in French; Rule 9f)
   - A14 (a recommending editor's row before recording; Rule 9f)
+  - A15 (no sort state told to a screen reader; Rule 5)
+  - A16 (paging repeats and skips submissions sharing one date and time; Rule 5)
+  - A17 (strict mode on: the sidebar's search failing; Rule 7, Settings bullet 4)
   - OMP1 (no series filter on a press)
 - **No seed**:
   - "Reviews overdue" (Rule 2) and the "Review Request overdue by {days} days" popover (Rule 10): no seed backdates a request or a review deadline
@@ -843,6 +854,9 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | The overdue-review popover describes the missed review as a "response" and dates it with the review deadline | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | Paged lists: a screen reader announces the pager's "Next" as plain "Next", unlike its "Go to …" neighbours | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | In French a screen reader hears raw codes for the "…" button above the list and for "Loaded", and an accepted reviewer's indicator and a press's "Assigned To Editor" filter field show one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A15](#a15) | A sorted column header never tells a screen reader that the list is sorted by it, or in which direction | 🐞 | minor | — |
+| [A16](#a16) | Paging a view whose submissions share a submission date and time shows some on several pages and others on none | 🐞 | medium | — |
+| [A17](#a17) | With strict mode on, every search from the sidebar's "Search submissions" box fails and shows "Search Results (0)" | 🐞 | low · crash: server | — |
 | [A1](#a1) | Section Editors and assistants have no view listing declined (or published-and-gone) submissions; global search is their only way back | ❓ | user-visible | — |
 | [A2](#a2) | Editors are offered "Complete submission" on other people's incomplete submissions, landing them in the author's wizard | ❓ | minor | — |
 | [A3](#a3) | The author/reviewer conflict notice always says "as a Journal Manager", whoever is looking, on presses and preprint servers too | ❓ | minor | — |
@@ -1057,6 +1071,44 @@ Before a recommending editor records theirs, their row (Rule 9f) was
 never seen on screen.
 Question: does it read as Rule 9e? Lean: yes, per the code.
 Basis: code. <sup>a14</sup>
+
+<a id="a15"></a>
+**A15 — A sorted header never tells a screen reader how the list is sorted** · 🐞 · minor.
+Clicking "ID" reorders the rows descending, then ascending, then back to
+the default order, and a sighted user sees each change. A screen reader
+is told none of it: in all three states, neither "ID" nor any other
+header announces that the list is sorted by it, or in which direction.
+Expected: the sorted header announces "ascending" or "descending".
+Nothing is lost; a screen-reader user can tell the order only by
+reading the rows.
+Basis: probe, 2026-10-04. <sup>a15</sup>
+
+<a id="a16"></a>
+**A16 — Paging a view repeats some submissions and skips others** · 🐞 · medium.
+A person paging through a view expects to meet each submission once.
+When submissions in the view share one submission date and time, as
+Native XML imports dated on one day do, some show on two or more
+pages and others on none, and nothing on screen says so. On a journal
+whose "Active submissions" read "Showing 1 to 30 of 272", its 10 pages
+showed 272 rows but only 234 different submissions, one of them on five
+pages; on a press, 235 of 272. An editor paging for a submission can
+miss it. Seen on a journal and a press; untested on a preprint server,
+where no view ran past one page. The Native XML
+tool's export list pages the same way
+([Import & export A24](U63-import-export.md#a24)).
+Basis: probe, 2026-10-04. <sup>a16</sup>
+
+<a id="a17"></a>
+**A17 — With strict mode on, every global search fails** · 🐞 · low · crash: server.
+On an install whose configuration file has the "strict" option On,
+every phrase typed into the sidebar's "Search submissions" box fails on
+the server, even one that matches submissions. The page shows "Search
+Results (0)" and one "No Items" row, with no message, so the box finds
+nothing for anyone. Expected: the matches, as with strict mode Off. The
+configuration template ships it Off and no screen offers it. The same
+setting also breaks deleting a Submission Library file and a reviewer's
+file list ([Submission & Publisher Libraries A5](U39-submission-and-publisher-libraries.md#a5)).
+Basis: probe, 2026-10-03. <sup>a17</sup>
 
 ### OMP
 
@@ -1930,6 +1982,65 @@ active review confirmed) or pending-reviews, so the 9e branches render
 (code read 2026-09-30). Not driven: no seed puts recommending editors on a
 round. It is settled by reading that editor's dashboard row on a round
 under review before they record a recommendation.
+
+<a id="fn-a15"></a>
+**a15 — A15 evidence.** The shared table's `TableColumn.vue` binds
+`aria-sort` to `tableContext.sortDirection`, but `Table.vue` provides
+only `sortDescriptor`, so the attribute is never set (code read
+2026-10-04). Live-probed 2026-10-04 (OJS, OMP and OPS `main`, PKP's
+default test dataset, as `dbarnes` on "Assigned to me" and "Active
+submissions"; the kept script
+`shared/playwright/checks/issues/dashboard-unsort-keeps-sort-in-address/walk.js`,
+which records each header's `aria-sort`): every one of the six headers
+had no `aria-sort` on arrival, after the first, second and third click
+on "ID" and after a reload, with the fix for A5 in and out. "Days" was
+not clicked; it carries the same binding. My Submissions and the
+reviewer's list use the same table (code; their headers were not read).
+The sort icon's look in each state was not recorded.
+
+<a id="fn-a16"></a>
+**a16 — A16 evidence.** The dashboard asks `api/v1/_submissions` for
+`count=30` at an `offset`, with no ordering unless a header is sorted,
+so `PKP\submission\Collector::getQueryBuilder()` orders by
+`s.date_submitted` DESC and nothing after it; each page is its own
+query, and the database may return tied rows in a different order each
+time. A Native XML import stores the submission date as a day at
+midnight (`NativeXmlSubmissionFilter`), so submissions imported with
+dates on one day tie. Live-probed 2026-10-04 (OJS and OMP, `main` and
+`stable-3_5_0`, PostgreSQL, PKP's default test dataset loaded fresh,
+with the journal's Native XML export imported again until the export
+list ran to four pages: 320 submissions on OJS, 306 on OMP; the kept
+script
+`shared/playwright/checks/issues/export-list-repeats-submissions-across-pages/walk.js`):
+"Active submissions" read "Showing 1 to 30 of 272"; "Next" to the last
+of 10 pages gave 272 rows, 234 different submission IDs on OJS and 235
+on OMP, submission 21 on five pages on both; 3.5 gave the same numbers.
+No request failed and the page logged no script error. With the
+submission ID added as the Collector's last sort key, the pages showed
+272 of 272. OPS: the imported copies of its preprints sit in no
+dashboard view, so no view ran past one page; its lists make the same
+request (code). My Submissions makes the same request (code; no dataset
+author has more than 30 submissions). MySQL was not checked.
+Issue report: [pkp-e2e#919](https://github.com/jardakotesovec/pkp-e2e/issues/919) ([docs/issues/U63-A24-export-list-repeats-submissions-across-pages.md](../issues/U63-A24-export-list-repeats-submissions-across-pages.md)), tracked in *[Import & export](U63-import-export.md#a24)* A24.
+
+<a id="fn-a17"></a>
+**a17 — A17 evidence.** `PKP\submission\Collector::getQueryBuilder()`'s
+keyword search reads the bare global `ASSOC_TYPE_PUBLICATION`, an alias
+strict mode does not register, so the list request answers 500 with
+`Undefined constant "PKP\submission\ASSOC_TYPE_PUBLICATION"` in the
+server log. The bare constant came with pkp-lib 0789f18150
+(2026-06-12); `stable-3_5_0` and `stable-3_4_0` do not have it (code).
+The configuration template ships `strict = Off`; on `main`, a
+configuration file with no `strict` line also runs in strict mode.
+Live-probed 2026-10-03 (OJS, OMP and OPS `main`, PKP's default test
+dataset with `strict = On` set under `[general]` in
+`config.inc.php`, as `dbarnes`, the phrase "cashmere" on OJS and OPS
+and "Canada" on OMP; the kept script
+`shared/playwright/checks/issues/library-delete-strict-mode-error/walk.js`
+with `nb`): "Search Results (0)" and "No Items", no message; with
+`Application::ASSOC_TYPE_PUBLICATION` in that line, the same search
+listed its matches. The in-page search box was not tried.
+Issue report: [pkp-e2e#698](https://github.com/jardakotesovec/pkp-e2e/issues/698) ([docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md)), tracked in *[Submission & Publisher Libraries](U39-submission-and-publisher-libraries.md#a5)* A5.
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's

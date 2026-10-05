@@ -193,13 +193,14 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     ([Submissions dashboard](U23-submissions-dashboard.md)) in the stage
     the file gives it, with the file's contributors and files.
     <sup>f</sup> <sup>td7</sup>
-10a. **Error lines on a clean file.** Even a file the app itself
-    exported lists, under "Errors occured:", "The author {name} does not
-    have a country." and "The author '{name}' does not have any
-    contributor role. Defaults to AUTHOR." for each contributor exported
-    without them, and on a journal "The issue identification element is
-    missing for the article "{title}"." for an article in no issue. The
-    items are imported all the same ⚠ [A8](#a8). <sup>f</sup>
+10a. **Error lines on a clean file.** Even the app's own exported
+    file lists, under "Errors occured:", on a journal "The issue
+    identification element is missing for the article "{title}"." for
+    an article in no issue and, imported into another journal, press
+    or server, "The author '{name}' does not have any contributor
+    role. Defaults to AUTHOR." for every contributor, whose role then
+    reads "Author". Everything is still imported ⚠ [A8](#a8).
+    <sup>f</sup>
 11. **A failed import keeps nothing.** When the file does not match the
     format, or the import stops on an error part-way, the tab reads "The
     process failed. Check below for errors/warnings.", then the "Errors
@@ -209,13 +210,17 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     included. A file exported from a 3.5 installation is refused this
     way: the format changes with each major version, as PKP's
     Administrator's Guide says. <sup>f</sup>
-12. **Problems that do not stop an import.** Some problems leave the rest
-    of the file imported: the success text of Rule 10 is then followed by
-    "Errors occured:" or "Warnings encountered:", one line per problem.
-    An article placed in an issue the journal does not have gets a new
-    unpublished issue of that volume, number and year {OJS}, with the
-    line "None or more than one issue matches the given issue
-    identification "…"." (the file's issue details inside the quotes).
+12. **Problems that do not stop an import.** With some problems the
+    whole file is still imported: the success text of Rule 10 is then
+    followed by "Errors occured:" or "Warnings encountered:", one line
+    per problem. An article placed in an issue the journal lacks gets a
+    new unpublished issue of that volume, number and year {OJS}, with
+    the line "None or more than one issue matches the given issue
+    identification "…"." (the file's issue details quoted). A
+    contributor with no Country in the file stays on its submission,
+    with the line "The author {name} does not have a country." (how a
+    Country goes missing:
+    [Contributors and affiliations](U41-contributors-and-affiliations.md#a16)).
     <sup>f</sup> <sup>td18</sup>
 12a. **An unknown section.** An article or preprint whose section the
     journal lacks ends in an empty results tab, with no text. The
@@ -1202,6 +1207,9 @@ Left out of the scenarios above, by reason:
     DOAJ "Articles" list's "Article Title" and "Authors" search
     finding an article typed in lower case; and its issue link opening
     the window headed with the issue's name {OJS}
+  - a Native XML file with a contributor that has no Country: the
+    success text, then "The author {name} does not have a country."
+    (Rule 12)
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1422,11 +1430,10 @@ issue identification element is missing for the article …" for each
 article in no issue, though the article is imported correctly. Imported
 into another journal, press or server, the file also gives every
 contributor "The author '{name}' does not have any contributor role.
-Defaults to AUTHOR.", and each one does become an "Author": a book's
+Defaults to AUTHOR.", and each becomes an "Author": a book's
 "Volume editor" and "Chapter Author" roles and a "Translator" are lost,
-and come back only by editing each contributor. A contributor exported
-without a country gets a line too. The manager cannot tell these lines
-from real failures.
+and come back only by editing each contributor. The manager cannot tell
+these lines from real failures.
 Basis: probe, 2026-10-01. <sup>f-a8</sup>
 
 <a id="a9"></a>
@@ -1972,8 +1979,13 @@ contributor and file; the mail catcher got nothing. Two "Import"
 presses gave two tabs and two copies, and one click on each tab two
 more (the tab's own `…/import?temporaryFileId=…` request repeats on the
 click; A7). Each results tab carries "Close". A round trip listed
-"Errors occured:" with the country and contributor-role lines, and on
-OJS the issue-identification line (A8). A file with an unknown element:
+"Errors occured:" with the contributor-role line, and on OJS the
+issue-identification line (A8); the scratch contributor, made with no
+country, also gave the country line (Rule 12:
+`NativeXmlPKPAuthorFilter` adds
+`plugins.importexport.common.error.missingCountry` for a contributor
+that is not Anonymous and has no country, a check added with lib/pkp
+`52d3a0f8e7`). A file with an unknown element:
 "The process failed…", an "Errors occured:" line such as "Filter
 (Native XML submission import) supports input schema(…) - string
 given" with the file's lines, then "Validation errors:"; a file that
@@ -2823,7 +2835,11 @@ Issue report: [pkp-e2e#266](https://github.com/jardakotesovec/pkp-e2e/issues/266
 **f-a8** — Live-probed 2026-09-27, three apps (note f): a submitted
 submission and a published one with two versions, exported and
 re-imported unchanged. The lines come from the native filters'
-`addError()` calls, which do not stop the import.
+`addError()` calls, which do not stop the import. Issues-session walk
+2026-10-01: every contributor in the three apps' seeded data has a
+country, so a round trip of seeded submissions shows no country line;
+that line belongs to a contributor without a country (Rule 12, note
+f), not to the round trip.
 Issue report: [pkp-e2e#267](https://github.com/jardakotesovec/pkp-e2e/issues/267) ([docs/issues/U63-A8-native-import-article-without-issue-lists-error.md](../issues/U63-A8-native-import-article-without-issue-lists-error.md)).
 Issue report: [pkp-e2e#268](https://github.com/jardakotesovec/pkp-e2e/issues/268) ([docs/issues/U63-A8-native-import-other-context-resets-contributor-roles.md](../issues/U63-A8-native-import-other-context-resets-contributor-roles.md)).
 

@@ -216,9 +216,12 @@ nothing is ticked and the box is ticked again. <sup>td19</sup>
    <sup>d</sup>
 5. **Adding a representative.** "OK" adds the representative under
    "Agents" or "Suppliers" by its type, and the notice "Representative
-   added." appears; "Edit" › "OK" shows "Representative edited.". Each
-   group lists its representatives in the order they were added, but
-   one saved again through "Edit" can move to the end of its group.
+   added." appears; "Edit" › "OK" shows "Representative edited.". On an
+   install with no representative yet, the first one is saved (an agent
+   with "Representative added.") but unlisted until a reload
+   ⚠ [A20](#a20). Each group lists its representatives in the order they
+   were added, but one saved again through "Edit" can move to the end of
+   its group.
    <sup>e</sup> <sup>td7</sup>
 6. **The type decides the role list.** Once "Agent" is clicked, "Role"
    shows the agent roles alone, and once "Supplier" is clicked the
@@ -1042,6 +1045,8 @@ Left out of the scenarios above, by reason:
     returns condition, and an import losing the formats' returns and
     availability; Rules 22, 25d)
   - A19 (an import adding the exporting press as a supplier; Rule 25b)
+  - A20 (the install's first representative listed only after a
+    reload, the server failing; Rule 5)
 - **Owned by another feature**:
   - the Author's view without a "Marketing" group (Actors row 1;
     *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#side-menu)*)
@@ -1082,6 +1087,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A20](#a20) | On an install with no representative yet, the first one added is not listed until the page is reloaded | 🐞 | minor · crash: server | — |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
 | [A10](#a10) | A representative's ID, and an agent's phone and email, reach no file | ❓ | minor | — |
 
@@ -1355,6 +1361,16 @@ back with none; one exported without comes back with the book's page on
 the exporting press as its website. Expected: markets and suppliers
 come back as they were.
 Basis: probe, 2026-10-03. <sup>f-a19</sup>
+
+<a id="a20"></a>
+**A20 — On an install with no representative yet, the first one added is not listed until the page is reloaded** · 🐞 · minor · crash: server.
+On an install where no book has a representative yet, the first one
+added on a book's "Marketing" › "Representatives" page, agent or
+supplier, is saved at "OK" (an agent with "Representative added."),
+yet neither "Agents" nor "Suppliers" lists it; a reload lists it under its
+group. Every representative added after it is listed at once.
+Expected: the first one is listed at once too, like the rest.
+Basis: probe, 2026-10-03. <sup>f-a20</sup>
 
 ---
 
@@ -2430,6 +2446,27 @@ importing press named the exporting press's name, email and home page
 as the supplier.
 Issue report: [pkp-e2e#714](https://github.com/jardakotesovec/pkp-e2e/issues/714) ([docs/issues/U74-A19-native-import-adds-press-as-supplier.md](../issues/U74-A19-native-import-adds-press-as-supplier.md)).
 Issue report: [pkp-e2e#711](https://github.com/jardakotesovec/pkp-e2e/issues/711) ([docs/issues/U74-A19-native-import-changes-supplier-websites.md](../issues/U74-A19-native-import-changes-supplier-websites.md)).
+
+<a id="fn-f-a20"></a>
+**f-a20** — Note e. After a save the table fetches the new row
+(`representatives-grid/fetch-row?rowId={id}&rowCategoryId={0|1}`).
+lib/pkp `CategoryGridHandler::getRowDataElement()` looks the row id up
+among the grid's own elements first, which on this grid are its two
+categories, keyed 0 ("Agents") and 1 ("Suppliers"), and looks inside
+the category only when that finds nothing. Representative id 1 thus
+gets the "Suppliers" category's data, and
+`RepresentativesGridRow::initialize()` calls `getId()` on that array.
+Representative ids count across the install, so only its first
+representative is hit. Live-probed 2026-10-03 (A20; Rule 5) on OMP
+`main` and `stable-3_5_0`, the default test dataset (no
+representatives) as `dbarnes`, in every first walk of that day's
+representative and Native XML import walks: the first representative
+added, agent or supplier, was stored (an agent, A12
+report step 3, with "Representative added."); its row fetch answered 500 with
+`Uncaught Error: Call to a member function getId() on array`; a reload
+listed it; the next one (id 2) was listed without a reload. Upstream
+pkp/pkp-lib#8968 (a new representative not listed, closed in 2023 with
+a change to `CategoryGridHandler`) concerns the same page.
 
 ## Reference — entry points & surfaces
 

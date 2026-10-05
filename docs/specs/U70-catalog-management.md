@@ -53,11 +53,18 @@ signed-out visitor who types the page's address gets the Login page.
 ## Fields & validation
 
 **The Catalog page.** Headed "Catalog", with one tab, "All Monographs",
-holding a list headed "Monographs". In French the tab, the list's
-heading, the column headings, each row's "View Entry" and two of the
-boxes' screen-reader texts show raw keys, text such as
-"##catalog.manage.featured##" in place of the words ⚠ [A7](#a7). Above
-the list, left to right: <sup>f</sup>
+holding a list headed "Monographs". In French (Canada) the following
+show raw keys, text such as "##catalog.manage.featured##" in place of
+the words ⚠ [A7](#a7):
+
+- the tab, the list's heading and the column headings;
+- each row's "View Entry", and what a screen reader hears for each of
+  its two boxes;
+- "Order Features" and, while ordering, "Save Order" and the notice;
+- the "Categories" heading in the "Filters" column, and the label of
+  the "Add Entry" panel's search box.
+
+Above the list, left to right: <sup>f</sup>
 
 | Control (UI label) | Shown | Rules |
 |--------------------|-------|-------|
@@ -197,9 +204,18 @@ raw keys, text such as "##publication.placement##" in place of the words
       hidden, but a "Filters" column already open stays and still
       switches the list ⚠ [A12](#a12).
     - 10b. **Moving.** An arrow moves the book one place. The first
-      book's up arrow does nothing. The last book's down arrow changes
-      nothing on screen, yet the next arrow press that should move that
-      book changes nothing either ⚠ [A13](#a13).
+      book's up arrow does nothing. The books that are not featured,
+      hidden while ordering, still hold places in the list, and a press
+      that should move a featured book past one of them changes nothing
+      on screen ⚠ [A13](#a13). That happens in two ways:
+      - The last book's down arrow changes nothing on screen, yet it
+        moves the book below a hidden book: the next press that should
+        move that book, or the book above it, back across that place
+        changes nothing either.
+      - A book ticked "Featured" after the page was loaded keeps its
+        place among the books that are not featured (Rule 6), so its up
+        arrow changes nothing on screen while one of them stands above
+        it.
     - 10c. **Saving.** "Save Order" saves the order and ends ordering,
       with no message; "Cancel" ends it and puts the list back as it was
       saved. Leaving the page while ordering asks nothing, and an order
@@ -726,6 +742,8 @@ Left out of the scenarios above, by reason:
   - the guard for A7 (issue report
     `docs/issues/U69-A15-omp-french-book-page-raw-keys.md`): the Catalog
     page in French (Canada) shows no `##` code
+  - a scheduled book's Production stage shows the "Catalog
+    Management" notice, not "Awaiting approval." (Rule 14)
 - **Rarely met**:
   - "Add Entry" › "Save" of a book whose "Date Published" lies in the
     future: the book is scheduled, stays off the list and is still
@@ -757,8 +775,8 @@ Left out of the scenarios above, by reason:
   - A5 ("Add Entry" › "Save" with nothing chosen, or with a book whose
     contributor's ORCID iD is unverified or duplicated while ORCID is
     on; Rule 12b; Settings bullet 6)
-  - A6 (the notice after "Unpublish" and on a scheduled book; Rule 14;
-    scenario 2 passes the unpublish)
+  - A6 (the notice after "Unpublish"; Rule 14; scenario 2 passes the
+    unpublish)
   - A7 (the Catalog page in French; Fields, the Catalog page)
   - A8 ("Add Entry" › "Save" with a word typed and nothing chosen; Rule
     12a)
@@ -769,7 +787,8 @@ Left out of the scenarios above, by reason:
   - A11 (the "Drag-and-drop" notice while no row can be dragged; Rule
     10a; scenario 3 passes it)
   - A12 (a "Filters" column left open while ordering; Rule 10a)
-  - A13 (the last featured book's down arrow; Rule 10b)
+  - A13 (the last featured book's down arrow, and the up arrow of a
+    book featured after the page was loaded; Rule 10b)
   - A14 (the ordering arrows' names for a screen reader; Rule 10a)
   - A15 (the Catalog Entry page in French; Fields, the "Catalog Entry"
     page)
@@ -1703,7 +1722,11 @@ Issue report: [pkp-e2e#735](https://github.com/jardakotesovec/pkp-e2e/issues/735
 **f-a6** — Note e: the notices key on `datePublished`, which a scheduled
 version carries and an unpublished one keeps. Live-probed 2026-09-27
 (note td15). The Production stage's spec records the unpublish half as
-its OMP2.
+its OMP2. Walked 2026-10-03 (Rule 14; Coverage): a book given a "Date
+Published" of 2030-01-01 and then "Schedule For Publication" read
+"Catalog Management", which is right for a book that has been approved;
+the report's fix keys the notice on "published or scheduled" and keeps
+it, so only the unpublish half is a defect.
 Issue report: [pkp-e2e#744](https://github.com/jardakotesovec/pkp-e2e/issues/744) ([docs/issues/U70-A6-unpublished-book-notice-still-approved.md](../issues/U70-A6-unpublished-book-notice-still-approved.md)), shared with [Production stage OMP2](U33-production-stage.md#omp2).
 
 <a id="fn-f-a7"></a>
@@ -1712,6 +1735,15 @@ Issue report: [pkp-e2e#744](https://github.com/jardakotesovec/pkp-e2e/issues/744
 quoted; a book titled in both languages showed its French title. The
 French strings of these keys are empty in the install's `fr_CA` locale
 files. The panel headers' "##common.help##" is the navigation spec's A1.
+Walked 2026-10-03 on main and 3.5, as Press manager in French (Canada)
+(Fields, the Catalog page): "Order Features" read
+"##submission.list.orderFeatures##"; while ordering, "Save Order"
+"##submission.list.saveFeatureOrder##" (beside "Annuler") and the notice
+"##submission.list.orderingFeatures##"; the "Filtres" column's groups
+"##catalog.categories##" and "Série"; the "Add Entry" search box
+"##catalog.manage.findSubmissions##"; the boxes' screen-reader names
+"##catalog.manage.isNotFeatured##", "##catalog.manage.isFeatured##"
+(after a press) and "##catalog.manage.isNotNewRelease##".
 Issue report: [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) ([docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md)) (its Steps 34 to 39, walked on main and 3.5), shared with [Monograph landing page A15](U69-monograph-landing-page.md#a15).
 
 <a id="fn-f-a8"></a>
@@ -1762,7 +1794,17 @@ Issue report: [pkp-e2e#746](https://github.com/jardakotesovec/pkp-e2e/issues/746
 featured: the first up arrow and the last down arrow changed nothing on
 screen; then M1's down arrow changed nothing either. After M2's down
 arrow alone, its up arrow pressed once changed nothing and pressed twice
-gave M3, M2, M1.
+gave M3, M2, M1. Walked 2026-10-03 (Rule 10b), as Press manager, with
+two books featured and one not: on main and 3.5, the last book's down
+arrow changed nothing, then its up arrow changed nothing once and moved
+it at the next press; the last book's down arrow again, then the down
+arrow of the book above changed nothing once and moved it at the next
+press; "Save Order" kept the order shown. On main, a book ticked
+"Featured" without a reload below a book not featured: its up arrow
+changed nothing once, then moved it to the top. Only one book not
+featured was walked; that each further press of the last down arrow,
+one per book not featured, costs one more later press is read from the
+code (`itemOrderDown()` is bounded only by the ends of `items`).
 Issue report: [pkp-e2e#748](https://github.com/jardakotesovec/pkp-e2e/issues/748) ([docs/issues/U70-A13-catalog-last-featured-down-arrow-extra-press.md](../issues/U70-A13-catalog-last-featured-down-arrow-extra-press.md)).
 
 <a id="fn-f-a14"></a>

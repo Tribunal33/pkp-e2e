@@ -80,8 +80,13 @@ arrives with an empty "Alternate text" box; saved as it is, the new
 picture has no description. A file of a type the box does not take is
 refused in the box ("You can't upload files of this type.") and nothing
 is sent; after a refusal made with "Upload File", that button and the
-tab's "Save" stay disabled ⚠ [A7](#a7). An upload counts only once the
-tab is saved. <sup>d</sup> <sup>td3</sup>
+tab's "Save" stay disabled ⚠ [A7](#a7). The refused file's empty frame
+holds a "Remove file" link that shows only under the pointer; pressing
+it brings "Upload File" back, but "Save" stays disabled ⚠ [A15](#a15).
+A picture that is sent and then fails on the server (A16 names the
+server and the size) leaves a red warning sign under the box with no
+message ⚠ [A16](#a16). An upload counts only once
+the tab is saved. <sup>d</sup> <sup>td3</sup>
 
 **"Theme"** (Settings › Website › "Appearance" › "Theme"; the page opens
 on this tab). On a journal the fields follow "Theme" in the order below; a
@@ -158,7 +163,7 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
 |------------------|-----------|-------|
 | "Date" | no | "September 24, 2026" (chosen on a new journal), "September 24 2026", "24 September 2026", "2026 September 24", "Custom" <sup>j</sup> |
 | "Date (Short)" | no | "2026-09-24" (chosen on a new journal), "24-09-2026", "09/24/2026", "24.09.2026", "Custom" <sup>j</sup> |
-| "Time" | no | "15:05", "03:05 PM" (chosen on a new journal), "3:05PM", "Custom"; the pages print the third choice in lower case ("3:05pm") ⚠ [A8](#a8) <sup>j</sup> |
+| "Time" | no | "15:05", "03:05 PM" (chosen on a new journal), "3:05PM", "Custom"; with the third choice saved, most pages print it in lower case ("3:05pm"), while some editorial screens, such as a discussion's messages, print it as the choice reads ("11:58AM"), so one journal shows both ⚠ [A8](#a8) <sup>j</sup> |
 | "Date & Time" | no | One ready choice, the saved "Date" and "Time" joined by " - " ("September 24, 2026 - 03:05 PM", chosen on a new journal), then "Custom" (Rule 32) <sup>j</sup> |
 | "Date & Time (Short)" | no | One ready choice, the saved "Date (Short)" and "Time" joined by a space ("2026-09-24 03:05 PM", chosen on a new journal), then "Custom" (Rule 32) <sup>j</sup> |
 
@@ -546,8 +551,6 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
 
 35. **French: raw codes.** In the French interface some labels show as
     raw codes, words between "##" marks ⚠ [A6](#a6):
-    - on a journal's "Theme": the "Journal Content Organization" field,
-      its description and its three boxes;
     - on a press's "Theme": the only entry of the "Thème" list and every
       label, description and choice of the default theme's fields,
       "Press Summary" included;
@@ -561,14 +564,19 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
     - on a preprint server's "Theme": "Usage statistics display options"
       and its three choices.
 
-    A journal's and a preprint server's "Setup" and "Advanced" show no
-    raw code. <sup>td37</sup>
+    A journal's "Theme" shows the "Journal Content Organization" field,
+    its description and its three boxes as codes too: they are texts no
+    released version has yet, untranslated in every language, so these
+    codes are expected, not a defect. A journal's and a preprint
+    server's "Setup" and "Advanced" show no raw code. <sup>td37</sup>
 
 35a. **French: the upload boxes.** In the French interface the drop area
     of every upload box on "Setup" ("Logo", the thumbnail, "Homepage
     Image") and "Advanced" (the style sheet, "Favicon") reads the English
     "Drop files here to upload", beside the French button "Téléverser un
-    fichier" ⚠ [A12](#a12). <sup>td38</sup>
+    fichier" ⚠ [A12](#a12). A file the box refuses gets the English "You
+    can't upload files of this type.", and the "Remove file" link on the
+    refused file's frame is English too. <sup>td38</sup>
 
 35b. **French: "Entête".** In the French interface the side tab
     "Editorial Masthead" reads "Entête", and the order list's description
@@ -587,10 +595,11 @@ September 2026 at 3:05 in the afternoon. <sup>j</sup> <sup>td7</sup>
 - None beyond the pages themselves: saving these tabs sends no email,
   creates no notification and writes no line to any log a manager can
   read. <sup>c</sup>
-- Uploaded pictures and the style sheet are stored as public files of the
-  journal, reachable by their address by anyone; "Remove" and "Save"
-  delete a picture's file, and leave the style sheet's in place
-  ([A5](#a5)). <sup>d</sup>
+- Uploaded pictures and the style sheet are public files of the journal,
+  open to anyone at their address. "Remove" and "Save" delete a "Logo",
+  "Homepage Image" or "Favicon" file and keep the style sheet's
+  ([A5](#a5)); whether they delete the thumbnail's is not yet checked.
+  <sup>d</sup>
 
 ## Settings that modify behavior
 
@@ -1180,15 +1189,17 @@ Left out of the scenarios above, by reason:
   - A3 (the ordering arrows' names for a screen reader; Rules 23, 28; scenario 4 marks it)
   - A4 ("Setup" refusing a save while a placed block's plugin is disabled; Rule 25; scenario 4 marks it)
   - A5 (the removed style sheet's file still opening at its address; Rule 26; scenario 1 marks it)
-  - A6 (the French interface's raw codes on the "Theme" tab, and on a press's "Setup" and "Advanced"; Rule 35)
+  - A6 (the French interface's raw codes on a press's and a preprint server's "Theme" tab, and on a press's "Setup" and "Advanced"; Rule 35)
   - A7 (a file refused through "Upload File" locking the box and the tab's "Save"; Fields, the upload boxes)
   - A8 (the "3:05PM" time choice printed in lower case; Fields, "Date & Time")
   - A9 (an empty "Custom" under "Date (Short)" leaving the editorial dates without the date; Rule 33)
   - A10 (a browser that opened the journal before keeping the old header colour after a "Colour" save; Rule 6a)
   - A11 (the French "Entête" description naming a journal on a press and a preprint server; Rule 35b)
-  - A12 (the French upload boxes' drop area in English; Rule 35a)
+  - A12 (the French upload boxes' drop area, refusal and "Remove file" in English; Rule 35a)
   - A13 (the default French date in the English word order {OMP}; Rule 3a)
   - A14 (roles of the same level changing places on "Editorial Masthead" before its first save; Rule 28)
+  - A15 (the refused file's hidden "Remove file" leaving "Save" disabled; Fields, the upload boxes)
+  - A16 (a "Logo" the server fails on, the box left with a warning sign and no message; Fields, the upload boxes)
   - OJS2 (a first issue created on a journal that never saved "Theme", the home page switching by itself {OJS}; Rule 10)
   - OJS3 (a published issue's articles absent from "Latest Publications", the list ordered by submission {OJS}; Rule 13)
   - OJS4 (the Settings Wizard showing another organization for a journal with no issue {OJS}; Rule 34; scenario 2 marks it)
@@ -1215,7 +1226,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; A10–A12
-2026-09-28; A13, A14 2026-09-29), unreviewed unless an entry notes
+2026-09-28; A13, A14 2026-09-29; A15, A16 2026-10-05), unreviewed unless an entry notes
 otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
@@ -1230,6 +1241,8 @@ otherwise; the team settles them on spec review.
 | [A9](#a9) | After a manager saves an empty "Custom" short date, editorial dates show only the time | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A15](#a15) | After a refused file, its hidden "Remove file" frees "Upload File" but leaves "Save" disabled | 🐞 | minor | — |
+| [A16](#a16) | A "Logo" the server fails on leaves a warning sign with no message under the box | 🐞 | minor · crash: server | — |
 | [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | On a journal's home page, each "Latest Publications" title is a heading at the section's own level | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1486,6 +1499,31 @@ the list have one order before its first save? Lean: yes, a minor
 defect; a list that reorders itself between visits reads as a change
 nobody made. Basis: probe. <sup>f-a14</sup>
 
+<a id="a15"></a>
+**A15 — After a refused file, its hidden "Remove file" frees "Upload File" but leaves "Save" disabled** · 🐞 · minor.
+After "Logo" refuses a ".pdf" picked with "Upload File" ([A7](#a7)),
+the box's empty frame holds a "Remove file" link written white on
+white: it shows only while the pointer is over the frame. A manager who
+finds it and presses it expects the box and the tab back as they were.
+The box empties and "Upload File" works again, but the tab's "Save"
+stays disabled, and the form's foot reads "Please correct one error. Go
+to Logo: undefined Jump to next error", naming no error the box shows.
+Basis: probe, 2026-10-03. <sup>f-a15</sup>
+
+<a id="a16"></a>
+**A16 — A "Logo" the server fails on leaves a warning sign with no message** · 🐞 · minor · crash: server.
+On a server whose file and request limits are both 8 MiB, a picture of
+exactly 8388608 bytes passes the "Logo" box's size check, is sent in
+full, and the application fails on the server
+([Submission files](U36-submission-files.md#a21) describes why it is
+sent at all). The manager expects a message saying why the picture was
+not taken. The picture stays in the upload frame with its "Remove
+file" link and a red warning sign under it, no message; the form's
+foot reads "Please correct one error." and "Go to Logo:" with nothing
+after it. As after a refused type ([A7](#a7)), the frame's "Upload
+File" and the tab's "Save" stay disabled. Nothing is stored, and
+nothing says the picture was too large. Basis: probe, 2026-10-02. <sup>f-a16</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1680,7 +1718,8 @@ moves each temporary file into the journal's public files
 (`_saveFileParam()`: `public/journals|presses|contexts/<id>/`, stored as
 `name`, `uploadName`, `width`, `height`, `dateUploaded`, `altText`); a
 `null` value deletes the stored file (`PublicFileManager::removeContextFile()`).
-The thumbnails are saved the same way by each app's `ContextService`.
+The thumbnails are saved by each app's `ContextService`; a removed
+thumbnail's file was not checked (Side effects bullet 2 leaves it out).
 Since 2026-09-24 the test installs' public files load (seed-facts: the
 relative `public_files_dir`). Live-probed 2026-09-24 (Side effects
 bullet 2; all three apps): a saved logo's address answered a signed-out
@@ -2074,11 +2113,18 @@ journal's address with the `fr_CA` segment. 9 — two submissions with
 year: 2026, published: true}]`.
 
 <a id="fn-f-a1"></a>
-**f-a1** — OJS `aa7d5a8648` (2019-04-21, "corrected alt text source for
-homepageImage") and `e7c66ecb3c` (2019-05-14) moved the journal's page to
-`$homepageImage.altText`; OMP `d9ffc0c1e` (2019-05-14) and OPS (renamed
-from the journal's template in `c8046900c3`, 2021-02-14) kept
-`$homepageImageAltText`, see note q. Live-probed 2026-09-24 on all three
+**f-a1** — OJS `aa7d5a8648` (2019-04-21, `pkp/pkp-lib#4557`, "corrected
+alt text source for homepageImage") moved the journal's page to
+`$homepageImage.altText`; `e7c66ecb3c` (2019-05-14, `pkp/ojs#2376`, for
+`pkp/pkp-lib#4683`, the header-background option) switched it back to
+the dead `$homepageImageAltText`, as OMP `d9ffc0c1e` (2019-05-14) did on
+the press's page, which had read `$homepageImage.altText` since 2015.
+OJS was corrected in 2020 by `8cb940a8e4` (`pkp/ojs#2715`, for
+`pkp/pkp-lib#5778`) and `deed55c18a` the next day (the `alt` left out
+when empty). OPS's template was copied from the journal's before that
+fix (`8cb940a8e4` is not in OPS's history; renamed in `c8046900c3`,
+2021-02-14) and kept `$homepageImageAltText`, see note q. Git history
+read 2026-10-03. Live-probed 2026-09-24 on all three
 apps: typed "Home picture" (and "Our building"), the journal's picture
 read the typed text, the press's and the server's `alt=""`; the tab
 still held the text after a reload.
@@ -2115,11 +2161,18 @@ Issue report: [pkp-e2e#370](https://github.com/jardakotesovec/pkp-e2e/issues/370
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPContextService::_saveFileParam()` with a `null` value
-removes the stored file by `$isImage ? $setting['uploadName'] : $setting`;
-the style sheet is saved with `$isImage` false but stored as an object
-(`name`, `uploadName`, `dateUploaded`), so the path handed to
-`PKPPublicFileManager::removeContextFile()` ends in the array's string
-form and nothing is deleted. Live-probed 2026-09-24 on all three apps:
+first reads the stored setting with `getData($settingName, $localeKey)`.
+The style sheet, one file for every language, is saved with no locale,
+so `$localeKey` keeps its default `''`, which `DataObject::getData()`
+looks up as a locale: `getData('styleSheet', '')` returns `null`, and
+nothing is deleted before the setting is cleared. A second fault sits
+behind it: the removal takes `$isImage ? $setting['uploadName'] :
+$setting`, and the style sheet, saved with `$isImage` false, is stored
+as an object (`name`, `uploadName`, `dateUploaded`), so with the lookup
+alone fixed the path handed to `PKPPublicFileManager::removeContextFile()`
+would end in the array's string form and still delete nothing.
+`PKPSiteService::_saveFileParam()` has the same branch for the site's
+style sheet. Code read 2026-10-03. Live-probed 2026-09-24 on all three apps:
 after "Remove" and "Saved", the pages no longer linked the style sheet,
 and its old address (`/public/journals/<id>/styleSheet.css`, OMP
 `presses`, OPS `contexts`) still answered 200 with the file, signed out;
@@ -2129,7 +2182,10 @@ Issue report: [pkp-e2e#780](https://github.com/jardakotesovec/pkp-e2e/issues/780
 <a id="fn-f-a6"></a>
 **f-a6** — Seen 2026-09-24 on all three apps with the French interface.
 OJS `locale/fr_CA` lacks `manager.setup.journalContentOrganization` and
-its description and option keys; OMP's `plugins/themes/default/locale/fr_CA/locale.po`
+its description and option keys: OJS added them in English on `main`
+only (`9486d8e182`, 2025-05-27, `pkp/pkp-lib#9295`) and no language has
+them yet, so under the team's 2026-10-02 ruling on main-only texts they
+await translation and are not part of A6 (read 2026-10-03). OMP's `plugins/themes/default/locale/fr_CA/locale.po`
 holds one entry and the app's `manager.setup.contextSummary` is empty in
 French; OPS's theme locale has empty `displayStats` strings. Code read
 2026-09-24. Live-probed 2026-09-28 (Rule 35; OMP, two runs, OJS and OPS
@@ -2150,7 +2206,14 @@ ancien)", "Date de publication (du plus récent)"; its "Advanced"
 "##manager.setup.coverThumbnailsMaxWidth##" and
 "##manager.setup.coverThumbnailsMaxHeight##", each over
 "##manager.setup.coverThumbnailsMaxWidthHeight.description##". A
-journal's and a server's "Setup" and "Advanced" showed none.
+journal's and a server's "Setup" and "Advanced" showed none. Beyond
+French (Canada), read in the locale files on `main` 2026-10-03 (a text
+counts as missing when empty or absent; not driven): of OMP's 33
+languages, Greek, Kyrgyz and Vietnamese lack all 42 texts the French
+(Canada) fix holds and 19 others lack some (French (France) three);
+of OPS's 17, Catalan, Croatian, French (France), Indonesian, Kyrgyz,
+Norwegian Bokmål, Portuguese, Spanish and Turkish lack all nine chart
+texts.
 Issue report: [pkp-e2e#777](https://github.com/jardakotesovec/pkp-e2e/issues/777) ([docs/issues/U10-A6-french-appearance-settings-raw-keys.md](../issues/U10-A6-french-appearance-settings-raw-keys.md)).
 
 <a id="fn-f-a7"></a>
@@ -2166,7 +2229,14 @@ Issue report: [pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772
 **f-a8** — Note j: the label is luxon's rendering of `g:ia`, the pages
 PHP's. Live-probed 2026-09-24 on all three apps: the choice read
 "7:35PM" at that time; saved, a library file's "Date uploaded" read
-"2026-09-24 7:17pm" and a file's note "2026-09-24 7:17pm".
+"2026-09-24 7:17pm" and a file's note "2026-09-24 7:17pm". Walked
+2026-10-03 (Fields, "Time"; `main` and 3.5): the screens the browser
+draws print with luxon and follow the label, so on `main` a discussion
+message read "11:58AM" while a library file's "Date uploaded" read
+"7:25pm"; on 3.5 only the tab's labels and the emails list in an
+author's workflow printed "PM". Up to 3.4 the labels were drawn with
+moment, whose `a` is lower case, so the choice itself read "3:05pm"
+(code read).
 Issue report: [pkp-e2e#779](https://github.com/jardakotesovec/pkp-e2e/issues/779) ([docs/issues/U10-A8-time-choice-3-05pm-prints-lower-case.md](../issues/U10-A8-time-choice-3-05pm-prints-lower-case.md)).
 
 <a id="fn-f-a9"></a>
@@ -2258,6 +2328,39 @@ press above in all three runs. "Production editor" stood after
 "Journal editor" in every run. The same list feeds the public pages, so
 they follow the tab's order (code read, not driven).
 
+<a id="fn-f-a15"></a>
+**f-a15** — Walked 2026-10-03 on `main`, all three apps ("Logo", a
+".pdf" picked with "Upload File", then the pointer over the empty
+frame): the frame turned blue with the file's name and a blank white
+block, the link "Remove file" in white on white; pressing it emptied
+the box and enabled "Upload File", while "Save" stayed disabled with
+"Please correct one error. Go to Logo: undefined Jump to next error".
+Not walked on 3.5. Cause, read in the code: ui-library `FormGroup.vue`
+`setFieldErrors()` deletes a multilingual field's language entry but
+leaves an empty object under the field's name, which the form still
+counts as an error. The fix proposed for A7 removes the refused file
+and its link, but by the code the empty entry still shows while the
+next file uploads. Issue report for A7, which records this walk:
+[pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772).
+
+<a id="fn-f-a16"></a>
+**f-a16** — Walked 2026-10-02 on `main` and 3.5, all three apps, on a
+second `php -S` of the same install with `upload_max_filesize` and
+`post_max_size` both 8M and `display_errors` off: an 8 MiB (8388608
+bytes) "Logo" passed the box's check against `getIntMaxFileMBs()`, and
+`POST …/api/v1/temporaryFiles` answered 500
+`{"error":"The POST data is too large."}`; the server log read "PHP
+Warning: POST Content-Length of 8389029 bytes exceeds the limit of
+8388608 bytes". The box kept the preview and the link "Remove file",
+an error icon with no text, "Upload File" disabled; the form's foot
+"Please correct one error." with "Go to Logo:" and "Save" disabled.
+Cause, read in the code: ui-library `FieldUpload.vue` `onError()` shows
+only an answer's `errorMessage`, and this answer carries `error`, so
+the message is empty; any server refusal of a settings upload that
+carries `error` would show the same (not driven). Why the file is sent
+and the server error itself belong to Submission files' A21 and Custom
+pages & blocks' A18 (pkp-e2e#373).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's
 `DefaultThemePlugin` alone; OMP and OPS index handlers read no such
@@ -2289,9 +2392,19 @@ list.
 runs (note x).
 
 <a id="fn-f-ojs5"></a>
-**f-ojs5** — Note o: `IndexHandler` uses `JournalContentOption::default()`
-whenever the stored option is not an array, and the tab sends an empty
-value when nothing is ticked. Live-probed 2026-09-24 on two scratch
+**f-ojs5** — The fault is in the shared theme-option save, not in
+`IndexHandler`. The tab sends an empty list as `''` (jQuery drops empty
+arrays, `Form.vue` `submitValues`), the API's `ConvertEmptyStringsToNull`
+turns it into `null`, and pkp-lib's `ThemePlugin::saveOption()` stores
+a row whose value is NULL. `ThemePlugin::getOption()` reads that back
+as never set and answers with the option's default,
+`JournalContentOption::default()` (note o); the tab (`PKPThemeForm`,
+`Field::getConfig()` `value ?? default`) and `IndexHandler` both see
+that default. `journalContentOrganization` is the first theme option
+whose default is a list that is never empty. A child theme of the
+default theme and the Settings Wizard's "Appearance" tab save through
+the same `saveOption()` and meet it too. Code read 2026-10-03; walked
+2026-10-03 on `main` and 3.5. Live-probed 2026-09-24 on two scratch
 journals with an issue, two runs: "Saved", the tab reopened with
 "Include the current issue's table of contents" ticked, and the home
 page showed "Current Issue".
@@ -2687,7 +2800,12 @@ all three apps, two runs): as before; the "Évaluateurs-trices" group
 no such group. The labels pkp/pkp-lib#13370 added (the enrollment group,
 its description and box, the reviewers box) read as raw codes in French
 and the "Évaluateurs-trices" note keeps its older wording, pending
-their translation.
+their translation. Walked 2026-10-03 (Rule 35a; all three apps, `main`
+and 3.5, French (Canada)): a ".pdf" picked for "Logo" with "Téléverser
+un fichier" was refused with "You can't upload files of this type.",
+and the refused file's frame carried the link "Remove file". By the
+code, the drop area and the refusal take the upload library's own
+English texts in every language (note f-a12).
 
 ## Reference — entry points & surfaces
 

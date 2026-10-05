@@ -682,7 +682,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OPS1](#ops1) | On a preprint server galley editing follows the publication's edit permission; on a journal, Production access | ✅ | — | — |
+| [OPS1](#ops1) | A preprint's Author manages the galleys while they may edit the preprint; a journal's Author never does | ✅ | — | issue report (claude), 2026-10-02 — rescoped to the Author |
 | [A2](#a2) | Retired: the galley window's "Close" was thought to drop unsaved changes without asking | ✅ | retired | — |
 
 ### All apps
@@ -788,18 +788,22 @@ Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
 ### OPS
 
 <a id="ops1"></a>
-**OPS1 — Galley editing follows the publication's edit permission** · ✅ · intended divergence.
+**OPS1 — A preprint's Author manages the galleys while they may edit the preprint** · ✅ · intended divergence.
 On a preprint server the galleys are the Author's to manage while they
-may edit the preprint, and a Moderator's right to change them before
-posting follows their assignment's "Permissions" box; after posting, the
-Preprint Server Manager and every assigned Moderator may change them and
-the Author may only view them. On a journal the galleys are production
-work: every role that reaches the "Galleys" page may change them,
-whatever its "Permissions" box, and the Author never may. Intended: the
-preprint server has no layout staff, and its Author was given the
-galleys deliberately.
-Since: 2025-05-28 (editing kept open after posting), 2026-07-27 (the
-Author's offer) · Basis: commit, 2026-09-24. <sup>f-ops1</sup>
+may edit the preprint (before posting, with "Permissions" ticked on
+their assignment); otherwise they get "View" only (Actors row 3). On a
+journal the galleys are production work: the Author never changes them,
+and every role that reaches the "Galleys" page may, whatever its
+"Permissions" box. Intended: the preprint server has no layout staff,
+and its Author was given the galleys deliberately. The Moderator is not
+part of this difference. The development team's stated rule for the
+page is that the Preprint Server Manager and the Moderators may change
+the galleys at any time, as a journal's editorial roles do. A Moderator
+held back by an unticked "Permissions" box before posting is therefore
+the defect in [OPS2](#ops2), not an intended rule.
+Since: 2026-07-27 (the Author's offer) · Basis: commit, 2026-09-24.
+Re-checked: issue report (claude), 2026-10-02 — rescoped (the
+Moderator's half, once read as intended, moved to OPS2). <sup>f-ops1</sup>
 
 <a id="ops2"></a>
 **OPS2 — Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers** · 🐞 · medium.
@@ -1418,7 +1422,20 @@ Issue report: [pkp-e2e#618](https://github.com/jardakotesovec/pkp-e2e/issues/618
 (`7d9c84e9b6`, 2025-05-28, pkp/pkp-lib#10263; `ab4b990d96`, 2026-09-08,
 pkp/pkp-lib#13109) and ui-library `e26e36b6` (2026-07-27,
 pkp/pkp-lib#13039: "galleys should be editable by author in OPS if he got
-the permission"), against OJS's stage-access `canEdit()`.
+the permission"), against OJS's stage-access `canEdit()`. The
+Moderator's half, re-read on 2026-10-02 in the code and the pkp issues
+(OPS `main` and 3.5, not driven): ui-library `f9aca59b` (2025-01-06,
+pkp/ui-library#478 for pkp/pkp-lib#10760, whose notes read "Edit actions
+are available for editorial roles when the publication is not
+published") gave the page's editorial roles every action whatever the
+publication's edit permission, and a comment of 2026-07-27 on
+pkp/pkp-lib#13039 states "Editorial roles can edit galleys anytime
+(including publication is published)". The server's
+`canEditPublication()` branch before posting dates from
+pkp/pkp-lib#5750 (2020), when the legacy grid offered such a Moderator
+"View" alone. The issue report recommends that the server follow the
+page.
+Issue report: [pkp-e2e#613](https://github.com/jardakotesovec/pkp-e2e/issues/613) ([docs/issues/U46-OPS2-moderator-galleys-offered-then-refused.md](../issues/U46-OPS2-moderator-galleys-offered-then-refused.md)).
 
 <a id="fn-f-ops2"></a>
 **f-ops2** — Note c: the client offers a sub-editor every action

@@ -86,7 +86,7 @@ one-line description under its heading (Rule 6). <sup>m</sup>
 | "Name" | Yes | Hint "Please enter the name for the task and discussion.". Empty, "Save" is refused with "This field is required." under it. At most 255 characters; a longer name is refused on "Save" with "This may not be greater than 255 characters." under it <sup>td11</sup>. The name is the subject of every email the item sends (Side effects). <sup>m</sup> <sup>o</sup> |
 | "Participants" | Yes | Hint "You have the option to assign participants or allocate it solely to yourself.". A list of boxes, one per person offered (Rule 7), opening with the signed-in person ticked. The refusals on "Save" are Rule 8's. <sup>m</sup> <sup>n</sup> |
 | "Enter task information" | No | A box under the heading "Task Information". Ticked, the item is a task and the three fields below show. Greyed when editing a task: a task never turns back into a discussion (Rule 15). <sup>p</sup> |
-| "Due Date" | Yes, for a task | Hint "If there is a deadline for this task, you can indicate it here. The due date will be communicated and established for each participant assigned to this task.". A date; today or later. The picker greys the days before today; an earlier date typed into the box is accepted there, and "Save" is refused with "Start date should be greater than or equal to today" under "Due Date" ⚠ [A10](#a10). Left empty on a task: "This field is required.". <sup>p</sup> <sup>td11</sup> |
+| "Due Date" | Yes, for a task | Hint "If there is a deadline for this task, you can indicate it here. The due date will be communicated and established for each participant assigned to this task.". A date; today or later. The picker greys the days before today; an earlier date typed into the box is accepted there, and "Save" is refused with "Start date should be greater than or equal to today" under "Due Date" ⚠ [A10](#a10); on a journal, an overdue task's "Edit" gets this refusal until the date moves (Rule 15f). Left empty on a task: "This field is required.". <sup>p</sup> <sup>td11</sup> |
 | "Responsible to complete this task (Task owner)" | Yes, for a task | Hint "If there is a specific participant designated to complete this task, please assign it to them here.". One radio button per person ticked under "Participants"; exactly one owner. None chosen: "This field is required." (Rule 8c). <sup>p</sup> |
 | (no label) "Begin Task Upon Saving" / "Create Task (Do Not Start)" | — | A drop-down, "Begin Task Upon Saving" by default; greyed when editing (Rule 9), still reading "Begin Task Upon Saving" when an edit turns a discussion into a task (Rule 15b). <sup>p</sup> |
 | The message box (heading "Discussion") | Yes | Rich text with bold, italic, underline, a bulleted list and "Attach Files" (Rule 14); the files attached show under the box, each with a remove control. Empty, "Save" is refused with "This field is required.". When editing, it holds the item's first message (Rule 15). <sup>m</sup> |
@@ -126,6 +126,9 @@ one-line description under its heading (Rule 6). <sup>m</sup>
    rows are grouped under three headings, always in this order: "Yet to
    begin", "In progress" and "Closed"; an empty group reads "No Items".
    Within a group the oldest item comes first. <sup>j</sup>
+   A screen reader hears a task row's "Started" and "Closed" boxes under
+   one name, the task's own; only their column tells them apart ⚠
+   [A32](#a32). <sup>td20</sup>
 <a id="states"></a>
 2. **Where an item sits.** <sup>j</sup>
    - 2a. A discussion sits under "In progress" until it is closed, then
@@ -425,6 +428,14 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       "Save". Each later "Save" rewrites that added message. The History
       records nothing ⚠ [A9](#a9). The other items of Rule 21 are edited
       as 15a says. <sup>v</sup> <sup>td10</sup>
+    - 15f. On a journal, a task whose due date has passed (Rule 2d) opens
+      in "Edit" with that past date under "Due Date", and the form sends
+      it back with every "Save". Each "Save" that keeps the date is
+      refused, even one that changes only "Name": the window stays open
+      with "Start date should be greater than or equal to today" under
+      "Due Date" ([A10](#a10)) and "Please correct one error.". Nothing
+      in an overdue task's "Edit" can be saved until its due date is
+      moved to today or later ⚠ [A34](#a34). <sup>td21</sup>
 <a id="start"></a>
 16. **Starting a task.** A task is started by "Begin Task Upon Saving"
     (Rule 9), by ticking its "Started" box in the row, which first asks
@@ -460,8 +471,12 @@ one-line description under its heading (Rule 6). <sup>m</sup>
 <a id="history"></a>
 18. **"History".** The row menu's "History" opens a side window titled
     "History", with the item's name under it, and a table "Date", "User",
-    "Event", newest first; events saved in the same second come in no
-    fixed order. "User" is the person's full name; "Event" uses the
+    "Event", newest first. <sup>y</sup>
+    Events saved in the same second are not put in the order they were
+    saved, latest first: a reply's "posted a response" line stood above
+    its file's "uploaded by" line on a journal and below it on a
+    preprint server ⚠ [A33](#a33). <sup>td22</sup>
+    "User" is the person's full name; "Event" uses the
     username. During Login As, "User" reads "{real person} (acting as {the
     person impersonated})", and "Event" and the row's "Activity" name the
     real person, while the message itself reads "Message from {the
@@ -597,6 +612,10 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       "Yes" or "No"; "Yes" saves it and shows "Your changes have been
       saved." at the top right. "No" saves nothing ([A26](#a26)). The
       list's box and the window's "Automatically add…" box are one switch.
+      A screen reader hears every row's box under one name,
+      "Automatically add this task and discussion when a submission
+      reaches a specific stage", which names neither the template nor the
+      stage ([A32](#a32)). <sup>td20</sup>
     - 26b. While it is on, a submission that reaches the template's stage
       gets an item made from the template (Rule 21): the first stage when
       the author submits, a later stage when a decision sends the
@@ -1383,6 +1402,9 @@ Left out of the scenarios above, by reason:
   - A29 (a file attached in the "Add" window missing from the History; Rule 18)
   - A30 (a task whose owner is taken off, left with no owner; Rule 23)
   - A31 (an auto-added item's unfilled placeholders; Rule 26b)
+  - A32 (the boxes a screen reader hears under one name; Rules 1, 26a)
+  - A33 (events of one second out of their saved order in the History; Rule 18)
+  - A34 (an overdue task's "Edit" refused until its due date moves; Rule 15f)
   - OMP1 (a press's reviewers listed as "Internal Reviewer"; Rule 20; scenario 11 marks it)
   - OPS1 (a preprint server's empty "Assign Editor" template; Rule 10e; scenario 3 marks it)
 - **No seed**:
@@ -1421,6 +1443,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A31](#a31) | A discussion's letter keeps "{$signature}" when its writer is not a participant: auto-added, or a manager stays out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A32](#a32) | A screen reader hears a task row's "Started" and "Closed" boxes, and every template's "Auto-add at stage" box, under one shared name | 🐞 | minor | — |
+| [A33](#a33) | A History lists events saved in the same second in no set order | 🐞 | minor | — |
+| [A34](#a34) | An overdue task's "Edit" refuses every "Save", even a rename, until its due date is moved | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A press's discussion window lists an External Review reviewer as "Internal Reviewer" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | An hour after writing it, an Author or assistant can change nothing in their own discussion | ❓ | user-visible | — |
@@ -1790,6 +1815,44 @@ themself as a participant. Ticked, the writer's name fills the closing
 on "Save".
 Basis: probe, 2026-10-02. <sup>[f-a31](#fn-a31)</sup>
 
+<a id="a32"></a>
+**A32 — A screen reader hears the panel's boxes under shared names** · 🐞 · minor.
+A screen-reader user on a task's row hears its "Started" box and its
+"Closed" box under the same name, the task's own; only the column the
+box sits in tells which is which. On Settings › Workflow › "Tasks and
+Discussions", every template's "Auto-add at stage" box is heard as
+"Automatically add this task and discussion when a submission reaches a
+specific stage", naming neither the template nor the stage. Each box's
+name should say what it does and which task or template it belongs to.
+A screen-reader user can tick the wrong box.
+Basis: probe, 2026-10-02. <sup>[f-a32](#fn-a32)</sup>
+
+<a id="a33"></a>
+**A33 — The History does not order events saved in the same second** · 🐞 · minor.
+A task's or discussion's History lists its events newest first, but
+events saved within the same second keep whatever order the application
+fetches them in, which differs from one install to another. After a
+reply with a file, a journal listed "{username} ({roles}) posted a
+response on {date}" above "{file name} uploaded by {username} on
+{date}", and a preprint server listed it below. The History is meant to
+put such events in the order they were saved, latest first, and that
+order never takes effect. Lines from one save, such as a reply and its
+file, can read in either order.
+Basis: probe, 2026-10-02. <sup>[f-a33](#fn-a33)</sup>
+
+<a id="a34"></a>
+**A34 — An overdue task cannot be edited until its due date is moved** · 🐞 · user-visible.
+Once a task's due date has passed, its "Edit" window shows that date
+under "Due Date", and every "Save" that leaves it there is refused with
+"Start date should be greater than or equal to today" under "Due Date"
+and "Please correct one error.", even when only "Name" was changed.
+Whoever manages the task expects to rename it, add a participant or
+rewrite its message without touching the deadline; instead they must
+first move the due date to today or later. The check should apply only
+to a due date that was changed. Seen on a journal; a press and a
+preprint server were not tried.
+Basis: probe, 2026-10-02. <sup>[f-a34](#fn-a34)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -2011,6 +2074,15 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 <a id="fn-td19"></a>
 **td19** — Live-probed 2026-09-23 (Rule 21; all three apps): with "Discussion (Submission)" (a preprint server: "Discussion (Production)") set to auto-add, the Author's submit left the discussion "Created by: system" under "In progress", with an empty "Activity", a History reading "No Items", no participants and "Message from system" "Please enter your message."; the manager-level Editor saw it, the assigned Section Editor, Funding Coordinator and Author did not; nobody was mailed or given a row; after the Journal Manager ticked the Section Editor and the Editor in "Edit", the Section Editor saw it.
 
+<a id="fn-td20"></a>
+**td20** — Live-probed 2026-10-02 (Rules 1, 26a; A32; all three apps; the default dataset, `dbarnes`), reading the browser's accessibility tree: at Production, a task row's two inputs both read `checkbox "{task name}"` and a discussion row's one input `checkbox "{discussion name}"`; on Settings › Workflow › "Tasks and Discussions", every template's box (ten on a journal, twelve on a press, two on a preprint server) read `checkbox "Automatically add this task and discussion when a submission reaches a specific stage"`.
+
+<a id="fn-td21"></a>
+**td21** — Live-probed 2026-10-02 (Rule 15f; A34; OJS; the default dataset, `dbarnes`): a task added on Copyediting due in fourteen days, its stored due date then moved three weeks back in the database in place of waiting; "Edit" showed the past date under "Due Date" and the badge "Overdue"; "Save" with only "Name" changed answered 422 (`dateDue`: "Start date should be greater than or equal to today") and the window stayed open with "Please correct one error.". OMP and OPS were not driven.
+
+<a id="fn-td22"></a>
+**td22** — Live-probed 2026-10-02 (Rule 18; A33; OJS and OPS; the default dataset, `dbarnes`): a reply with a file attached, its two History lines in the same second: OJS listed "… posted a response …" above "replacement.pdf uploaded by …", OPS the other way round.
+
 <a id="fn-a1"></a>
 **f-a1** — Live-probed 2026-09-04 on OMP and OPS (Notifications center's probes): "Add" › "Save" and a reply each showing the dialog; the row stored, no Tasks row, no email. Cause: `EditorialTaskController` imports `APP\notification\Notification` (pkp/pkp-lib#12322, `139bde1e657`, 2026-02-10), a class only OJS ships (`ojs/classes/notification/Notification.php`); OMP (`7f9455d5a`) and OPS (`15f0b6e0bd`) still track none. The class is resolved only where `notifyParticipants()` touches a constant: every add and reply, and an edit on Copyediting or Production (the notice update). The test installs mount an empty subclass for both apps so the other features can run, which is why a drive on them does not show the error: the as-shipped error cannot be seen on these test installs. Re-read 2026-09-23: the OMP (`7f9455d5a`) and OPS (`15f0b6e0bd`) checkouts still track no `classes/notification/Notification.php` (the file there is the mounted subclass, excluded from git), and lib/pkp's `EditorialTaskController.php` still imports `APP\notification\Notification`; with the subclass, every save and reply on OMP and OPS stored the item and sent the emails and rows.
 
@@ -2121,6 +2193,15 @@ Issue report: [pkp-e2e#428](https://github.com/jardakotesovec/pkp-e2e/issues/428
 <a id="fn-a31"></a>
 **f-a31** — Note aa: the auto-add path makes the item with no participants and no writer, so the recipient and sender placeholders have nobody to stand for. Live-probed 2026-09-23 on all three apps: "Galleys Complete" auto-added (OJS, OMP) and a template text with "{$recipientName}" (all three) under "Message from system".
 Issue report: [pkp-e2e#430](https://github.com/jardakotesovec/pkp-e2e/issues/430) ([docs/issues/U37-A31-auto-added-item-letter-placeholders.md](../issues/U37-A31-auto-added-item-letter-placeholders.md)).
+
+<a id="fn-a32"></a>
+**f-a32** — Live-probed 2026-10-02 (note td20). ui-library `DiscussionManagerCellStarted.vue` and `DiscussionManagerCellClosed.vue` label their input with `labelIds` = `discussion_name_{id} {tableId}_{index}`: the first id is the row's name link, the second matches no element on the page, so both inputs take the item's name. `TaskTemplateManagerCellAutoAdd.vue` gives every row's box the same `aria-label`, `taskTemplates.templateAutoAdd` (lib/pkp `locale/en/submission.po`). The same cells are A26's.
+
+<a id="fn-a33"></a>
+**f-a33** — Live-probed 2026-10-02 (note td22). The event-log `Collector` returns a task's entries ordered by `date_logged` alone; `TaskResource::toArray()` then calls `sortBy(['dateLogged' => 'desc', 'id' => 'desc'])` (c69d929b26, `pkp/pkp-lib#12451`, merged 2026-03-15), which Laravel's `sortByMany()` reads as the values to sort on, so it sorts nothing and lines of one second keep the database's order. Checked in PHP against the bundled Laravel, 2026-10-02: that array leaves a collection as it is, where `[['dateLogged', 'desc'], ['id', 'desc']]` sorts it. Note y saw the same on 2026-09-23 (events of one second in different orders between apps).
+
+<a id="fn-a34"></a>
+**f-a34** — Live-probed 2026-10-02 (note td21). `EditTask::rules()` (lib/pkp `api/v1/submissions/tasks/formRequests/EditTask.php`) checks `dateDue` with `after_or_equal:today` on every edit, and `saveWorkItem()` sends `dateDue` with every "Save" (note v), so an unchanged past date is refused. A press and a preprint server read in the code only: the same lib/pkp rule. The wording of the refusal is A10's.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: the reviewer group is the first of the press's two reviewer groups the database returns. Live-probed 2026-09-23 on OMP, two fresh presses: "External Reviewer" in one run's manager window, "Internal Reviewer" in others, the manager's, the Author's and the reviewer's windows differing; OJS prints "Reviewer".

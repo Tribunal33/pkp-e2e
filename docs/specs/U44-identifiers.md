@@ -53,7 +53,7 @@ and there the "URN" row of the Plugins page offers no "Settings". <sup>a</sup> <
 |--------|--------------------|
 | **Switch publisher IDs on or off, per kind of item** | • manager-level roles, on Settings › Workflow › Submission › "Metadata" (Settings bullet 1) <sup>a</sup> |
 | **Enable the URN plugin, configure it, "Reassign URNs"** {OJS OMP} | • manager-level roles, on Settings › Website › "Plugins" (Settings bullets 2 to 6; Rule 18) <sup>b</sup> |
-| **See the article's "Identifiers" page** {OJS OMP} | • every role that sees the editorial view of the Publication area, while the URN plugin is on for articles (Rule 7); a press keeps listing the page, empty, once the plugin is off (Rule 20). The author view never lists the page ([→ the Publication tabs](U24-workflow-screen-and-stage-access.md#publication-tabs)) <sup>c</sup> |
+| **See the article's "Identifiers" page** {OJS OMP} | • every role that sees the editorial view of the Publication area, while the URN plugin is on for articles (Rule 7); a press keeps listing it once the plugin is off (Rule 20) ⚠ [OMP7](#omp7). The author view never lists the page ([→ the Publication tabs](U24-workflow-screen-and-stage-access.md#publication-tabs)) <sup>c</sup> |
 | **Assign, type or clear the article's URN** {OJS OMP} | • whoever may edit the publication ([→ edit gate](U40-publication-metadata.md#edit-gate))<br>• anyone else who reaches the page sees it with "Save" greyed, yet is offered "Assign", which fills the box with a URN that cannot be saved and is gone when the page is left ⚠ [A9](#a9). A Layout Editor reaches the page once the submission is in Production; while it is still at the Submission stage, their side menu's "Publication" group is empty ([→ the Publication tabs](U24-workflow-screen-and-stage-access.md#publication-tabs)) <sup>c</sup> <sup>q1</sup> <sup>s</sup> |
 | **Type the article's Publisher ID** | • whoever may save the Metadata page ([→ edit gate](U40-publication-metadata.md#edit-gate)), the Author included, while publisher IDs are on for articles (Rule 2) <sup>d</sup> <sup>q2</sup> |
 | **Set a galley's identifiers** {OJS OPS} | • Journal Manager, Editor, Site Administrator, and a Section Editor or production assistant (Layout Editor, Designer, Proofreader…) assigned with access to Production, from the galley row's "Edit" on the Galleys page (Rule 12). On a journal an assigned Section Editor saves the tab whether or not the assignment's "Permissions" box (changes to the publication) is ticked<br>• on a preprint server, also the Author, while they may edit the preprint and it is not yet posted; before posting, a Moderator whose assignment has "Permissions" unticked sees the tab read-only. Once the preprint is posted, the Preprint Server Manager, every assigned Moderator and a Site Administrator may save, and the Author's row menu offers only "View", which opens the window with the tab read-only <sup>e</sup> <sup>q19</sup><br>• a journal's Author is not offered "Edit" on a galley |
@@ -243,7 +243,10 @@ windows are the galley row's "Edit" on the Galleys page (a window headed
       same URN prefix assigned:", a greyed "URN Prefix" box, a "URN
       Suffix" box and, with "Check Number" ticked, an "Add Check Number"
       button [A6](#a6); pressed while the "URN Suffix" box is empty,
-      that button writes "NaN" into it ⚠ [A13](#a13). With no suffix
+      that button writes "NaN" into it ⚠ [A13](#a13). On a galley's or a
+      chapter's tab (the issue, format and file tabs untried), pressed on
+      a suffix holding a character such as "~", it turns "a~b" into
+      "a~bNaN" ⚠ [A15](#a15). With no suffix
       saved yet the area reads "The URN cannot be assigned because the
       custom suffix is missing."; once a suffix is saved, the preview
       sentence and the ticked box of the first state are added under the
@@ -330,10 +333,11 @@ windows are the galley row's "Edit" on the Galleys page (a window headed
     [A4](#a4). <sup>q6</sup> Each galley's copy keeps its publisher ID
     and URN ⚠ [A5](#a5). <sup>c</sup> <sup>q7</sup>
 20. **Switching the plugin off hides, and keeps.** With the "URN" plugin
-    disabled, no screen shows a URN: the tabs' URN areas and the reader
-    blocks go, and so does the "Identifiers" page on a journal (a press
-    keeps an empty one, a finding of the workflow screen's spec). The stored URNs are kept and return when the
-    plugin is enabled again. <sup>b</sup> <sup>q13</sup>
+    disabled, the tabs' URN areas go. On a journal the reader blocks and
+    the "Identifiers" page go too. A press keeps listing the
+    "Identifiers" page, with no "URN" box or "Save", and its
+    book page keeps showing each format's stored URN [OMP7](#omp7). The stored URNs
+    are kept and return when the plugin is enabled again. <sup>b</sup> <sup>q13</sup>
 21. **What readers see.** A published article's page shows a "URN"
     heading with a link whose text and target are the resolver address
     followed by the URN ("https://nbn-resolving.de/urn:nbn:de:0000-…").
@@ -375,7 +379,8 @@ windows are the galley row's "Edit" on the Galleys page (a window headed
 2. **The "URN" plugin** {OJS OMP} (Settings › Website › "Plugins",
    "Public Identifier Plugins", the "URN" row): default disabled, no
    URN anywhere. Enabled and saved with a kind ticked: URNs for that kind
-   (Rule 7). Disabled again: URNs hidden and kept (Rule 20).
+   (Rule 7). Disabled again: URNs hidden and kept, a press's book page
+   excepted (Rule 20; [OMP7](#omp7)).
 3. **"Journal Content" / "Press Content"** {OJS OMP} (the plugin's
    settings): default none ticked. "Articles"/"Monographs" lists the
    "Identifiers" page (Rule 7); "Galleys", "Issues" and the press's
@@ -597,8 +602,8 @@ are in the footnote. <sup>s</sup>
      monograph's URN ([OMP3](#omp3)).
    - **The plugin switched off and on**: on Settings › Website ›
      "Plugins" untick the "URN" row: the article's page shows no URN, and
-     the published version's Publication area lists no "Identifiers" (a
-     press keeps listing an empty one). Tick the row again: the article's
+     the published version's Publication area lists no "Identifiers"
+     (press: its "Identifiers" page shows no "URN" box, [OMP7](#omp7)). Tick the row again: the article's
      page shows the URN link again (press: the "Identifiers" page holds
      the URN again) (Rule 20; Settings bullet 2).
    - **"Reassign URNs"**: open the "URN" row's "Settings" and press
@@ -891,6 +896,8 @@ Left out of the scenarios above, by reason:
   - A4 (the article's own URN refused on a later "Save"; Rule 11)
   - A13 ("Add Check Number" on an empty tab suffix writing "NaN";
     Rule 12)
+  - A15 ("Add Check Number" adding "NaN" to a tab suffix holding "~";
+    Rule 12)
   - A14 (a galley's or a chapter's tab still showing a cleared URN;
     Rule 14; scenario 5 passes it)
   - A4 and A5 (a new version copying the URN and the galleys' publisher
@@ -902,6 +909,8 @@ Left out of the scenarios above, by reason:
     angle brackets and failing page script; Fields, the URN plugin's
     settings window; scenario 2 passes A10)
   - OMP6 (a press file's default URN without the format number; Rule 8)
+  - OMP7 (a press still listing "Identifiers" and showing format URNs
+    on its book page with the plugin off; Rule 20; scenario 3 passes it)
 - **No seed**:
   - an issue galley's "Publisher ID" on an existing issue galley, its
     refusal notices, "/" accepted, and "Enable for Issue Galleys"
@@ -951,6 +960,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A15](#a15) | "Add Check Number" on an item's "Identifiers" tab adds "NaN" to a suffix holding a character such as "~" | 🐞 | minor | — |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -958,6 +968,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP4](#omp4) | Publishing a book with only monograph URNs shows a one-row URN table instead of the URN sentence | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP6](#omp6) | A press file's URN leaves out its format number, and file patterns leave "%f" unfilled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [OMP7](#omp7) | With the URN plugin switched off, a press's book page still shows format URNs | 🐞 | medium | — |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
 | [A12](#a12) | A URN that differs from another only in case is accepted as new | ❓ | minor | — |
 | [OJS2](#ojs2) | The JATS XML's publisher ID is the article's number, not the typed Publisher ID | ❓ | minor | — |
@@ -1165,6 +1176,20 @@ objects. OPS has no URN plugin; on 3.3 the DOI plugin's "Clear" on the
 same tabs, OPS galleys included, acts the same way.
 Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
+<a id="a15"></a>
+**A15 — "Add Check Number" on an item's "Identifiers" tab adds "NaN" to a suffix holding a character such as "~"** · 🐞 · minor.
+On a galley's "Identifiers" tab (journal) or a chapter's (press; issue,
+format and file tabs untried), with "Enter an individual URN
+suffix…" chosen and "Check Number" ticked in the URN settings, an editor
+types "a~b" in "URN Suffix" and presses "Add Check Number". The box then
+reads "a~bNaN": "NaN" where a digit was expected. The area above the box says a suffix "can take
+any form", and nothing on the tab warns that this one cannot take a
+check digit. The editor sees the value at once and can correct it.
+Which characters a suffix may hold, and whether the button should
+refuse or skip the others, is for the team to settle; [A13](#a13)'s empty
+box is a separate case.
+Basis: probe, 2026-10-02. <sup>f-a15</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1279,6 +1304,14 @@ assigned new DOIs". File DOIs under the "Default" DOI format are not
 affected.
 Basis: probe, 2026-10-02. <sup>f-omp6</sup>
 
+<a id="omp7"></a>
+**OMP7 — With the URN plugin switched off, a press's book page still shows format URNs** · 🐞 · medium.
+A press that switches the "URN" plugin off still shows each format's
+stored URN on its book page, and keeps listing an "Identifiers" page
+with no "URN" box; a journal hides both. The full entry is the workflow screen's
+([→ Workflow screen & stage access, OMP3](U24-workflow-screen-and-stage-access.md#omp3)).
+Basis: probe, 2026-10-02. <sup>f-omp7</sup>
+
 ### Retired
 
 <a id="a1"></a>
@@ -1363,7 +1396,8 @@ publications) / `PressDAO::deleteAllPubIds()` (chapters, formats,
 submission files, publications), whatever the item's status. Hidden
 while disabled: `register()` adds the schema fields and hooks only when
 `getEnabled()`, and every display loops over
-`PluginRegistry::loadCategory('pubIds', true, …)`, the enabled plugins;
+`PluginRegistry::loadCategory('pubIds', true, …)`, the enabled plugins,
+which on OMP still hold the switched-off URN plugin (note f-omp7);
 the stored `pub-id::other::urn` rows are not touched by disabling.
 Locale strings: `plugins/pubIds/urn/locale/en/locale.po` of each app.
 The labels "Journal Content", "Articles", "Monographs", "URN Prefix"
@@ -1744,8 +1778,10 @@ with no box.
 **q10** — Live-probed 2026-09-24 (Fields, "URN Suffix"; A8, A11), OJS and OMP:
 with the pattern choice and "Articles" ticked, an empty "for articles"
 was refused under the box with "This field is required." and nothing
-was sent; a box of spaces was refused with the text code under the box,
-at the top of the window and in a notice. While the pattern choice was
+was sent; a box of spaces was refused with the text code under each box
+and in the list at the top of the window, and no notice showed at the
+top right (walked 2026-10-02 on `main` and `stable-3_5_0`, OJS and OMP,
+the walk reading every message on the page). While the pattern choice was
 selected, each tick raised a page error (none under the default
 choice).
 
@@ -1976,6 +2012,20 @@ tabs' "Clear" deletes the URN at once (note e) without redrawing the
 tab; the issue tab reloads `#identifiersTab` (note f).
 Issue report: [pkp-e2e#463](https://github.com/jardakotesovec/pkp-e2e/issues/463) ([docs/issues/U44-A14-cleared-urn-stays-on-tab.md](../issues/U44-A14-cleared-urn-stays-on-tab.md)).
 
+<a id="fn-f-a15"></a>
+**f-a15** — Walked 2026-10-02 on `main`, the OJS galley tab and the OMP
+chapter tab, with the empty-box fix of A13's issue report applied and
+without it: "a~b" in "URN Suffix" and "Add Check Number" gave
+"a~bNaN". The legacy `#checkNo` handler in `plugins/pubIds/urn/js/checkNumber.js`
+appends `getCheckNumber()`, whose conversion table holds letters,
+digits and `-:_/.+`; `conversionTable['~']` is `undefined`, so the sum
+is `NaN`. The server's `URNPubIdPlugin::_calculateCheckNo()` skips
+characters outside its table. Not walked: saving the tab with
+"a~bNaN", the issue, format and file tabs, and the article's page,
+whose "Add Check Number" calls the same `getCheckNumber()` (note f-a6).
+The A13 report leaves this case out of its fix until the team rules on
+the characters a suffix may hold: [pkp-e2e#462](https://github.com/jardakotesovec/pkp-e2e/issues/462) ([docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issues/U44-A13-check-number-empty-urn-suffix-nan.md)).
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls
 `JournalDAO::anyPubIdExists(…, ASSOC_TYPE_ISSUE_GALLEY, $this->_issueGalley
@@ -2041,6 +2091,20 @@ formats' `…kone.531.4` and `…pkp.536.7`, while the settings window lists
 "%p.%m.%f.%s for files". OMP `classes/plugins/PubIdPlugin.php`
 `generateDefaultPattern()` does not resolve the format for a file.
 Issue report: [pkp-e2e#477](https://github.com/jardakotesovec/pkp-e2e/issues/477) ([docs/issues/U44-OMP6-press-file-default-urn-no-format-number.md](../issues/U44-OMP6-press-file-default-urn-no-format-number.md)).
+
+<a id="fn-f-omp7"></a>
+**f-omp7** — Walked 2026-10-02 on OMP `main` (default dataset): with
+"Publication Formats" ticked, book 14's "PDF" format was assigned
+`urn:nbn:de:0000-jpk.14.3`; with the "URN" plugin then disabled, the
+signed-out book page still showed the URN under the format, as
+"other::urn" in plain text ([OMP2](#omp2)). OMP's
+`plugins/pubIds/urn/version.xml` holds `<lazy-load>0</lazy-load>` (OJS
+`1`), and `VersionDAO::getCurrentProducts()` counts a plugin that is not
+lazy-loaded as enabled, so `PluginRegistry::loadCategory('pubIds', true)`,
+which `CatalogBookHandler` hands to `monograph_full.tpl`, still holds
+the URN plugin; the same list keeps the workflow's "Identifiers" page
+listed (note q13). Issue report, tracked by the workflow screen's spec:
+[pkp-e2e#576](https://github.com/jardakotesovec/pkp-e2e/issues/576) ([docs/issues/U24-OMP3-press-identifiers-page-stays-after-plugin-off.md](../issues/U24-OMP3-press-identifiers-page-stays-after-plugin-off.md)).
 
 ## Reference — entry points & surfaces
 

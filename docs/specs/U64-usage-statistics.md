@@ -326,6 +326,12 @@ bottom, then "Save": <sup>q</sup>
    still shows the previous range, and the table reads "No articles were
    found with usage statistics matching these parameters." ⚠ [A1](#a1).
    <sup>f</sup> <sup>td1</sup>
+   - 9a. When the server refuses the dates of a request for the figures
+     of "Articles", its answer names the refusal by a code alone, such
+     as "api.stats.400.wrongDateFormat", with no sentence. The "Error"
+     window above shows that code, and the same request sent without
+     the page (address and account in the footnote) gets it too ⚠
+     [A14](#a14). <sup>f</sup>
 10. **The chart.** The chart always shows the whole range, one point per
     day or per month, flat at zero where there were no visits. On
     "Articles" "Abstracts" (on arrival) shows abstract views and "Files"
@@ -1206,6 +1212,8 @@ Left out of the scenarios above, by reason:
   - A12 (Escape on the date range list; Fields)
   - A13 (the "Custom Range" boxes after a preset, and "Apply" on them;
     Fields)
+  - A14 (a refused request for the "Articles" figures answering with a
+    code alone; Rule 9a)
   - OJS1 (the Release 4 page beside "Counter R5"; Rule 25; scenario 12
     marks it)
   - OJS2 (one HTML galley view writing three visits; Rule 3a)
@@ -1252,6 +1260,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A14](#a14) | A refused request for the "Articles" figures answers with a code, not a sentence | 🐞 | minor | — |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | "COUNTER Reports": the downloaded XML file names its report by a cut-off code path instead of "JR1" or "AR1" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1488,6 +1497,17 @@ Question: should the boxes show the range the page shows? Lean: yes;
 fill them with the page's range (empty for "All dates"), so that "Apply"
 never changes the range unasked.
 Basis: probe, 2026-09-29. <sup>f-a13</sup>
+
+<a id="a14"></a>
+**A14 — A refused request for the "Articles" figures answers with a code, not a sentence** · 🐞 · minor.
+When the server refuses the dates of a request for the figures of
+Statistics › "Articles", its answer carries only a code, such as
+"api.stats.400.wrongDateFormat", where a sentence saying what is wrong
+with the dates is expected. The "Error" window of [A1](#a1) shows that
+code on screen; a program sending the request without the page
+(address and account in the footnote) gets the same code, with no
+sentence to show its user.
+Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 ### OJS
 
@@ -1790,7 +1810,16 @@ title opens `article/view/{id}` (OMP `catalog/book/{id}`, OPS
 `preprint/view/{id}`) in a new tab; "Total" pressed three times gave
 ascending, descending, ascending; no other heading sorts. "All dates" on
 a journal first published 2024-03-05 started the chart at "March 2024".
-Search: td15.
+Search: td15. Live-probed 2026-10-02 (Rule 9a; A14), OJS, OMP and OPS on
+`main` and `stable-3_5_0`, signed in as `admin`, "All dates" on
+"Articles" of a context with nothing published (created for it under
+Administration › "Hosted Journals"): the list request `GET
+/index.php/{path}/api/v1/stats/publications?count=30&offset=0&orderBy=total&orderDirection=DESC`
+and both monthly chart requests `GET
+/index.php/{path}/api/v1/stats/publications/timeline?timelineInterval=month`
+(the same route in the three apps) answered 400 with the body `{"error":"api.stats.400.wrongDateFormat"}`
+alone, no `errorMessage`; on OJS with an article's publication date set
+to 1999-06-01, `{"error":"api.stats.400.earlyDateRange"}` the same way.
 
 <a id="fn-g"></a>
 **g** — `PKPStatsContextController::get()` (total from
@@ -2501,6 +2530,17 @@ the Journal Manager and the Section Editor on "Articles", "Journal" and
 2026-09-28 while the page read "2026-06-30 — 2026-09-28", and "Apply"
 untouched set "2026-08-29 — 2026-09-28"; after "All dates" the boxes
 read the same arrival dates.
+
+<a id="fn-f-a14"></a>
+**f-a14** — fn-f (the untranslated key in `error`, the requests and
+the account they were made as; live-probed
+2026-10-02, three apps, `main` and `stable-3_5_0`). By code, not driven:
+on 3.4 and 3.3 `withJsonError()` sent the translated `errorMessage`
+beside the key ("The date must be in the format YYYY-MM-DD.", "The start
+date can not be earlier than 2001-01-01."), which `ajaxError.js` shows
+before `error`; the port to Laravel routing (pkp/pkp-lib#9176) dropped
+it, so this is a regression, not a choice. Named in A1's issue report
+(f-a1) and left out of its fix.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-p. Live-probed 2026-09-27: td11; the side menu offers

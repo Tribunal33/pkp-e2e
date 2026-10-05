@@ -110,9 +110,10 @@ itself enforces before submission is Rule 13.
    [OMP1](#omp1). <sup>d</sup>
 4a. **"Submit As".** The list offers the user's roles with submission
     access, and the first one listed is selected when the form opens.
-    - A journal and a preprint server list "Author" first. A press lists
-      the roles in no fixed order, so its preselection can change from
-      one visit to the next ⚠ [OMP3](#omp3).
+    - No app fixes the order of the list, so which role is preselected
+      depends on the install. On the seeded journal, press and server the
+      editorial role is listed first and selected; on a scratch journal
+      or preprint server "Author" was listed first ⚠ [A21](#a21).
     - On a journal or press the stock Journal Manager role has no
       submission access, so a Journal Manager who is also an Author gets
       no choice. A preprint server's manager role has it: a Preprint
@@ -157,9 +158,10 @@ itself enforces before submission is Rule 13.
      manages the preprint's galleys, the files readers will get, through
      its own "Files" panel: "Add File" first asks for the galley's label,
      then the upload asks for the file's Preprint Component before
-     accepting the file [OPS1](#ops1). On a draft that already listed a
-     galley when the wizard was opened, a further galley never gets its
-     file ⚠ [OPS8](#ops8).
+     accepting the file [OPS1](#ops1). On a draft that already had a
+     galley when the wizard was opened, a further galley's upload window
+     stays open after uploading, and "Files" lists the new label
+     without a file until a reload ⚠ [OPS8](#ops8).
    - *Details*: title and abstract. The title arrives pre-filled from the
      start form. Keywords, a plain language summary, a references box,
      data citations, a data availability statement, and a Funders list
@@ -195,14 +197,19 @@ itself enforces before submission is Rule 13.
    "#…" part of the address on an open wizard, though, opens any step, even
    ahead of progress. The submission check (Rule 12) runs only when Review
    opens this way. Pasting a wizard address into a new tab, or reloading,
-   always ignores the "#…" part and reopens as Rule 6 describes.
-   On narrow screens the rail collapses to "{n}/{total} steps" with a
-   "Show all steps" control. But a wizard *loaded* at phone width (375
-   pixels, say) on a journal or press keeps the full uncollapsed rail and
-   the page scrolls sideways. A merely narrow fresh load (600 pixels, say)
-   collapses correctly, and so does resizing an already open window down to
-   phone width. A preprint server collapses correctly even on a phone-width
-   load ⚠ [A10](#a10). <sup>h</sup>
+   always ignores the "#…" part and reopens as Rule 6 describes. <sup>h</sup>
+8a. **A narrow window.** In a window too narrow for the full step rail
+    (narrower than about 1070 pixels), the rail should collapse to
+    "{n}/{total} steps" with a "Show all steps" control. Narrowing a
+    window with the wizard already open does collapse it. A wizard opened
+    or reloaded in a narrow window, though, often keeps the full rail
+    running past the right edge, and the page scrolls sideways
+    ⚠ [A10](#a10):
+    - On a journal or press, every load at phone width (375 to 540
+      pixels) keeps the full rail, and so do some loads at 700 to 900
+      pixels. A load at 600 pixels collapses.
+    - A preprint server collapses on every load, at every width.
+    <sup>h</sup>
 9. <a id="autosave"></a>**Autosave.** The wizard saves the author's
    changes by itself, never keystroke by keystroke:
    - *Moving to another step*, by "Continue" or from the step rail, saves
@@ -1001,7 +1008,7 @@ Left out of the scenarios above, by reason:
   - A2 (the resume-link email going to a Journal Manager who pressed "Save for Later")
   - A6 (submitting the same draft twice)
   - A9 (a Section Editor or Site Administrator pressing "Begin Submission")
-  - A10 (the step rail at phone width)
+  - A10 (the step rail on a wizard opened or reloaded in a narrow window)
   - A12 (the Emails screen showing no acknowledgement option after off is saved)
   - A14 (a Section Editor who is also an Author choosing "Section editor" in "Submit As")
   - A15 (leaving the wizard within a minute of the last save)
@@ -1010,8 +1017,8 @@ Left out of the scenarios above, by reason:
   - A18 (a change typed more than a minute after the last save, saved cut after its first letters)
   - A19 (the wizard hung on "Saving" after any save the server refuses, and the reload's "Unsaved Changes" after it)
   - A20 (a required plain language summary refusing saves of other fields)
+  - A21 (the order of the "Submit As" roles, and so the role preselected)
   - OMP2 (a second copy address on a press)
-  - OMP3 (the order of the "Submit As" roles on a press)
   - OPS4 (a manager reading another author's completion screen)
   - OPS8 (a further galley on a draft that already listed one when the wizard was opened)
   - OPS9 (the Review step's "Files" panel after a reload)
@@ -1063,8 +1070,8 @@ are the source; badges, Impact and Basis:
 | [A18](#a18) | Submission wizard saves a field cut off mid-typing when the author starts typing after a quiet minute | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
+| [A21](#a21) | "Submit As" lists its roles in an order no app fixes, so the preselected role depends on the install | 🐞 | minor | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | 🐞 | minor | — |
 | [OPS3](#ops3) | A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS7](#ops7) | A signed-in user who may not submit to a preprint server reads a raw translation key instead of the reason | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1083,6 +1090,7 @@ are the source; badges, Impact and Basis:
 | [A11](#a11) | An Author-role user with no profile affiliation cannot start a submission at all; "Begin Submission" 500s (regression, pkp-lib `9e2fbac214`) | ✅ | retired | maintainer reproduced independently, 2026-09-01 (admin-created, profile-cleared and multi-role users all crash) |
 | [A13](#a13) | Changing the submission language inside the wizard leaves every language-bound value, the copied contributor affiliation and given name included, to be filled for the new language before submitting | ✅ | — | @jarda.kotesovec 2026-09-12 · intended |
 | [OMP1](#omp1) | A press submits by work type (Monograph / Edited Volume), with no section at intake and an optional Series later | ✅ | — | — |
+| [OMP3](#omp3) | A press lists the "Submit As" roles in a changing order, so the preselected role changes between visits | ✅ | retired | issues (claude), 2026-10-01 — not seen again; the order is A21 on every app |
 | [OPS1](#ops1) | A preprint server's wizard is galley-based and single-stage: license & relation questions, moderation-aware messaging, can-post variants | ✅ | — | — |
 
 ### All apps
@@ -1393,6 +1401,21 @@ saves after submission
 ([→ Publication metadata A1](U40-publication-metadata.md#a1)).
 Basis: probe, 2026-10-01. <sup>[fn-a20](#fn-a20)</sup>
 
+<a id="a21"></a>
+**A21 — "Submit As" lists its roles in an order no app fixes, so the preselected role depends on the install** · 🐞 · minor.
+"Submit As" selects whichever role it lists first, and no app decides
+that order: the list comes out as the install's database returns it.
+On the seeded journal, press and server, a user who also holds Author
+sees their editorial role listed first and selected: "Journal editor",
+"Press editor" or "Preprint Server manager" on every visit, and
+"Section editor" ("Series editor" on a press) for a Section Editor. On
+a scratch journal or preprint server the same kinds of user saw
+"Author" first. On a scratch press, one run saw
+the order change between two visits of the same user and a later run
+did not. An author who accepts the preselection may submit under an
+editorial role they did not mean, or be refused [A14](#a14).
+Basis: probe, 2026-10-01. <sup>[fn-a21](#fn-a21)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1419,19 +1442,6 @@ journal and a preprint server accept the list.
 So a press can copy the submission acknowledgement to only one extra
 address, though its own screen says otherwise.
 Basis: probe, 2026-10-01. <sup>[fn-omp2](#fn-omp2)</sup>
-
-<a id="omp3"></a>
-**OMP3 — "Submit As" lists its roles in a changing order** · 🐞 · minor.
-"Submit As" selects whichever role it lists first. A journal and a
-preprint server always list "Author" first. A press lists the roles in
-no fixed order. In one run a user holding Series Editor and Author saw
-"Author" first on one visit and "Series editor" first on the next, and a
-user holding Press Editor and Author saw "Press editor" first; in the
-other run both saw "Author" first. So the preselected role changes from visit to
-visit, and can be "Series editor", which "Begin Submission" refuses
-[A14](#a14). An author who accepts the preselection may be refused, or
-submit under a role they did not mean.
-Basis: probe. <sup>[fn-omp3](#fn-omp3)</sup>
 
 ### OPS
 
@@ -1574,6 +1584,9 @@ Basis: probe. <sup>[fn-ops10](#fn-ops10)</sup>
 
 <a id="a11"></a>
 **A11 — No profile affiliation, no submission: the wizard's start 500s** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13265), 2026-09-03. <sup>[fn-a11](#fn-a11)</sup>
+
+<a id="omp3"></a>
+**OMP3 — "Submit As" lists its roles in a changing order** · ✅ · retired. Not seen again on 2026-10-01: a press kept one order across visits; the order no app fixes is [A21](#a21). <sup>[fn-omp3](#fn-omp3)</sup>
 
 ---
 
@@ -1725,7 +1738,7 @@ your contribution to this submission." beside "Section editor" or
 "Series editor", and added "Select an editorial role if you want to edit
 and publish this submission yourself." beside "Journal editor", "Press
 editor" and "Preprint Server manager". Refusal: note fn-a14; order:
-note fn-omp3.
+note fn-a21.
 
 <a id="fn-e"></a>
 **e** — Creation. `StartSubmissionForm.vue` strips `title` from the
@@ -1830,15 +1843,27 @@ steps then show as completed, and validation runs only when the opened
 step is Review — while every full page load rewrites the typed hash to the
 resume step, `#review` included (`created()` opens the resume step and the
 step watcher rewrites `location.hash` before `openUrlHash()` reads it).
-Tab title: `submission.wizard.titleWithStep`. Phone-width collapse (A10)
-live-probed 2026-08-26, fresh browser contexts sized before load: OJS
-collapses correctly at 600–1024px (`.pkpSteps--collapsed`, "1/5 steps" +
-"Show all steps"), but a fresh load at 480px or 375px renders no collapse
-and the document scrolls sideways (scrollWidth 1056 against a 375px
-viewport, step buttons laid out past the right edge); OMP fails the same
-way at 375px; OPS collapses correctly at 375px (scrollWidth 558). The same
-OJS page resized 1440→375 *without* reload collapses correctly; reloading
-at that width breaks it again — reproduced in both orders, twice.
+Tab title: `submission.wizard.titleWithStep`. Narrow-window collapse
+(Rule 8a, A10) live-probed 2026-08-26, fresh browser contexts sized
+before load: a fresh load at 480px or 375px renders no collapse and the
+document scrolls sideways (scrollWidth 1056 against a 375px viewport,
+step buttons laid out past the right edge) on OJS and, at 375px, on OMP;
+OPS collapses at 375px (scrollWidth 558); the OJS loads tried at 600 to
+1024px that day collapsed (`.pkpSteps--collapsed`, "1/5 steps" + "Show
+all steps"). The same OJS page resized 1440→375 *without* reload
+collapses correctly; reloading at that width breaks it again —
+reproduced in both orders, twice. Width checks 2026-10-01 (the issue
+report's `diag.js`, reloads at 375 to 1200px on `main`, PKP's default
+dataset): the wrapper gets the window's width less 368px and the steps
+need 702px (682px on OPS), so the rail fits from about 1070px (1050px
+on OPS); OJS and OMP stayed uncollapsed on every load from 375 to 540px
+(three loads each at 375) and at 700 and 900px, OJS at 800px on one
+load of two, and both collapsed at 600px on every load; OPS collapsed
+at every width. `Steps.vue` runs its first width check in `mounted()`,
+before the child steps render, so it measures an empty row; only a later
+size change (OPS's "Upload Files" filling in after "Loading") makes it
+check again. On `stable-3_5_0` the same day OJS stayed uncollapsed at
+1024 and 1050px on every load and OPS at 1024px on three loads of four.
 A10 issue report: [pkp-e2e#316](https://github.com/jardakotesovec/pkp-e2e/issues/316) ([docs/issues/U21-A10-phone-wizard-step-rail-not-collapsed.md](../issues/U21-A10-phone-wizard-step-rail-not-collapsed.md)).
 
 <a id="fn-i"></a>
@@ -2505,6 +2530,23 @@ same. Controls, the summary at ask: the same drives answered 200 and
 the text read back after a reload.
 Issue report: [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323) ([docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md)).
 
+<a id="fn-a21"></a>
+**fn-a21** — A21. `PKPSubmissionHandler::getSubmitUserGroups()` (and
+OPS's `SubmissionHandler` override, note fn-ops1) reads the user's
+groups with no `ORDER BY`, and the start form's radio lists them as
+read and checks the first (note fn-d), so the order is the database's.
+Live-probed 2026-10-01 on OJS, OMP and OPS `main`, PostgreSQL, PKP's
+default dataset (pkp/datasets 27f1204): the Site Administrator gave
+`dbarnes` the Author role; three visits per app listed the editorial
+role first and checked, every visit ("Journal editor", "Press editor",
+"Preprint Server manager"). The A14 issue walk the same day on that
+dataset listed "Section editor" ("Series editor" on OMP) first and
+checked for `dbuskins` given Author. A scratch press re-driving note
+fn-omp3 (a Series editor + Author and a Press editor + Author, four
+visits each) kept one order on every visit. Scratch contexts on
+2026-09-28 listed "Author" first on OJS (six visits) and OPS (four):
+note fn-omp3.
+
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds
 `workType`; `SubmissionHandler::getSubmittingTo()` returns the work-type
@@ -2543,6 +2585,8 @@ the Series editor + Author user (the first visit had "Author" first), and
 "Press editor" first and checked for the Press editor + Author user; run
 2 listed "Author" first for both. OJS (six visits) and OPS (four) listed
 "Author" first every time.
+Not seen again 2026-10-01, when the order held across visits on every
+app: note fn-a21.
 
 <a id="fn-ops1"></a>
 **fn-ops1** — OPS divergence points: `SubmissionHandler` (OPS)
@@ -2596,8 +2640,14 @@ behind "Upload a File Ready for Publication" and raised the page error
 accepted, and when the file finished uploading "this.galleys.map is not
 a function" followed; the "2. Review Details" step stayed blank and its
 "Continue" could not be pressed. The "Files" list then held the new label with no
-file, also after a reload. Controls: a draft's first galley, and a
-second added in the same visit, completed with no page error.
+file. Controls: a draft's first galley, and a second added in the same
+visit, completed with no page error. Walked again 2026-10-01 (OPS `main`
+c8af945bb7, PKP's default dataset, the issue report's `walk.js`): after
+cancelling the stuck windows "Files" showed "HTML" as plain text with no
+file link; after a reload "HTML" linked to "preprint.html", so the
+galley, its label and its file were all stored, and "Review" still read
+"No files have been uploaded for this submission.". The "also after a
+reload" seen on 2026-09-28 did not hold.
 Issue report: [pkp-e2e#333](https://github.com/jardakotesovec/pkp-e2e/issues/333) ([docs/issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md](../issues/U21-OPS8-OPS9-preprint-reloaded-draft-galley-list.md)).
 
 <a id="fn-ops9"></a>

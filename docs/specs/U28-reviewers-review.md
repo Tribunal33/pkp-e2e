@@ -86,7 +86,7 @@ give no access to any screen in this spec. <sup>l</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "For author and editor" | no | Rich text under "Review", shown when the assignment carries no review form. Nothing requires it: "Submit Review" with both boxes empty and no file under "Reviewer Files" ({OJS}: with a recommendation chosen) submits the review ⚠ [A7](#a7) |
+| "For author and editor" | no | Rich text under "Review", shown when the assignment carries no review form. Nothing requires it: "Submit Review" with both boxes empty and no file under "Reviewer Files" ({OJS}: with a recommendation chosen) submits the review, as intended (Rule 13) |
 | "For editor" {OJS} / "For editor only" {OMP} | no | Rich text, same condition. Never required |
 | The review form's questions | per question, marked "*" | Shown instead of the two text boxes when the assignment carries a review form: the form's title and description, then each question as the form defines it (a text box, a checkbox group, a radio group or a drop-down). A required question left unanswered stops "Submit Review" only after its confirmation: the step stays, nothing is submitted, and the box "Please fill in required fields." / "Some required fields are not filled in. Please complete them before submitting your review." appears under the buttons ({OMP}: the first sentence prints as a raw key ⚠ [OMP3](#omp3)). On a form with a required "Single line text box" question (an item type), "This field is required." also appears under each unanswered required question, a radio group included; on a form whose only required question is a radio group, a press marks no question and a journal shows none in view ⚠ [A16](#a16). The page stays scrolled at the buttons, so a mark on a question higher up is out of sight until the reviewer scrolls up. "Save for Later" saves whether or not a required question is answered and shows "Your changes have been saved.". With that question unanswered it also shows the box and the marks, as a refused submit does; {OJS} so does any review form saved while "Recommendation" reads "Choose One", with the mark under the list ⚠ [A14](#a14). A reload keeps what was saved and clears the box and the marks |
 | "Reviewer Files" (the list under "Upload") | no | The reviewer's own attachments: "Upload File" opens the shared upload wizard (*Submission files*; here three steps, "1. Upload File", "2. Review Details" and "3. Confirm", with no file-type question), and each row offers "Edit" and "Delete". Once the review is submitted, "Upload File" and "Delete" are gone and "Edit" stays |
@@ -240,13 +240,15 @@ give no access to any screen in this spec. <sup>l</sup>
     opens them in a dialog of that name; the review itself; the "Upload"
     section ("Upload files you would like the editor and/or author to
     consult, including revised versions of the original review file(s).")
-    with the "Reviewer Files" list, "No Files" while empty; the "Review
+    with the "Reviewer Files" list, "No Files" while empty (on an install
+    running in strict mode the list stays on "Loading" and offers no
+    "Upload File" ⚠ [A17](#a17), Settings); the "Review
     Tasks & Discussions" panel with its "Add" button (Actors; a second
     copy sits on step 4, Rule 13); {OJS} the
     "Recommendation" list under "Select a recommendation and submit the
     review to complete the process. You must enter a review or upload a
-    file before selecting a recommendation." (a sentence nothing enforces,
-    Rule 13); and, last, the link "Go Back" (to step 2) and the buttons
+    file before selecting a recommendation.", although an empty review
+    is allowed (Rule 13) ⚠ [A7](#a7); and, last, the link "Go Back" (to step 2) and the buttons
     "Save for Later" and "Submit Review". The review is either the two
     free-text boxes under "Review" ("Enter (or paste) your review of this
     submission into the form below."): "For author and editor" ("These
@@ -273,8 +275,10 @@ give no access to any screen in this spec. <sup>l</sup>
     "Cancel" leaves step 3 as it was. Only after "OK" are the checks of
     Fields run: a review form's unanswered required question, and {OJS} a
     "Recommendation" left at "Choose One", keep the step with their
-    messages; nothing else stops the submit, so a review with nothing typed
-    and no file goes through ⚠ [A7](#a7). A submit that passes moves to
+    messages. Nothing else stops the submit: a review with nothing typed
+    and no file is allowed and goes through on a journal and a press
+    alike, whatever the journal's step-3 sentence says ([A7](#a7)). A
+    submit that passes moves to
     step 4. Step 4 ("4. Completion") reads "Review Submitted" and "Thank
     you for completing the review of this submission. Your review has been
     submitted successfully. We appreciate your contribution to the quality
@@ -417,7 +421,7 @@ give no access to any screen in this spec. <sup>l</sup>
 
 ## Settings that modify behavior
 
-All of these are configured on other features' screens; they are listed for
+All of these but the last are configured on other features' screens; they are listed for
 their effect on the reviewer's screens. Unless said otherwise the screen is
 Settings › Workflow › Review (its sub-tab "Setup" for the first two, "Reviewer
 Guidance" for the guidelines and the policy), owned by *Review setup & review
@@ -458,6 +462,10 @@ forms*. <sup>o</sup>
 - **Automatic reminders**: sent to the reviewer by *reviewer assignment &
   management*, clocked in *Review setup & review forms*; on this side they
   are only more emails.
+- **The install's strict mode** (the configuration file's "strict"
+  option, set in that file only; no screen shows or changes it). Install
+  default: Off. On, step 3's "Reviewer Files" list never loads and offers
+  no "Upload File" (Rule 12) [A17](#a17).
 
 ## Cross-feature interactions
 
@@ -673,7 +681,9 @@ Accounts, passwords and the tooling recipe are in the footnote. <sup>s</sup>
      "Recommendation"; choose "Decline Submission", then press "Submit
      Review" and "OK" again. {OMP} nothing intervenes. Either
      way "4. Completion" opens and the Section Editor's mailbox holds
-     "Review complete: …" for a review with nothing in it ⚠ [A7](#a7).
+     "Review complete: …" for a review with nothing in it. {OJS} The
+     sentence under "Recommendation" says a review or file must be
+     entered all the same ⚠ [A7](#a7).
    - **"Upload File"**: on the second request's step 3 press "Upload File"
      under "Upload": the "Upload File" wizard opens with the tabs
      "1. Upload File", "2. Review Details" and "3. Confirm"; attach a file
@@ -985,7 +995,7 @@ Left out of the scenarios above, by reason:
   - a reviewer who saves a text, empties the box, saves again and reopens the review finding the box empty, and the editor reading no text ([A4](#a4); Rule 13): the guard the issue report proposes, once fixed
   - a reviewer's search for a word of one title listing that row alone under "All assignments (1)", and a search for no title's word reading "No Items" ([A1](#a1); Rules 3–4): the guard the issue report proposes, once fixed
   - the accepted row of the reviewer's list reading "Please complete this review by" with the due date in the journal's short date format and no clock time ([A5](#a5); Rule 3): the guard the issue report proposes, once fixed
-  - {OJS} step 3 of a review without a review form reading that a review or file "should" be entered, and a review with nothing typed and no file submitted once a "Recommendation" is chosen ([A7](#a7); Fields, Rule 13): the guard the issue report proposes, once fixed
+  - {OJS} step 3 of a review without a review form reading "You should enter a review or upload a file before selecting a recommendation." under "Recommendation" ([A7](#a7); Rule 12): the guard the issue report proposes, once fixed
   - a file link opened by a reviewer with no assignment on the submission landing on the access-denied page, and opened signed out landing on the Login page, where signing in downloads the file ([A6](#a6); Rule 15): the guard the issue report proposes, once fixed
   - a reviewer holding requests on two submissions opening each request email's one-click link onto its own review, while a sent reminder still replaces the same review's link ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
   - the request email's one-click link still opening the review after "Send Reminder" was pressed and the "Review Reminder" window closed with "Cancel" ([A9](#a9); Rule 16): the guard the issue report proposes, once fixed
@@ -1014,7 +1024,7 @@ Left out of the scenarios above, by reason:
   - A4 (a saved text emptied and saved again keeping its old content on record; Rule 13)
   - A5 (the accepted row's due date printed with a midnight clock time; Rule 3)
   - A6 (the file refusal as a bare line of text, not the access-denied page; Rule 15)
-  - A7 (a review with nothing typed and no file going through; Fields, Rule 13)
+  - A7 (the journal's step 3 saying "You must enter a review or upload a file before selecting a recommendation.", a check the step does not make; Rule 12)
   - A9 (a reminder or another submission's request killing the earlier one-click link with a bare "404 Not Found"; Rule 16)
   - A10 (a one-click link opened while signed in as somebody else showing a blank page; Actors row 9, Rule 16)
   - A11 (the left-behind assignment's wizard still taking and submitting a review; Rule 17)
@@ -1023,6 +1033,7 @@ Left out of the scenarios above, by reason:
   - A14 ("Save for Later" on a review form showing the refusal's messages beside "Your changes have been saved."; Fields step 3)
   - A15 (unsaved free-form review text dropped without a warning on leaving step 3; Rule 18)
   - A16 (a refused review-form submit marking the unanswered questions on one form and none on another; Fields step 3)
+  - A17 (step 3's "Reviewer Files" list on "Loading" with no "Upload File" on an install running in strict mode; Rule 12, Settings)
   - OMP2 (the press's review-complete email saying "recommends None"; Side effects)
   - OMP3 (the press's review-form refusal opening with a raw key; Fields)
   - OPS1 (a home-made reviewer role landing on a page headed "undefined (0)" that lists nothing under an "Error" window; Purpose, scenario 17)
@@ -1058,6 +1069,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A reviewer's own review is listed under "Previous Reviews" once the submission has a later round | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a changed "Recommendation" or review-form answer is guarded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A17](#a17) | With strict mode on, step 3's "Reviewer Files" list stays on "Loading" with no "Upload File" | 🐞 | low | — |
 | [OMP2](#omp2) | {OMP} On a press, the email telling editors a review is in says the reviewer "recommends None" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | {OPS} On a preprint server, a user given a "Reviewer"-level role lands after every sign-in on a page headed "undefined (0)" under an "Error" window | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
@@ -1356,6 +1368,18 @@ each required group, so the unmarked form looks like a defect whose
 trigger (the form's make-up is the first suspect) is not yet known.
 Basis: probe (2026-09-04 and 2026-09-28, both apps); test run
 (2026-09-26, the press). <sup>[f-a16](#fn-a16)</sup>
+
+<a id="a17"></a>
+**A17 — With strict mode on, step 3's "Reviewer Files" list stays on "Loading" with no "Upload File"** · 🐞 · low.
+On an install whose configuration file has the "strict" option On, a
+reviewer who has accepted a request finds step 3's "Reviewer Files"
+list reading "Loading" for good, with no "Upload File": they cannot
+attach a file to the review. With strict mode Off the list loads and
+offers "Upload File". The same setting also breaks the Submission
+Library's "Delete" and the dashboard search; the shared cause and its
+fix are recorded with
+[Submission & Publisher Libraries A5](U39-submission-and-publisher-libraries.md#a5).
+Basis: probe, 2026-10-03. <sup>[f-a17](#fn-a17)</sup>
 
 ### OMP
 
@@ -2389,6 +2413,20 @@ Submitted"; OJS stopped at "Choose One" ("This field is required." under
 the list) and reached step 4 once "Decline Submission" was chosen; a
 text-only review and a file-only review reached step 4 on both, and the
 "Review complete" email arrived each time.
+Walked 2026-10-02 on OJS and OMP, `main` and 3.5 (Fields, Rules 12–13,
+scenario 7; kept walk
+`shared/playwright/checks/issues/empty-review-can-be-submitted/walk.js`):
+the journal's step 3 read "Select a recommendation and submit the review
+to complete the process. You must enter a review or upload a file before
+selecting a recommendation."; with both boxes empty and no file, OJS
+stopped once at "Choose One" and submitted after "Accept Submission"
+was chosen, OMP submitted at the first "OK"; the form posted
+`comments=` and `commentsPrivate=` empty and answered `"status": true`,
+and the editor's "Review Details" showed "-" under both headings and
+no reviewer file. `pkp/pkp-lib#11418` (open, milestone 3.6) keeps an
+empty review allowed and asks for "must" to become "should", so the
+empty submit is stated as intended and only the journal's sentence is
+the finding; OMP's locale has no such sentence.
 Issue report: [docs/issues/U28-A7-empty-review-can-be-submitted.md](../issues/U28-A7-empty-review-can-be-submitted.md), filed as [pkp-e2e#583](https://github.com/jardakotesovec/pkp-e2e/issues/583).
 
 <a id="fn-a8"></a>
@@ -2548,6 +2586,26 @@ checked below the visible area. Settling observation: the same refusal
 on OJS with scenario 8's form, read over the whole page, and on both
 apps with a form of one required radio group plus one required one-line
 answer versus one without it.
+
+<a id="fn-a17"></a>
+**f-a17** — `lib/pkp/templates/reviewer/review/step3.tpl` builds the
+"Reviewer Files" list's `fetchGrid` address with
+`assocType=$smarty.const.ASSOC_TYPE_REVIEW_ASSIGNMENT`; strict mode does
+not register the global `ASSOC_TYPE_*` aliases, Smarty renders the
+undefined constant as null, and the list is requested with an empty
+`assocType`. On `main` a configuration file with no `strict` line also
+runs in strict mode. Live-probed 2026-10-03 on OJS and OMP `main` with
+`strict = On` in the configuration file (Rule 12, Settings): `jjanssen`
+on PKP's default test dataset, step 3 after accepting (OJS submission
+12, OMP submission 17), the list stayed on "Loading" with no "Upload
+File"; its request answered 200, what it returned was not recorded;
+with the report's one-line fix (`PKP\core\PKPApplication::ASSOC_TYPE_REVIEW_ASSIGNMENT`)
+the list loaded with "Upload File". The test installs run with
+`strict = Off` (the reset writes it), where the list loads with "Upload
+File" (scenario 7). 3.5 and 3.4 read in the code only.
+Kept walk: `shared/playwright/checks/issues/library-delete-strict-mode-error/walk.js`
+(`nb` runs the reviewer's step 3).
+Issue report: [docs/issues/U39-A5-library-delete-strict-mode-error.md](../issues/U39-A5-library-delete-strict-mode-error.md), filed as [pkp-e2e#698](https://github.com/jardakotesovec/pkp-e2e/issues/698).
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `classes/core/Application.php::hasCustomizableReviewerRecommendation()`

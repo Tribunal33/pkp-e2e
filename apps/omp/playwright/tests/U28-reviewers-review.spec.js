@@ -766,8 +766,8 @@ test.describe("Reviewer's review (U28)", () => {
         const control = await seedExternal(ompApi, controlTag, [{username: PAUL, status: 'accepted'}]);
 
         // Nothing typed, no file: the confirmation appears at once with no
-        // field marked, and "OK" submits (register finding A7's behavior,
-        // as scenario 7 prescribes).
+        // field marked, and "OK" submits (Rule 13, as scenario 7
+        // prescribes).
         const page = await (await asUser(JULIA)).newPage();
         const {wizard} = reviewerScreens(page, PK);
         await walkToStep3(wizard, seeded.submissionId);

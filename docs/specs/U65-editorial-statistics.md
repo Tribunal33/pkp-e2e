@@ -447,13 +447,19 @@ the links' addresses carry the English language code "en" ⚠
     <sup>td12</sup>
 23. **"Monograph Report"** {OMP}. One line per book of the press, drafts
     included, with the "Articles Report" rules for authors, editors,
-    decisions and "Status" (Rule 20; "Status" uses the press's stages).
-    Its author and decision columns are counted over every press of the
-    installation, not this one alone ⚠ [OMP3](#omp3); its editor
-    columns follow this press's books. A reverted Internal Review
-    decline is named "Decline Submission" ⚠ [OMP4](#omp4). "Categories"
+    decisions and "Status" (Rules 20a–20c, 20e; "Status" uses the
+    press's stages), except for the decision names of 23b. "Categories"
     and "Identifiers" put one entry per line inside their cell.
     <sup>o</sup> <sup>td13</sup>
+    - 23a. Its author and decision columns are counted over every press
+      of the installation, not this one alone ⚠ [OMP3](#omp3); its
+      editor columns follow this press's books.
+    - 23b. The press's file names "Accept and Skip Review", "Revert
+      Decline", "New Review Round" and the moves back a stage, which a
+      journal's "Articles Report" leaves empty [OJS3](#ojs3). A reverted Internal Review
+      decline is named "Decline Submission" ⚠ [OMP4](#omp4). The "Move
+      to Done" that publishing a book records has its date under "Date
+      decided" and an empty "Editor Decision" ⚠ [OMP6](#omp6).
 
 **The monthly statistics email**
 
@@ -1001,6 +1007,7 @@ Left out of the scenarios above, by reason:
   - "Articles Report" after "Accept and Skip Review", "Revert Decline", "New Review Round", a move back a stage and a publication: every "Editor Decision" cell named (the guard for OJS3, once fixed; Rule 20b)
   - "Monograph Report" of a press whose books have fewer authors and decisions than another press's: no author or decision column beyond its own books' (the guard for OMP3, once fixed; Rule 23)
   - "Monograph Report" after an Internal Review "Decline Submission" and its "Revert Decline": the revert named "Revert Decline" (the guard for OMP4, once fixed; Rule 23)
+  - "Monograph Report" after a book is published: its "Move to Done" named (the guard for OMP6, once fixed; Rule 23b)
 - **Nothing new to test**:
   - a published item whose newer version moves it to another section,
     counted under its old section in "Filters" and "Articles Report"
@@ -1050,9 +1057,9 @@ Left out of the scenarios above, by reason:
   - OMP1 (an Internal Review decline; Rule 13)
   - OMP2 ("your journal" in the press's icon text; Fields; scenario 6
     marks it)
-  - OMP3 and OMP4 ("Monograph Report" columns sized by other presses,
-    and the reverted Internal Review decline; Rule 23; scenario 7 marks
-    OMP3)
+  - OMP3, OMP4 and OMP6 ("Monograph Report" columns sized by other
+    presses, the reverted Internal Review decline, and publishing's
+    unnamed "Move to Done"; Rule 23; scenario 7 marks OMP3)
   - OPS4 (the preprint server's blank "Accepted submissions this
     month:"; Fields; scenario 3 marks it)
 - **Owned by another feature**:
@@ -1083,6 +1090,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | "Monograph Report" of one press carries empty author and decision columns sized by another press's books | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP4](#omp4) | "Monograph Report" names a reverted Internal Review decline "Decline Submission" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A French press's monthly attachment names External Review by a raw code | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [OMP6](#omp6) | "Monograph Report" leaves "Editor Decision" empty for the "Move to Done" that publishing records | 🐞 | medium | — |
 | [OPS4](#ops4) | A preprint server's monthly statistics email reads "Accepted submissions this month:" with no number | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | Whether drafts started within the range count in "Submissions In Progress" is unseen; drafts started today never do | ❓ | minor | — |
 | [A4](#a4) | The closed "Filters" panel is still read out by a screen reader | ❓ | minor | — |
@@ -1386,8 +1394,8 @@ New on `main`: publishing an article now records a "Move to Done"
 decision, and unpublishing it a "Return to Workflow", and neither has a
 name in the file either. So every published article's line gains an
 empty cell, and the upgrade to this version adds one to every article
-already published. A press's "Monograph Report" leaves these new
-decisions unnamed in the same way.
+already published. A press's "Monograph Report" leaves its "Move to
+Done" unnamed in the same way [OMP6](#omp6).
 
 Anyone counting decisions from the file (how many submissions were
 accepted, how many went to a second round) gets wrong numbers. Expected:
@@ -1497,6 +1505,19 @@ and its Roles list ([Monograph landing page](U69-monograph-landing-page.md)'s
 [A15](U69-monograph-landing-page.md#a15)). Expected: the stage's French
 name.
 Basis: probe, 2026-10-03. <sup>f-omp5</sup>
+
+<a id="omp6"></a>
+**OMP6 — "Monograph Report" leaves "Editor Decision" empty for the "Move to Done" that publishing records** · 🐞 · medium.
+Publishing a book records a "Move to Done" decision. In the press's
+"Monograph Report" (Statistics › "Reports"), that decision's "Date
+decided" holds its date and its "Editor Decision" is empty, while the
+book's earlier decisions are named. Nothing in the file or on the page says a name is missing.
+
+Every published book's line carries one such empty cell, so anyone
+counting decisions from the file cannot tell what was decided on that
+date. A journal's "Articles Report" has the same gap and more
+[OJS3](#ojs3). Expected: "Move to Done".
+Since: 2026-06-29 · Basis: probe, 2026-10-03. <sup>f-omp6</sup>
 
 ### OPS
 
@@ -2303,6 +2324,23 @@ lines read "Évaluation interne",0 and
 "##workflow.review.externalReview##",3; a French journal's and preprint
 server's attachments name every stage.
 Issue report: [docs/issues/U69-A15-omp-french-book-page-raw-keys.md](../issues/U69-A15-omp-french-book-page-raw-keys.md), filed as [pkp-e2e#291](https://github.com/jardakotesovec/pkp-e2e/issues/291) (joined with U69 A15).
+
+<a id="fn-f-omp6"></a>
+**f-omp6** — fn o (`getDecisionMessage()`): OMP's list names every
+decision type up to `CANCEL_INTERNAL_REVIEW_ROUND` and returns `''` for
+`MOVE_TO_DONE`, `RETURN_TO_WORKFLOW` and `RETURN_TO_DONE`, added by
+pkp-lib d52aa4c84b (`pkp/pkp-lib#12799`, PR `pkp/pkp-lib#12881`, merged
+2026-06-29); `ApplyDoneWorkflowStage` records `MOVE_TO_DONE` on
+publishing, and the 3.6 upgrade `I12799_MovePublishedSubmissionsToDone`
+writes one for every published submission not yet in Done (code).
+Live-probed 2026-10-03 on `main`, PKP's default dataset: the line of
+the published "From Bricks to Brains: The Embodied Cognitive Science of
+LEGO Robots" read "Editor Decision 5 (Editor 1)" empty and "Date
+decided 5 (Editor 1)" filled. "Return to Workflow" and "Return to Done"
+were read in the code only. On `stable-3_5_0`, walked the same day, the
+dataset records no "Move to Done" and the press's file names every
+decision it holds.
+Issue report: [docs/issues/U65-OJS3-articles-report-decision-cell-empty.md](../issues/U65-OJS3-articles-report-decision-cell-empty.md) (the press's half), filed as [pkp-e2e#656](https://github.com/jardakotesovec/pkp-e2e/issues/656).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn d (`removeEditorialStatsChartView()`). Live-probed 2026-09-28: no

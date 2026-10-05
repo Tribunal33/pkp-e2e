@@ -764,7 +764,7 @@ test.describe('reviewer\'s review', () => {
         await wizard.expectStep(3);
 
         // On the same page, a recommendation, and the empty review goes
-        // through (A7's record).
+        // through (Rule 13, scenario 7; A7 is only the journal's sentence).
         await wizard.chooseRecommendation('Decline Submission');
         await wizard.submitReview();
         await wizard.expectCompleted();

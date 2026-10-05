@@ -52,8 +52,8 @@ always editable there. <sup>a</sup> <sup>b</sup>
 ## Fields & validation
 
 The add/edit panel ("Add Contributor" / "Edit") opens with a
-**"Contributor Type"** choice. That choice decides which of the fields
-below appear. Its guidance warns: "Selecting a contributor type will
+**"Contributor Type"** choice, which decides which of the fields below
+appear. Its guidance warns: "Selecting a contributor type will
 determine which fields you need to complete in this form. Please note that
 if you change the contributor type after you've started filling out the
 form, any information you've already entered will not be saved." Fields
@@ -64,14 +64,15 @@ required field missing never leaves the form. **"This field is required."**
 appears in red under the field. The form's foot shows **"Please correct one
 error."**, or **"Please correct {n} errors."** when there are several, with
 a **"Jump to next error"** link until every error is fixed. After a refused
-save, Save stays disabled while any flagged field still carries its error.
-Editing a flagged field clears that field's message alone, and Save enables
-once no error is left. The server can also refuse a save the form itself
-let through. The same foot then counts and lists the server's reasons as
+save, Save stays disabled until no flagged field carries its error;
+editing a flagged field clears that field's message alone. The server
+can also refuse a save the form itself let through. The same foot then counts and lists the server's reasons as
 "Go to {Field}: {message}" buttons, and the page shows "The form was not saved because {n}
-error(s) were encountered. Please correct these errors and try again." A
-reason that names a field the chosen contributor type does not show can
-never be cleared, so Save stays disabled until the panel is closed
+error(s) were encountered. Please correct these errors and try again." Where a
+"Forms" language is not a metadata language (Settings that modify
+behavior), the reasons can name fields the chosen type lacks, for a
+Person "Go to Organization Name: This language is not accepted.", which
+nothing typed into its own fields clears, so Save stays disabled
 ⚠ [A20](#a20). <sup>c</sup> <sup>n</sup>
 
 | Field (UI label) | Required? | Rules |
@@ -88,7 +89,7 @@ never be cleared, so Save stays disabled until the panel is closed
 | **ORCID iD** | No | Person only. Present only while the journal has ORCID enabled. The field's states, its "Request verification" flow and iD removal are owned by *[ORCID integration](U04-orcid-integration.md)*. |
 | **Competing Interests** | Yes, when shown | Rich text, multilingual. Present only when the journal requires competing-interest statements (Settings that modify behavior). Guidance: "Please disclose any competing interests this author may have with the research subject." Saving it empty is stopped as a missing required field (the refusal described above this table). On a preprint server the field's label renders as raw code-like text instead of the plain "Competing Interests" ⚠ [OPS2](#ops2). <sup>j</sup> |
 | **Bio Statement (e.g., department and rank)** | No | Rich text, multilingual. |
-| **Affiliations** | No | The contributor's institution list, any number of entries. Guidance: 'Enter the full name of the institution below, avoiding any acronyms. Select the name from the dropdown and click "Add" to include the affiliation in your profile (e.g. "Simon Fraser University")'. Typing under "Type the institution name in {language}" queries the public ROR registry as you type, from four characters on, straight from your own browser. Each suggestion shows the institution's name, country, the ROR mark and a link to its registry record. You can also pick your typed text itself, offered first as a bare label, to record a hand-typed institution. "Add" appears only once a suggestion is picked. There is no Add button before that, and text typed but never picked is silently dropped when the form is saved ⚠ [A8](#a8). "Add" puts the institution on the list. While a picked entry sits under "Selected", the search box is disabled: add or remove the entry before typing a new query. A registry-backed entry's identity is fixed. Its row links to the registry record, its name comes from the registry, and its only action is "Remove institution". A typed entry carries one name box per submission language ("Type the institution name in {language}"). A screen reader announces those boxes wrongly ⚠ [A10](#a10). It also shows a completeness status: "{count} of {total} languages completed" while incomplete, "All translations available" once every language is filled. That total may follow the publication's own language set rather than the journal's ⚠ [A17](#a17). A typed entry offers both "Edit institution name" and "Remove institution"; the two actions sit behind the row's expander button, named "Click to edit or delete". A save without the submission language's name is refused with "Please provide affiliation name in the submission primary locale." The form foot's error summary misprints that message as "Go to Affiliations: [object Object]" ⚠ [A7](#a7). Removing asks "Are you sure?" with "The affiliation {name} will be deleted." (Yes/No). When a registry search fails, an "ROR API Error" dialog explains why. There are three distinct messages (rate-limited, unavailable or deprecated), each dismissed with "OK", and the text just searched is left pre-picked as a typed entry. Registry suggestions do not come back after the dialog. They stay off until the Edit panel is closed and reopened, whatever the dialog's own advice says ⚠ [A11](#a11). Hand-typed entry keeps working throughout. <sup>d</sup> |
+| **Affiliations** | No | The contributor's institution list, any number of entries. Guidance: 'Enter the full name of the institution below, avoiding any acronyms. Select the name from the dropdown and click "Add" to include the affiliation in your profile (e.g. "Simon Fraser University")'. Typing under "Type the institution name in {language}" queries the public ROR registry as you type, from four characters on, straight from your own browser. Each suggestion shows the institution's name, country, the ROR mark and a link to its registry record. You can also pick your typed text itself, offered first as a bare label, to record a hand-typed institution. "Add" appears only once a suggestion is picked. There is no Add button before that, and text typed but never picked is silently dropped when the form is saved ⚠ [A8](#a8). "Add" puts the institution on the list. While a picked entry sits under "Selected", the search box is disabled: add or remove the entry before typing a new query. A registry-backed entry's identity is fixed. Its row links to the registry record, its name comes from the registry, and its only action is "Remove institution". A typed entry carries one name box per submission language ("Type the institution name in {language}"). A screen reader announces those boxes wrongly ⚠ [A10](#a10). It also shows a completeness status: "{count} of {total} languages completed" while incomplete, "All translations available" once every language is filled. That total may follow the publication's own language set rather than the journal's ⚠ [A17](#a17). A typed entry offers both "Edit institution name" and "Remove institution"; the two actions sit behind the row's expander button, named "Click to edit or delete". A save without the submission language's name is refused with "Please provide affiliation name in the submission primary locale." under the field and "Please correct one error." at the form's foot. The foot's error list, which only a screen reader reads, names that refusal "Go to Affiliations: [object Object]" ⚠ [A7](#a7). Removing asks "Are you sure?" with "The affiliation {name} will be deleted." (Yes/No). When a registry search fails, an "ROR API Error" dialog explains why. There are three distinct messages (rate-limited, unavailable or deprecated), each dismissed with "OK", and the text just searched is left pre-picked as a typed entry. Registry suggestions do not come back after the dialog. They stay off until the Edit panel is closed and reopened, whatever the dialog's own advice says ⚠ [A11](#a11). Hand-typed entry keeps working throughout. <sup>d</sup> |
 | **Contributor Roles** | Yes | One checkbox per role the journal defines (Rule 11). At least one must be ticked; a save with none is stopped as a missing required field (the refusal described above this table). When the journal has exactly one role, the field disappears. Every contributor save from the form then fails, leaving role-less contributors behind ⚠ [A14](#a14). <sup>c</sup> |
 | **CRediT roles and the degrees of contribution** | No | Guidance: "Select the CRediT roles of the contributor and the degrees of contribution." The standard CRediT taxonomy list, with a degree per picked role. Shown to readers on the landing page (Rule 14). |
 | **Publication Lists** | No | One checkbox, ticked by default: "Include this contributor when identifying authors in lists of publications." (Rule 8, and its limits in practice, ⚠ [A3](#a3)). |
@@ -232,20 +233,26 @@ screen, Rule 12): <sup>e</sup>
     deleted ("Last AUTHOR role cannot be deleted."). Either refusal
     appears as a modal "Error" dialog dismissed with "OK". When both would
     apply, the in-use refusal is the one shown. The type-to-confirm
-    dialog's confirm button is mislabeled with a whole warning sentence,
-    "Are you sure you wish to delete this item? This action cannot be
-    undone.", where a short "Delete" label belongs ⚠ [A12](#a12). A
-    deleted role's confirmation reads "Role Deleted": '"{identifier}" has
-    been successfully deleted.' <sup>e</sup>
+    dialog's confirm button is labeled with a warning question, "Are you
+    sure you wish to delete this item? This action cannot be undone.",
+    where a label naming the action belongs, such as the application's
+    own unused "I understand the consequences, delete this role"
+    ⚠ [A12](#a12). A deleted role's confirmation reads "Role Deleted":
+    '"{identifier}" has been successfully deleted.' <sup>e</sup>
 14. **What readers see on the landing page.** A published item's landing
     page is the article page on a journal, the catalog's book page on a
     press, and the preprint's page on a server. It credits every
     contributor in list order: name, affiliation names, contributor role
     names (in the reader's language, Rule 15a), ORCID iD, and any CRediT
     roles, each followed by its degree in parentheses ("Conceptualization
-    (Lead)"). On a journal's French article page the degree prints as a
-    raw code (presses and servers untried) ⚠ [A23](#a23). A
-    registry-backed affiliation's ROR mark links to its registry record,
+    (Lead)"). The CRediT roles are in no released version yet, and their
+    degree words exist only in English, so
+    a journal's French article page prints the degree as a raw code,
+    "Conceptualisation
+    (##submission.submit.creditRoles.degrees.lead##)"; why a missing
+    translation shows as a code is
+    [Languages & locales](U57-languages-and-locales.md#a4).
+    <sup>f-a23</sup> A registry-backed affiliation's ROR mark links to its registry record,
     but assistive technology cannot name that link ⚠ [A9](#a9). The ORCID
     iD shows a verified or unauthenticated icon; see
     *[ORCID integration](U04-orcid-integration.md)*. Contributors with a
@@ -277,20 +284,20 @@ screen, Rule 12): <sup>e</sup>
     role's French name in its "Edit Role" window (Rule 12), the French
     pages read "Auteur-e" and "{name} (Auteur-e)", and the English pages
     still read "Author". <sup>h</sup>
-16. **Affiliation identities and the registry cache.** An affiliation is
-    either registry-backed or typed by hand. A registry-backed one is
-    identified by its ROR record, and its name is shown from the registry
-    in every registry language. A typed one has per-language names
-    (Fields & validation). Registry search runs from the user's own
-    browser against the public registry. The first time an institution is
-    picked anywhere in the journal, the install also stores its registry
-    record through the journal's server. A monthly self-update keeps all
-    stored records current with the public registry data set; it also
-    runs once at install. When the journal's server cannot reach the
-    registry for that first pick, the stored record never arrives. The
-    pick itself still lands normally, pressing "Add" raises an error
-    dialog, and the entry is added anyway. The affiliation then saves, and
-    publishes, with no name at all ⚠ [A5](#a5). <sup>d</sup> <sup>k</sup>
+16. **Affiliation identities and the registry copy.** An affiliation is
+    either registry-backed or typed by hand. A typed one has per-language
+    names (Fields & validation). A registry-backed one is identified by
+    its ROR record. Its name, in every registry language, is read from
+    the install's own copy of the registry, downloaded at install and
+    refreshed monthly from the public registry data set. Registry search
+    runs from the user's own browser against the public registry.
+    Pressing "Add" on an institution the copy lacks has the journal's
+    server fetch its record into the copy. When the server cannot reach
+    the registry, "Add" raises an error dialog and the entry is added
+    anyway. The affiliation then saves,
+    and publishes, with no name until the copy gains the institution; a
+    server without outside internet access never gets it ⚠ [A5](#a5).
+    <sup>d</sup> <sup>k</sup>
 17. **Reviewers and anonymity.** Where the review type keeps the authors'
     identity from the reviewer, the contributor list is withheld from the
     data sent to the reviewer's browser. That safeguard is visible only by
@@ -311,9 +318,9 @@ screen, Rule 12): <sup>e</sup>
 - The one email in the flow: requesting a contributor's ORCID
   verification from the form sends that contributor the verification
   email. That email is owned by *[ORCID integration](U04-orcid-integration.md)*.
-- Picking a registry-backed affiliation can store a local copy of the
-  institution's registry record, with names in all registry languages.
-  This is invisible to users (Rule 16).
+- Adding a registry-backed affiliation that the install's registry copy
+  lacks stores the institution's record in that copy, with
+  names in all registry languages, invisibly to users (Rule 16).
 - Contributor data travels outward with the publication's metadata. DOI
   registration, metadata export and citation displays carry the names,
   roles, affiliations and ORCID iDs. Those surfaces belong to their own
@@ -340,10 +347,12 @@ screen, Rule 12): <sup>e</sup>
   "Metadata" in "Submission Languages"
   ([Languages & locales](U57-languages-and-locales.md#form-languages);
   install default: the primary language alone in both). Such a language
-  adds no box to the contributor form, but the workflow's "Add
-  Contributor" then never saves ([A20](#a20)). Adding the language to
-  "Submission Languages" with "Submissions" ticked, which ticks
-  "Metadata" too, lets it save again.
+  adds no box to the contributor form, yet on a submission with no text
+  in that language the workflow's "Add Contributor" is refused. Nothing
+  on screen points to the way round: pick another contributor type, type
+  into the field the refusal names, switch back and save ([A20](#a20)).
+  Ticking the language under "Submissions" in "Submission Languages", which ticks
+  "Metadata" too, ends the refusal.
 - **ORCID enablement** decides whether the form carries the ORCID iD
   field. The setting belongs to *[ORCID integration](U04-orcid-integration.md)*.
 - Nothing gates the rest. The Contributors entry, the affiliations field
@@ -553,16 +562,19 @@ footnote.
    - **An empty primary-language name**: clear the submission language's
      box and press Save: the save is refused with "Please provide
      affiliation name in the submission primary locale." under the
-     field, while the foot's summary misprints it as "Go to
-     Affiliations: [object Object]" ([A7](#a7)); type "Probe Institute"
-     back into the box (Fields).
+     field and "Please correct one error." at the foot, whose error list
+     a screen reader reads as "Go to Affiliations: [object Object]"
+     ([A7](#a7)); type "Probe Institute" back into the box (Fields).
    - **A registry-backed institution**: type "Simon Fraser University",
      pick the suggestion that shows its country and the ROR mark, and
      press "Add": the entry's row links to the registry record and
-     offers only "Remove institution". On an install whose server cannot
-     reach the registry, the picked suggestion still shows, but "Add"
-     raises an "Error" dialog; the entry is added anyway and saves
-     without a display name ([A5](#a5)) (Fields; Rule 16).
+     offers only "Remove institution". Where the registry copy lacks it
+     and the server cannot reach the registry (Rule 16),
+     "Add" instead raises "Error": "An unexpected error has occurred.
+     Please reload the page and try again." ("OK" closes it); the entry
+     is added anyway, and reopened after Save its row shows only the
+     registry link and, in red, "The primary language English is
+     required" ([A5](#a5)) (Fields).
    - **Both saved**: Save the contributor and reopen "Edit": both
      institutions are there (Rule 4; Fields).
    - **Removing one**: press "Remove institution" on "Probe Institute":
@@ -597,7 +609,8 @@ footnote.
      (Rule 13).
    - **The deletion**: untick the role on the contributor, then delete
      the role again: type "EDITOR" into the confirm box; the confirm
-     button, labeled with a whole warning sentence (⚠ [A12](#a12)),
+     button, labeled with the warning question "Are you sure you wish to
+     delete this item? This action cannot be undone." (⚠ [A12](#a12)),
      enables only on an exact match; the dialog "Role Deleted" confirms
      (Rule 13).
    - **The last AUTHOR role**: try "Delete Role" on "Author": while the
@@ -804,6 +817,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U41-OPS2-competing-interests-label-raw-markup.md`):
     scenario 8 on a preprint server, the contributor form's field
     labelled "Competing Interests"
+  - a CRediT role's degree on a French landing page reading in French,
+    once the degree words gain their French translation (Rule 14; A23,
+    retired)
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills
@@ -820,8 +836,8 @@ Left out of the scenarios above, by reason:
     given
 - **Register carries it**:
   - A4 (a typed ROR ID surviving the type switch; Fields)
-  - A7 (the form foot's "Go to Affiliations: [object Object]"; Fields;
-    scenario 4 marks it)
+  - A7 (the screen-reader error list's "Go to Affiliations: [object
+    Object]"; Fields; scenario 4 marks it)
   - A8 (institution text typed but never picked dropped on save;
     Fields)
   - A9 (the landing page's ROR link without an accessible name;
@@ -840,15 +856,12 @@ Left out of the scenarios above, by reason:
     Fields)
   - A19 (the email field labeled "Email" or "Email address" by the
     install; Fields)
-  - A20 (the workflow's "Add Contributor" never saving on a journal
-    with a "Forms" language not ticked under "Metadata"; Fields;
-    Settings)
+  - A20 (the workflow's "Add Contributor" refused where a "Forms"
+    language is not a metadata language; Fields; Settings)
   - A21 (contributor roles arriving named in the primary language
     only; Rule 11)
   - A22 (a role name closed without saving shown on the row and in the
     reopened "Edit Role", and stored by the role's next "Save"; Rule 12)
-  - A23 (a CRediT role's degree printing as a raw code on a French
-    landing page; Rule 14)
   - OPS2 (the Competing Interests label rendering raw on a preprint
     server; Fields)
 - **No seed**:
@@ -857,9 +870,11 @@ Left out of the scenarios above, by reason:
   - the install storing a picked institution's registry record, and the
     monthly self-update (Rule 16; Side effects)
   - a registry-backed affiliation's ROR mark linking to its record on
-    the landing page (Rule 14): the test installs' server cannot reach
-    the registry, so a registry-backed affiliation with a name cannot
-    be built
+    the landing page (Rule 14), which A9's guard needs: the test
+    installs' server cannot reach the registry and their copy lacks
+    scenario 4's institution, so no named registry-backed affiliation
+    can be built there; an install whose copy holds it, as PKP's
+    default test dataset's does, builds one
 - **Owned by another feature**:
   - the ORCID iD field while ORCID is enabled (Fields; Settings; *ORCID
     integration*)
@@ -895,13 +910,12 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name until the install's registry copy gains it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On a journal with one contributor role, adding or editing any contributor fails with an error | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A20](#a20) | "Add Contributor" never saves when a "Forms" language is not a metadata language | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium || issues (claude), 2026-10-03 — re-verified |
+| [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A refused affiliation reads "Go to Affiliations: [object Object]" to screen-reader users of the contributor form | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | On an article, book or preprint page, screen readers announce the ROR logo beside an affiliation or funder as an unnamed link | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | The button that deletes a contributor role is labelled with a warning question, not the action | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the contributor form labels "Competing Interests" with raw link markup | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A23](#a23) | On a French landing page a CRediT role's degree prints as a raw text code | 🐞 | minor | — |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
 | [A4](#a4) | The organization contributor's "ROR ID" box accepts any text without a shape check | ❓ | minor | — |
@@ -917,6 +931,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP2](#omp2) | An Edited Volume's book page credits volume editors instead of the contributor list | ✅ | user-visible | — |
 | [OPS1](#ops1) | The submitting author edits their own unposted preprint's contributors | ✅ | user-visible | — |
 | [A15](#a15) | A newly added contributor can land at the top of the list, and of the reader-facing author line, varying between loads (pkp/pkp-lib#13003) | ✅ | retired | rebase check (claude), 2026-09-03 — fixed upstream (pkp-lib `922f895988`), verified live on OJS and OMP |
+| [A23](#a23) | On a French landing page a CRediT role's degree prints as a raw code: texts new in the unreleased version, awaiting translation | ✅ | retired | issues (claude), 2026-10-03 — the team's 2026-10-02 ruling on untranslated new texts |
 
 ### All apps
 
@@ -1253,17 +1268,6 @@ Only a reload before reopening puts the stored names back. The same as
 [Highlights A4](U11-highlights.md#a4).
 Since: 2025-11-11 (10½ months) · Basis: probe, 2026-10-03. <sup>f-a22</sup>
 
-<a id="a23"></a>
-**A23 — A CRediT role's degree prints as a raw code on a French landing page** · 🐞 · minor.
-On a French article page a contributor's CRediT role reads
-"Conceptualisation (##submission.submit.creditRoles.degrees.lead##)"
-where the English page reads "Conceptualization (Lead)": the role is
-translated, its degree is not. Seen on a journal. The degree words are
-missing from the French translation all three applications share, so a
-press's book page and a preprint server's page are expected to show the
-same.
-Basis: probe + code reading. <sup>f-a23</sup>
-
 ### OMP
 
 <a id="omp1"></a>
@@ -1319,6 +1323,9 @@ Basis: probe + code reading, 2026-10-03. <sup>f-ops2</sup>
 
 <a id="a15"></a>
 **A15 — A new contributor can land at the top of the list, varying between loads** · ✅ · retired. Fixed upstream (pkp-lib `922f895988`, pkp/pkp-lib#13003), 2026-09-03. <sup>f-a15</sup>
+
+<a id="a23"></a>
+**A23 — A CRediT role's degree prints as a raw code on a French landing page** · ✅ · retired. Not a defect: the degree words are new in the unreleased version and await their translations (the team's ruling, 2026-10-02); Rule 14 states what the page prints. <sup>f-a23</sup>
 
 ---
 
@@ -1914,9 +1921,19 @@ from the submitter's profile) still showed no affiliation text on
 either surface. The OMP reader-side symptom, same date: on a
 five-contributor book page the one contributor with a (typed, saved)
 affiliation rendered as "Ben Beta, ;" in the compacted line —
-`submission.authorWithAffiliation` with an empty affiliation value;
-the exact template-side mechanism is unverified, but the shape matches
-this entry's dead-field read.
+`submission.authorWithAffiliation` with an empty affiliation value.
+It comes from a fault in the book page itself, not from the rows' dead
+field; settled by the issue report's walk of 2026-10-03 (OMP `main` and `stable-3_5_0`;
+kept script
+`shared/playwright/checks/issues/book-page-long-credits-dangling-comma/walk.js`;
+the "Preview" of a book with five or more contributors read "Dietmar
+Kennepohl, ; Terry Anderson, ; …"): OMP
+`templates/frontend/components/authors.tpl`'s five-or-more branch
+captures the names into `$authorAffiliations` and passes
+`$authorAffiliation`, never assigned, to the text, since pkp/omp#1819
+(`17f2661a46`, 2025-01-30) renamed the capture and left the `translate`
+line. The chapter page and an edited volume's editors run the same
+branch (code read).
 Issue report: [pkp-e2e#756](https://github.com/jardakotesovec/pkp-e2e/issues/756) ([docs/issues/U41-A1-contributor-rows-no-affiliation.md](../issues/U41-A1-contributor-rows-no-affiliation.md)).
 Issue report: [pkp-e2e#758](https://github.com/jardakotesovec/pkp-e2e/issues/758) ([docs/issues/U41-A1-book-page-long-credits-dangling-comma.md](../issues/U41-A1-book-page-long-credits-dangling-comma.md)).
 
@@ -1980,7 +1997,17 @@ name and the registry id kept; the reopened row showed the red "The
 primary language English is required" with only "Remove institution",
 a later save with the nameless row present succeeded, and the
 published article/preprint page rendered the affiliation as an
-icon-only registry link.
+icon-only registry link. Walked 2026-10-03 for the issue report on
+`main` and `stable-3_5_0`, OJS, OMP and OPS (kept script
+`shared/playwright/checks/issues/registry-pick-saves-nameless/walk.js`,
+on PKP's default test dataset with the two picked organizations taken
+out of the install's registry copy and the server's outside access
+cut): the same error dialog, nameless save and red message. Code read
+the same day (Rule 16): the name comes only from the install's copy
+(`rors` / `ror_settings`), which the scheduled task fills at install and
+monthly (fn k), so a connected install shows the name once the copy
+gains the institution; on a server that never reaches the registry the
+copy stays empty.
 Issue report: [pkp-e2e#754](https://github.com/jardakotesovec/pkp-e2e/issues/754) ([docs/issues/U41-A5-registry-pick-saves-nameless.md](../issues/U41-A5-registry-pick-saves-nameless.md)), shared with [Funding A3](U43-funding.md#a3).
 
 <a id="fn-f-a6"></a>
@@ -1996,7 +2023,14 @@ shared form): the 400 refusal "Please provide affiliation name in the
 submission primary locale." rendered correctly inline under the field
 while the foot's error-summary item printed the literal "Go to
 Affiliations: [object Object]" — sibling fields print their message
-text (e.g. "Go to Country: This field is required.").
+text (e.g. "Go to Country: This field is required."). Walked
+2026-10-03 for the issue report on `main` and `stable-3_5_0`, OJS, OMP
+and OPS (kept script
+`shared/playwright/checks/issues/affiliation-error-list-object-object/walk.js`,
+PKP's default test dataset): the error list is not drawn on screen; the
+accessibility tree held, under the visible "Please correct one error.",
+one button "Go to Affiliations: [object Object]", beside "Jump to next
+error", while the field showed the message.
 Issue report: [pkp-e2e#759](https://github.com/jardakotesovec/pkp-e2e/issues/759) ([docs/issues/U41-A7-affiliation-error-list-object-object.md](../issues/U41-A7-affiliation-error-list-object-object.md)).
 
 <a id="fn-f-a8"></a>
@@ -2009,9 +2043,17 @@ showed an empty affiliations list — no message anywhere.
 **f-a9 — A9 evidence.** Live-probed 2026-08-28 (OJS + OPS landing
 pages, registry-backed affiliation): the ROR mark is an `<a>` holding
 only the logo image, with no text, title or ARIA name — an accessibility
-scan reads the link out as nothing. OMP's book page renders its own
-ROR-mark markup and was not checked (its ≥5-contributor compaction
-drops the marks entirely, OMP1).
+scan reads the link out as nothing. Walked 2026-10-03 for the issue
+report on `main` and `stable-3_5_0`, OJS, OMP and OPS (kept script
+`shared/playwright/checks/issues/ror-logo-link-unnamed/walk.js`, PKP's
+default test dataset, whose copy of the registry holds the picked
+organizations, so they saved with their names): on a new version, the
+affiliation "University of Ljubljana" and the funder "Natural Sciences
+and Engineering Research Council of Canada" picked from the registry and
+published; on the article page, OMP's book page (a three-contributor
+book) and the preprint page, both logo links had an empty accessible
+name (3.5: the affiliation only; it has no funders). OMP's book page
+with five or more contributors prints names only, with no link (OMP1).
 Issue report: [pkp-e2e#763](https://github.com/jardakotesovec/pkp-e2e/issues/763) ([docs/issues/U41-A9-ror-logo-link-unnamed.md](../issues/U41-A9-ror-logo-link-unnamed.md)).
 
 <a id="fn-f-a10"></a>
@@ -2040,7 +2082,15 @@ dialog's "OK" merely closes.
 dialog's two buttons read "Are you sure you wish to delete this item?
 This action cannot be undone." (the confirm — locale key
 `common.confirmDelete`, a message string wired in as the label) and
-"Cancel".
+"Cancel". Walked 2026-10-03 for the issue report on `main`, OJS, OMP
+and OPS (kept script
+`shared/playwright/checks/issues/delete-role-button-label-sentence/walk.js`,
+"Translator" on PKP's default test dataset): the same label, disabled
+until "TRANSLATOR" was typed, then "Role Deleted". pkp-lib
+`52d3a0f8e7` added `manager.contributorRoles.alert.delete.confirm` ("I
+understand the consequences, delete this role") for this button, and
+nothing reads it; `common.delete` ("Delete") is the report's
+alternative.
 Issue report: [pkp-e2e#761](https://github.com/jardakotesovec/pkp-e2e/issues/761) ([docs/issues/U41-A12-delete-role-button-label-sentence.md](../issues/U41-A12-delete-role-button-label-sentence.md)).
 
 <a id="fn-f-a13"></a>
@@ -2185,6 +2235,13 @@ context with `fr_CA` also a submission (hence metadata) language saved a
 Person and an Organization, listed after a reload. A language ticked
 under "Metadata" alone is accepted by that code; not driven. Introduced
 by pkp-lib `52d3a0f8e7` (2025-11-11, "Contributor Roles and Type").
+Walked 2026-10-03 for the issue report on `main`, OJS, OMP and OPS (kept
+script `shared/playwright/checks/issues/add-contributor-refused-hidden-fields/walk.js`,
+PKP's default test dataset with French unticked under "Metadata"): the
+refusal hit submissions holding no French text (by the code, one that
+holds French text saves; the dataset has none). On OJS, as the Section
+Editor, an add that got an Organization Name typed under "Organization
+or group" before switching back to "Person" saved.
 Issue report: [pkp-e2e#751](https://github.com/jardakotesovec/pkp-e2e/issues/751) ([docs/issues/U41-A20-add-contributor-refused-hidden-fields.md](../issues/U41-A20-add-contributor-refused-hidden-fields.md)).
 
 <a id="fn-f-a21"></a>
@@ -2243,7 +2300,16 @@ the CRediT role "Conceptualization" at "Lead" read "Conceptualisation
 `.supporting` ("Lead", "Equal", "Supporting"); lib/pkp
 `locale/fr_CA/` has none of the three, in all three apps' checkouts.
 Not read on a press or a preprint server: no French item read there
-carried a CRediT role.
+carried a CRediT role. Code read 2026-10-03 (issues session; no walk):
+the degree texts came with lib/pkp `036af20d17` (2025-07-07,
+pkp/pkp-lib#857 "Credit Roles"), on `main` only — `stable-3_5_0` has no
+CRediT roles, no `classes/author/creditRole` and no `creditRoles` key in
+`locale/en` — and none of the 12 `submission.submit.creditRoles.*` keys
+exists in any language but `en` in the three apps' lib/pkp `main` (OJS
+`987776cd04`, OMP and OPS `3dc90c81a6`); the page prints the degree
+through `__()` in `classes/author/creditRole/Repository.php`. Retired
+under the team's 2026-10-02 ruling on texts new on `main` and awaiting
+their translations.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP

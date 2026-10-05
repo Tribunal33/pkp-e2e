@@ -279,9 +279,21 @@ level allows no stage ⚠ [A12](#a12). <sup>k</sup>
       shows every box of its row unticked. <sup>l</sup>
     - 15b. A "Role Name" or "Abbreviation" of spaces only gets no "This
       field is required.". "OK" then keeps the window open with a notice
-      at its top reading "Errors occurred processing this
-      form", "You need to define a role name. (English)" and "You need to
-      define a role abbreviature. (English)" ⚠ [A10](#a10). <sup>l</sup>
+      at its top reading "Errors occurred processing this form" and, for
+      each box of spaces, "You need to define a role name. (English)" or
+      "You need to define a role abbreviature. (English)". The window
+      comes back broken ⚠ [A10](#a10). Under "Stage Assignment" only
+      "You need to define a stage to assign to." is left, with no stage
+      boxes. In a role's "Edit" window "Permission level" now reads
+      "Journal Manager" ("Press Manager", "Manager") whatever the role's
+      level. The manager corrects the box and presses "OK" again, and the
+      browser leaves Settings for a bare page holding only a line of code
+      text that starts `{"status":true`. From "Create New Role" the role
+      is saved all the same: back on the "Roles" list (the browser's Back
+      button, then a reload) its row shows every stage box unticked,
+      whatever was ticked before the first "OK" (a Journal Manager-level
+      role gets every stage, Rule 16). From "Edit" nothing is saved and
+      no role is added. <sup>l</sup>
 16. **Saving a manager-level role ticks every stage.** "OK" in the
     window of a role of the Journal Manager level stores every stage for
     it, whatever it worked in before, although the window offers no
@@ -837,7 +849,9 @@ Left out of the scenarios above, by reason:
   - A8 (the stage boxes to a screen reader; Fields, the "Roles" tab)
   - A9 (the filters hidden again after a choice, the count line the only
     sign; Rule 3b; scenario 1 passes it)
-  - A10 (a "Role Name" or "Abbreviation" of spaces; Rule 15b)
+  - A10 (a "Role Name" or "Abbreviation" of spaces, the window drawn
+    again without its stage boxes, and the second "OK" leaving Settings;
+    Rule 15b)
   - A11 ("OK" in the window of a manager's only Settings role storing the
     box unticked; Rule 18; scenario 5 passes it)
   - A12 ("Stage Assignment" hidden, or on screen with every box greyed;
@@ -1841,6 +1855,24 @@ answered 200 with the refused form, the window stayed open with the notice
 quoted in Rule 15b and no message under the boxes, and the page logged the
 script error "Failed to execute 'appendChild' on 'Node': Unexpected token
 ','" on `management/settings/access`.
+Walked 2026-10-02 (Rule 15b; all three apps, `main` and `stable-3_5_0`;
+the issue report below): the refused form is drawn after
+`readInputData()`, not `UserGroupForm::initData()`, which alone sets
+`stages`, `roleForbiddenStagesJSON`, `userGroupId` and an existing role's
+`roleId`. The template prints `roleForbiddenStagesJSON: ,`, the inline
+script fails, `UserGroupFormHandler` is never attached, and the second
+"OK" is a plain form post to `update-user-group`, whose JSON answer the
+browser shows as the page. "Create New Role" at "Assistant" with
+"Copyediting" ("Production" on OPS) ticked and "Role Name" of three
+spaces, then "u54g role": the second post carried no `assignedStages[]`,
+the page read
+`{"status":true,"content":"","elementId":"0","events":[…]}`, and the
+role was stored with no stage (all three apps on `main`, OJS on 3.5).
+"Copyeditor" ("Author" on OPS) "Edit" with "Abbreviation" of three
+spaces: the refused window's level read "Journal Manager" ("Press
+Manager", "Manager"); the second "OK" showed the window's markup as text
+(`{"status":true,"content":"<script …`), refused as a new role without a
+level, and "Copyeditor" stayed unchanged with no role added.
 Issue report: [pkp-e2e#435](https://github.com/jardakotesovec/pkp-e2e/issues/435) ([docs/issues/U54-A10-role-name-of-spaces-breaks-window.md](../issues/U54-A10-role-name-of-spaces-breaks-window.md)).
 
 <a id="fn-f-a11"></a>

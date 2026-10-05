@@ -83,7 +83,7 @@ templates" link of the tab above), top to bottom:
 | Page heading "Manage Emails"; the list's own heading "Emails" | — | — <sup>f</sup> |
 | A search box, "Search by name or description" | no | Applied when Enter is pressed; an "×" button clears it (Rule 7) <sup>h</sup> |
 | "Reset All" (a button in red lettering beside the search box) | — | Opens the confirmation of Rule 19 <sup>t</sup> |
-| The list: one row per email, its name in bold and its description under it, with an "Edit" button | — | Which emails, in which order: Rule 6. "Edit": Rule 9 <sup>g</sup> |
+| The list: one row per email, its name in bold and its description under it, with an "Edit" button | — | Which emails, in which order: Rule 6. "Edit": Rule 9; its label in French: Rule 6a <sup>g</sup> |
 | A "Filters" panel beside the list | — | Three blocks of filter buttons: an unheaded block of groups, "Sent From" and "Sent To" (Rule 8) <sup>i</sup> |
 
 **An email's window** (the "Edit" of an email that takes several
@@ -214,7 +214,9 @@ The three fields hold one text per form language of the journal (Rule
      manager who picks French with "Change Language"
      ([Languages & locales](U57-languages-and-locales.md#change-language))
      reads the page as "Gérer les courriels", the same emails under their
-     French names and descriptions. Some emails show a code between hash
+     French names and descriptions. Each row's button still reads "Edit",
+     in English, while a screen reader names it in French ("Modifier
+     {email name}") ⚠ [A12](#a12). Some emails show a code between hash
      signs instead, and on a preprint server so do the Moderator's filter
      buttons ⚠ [A11](#a11). <sup>g</sup>
 7. **Search.** Typing in the search box changes nothing until Enter is
@@ -824,6 +826,9 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - the guard for OMP2 (issue report `docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md`): a new press's "Emails" tab opens with "Notify Primary Contact" at "No", as a journal's and a preprint server's do (Fields, the "Emails" tab; scenario 2)
   - the guard for A11 (issue report `docs/issues/U56-A11-french-manage-emails-raw-keys.md`): the French (Canada) "Gérer les courriels" list and its filters hold no `##` code, the emails new on `main` aside (Rule 6a)
+  - the French (Canada) "Gérer les courriels" rows' button: it reads
+    "Edit" while a screen reader names it "Modifier {email name}"
+    (Rule 6a; A12)
   - the guard for A4 (issue report `docs/issues/U56-A4-add-template-window-titled-edit-template.md`): "Add Template" opens a window titled "Add Template", and an existing template's window stays "Edit Template" (Rule 12; scenario 3)
   - the guard for A5 (issue report `docs/issues/U56-A5-remove-template-confirmation-names-subject.md`): "Remove" on an added template whose name and subject differ asks about the template by the name its row shows (Rule 17; scenario 3)
 - **Nothing new to test**:
@@ -854,6 +859,8 @@ Left out of the scenarios above, by reason:
   - A10 (a press's and a preprint server's French submission
     confirmation speaking of "la revue"; Rule 20)
   - A11 (codes in the list and the filters of the French "Manage
+    Emails"; Rule 6a)
+  - A12 (the rows' "Edit" left in English in the French "Manage
     Emails"; Rule 6a)
   - OMP1 (the press's masthead email whose "Edit" leaves the page stuck;
     Rule 9)
@@ -910,6 +917,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | On "Manage Emails", "Remove" on a template a manager created names it by its subject, not its row's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A press's or preprint server's French submission confirmation thanks the author for choosing "notre revue" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A12](#a12) | In French (Canada), every row's button on "Manage Emails" reads "Edit" in English | 🐞 | minor | — |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither "Yes" nor "No" selected | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS1](#ops1) | Preprint server emails: "Insert Content" describes the server's initials with a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1090,6 +1098,15 @@ The same Moderator code shows on other preprint server screens
 [Journal identity & about pages OPS4](U07-journal-identity-and-about-pages.md#ops4));
 the general question is [Languages & locales A4](U57-languages-and-locales.md#a4).
 Basis: probe, 2026-10-04. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — In French (Canada), every row's button on "Manage Emails" reads "Edit" in English** · 🐞 · minor.
+A manager who works in French (Canada) opens "Gérer les courriels" and
+finds every email's button labelled "Edit", in English, beside the
+French names and descriptions; it should read "Modifier". A screen
+reader already names the same button in French, "Modifier {email
+name}". The button still opens the email as it does in English.
+Basis: probe, 2026-10-04. <sup>f-a12</sup>
 
 ### OMP
 
@@ -1816,6 +1833,21 @@ the "Envoyé par" and "Envoyé à" button
 "Rédacteur-trice" there. The English list of the same contexts showed
 no code.
 Issue report: [pkp-e2e#875](https://github.com/jardakotesovec/pkp-e2e/issues/875) ([docs/issues/U56-A11-french-manage-emails-raw-keys.md](../issues/U56-A11-french-manage-emails-raw-keys.md)).
+
+<a id="fn-f-a12"></a>
+**f-a12** — lib/pkp `templates/management/manageEmails.tpl` (lib/pkp
+`987776cd04`) writes the row button's visible word as the literal
+`<span aria-hidden="true">Edit</span>`, beside a screen-reader span
+`common.editItem` ("Modifier {$name}" in French (Canada)); the word is
+not looked up in any language file, so other interface languages are
+expected to show "Edit" too (read from the code, not driven).
+Live-probed 2026-10-04 on `main`, all three apps, by the A11 issue
+walk (`shared/playwright/checks/issues/french-manage-emails-raw-keys/walk.js`,
+which records each row's shown text and screen-reader name) on
+`publicknowledge` in French (Canada): every row's button showed "Edit"
+while its screen-reader name read "Modifier …"; the report lists it
+under "Not this fault"
+([docs/issues/U56-A11-french-manage-emails-raw-keys.md](../issues/U56-A11-french-manage-emails-raw-keys.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26 on the seeded press and on a new

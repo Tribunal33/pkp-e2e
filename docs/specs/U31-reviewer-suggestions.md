@@ -51,7 +51,7 @@ is named where it differs. <sup>a</sup>
 | **Suggest reviewers** ("Add Reviewer Suggestion", "Edit", "Delete" on the wizard step) | • Author: on their own draft, while "Reviewer Suggestion at Submission" is on (Rules 2–5); after the final "Submit" no screen offers a change (Rule 7)<br>• Journal Manager: on any author's draft, the same wizard step; the Editor Dashboard's "All in submission stage" view lists the draft as "Incomplete" with one button, "Complete submission", which opens it<br>• Section Editor, another Author, Reviewer, Reader: no screen offers another's draft, and typing its address lands on the access-denied page <sup>a</sup> <sup>t1</sup> |
 | **See the "Reviewers Suggested by Author" panel** (workflow screen, Submission and Review stages) | • Editorial roles: whenever the submission carries at least one suggestion to list (Rule 8)<br>• Funding Coordinator: the panel never shows; instead a dialog titled "Error", reading "The current role does not have access to this operation." with one button, "OK", opens on the stage, with or without a suggestion ⚠ [A1](#a1)<br>• Author: never; the author view carries no such panel <sup>a</sup> |
 | **"Add Reviewer" from a suggestion** (the row's "…" menu on the Review stage) | • Editorial roles: while the Review stage is the submission's current stage (Rule 9); the request itself follows the Add Reviewer window's own rules (*Reviewer assignment & management*) <sup>a</sup> |
-| **"Select Reviewer" on a suggestion inside the Add Reviewer window** | • Whoever opened the Add Reviewer window, while the suggestion is pending and the person is not yet on the round (Rule 10)<br>• Funding Coordinator: offered on every entry, but on a person with no account the "Create New Reviewer" form it opens does nothing when its "Add Reviewer" is pressed ⚠ [A5](#a5) <sup>a</sup> |
+| **"Select Reviewer" on a suggestion inside the Add Reviewer window** | • Whoever opened the Add Reviewer window, while the suggestion is pending and the person is not yet on the round (Rule 10)<br>• Funding Coordinator: offered on every entry, but on a person with no account it opens the "Create New Reviewer" form, whose "Add Reviewer" is refused with a browser alert, "The current role does not have access to this operation.", and the form stays open ⚠ [A5](#a5) <sup>a</sup> |
 
 ## Fields & validation
 
@@ -142,6 +142,11 @@ correct {N} errors." drops by one, and "Save" comes back with the last one.
      person's name and email, skipping "Locate a Reviewer", with the
      "Review Request" message and both due dates already filled; the editor
      changes what they want and presses "Add Reviewer". <sup>t8</sup>
+     When the person is already a reviewer on the round while their
+     suggestion is still pending (as [A6](#a6) can leave it), the row
+     still offers "Add Reviewer", and pressing "Add Reviewer" in the window
+     fails: no message shows, the window stays open and the suggestion
+     stays in the panel ⚠ [A12](#a12).
    - *The address belongs to an account without a Reviewer role*: the window
      opens on the form "Enroll an Existing User as Reviewer" with that user
      already in "Search By Name" ("{name} ({email})") and "Enroll the user
@@ -474,9 +479,11 @@ footnote. <sup>s</sup>
    - **"Create New Reviewer" as this role**: press the Reviewers panel's
      "Add Reviewer" again and "Select Reviewer" on Nova's entry: a second
      window opens on "Create New Reviewer", filled in; type nova in
-     "Username" and press its "Add Reviewer": the form stays open, no
-     message shows and the Reviewers panel does not gain Nova [A5](#a5);
-     press the "Close" arrow of each window.
+     "Username" and press its "Add Reviewer": a browser alert reads "The
+     current role does not have access to this operation."; press "OK":
+     the form stays open with nova still in "Username", and the Reviewers
+     panel does not gain Nova [A5](#a5); press the "Close" arrow of each
+     window.
    - **Control**: Journal Manager, on the same submission's Review stage:
      no dialog opens, and "Reviewers Suggested by Author" lists Nova and
      not Kay. <sup>s4</sup>
@@ -569,6 +576,7 @@ Left out of the scenarios above, by reason:
   - A6 (the same address accepted in another case)
   - A9 (the emptied entry's blank row)
   - A10 (the inner window's "Back to Search")
+  - A12 (the panel's "Add Reviewer" on a suggested person already on the round)
   - A5's "Enroll an Existing User as Reviewer" path for the Funding Coordinator, not driven
 - **No seed**:
   - "Reviewer Suggestion at Submission" switched off after suggestions exist, then on again (Rule 8d): no scenario key changes a journal's setting once the journal exists, and a suggestion can be seeded only where the setting is on
@@ -591,6 +599,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | After an editor adds a suggested reviewer in the Add Reviewer window, the suggestions list keeps an empty row | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code | 🐞 | medium · crash: script | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | Authors suggesting a reviewer read "mention is there are any potential conflict of interest" for "if there are any potential conflicts" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A12](#a12) | The panel offers "Add Reviewer" on a suggested person already on the round, and the request fails with no message | 🐞 | user-visible · crash: server | — |
 | [A2](#a2) | An ORCID iD typed on a suggestion is seen again only in the author's "Edit" window | ❓ | minor | — |
 | [A3](#a3) | A matched suggestion is offered nowhere again, even after the reviewer is unassigned or cancelled | ❓ | minor | — |
 | [A4](#a4) | The author loses sight of their suggestions the moment they submit | ❓ | minor | — |
@@ -672,7 +681,7 @@ Author", with nothing to tell the two apart. Once an editor adds the
 person as a reviewer from one entry, the other stays in the panel as a
 pending suggestion for good: its "Add Reviewer" opens on the person's
 new account, and pressing "Add Reviewer" there fails on the server with
-no message and the window left open. No screen removes the entry. It
+no message and the window left open ([A12](#a12)). No screen removes the entry. It
 happens on journals and presses whose database is PostgreSQL. The same
 stuck entry follows from a single suggestion whose address differs only
 in capitals from a reviewer's existing account, once the editor adds
@@ -756,6 +765,19 @@ conflicts of interest". The same help shows when the author presses
 "Edit" on a suggestion already in that step's list. The German and
 Slovenian translations carry slips of their own. Basis: probe,
 2026-10-04. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — The panel offers "Add Reviewer" on a suggested person already on the round, and the request fails with no message** · 🐞 · user-visible · crash: server.
+On the Review stage, "Reviewers Suggested by Author" can keep a pending
+suggestion whose person is already a reviewer on the round (both ways
+seen come from [A6](#a6): the second entry for a person added from the
+first, and an address differing only in capitals from the reviewer's
+account). The Add Reviewer window's list shows such an entry as "This
+reviewer has already been assigned to this review round." with no button
+(Rule 10), but the panel row still offers "…" › "Add Reviewer", opening
+on "Selected Reviewer" for that person. Its "Add Reviewer" fails on the
+server: no message shows, the window stays open and the suggestion stays.
+Basis: probe, 2026-10-04. <sup>f-a12</sup>
 
 ### OMP
 
@@ -884,7 +906,7 @@ Basis: probe. <sup>f-omp1</sup>
 **f-a1** — `ReviewerSuggestionManager` is pushed for every editorial-view visitor of the stage and its store fetches the list on mount; `useFetch` then calls `modalStore.openDialogNetworkError()`, which shows the response's error text under the title `common.error` "Error". Live-probed 2026-09-06, OJS and OMP, as a scratch `funding` participant: `GET …/api/v1/submissions/{id}/reviewers/suggestions[?approved=false]` is answered 401 with "The current role does not have access to this operation." (not the 403 `api.403.unauthorized` the middleware `HasRoles` would give) and the dialog shows that text with one "OK"; the same on the Submission stage and Review round 1, with suggestions and without; none on a journal with the setting off; after "OK" the stage was usable and the coordinator went on to open "Add Reviewer".
 
 <a id="fn-f-a5"></a>
-**f-a5** — `PKPReviewerGridHandler::__construct()` grants `ROLE_ID_ASSISTANT` the review-round operations minus `createReviewer`, `enrollReviewer` and `gossip` (note a), and `AdvancedSearchReviewerForm::fetch()` adds the "Create New Reviewer" / "Enroll Existing User" link actions only for `ROLE_ID_MANAGER` and `ROLE_ID_SUB_EDITOR`, but `SelectReviewerSuggestionListItem.vue::select()` opens `showReviewerForm` with `selectionType` `REVIEWER_SELECT_CREATE` for any role that reached the window. Live-probed 2026-09-06, OJS (two runs) and OMP (one run): the Funding Coordinator's "Select Reviewer" on a no-account suggestion opened "Create New Reviewer" prefilled; its "Add Reviewer" posted `reviewer-grid/create-reviewer`, answered 200, and the form neither closed nor complained, the Reviewers table still "No Items". The role's "Select Reviewer" on an enrolled reviewer gave the "Selected Reviewer … Change" request form. The Enroll path was not driven for this role.
+**f-a5** — `PKPReviewerGridHandler::__construct()` grants `ROLE_ID_ASSISTANT` the review-round operations minus `createReviewer`, `enrollReviewer` and `gossip` (note a), and `AdvancedSearchReviewerForm::fetch()` adds the "Create New Reviewer" / "Enroll Existing User" link actions only for `ROLE_ID_MANAGER` and `ROLE_ID_SUB_EDITOR`, but `SelectReviewerSuggestionListItem.vue::select()` opens `showReviewerForm` with `selectionType` `REVIEWER_SELECT_CREATE` for any role that reached the window. Live-probed 2026-09-06, OJS (two runs) and OMP (one run): the Funding Coordinator's "Select Reviewer" on a no-account suggestion opened "Create New Reviewer" prefilled; its "Add Reviewer" posted `reviewer-grid/create-reviewer`, answered 200, and the form stayed open, the Reviewers table still "No Items" (that probe dismissed a browser alert without recording it). Walked 2026-10-04 (Actors row 4; scenario 4), OJS and OMP, `main` and `stable-3_5_0`, PKP's default dataset as a Funding coordinator: the answer is `{"status": false, "content": "The current role does not have access to this operation."}`, which `$.pkp.classes.Handler.prototype.handleJson()` shows with `alert()`; after "OK" the form still held the typed username and the Reviewers table read "No Items"; no server or script error. The role's "Select Reviewer" on an enrolled reviewer gave the "Selected Reviewer … Change" request form. The Enroll path was not driven for this role.
 Issue report: [pkp-e2e#849](https://github.com/jardakotesovec/pkp-e2e/issues/849) ([docs/issues/U31-A5-funding-coordinator-create-reviewer-from-suggestion-does-nothing.md](../issues/U31-A5-funding-coordinator-create-reviewer-from-suggestion-does-nothing.md)).
 
 <a id="fn-f-a2"></a>
@@ -919,6 +941,9 @@ Issue report: [pkp-e2e#841](https://github.com/jardakotesovec/pkp-e2e/issues/841
 <a id="fn-f-a11"></a>
 **f-a11** — `lib/pkp/locale/en/submission.po`, `reviewerSuggestion.suggestionReason.description`, the `FieldRichTextarea('suggestionReason')` description (note b). Live-probed 2026-09-06 (note b; the K4 window snapshots), OJS and OMP, verbatim in the "Add Reviewer Suggestion" and "Edit" windows.
 Issue report: [pkp-e2e#853](https://github.com/jardakotesovec/pkp-e2e/issues/853) ([docs/issues/U31-A11-reviewer-suggestion-reason-help-is-there.md](../issues/U31-A11-reviewer-suggestion-reason-help-is-there.md)).
+
+<a id="fn-f-a12"></a>
+**f-a12** — `useReviewerSuggestionManagerActions.js::getItemActions()` gives every pending row "Add Reviewer" with no look at the round's reviewers, while `SelectReviewerSuggestionListItem.vue` hides its button when `currentlyAssigned` holds the person (note h). `reviewerSuggestionApprove()` opens `showReviewerForm` on the existing account in `REVIEWER_SELECT_ADVANCED_SEARCH` (note g); on save `ReviewerForm::execute()` finds `_isValidReviewer()` false for a reviewer already on the round and throws `Exception('Invalid reviewer id.')` instead of returning a form error. Walked 2026-10-04 (Rule 9, first mode), OJS and OMP, `main` and `stable-3_5_0`, PostgreSQL, PKP's default dataset, in the A6 report's walk ([pkp-e2e#856](https://github.com/jardakotesovec/pkp-e2e/issues/856)), which names this fault separate from A6 and out of its scope: through A6's second entry after the person was added from the first, and through a single suggestion "AGallego@Mailinator.com" after the dataset reviewer holding agallego@mailinator.com was added through the window's list (note f-a6). The row's window opened on "Selected Reviewer" with the person's name; its "Add Reviewer" posted `reviewer-grid/update-reviewer`, answered 500, with the log line `PHP Fatal error:  Uncaught Exception: Invalid reviewer id. in lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php`; no message showed, the window stayed open, the row stayed in the panel, and the window's list showed the entry with the assigned notice and no "Select Reviewer".
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note t10 (live-probed 2026-09-06, OMP: both halves hold, the internal add retires the suggestion for the External Review panel and list, that round's Reviewers table "No Items"). Note f (panel absent on `WORKFLOW_STAGE_ID_INTERNAL_REVIEW`; `atActiveReviewStage()` requires stage 3) against note h (`PKPSelectReviewerListPanel` adds the list on any stage); `ReviewerForm::execute()` matches by email whatever the stage (note i).

@@ -74,7 +74,7 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 | **See a workflow file list** (Rule 1) | • The stage's team, on every list of the stage<br>• Author: "Submission Files", "Revisions Uploaded" and "Copyedited Files" of their own submission, in the author view of each stage (the stage specs above)<br>• On a preprint server: nobody; there are no workflow lists [OPS1](#ops1) <sup>b</sup> |
 | **Add a file to a list** ("Upload" or "Upload/Select Files" above it; Rules 2, 5, 15) | • The stage's team: "Upload" on "Submission Files", "Revisions Uploaded" and "Production Ready Files"; "Upload/Select Files" on "Files for Review", "Draft Files" and "Copyedited Files"<br>• Author: "Upload" on "Revisions Uploaded" and the "Upload revisions" button under the round, while the round asks for revisions ([→ Revisions Uploaded](U26-review-stage-and-rounds.md#revisions)). "Upload revisions" shows only then; "Upload" shows on every round, and before revisions are requested its window refuses them ⚠ [A7](#a7)<br>• Author: never on "Submission Files" once the submission is submitted: before that, the submission wizard's "Files" panel is their upload (Actors row 9) <sup>c</sup> |
 | **"Update File Details"** (a row's "More Actions" menu; Rule 10) | • The stage's team, on every list<br>• Author: on "Submission Files" and "Revisions Uploaded", for files they uploaded themselves. The entry is offered on every row of those lists, and on a file somebody else uploaded the window refuses them ⚠ [A2](#a2)<br>• Author: never on "Copyedited Files" <sup>d</sup> <sup>d1</sup> |
-| **"More Information"** (row menu; Rules 13–14) | • The stage's team, on every list. The window's "History" tab never loads for the assistant roles: it keeps showing "Loading" ⚠ [A3](#a3)<br>• Adding a note: everybody the window opens for<br>• Deleting a note: a Journal Manager, Editor, Production editor, Section Editor or Guest Editor {OJS}, any note, whoever wrote it; never an assistant role, not even on their own note<br>• Author: never; the menu has no such entry for them <sup>e</sup> <sup>d2</sup> |
+| **"More Information"** (row menu; Rules 13–14) | • The stage's team, on every list. For the assistant roles the window opens with two browser alerts, "The current role does not have access to this operation." and then one reading only "undefined" ⚠ [A27](#a27), and its "History" tab never loads: it keeps showing "Loading" ⚠ [A3](#a3)<br>• Adding a note: everybody the window opens for<br>• Deleting a note: a Journal Manager, Editor, Production editor, Section Editor or Guest Editor {OJS}, any note, whoever wrote it; never an assistant role, not even on their own note<br>• Author: never; the menu has no such entry for them <sup>e</sup> <sup>d2</sup> |
 | **"Delete"** (row menu; Rule 4) | • The stage's team, on every list<br>• Author: on "Revisions Uploaded" only <sup>g</sup> |
 | **"Download All Files"** (under a list; Rule 3) | • The stage's team: under "Submission Files" and "Production Ready Files"<br>• Author: under "Submission Files"<br>• Every role, only while the list holds at least one file; the other lists never offer it <sup>h</sup> <sup>d1</sup> |
 | **Download a file** (its name in a list; Rule 3) | • Everyone the list shows the file to<br>• A reviewer: the files their review gives them (*[Reviewer's review](U28-reviewers-review.md#step-1)*), under a neutral name in an "Anonymous Reviewer/Anonymous Author" review, under the file's own name in an "Anonymous Reviewer/Disclosed Author" or "Open" one (Rule 3) <sup>i</sup> |
@@ -90,7 +90,7 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 |------------------|-----------|-------|
 | "If you are uploading a revision of an existing file, please indicate which file." | No | A drop-down of the files already in the list, opening on "This is not a revision of an existing file". Shown only when the list already holds a file, and listing that list's files only, each by its name alone, with no number or component ⚠ [A8](#a8). Choosing a file makes the upload a revision of it (Rule 8). <sup>o</sup> |
 | "Article Component" ("Submission Component" on a press, "Preprint Component" on a preprint server) | Yes, for a new file | A drop-down opening on "Select article component" ("Select component", "Select preprint component"), listing the journal's components (with the install's list, in the "Components" tab's order), except the ones marked as dependent files (Settings bullet 1). Choosing a file to revise sets it to that file's component and greys it out. <sup>o</sup> |
-| The upload box | Yes | Hidden until a component or a file to revise is chosen; a screen reader reads it all the same ⚠ [A9](#a9). A button "Upload File" and the text "Drag and drop a file here to begin upload"; once a file is uploaded, its name and "Change File" (Rule 5a). <sup>o</sup> |
+| The upload box | Yes | Hidden until a component or a file to revise is chosen; a screen reader reads it all the same ⚠ [A9](#a9). A button "Upload File" and the text "Drag and drop a file here to begin upload"; once a file is uploaded, its name and "Change File" (Rule 5a). Tab never stops on "Upload File" or the box, so without a mouse no file can be chosen ⚠ [A26](#a26). <sup>o</sup> |
 | "How to ensure all files are anonymized" | — | A link, shown only with the journal's anonymizing setting on, and only on the Submission and review stages (Settings bullet 2). <sup>o</sup> |
 
 **"2. Review Details" and the "Update File Details" window** (Rules 10–12). <sup>t</sup>
@@ -312,8 +312,8 @@ record what each role is offered once the list is on screen. <sup>b</sup>
       window can make the page's script fail, with nothing on screen
       ⚠ [A17](#a17). For the stage's team the tab has a "Search" button
       that opens the box "Show events from prior versions"; ticking it
-      and pressing "Search" reloads the same rows, with the box closed
-      and unticked again ⚠ [A4](#a4). <sup>v</sup> <sup>d3</sup>
+      reloads the tab with the same rows, and the box is hidden behind
+      "Search" again, still ticked ⚠ [A4](#a4). <sup>v</sup> <sup>d3</sup>
 <a id="notes"></a>
 14. **"Notes".** The tab lists the file's notes, each with its writer's
     name and date, or "There are no notes to display." when there are
@@ -758,7 +758,7 @@ tooling recipe are in the footnote. <sup>s0</sup>
      14).
    - **The Copyeditor's note**: Copyeditor: open the submission at
      "Copyediting" and "More Information" on the "Draft Files" copy: the
-     window opens on "History" [A3](#a3); select "Notes", type "Copyedit
+     window opens on "History" [A3](#a3) [A27](#a27); select "Notes", type "Copyedit
      started." in "Add Note" and press "Add Note": "Note posted." appears,
      and the note is listed with no "Delete" (Actors row 4; Rule 14).
    - **The Journal Manager on that note**: Journal Manager: the copy's
@@ -939,6 +939,7 @@ Left out of the scenarios above, by reason:
   - the reviewer's "Review Files" search for a text no file name contains: "No Files" ([A20](#a20)): the guard the issue report proposes
   - step 1 of the upload wizard before a component is chosen: the upload box absent from the accessibility snapshot, and each drop-down found by its role and label ([A9](#a9)): the guards the two issue reports propose
   - "2. Review Details" reopened from "3. Confirm": the button reads "Continue", and one "Complete" on step 3 closes the window ([A15](#a15)): the guard the issue report proposes
+  - step 1 of the upload wizard with a component chosen: Tab stops on "Upload File", and Enter opens the computer's file picker ([A26](#a26)): the guard the issue report proposes
 - **Nothing new to test**:
   - "Cancel" after revising a file renamed since its last upload: the previous file back, its rename kept, and no line of the cancelled upload in its "History" (Rule 9)
   - the header "Close" after a revision: the new file kept, the earlier version a "Download" in "History" (Rule 9)
@@ -955,7 +956,7 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A2 (the Author offered "Update File Details" on a file an editor uploaded, and refused; Actors row 3; scenario 7 marks it)
   - A3 ("History" keeps showing "Loading" for the assistant roles; Actors row 4; scenario 6 marks it)
-  - A4 ("Show events from prior versions" changing nothing; Rule 13b)
+  - A4 ("Show events from prior versions" changing nothing, and hidden behind "Search" again after the reload; Rule 13b)
   - A5 (a galley's "Change File" naming no current file; Rule 9a)
   - A6 (every row's menu button named "More Actions" alone; Rule 2)
   - A7 (the Author's "Upload" above "Revisions Uploaded" offered on a round that asks for no revisions; Actors row 2; scenario 7 marks it)
@@ -977,6 +978,8 @@ Left out of the scenarios above, by reason:
   - A23 ("Cancel" after a second pick on step 1 leaving the first pick as the file; Rule 9b)
   - A24 (one file revised in two windows: one "Cancel" doing nothing, the file keeping a cancelled upload; Rule 9c)
   - A25 ("Cancel upload" pressed after the whole file has been sent keeping the file; Rule 17a)
+  - A26 ("Upload File" in the upload wizard out of reach of the Tab key; Fields)
+  - A27 (a refused "History" tab adding a second alert that reads only "undefined"; Actors row 4; scenario 6 marks it)
 - **Owned by another feature**:
   - a Production editor's lists: every stage's while not assigned, Copyediting and Production only once assigned (Actors preamble; *Workflow screen & stage access*, and *Stage participants*, whose A8 records the assigned case)
   - the Author's revision upload through "Upload revisions" (Actors row 2; *Review stage & rounds*, scenario 4)
@@ -1012,6 +1015,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | Revising a file, a second pick on step 1 and then "Cancel" leave the first pick as the file instead of the original | 🐞 | minor | — |
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
 | [A25](#a25) | "Cancel upload" in the submission wizard, pressed once the file has been sent, keeps the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A26](#a26) | "Upload File" in the upload wizard cannot be reached with the keyboard, so no file can be chosen without a mouse | 🐞 | high | — |
+| [A27](#a27) | A refused "History" tab in "More Information" shows a second alert that reads only "undefined" | 🐞 | minor | — |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1086,6 +1091,12 @@ The fault shows on every file that is a copy of an earlier one, and
 that is how a file reaches review, copyediting and production. A
 preprint server shows the box too on `main`, but copies no files, so
 there is nothing for the box to bring.
+
+After the reload the box is hidden behind "Search" again, still ticked,
+so nothing on the tab shows that it is ticked. The filter lists of the
+Roles list fold away the same way ([→ Roles configuration's
+A9](U54-roles-configuration.md#a9)); fixing that one leaves this tab as
+it is.
 Basis: probe, 2026-10-02. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
@@ -1406,6 +1417,36 @@ The author sees it on the panel, with "Edit" and "Remove", only after
 a reload.
 Basis: probe, 2026-10-02. <sup>[f-a25](#fn-a25)</sup>
 
+<a id="a26"></a>
+**A26 — "Upload File" in the upload wizard cannot be reached with the keyboard** · 🐞 · high.
+On step 1 of the upload wizard, once a component is chosen, Tab goes
+from the component list straight to "Cancel", and no number of Tab or
+Shift+Tab presses ever stops on "Upload File" or on the box "Drag and
+drop a file here to begin upload". Tab is expected to stop on "Upload
+File", and Enter there to open the computer's file picker.
+
+Without a mouse no file can be chosen: an author cannot upload a
+revision, and an editor cannot upload a production-ready file or a
+galley's file; on a preprint server a moderator cannot add a galley's
+file. The submission wizard's "Add File" is not affected: Tab reaches
+it and Enter opens the picker (Rule 17). The full entry, with the
+import page that has the same box and the same fault, is [→ Import &
+export's A6](U63-import-export.md#a6).
+Basis: probe, 2026-10-01. <sup>[f-a26](#fn-a26)</sup>
+
+<a id="a27"></a>
+**A27 — A refused "History" tab in "More Information" shows a second alert that reads only "undefined"** · 🐞 · minor.
+When the app refuses the "History" tab of a file's "More Information"
+to the person who opened the window, the browser shows the alert "The
+current role does not have access to this operation.", and then a
+second alert that says only "undefined". The refusal alone is expected;
+the second alert tells nothing and has to be dismissed as well. It
+shows wherever this spec meets such a refusal: an assistant role's
+"History" tab ([A3](#a3)), and "More Information" on another stage's
+file in "Upload/Select Files" ([A19](#a19)). A preprint server's
+default roles meet neither case.
+Basis: probe, 2026-10-02. <sup>[f-a27](#fn-a27)</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1570,7 +1611,10 @@ Manager and the Section Editor saw "Delete" on it. The Author's menus had no
 <a id="fn-d2"></a>
 **d2** — Live-probed 2026-09-23 (Actors row 4; OJS and OMP): as a Copyeditor
 on "Draft Files", "More Information" opened "Information Center: article.pdf"
-on "History", which kept showing "Loading" with no message (A3); in "Notes",
+on "History", which kept showing "Loading" (A3); the issue reports' walks of
+2026-10-02 (OJS and OMP, `main` and 3.5) recorded two browser alerts before
+it, "The current role does not have access to this operation." and then
+"undefined" (A27); in "Notes",
 "Checked" and "Add Note" gave "Note posted." and a note with no "Delete". The
 Journal Manager on the same file: the "Date User Event" table, and a "Delete"
 on the Copyeditor's note.
@@ -2076,7 +2120,8 @@ copier. Each upload and revision row showed "Download" only once its arrow was
 pressed, and each download fetched the version the row records (fileId 186
 "article.pdf", 187 "notes.md"). The box sat behind "Search" for the Journal
 Manager, the Section Editor and the OPS manager and Moderator; ticked and
-searched, the same rows came back with the box unticked (A4).
+searched, the same rows came back and the box folded away behind "Search"
+(A4; still ticked, as the walks of 2026-10-02 read it, note f-a4).
 
 <a id="fn-d14"></a>
 **d14** — Live-probed 2026-09-23 (Rule 14; all three apps): a file with no
@@ -2304,7 +2349,9 @@ Issue report: [pkp-e2e#528](https://github.com/jardakotesovec/pkp-e2e/issues/528
 OJS and OMP; Copyeditor, Layout Editor, Proofreader): "Loading" after 10 s;
 the History grid's `fetch-grid` answered `status:false` "The current role does
 not have access to this operation.", which the tab never shows. Their notes
-posted with "Note posted.".
+posted with "Note posted.". Live-probed 2026-10-02 (OJS and OMP, `main` and 3.5;
+the Copyeditor on "Copyedited Files"): at each opening two browser alerts,
+the refusal's text and then "undefined" (A27), before "Loading".
 Issue report: [pkp-e2e#531](https://github.com/jardakotesovec/pkp-e2e/issues/531) ([docs/issues/U36-A3-assistant-file-history-keeps-loading.md](../issues/U36-A3-assistant-file-history-keeps-loading.md)).
 
 <a id="fn-a4"></a>
@@ -2312,7 +2359,13 @@ Issue report: [pkp-e2e#531](https://github.com/jardakotesovec/pkp-e2e/issues/531
 Manager, Section Editor, Moderator): the filter form hidden until "Search";
 the POST to `submission-file-event-log-grid/fetch-grid` carried `allEvents=on`
 and returned the same rows (eight on an OJS file; on a copy the same three,
-none of its source's), and the form came back collapsed and unticked.
+none of its source's), and the form came back collapsed. Live-probed 2026-10-02
+(OJS and OMP, `main` and 3.5; `dbarnes` on a "Files for Review" copy): the
+tick alone sent the reload, `allEvents=on`, answered `status: true` with the
+same single row, and after it the box was hidden behind "Search", still
+ticked. `eventLogGridFilter.tpl`'s form lacks the `filter` class the grid's
+script looks for, so the reload never reopens it (the gap the Roles
+configuration A9 report, pkp-e2e#442, names and its fix leaves out).
 Issue report: [pkp-e2e#532](https://github.com/jardakotesovec/pkp-e2e/issues/532) ([docs/issues/U36-A4-history-prior-versions-box-changes-nothing.md](../issues/U36-A4-history-prior-versions-box-changes-nothing.md)).
 
 <a id="fn-a5"></a>
@@ -2526,6 +2579,34 @@ has left the browser, so there a full bar does not mean the file was sent.
 Scenario 9 presses mid-upload; no test drives the window after the last
 byte.
 Issue report: [pkp-e2e#530](https://github.com/jardakotesovec/pkp-e2e/issues/530) ([docs/issues/U36-A25-cancel-upload-after-sent-keeps-file.md](../issues/U36-A25-cancel-upload-after-sent-keeps-file.md)).
+
+<a id="fn-a26"></a>
+**f-a26** — Note o. `fileUploadContainer.tpl` gives the browse button
+`tabindex="-1"` (since 2016), and plupload from 2.3.4 on (pkp-lib took
+2.3.6 in 2018, first in 3.2) gives its hidden file input `tabindex="-1"`
+too, so nothing of the box is in the tab order. Live-probed 2026-10-01 on
+`main` (OJS and OMP: "Upload" above "Production Ready Files", component
+chosen; OPS: a new galley's "Upload a File Ready for Publication"; OJS:
+the Author's "Upload revisions"): Tab from the component list went to
+"Cancel", then the window's help link; Shift+Tab from "Cancel" back to
+the component list, "1. Upload File" and "Close"; both elements read
+`tabindex="-1"`. Control: on a new submission's "Upload Files" step the
+12th Tab reached "Add File" and Enter opened one picker. 3.5's workflow
+windows were read in the code only. Fix tried on `main`, all three apps:
+without the button's `tabindex`, Tab stopped on "Upload File" and Enter
+opened one picker.
+Issue report: [pkp-e2e#265](https://github.com/jardakotesovec/pkp-e2e/issues/265) ([docs/issues/U63-A6-upload-file-out-of-keyboard-reach.md](../issues/U63-A6-upload-file-out-of-keyboard-reach.md)).
+
+<a id="fn-a27"></a>
+**f-a27** — Notes e and w. `UrlInDivHandler.handleLoadedContent_`:
+`handleJson()` alerts a refused answer's text and returns `false`, and the
+caller then alerts `false.content`, which is `undefined`, leaving the
+"Loading" placeholder. Live-probed 2026-10-02 (OJS and OMP, `main` and 3.5):
+the Copyeditor's "More Information" on "Copyedited Files" (A3's walk), and
+the editor's "More Information" on another stage's file in "Upload/Select
+Files" (A19's walk), each time the refusal's alert and then "undefined".
+The same two alerts follow every refused load of this kind in the code;
+only these two were driven.
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
