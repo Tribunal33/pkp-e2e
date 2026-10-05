@@ -44,7 +44,7 @@ const sql = (app, q) => {
     }
 };
 const CTX = {ojs: ['journals', 'journal_id'], omp: ['presses', 'press_id'], ops: ['servers', 'server_id']};
-// A server error's own text is never kept (security-verify.md "The private file").
+// A server error's own text is never kept (../pkp-e2e-sec/security_policy.md).
 const INTERNALS = /SQLSTATE|Stack trace|\.php(:| on line )\d+/;
 function scrub(v) {
     if (Array.isArray(v)) return v.map(scrub);

@@ -49,7 +49,7 @@ let facts = {};
 let phaseName = '';
 // A server error's own text (a raw database or PHP message in an "Error"
 // window or an answer) is not kept in any file here: it is routed to the
-// maintainer's private file (security-verify.md "The private file").
+// private security repo (../pkp-e2e-sec, its security_policy.md).
 const INTERNALS = /SQLSTATE|Stack trace|\.php(:| on line )\d+/;
 function scrub(v) {
     if (Array.isArray(v)) return v.map(scrub);

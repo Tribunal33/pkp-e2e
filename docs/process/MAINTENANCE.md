@@ -347,9 +347,9 @@ stayed on it is reported, not a pause.
      fix) and "Evidence" the kept script, and the housekeeping session
      confirms it and retires the entry through its fold, markers, suites
      and coverage included.
-   - a routing to the private file: the entry is left as it is, and
-     RUNBOOK "What goes where" applies (the verification probe, the
-     fact-only post).
+   - a routing to the private security repo: the finding is left as it
+     is, and RUNBOOK "What goes where" applies (the verification probe,
+     the post in the thread).
 4. **Bring the register in line with the report.** The session edits
    the entries itself, since the text comes from a report it has just
    accepted. For each entry the report covers:
@@ -529,7 +529,7 @@ The apps move; the suite follows. The baselines live in
    more than a missed one. If a shipped suite
    should have caught it, the missing check is a **Planned** item in the
    owning spec. Anything security-shaped follows RUNBOOK "What goes where":
-   verify privately and post the entry in full in the thread, tagging
+   verify privately and post the finding in full in the thread, tagging
    @jarda.kotesovec alone, who watches over the security reports; none
    of it reaches the repo.
 6. **Advance the baseline.** Update `upstream-sync.md` with the new SHAs and
@@ -672,10 +672,11 @@ affected rows and in the next Mattermost summary.
   summary; findings and breaking changes get their own message. Questions a
   spec would mark ❓ (TEMPLATE) go to the channel too. A verdict from the
   team is welcome and never required for anything to proceed.
-- **Security entries go to the thread in full**: each entry added to
-  the private security file is posted with its details, tagging
-  @jarda.kotesovec (Mattermost is private; the repo is public, so no
-  trace of it there; maintainer, 2026-10-02). **Never post**
+- **Security findings go to the thread in full**: each finding added to
+  the private security repo (`../pkp-e2e-sec`) is posted with its
+  details and its path there, tagging @jarda.kotesovec (Mattermost is
+  private; the repo is public, so no trace of it there; maintainer,
+  2026-10-02). **Never post**
   credentials or speculation presented as a finding.
 - A team reply that changes campaign rules is a maintainer ruling: encode
   it where RUNBOOK "What goes where" sends process learnings. A team
@@ -923,7 +924,7 @@ the answer; the spec and the test are the record.
   spends its coverage as sync loop step 4 says: a bullet one scenario
   plainly takes, with its assertions, or a **Planned** item.
   Maintenance never changes app code beyond what RUNBOOK step 10 allows,
-  and never moves content routed to the private security file.
+  and never moves content routed to the private security repo.
 - **Keep CI balanced.** CI runs each app as three shards (`run-app.yml`);
   when a shard's Playwright step approaches 25 minutes on CI, one more
   shard there is the next task, never a cut.

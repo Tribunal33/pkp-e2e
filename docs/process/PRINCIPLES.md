@@ -91,7 +91,7 @@ are the authoring conventions:
 - **M3 — Never write a test that asserts a 🐞 finding** (that freezes the
   defect as the contract), and **never a test that demonstrates a potential
   security concern**. These repos are public; the finding goes to the
-  maintainer's private file (RUNBOOK "What goes where") and the suite stays
+  private security repo (RUNBOOK "What goes where") and the suite stays
   silent until the fix ships. A claim parked on an open ❓ is not a coverage
   gap. Each suite's file header says what it deliberately does not cover.
 - **M4 — Absence tests** assert that the surface is not offered AND pair

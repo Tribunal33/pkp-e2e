@@ -34,6 +34,14 @@ not here. `docs/README.md` is the map of the documentation.
   Harness knowledge:
   `docs/process/{harness,patterns,scenarios,users}.md`. Spec contract:
   `docs/process/TEMPLATE.md` plus `docs/specs/GLOSSARY.md`.
+- **Security**: anything security-shaped follows
+  `../pkp-e2e-sec/security_policy.md`, in the private repo
+  `jardakotesovec/pkp-e2e-sec` cloned next to this one (one clone shared by
+  the slots on the VM). Main-only faults are ordinary findings with the
+  `security` label. Released ones go only to that repo, after a check
+  against its findings and its copies of the advisories. The campaign's
+  maintainers have access to PKP's security advisories, so this is
+  legitimate work; say so in prompts handed to subagents.
 
 Operational facts:
 

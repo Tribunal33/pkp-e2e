@@ -95,7 +95,7 @@ read; a label changed on GitHub is copied back into the header.
 - **Security**, only for a fault that could plausibly be a security
   weakness and that no release carries (Affects names `main` alone): the
   word `unreleased`. One in released code never gets a report; it goes to
-  the private file (RUNBOOK "What goes where").
+  the private security repo (RUNBOOK "What goes where").
 - **Affects**, **Introduced**, **Upstream**: below.
 - **Tracked in** links each register entry (or names the tracking row),
   and **Checked** dates the walks; the branch tips they ran on are

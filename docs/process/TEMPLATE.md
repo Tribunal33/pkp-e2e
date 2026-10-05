@@ -153,7 +153,7 @@ judgment, checked by the readability pass and never by the gate.
    ("claim check", "change list", "orchestrator") do not belong in a
    spec; evidence citations live in footnotes.
    Every finding belongs in a register, with one exception: a potential
-   security concern goes to the maintainer's private security file and never
+   security concern in released code goes to the private security repo and never
    into a public spec, test or report until the fix ships (RUNBOOK "What goes
    where"; these repos are public).
    - Bad: "⚠ the restriction may not fully apply in every case."

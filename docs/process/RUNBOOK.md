@@ -5,8 +5,8 @@ developer, and per-app Playwright tests derived from them with strong
 coverage, for OJS, OMP and OPS (one FEATURE-MAP row per feature, anchored on
 OJS). Every claim is driven on the screens before it ships, every spec gets
 one readability pass, every suite runs green twice, and anything
-security-shaped is quarantined in the maintainer's private file. When a rule
-gets in the way of that, the rule changes.
+security-shaped in released code is kept in the private security repo.
+When a rule gets in the way of that, the rule changes.
 
 This file and `docs/tracking/PROGRESS.md` are the source of truth; a session
 becomes correct by reading them, never by memory. A session is either a
@@ -14,8 +14,8 @@ FEATURE session (one feature, then stop for the maintainer's review) or a
 MAINTENANCE session (`MAINTENANCE.md`, with this loop binding underneath:
 the housekeeping session builds pending rows and revisions through it);
 the PROGRESS banner says whether the resident agent is active. Paths are
-relative to the repo root; `../e2e_ng/` is the maintainer's private
-directory.
+relative to the repo root; `../pkp-e2e-sec/` is the private security repo,
+and its `security_policy.md` the rule for anything security-shaped.
 
 ## The loop
 
@@ -92,22 +92,23 @@ orchestrator.
     committing, `npm run check-models` must pass: it lists every agent of
     the session that was stopped or served another model and blocks on any
     but the security probe ("Model discipline"; for the probe, add
-    `(finished on <model>)` to its entry's `verified-by` line). Gate: the
+    `(finished on <model>)` to its finding's `verified` line). Gate: the
     commit on `origin/main`.
 11. **Report.** What was built, the register highlights, anything
     low-confidence; if
-    anything was routed to the private file, the verification probe
-    (`briefs/security-verify.md`) has run and the report gives counts only
-    (the entries themselves go to the thread, "What goes where").
+    anything was routed to the private security repo, the verification
+    probe (`briefs/security-verify.md`) has run, the orchestrator has
+    committed and pushed the private repo, and the report gives counts only
+    (the findings themselves go to the thread, "What goes where").
     Then stop; the next feature starts in a fresh session. Gate: `security ·
-    <date> · none | routed, see private file` in phase-status.
+    <date> · none | routed, see pkp-e2e-sec` in phase-status.
 
 ## What goes where
 
 | What | Where |
 |---|---|
 | Product findings: bugs, divergences, open questions, API misbehavior the browser's own traffic showed, or a direct check of an API no screen calls (the Frame's one exception), with no security dimension | the spec's Findings register; nowhere else (not `app-changes.md`, not a PROGRESS note). A new 🐞 entry needs no other step: `npm run backlog` lists it until the housekeeping session writes it up (MAINTENANCE "Issue reports") |
-| A potential security concern in released code (3.5, 3.4 or 3.3 has it; one that exists only on `main` is in no release, so it is an ordinary product finding, row above) | `../e2e_ng/security.md`, private and outside every repo; verified by one targeted probe before the session report; rules and entry shape in `briefs/security-verify.md`. Every entry added is posted in full in the session's thread (on the VM, in a post tagging @jarda.kotesovec alone, who watches over the security reports (regression reports tag @beaug alone; one watcher per kind, 2026-09-30), in every session, a developer's PR check included; no direct messages): Mattermost is private, the repos are public (maintainer, 2026-10-02). The content never appears in anything this repo carries: a spec, test, tracking file, PROGRESS note, commit message, branch name or pushed file |
+| A potential security concern in released code (3.5, 3.4 or 3.3 has it; one that exists only on `main` is in no release, so it is an ordinary product finding, row above, whose issue report is marked `- **Security** unreleased` and filed with the `security` label) | the private security repo `../pkp-e2e-sec`, as its `security_policy.md` says: checked first against its findings and its copies of PKP's advisories (a known problem gets a sighting line, not a new file), one file per problem, verified by one targeted probe (`briefs/security-verify.md`) before the session report, then committed and pushed there by the orchestrator. Every finding added is posted in full in the session's thread with its path in the private repo (on the VM, in a post tagging @jarda.kotesovec alone, who watches over the security reports (regression reports tag @beaug alone; one watcher per kind, 2026-09-30), in every session, a developer's PR check included; no direct messages): Mattermost is private, the repos are public (maintainer, 2026-10-02). The content never appears in anything this repo carries: a spec, test, tracking file, PROGRESS note, commit message, branch name or pushed file |
 | A finding against an unmerged PR | the developer; the spec describes `main` (MAINTENANCE "A developer's PR fails the suite") |
 | What a probe saw on another feature's screen | `docs/tracking/incidentals.md`, one line, written by the orchestrator from the fold log and the merge, only after grepping that feature's spec for it: a sighting the spec already states is dropped, one it contradicts names the rule or register ID it contradicts; the line names the account and the state the read was taken in (signed in or out, a window open over it, what the seed held), and its evidence names the kept script under `shared/playwright/checks/` beside any `.reports/` path, which stays in the slot that wrote it (U08, U22, U28, U29, U60 claim checks) |
 | Process friction | `docs/tracking/friction.md`, one line, appended by the screen-driving agent itself |
@@ -190,10 +191,10 @@ Test files cite these by number, so the numbers are stable.
   slice, at most twice.
 - The one exception is the security verification probe: a stop there, or
   the rest of its run served on another model, does not hold up the
-  feature. Its verdict stands with the model named on the entry's
-  `verified-by` line, and an entry it could not settle stays `unverified`
-  for the maintainer. It writes only to the private file and its own
-  folder, so nothing it produced reaches other work.
+  feature. Its verdict stands with the model named on the finding's
+  `verified` line, and a finding it could not settle stays `verified: no`
+  for the maintainer. It writes only to the private security repo and its
+  own folder, so nothing it produced reaches other work.
 - The orchestrator never probes, verifies or edits a spec inline (the
   `status:` flip excepted); agents that drive screens are always fresh, one
   or two at a time, cut for about 40 browser calls each (an agent still
