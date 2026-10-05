@@ -885,7 +885,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | Outside Production, a Copyeditor allowed to edit the publication can change its media files, which no page offers them | 🐞 | user-visible | — |
+| [A8](#a8) | Outside Production, a copyeditor allowed to edit a version can change its media files, which no screen offers them | 🐞 | low | issues (claude), 2026-10-05 — re-verified |
 | [OMP2](#omp2) | On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
@@ -1009,21 +1009,26 @@ locales](U57-languages-and-locales.md#a4)'.
 Basis: probe, 2026-10-02. <sup>f-a7</sup>
 
 <a id="a8"></a>
-**A8 — Outside Production, a Copyeditor allowed to edit the publication can change its media files, which no page offers them** · 🐞 · user-visible · {OJS OMP}.
-The "Media" page offers its changes only to a role on the submission's
-Production stage: a journal does not show the Copyeditor the page, and
-a press shows them the list without its buttons. The server accepts the
-same changes from anyone with a role on the stage the submission is in
-now whose assignment carries the "Permissions" box. So a Copyeditor
-given that box can add, rename, relink and delete media files, other
-people's included, by sending the changes straight to the server while
-the submission is in Copyediting; in Production they are refused. They
-may already change the version's metadata and its JATS XML there, so
-the page and the server disagree rather than a new right opening; one
-of the two should change. A journal's body text behaves the same way
-([JATS XML & body text](U48-jats-and-body-text.md)).
-Since: 2026-09-17 · Basis: probe, 2026-09-30. <sup>f-a8</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A8 — Outside Production, a copyeditor allowed to edit a version can change its media files, which no screen offers them** · 🐞 · low.
+A version's media files (the images and style sheets its HTML galley
+shows) are managed on the "Media" page, which is production material: the
+page offers its changes only to a role assigned on the submission's
+Production stage. A journal does not list "Media" in the side menu for a
+copyeditor, and a press lists the files with no buttons.
+The server, though, accepts those changes from anyone who holds a role on
+the stage the submission is in now and whose assignment carries the
+"Permit submission metadata edit" permission. So a copyeditor given that
+permission, working while the submission is in Copyediting, can add,
+rename, delete and relink the version's media files (relink pairs a
+figure's web-resolution copy with its high-resolution original), other
+people's included, even though no screen offers them the actions. Once the
+submission reaches Production the same request is refused.
+The copyeditor already may edit the version's metadata at that stage, so
+this opens no new kind of right; it is the page and the server disagreeing
+about who manages media, and one of the two should change. Each change is
+written to the submission's activity log under the copyeditor's name.
+The OJS "Body Text" route takes the same check ([JATS XML & body text](U48-jats-and-body-text.md)).
+Since: 2026-09-17 · Basis: probe, 2026-10-05. <sup>f-a8</sup>
 
 ### OJS
 <a id="ojs1"></a>
@@ -1880,6 +1885,7 @@ Text and Media to whoever may edit the publication at the current
 stage. 3.5 has only the JATS route, whose server rule matches its page,
 and 3.4 and 3.3 have none of these routes: not affected.
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Issue report: [docs/issues/U47-A8-copyeditor-changes-media-outside-production.md](../issues/U47-A8-copyeditor-changes-media-outside-production.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note q29. `HtmlArticleGalleyPlugin`, the galley view: a
