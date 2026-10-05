@@ -23,7 +23,7 @@
  * - OPS2 🐞: S9 reads "Assign Editor" in the predefined-message list and
  *   never chooses it.
  * - OPS3 🐞: scenario 8 has no run here (see above).
- * - A1 🐞, A3 🐞, A4 🐞, A6 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A15 🐞,
+ * - A1 🐞, A4 🐞, A6 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A15 🐞,
  *   A16 🐞, A2 ❓, A8 ❓, A13 ❓: no scenario reaches them here.
  * - OPS1 ✅: S9 reads the manager role offered in "Assign" as the spec's
  *   text. OJS1, OMP1, OMP2: other apps' territory.

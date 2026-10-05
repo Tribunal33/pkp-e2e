@@ -18,7 +18,7 @@
  *   unsubscribe link, never how many footers the email carries.
  * - OJS1 🐞: S8 reads the automatic email's request to send the submission
  *   for review or decline it, never the button name it quotes.
- * - A1 🐞, A3 🐞, A4 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A16 🐞, A2 ❓,
+ * - A1 🐞, A4 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A16 🐞, A2 ❓,
  *   A8 ❓, A13 ❓: no scenario reaches them here.
  * - OMP1, OMP2, OPS1, OPS2, OPS3: other apps' territory.
  *

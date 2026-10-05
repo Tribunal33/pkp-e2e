@@ -1,6 +1,6 @@
 // Regression read of pkp/pkp-lib#13385 (issue #12593 "Handle missing email template or key"), kept from the
 // PR review rounds of 2026-09-28 (.reports/sync/rr12593/suspicions.md), 2026-10-02 (.reports/pr12593r2/) and
-// 2026-10-03 (.reports/pr12593r3/, .reports/sync/r3/).
+// 2026-10-03 (.reports/pr12593r3/, .reports/sync/r3/) and 2026-10-05 (.reports/pr12593r4/, .reports/sync/r4/).
 // The PR changes the stage Participants panel's "Assign" / "Notify" message:
 // PKPStageParticipantNotifyForm::sendMessage() (a blank template, or one the SENDER may not use (round 2;
 // round 1 checked the recipient) → the stage's DISCUSSION_NOTIFICATION_* template, then promote() with no null
@@ -18,6 +18,8 @@
 //   (its pointer 3dc90c81a6 lies below the PR base). Round 1 (head cf72cc78d8): see the 2026-09-28 sync-log entry.
 // Refs, round 3: after3 = ojs ff004d0973 with lib/pkp at the PR head 62077d1f6f merged onto its pointer
 //   987776cd04; omp at the PR head ecd65eebb0 (lib/pkp 62077d1f6f); ops c8af945bb7 with lib/pkp 62077d1f6f.
+// Refs, round 4: after4 = ojs 1f4cef786f and ops caddbb33da with lib/pkp at the PR head e39fdee199 (on pkp-lib
+//   main d1c90fe604, one merge above both pointers a7f5e3081b); omp at the PR head 27a00dd1a1 (lib/pkp e39fdee199).
 // Verdicts, from result-<ref>-<app>.json (round 2 expectations):
 //   s1 (A3 fixed): notifyBlank/assignBlank status 200 and a mail with subject "Discussion (Submission)"
 //      ("Discussion (Production)" on OPS); tasks' created_by is the manager (A5 fixed); before: 500, no mail.
@@ -27,6 +29,8 @@
 //   s4 (A10 fixed): choose → message filled; every recipient → subject = the template's name.
 //   s5 (default deleted, every app): round 2 500 ("promote() on null"); round 3 still 500 (the anonymous
 //      fallback Mailable has no allowUnsubscribe()), no mail, but a discussion per attempt.
+//      Round 4 (e39fdee199, the fallback uses Discussion): both 200 with the notice, one discussion each, mails
+//      "Discussion (Submission)" ("Discussion (Production)" on OPS) with the typed text and the discussion footer.
 //   s6 (sender check): the Section editor's EditorOnly send to the Author keeps its name.
 //   s8 (A17): chosen, set back to blank, typed, "Notify": 200, sent as the stage's "Discussion (…)".
 //   s7 (letter): "Request Copyedit" limited to Copyeditor sent to the Author keeps its subject, fills

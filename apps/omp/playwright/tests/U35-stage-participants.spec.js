@@ -20,7 +20,7 @@
  *   unsubscribe link, never how many footers the email carries.
  * - OMP1 🐞: S1 reads the Internal Review entry not yet initiated (no
  *   panel), never its "Assign" window's predefined-message list.
- * - A1 🐞, A3 🐞, A4 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A16 🐞, OMP2 🐞, A2 ❓,
+ * - A1 🐞, A4 🐞, A7 🐞, A9 🐞, A11 🐞, A12 🐞, A16 🐞, A2 ❓,
  *   A8 ❓, A13 ❓: no scenario reaches them here.
  * - OJS1, OPS1, OPS2, OPS3: other apps' territory.
  *
