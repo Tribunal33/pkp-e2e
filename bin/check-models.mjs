@@ -6,7 +6,7 @@
 // without holding up the feature. Prints one line per agent that is off-model or
 // was stopped, then a verdict; exit 1 means do not commit, pause for the maintainer.
 // run: node bin/check-models.mjs [--session <id or session.jsonl>] [--stops-warn]
-// --stops-warn (the issues loop, MAINTENANCE "The issues session"): a classifier
+// --stops-warn (issue reports, MAINTENANCE "Issue reports"): a classifier
 // stop on an agent that stayed on the session's model is reported, not blocked;
 // only work served on another model blocks.
 // (default: $CLAUDE_CODE_SESSION_ID, the session running the command)

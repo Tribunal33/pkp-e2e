@@ -551,8 +551,12 @@ status: draft | verified    # verified = the full RUNBOOK loop passed
      ISSUE REPORTS. A 🐞 entry written up in `docs/issues/` carries the
      report's severity (critical / high / medium / low) in place of the
      impact word, and, when it is the report's whole subject, the report's
-     title and Summary as its title and symptom (MAINTENANCE "The issues
-     session", step 7); the report is the source and the entry follows it.
+     title and Summary as its title and symptom (MAINTENANCE "Issue
+     reports", step 4); the report is the source and the entry follows it.
+     A `Report: refresh owed — … (<date>)`, `Report: paused — …` or
+     `Report: none — …` line under the Basis line says what the report
+     still owes (MAINTENANCE "Keeping a report in step"); `npm run
+     backlog` reads it, and the refresh deletes it.
 
      CRASHES. When the drive saw the app fail behind the finding (a request
      answering a server error, the page's script failing: the digest block's

@@ -240,7 +240,7 @@ node bin/try-fix.js status [ojs] [omp] [ops]    # exits 1 while a named app (def
   applied fix when it starts and, when it ends, one applied, reverted or
   swapped while it ran (that run drove mixed code). A status read is a
   point check: another reporter's apply can land seconds later, mid-walk
-  (MAINTENANCE issues session step 6).
+  (MAINTENANCE "Issue reports" step 3).
   `PKP_E2E_LINE=<line>` in front tries it on a stable line's checkouts.
 - Every fleet of the slot, campaign and dataset alike, serves the patched
   code while it is applied: one fix at a time, and only while nothing

@@ -720,6 +720,7 @@ panel shows the grants before the save, so a user who notices can type the
 deleted grant again. The same fault keeps an abandoned author row in "Edit
 citation" ([Citations & references A13](U42-citations-and-references.md#a13)).
 Basis: probe, 2026-10-04. <sup>f-a15</sup>
+Report: refresh owed — joins pkp-e2e#880 (the U42-A13 report): add it to the report's "Tracked in" (2026-10-05)
 
 ### OPS
 

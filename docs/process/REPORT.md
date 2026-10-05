@@ -10,8 +10,8 @@ under `docs/reports/` as `<date>-<repo>-<pr>.md` (or
 team the same day, and is deleted once the team has acted on it; the
 tracking row or the register footnote keeps the pointer (RUNBOOK "What
 goes where"). An **issue report** is the backlog kind: a defect in a
-spec's register, written up under `docs/issues/` by the issues session
-(MAINTENANCE "The issues session"), filed as a GitHub issue on pkp-e2e
+spec's register, written up under `docs/issues/` by the housekeeping
+session (MAINTENANCE "Issue reports"), filed as a GitHub issue on pkp-e2e
 ("As a GitHub issue" below) and deleted when the issue closes. Research write-ups (a performance round, a
 flake investigation) are not this shape, but they too lead with the
 outcome.
@@ -52,7 +52,7 @@ never dropped.
   at least [<sha>](<commit URL>) (<date>)
 - **Upstream** none found (<date>) | `<repo>#<n>` (open | closed
   without a fix | fix in PR `<repo>#<n>`, not yet in main)[, covering
-  <what it covers when that differs>]
+  <what it covers when that differs>][, the team's copy of this issue]
 - **Tracked in** <spec Ux [An](<entry URL>), [Am](<entry URL>) |
   ci-triage row | app-changes row n>[ · Temporary: delete once acted on]
 - **Checked** <date>, each branch's tip (the commits in Evidence)
@@ -129,7 +129,11 @@ less or more than this report (another app, one symptom of several).
 The report is written as usual either way: it re-verifies the fault on
 today's code and adds the steps, cause and fix analysis the pkp issue
 may lack. A fix already on `main` means the finding is stale and gets
-no report. Nothing found says so, with the date of the search.
+no report. Nothing found says so, with the date of the search. When a
+developer copies a filed issue to pkp to work on it, the bullet names
+the copy with "the team's copy of this issue", and the pkp-e2e issue
+closes once the copy is resolved and a walk on `main` shows the fix
+(MAINTENANCE "The housekeeping session").
 
 **Affects.** Which apps on which versions show the fault, so the team
 can see what a fix must reach and what a backport would cover: a header

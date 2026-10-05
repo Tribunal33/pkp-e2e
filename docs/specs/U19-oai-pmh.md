@@ -1896,6 +1896,7 @@ starts afresh never gets it. No release has "Return to Workflow" yet.
 The readers' side, the book's page answering "404 Not Found", is
 [Search](U15-search.md#omp3)'s entry (its OMP3).
 Since: 2026-06-09 · Basis: probe, 2026-10-03. <sup>f-omp8</sup>
+Report: refresh owed — joins pkp-e2e#709 (docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md): add it to the report's "Tracked in" (2026-10-05)
 
 <a id="omp9"></a>
 **OMP9 — On the first press, the press's set may leave out the deleted records of books in a series** · ❓ · user-visible.
@@ -1975,6 +1976,7 @@ release has "Return to Workflow" yet. The readers' side, the preprint's
 page answering "404 Not Found", is [Search](U15-search.md#ops4)'s entry
 (its OPS4).
 Since: 2026-06-09 · Basis: probe, 2026-10-03. <sup>f-ops5</sup>
+Report: refresh owed — joins pkp-e2e#709 (docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md): add it to the report's "Tracked in" (2026-10-05)
 
 ### Retired
 

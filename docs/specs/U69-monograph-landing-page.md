@@ -1376,6 +1376,7 @@ preview notice alone. The editor or author checking the new version is
 told it is outdated and already published; readers never see the
 line.
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
+Report: refresh owed — widened to the saved "Date Published" by the housekeeping claim check; pkp-e2e#209 says less (2026-10-05)
 
 <a id="a5"></a>
 **A5 — An older version's browser tab names the current version** · 🐞 · low.
@@ -1590,6 +1591,7 @@ It needs three things, and the first is the default:
 A DOI assigned after the second version is published does not help: it
 goes to the current version's chapter only.
 Basis: probe, 2026-10-01. <sup>f-a19</sup>
+Report: refresh owed — widened to a new version's preview by the housekeeping claim check; pkp-e2e#286 says less (2026-10-05)
 
 <a id="a20"></a>
 **A20 — A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version** · 🐞 · low.

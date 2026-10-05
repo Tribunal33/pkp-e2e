@@ -1056,6 +1056,7 @@ other journal's comment untouched; observed each carried out.
 Moderation thus crosses the boundary between journals the rest of the
 application keeps.
 Basis: probe; code for deleting a report. <sup>f-a12</sup>
+Report: paused — held for the maintainer: two attempts (2026-10-04) fell back to another model after a classifier stop; the draft in .reports/issues/u14d/draft/ must not be used; start fresh when the maintainer resumes it (2026-10-04)
 
 <a id="a13"></a>
 **A13 — On the editorial Comments page, the browser tab shows only the journal's name, not "Comments"** · 🐞 · low.
@@ -1086,6 +1087,7 @@ window. Expected an "Error" window naming the failure, the reason kept;
 observed silence, so the reader believes the report reached the
 moderators.
 Since: 2026-09-29 · Basis: probe. <sup>f-a14</sup>
+Report: paused — the open report docs/reports/2026-09-29-ui-library-992.md carries it until the team acts on it (2026-10-05)
 
 <a id="a15"></a>
 **A15 — Only the icon's fill tells an unverified ORCID iD under a comment from a verified one** · ❓ · minor.

@@ -1120,6 +1120,7 @@ where no view ran past one page. The Native XML
 tool's export list pages the same way
 ([Import & export A24](U63-import-export.md#a24)).
 Basis: probe, 2026-10-04. <sup>a16</sup>
+Report: refresh owed — joins pkp-e2e#919 (docs/issues/U63-A24-export-list-repeats-submissions-across-pages.md): add it to the report's "Tracked in" (2026-10-05)
 
 <a id="a17"></a>
 **A17 — With strict mode on, every global search fails** · 🐞 · low · crash: server.

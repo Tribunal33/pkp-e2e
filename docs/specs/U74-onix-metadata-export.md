@@ -1349,6 +1349,7 @@ returnable. Expected:
 the tab shows what the product will carry, and an import brings both
 back as exported.
 Basis: probe, 2026-10-03. <sup>f-a18</sup>
+Report: refresh owed — the report and its issue say "Returnable Indicator" is offered on physical formats only, but every format's "Metadata" tab shows the physical groups today (Publication formats A6, pkp-e2e#796), so those sentences hold only once A6 is fixed (2026-10-05)
 
 <a id="a19"></a>
 **A19 — A Native XML import rewrites the suppliers** · 🐞 · medium.

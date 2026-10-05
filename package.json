@@ -15,6 +15,7 @@
     "reset:omp": "node bin/with-app.js omp shared/playwright/reset.js",
     "reset:ops": "node bin/with-app.js ops shared/playwright/reset.js",
     "questions": "node bin/open-questions.mjs",
+    "backlog": "node bin/backlog.mjs",
     "seed-facts": "node bin/seed-facts.js",
     "dataset-facts": "node bin/dataset-facts.js",
     "probe-servers": "node bin/probe-servers.js",

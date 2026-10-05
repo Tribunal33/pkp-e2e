@@ -1497,6 +1497,7 @@ stored and appears once the panel reloads, but no participant is emailed
 and no Tasks row is raised. A journal, or a test install (which adds
 that class), is not affected.
 Since: 2026-02-10 · Basis: probe. <sup>[f-a1](#fn-a1)</sup>
+Report: paused — the open report docs/reports/2026-09-04-omp-ops-discussion-save-missing-notification-class.md carries it until the team acts on it (2026-10-05)
 
 <a id="a2"></a>
 **A2 — The "Add" and "Edit" windows for a task or discussion show "Open for What? Open to What? Beyond Content" under the title** · 🐞 · low.

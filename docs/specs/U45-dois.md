@@ -2126,6 +2126,7 @@ cleared. On 3.5 the same notice shows, and the work is sent to Crossref
 with an empty DOI, which cannot register anything; the work stays "Needs
 DOI" and no error is recorded.
 Basis: probe, 2026-10-01. <sup>f-a15</sup>
+Report: refresh owed — extended to "Deposit All" by the housekeeping claim check; the report and issue say less (2026-10-05)
 
 <a id="a16"></a>
 **A16 — A "Needs Sync" item's agency panel says its metadata "has not been submitted"** · ❓ · minor.

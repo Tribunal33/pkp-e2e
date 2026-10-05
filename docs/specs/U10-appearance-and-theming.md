@@ -1362,6 +1362,7 @@ Besides the style sheets, only a journal's thumbnail is left behind
 ([A20](#a20)): a removed "Logo", "Homepage Image" or "Favicon" of a
 journal, and the site's "Logo", are deleted as they should be. Basis:
 probe, 2026-10-04. <sup>f-a5</sup>
+Report: refresh owed — the last Summary sentence of pkp-e2e#780 needs re-syncing: the thumbnail is A20 (2026-10-05)
 
 <a id="a6"></a>
 **A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · 🐞 · low.

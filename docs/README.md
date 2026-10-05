@@ -44,8 +44,11 @@ record changes still in effect.
 - `docs/reports/`: regression and defect write-ups handed to the team,
   deleted once acted on.
 - `docs/issues/`: the specs' defects written up for the team, one file
-  per GitHub issue on pkp-e2e, deleted when the issue closes; the order
-  they are written in is `docs/tracking/issues-queue.md`.
+  per GitHub issue on pkp-e2e, kept in step with its register entries
+  and deleted when the issue closes (a developer who takes one on copies
+  it to pkp, and the issue closes once that copy is resolved and the
+  fix shows on `main`). `npm run backlog` lists everything the
+  housekeeping session still has to work, reports owed included.
 
 ## If you are building specs and tests
 

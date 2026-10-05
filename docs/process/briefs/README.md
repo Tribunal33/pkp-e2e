@@ -2,7 +2,7 @@
 
 One file per role of the RUNBOOK loop, one for the maintenance loop's
 regression reader (`regression-read.md`, MAINTENANCE step 5), one for
-the issues session's reporter (`issue-report.md`) and its two role
+the issue reporter (`issue-report.md`, MAINTENANCE "Issue reports") and its two role
 reads of a written report (`issue-read.md`, developer and triage), one for a
 flake class's diagnostician (`flake-diagnosis.md`, MAINTENANCE "Standing
 duties"), plus two
