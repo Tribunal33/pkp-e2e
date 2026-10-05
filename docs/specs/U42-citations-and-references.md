@@ -2326,7 +2326,7 @@ writes without schema validation. 3.5, 3.4 and 3.3 do not have it: they
 have no structured references (no `citation.json`, citations API or
 CitationManager).
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
-Issue report: [docs/issues/U42-A22-reference-author-orcid-any-link.md](../issues/U42-A22-reference-author-orcid-any-link.md).
+Issue report: [pkp-e2e#927](https://github.com/jardakotesovec/pkp-e2e/issues/927) ([docs/issues/U42-A22-reference-author-orcid-any-link.md](../issues/U42-A22-reference-author-orcid-any-link.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where
