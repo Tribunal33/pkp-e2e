@@ -1,4 +1,5 @@
-// Helpers of walk.js (issue report docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md).
+// OAI and "Title & Abstract" helpers, first written for the walk of U19 OMP4 (retired 2026-10-05, its walk
+// deleted; git keeps it) and required by other kept checks.
 // Requiring this file runs nothing. Every helper drives a screen a person uses, or reads an
 // OAI address as a harvester does.
 const fs = require('fs');

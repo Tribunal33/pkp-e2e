@@ -28,7 +28,6 @@
  * - A19 🐞: no section is deleted.
  * - A21 ❓: nothing is read in French.
  * - OPS1 🐞: no list carries `until` (S5's `until` bullets are {OJS OMP}).
- * - OPS2 🐞: every preprint is seeded with an abstract.
  * - OPS3 ❓: S1 reads the two eu-repo types, as the scenario says.
  * - OPS4 🐞: no server is removed.
  *
@@ -40,7 +39,7 @@
  * in S3 and S7; S6's Site Administrator is `admin`. Preprints are posted by
  * the submission scenario (`published`, no `datePublished`), so every
  * datestamp and "Date" is today, UTC, each with the default abstract unless
- * the scenario names one (OPS2). The first section's `abbrev` is a bare
+ * the scenario names one. The first section's `abbrev` is a bare
  * string (a locale map stores "Array", scenarios.md). S6 passes
  * `restrictSiteAccess` and `context.country` (the Hosted Servers "Edit"
  * refuses to save a server with no Country, seed-facts); "Enable OAI" (S7),

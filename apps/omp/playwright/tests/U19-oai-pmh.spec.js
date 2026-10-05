@@ -29,7 +29,6 @@
  *   "foo".
  * - A18 🐞: S3 never reads the datestamp of the record published again.
  * - OMP3 🐞: no unknown set is asked of a press.
- * - OMP4 🐞: every book carries an abstract (the scenario default).
  * - OMP6 🐞: no series (a scratch press has none).
  * - OMP7 ❓: no new version is published.
  * - A6–A15, A19–A24, OJS-only: the journal's, in that suite; OPS*: the

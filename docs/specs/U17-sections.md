@@ -451,9 +451,8 @@ on Settings › Journal › "Sections", a row's "Edit" (Settings › Press ›
 5. **"Do not require abstracts"** {OJS OPS}. Default unticked (the
    abstract is required). Ticked: a submission in the section may be
    submitted and published without an abstract (Submission wizard, Rule 13
-   there; Publication metadata, Rule 5 there). On a preprint server, one
-   preprint posted without an abstract makes the server's harvesting
-   record lists fail ⚠ [OPS6](#ops6). <sup>k</sup>
+   there; Publication metadata, Rule 5 there); its harvesting record
+   carries no "Description" (*[OAI-PMH](U19-oai-pmh.md)*). <sup>k</sup> <sup>f-ops6</sup>
 6. **"Review Form"** {OJS}. Default "None / Free Form Review". A form
    chosen is preselected in Add Reviewer for submissions in the section
    ([→ review forms](U29-review-setup-and-review-forms.md#forms)). A press
@@ -1006,8 +1005,6 @@ Left out of the scenarios above, by reason:
   - OPS3 (two sections sharing a path, and a path with a space or a slash;
     Rule 16c)
   - OPS4 (no link leading to a section's page; Rule 16b)
-  - OPS6 (a preprint posted without an abstract breaking the server's
-    harvesting; Settings bullet 5)
   - OPS2 (the "(For example etc.)" help, and the box changing nothing on
     a preprint server; Fields, "Identify items posted in this section as
     a(n)"; Settings bullet 11)
@@ -1079,7 +1076,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS1](#ops1) | A preprint server with nothing posted shows a blank "Archives" page, with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | Preprint server sections: the "Identify items posted in this section as a(n)" box has no examples and no effect | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS5](#ops5) | A typed "Archives" page number past the last page opens an empty page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OPS6](#ops6) | One preprint posted without an abstract makes the server's harvesting record lists fail | 🐞 | user-visible · crash: server | — |
 | [OPS7](#ops7) | Paging through "Archives" shows some preprints posted on the same day on several pages and others on none | 🐞 | medium | — |
 | [A2](#a2) | A negative "Word Count" is saved and then refuses every abstract in the section, at submission and on "Title & Abstract" | ❓ | user-visible | — |
 | [A3](#a3) | "Will not be included in the indexing of the journal" changes nothing anywhere | ❓ | minor | — |
@@ -1090,6 +1086,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS3](#ops3) | A section's URL path is not checked: a shared path shows only one section's page, a path with a space or slash no page | ❓ | minor | — |
 | [OPS4](#ops4) | No page of a preprint server links to a section's page | ❓ | minor | — |
 | [OMP1](#omp1) | Series are optional and described for readers; no intake settings, no active-series minimum | ✅ | — | — |
+| [OPS6](#ops6) | One preprint posted without an abstract made the server's harvesting record lists fail | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/ops#1430's head |
 
 ### All apps
 
@@ -1398,19 +1395,6 @@ typed, bookmarked, or left behind when the server's list got shorter or
 "Items per page" grew.
 Basis: probe, 2026-10-02. <sup>f-ops5</sup>
 
-<a id="ops6"></a>
-**OPS6 — A preprint without an abstract breaks the server's harvesting** · 🐞 · user-visible · crash: server.
-A manager posts a preprint without an abstract, which a section marked
-"Do not require abstracts" allows. From then on the server's harvesting
-interface fails: the record list of the whole server, and the list of
-that section's set, answer a server error instead of records, so a
-harvester gets none of the server's records. The other sections' lists
-answer normally, and a journal lists the same case normally. The
-harvesting interface is *OAI-PMH*'s; the entry sits here because this
-section setting is the way to the state. It broke in a July 2026 change
-to the server's harvested records: decay, not a choice.
-Since: 2026-07-07 (about three months) · Basis: probe, 2026-09-25; its start, commit. <sup>f-ops6</sup>
-
 <a id="ops7"></a>
 **OPS7 — Paging through "Archives" repeats some same-day preprints and skips others** · 🐞 · medium.
 A visitor who presses "Next" through a preprint server's "Archives"
@@ -1424,6 +1408,11 @@ the export list and the editorial dashboard
 (*[Import & export](U63-import-export.md#a24)* A24), and one fix
 reaches all of them.
 Basis: probe, 2026-10-04. <sup>f-ops7</sup>
+
+### Retired
+
+<a id="ops6"></a>
+**OPS6 — A preprint without an abstract broke the server's harvesting** · ✅ · retired. Fixed by pkp/ops#1430 (for pkp/pkp-lib#13445), verified 2026-10-05 at the PR's head before its merge (*[OAI-PMH](U19-oai-pmh.md#ops2)*, note f-ops2). <sup>f-ops6</sup>
 
 ---
 
@@ -1674,7 +1663,7 @@ Issue report: [pkp-e2e#489](https://github.com/jardakotesovec/pkp-e2e/issues/489
 Issue report: [pkp-e2e#490](https://github.com/jardakotesovec/pkp-e2e/issues/490) ([docs/issues/U17-OPS5-archives-page-past-last-not-404.md](../issues/U17-OPS5-archives-page-past-last-not-404.md)).
 
 <a id="fn-f-ops6"></a>
-**f-ops6** — OPS `plugins/metadata/dc11/filter/Dc11SchemaPreprintAdapter.php` passes `$publication->getData('abstract')`, null for a preprint without an abstract, to `addLocalizedElements(…, array $localizedValues)`, a TypeError; OJS's adapter casts to `(array)`. The array typing came with ops `25e6954e81` "pkp/pkp-lib#12950 add version relations to OAI DC" (2026-07-07). Live-probed 2026-09-25, two runs: `{server}/oai?verb=ListRecords&metadataPrefix=oai_dc` and the section's set (`…&set={server}:{abbreviation}`) answered 500 with an empty body, the probe server logging "Uncaught TypeError: …Dc11SchemaPreprintAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given"; the other sections' sets answered 200 with their records; the same case on a journal answered 200 with both records. Written up for the team in `docs/reports/2026-09-25-ops-oai-empty-abstract.md` (a temporary report, deleted once addressed; git history keeps it).
+**f-ops6** — OPS `plugins/metadata/dc11/filter/Dc11SchemaPreprintAdapter.php` passes `$publication->getData('abstract')`, null for a preprint without an abstract, to `addLocalizedElements(…, array $localizedValues)`, a TypeError; OJS's adapter casts to `(array)`. The array typing came with ops `25e6954e81` "pkp/pkp-lib#12950 add version relations to OAI DC" (2026-07-07). Live-probed 2026-09-25, two runs: `{server}/oai?verb=ListRecords&metadataPrefix=oai_dc` and the section's set (`…&set={server}:{abbreviation}`) answered 500 with an empty body, the probe server logging "Uncaught TypeError: …Dc11SchemaPreprintAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given"; the other sections' sets answered 200 with their records; the same case on a journal answered 200 with both records. Written up for the team in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`, deleted with the fix (git history keeps it). Fixed by pkp/ops#1430, the `(array)` cast and `?array`: walked 2026-10-05 at the PR head `113172195a`, before its merge (U19 note f-ops2).
 
 <a id="fn-f-ops7"></a>
 **f-ops7** — fn f: `PreprintsHandler::index()` orders by `ORDERBY_DATE_PUBLISHED` (`po.date_published`, a date with no time) with no second key, and each page is its own `LIMIT`/`OFFSET` query, so the database may order tied rows differently on each page. Walked 2026-10-04 on PostgreSQL, OPS `main` (ops `c8af945bb7`, lib/pkp `3dc90c81a6`) and `stable-3_5_0` (ops `38b61882d3`), signed out, on the default test dataset with 272 preprints posted on one day (copies made with the Native XML import): "Archives" ("1-25 of 272") paged with "Next" to the last of 11 pages showed 268 different preprints on main, submission 19 "Finocchiaro: Arguments About Arguments" on pages 1 to 5 and four on no page; 268 of 272 on 3.5 too, submission 11 on five pages. No request failed and no page script failed. A section's page (`SectionsHandler::section()`, note q) orders the same way (code read, not driven). The proposed fix, a last sort key `s.submission_id` in `PKP\submission\Collector`, tried on main, showed 272 of 272. Kept script: `shared/playwright/checks/issues/export-list-repeats-submissions-across-pages/walk.js` (mode `reader`).

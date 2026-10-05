@@ -26,7 +26,6 @@
  *   the last.
  * - OPS2 🐞: S1 never reads the help under "Identify items posted in this
  *   section as a(n)".
- * - OPS6 🐞: no scenario posts a preprint without an abstract.
  * - A9 🐞, A10 🐞: the journal's programming interface, absent here (A5).
  * - A2 ❓, A3 ❓, A4 ❓, A5 ❓, OPS3 ❓, OPS4 ❓: parked; S6 types a path of
  *   letters only and opens a section's page by its address alone.

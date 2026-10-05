@@ -164,7 +164,7 @@ language, each marked with its language. <sup>f</sup>
 | Title | each language's title, followed by ": " and the subtitle when there is one | the same | the same <sup>f</sup> <sup>q13</sup> |
 | Author or Creator | each contributor as "{family name}, {given name}", once per language the name is given in | the same | the same <sup>f</sup> <sup>q13</sup> |
 | Subject and Keywords | each keyword, then each subject, by its name | the same | the same <sup>f</sup> <sup>q13</sup> |
-| Description | the abstract, its formatting removed | the same; a book without an abstract ⚠ [OMP4](#omp4) | the same; a preprint without an abstract ⚠ [OPS2](#ops2) <sup>f</sup> <sup>q13</sup> |
+| Description | the abstract, its formatting removed; none for an item without an abstract | the same | the same <sup>f</sup> <sup>q13</sup> <sup>f-omp4</sup> |
 | Publisher | the journal's "Publisher" (Settings › Journal › "Masthead"), else the journal's name in each of its languages | the press's "Press Publisher Name", else its name | the server's name in each of its languages <sup>f</sup> <sup>q13</sup> |
 | Other Contributor | never shown ⚠ [A6](#a6) | never shown | never shown <sup>f</sup> <sup>q13</sup> |
 | Date | the version's publication date, "YYYY-MM-DD" | the same | the same <sup>f</sup> <sup>q13</sup> |
@@ -643,8 +643,7 @@ message. <sup>m</sup>
   side of Rule 4c's fault, the item's own page, is in
   [Search](U15-search.md#omp3).
 - [Sections](U17-sections.md) owns the sections, their abbreviation and
-  type (Rule 7; Settings bullet 11) and carries the entry for a preprint
-  without an abstract ([OPS2](#ops2)).
+  type (Rule 7; Settings bullet 11).
 - [Publication metadata](U40-publication-metadata.md),
   [Contributors & affiliations](U41-contributors-and-affiliations.md),
   [Identifiers](U44-identifiers.md) and *DOIs* own the values the records
@@ -1138,11 +1137,9 @@ Left out of the scenarios above, by reason:
     ListIdentifiers and ListRecords asked with `until` on a preprint server
     list its preprints, as scenario 5 shows on a journal and a press {OPS}
     (Rule 9)
-  - the guard for OMP4 (issue report
-    `docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md`): a
-    press's ListRecords and GetRecord with one published book that has no
-    abstract, the book's record answered without a "Description" {OMP} (once
-    fixed)
+  - a book or a preprint published without an abstract (retired OMP4,
+    OPS2): the press's or the server's ListRecords and GetRecord answer
+    its record without a "Description" {OMP OPS} (the Dublin Core table)
   - the guard for A1 (issue report
     `docs/issues/U19-A1-oai-own-address-loses-deleted-records.md`): a second
     journal's own address after it unpublishes an article: its lists and
@@ -1348,8 +1345,6 @@ Left out of the scenarios above, by reason:
     lists with `from` or `until`; Rule 9e)
   - OMP2 (a press with no "Enable OAI"; Rule 17)
   - OMP3 (a press given a set it does not have; Rule 8)
-  - OMP4, OPS2 (a book or a preprint without an abstract; the Dublin
-    Core table)
   - OMP6 (a series with no prefix; Rule 7b)
   - OMP7 (a book's new version changing its format identifiers; Rule 4a)
   - OMP8, OPS5 (a book returned to the workflow leaving the lists with no
@@ -1398,11 +1393,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | A journal's `driver` OAI set lists articles that have no galley {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | On 3.5 a journal's `driver` OAI list stops after a hundred records; on every version it offers "Resume" when complete {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP6](#omp6) | A press's OAI-PMH set list names every series that has no prefix with a leading space | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OMP8](#omp8) | A published book returned to the workflow leaves the press's OAI records with no deleted record | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
 | [OPS4](#ops4) | Removing a preprint server leaves no deleted records for its posted preprints at the site-wide OAI address | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | A posted preprint returned to the workflow is reported to harvesters as deleted | 🐞 | user-visible | — |
 | [A6](#a6) | "Supporting Agencies", "Rights" and "Source" reach no record | ❓ | minor | — |
@@ -1417,6 +1410,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS3](#ops3) | "Identify items posted in this section as a(n)" reaches no record | ❓ | minor | — |
 | [OMP1](#omp1) | A press's record is a publication format, not a book | ✅ | invisible | — |
 | [OMP5](#omp5) | Retired: an address with no press answers as the whole site | ✅ | retired | — |
+| [OMP4](#omp4) | A press's OAI-PMH record lists answered a server error once one book was published without an abstract | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/omp#2490's head |
+| [OPS2](#ops2) | One preprint without an abstract made the server's record lists fail | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/ops#1430's head |
 
 ### All apps
 
@@ -1845,23 +1840,6 @@ correctly. The site-wide address answers a press's set correctly and an
 unknown set with every press's records.
 Basis: probe, 2026-10-01. <sup>f-omp3</sup>
 
-<a id="omp4"></a>
-**OMP4 — A press's OAI-PMH record lists answer a server error once one book is published without an abstract** · 🐞 · high · crash: server.
-When a press publishes a book that has no abstract in any language,
-which the press's forms allow at submission and in the workflow, the
-press's OAI-PMH ListRecords answers a server error instead of the page
-of the list that holds the book. GetRecord for that book fails the same
-way. ListIdentifiers still answers. ListRecords is served in pages of up
-to 100 records. A harvester gets status 500 and an empty answer for the
-page that holds the book, so it loses every record of that page and
-cannot go on to the pages after it. On a press with fewer than 100
-records that is the whole list. The site-wide address fails on the same
-page, which there also holds the other presses' records. Nothing tells
-the press: the book's page and the workflow look right. The list answers
-once the book has an abstract. Dublin Core is the only format a press
-offers, so the harvester has no other format to ask for.
-Basis: probe, 2026-10-01. <sup>f-omp4</sup>
-
 <a id="omp6"></a>
 **OMP6 — A press's OAI-PMH set list names every series that has no prefix with a leading space** · 🐞 · low.
 A harvester reading a press's ListSets expects each series named by its
@@ -1933,12 +1911,6 @@ date. Harvesting a preprint server in slices of dates, each with a
 normally when `until` is left out.
 Since: 2021-06-11 · Basis: probe, 2026-10-01. <sup>f-ops1</sup>
 
-<a id="ops2"></a>
-**OPS2 — A preprint without an abstract breaks the server's lists** · 🐞 · user-visible · crash: server.
-One preprint posted without an abstract makes the server's record lists
-fail; [Sections](U17-sections.md#ops6) carries the entry (its OPS6).
-Basis: probe, 2026-09-26. <sup>f-ops2</sup>
-
 <a id="ops3"></a>
 **OPS3 — The section type reaches no record** · ❓ · minor.
 A Preprint Server Manager fills a section's "Identify items posted in
@@ -1979,6 +1951,12 @@ Since: 2026-06-09 · Basis: probe, 2026-10-03. <sup>f-ops5</sup>
 Report: refresh owed — joins pkp-e2e#709 (docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md): add it to the report's "Tracked in" (2026-10-05)
 
 ### Retired
+
+<a id="omp4"></a>
+**OMP4 — A press's OAI-PMH record lists answered a server error once one book was published without an abstract** · ✅ · retired. Fixed by pkp/omp#2490 (for pkp/pkp-lib#13445), verified 2026-10-05 at the PR's head before its merge. <sup>f-omp4</sup>
+
+<a id="ops2"></a>
+**OPS2 — One preprint without an abstract made the server's record lists fail** · ✅ · retired. Fixed by pkp/ops#1430 (for pkp/pkp-lib#13445), verified 2026-10-05 at the PR's head before its merge. <sup>f-ops2</sup>
 
 <a id="omp5"></a>
 **OMP5 — An address with no press answers as the whole site** · ✅ · retired. Overturned 2026-09-26: seen on a press's install, the address answers "404 Not Found", as on a journal's (Rule 16a). <sup>f-omp5</sup>
@@ -2228,8 +2206,8 @@ Issue report: [pkp-e2e#341](https://github.com/jardakotesovec/pkp-e2e/issues/341
 Issue report: [pkp-e2e#299](https://github.com/jardakotesovec/pkp-e2e/issues/299) ([docs/issues/U19-OMP3-oai-unknown-set-lists-other-records.md](../issues/U19-OMP3-oai-unknown-set-lists-other-records.md)).
 
 <a id="fn-f-omp4"></a>
-**f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract).
-Issue report: [pkp-e2e#253](https://github.com/jardakotesovec/pkp-e2e/issues/253) ([docs/issues/U19-OMP4-book-without-abstract-oai-lists-fail.md](../issues/U19-OMP4-book-without-abstract-oai-lists-fail.md)).
+**f-omp4** — Live-probed 2026-09-26: a book published with its abstract saved empty on "Title & Abstract" made the press's ListRecords, its GetRecord and the site-wide `set={press}` list answer 500, while the site-wide first page (without the book) and ListIdentifiers answered; the server log: `Dc11SchemaPublicationFormatAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given`. The book was unpublished again at once. Code: note f (`Dc11SchemaPublicationFormatAdapter::addLocalizedElements(…, array $localizedValues)` receives `$publication->getData('abstract')`, null when never set; OMP's "Title & Abstract" does not require the abstract). Fixed by pkp/omp#2490 (the `(array)` cast and `?array`, as pkp/ojs#5753 did for OJS): walked 2026-10-05 at the PR head `bd8c5a28c6`, before its merge, on the default dataset (the issue report's steps, its kept walk): after the abstract is emptied the press's ListRecords, the site-wide list with and without `set=publicknowledge` and GetRecord of book 14's format answer 200, book 14's record with 20 elements and no `dc:description`; the abstract typed back gives the 21st.
+Issue report: pkp-e2e#253, closed at the merge (the report and its walk deleted; git keeps them).
 
 <a id="fn-f-omp5"></a>
 **f-omp5** — Live-probed 2026-09-26, all three apps, two runs: `{site address}/index.php/nosuchjournal/oai?verb=Identify` and a second unknown path answered "404 Not Found" on the press's install too. The retired entry rested on OMP `OAIHandler::index()`, which has no check of its own for an unknown press path; the request is refused before it.
@@ -2253,7 +2231,7 @@ Issue report (the Search spec's OMP3 and OPS4, this entry under its "Reach"): [d
 Issue report: [pkp-e2e#252](https://github.com/jardakotesovec/pkp-e2e/issues/252) ([docs/issues/U19-OPS1-preprint-server-oai-until-fails.md](../issues/U19-OPS1-preprint-server-oai-until-fails.md)).
 
 <a id="fn-f-ops2"></a>
-**f-ops2** — Live-probed 2026-09-26: a preprint posted with its abstract empty made the server's ListRecords, its GetRecord and the site-wide `set={server}` list answer 500 (`Dc11SchemaPreprintAdapter::addLocalizedElements()`, the same TypeError as OMP4); the preprint was unposted again at once. The Sections spec's note f-ops6 (live-probed 2026-09-25): `Dc11SchemaPreprintAdapter::addLocalizedElements()` receives a null abstract, a TypeError; written up in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`.
+**f-ops2** — Live-probed 2026-09-26: a preprint posted with its abstract empty made the server's ListRecords, its GetRecord and the site-wide `set={server}` list answer 500 (`Dc11SchemaPreprintAdapter::addLocalizedElements()`, the same TypeError as OMP4); the preprint was unposted again at once. The Sections spec's note f-ops6 (live-probed 2026-09-25): `Dc11SchemaPreprintAdapter::addLocalizedElements()` receives a null abstract, a TypeError; written up in `docs/reports/2026-09-25-ops-oai-empty-abstract.md`. Fixed by pkp/ops#1430: walked 2026-10-05 at the PR head `113172195a`, before its merge (`checks/U19/K3/k3.js` `PHASES=seed,empty` with `KEEP_EMPTY=1`): a preprint posted with its abstract emptied on "Title & Abstract" is listed by the server's ListRecords and ListIdentifiers, the site-wide list and `set={server}`, all 200, and GetRecord answers it with no `dc:description`; control on the same database at ops `caddbb33da` (the PR's base): the server's ListRecords and that GetRecord 500 with an empty body. The temporary report `docs/reports/2026-09-25-ops-oai-empty-abstract.md` is deleted.
 
 <a id="fn-f-ops3"></a>
 **f-ops3** — Live-probed 2026-09-26: "Working Paper" typed in a section's "Identify items posted in this section as a(n)"; its preprint's record read the two eu-repo words only, and the preprint's page, signed out, did not show the words. Code: note f; ops `512707bc6d` "Additional changes to OAI in PPS" (2019-11-21) removed `getIdentifyType()` from the adapter; the section form still offers the field (`sectionForm.tpl`, `manager.sections.identifyType`).
