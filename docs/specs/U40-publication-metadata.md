@@ -908,6 +908,10 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A21 (issue report
+    `docs/issues/U40-A21-author-new-version-changes-published-funders.md`):
+    an Author allowed to edit only a new version of a published item is
+    offered no "Add Funder", and the published page's funders stay as they were
   - Tools › Permissions: Cancel in the reset confirm box leaves the button usable, and pressing it again asks again (A13; the guard its issue report names)
   - a press with License Terms and no license: a book page without its own License URL shows the "License" heading and the terms, with no link in the block (OMP5; the guard its issue report names)
   - a journal that requires the plain language summary: the
@@ -1000,7 +1004,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A15](#a15) | Change Submission Language: a language picked while the panel loads saves the old title as the new one | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A21](#a21) | Through a new version of a published item, the permitted Author changes the published version's funders and can take its review round | 🐞 | user-visible | — |
+| [A21](#a21) | Through a new version of a published item, the permitted Author changes the published version's funders and can take its review round | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1271,18 +1275,17 @@ automatic fill that will not happen.
 Basis: probe. <sup>f-a20</sup>
 
 <a id="a21"></a>
-**A21 — An Author's edits on a new version change the published version's funders and review round** · 🐞 · user-visible.
-On a new version of a published item, the permitted Author (Rule 9)
-changes two things the published version shares with it. On a journal, a
-funder added, edited or deleted on the new version's "Funding" page
-changes the published article's page and its next Crossref or DataCite
-deposit (a press or preprint server has no such page; a hand-made request
-does the same). A hand-made save of the new version also takes the
-published version's review round, a choice the screen offers disabled.
-Expected: both stay as published, like the title. Funders being one list
-for every version is *[Funding](U43-funding.md#a2)* A2.
-Since: 2026-09-08 · Basis: probe, 2026-09-30 (OJS); code (OMP, OPS). <sup>f-a21</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A21 — An Author's edits on a new version change the published version's funders and review round** · 🐞 · medium.
+On a new version of a published item, an Author allowed to edit only
+that version adds, edits or deletes a funder on its "Funding" page, and
+the published version's page shows the change at once: funders are one
+list for every version (*[Funding](U43-funding.md#a2)* A2). Saving a
+version's "Associated review round" also takes, silently, a round the
+published version holds: an editor does so from a version page opened
+before the round moved back, and an Author allowed to edit the new
+version can by a request no screen sends. Expected: both stay as
+published, like the title.
+Since: 2026-09-08 · Basis: probe, 2026-10-05. <sup>f-a21</sup>
 
 ### OJS
 
@@ -2801,6 +2804,8 @@ it: 3.5's `canEditPublication(int $submissionId, …)` locks the Author out
 of every version once one is published (`classes/submission/Repository.php:514-547`),
 and none of them has the funders API or `reviewRoundIds`.
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Issue report (the funders): [docs/issues/U40-A21-author-new-version-changes-published-funders.md](../issues/U40-A21-author-new-version-changes-published-funders.md).
+Issue report (the review round): [docs/issues/U40-A21-review-round-taken-from-other-version.md](../issues/U40-A21-review-round-taken-from-other-version.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1 — OJS1 evidence.** An OJS submission whose publication is

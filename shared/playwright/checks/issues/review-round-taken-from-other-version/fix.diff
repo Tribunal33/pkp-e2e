@@ -1,0 +1,35 @@
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -264,6 +264,20 @@
+                         __('editor.submission.workflowDecision.invalidReviewRoundSubmission')
+                     );
+                 }
++
++                // A round another version holds stays with it until that version lets it go,
++                // as the "Associated review round" control shows it disabled
++                $otherVersionReviewRounds = array_filter(
++                    array_intersect_key($submissionReviewRoundsById, array_flip(array_map('intval', $props['reviewRoundIds']))),
++                    fn ($reviewRound) => $reviewRound->getPublicationId() && $reviewRound->getPublicationId() !== $publication->getId()
++                );
++
++                if (!empty($otherVersionReviewRounds)) {
++                    $validator->errors()->add(
++                        'reviewRoundIds',
++                        __('publication.reviewRound.otherVersion')
++                    );
++                }
+             }
+         });
+ 
+--- a/lib/pkp/locale/en/submission.po
++++ b/lib/pkp/locale/en/submission.po
+@@ -3612,6 +3612,9 @@
+ msgid "publication.reviewRound.optionNoDate"
+ msgstr "Round {$round}"
+ 
++msgid "publication.reviewRound.otherVersion"
++msgstr "A chosen review round is associated with another version. Remove it from that version first."
++
+ msgid "submission.submit.creditRoles.degrees.lead"
+ msgstr "Lead"
+ 

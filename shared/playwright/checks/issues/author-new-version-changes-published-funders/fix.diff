@@ -1,0 +1,112 @@
+--- a/lib/pkp/api/v1/funders/PKPFunderController.php
++++ b/lib/pkp/api/v1/funders/PKPFunderController.php
+@@ -32,6 +32,7 @@
+ use PKP\security\authorization\PublicationWritePolicy;
+ use PKP\security\authorization\SubmissionAccessPolicy;
+ use PKP\security\authorization\UserRolesRequiredPolicy;
++use PKP\security\authorization\internal\SubmissionPublicationsCanBeEditedPolicy;
+ use PKP\security\Role;
+ use PKP\services\PKPSchemaService;
+ 
+@@ -114,6 +115,9 @@
+             $this->addPolicy(new PublicationAccessPolicy($request, $args, $roleAssignments));
+         } else {
+             $this->addPolicy(new PublicationWritePolicy($request, $args, $roleAssignments));
++            // Funders belong to the submission and every version shows them, so a change
++            // reaches the published versions too: require the right to edit every version.
++            $this->addPolicy(new SubmissionPublicationsCanBeEditedPolicy($request, 'api.submissions.403.userCantEdit'));
+         }
+ 
+         return parent::authorize($request, $args, $roleAssignments);
+--- /dev/null
++++ b/lib/pkp/classes/security/authorization/internal/SubmissionPublicationsCanBeEditedPolicy.php
+@@ -0,0 +1,57 @@
++<?php
++
++/**
++ * @file classes/security/authorization/internal/SubmissionPublicationsCanBeEditedPolicy.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class SubmissionPublicationsCanBeEditedPolicy
++ *
++ * @ingroup security_authorization_internal
++ *
++ * @brief Policy to ensure every publication of the authorized submission is editable by the
++ *  given user, for data that belongs to the submission and shows on every version (funders).
++ */
++
++namespace PKP\security\authorization\internal;
++
++use APP\core\Application;
++use APP\core\Request;
++use APP\facades\Repo;
++use APP\submission\Submission;
++use PKP\security\authorization\AuthorizationPolicy;
++use PKP\security\Role;
++
++class SubmissionPublicationsCanBeEditedPolicy extends AuthorizationPolicy
++{
++    /** @var \PKP\user\User */
++    private $_currentUser;
++
++    public function __construct(Request $request, string $message)
++    {
++        parent::__construct($message);
++        $this->_currentUser = $request->getUser();
++    }
++
++    /**
++     * @see AuthorizationPolicy::effect()
++     */
++    public function effect(): int
++    {
++        $userRoles = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_USER_ROLES);
++        if (in_array(Role::ROLE_ID_SITE_ADMIN, $userRoles)) {
++            return AuthorizationPolicy::AUTHORIZATION_PERMIT;
++        }
++
++        $submission = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_SUBMISSION); /** @var Submission $submission */
++        foreach ($submission->getData('publications') as $publication) {
++            if (!Repo::submission()->canEditPublication($publication, $this->_currentUser)) {
++                return AuthorizationPolicy::AUTHORIZATION_DENY;
++            }
++        }
++
++        return AuthorizationPolicy::AUTHORIZATION_PERMIT;
++    }
++}
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOJS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigAuthorOJS.js
+@@ -448,7 +448,12 @@
+ 					props: {
+ 						submission,
+ 						publication: selectedPublication,
+-						canEdit: permissions.canEditPublication,
++						// Funders belong to the submission and show on every version
++						canEdit:
++							permissions.canEditPublication &&
++							submission.publications.every(
++								(publication) => publication.canCurrentUserChangeMetadata,
++							),
+ 						funderEditForm: pageInitConfig.componentForms.funderEditForm,
+ 					},
+ 				},
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOJS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOJS.js
+@@ -1010,7 +1010,12 @@
+ 					props: {
+ 						submission,
+ 						publication: selectedPublication,
+-						canEdit: permissions.canEditPublication,
++						// Funders belong to the submission and show on every version
++						canEdit:
++							permissions.canEditPublication &&
++							submission.publications.every(
++								(publication) => publication.canCurrentUserChangeMetadata,
++							),
+ 						funderEditForm: pageInitConfig.componentForms.funderEditForm,
+ 					},
+ 				},
