@@ -218,7 +218,7 @@ the page and the XML at once; it is left out of the tried diff because
 it changes what the page shows members.
 
 **With the U51 A30 fix.**
-[U51-A30](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U51-A30-article-without-issue-galleys-open-to-all.md)
+[pkp-e2e#924](https://github.com/jardakotesovec/pkp-e2e/issues/924)
 (galleys of an article published with no issue open to all) changes the
 same two OJS files: it makes `IssueAction::subscriptionRequired()` take
 a null issue (an article without an issue follows the journal's
