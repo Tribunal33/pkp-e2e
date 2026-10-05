@@ -90,7 +90,7 @@ The lower half holds the request form shared by all three add modes:
 | "Choose a predefined message to use, or fill out the form below." | no | Email template chooser. It renders on every add, even with no alternate request templates to offer, as a one-option select ("Review Request") ⚠ [A19](#a19). When alternates do exist, all of them are listed ([A5](#a5), retired; the access check it questioned was reverted upstream) <sup>d</sup> |
 | "Email to be sent to reviewer" | no | Rich-text request letter, prefilled from the chosen template. Placeholders for name, deadlines and the review link are filled at send time. Effectively required: submitting with the letter emptied fails with no on-screen feedback of any kind, yet still creates the assignment and never sends the request email ⚠ [A18](#a18) <sup>d</sup> |
 | "Do not send email to Reviewer." | no | Checkbox. Skips the request email; the assignment is still created <sup>d</sup> |
-| "Response Due Date" / "Review Due Date" (under "Important Dates") | yes | Date pickers, prefilled per the journal's review setup (Rule 9). The permanent guidance "Review due date must be greater or equal to response due date." states the rule; the Edit window shows it too. Submitting with the dates inverted is refused with no visible feedback: the window stays open and nothing is added ⚠ [A8](#a8). The pickers, shared with the Edit and Resend windows, take calendar picks or a date typed in the YYYY-MM-DD format (e.g. 2026-08-02). A date typed in another format looks accepted, but the date the box held before is silently saved ("11/12/2030" shows as "11122030"). In the Edit window's "Review Due Date" an impossible date is saved as its text read one key earlier, whatever the box held: "2030-02-30" as 2030-02-03 ⚠ [A16](#a16). They also accept dates already past without any warning ⚠ [A17](#a17) <sup>f</sup> |
+| "Response Due Date" / "Review Due Date" (under "Important Dates") | yes | Date pickers, prefilled per the journal's review setup (Rule 9). The permanent guidance "Review due date must be greater or equal to response due date." shows here and in the Edit window. Inverted dates are refused with a notice at the top right, "There was an error adding the reviewer as review due date must be equal or greater than responde due date." ⚠ [A45](#a45), gone by itself within seconds; the window stays open and nothing is added. The pickers, shared with the Edit and Resend windows, take calendar picks or a date typed in the YYYY-MM-DD format (e.g. 2026-08-02). A date typed in another format looks accepted, but the date the box held before is silently saved ("11/12/2030" shows as "11122030"). In the Edit window's "Review Due Date" an impossible date is saved as its text read one key earlier, whatever the box held: "2030-02-30" as 2030-02-03 ⚠ [A16](#a16). They also accept past dates without any warning ⚠ [A17](#a17) <sup>f</sup> |
 | "Files To Be Reviewed" | no | Collapsed file list with one checkbox per file of the round, all ticked by default. The inline warning "No Files Selected" appears here only when the round has no files at all. Unticking every box triggers no warning in this window (Rule 11) <sup>d</sup> |
 | "Review Type" | yes | Radio group "Anonymous Reviewer/Anonymous Author", "Anonymous Reviewer/Disclosed Author", "Open". Preselected per the journal's review setup <sup>d</sup> |
 | "Public Visibility" | no | Checkbox "Publicly Show Reviewer Comments". Preselected per the journal's public-visibility default. Ticked, it adds a sentence to the "Mark this review as complete?" dialog (Rule 14a) and a confirmation before a completed review is modified (Rule 14b) <sup>d</sup> |
@@ -126,7 +126,8 @@ while the review has not been submitted. Here, and only here, the "No Files
 Selected" warning reacts to the checkboxes, appearing and disappearing as
 boxes are ticked and unticked (Rule 11). Saving with the review due date
 before the response due date is refused under the same date rule as at add
-time ⚠ [A8](#a8). Its "Cancel" closes the window at once, even with a due
+time, with the same notice [A45](#a45): the window stays open and the
+dates are not changed. Its "Cancel" closes the window at once, even with a due
 date changed: nothing asks, nothing is saved, and "Edit" opened again shows
 the old date. Its top "Close" asks first after a change to the review due
 date, the "Review Type" or the "Public Visibility" box (no other control
@@ -162,10 +163,15 @@ submit "Reinstate Reviewer" ([A20](#a20), retired: the shipped script bundle
 briefly opened these windows, Send Reminder included, without their message
 editor).
 **Resend Review Request window** (on a declined row; no template chooser):
-the message, the skip-email checkbox, plus fresh "Response Due Date" and
-"Review Due Date" pickers. Each picker is preset from its own configured
-interval, exactly as at add time ([A9](#a9), retired) (Rule 19).
-<sup>k</sup>
+the message "Email to be sent to reviewer", the "Do not send email to
+Reviewer." checkbox, and under "Important Dates" fresh "Response Due Date"
+and "Review Due Date" pickers; the buttons are "Cancel" and "Resend Review
+Request". Each picker is preset from its own configured interval, exactly
+as at add time ([A9](#a9), retired) (Rule 19). The window shows no date
+guidance sentence, but the same date rule applies: a review due date
+before the response due date is refused with the notice of the Add
+Reviewer window [A45](#a45) and a browser alert as well, and the window
+stays open ⚠ [A46](#a46). <sup>k</sup>
 
 **Closing the Thank Reviewer and Unassign Reviewer windows.** Their
 "Close" (top right) closes the window at once after a change to the
@@ -207,10 +213,10 @@ under the prompt "Record the response on behalf of the reviewer". Submit
    |---|---|---|
    | "Request Sent" | Invitation out, no response, response not yet due | none. The "Response due: {date}" line is missing here, though the date is set ⚠ [A7](#a7) |
    | "Request Accepted" | Reviewer accepted, review not yet due | "Review due: {date}" |
-   | "Overdue" (red) | No response and the response date passed | "Response due: {date}" |
+   | "Overdue" (red) | No response to a first request and the response date passed | "Response due: {date}" |
    | "Overdue" (red) | Accepted and the review date passed | "Review due: {date}" |
    | "Request Declined" | Reviewer declined (hover: "The reviewer declined this review request.") | — |
-   | "Request Resent" | Request re-sent after a decline, no response yet | "Response due: {date}", but the date shown is the review deadline ⚠ [A2](#a2) |
+   | "Request Resent" | Request re-sent after a decline, no response yet, even once its response date has passed ⚠ [A47](#a47) | "Response due: {date}", but the date shown is the review deadline ⚠ [A2](#a2) |
    | "Review Submitted" | Review in, no editor has opened it yet ([A10](#a10), retired: opening now marks it viewed); also after "Revert Decision" on a "Complete" row (Rule 16) | reviewer's recommendation {OJS} |
    | "Review Viewed" | An editor opened the review (Rule 14a); also after "Revert Decision" on a "Reviewer Thanked" row (Rule 16) | reviewer's recommendation {OJS} |
    | "Complete" | An editor marked the review complete (Rule 14a) | reviewer's recommendation {OJS} |
@@ -306,8 +312,10 @@ under the prompt "Record the response on behalf of the reviewer". Submit
    defaults come from the journal's review setup, as weeks from today for
    each. When unset, the install falls back to 3 weeks for the response and
    4 for the review; the numbers belong to *Review setup & review forms*.
-   The review due date may not precede the response due date ⚠ [A8](#a8),
-   and nothing warns against a date already past ⚠ [A17](#a17) (Fields).
+   The review due date may not precede the response due date: "Add
+   Reviewer", "Edit" and "Resend Review Request" refuse such a pair with a
+   notice and accept equal dates (Fields). Nothing warns against a date
+   already past ⚠ [A17](#a17).
    <sup>f</sup>
 10. **Review type, visibility, form.** Each assignment carries its own review
     type (the three-way anonymity choice), a public-visibility flag, and
@@ -929,11 +937,11 @@ are in the footnote. <sup>s</sup>
 
    - **"Files To Be Reviewed"**: the list is empty and shows the inline
      warning "No Files Selected".
-   - **Inverted dates**: set "Review Due Date" before "Response Due Date"
-     and press "Add Reviewer": no assignment is created and the window
-     stays open. The only statement of the rule is the guidance sentence
-     "Review due date must be greater or equal to response due date."; no
-     error message appears ⚠ [A8](#a8).
+   - **Inverted dates**: set "Review Due Date" before "Response Due Date",
+     press "Add Reviewer" and look at once: a notice at the top right, gone
+     by itself within seconds, reads "There was an error adding the
+     reviewer …" (Fields) [A45](#a45); no assignment is created and the
+     window stays open.
    - **Control**: correct the dates and press "Add Reviewer": the row
      appears.
 
@@ -944,8 +952,9 @@ are in the footnote. <sup>s</sup>
 
    - **"Edit", the dates**: open the row's "Edit": the "Edit Review" window
      shows the guidance "Review due date must be greater or equal to
-     response due date.". Set "Review Due Date" before "Response Due Date"
-     and save: the save is refused and the window stays open ⚠ [A8](#a8).
+     response due date.". Set "Review Due Date" before "Response Due Date",
+     save and look at once: the same notice refuses it [A45](#a45) and
+     the window stays open.
      Set "Review Due Date" a week after the original date and save.
    - **The reviewer's side**: Reviewer: sign in: the header's Tasks panel
      holds "Review pending." and "Review assignment updated." for the
@@ -1339,6 +1348,8 @@ Left out of the scenarios above, by reason:
     "Email Reviewer" sent with a Subject and an empty Body is refused with
     "Please provide the email body text.", and no email reaches the
     reviewer
+  - the inverted-date refusal's notice: in "Add Reviewer" and in "Edit", the window open and the notice "There was an error adding the reviewer as review due date must be equal or greater than responde due date." at the top right (Fields, Rule 9): likely the inverted-date bullets of scenarios 5 and 6, which already press the refusal
+  - "Resend Review Request" refusing inverted dates with the window kept open, and accepting equal ones (Fields, Rule 9): likely a bullet in scenario 12, before its send
   - the "Thank Reviewer" window's "Close" asking "The data on this form has changed. Do you wish to continue without saving?" after a changed message with "Do not send email to Reviewer." ticked as well, and "Cancel" keeping the window with the change (Fields): likely a bullet in scenario 9, which thanks the reviewer
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
@@ -1368,7 +1379,6 @@ Left out of the scenarios above, by reason:
   - A4 (one shared note per reviewer, rewritten from any submission; Rule 22)
   - A19 (the template chooser as a one-option select on every add; Fields)
   - A18 (an emptied request letter: the row created with no feedback and no email; Fields)
-  - A8 (the inverted-date refusal showing no message; Fields, Rule 9)
   - A16 (a typed date in another format, or one that does not exist, looking accepted while another date is saved; Fields)
   - A17 (past dates accepted without a warning; Fields, Rule 9)
   - A13 (Email Reviewer sending with an empty body; Fields)
@@ -1397,6 +1407,9 @@ Left out of the scenarios above, by reason:
   - A40 (the competing-interests answer recorded alone on a request with no review, submitting the review; Rule 14d)
   - A43 ("Thank Reviewer" and "Unassign Reviewer" closing unasked after a change to the message alone; Fields)
   - A44 (the resend email naming the request's old response date; Side effects)
+  - A45 (the inverted-date notice speaking of "adding the reviewer" in the "Edit" and "Resend Review Request" windows, and misspelling "response"; Fields)
+  - A46 (the "Resend Review Request" refusal adding a browser alert, with no guidance sentence in its window; Fields)
+  - A47 (a re-sent request past its response date never reading "Overdue", with no "Send Reminder"; Rule 2)
 - **No seed**:
   - the automatic reminder emails from the principal contact at the configured day-offsets, with their "Reviewer Reminded" and log stamps (Rule 13, Side effects, Settings)
   - a section's default "Review Form" preselected in the Add Reviewer window (Rule 10, Settings): the seed sets no default review form on a section
@@ -1427,7 +1440,6 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | A reviewer's row offers "Send Review To ORCID" before the review is submitted, and pressing it does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | A reviewer's "Request Resent" row reads "Response due:" with the review deadline, not the response deadline | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Editors see no "Response due" date on a reviewer's "Request Sent" row in the Reviewers table | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A8](#a8) | Submitting inverted due dates is refused with no message; the form just stays open | 🐞 | user-visible | — |
 | [A12](#a12) | A reviewer who unsubscribes through the "Your review assignment has been changed" email keeps getting it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | Email Reviewer with an empty Body sends the reviewer a blank email and leaves the window stuck | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A reviewer's response erases "Reviewer Reminded" from the assignment's History and the Review Report | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1450,6 +1462,9 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A40](#a40) | On a press, recording a reviewer's competing interests in "Modify Review" submits an empty review for them | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A43](#a43) | "Thank Reviewer" and "Unassign Reviewer" close without asking after a change to the message alone, and the change is lost | 🐞 | medium | — |
 | [A44](#a44) | The resend email names the request's old response date, not the one picked in the window | 🐞 | user-visible | — |
+| [A45](#a45) | The inverted-date notice says "adding the reviewer" in the "Edit" and "Resend Review Request" windows too, and misspells "response" as "responde" | 🐞 | minor | — |
+| [A46](#a46) | "Resend Review Request" with inverted dates raises a browser alert on top of the notice, and its window shows no date guidance | 🐞 | minor | — |
+| [A47](#a47) | A re-sent request whose response date has passed keeps reading "Request Resent": never "Overdue", no "Send Reminder" | 🐞 | user-visible | — |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -1461,6 +1476,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A42](#a42) | What the Review Details window shows on a "Request Resent" row, its dated line included, is unsettled | ❓ | minor | — |
 | [OMP5](#omp5) | {OMP} "Save Changes" with nothing entered is accepted on an unanswered request and submits an empty review for the reviewer | ❓ | minor | — |
 | [OMP1](#omp1) | A press's review runs without reviewer recommendations, and with a per-stage reviewer pool (Internal vs External Reviewers) | ✅ | — | — |
+| [A8](#a8) | Retired: inverted due dates are refused with a notice at the top right, not silently; the earlier probe missed the notice | ✅ | retired | claim check (claude), 2026-10-05 — overturned |
 | [A24](#a24) | Retired: a modification save on a request with no review completes it because it submits the review on the reviewer's behalf, the behavior upstream designed (pkp/pkp-lib#13337); screens do reach it (Rule 14d) | ✅ | retired | upstream change + claim check (claude), 2026-09-17 — overturned by design |
 | [A25](#a25) | Retired: {OJS} opened from the dashboard popover, a submitted review's Review Details window omitted the recommendation; fixed upstream (pkp/ui-library#971) | ✅ | retired | re-verified live (claude), 2026-09-03 — fixed upstream |
 | [A10](#a10) | Retired: opening the Review Details window now marks a submitted review viewed; the once-dead "Review Viewed" status is the designed behavior | ✅ | retired | upstream rework (claude), 2026-08-29 — overturned by design |
@@ -1584,15 +1600,6 @@ row prints "Review due: {date}" there, and a request past its response
 date "Response due: {date}". The editor has to open "Edit" on each row
 to see by when a reviewer should answer. Basis: probe, 2026-10-03.
 <sup>[f-a7](#fn-a7)</sup>
-
-<a id="a8"></a>
-**A8 — Inverted due dates are refused without a word** · 🐞 · user-visible.
-Submitting the Add Reviewer form with the review due date set before the
-response due date does nothing visible. There is no error and no notice; the
-window simply stays open and no assignment is created. Only the permanent
-guidance sentence states the rule. The server's own error message never
-reaches the screen.
-Basis: live probe. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Retired: the Resend window presets dates correctly** · ✅ · retired.
@@ -2052,6 +2059,42 @@ email read "by 2026-10-30". The reviewer is told to answer by a date the
 request no longer carries. Basis: probe, 2026-10-03.
 <sup>[f-a44](#fn-a44)</sup>
 
+<a id="a45"></a>
+**A45 — The inverted-date notice speaks of "adding the reviewer" in every window, and misspells "response"** · 🐞 · minor.
+An editor who sets the review due date before the response due date and
+presses the window's button reads the notice "There was an error adding
+the reviewer as review due date must be equal or greater than responde
+due date." in all three windows that carry the dates. In "Edit" and
+"Resend Review Request" nothing is being added, so the notice describes
+another action, and "responde" is a typo in the shipped text. The
+refusal itself is right. Basis: probe, 2026-10-05.
+<sup>[f-a45](#fn-a45)</sup>
+
+<a id="a46"></a>
+**A46 — "Resend Review Request" refuses inverted dates with a browser alert as well, and states no date rule** · 🐞 · minor.
+In the "Resend Review Request" window, with the review due date before
+the response due date, pressing "Resend Review Request" raises a browser
+alert, "There was an error requesting the reviewer to reconsider the
+review invitation. Please try again.", besides the notice of
+[A45](#a45). The window stays open. The alert's "try again" suggests a
+passing failure, while only the dates are wrong. Unlike "Add Reviewer"
+and "Edit", the window never shows the guidance "Review due date must be
+greater or equal to response due date.", so the editor learns the rule
+only from the refusal. Basis: probe, 2026-10-05.
+<sup>[f-a46](#fn-a46)</sup>
+
+<a id="a47"></a>
+**A47 — A re-sent request whose response date has passed never turns "Overdue"** · 🐞 · user-visible.
+After "Resend Review Request", a reviewer who lets the new response date
+pass without answering still reads "Request Resent", in normal text,
+with no "Send Reminder" button. A first request in the same state reads
+"Overdue" in red with "Send Reminder". The row stays "Request Resent"
+whether the past date was picked in the Resend window or set later
+through "Edit", and also once the review date has passed. Its "More
+Actions" menu offers no reminder either. The editor is not shown that
+the reviewer is late and cannot send them the reminder form. Basis:
+probe, 2026-10-05. <sup>[f-a47](#fn-a47)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -2179,6 +2222,9 @@ Basis: code reading + registry check. <sup>[f-ops1](#fn-ops1)</sup>
 > footnote.
 
 ### Retired
+
+<a id="a8"></a>
+**A8 — Inverted due dates are refused without a word** · ✅ · retired. Overturned, 2026-10-05: "Add Reviewer", "Edit" and "Resend Review Request" refuse the inverted pair with a notice at the top right, in the version under development and the 3.5 release; the 2026-08-02 probe most likely looked too late. The notice's wording is [A45](#a45). <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a24"></a>
 **A24 — A modification save completes an incomplete review** · ✅ · retired. Overturned, 2026-09-17: screens do reach the save (Rule 14d), and completing the request is the editor submitting the review on the reviewer's behalf, designed upstream (pkp/pkp-lib#13337, finished by pkp/pkp-lib#13338); what stays open is [A29](#a29), [A30](#a30), [OMP4](#omp4) and [OMP5](#omp5). <sup>[f-a24](#fn-a24)</sup>
@@ -2473,10 +2519,12 @@ end-of-day today-based. Validators: both dates required
 (`editor.review.errorAddingReviewer`), review ≥ response
 (`FormValidatorDateCompare`, message
 `editor.review.errorAddingReviewer.dateValidationFailed` — "…must be equal
-or greater than responde due date", typo as shipped; live-probed 2026-08-02
-on OJS + OMP the message never reaches the screen — the refusal is silent,
-finding A8; control: valid dates on the same path succeed). The same pair
-guards the Edit and Resend windows. Defaults live-probed 2026-08-02: each
+or greater than responde due date", typo as shipped, finding A45). The
+refusal shows that message as a page notice (live-probed 2026-10-05, OJS
+and OMP, main and stable-3_5_0; the 2026-08-02 reading of a silent refusal
+is retired finding A8, note f-a8; control: equal dates on the same path
+succeed). The same pair guards the Edit and Resend windows (finding A46
+for the Resend window's extra alert). Defaults live-probed 2026-08-02: each
 date arrived as today + its own configured week count, independently (2/6
 weeks on a scratch journal, 4/8 cross-check on the baseline; the 3/4-week
 unset fallback was not exercised). The pickers' wrong-format-input discard
@@ -3174,10 +3222,21 @@ shows it.
 Issue report: [pkp-e2e#680](https://github.com/jardakotesovec/pkp-e2e/issues/680) ([docs/issues/U27-A7-request-sent-row-no-response-due.md](../issues/U27-A7-request-sent-row-no-response-due.md)).
 
 <a id="fn-a8"></a>
-**f-a8** — Live-probed 2026-08-02 (OJS + OMP): review date set before the
-response date, submit — no toast, no inline error, the window stayed open
-and no row appeared. Control: correcting the dates on the same form
-succeeded. The undisplayed server message string is quoted in note f.
+**f-a8** — Originally live-probed 2026-08-02 (OJS + OMP): review date set
+before the response date, submit — no toast and no inline error read, the
+window open and no row. Retired on the claim check of 2026-10-05 (OJS and
+OMP, `main` ojs `ff004d0973` / omp `3b0ecf794` and `stable-3_5_0` ojs
+`c1cee76b95` / omp `9c5e24246`, as a scratch Journal/Press Manager and as
+a participating Section/Series Editor, two runs each): "Add Reviewer"
+(`update-reviewer`), "Edit" (`update-review`) and "Resend Review Request"
+(`update-resend-request-reviewer`) each answered 200 with `status: false`,
+and the page notice "There was an error adding the reviewer as review due
+date must be equal or greater than responde due date." appeared 2–29 ms
+after the answer, read again on the settled screen; the window stayed
+open, no review_assignments row was added and an edited row's stored
+dates did not change. Equal dates then saved in all three windows. A walk
+of 2026-10-03 (OJS and OMP, main and 3.5) had seen the same notice. The 2026-08-02 read most likely came after the notice
+had gone.
 
 <a id="fn-a9"></a>
 **f-a9** — Disproof live-probed 2026-08-02 (claim check; OJS scratch
@@ -3475,7 +3534,13 @@ alike, and `createMail()` sets the mailable's subject from that template,
 so `ReviewerUnassign`'s own REVIEWER_UNASSIGN subject (installed by
 `I12903_ReviewerUnassignEmailTemplate`, note k) never reaches the mail. The
 suites match the removal mail by recipient and title (OJS) or body (OMP)
-and assert the subject neither way.
+and assert the subject neither way. Driven 2026-10-05 (OJS and OMP, main,
+two runs each) with the interface in French: the unassign mail carried
+the French cancellation subject, "Annulation de la demande d'évaluation"
+(OJS) / "Annulation de la requête d'évaluation" (OMP), over the English
+Reviewer Unassign body; on main the French Reviewer Unassign template
+ships with an empty subject and body (a new template whose translation
+has not arrived yet).
 Issue report: [pkp-e2e#689](https://github.com/jardakotesovec/pkp-e2e/issues/689) ([docs/issues/U27-A26-unassign-notice-cancel-subject.md](../issues/U27-A26-unassign-notice-cancel-subject.md)).
 
 <a id="fn-a27"></a>
@@ -3812,6 +3877,45 @@ lib/pkp form and template, with no override in OMP (read in the code
 ([docs/issues/U27-A2-request-resent-row-shows-review-deadline.md](../issues/U27-A2-request-resent-row-shows-review-deadline.md)),
 which names it as a separate fault; that walk read the stored dates
 (the two picked) on 3.5.
+
+<a id="fn-a45"></a>
+**f-a45** — Live-probed 2026-10-05 (OJS and OMP, main and
+stable-3_5_0, manager and sub-editor level, two runs each): the notice
+quoted in the entry is `editor.review.errorAddingReviewer.dateValidationFailed`
+(note f), shown unchanged by "Add Reviewer", "Edit" and "Resend Review
+Request" after an inverted pair; the misspelling is in the shipped en
+locale on both lines.
+
+<a id="fn-a46"></a>
+**f-a46** — Live-probed 2026-10-05 (OJS and OMP, main and
+stable-3_5_0, manager and sub-editor level, two runs each): the Resend
+form posts to `update-resend-request-reviewer`, which answers 200 with
+`status: false` and the content "There was an error requesting the
+reviewer to reconsider the review invitation. Please try again."; the
+page shows it through a native `alert()` about 130–145 ms after the
+date-validation notice (note f-a45). The window reads "Email to be sent
+to reviewer", "Do not send email to Reviewer.", "Important Dates" with the
+two pickers, and "Cancel" / "Resend Review Request", with no guidance
+sentence; "Add Reviewer" and "Edit" show it in the same runs.
+
+<a id="fn-a47"></a>
+**f-a47** — Mechanism: `ReviewAssignment::getStatus()` returns
+REQUEST_RESEND while the request is flagged re-sent and unconfirmed,
+before it compares any due date (note b's order), so the due-date
+arithmetic that yields the overdue states is never reached; the cell's
+"Send Reminder" follows the overdue states only (Rule 3). Live-probed
+2026-10-05 (OJS and OMP, main and stable-3_5_0, two runs each, re-read
+after a reload): four re-sent requests (default dates; response date
+yesterday and review date three weeks out, picked in the Resend window;
+default dates then the response date moved to yesterday through "Edit";
+response and review dates both in the past) all read "Request Resent"
+with no red styling and no button, review_assignments `request_resent=1`
+with no confirmation date, and their menu read "Review Details", "Edit",
+"Unassign Reviewer", "Email Reviewer", "History", "Login As", "Editorial
+Notes", "Log Response". Control: a first request moved to yesterday
+through "Edit" read "Overdue" in red with "Response due: {date}" and
+"Send Reminder". First read in the code 2026-10-03, while tracing
+finding A2.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only

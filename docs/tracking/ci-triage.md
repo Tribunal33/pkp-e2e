@@ -1233,6 +1233,17 @@ trips.
   2026-10-05 (`.reports/hk05/u40s11/`). **Watch condition**: a second
   sighting; then read the retry's trace for the Files step's galley grid.
 
+- **Uncaught "reading 'serialize'" after a "Selected Reviewer" window**
+  (U31 S2/S4, OJS, CPU ×6, one sighting 2026-09-30 in the flake
+  diagnosis `.reports/flake-0930/u31s2s4/diagnosis.md` T-ojs-1): a page
+  error "Cannot read properties of undefined (reading 'serialize')" after
+  a reviewer window was closed with text typed in its message and another
+  opened and sent. Not reproduced by the housekeeping claim check of
+  2026-10-05 (U27 I05: 100 suggestion-row and 48 Reviewers-panel
+  sequences on OJS and OMP `main` at CPU ×6, every add "Request Sent", no
+  page error; `.reports/U27/cc-I05.md` I05-5). **Watch condition**: a
+  second sighting; then read the error's stack from that run.
+
 ## Companion branches — pkp-e2e branches waiting on app PRs
 
 One row per branch prepared for a developer's open OJS, OMP or OPS pull

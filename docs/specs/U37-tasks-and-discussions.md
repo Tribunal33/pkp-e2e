@@ -71,7 +71,7 @@ The rows below use three terms. <sup>b</sup>
 | **"History"** (Rule 18), **"Delete"** (Rule 19) | • Whoever may manage the item <sup>e</sup> |
 | **Start a task** ("Started", "Start this task"; Rule 16) | • Whoever may manage the task, while it is "Yet to begin" and has an owner <sup>f</sup> |
 | **Close or reopen** ("Closed", "Close this Discussion", "Complete this task"; Rule 17) | • Whoever may manage the item. A closed task cannot be reopened by anyone ⚠ [A13](#a13) <sup>f</sup> |
-| **Attach files** to a message ("Attach Files"; Rule 14) | • "Upload File": everyone who writes a message<br>• "Workflow Files" (files already on the submission): manager-level people, and the Section Editor, Guest Editor {OJS} and assistant roles assigned to the submission<br>• Author, Reviewer: never "Workflow Files" <sup>g</sup> |
+| **Attach files** to a message ("Attach Files"; Rule 14) | • "Upload File": everyone who writes a message<br>• "Workflow Files" (files already on the submission): manager-level people, and the Section Editor, Guest Editor {OJS} and assistant roles assigned to the submission; which stages each may choose is Rule 14a's<br>• Author, Reviewer: never "Workflow Files" <sup>g</sup> |
 | **Use a template** in the "Add" window (Rule 10) | • Everyone who adds an item. A template limited to some roles is listed only to people holding one of them; manager-level people see every template (Settings bullet 3) <sup>i</sup> |
 | **Manage the templates** (Settings › Workflow › "Tasks and Discussions"; Rules 25–26) | • The Journal Manager, the Editor and the Site Administrator (whoever may open the journal's Settings)<br>• A Section Editor who types the screen's address gets "The current role does not have access to this operation." <sup>h</sup> |
 
@@ -359,6 +359,16 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       posted a response on {date}". <sup>td12</sup>
     - 13c. A closed discussion or task still takes replies: closing ends
       the work, not the thread.
+    - 13d. A participant whom someone else's "Edit" takes off the item
+      while they have its window open cannot reply from that window:
+      "Save" opens an "Error" window with "OK" and the message is not
+      saved. A Section Editor reads "You do not have permission to modify
+      this discussion."; a manager-level person reads "An unexpected error
+      has occurred. Please reload the page and try again." ⚠
+      [A36](#a36). After a reload, the Section Editor no longer sees the
+      item, and the manager-level person reads it with "To add a new
+      message, please assign yourself as a participant." (Actors).
+      <sup>td23</sup>
 <a id="attach-files"></a>
 14. **Attaching files.** "Attach Files" on a message box opens the "Attach
     Files" window, whose mechanics are *[Editorial decision
@@ -367,15 +377,19 @@ one-line description under its heading (Rule 6). <sup>m</sup>
     to the people Actors names, "Workflow Files" ("Attach files uploaded
     during the submission workflow, such as revisions or files to be
     reviewed.", button "Attach Workflow Files"). <sup>g</sup>
-    - 14a. The "Select submission stage" list of "Workflow Files" offers
-      the stages up to Production. On a journal and a press, a Copyeditor
-      or Layout Editor is offered every stage too, but choosing
-      "Submission" or "Review" ("Internal Review" or "External Review" on
-      a press) shows nothing between the list and "Back": no file list,
-      no "No Items" ⚠ [A24](#a24). A preprint server offers "Production"
-      alone, whose "Production Ready Files" list reads "No Items" on every
-      preprint, a preprint server's files being its galleys ⚠
-      [OPS2](#ops2). <sup>g</sup>
+    - 14a. The "Select submission stage" list of "Workflow Files" opens
+      with no stage chosen and offers the stages up to Production; a
+      chosen stage shows its file lists, an empty one reading "No Items".
+      On a journal and a press, a Copyeditor or Layout Editor sees every
+      stage too, but can choose only their own ("Copyediting" for the
+      Copyeditor, "Production" for the Layout Editor), and only while the
+      submission is there. The other stages are greyed, cannot be chosen
+      and give no reason. Once the submission is at Production, a
+      Copyeditor can choose none ⚠ [A35](#a35). Other assistant roles
+      (Proofreader, Designer…) were not driven. A preprint server offers
+      "Production" alone, whose "Production Ready Files" list reads
+      "No Items" on every preprint, a preprint server's files being its
+      galleys ⚠ [OPS2](#ops2). <sup>g</sup>
     - 14b. The chosen files list under the message box, each with
       "Remove" until "Save". Saved, each file is listed under its message
       and attached to the message's emails; a workflow file is attached
@@ -399,8 +413,10 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       Details". The drop-down under "Task Information" reads "Begin Task
       Upon Saving", greyed, but the new task is not started: it is
       started from its row or window (Rule 16) ⚠ [A25](#a25). Its History
-      then reads "Task created by …" (Rule 18, [A28](#a28)). A task never
-      turns back (Fields).
+      then reads "Task created by {the writer's username} ({role}) on
+      {date}", naming the person who wrote the discussion, under "Task
+      assigned to {owner} by {the person who turned it into a task} on
+      {date}" (Rule 18, [A28](#a28)). A task never turns back (Fields).
     - 15c. Whoever is not manager-level, not a Section Editor and not a
       Guest Editor {OJS} may save an edit only when they wrote the item's
       first message, and only within an hour of writing it; a task's
@@ -539,9 +555,10 @@ one-line description under its heading (Rule 6). <sup>m</sup>
       only participants
       ([→ Editorial decision recording's A4](U34-editorial-decision-recording.md#a4)).
       The recommending editor sees no row for it, and a manager's "Edit" ›
-      "Save" is refused with "At least two participants are required for
-      a discussion." and "The creator must participate in the
-      task/discussion." (Rule 8) until the recommending editor is ticked;
+      "Save" is refused with "The creator must participate in the
+      task/discussion." (Rule 8) until the recommending editor is ticked,
+      and also with "At least two participants are required for a
+      discussion." when there is one deciding editor;
     - a template with "Auto-add at stage" on (Rule 26): made by the
       application ("Created by: system" on a discussion, "Task Owner:"
       with nothing after it on a task), with no participants, so only
@@ -1374,6 +1391,8 @@ Left out of the scenarios above, by reason:
   - the guard for A26 (issue report `docs/issues/U37-A26-no-answer-box-screen-reader-opposite-state.md`): after "No" in a row box's question, the box reads to a screen reader as it looks (Rule 16)
   - the guard for A25 (issue report `docs/issues/U37-A25-converted-task-not-begun.md`): a discussion turned into a task through "Add Task Details" or "Edit" is saved begun, under "In progress" (Rule 15b)
   - the guard for A28 (issue report `docs/issues/U37-A28-converted-task-history-says-task-created.md`): a converted discussion's History keeps "Discussion created by …" as its oldest line (Rule 18)
+  - an assistant's "Select submission stage": the Copyeditor on a submission at Copyediting can choose only "Copyediting", and the Layout Editor at Production only "Production", the other stages greyed (Rule 14a; A24 retired)
+  - a Section Editor taken off a discussion while its window is open, refused a reply with "You do not have permission to modify this discussion." and no longer seeing the item after a reload (Rule 13d)
 - **Rarely met**:
   - a participant whose account is disabled: still named on their items and ticked in "Edit", not offered to new items, sent no email and no Tasks row (Rule 22; Side effects)
 - **Nothing new to test**:
@@ -1395,7 +1414,7 @@ Left out of the scenarios above, by reason:
   - A20 (a discussion left with one participant, refused on "Edit"; Rule 7e; scenario 11 marks it)
   - A21 (the error list's "Go to undefined"; Rule 11a; scenarios 2 and 8 mark it)
   - A23 (the convert hint shown to people without "Edit"; Rule 12)
-  - A24 and OPS2 ("Workflow Files" stages that show an assistant nothing, and a preprint server's empty "Production"; Rule 14a)
+  - OPS2 (a preprint server's "Workflow Files" with an empty "Production"; Rule 14a)
   - A25 and A28 (a converted task not begun, and its History's "Task created by"; Rules 15b, 18; scenario 5 marks them)
   - A26 (what a screen reader hears after "No" in a row box's question; Rule 16; scenarios 4, 5 and 9 mark it)
   - A27 (the History during Login As; Rule 18)
@@ -1405,6 +1424,8 @@ Left out of the scenarios above, by reason:
   - A32 (the boxes a screen reader hears under one name; Rules 1, 26a)
   - A33 (events of one second out of their saved order in the History; Rule 18)
   - A34 (an overdue task's "Edit" refused until its due date moves; Rule 15f)
+  - A35 (a Copyeditor's "Workflow Files" with every stage greyed once the submission is at Production; Rule 14a)
+  - A36 (a manager-level person taken off an item while its window is open, told "An unexpected error has occurred" on a reply; Rule 13d)
   - OMP1 (a press's reviewers listed as "Internal Reviewer"; Rule 20; scenario 11 marks it)
   - OPS1 (a preprint server's empty "Assign Editor" template; Rule 10e; scenario 3 marks it)
 - **No seed**:
@@ -1437,7 +1458,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | A refused task or discussion window tells screen-reader users "Go to undefined" for the empty message box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A24](#a24) | An assistant's "Workflow Files" offers stages that show nothing | 🐞 | minor | — |
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving", but the saved task is not begun | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A26](#a26) | After "No" to a Tasks & Discussions box's question, a screen reader hears the box in the opposite state | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1446,6 +1466,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A32](#a32) | A screen reader hears a task row's "Started" and "Closed" boxes, and every template's "Auto-add at stage" box, under one shared name | 🐞 | minor | — |
 | [A33](#a33) | A History lists events saved in the same second in no set order | 🐞 | minor | — |
 | [A34](#a34) | An overdue task's "Edit" refuses every "Save", even a rename, until its due date is moved | 🐞 | user-visible | — |
+| [A36](#a36) | A manager-level person taken off an item while its window is open is told "An unexpected error has occurred" when replying | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's discussion window lists an External Review reviewer as "Internal Reviewer" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint server's "Assign Editor" template has no text, and choosing it leaves the message box showing text "Save" ignores | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | An hour after writing it, an Author or assistant can change nothing in their own discussion | ❓ | user-visible | — |
@@ -1458,9 +1479,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | The hint "You can convert this into a task by clicking Edit." shows to people who have no "Edit" | ❓ | minor | — |
 | [A27](#a27) | During Login As, a reply is headed with one person's name and logged under another's | ❓ | minor | — |
 | [A30](#a30) | A task whose owner leaves the submission is left with no owner, and nothing says so | ❓ | minor | — |
+| [A35](#a35) | Once a submission is at Production, a Copyeditor is offered "Workflow Files" with every stage greyed | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server offers a "Workflow Files" source that never holds a file | ❓ | minor | — |
 | [A11](#a11) | Retired: "Cancel" asks before discarding, like the close control | ✅ | retired | — |
 | [A22](#a22) | Retired: leaving the page after a discarded window asks nothing | ✅ | retired | — |
+| [A24](#a24) | Retired: an assistant's "Workflow Files" offers stages that show nothing | ✅ | retired | re-probe (claude), 2026-10-05 — overturned |
 
 ### All apps
 
@@ -1713,16 +1736,6 @@ Question: should the hint show only to whoever has "Edit"? Lean: yes;
 for the others it points at a button they do not have.
 Basis: probe. <sup>[f-a23](#fn-a23)</sup>
 
-<a id="a24"></a>
-**A24 — An assistant's "Workflow Files" stages show nothing** · 🐞 · minor.
-On a journal and a press, a Copyeditor or Layout Editor in a discussion
-is offered every stage under "Select submission stage", but choosing
-"Submission" or "Review" ("Internal Review" or "External Review" on a
-press) shows nothing between the list and "Back": no file list and no
-"No Items". Only "Copyediting" and "Production" show their files. The
-assistant is offered sources that neither list files nor say why not.
-Basis: probe. <sup>[f-a24](#fn-a24)</sup>
-
 <a id="a25"></a>
 **A25 — A discussion turned into a task reads "Begin Task Upon Saving", but the saved task is not begun** · 🐞 · low.
 When someone turns a discussion into a task, through the row's "Add Task
@@ -1768,10 +1781,12 @@ Basis: probe. <sup>[f-a27](#fn-a27)</sup>
 **A28 — A converted discussion's History says it began as a task** · 🐞 · low.
 Once "Add Task Details", or "Edit" with "Enter task information"
 ticked, turns a discussion into a task, the History's oldest line reads
-"Task created by …" where it and the row's "Activity" read "Discussion
-created by {username} ({role}) on {date}" before. Above it, "Task
-assigned to {owner} by …" is the only trace of the change, so the
-History says the item began as a task. The same save writes two PHP
+"Task created by {the writer's username} ({role}) on {date}", still
+naming the person who wrote the discussion, where it and the row's
+"Activity" read "Discussion created by {username} ({role}) on {date}"
+before. Above it, "Task assigned to {owner} by {the person who turned
+it into a task} on {date}" is the only trace of the change, so the
+History says the item began as a task, created by its writer. The same save writes two PHP
 warnings to the server's error log (`Attempt to read property "userId"
 on null`), while it succeeds and the screens show nothing wrong; that
 is a cause of its own, with a report of its own.
@@ -1853,6 +1868,34 @@ to a due date that was changed. Seen on a journal; a press and a
 preprint server were not tried.
 Basis: probe, 2026-10-02. <sup>[f-a34](#fn-a34)</sup>
 
+<a id="a35"></a>
+**A35 — A Copyeditor is offered "Workflow Files" with no stage to choose** · ❓ · minor.
+On a journal and a press, once a submission has moved on to Production,
+a Copyeditor replying or adding an item on its "Copyediting Tasks &
+Discussions" is still offered "Attach Workflow Files", but "Select
+submission stage" has every stage greyed, "Copyediting" included, in the
+"Add" window and in a reply box (Rule 14a). While the submission is at
+Copyediting, the Copyeditor can choose "Copyediting". The Journal
+Manager and the Section Editor can choose every stage either way, and
+nothing tells the Copyeditor why they cannot.
+Question: should a Copyeditor keep their own stage once the submission
+moves on, or not be offered "Workflow Files" at all? Lean: a defect; the
+source is offered but can never be used, and nothing says why.
+Basis: probe, 2026-10-05. <sup>[f-a35](#fn-a35)</sup>
+
+<a id="a36"></a>
+**A36 — A manager-level person taken off an item while its window is open is told "An unexpected error has occurred"** · 🐞 · minor.
+A manager-level person has a discussion's window open while someone
+else's "Edit" unticks them as a participant. Their "Add New Message" ›
+"Save" then opens "Error" with "An unexpected error has occurred. Please
+reload the page and try again.", and the message is not saved. A Section
+Editor taken off the same way is told why: "You do not have permission
+to modify this discussion." (Rule 13d). The manager-level person is told
+the application failed, when it refused a reply from someone no longer a
+participant; after a reload the window reads "To add a new message,
+please assign yourself as a participant.".
+Basis: probe, 2026-10-05. <sup>[f-a36](#fn-a36)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1904,6 +1947,9 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 <a id="a22"></a>
 **A22 — The leave-page prompt after a discarded window** · ✅ · retired. Overturned on screen 2026-09-29 (all three apps): leaving the page after a window was closed with "Warning" › "Yes" asks nothing, as after a save or an untouched close (Rule 11d); the 2026-09-23 prompt came from test tooling reloading the page within a fraction of a second of the close. <sup>[f-a22](#fn-a22)</sup>
 
+<a id="a24"></a>
+**A24 — An assistant's "Workflow Files" stages show nothing** · ✅ · retired. Overturned on screen 2026-10-05 (OJS, OMP): a stage the Copyeditor or Layout Editor cannot use is greyed and cannot be chosen (Rule 14a); the 2026-09-23 observation of stages that showed nothing came from test tooling that recorded the refused choice as an empty stage. <sup>[f-a24](#fn-a24)</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1928,7 +1974,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **f** — Row boxes: `DiscussionManagerCellStarted.vue` (hidden unless a task; disabled unless write access, status pending and a responsible participant; confirm `task.startThisTask` / `task.confirmStartTask`), `DiscussionManagerCellClosed.vue` (disabled without write access or on a closed task; confirm `discussion.closeThisDiscussion` / `discussion.confirmCloseDiscussion`, `discussion.reopenThisDiscussion` / `discussion.confirmReopenDiscussion`, `task.closeThisTask` / `task.confirmCloseTask`; the task reopen texts `task.reopenThisTask` / `task.confirmReopenTask` are unreachable, the box being disabled). The confirm dialog is `TableCellSelect.vue` with `common.yes` / `common.no`. Window boxes: `DiscussionManagerTaskInfo.vue` (`task.startThisTask` "Start this task" while pending, else `task.completeThisTask` "Complete this task"; disabled when closed or without a responsible participant) and `DiscussionManagerDiscussion.vue` (`discussion.closeThisDiscussion`, discussions in display mode only). Live-probed 2026-09-23 (Actors rows 7–8; Fields, the discussion window; all three apps): the row's "Started" box live for whoever may manage a "Yet to begin" task with an owner, greyed on the ownerless auto-added task and on every started task; the questions as quoted; a closed task's boxes ticked and greyed for the Journal Manager, the owner, the Site Administrator and an Author participant, a press on them asking nothing; an Author participant gets no box in the window.
 
 <a id="fn-g"></a>
-**g** — `useDiscussionMessages.js`: toolbar button `pkpAttachFiles` ("Attach Files") opens the Composer's `FileAttacherModal` titled `common.attachFiles`, with `FileAttacherUpload` (`common.upload.addFile` "Upload File", `common.upload.addFile.description`) always, and `FileAttacherWorkflowStage` (`workflow.files` "Workflow Files", `workflow.attachUploadedFiles`, button `workflow.attachWorkflowFiles`) only when `hasCurrentUserAtLeastOneAssignedRoleInAnyStage(submission, EditorialRoles)` (`SITE_ADMIN, MANAGER, SUB_EDITOR, ASSISTANT`). Server: `EditTask`/`AddNote` `submissionFileIds` is `prohibitedIf` the user is neither manager/admin nor holds an assistant or sub-editor stage assignment on the task's stage. Saving: `SaveNoteWithFiles::saveTemporaryFiles()` stores uploads as submission files of stage `SUBMISSION_FILE_QUERY` tied to the note; `attachSubmissionFiles()` copies a workflow file (`sourceSubmissionFileId` set). `notifyParticipants()` attaches the note's files to each email. The stage list's end at Production: *Workflow screen & stage access* Rule 18 (its A10, retired). Live-probed 2026-09-23 (Actors row 9; Rule 14; all three apps): "Workflow Files" offered to the Journal Manager, the Editor, an assigned Section Editor (Moderator), the Guest Editor (OJS) and the Copyeditor and Layout Editor (OJS, OMP), never to the Author or the Reviewer; the stage lists "Submission", "Review", "Copyediting", "Production" (OJS), "Submission", "Internal Review", "External Review", "Copyediting", "Production" (OMP), "Production" alone and empty (OPS2); an assistant's "Submission" and "Review" empty with no "No Items" (A24); each chosen file listed as "{number} {file name}" with "Remove"; saved, a download link under its message (the file downloads as an attachment) and an attachment on every participant's email; a workflow file attached as a copy with a new number, the original still the only row of its list.
+**g** — `useDiscussionMessages.js`: toolbar button `pkpAttachFiles` ("Attach Files") opens the Composer's `FileAttacherModal` titled `common.attachFiles`, with `FileAttacherUpload` (`common.upload.addFile` "Upload File", `common.upload.addFile.description`) always, and `FileAttacherWorkflowStage` (`workflow.files` "Workflow Files", `workflow.attachUploadedFiles`, button `workflow.attachWorkflowFiles`) only when `hasCurrentUserAtLeastOneAssignedRoleInAnyStage(submission, EditorialRoles)` (`SITE_ADMIN, MANAGER, SUB_EDITOR, ASSISTANT`). Server: `EditTask`/`AddNote` `submissionFileIds` is `prohibitedIf` the user is neither manager/admin nor holds an assistant or sub-editor stage assignment on the task's stage. Saving: `SaveNoteWithFiles::saveTemporaryFiles()` stores uploads as submission files of stage `SUBMISSION_FILE_QUERY` tied to the note; `attachSubmissionFiles()` copies a workflow file (`sourceSubmissionFileId` set). `notifyParticipants()` attaches the note's files to each email. The stage list's end at Production: *Workflow screen & stage access* Rule 18 (its A10, retired). Live-probed 2026-09-23 (Actors row 9; Rule 14; all three apps): "Workflow Files" offered to the Journal Manager, the Editor, an assigned Section Editor (Moderator), the Guest Editor (OJS) and the Copyeditor and Layout Editor (OJS, OMP), never to the Author or the Reviewer; the stage lists "Submission", "Review", "Copyediting", "Production" (OJS), "Submission", "Internal Review", "External Review", "Copyediting", "Production" (OMP), "Production" alone and empty (OPS2); each chosen file listed as "{number} {file name}" with "Remove"; saved, a download link under its message (the file downloads as an attachment) and an attachment on every participant's email; a workflow file attached as a copy with a new number, the original still the only row of its list. A stage is greyed by `useFileAttacherWorkflowStage.js` (since ui-library `185571a9`, 2026-01-21) when `getFileManagerUploadNamespaces()` (`useFileManagerConfig.js`) leaves the user no file list they may select from on it, given their stage assignments and the submission's current stage. Live-probed 2026-10-05 (Actors row 9; Rule 14a; A24 retired, A35; OJS and OMP, the preprint sentence OPS; two runs, each on a scratch journal): the list opening with no stage chosen and "Attach Selected" greyed until a file is ticked; the Journal Manager and an assigned Section Editor (Series Editor) choosing every stage, also on a submission still at Copyediting, each with its lists ("Submission Files", "Files for Review", "Revisions Uploaded", "Copyedited Files", "Draft Files", "Production Ready Files"), the empty ones reading "No Items"; the Copyeditor on a submission at Copyediting able to choose only "Copyediting", the Layout Editor on one at Production only "Production", the browser refusing the greyed options and arrow keys skipping them, none carrying a reason; the Copyeditor on a submission at Production finding every stage greyed, in the "Add" window and in a reply box; the Layout Editor refused the Copyediting stage of a submission still there ("You don't currently have access to that stage of the workflow."); the Preprint Server Manager and the Moderator offered "Production" alone, "No Items" on a preprint with and without a PDF galley. The 2026-09-23 reading of an assistant's greyed stages as empty came from test tooling that swallowed the refused selection.
 
 <a id="fn-h"></a>
 **h** — `PKPEditTaskTemplateController`: POST, PUT, DELETE and GET `variables` for `ROLE_ID_MANAGER, SITE_ADMIN` plus `CanAccessSettingsPolicy`; GET `/` for every editorial role, the Author and the Reviewer. Client `TaskTemplateManagerConfigurations` offers list, add, edit, delete to `MANAGER, SITE_ADMIN`. Live-probed 2026-09-23 (Actors row 11; all three apps): the tab with one "Add template" per stage for the Site Administrator, the Journal Manager and the Editor (OJS, OMP; a preprint server has no Editor); a Section Editor (Moderator) typing `…/management/settings/workflow` lands on `user/authorizationDenied` with the access-denied text.
@@ -1973,7 +2019,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **u** — `onNewMessage()` shows `FieldRichTextarea` `newMessage` and disables the button; `validateNewMessage()` → `validator.filled` "This field is required."; `addNewMessage()` POSTs `…/tasks/{id}/notes` (`AddNote`: `contents` required, max 65535). `addNote()` logs `SUBMISSION_LOG_TASK_NOTE_POSTED` (`submission.event.task.notePosted`) and calls `notifyParticipants()` with every participant. Closing does not gate notes: `addNote()` never reads `dateClosed`. Live-probed 2026-09-23 (Rule 13; all three apps): the box and the greyed button; an empty "Save" refused with no request; a reply added last, mailed to every participant and the writer, and logged in "Activity" and History; replies saved and mailed on a closed discussion and a closed task.
 
 <a id="fn-v"></a>
-**v** — `discussionEdit()` opens `DiscussionManagerFormModal` with the item; `discussionAddTaskDetails()` the same with `autoAddTaskDetails` (checkbox pre-ticked, `DiscussionManagerTaskInfo` `scrollIntoView`). `saveWorkItem()` PUTs `type`, `title`, `stageId`, `dateDue`, `participants`, `description` (always the message box), `submissionFileIds` (every file listed under the box, the head note's own files included, tagged `FileAttacherWorkflowStage`). `EditTask` `description` closure: passes for `MANAGER`/`SUB_EDITOR` in the context or a site admin; else fails `submission.task.validation.error.headnote.author` when the head note's `userId` is not the user, `…headnote.editExpired` when it is over 3600 s old; no head note, it passes. `editTask()`: `$editTask->update()`, `notifyParticipants(array_diff(new, old))`, `logParticipants()`, `logTaskFiles()`, and for tasks `logDueDate()` (only when there was a due date) and `logOwner()`. `EditorialTask::saveHeadnote()` updates the note flagged `is_headnote`, or saves a new flagged note when there is none. `determineStatus()` puts a converted discussion (no `dateStarted`) under pending. Live-probed 2026-09-23 (Rule 15; all three apps): "Edit" and "Add Task Details" as described (the latter landing on "Task Information"); one edit changing name, participants, due date, owner, message and a file, mailing only the new participant and logging the added, removed, due-date, reassigned and uploaded lines, none for the name or the text; the message replaced in place, keeping its time; both conversion routes landing under "Yet to begin"; the owner's refusal (Copyeditor on OJS and OMP, the Author everywhere) under the message box with the notice; a Section Editor, a Guest Editor (OJS) and the Author on their own item within the hour saving; past the hour (a scratch first message moved back two hours in the database) the Author's rename or added participant and the Copyeditor's rename refused, the Journal Manager's and a Section Editor's saved.
+**v** — `discussionEdit()` opens `DiscussionManagerFormModal` with the item; `discussionAddTaskDetails()` the same with `autoAddTaskDetails` (checkbox pre-ticked, `DiscussionManagerTaskInfo` `scrollIntoView`). `saveWorkItem()` PUTs `type`, `title`, `stageId`, `dateDue`, `participants`, `description` (always the message box), `submissionFileIds` (every file listed under the box, the head note's own files included, tagged `FileAttacherWorkflowStage`). `EditTask` `description` closure: passes for `MANAGER`/`SUB_EDITOR` in the context or a site admin; else fails `submission.task.validation.error.headnote.author` when the head note's `userId` is not the user, `…headnote.editExpired` when it is over 3600 s old; no head note, it passes. `editTask()`: `$editTask->update()`, `notifyParticipants(array_diff(new, old))`, `logParticipants()`, `logTaskFiles()`, and for tasks `logDueDate()` (only when there was a due date) and `logOwner()`. `EditorialTask::saveHeadnote()` updates the note flagged `is_headnote`, or saves a new flagged note when there is none. `determineStatus()` puts a converted discussion (no `dateStarted`) under pending. Live-probed 2026-09-23 (Rule 15; all three apps): "Edit" and "Add Task Details" as described (the latter landing on "Task Information"); one edit changing name, participants, due date, owner, message and a file, mailing only the new participant and logging the added, removed, due-date, reassigned and uploaded lines, none for the name or the text; the message replaced in place, keeping its time; both conversion routes landing under "Yet to begin"; the owner's refusal (Copyeditor on OJS and OMP, the Author everywhere) under the message box with the notice; a Section Editor, a Guest Editor (OJS) and the Author on their own item within the hour saving; past the hour (a scratch first message moved back two hours in the database) the Author's rename or added participant and the Copyeditor's rename refused, the Journal Manager's and a Section Editor's saved. Live-probed 2026-10-05 (Rule 15b; all three apps, both routes, the Journal Manager converting a discussion the Author wrote): "Enter task information" ticked, the drop-down reading "Begin Task Upon Saving" greyed, the saved task under "Yet to begin" with its "Started" box empty (also after a reload), its first message kept under its writer and time, the menu "Edit", "History", "Delete"; the History lines as note f-a28 says.
 
 <a id="fn-w"></a>
 **w** — `startTask()`: conflict when already started or a discussion; refuses with `…participant.required` without participants and `…participant.responsible` without exactly one owner; stamps `dateStarted`, `startedBy`; logs `SUBMISSION_LOG_TASK_STARTED` (`submission.event.task.started` "{$taskType} initiated by {$username} ({$userGroupName}) on {$dateLogged}"). No unstart route exists. Live-probed 2026-09-23 (Rule 16; all three apps): the row question, "No" sending nothing (still "Yet to begin" after a reload), "Yes" starting; the window's "Start this task" and "Save" starting with no question; "Task started by" and "Start Date"; "Task initiated by {username} ({roles}) on {date}"; the box ticked and greyed after, asking nothing; the ownerless auto-added task's boxes greyed.
@@ -1988,7 +2034,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **z** — `discussionDelete()`: dialog `common.delete` / `common.confirmDelete`, `common.ok` (warnable) and `common.cancel`; DELETE `submissions/{id}/tasks/{taskId}`. `EditorialTask::booted()` `deleted` removes the task's notes and its `Notification` rows (`withAssoc(ASSOC_TYPE_QUERY, id)`, the header Tasks rows); participants go with the task's foreign key. The note removal is a query delete, which does not fire `Note::booted()`'s file clean-up, so the attached files' records stay in the database. Live-probed 2026-09-23 (Rule 19; all three apps): "Delete" in red text, the dialog as quoted, "OK" in red and "Cancel"; "Cancel" sending nothing; "OK" removing the row at once and after a reload, and the item's Tasks rows from the Section Editor's and the Author's panels; nobody mailed; a download link to one of its files, kept from before, answering "The current role does not have access to this operation.".
 
 <a id="fn-aa"></a>
-**aa** — Participants messages: `PKPStageParticipantNotifyForm::sendMessage()` (`EditorialTask::create`, `Participant::create`, `Note::create` without `isHeadnote`). Comments box: `Submission\Repository::submit()` → `Repo::editorialTask()->addCommentsForEditorsQuery()` → `addQuery()` (title `submission.submit.coverNote`: OJS "Comments for the Editor", OMP "Cover Note to Editor", OPS "Comments for the Moderator"; participants = stage assignments with `MANAGER, SUB_EDITOR, ASSISTANT, AUTHOR` on the submission's stage; `createdBy` = the first Author assignment's user, else the request user; `Note::create` with `isHeadnote => true` since pkp/pkp-lib#13409, `3dc90c81a6`, 2026-09-29, before which the flag was missing (f-a9); its own notification and plain `Mailable`). Recommendation: `IsRecommendation::addRecommendationQuery()` → `addQuery()`, so its first note is flagged too. Auto-add: `Repository::autoCreateFromTemplates()` → `Template::promote($submission, false)` (no participants, `createdBy` null, head note `userId` null → "Message from system" in `DiscussionMessages::getNoteCreatedBy()`), no log entry, no notification. None of the three `addQuery`/notify paths writes an event-log entry, so their "Activity" is empty. Live-probed 2026-09-23 (Rule 21; all three apps, the recommendation OJS and OMP): "Notify" and "Assign" making a discussion named after the template, "Created by: {recipient}", sender and recipient its participants, its own email; the comments box making "Comments for the Editor" / "Cover Note to Editor" / "Comments for the Moderator" with every assignee of the stage (not an unassigned Journal Manager) as participants, all of them mailed, the Author included; "Editor Recommendation" with the deciding editor alone as participant, no row for the recommender, and a manager's "Save" refused with the two texts until the recommender is ticked; the auto-added discussion seen by manager-level people only, one added participant refused, two saved; every one of these items with an empty "Activity" and a History reading "No Items" (A18).
+**aa** — Participants messages: `PKPStageParticipantNotifyForm::sendMessage()` (`EditorialTask::create`, `Participant::create`, `Note::create` without `isHeadnote`). Comments box: `Submission\Repository::submit()` → `Repo::editorialTask()->addCommentsForEditorsQuery()` → `addQuery()` (title `submission.submit.coverNote`: OJS "Comments for the Editor", OMP "Cover Note to Editor", OPS "Comments for the Moderator"; participants = stage assignments with `MANAGER, SUB_EDITOR, ASSISTANT, AUTHOR` on the submission's stage; `createdBy` = the first Author assignment's user, else the request user; `Note::create` with `isHeadnote => true` since pkp/pkp-lib#13409, `3dc90c81a6`, 2026-09-29, before which the flag was missing (f-a9); its own notification and plain `Mailable`). Recommendation: `IsRecommendation::addRecommendationQuery()` → `addQuery()`, so its first note is flagged too. Auto-add: `Repository::autoCreateFromTemplates()` → `Template::promote($submission, false)` (no participants, `createdBy` null, head note `userId` null → "Message from system" in `DiscussionMessages::getNoteCreatedBy()`), no log entry, no notification. None of the three `addQuery`/notify paths writes an event-log entry, so their "Activity" is empty. Live-probed 2026-09-23 (Rule 21; all three apps, the recommendation OJS and OMP): "Notify" and "Assign" making a discussion named after the template, "Created by: {recipient}", sender and recipient its participants, its own email; the comments box making "Comments for the Editor" / "Cover Note to Editor" / "Comments for the Moderator" with every assignee of the stage (not an unassigned Journal Manager) as participants, all of them mailed, the Author included; "Editor Recommendation" with the deciding editor alone as participant, no row for the recommender, and a manager's "Save" refused until the recommender is ticked; the auto-added discussion seen by manager-level people only, one added participant refused, two saved; every one of these items with an empty "Activity" and a History reading "No Items" (A18). Live-probed 2026-10-05 (Rule 21, the recommendation; OJS, OMP): after "Recommend Accept" › "Record Recommendation", the deciding editors' panel listed "Editor Recommendation", "Created by: {recommender}", its only message the recommendation email addressed to the deciding editors, its participants those editors (one; or two), and the recommender's panel no row; the manager's "Edit" › "Save" with the message changed, the recommender unticked, answered 422 with both texts under "Participants" for one deciding editor, and with "The creator must participate in the task/discussion." alone for two (both texts again once one of the two was unticked); with the recommender ticked it saved in both cases, the recommender then listed and the message the manager's text.
 
 <a id="fn-ab"></a>
 **ab** — pkp/pkp-lib#13334 (`360badeef5`, 2026-09-16): `getTasks()`, `fromTemplate()`, `getTaskData()` and `recordParticipantsAction()` load users with `filterByStatus(UserCollector::STATUS_ALL)`, so a disabled participant or creator still resolves to a name in the list, the item, the edit form's merged options and the History. Not offered anew: `getParticipants()` uses `Repo::user()->get($id)` (disabled excluded, the `null` filtered out). Not notified: `notifyParticipants()` loads recipients with the collector's default (active) status. Live-probed 2026-09-23 (Rule 22; all three apps): a disabled Section Editor (Moderator) still named on her rows, in the window, ticked in "Edit" (kept ticked by a rename-only "Save") and in the History; not offered in "Add"; no email and no Tasks row for a reply while disabled, both again once enabled.
@@ -2083,6 +2129,9 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 <a id="fn-td22"></a>
 **td22** — Live-probed 2026-10-02 (Rule 18; A33; OJS and OPS; the default dataset, `dbarnes`): a reply with a file attached, its two History lines in the same second: OJS listed "… posted a response …" above "replacement.pdf uploaded by …", OPS the other way round.
 
+<a id="fn-td23"></a>
+**td23** — Live-probed 2026-10-05 (Rule 13d; A36; all three apps, two runs, two browsers at once on a scratch journal): a discussion written by the Section Editor (Moderator) with the Journal Manager and a second Section Editor, the Journal Manager's window open while the Section Editor unticked them in "Edit" and saved; the Journal Manager's "Add New Message" › "Save" answered 422 and showed "Error" "An unexpected error has occurred. Please reload the page and try again." with "OK", and after a reload the window read "To add a new message, please assign yourself as a participant."; the Section Editor's reply after the Journal Manager unticked them from a discussion the Journal Manager wrote: 401 "You do not have permission to modify this discussion." (`user.authorization.submissionQuery.edit`), and after a reload no row for it.
+
 <a id="fn-a1"></a>
 **f-a1** — Live-probed 2026-09-04 on OMP and OPS (Notifications center's probes): "Add" › "Save" and a reply each showing the dialog; the row stored, no Tasks row, no email. Cause: `EditorialTaskController` imports `APP\notification\Notification` (pkp/pkp-lib#12322, `139bde1e657`, 2026-02-10), a class only OJS ships (`ojs/classes/notification/Notification.php`); OMP (`7f9455d5a`) and OPS (`15f0b6e0bd`) still track none. The class is resolved only where `notifyParticipants()` touches a constant: every add and reply, and an edit on Copyediting or Production (the notice update). The test installs mount an empty subclass for both apps so the other features can run, which is why a drive on them does not show the error: the as-shipped error cannot be seen on these test installs. Re-read 2026-09-23: the OMP (`7f9455d5a`) and OPS (`15f0b6e0bd`) checkouts still track no `classes/notification/Notification.php` (the file there is the mounted subclass, excluded from git), and lib/pkp's `EditorialTaskController.php` still imports `APP\notification\Notification`; with the subclass, every save and reply on OMP and OPS stored the item and sent the emails and rows.
 
@@ -2165,7 +2214,7 @@ Issue report: [pkp-e2e#427](https://github.com/jardakotesovec/pkp-e2e/issues/427
 **f-a23** — Note t. Live-probed 2026-09-23 on all three apps: the hint with no "Edit" button for a participating Section Editor who did not create the item, a Copyeditor, the Author and a Reviewer (OJS, OMP).
 
 <a id="fn-a24"></a>
-**f-a24** — Note g. Live-probed 2026-09-23 on OJS and OMP: in a reply box, a Copyeditor's and a Layout Editor's "Select submission stage" offered every stage; "Submission" and "Review" ("Internal Review", "External Review") drew nothing under the list.
+**f-a24** — Note g. Live-probed 2026-09-23 on OJS and OMP: in a reply box, a Copyeditor's and a Layout Editor's "Select submission stage" offered every stage; "Submission" and "Review" ("Internal Review", "External Review") drew nothing under the list. Overturned 2026-10-05 (note g; OJS and OMP, two runs): those stages are greyed options the browser refuses to select; the 2026-09-23 probe's selection timed out on them and its script swallowed the refusal, recording the stage as empty. An issues-session walk on the default dataset (2026-10-02, OJS and OMP) saw the same greyed stages.
 
 <a id="fn-a25"></a>
 **f-a25** — Note p. Live-probed 2026-09-23 on all three apps: "Add Task Details" and "Edit" with the box ticked showed the drop-down at "Begin Task Upon Saving", greyed; after "Save" the task sat under "Yet to begin" with its "Started" box empty.
@@ -2179,7 +2228,7 @@ Issue report: [pkp-e2e#431](https://github.com/jardakotesovec/pkp-e2e/issues/431
 **f-a27** — Note y: every log call attributes to `Validation::loggedInAs()` when present, while the note is written as the impersonated user. Live-probed 2026-09-23 (OJS twice, OMP and OPS once): "User" "{Journal Manager} (acting as {Section Editor})", "Event" and "Activity" naming the manager's username, the message headed with the Section Editor's, the email from the Section Editor's address. *Login & sessions* says impersonation is total.
 
 <a id="fn-a28"></a>
-**f-a28** — Note y: `{$taskType}` is the item's current type. Live-probed 2026-09-23 on all three apps: a discussion's "Activity" read "Discussion created by …" before "Add Task Details" and its History "Task created by …" and "Task assigned to …" after. Test run 2026-09-23 on all three apps (scenario 5): "Add Task Details" choosing the first owner answered 200 and wrote "Task assigned to …", while the server logged `PHP Warning: Attempt to read property "userId" on null` twice: `EditorialTaskController::logOwner()` picks the "assigned" event when there is no old owner, then reads the old owner's `userId` for `taskOwnerOldUserId` and `taskOwnerOldUsername` anyway. Nothing on screen fails.
+**f-a28** — Note y: `{$taskType}` is the item's current type. Live-probed 2026-09-23 on all three apps: a discussion's "Activity" read "Discussion created by …" before "Add Task Details" and its History "Task created by …" and "Task assigned to …" after. Test run 2026-09-23 on all three apps (scenario 5): "Add Task Details" choosing the first owner answered 200 and wrote "Task assigned to …", while the server logged `PHP Warning: Attempt to read property "userId" on null` twice: `EditorialTaskController::logOwner()` picks the "assigned" event when there is no old owner, then reads the old owner's `userId` for `taskOwnerOldUserId` and `taskOwnerOldUsername` anyway. Nothing on screen fails. Live-probed 2026-10-05 (Rule 15b; A28; all three apps, both routes, the Journal Manager converting a discussion the Author wrote): before, the History's one line "Discussion created by {the Author's username} (Author) on {date}"; after, on the same page and after a reload, "Task created by {the Author's username} (Author) on {date}" (column "User" the Author's full name) under "Task assigned to {owner} by {the manager's username} on {date}", the latter also the row's "Activity"; the Author's own History read the same two lines (OMP, OPS); the server log held the two warnings per conversion again.
 Issue report: [pkp-e2e#445](https://github.com/jardakotesovec/pkp-e2e/issues/445) ([docs/issues/U37-A28-converted-task-history-says-task-created.md](../issues/U37-A28-converted-task-history-says-task-created.md)).
 Issue report: [pkp-e2e#446](https://github.com/jardakotesovec/pkp-e2e/issues/446) ([docs/issues/U37-A28-task-first-owner-server-warning.md](../issues/U37-A28-task-first-owner-server-warning.md)).
 
@@ -2202,6 +2251,12 @@ Issue report: [pkp-e2e#430](https://github.com/jardakotesovec/pkp-e2e/issues/430
 
 <a id="fn-a34"></a>
 **f-a34** — Live-probed 2026-10-02 (note td21). `EditTask::rules()` (lib/pkp `api/v1/submissions/tasks/formRequests/EditTask.php`) checks `dateDue` with `after_or_equal:today` on every edit, and `saveWorkItem()` sends `dateDue` with every "Save" (note v), so an unchanged past date is refused. A press and a preprint server read in the code only: the same lib/pkp rule. The wording of the refusal is A10's.
+
+<a id="fn-a35"></a>
+**f-a35** — Note g. Read in the code: `getPermittedNamespacesForStage()` (`useFileManagerConfig.js`) keeps a stage's file list only when the user holds a role on that stage and `getManagerConfig()`, which reads the submission's current stage, permits them an action on it; on screen, the Copyediting lists permitted the Copyeditor none once the submission was at Production. Live-probed 2026-10-05 on OJS and OMP, two runs: the Copyeditor on the Copyediting stage of a submission at Production found every option of "Select submission stage" disabled, in the "Add" window and in the reply box of a discussion they had saved; on a submission still at Copyediting, "Copyediting" enabled with "Copyedited Files" and "Draft Files"; the Journal Manager and the Section Editor (Series Editor) had every stage enabled on both.
+
+<a id="fn-a36"></a>
+**f-a36** — Note td23. `AddNote::rules()` (lib/pkp `api/v1/submissions/tasks/formRequests/AddNote.php`) checks `userId`, the signed-in user, with `Rule::exists('edit_task_participants', 'user_id')` for the task, so a manager-level user, whom the access policy admits without being a participant, is refused with 422 `{"userId":["The selected user id is invalid."]}`, a field the reply box has no place for, and the page shows its generic error.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note n: the reviewer group is the first of the press's two reviewer groups the database returns. Live-probed 2026-09-23 on OMP, two fresh presses: "External Reviewer" in one run's manager window, "Internal Reviewer" in others, the manager's, the Author's and the reviewer's windows differing; OJS prints "Reviewer".

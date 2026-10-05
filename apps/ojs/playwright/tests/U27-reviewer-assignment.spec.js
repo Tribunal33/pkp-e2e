@@ -11,7 +11,7 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as contract, a ❓ is parked, not a gap; the spec's
  * Coverage section is the record of everything else left out):
- * - A1 🐞, A2 🐞, A7 🐞, A8 🐞, A9 🐞, A12 🐞, A13 🐞, A14 🐞, A16 🐞,
+ * - A1 🐞, A2 🐞, A7 🐞, A9 🐞, A12 🐞, A13 🐞, A14 🐞, A16 🐞,
  *   A15 🐞, A18 🐞, A19 🐞, A21 🐞, A22 🐞, A26 🐞, A30 🐞, A31 🐞 (the refusals and races these
  *   name are walked where a scenario passes through them — S5's inverted
  *   dates, S6's refused edit, the settle-then-rate in S9, S11's unassign
@@ -688,8 +688,8 @@ test.describe('reviewer-assignment', () => {
         await expect(modal.getByText(DATE_RULE)).toBeVisible();
 
         // Review due date before the response due date: submitting adds
-        // nothing — the window stays open (the missing error message is
-        // register A8, asserted neither way).
+        // nothing — the window stays open (its notice, Planned with A45's
+        // wording, is asserted neither way).
         await pickDate(editorPage, modal, 'reviewDueDate', daysFromNow(7));
         await modal.getByRole('button', {name: 'Add Reviewer', exact: true}).click();
         await waitForJQueryIdle(editorPage);
@@ -743,7 +743,7 @@ test.describe('reviewer-assignment', () => {
         await uploadReviewFiles(managerPage, workflow, [fileOne, fileTwo]);
 
         // "Edit", the dates: the window shows the rule; an inverted pair is
-        // refused with the window staying open (the missing message is A8);
+        // refused with the window staying open (its notice not asserted);
         // a week later than the original (+4 weeks, the form's own default)
         // saves. Calendar picks — the widget discards typed dates (A16).
         const editModal = await openEditReview(managerPage, row);

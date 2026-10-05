@@ -17,7 +17,7 @@
  *
  * Not covered, by register ID (the spec's Coverage section is the record of
  * everything else left out; 🐞 findings are never asserted as contract):
- * OMP2, OMP3, OMP4, OMP5, OMP6, A2, A7, A8, A12, A13, A16, A17, A18, A19,
+ * OMP2, OMP3, OMP4, OMP5, OMP6, A2, A7, A12, A13, A16, A17, A18, A19,
  * A21, A22, A23, A26, A27, A29, A30, A31, A1, A4, A6, A15, A25, A33, A34, A35 (A24 is
  * retired: spec Rule 14d, under Budget, no test drives it yet).
  *
@@ -676,8 +676,8 @@ test.describe('Reviewer assignment & management (U27)', () => {
         await expect(addModal.getByText(DATE_RULE)).toBeVisible();
 
         // Review due BEFORE response due (calendar picks — A16): submitting
-        // creates nothing and the window stays open (the missing error
-        // message is register finding A8, unasserted).
+        // creates nothing and the window stays open (its notice, Planned
+        // with A45's wording, unasserted).
         await pickDate(page, addModal, 'reviewDueDate', daysFromNow(7));
         const refused = page.waitForResponse((r) =>
             r.url().includes('update-reviewer')
@@ -721,7 +721,7 @@ test.describe('Reviewer assignment & management (U27)', () => {
         const row = reviewerRow(modal, `Rev${tag} Reviewer`);
 
         // "Edit", the dates: the window shows the date rule; the inverted
-        // dates are refused and the window stays open (A8: no message);
+        // dates are refused and the window stays open (notice unasserted);
         // then the review due date moves a week past the original 4 weeks
         // (calendar picks — A16). The files added after the assignment are
         // ticked here so the later files-only edit has boxes to untick.
