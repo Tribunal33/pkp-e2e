@@ -996,7 +996,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A22](#a22) | A reference author's "ORCID iD" takes any text, and the References page links the author's ORCID icon to it | 🐞 | user-visible | — |
+| [A22](#a22) | A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
@@ -1295,19 +1295,21 @@ question [Languages & locales](U57-languages-and-locales.md#a4) asks.
 Basis: probe, 2026-10-04. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — A reference author's "ORCID iD" takes any text, and the References page links the author's ORCID icon to it** · 🐞 · user-visible.
-A reference author's "ORCID iD" is expected to be checked like a data
-citation creator's: only a full https://orcid.org/ address. Any text is
-saved as typed instead, an off-site address or a link of any other kind.
-With metadata lookup on, the expanded row then offers it as the author's
-ORCID icon ("ORCID profile for {name}"). The submitting Author can set
-it on their own submission while it is still in the wizard (directly,
-not through a screen), and afterwards while they may edit its metadata
-(by default on a preprint server). A Journal Manager, Section Editor or
-Assistant who clicks the icon follows the Author's link, not an ORCID
-profile. The published page does not show it.
-Since: 2025-09-16 · Basis: probe, 2026-09-30. <sup>f-a22</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · 🐞 · medium.
+On a submission's "References" page, "Edit citation" has an "ORCID iD"
+box for each author of a cited work. The box for a data citation's
+creators refuses anything but an ORCID address. This one keeps
+whatever is typed, including another website's address or a
+`javascript:` link. With metadata lookup on, the expanded reference
+shows that author with an ORCID icon, and pressing the icon opens the
+typed address in a new tab instead of an ORCID profile.
+Anyone who may edit the publication can type it. On a preprint server
+that includes the submitting author, because authors may edit their
+metadata by default. On a journal or press it includes the author
+once an editor has ticked the author's permission to change the
+publication. The editors, managers and assistants who press the icon
+are the ones sent to the author's page.
+Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
 ### Retired
 
@@ -2324,6 +2326,7 @@ writes without schema validation. 3.5, 3.4 and 3.3 do not have it: they
 have no structured references (no `citation.json`, citations API or
 CitationManager).
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Issue report: [docs/issues/U42-A22-reference-author-orcid-any-link.md](../issues/U42-A22-reference-author-orcid-any-link.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where

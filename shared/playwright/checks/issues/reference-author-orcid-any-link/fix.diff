@@ -1,0 +1,15 @@
+--- a/lib/pkp/schemas/citation.json
++++ b/lib/pkp/schemas/citation.json
+@@ -41,7 +41,11 @@
+                         "type": "string"
+                     },
+                     "orcid": {
+-                        "type": "string"
++                        "type": "string",
++                        "validation": [
++                            "nullable",
++                            "orcid"
++                        ]
+                     },
+                     "openAlex": {
+                         "type": "string"
