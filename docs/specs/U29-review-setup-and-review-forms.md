@@ -2086,7 +2086,7 @@ loading. OMP and OPS `main` have no such API
 OJS 3.5, 3.4 and 3.3 have no recommendations API at all, so no release
 carries it. Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
-Issue report: [docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md](../issues/U29-A13-section-editor-changes-reviewer-recommendations.md).
+Issue report: [pkp-e2e#922](https://github.com/jardakotesovec/pkp-e2e/issues/922) ([docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md](../issues/U29-A13-section-editor-changes-reviewer-recommendations.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the
