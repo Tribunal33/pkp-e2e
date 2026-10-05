@@ -331,32 +331,36 @@ nothing is ticked and the box is ticked again. <sup>td19</sup>
     Files"), as on the Native XML list. <sup>i</sup> <sup>td19</sup>
 18. **Exporting.** "Export Submissions" with one book or more ticked,
     at least one of them with a publication format, adds a tab "Export
-    Submissions Results" and opens it: "The export
-    completed successfully. Download the exported file from the button
-    below." and a "Download Exported File" button, with "Validate XML
-    before the export and registration." ticked or not. The button
-    downloads the ONIX file of the ticked books, its name starting
-    "onix30-" and ending ".xml" (Rules 20–24 say what it carries). Each
-    ticked book that was published while the press's "Press Publisher
-    Name" was blank adds, under the button, the heading "Warnings
-    encountered:" and a line starting "No publisher was recorded for",
-    then the book's title and "when it was published, so the press name
-    is used as publisher."; the export still completes and the button
-    is there. Each "Export Submissions" adds another results tab; its
-    "Close" removes the tab and returns to "Export" with the ticks kept.
+    Submissions Results" and opens it, with "Validate XML before the
+    export and registration." ticked or not:
+    - the text "The export completed successfully. Download the exported
+      file from the button below." and a "Download Exported File" button;
+    - the button downloads one ONIX file for the ticked books, its name
+      starting "onix30-" and ending ".xml" (Rules 20–24 say what it
+      carries);
+    - when a ticked book was published while the press's "Press
+      Publisher Name" was blank: under the button, the heading "Warnings
+      encountered:" and, for each such book, the line "No publisher is
+      recorded for "<the book's title>", so the press name is used as
+      the publisher. To record a publisher, use the command-line tool
+      tools/stampIdentityMetadata.php."; the export still completes and
+      the button is there.
+
+    Each "Export Submissions" adds another results tab; its "Close"
+    removes the tab and returns to "Export" with the ticks kept.
     <sup>j</sup> <sup>td20</sup>
-    - 18b. **No format among the ticked books.** With the validation box
-      ticked, the tab reads "The process failed. Check below for
-      errors/warnings.", "Errors occured:", "Generic Items" and an error
-      line naming "ONIXMessage" and reading "Missing child element(s).",
-      with no download. With the box unticked, the export completes as in Rule
-      18, and the file holds the press's header and no product.
-      <sup>j</sup> <sup>td20</sup>
     - 18a. **Nothing ticked.** Pressed with no book ticked, "Export
       Submissions" adds the "Export Submissions Results" tab and opens
       it empty, with no text and no button, whether the validation box
       is ticked or not, while the server fails behind it ⚠
       [A16](#a16). <sup>j</sup> <sup>td21</sup>
+    - 18b. **No format among the ticked books.** With the validation box
+      ticked, the tab reads "The process failed. Check below for
+      errors/warnings.", then "Errors occured:", "Generic Items" and an
+      error line that names "ONIXMessage" and says "Missing child
+      element(s).", with no download button. With the box unticked, the export
+      completes as in Rule 18, and the file holds the press's header
+      (Rule 24b) and no product. <sup>j</sup> <sup>td20</sup>
 19. **The trade data in a Native XML file.** While the press's
     four ONIX details are filled, each publication format in a book's
     Native XML export file (Tools › "Native XML Plugin" › "Export")
@@ -810,10 +814,11 @@ footnote. <sup>s</sup>
    - **Exporting**: tick "Tidewater Tales" and press "Export
      Submissions": a tab "Export Submissions Results" is added and opens,
      reading "The export completed successfully." with a "Download
-     Exported File" button; pressing the button downloads a file whose
-     name starts "onix30-" (Rule 18). The "Warnings encountered:" block
-     under it is not read here: "Tidewater Tales" was published before
-     the press had a "Press Publisher Name".
+     Exported File" button. Press the button: a file downloads whose name
+     starts "onix30-" and ends ".xml", holding a "Product" element (Rule
+     18). The "Warnings encountered:" block under the button, there
+     because "Tidewater Tales" was published before the press had a
+     "Press Publisher Name" (Rule 18), is neither a pass nor a fail here.
    - **Control**: on Settings › Press › "Masthead" empty "Publisher Code"
      and press "Save": the ONIX tool's page again shows only "This press
      is missing some required information. Please go to Press Settings
@@ -957,16 +962,13 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
-  - an export of a book with no publication format, the validation box
-    ticked and unticked (Rule 18b)
   - the guard A16's issue report names, once fixed: "Export
     Submissions" pressed with no book ticked: the alert "No objects
     selected.", no results tab opened and no request failing
-  - the guard for A1 (issue report
-    `docs/issues/U74-A1-onix-export-fails-every-book.md`): on a
-    freshly installed press with its "Publisher Identity" filled,
-    "Export Submissions" for one book gives "The export completed
-    successfully." and an ONIX file
+  - an export whose ticked books have no publication format, with the
+    validation box ticked and unticked (Rule 18b)
+  - the "Warnings encountered:" line for a book published while the
+    press's "Press Publisher Name" was blank (Rule 18)
   - the guard for A6 (issue report
     `docs/issues/U74-A6-market-edit-fills-in-gst-tax-type.md`): a
     market saved with "Taxation Type" empty reopens in its "Edit"
@@ -1084,7 +1086,6 @@ unless an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ends in "The process failed" for every book | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | Editing a book's market fills in "GST (Sales tax)" as its tax type, and "OK" saves it unasked | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1098,41 +1099,15 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A book representative switched between "Agent" and "Supplier" is listed under both groups until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A6](#a6) | Editing a market with no "Taxation Type" stores "GST (Sales tax) (02)", and the Native XML export then fails | 🐞 | user-visible | — |
-| [A7](#a7) | A sales-rights entry or a market saves with no territory, and the book's Native XML export then fails | 🐞 | user-visible | — |
-| [A8](#a8) | The market window takes any date and any price, and a price that is not a number makes the book's Native XML export fail | 🐞 | user-visible | — |
-| [A12](#a12) | The representative window shows both "Role" lists and refuses a new supplier until the type is clicked | 🐞 | user-visible | — |
-| [A17](#a17) | Any "Taxation Rate" but "Zero-rated (Z)" makes the book's Native XML export fail | 🐞 | user-visible | — |
-| [A2](#a2) | "Audience" offers "Save" to the assistant roles and refuses their save | 🐞 | minor | — |
-| [A4](#a4) | The "Market Territories" list shows bare codes and runs the price into the currency code | 🐞 | minor | — |
-| [A5](#a5) | A new market's "Date Format" preselects "YYYYMMDD (H)", the Hijri calendar | 🐞 | minor | — |
-| [A9](#a9) | The audience reaches the ONIX product with its code type and code value swapped | 🐞 | minor | — |
-| [A11](#a11) | A "Rest of World?" entry comes back from a Native XML import unticked | 🐞 | minor | — |
-| [A13](#a13) | A representative whose type is changed shows in both groups until a reload | 🐞 | minor | — |
-| [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | minor | — |
-| [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | minor | — |
 | [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A20](#a20) | On an install with no representative yet, the first one added is not listed until the page is reloaded | 🐞 | minor · crash: server | — |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
 | [A10](#a10) | A representative's ID, and an agent's phone and email, reach no file | ❓ | minor | — |
-| [A1](#a1) | Retired: "Export Submissions" on the ONIX tool failed for every book; it now completes with a download (Rule 18) | ✅ | retired | — |
+| [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/omp#2372's head |
 
 ### All apps
-
-<a id="a1"></a>
-**A1 — On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ends in "The process failed" for every book** · 🐞 · medium.
-On a press installed fresh from `main`, a manager who ticks one book or
-more in Tools › "ONIX 3.0 Monograph Export Plugin" and presses "Export
-Submissions" always gets "The process failed. Check below for
-errors/warnings." and "Filter (ONIX 3.0 XML monograph export) supports
-input classes.submission.Submission[] - array given", with no file to
-download, whatever the book. They expect "The export completed
-successfully." and an ONIX file. The press cannot produce its ONIX feed,
-and there is no way round on screen. Only presses on a new install are
-affected. An install upgraded from 3.5 or earlier still exports.
-Since: 2025-12-04, a date read from the code's history · Basis: probe, 2026-10-03. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Audience" refuses the assistant roles it offers "Save" to** · 🐞 · low.
@@ -1404,7 +1379,7 @@ Basis: probe, 2026-10-03. <sup>f-a20</sup>
 ### Retired
 
 <a id="a1"></a>
-**A1 — The ONIX export fails for every book** · ✅ · retired. Fixed by pkp/omp#2372 (the filter group's input type), verified 2026-10-02 at the PR's head before its merge: "Export Submissions" completes with "Download Exported File", validation ticked or not (Rule 18). <sup>f-a1</sup>
+**A1 — On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book** · ✅ · retired. Fixed by pkp/omp#2372 (the filter group's input type), verified 2026-10-05 at the PR's head before its merge. <sup>f-a1</sup>
 
 ---
 
@@ -1991,7 +1966,7 @@ generic group `plugins.importexport.native.common.any` "Generic
 Items"; on success `plugins.importexport.native.export.completed` "The
 export completed successfully." and "Download the exported file from the
 button below."). `PKPImportExportDeployment::export()` catches the
-filter's exception into that error. The filter group
+filter's exception into that error. On `main` the filter group
 `monographs=>onix30-xml` declares `inputType="class::classes.submission.Submission[]"`
 (`plugins/importexport/onix30/filter/filterConfig.xml`); lib/pkp
 `ClassTypeDescription::splitClassName()` reduces it to the class
@@ -2007,15 +1982,17 @@ book ticked, the empty `selectedSubmissions` reaches
 fails with a server error before any filter runs, the same lib/pkp path
 as the Native XML tool's (*Import & export*, its A12). Live-probed
 2026-09-28 (Rule 18; A1, A16): notes td20 and td21. pkp/omp#2372, at
-its head `64f7f2e404` (lib/pkp `d9ba2450cd`) before its merge, declares
+its head `f3808dce1` (lib/pkp `a7f5e3081b`) before its merge, declares
 `class::APP\submission\Submission[]` there, as the Native XML plugin
 does, and the export completes (note td20). The same PR adds the
 warning `plugins.importexport.onix30.export.warning.publisherNotStamped`
 from `MonographONIX30XmlFilter::getPublisherName()`: a publication
-stamped at publication with no publisher gets the press name and the
-warning. The download is `downloadExportFile`, the file
-`onix30-<YYYYMMDD-HHMMSS>-submissions-<press id>.xml`
-(`Onix30ExportPlugin::getExportFileName()`).
+whose identity was recorded at publication without a publisher gets the
+press name and the warning, once per book. The download is
+`downloadExportFile`, the file
+`onix30-<YYYYMMDD-HHMMSS>-submissions-<press id>.xml`. With no format
+among the ticked books the `ONIXMessage` holds the `Header` alone,
+which the ONIX schema refuses when validation is on (Rule 18b).
 
 <a id="fn-td20"></a>
 **td20** — Live-probed 2026-09-28 (Rule 18; A1), two runs. On a filled
@@ -2027,26 +2004,24 @@ all nine books through "Select All"; each export posted
 `exportSubmissionsBounce` (200), and no `onix30-*.xml` appeared in the
 files directory's `temp/`. A second export on the same page added a
 further results tab (three tabs after two); a tab's "Close" removed it
-and returned to "Export" with the ticks kept. Driven again 2026-10-02 at
-the pkp/omp#2372 head `64f7f2e404` (note j): on a filled press, a
-published book ticked, validation ticked and unticked, the tab read "The
-export completed successfully. Download the exported file from the
-button below." with "Download Exported File", which downloaded an ONIX
-file; a book published while "Press Publisher Name" was blank added the
-"Warnings encountered:" block, one published with it filled none
-(`.reports/sync/r4/onix-results-unstamped-omp.png`). The same day, a
-probe run of scenario 6's test (Rule 18b): "Harbour Lights", with no
-format, validation ticked, failed with the schema error
-"Element '{http://ns.editeur.org/onix/3.0/reference}ONIXMessage':
-Missing child element(s). Expected is one of (
+and returned to "Export" with the ticks kept. Driven 2026-10-02 at an
+earlier head of pkp/omp#2372 (Rules 18, 18b): on a filled press, a
+published book with a format ticked, validation ticked and unticked,
+the tab read "The export completed successfully. Download the exported
+file from the button below." with "Download Exported File", which
+downloaded the ONIX file; a book published while "Press Publisher Name"
+was blank added the "Warnings encountered:" block, one published with
+it filled none. "Harbour Lights", with no format, validation ticked,
+failed with "Element
+'{http://ns.editeur.org/onix/3.0/reference}ONIXMessage': Missing child
+element(s). Expected is one of (
 {http://ns.editeur.org/onix/3.0/reference}NoProduct,
 {http://ns.editeur.org/onix/3.0/reference}Product )." under "Generic
-Items" and again under "Validation errors:"; unticked, it completed
-and downloaded `onix30-20261002-142852-submissions-10.xml`, an
-`ONIXMessage` with the `Header` alone; "Tidewater Tales" with a format
-completed and the file had its product. Scenario 6's test reads the
-success text, the button, the file's name, its `ONIXMessage` and a
-`Product`.
+Items"; unticked, it completed and downloaded
+`onix30-20261002-142852-submissions-10.xml`, an `ONIXMessage` with the
+`Header` alone. Test run 2026-10-05 at the PR's head `f3808dce1`,
+before its merge: scenario 6 read the success text, the button, the
+file's name, its `ONIXMessage` and a `Product`.
 
 <a id="fn-td21"></a>
 **td21** — Live-probed 2026-09-28 (Rule 18a; A16), two runs. With
@@ -2185,9 +2160,9 @@ same book complete. A market dated "abc" as "YYYYMMDD" exported with
 `DateFormat` 20.
 
 <a id="fn-o"></a>
-**o** — Read from the code only; until pkp/omp#2372 the tool's file was
-never written (Rule 18, note j), and its download has not been read
-element by element since: `MonographONIX30XmlFilter` (note k) writes the header from
+**o** — Read from the code only; the tool's file was never written
+before pkp/omp#2372 (note j), and its download has not been read element
+by element since: `MonographONIX30XmlFilter` (note k) writes the header from
 `createHeaderNode()` and, per product, identification codes and a DOI,
 `DescriptiveDetail` (composition, form, measurements, license, series
 `Collection`, title, contributors with roles and verified ORCID iDs,
@@ -2309,7 +2284,7 @@ the refused delete's browser pop-up is accepted before the dialog's
 `context.country` and `context.acronym`, without which its "Masthead"
 refuses "Save". Scenario 6 seeds none of the four ONIX keys; "Tidewater
 Tales" is published with `publicationFormats: [{name: 'Paperback'}]`
-(a book with no format fails the validated export, Rule 18b), "Harbour Lights" `submitted: true` with no
+(with no format the validated export fails, Rule 18b), "Harbour Lights" `submitted: true` with no
 decision. Scenarios 7 and 8 seed `publisher`, `location`, `codeType:
 'Proprietary (01)'` and `codeValue` (scenario 7 `publisher: 'Tidewater
 Press'`), on both presses of scenario 8, whose B holds no book; a
@@ -2354,12 +2329,10 @@ format's ONIX product. The cause is read from the code (note j): the
 alias the declaration relied on went with omp `6f57d1d09`; the
 stable-3_5_0 line still has it, and exports (walked 2026-10-03). An
 install upgraded to `main` exports too: its migration rewrites the
-stored type.
+stored type. Retired 2026-10-05: pkp/omp#2372 declares the filter
+group's input as `class::APP\submission\Submission[]` (note j); at its
+head `f3808dce1`, before its merge, the export completes (note td20).
 Issue report: [pkp-e2e#695](https://github.com/jardakotesovec/pkp-e2e/issues/695) ([docs/issues/U74-A1-onix-export-fails-every-book.md](../issues/U74-A1-onix-export-fails-every-book.md)).
-stable-3_5_0 line still has it, and was not driven.
-Retired 2026-10-02: pkp/omp#2372 declares the filter group's input as
-`class::APP\submission\Submission[]` (note j); drive at its head (note
-td20).
 
 <a id="fn-f-a2"></a>
 **f-a2** — Note c: the menu offers the page with no role test, the form
