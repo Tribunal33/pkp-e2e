@@ -1311,7 +1311,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | upstream sync (claude), 2026-10-05 — re-verified |
 | [A25](#a25) | A book's HTML file that links another book shows with every "omp://" link dead | 🐞 | user-visible | upstream sync (claude), 2026-10-05 — re-checked: the file now shows, its "omp://" links do nothing |
 | [A26](#a26) | A review made public never shows on the published book's page | 🐞 | user-visible | — |
-| [A27](#a27) | A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included | 🐞 | user-visible | — |
+| [A27](#a27) | A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author Original has no page | ❓ | minor | — |
@@ -1686,10 +1686,9 @@ A journal's article page has the same fault
 Basis: probe, 2026-10-05. <sup>f-a26</sup>
 
 <a id="a27"></a>
-**A27 — A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included** · 🐞 · user-visible.
+**A27 — A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included** · 🐞 · medium.
 An unassigned Series editor or assistant role opens an unpublished book's page by its address while the book is still in submission or review, or after it was declined, as on an article's page, where the full entry stands ([→ Article landing page & reading, A16](U13-article-landing-page-and-reading.md#a16)).
-Since: 2026-02-18 · Basis: probe, 2026-09-30. <sup>f-a27</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+Since: 2026-02-18 · Basis: probe, 2026-10-05. <sup>f-a27</sup>
 
 ### Retired
 
@@ -2017,6 +2016,7 @@ Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283
 
 <a id="fn-f-a27"></a>
 **f-a27** — Note c: the same `canPreview()` role shortcut as U13 A16, with no stage check on `main` since pkp/pkp-lib#12245 (`768b0a3991`, Alec Smecher, 2026-02-18); the fix, the release check (3.5, 3.4 and 3.3 do not have it) and the evidence are there. Live-probed 2026-09-30, OMP `main`, seeded data: unassigned `mfritz` (Copyeditor) and `cturner` (Proofreader) opened books 3, 6 and 18, before copyediting. Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Issue report (with U13 A16): [docs/issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md](../issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md).
 
 ## Reference — entry points & surfaces
 

@@ -1092,6 +1092,7 @@ footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a Section Editor not assigned to a submission opens its article landing page before copyediting: "404 Not Found" ([A16](#a16)): the guard the issue report proposes
   - the guard for OPS2 and OPS3 (Rule 1, Rule 13; issue report
     `docs/issues/U13-OPS2-OPS3-ops-number-address-url-path.md`): on a preprint server, a
     preprint with a URL Path, its non-PDF galley link downloading the
@@ -1380,7 +1381,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A11](#a11) | Keywords on an article, book or preprint page can appear in another order than the editor typed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The PDF or HTML reader opened from a new version's preview calls that version outdated | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | In Japanese, Spanish (Mexico) and other languages whose translation lacks the entry, every "Versions" entry reads "##submission.versionIdentity##", with no date or version name | 🐞 | minor | — |
-| [A16](#a16) | A Section Editor or assistant role not assigned to a submission reads its unpublished page at every stage, declined submissions included | 🐞 | user-visible | — |
+| [A16](#a16) | Section editors and assistants not assigned to a submission open its article or book landing page before acceptance | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1661,23 +1662,30 @@ whole entry is therefore the key, and [A1](#a1)'s key, which French
 Basis: probe, 2026-10-05. <sup>[f-a15](#fn-f-a15)</sup>
 
 <a id="a16"></a>
-**A16 — A Section Editor or assistant role not assigned to a submission reads its unpublished page at every stage, declined submissions included** · 🐞 · user-visible.
-A Section Editor, a Subscription Manager, or a Copyeditor, Layout
-Editor, Proofreader or other assistant role of the journal, not
-assigned to a submission, types its page's address (the submission's
-number) and reads its title, abstract, authors and affiliations while
-it is still in the Submission or Review stage, or after it was
-declined. Their dashboard does not list it and the workflow refuses
-them. They expect "404 Not Found" until the submission reaches
-copyediting, as in the releases. A staff member who also reviews the
-submission double-anonymously reads on that page the authors' names
-the review screens hide. On a journal, the version's "JATS XML"
-download, once "Make available with publication" is ticked, lets the
-same people download it at the same stages. Nothing can be changed;
-files, reviews and discussions stay closed. A preprint server was seen
-only with preprints in production, so there it rests on the code.
-Since: 2026-02-18 (the earlier-stage preview change) · Basis: probe, 2026-09-30. <sup>[f-a16](#fn-f-a16)</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A16 — Section editors and assistants not assigned to a submission open its article or book landing page before acceptance** · 🐞 · medium.
+On a journal, some staff can read a submission they are not assigned
+to on its article landing page. This applies to a Section Editor, a
+Subscription Manager and the assistant roles (Copyeditor, Layout
+Editor, Proofreader and the like). They type the page's address,
+`article/view/<n>` with the submission's ID, and see its title,
+abstract, authors and affiliations. This works while the submission is
+still in the Submission or Review stage, and after it was declined.
+On a press, a Series editor and the assistant roles do the same on the
+book landing page, `catalog/book/<n>`. Their dashboard does not list
+the submission and its workflow refuses them. The page should answer
+"404 Not Found" to them until the submission reaches copyediting.
+A staff member who also reviews the submission double-anonymously sees
+on that page the authors' names the review screens hide. On a journal,
+once an editor ticks "Make available with publication" on the
+version's "JATS XML", the page's "JATS XML" link downloads the XML,
+author names included, for the same staff. Nothing can be changed
+through the page.
+The change behind it (`pkp/pkp-lib#12245`, the workflow for versions
+published while still under review) lets submissions be previewed
+before copyediting. The proposed fix keeps that for managers and for
+everyone assigned to the submission. It closes the page before
+copyediting only to staff who are not assigned.
+Since: 2026-02-18 (the earlier-stage preview change) · Basis: probe, 2026-10-05. <sup>[f-a16](#fn-f-a16)</sup>
 
 ### OJS
 
@@ -3194,6 +3202,7 @@ before copyediting. OPS: only preprints 1 and 4, in production, were
 walked; earlier stages by the code. The Subscription Manager: by the
 code. Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
+Issue report: [docs/issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md](../issues/U13-A16-unassigned-staff-read-pre-acceptance-pages.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `CitationStyleLanguagePlugin::getTemplateData()` passes

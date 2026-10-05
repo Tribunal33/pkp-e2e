@@ -1,0 +1,57 @@
+--- a/lib/pkp/classes/submission/Repository.php
++++ b/lib/pkp/classes/submission/Repository.php
+@@ -584,22 +584,25 @@
+             return false;
+         }
+ 
+-        if ($this->_roleCanPreview($user, $submission)) {
+-            return true;
++        if (!$user) {
++            return false;
+         }
+ 
+-        if ($user) {
+-            // Replaces StageAssignmentDAO::getBySubmissionAndRoleId
+-            $stageAssignments = StageAssignment::withSubmissionIds([$submission->getId()])
+-                ->withRoleIds([Role::ROLE_ID_AUTHOR])
+-                ->withUserId($user->getId())
+-                ->get();
+-
+-            if ($stageAssignments->isNotEmpty()) {
+-                return true;
+-            }
++        // Anyone assigned to the submission (its editors, assistants and
++        // authors) may preview it at every stage.
++        if (StageAssignment::withSubmissionIds([$submission->getId()])
++            ->withUserId($user->getId())
++            ->exists()) {
++            return true;
+         }
+-        return false;
++
++        // Managers may preview any submission at every stage. The other
++        // editorial roles of the context may preview a submission they are
++        // not assigned to only from copyediting on: the rule of 3.5 and
++        // earlier, which pkp/pkp-lib#12245 lifted for every role. (The
++        // workflow refuses them at every stage.)
++        $pastReview = in_array($submission->getData('stageId'), [WORKFLOW_STAGE_ID_EDITING, WORKFLOW_STAGE_ID_PRODUCTION, WORKFLOW_STAGE_ID_DONE]);
++        return $this->_roleCanPreview($user, $submission, $pastReview ? null : [Role::ROLE_ID_MANAGER]);
+     }
+ 
+     /**
+@@ -1527,13 +1530,13 @@
+      *
+      *
+      */
+-    protected function _roleCanPreview(?User $user, Submission $submission): bool
++    protected function _roleCanPreview(?User $user, Submission $submission, ?array $roleIds = null): bool
+     {
+         if (!$user) {
+             return false;
+         }
+ 
+-        $subscriptionAssumedRoles = [
++        $subscriptionAssumedRoles = $roleIds ?? [
+             Role::ROLE_ID_MANAGER,
+             Role::ROLE_ID_SUB_EDITOR,
+             Role::ROLE_ID_ASSISTANT,
