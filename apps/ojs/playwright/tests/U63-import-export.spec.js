@@ -80,7 +80,7 @@ const JOURNAL = 'publicknowledge';
 const NATIVE = {exportTab: 'Export Articles', exportButton: 'Export Articles', importResults: 'Import Results'};
 /** The Tools list's lines, in no fixed order (Rule 2; Fields; T-ojs-2). */
 const TOOL_LINES = [
-    'DOAJ Export Plugin: Export Journal for DOAJ.',
+    'DOAJ Export Plugin: Export article metadata to the Directory of Open Access Journals (DOAJ).',
     'DataCite Export/Registration Plugin: Export or register issue, article, galley and supplementary file metadata in DataCite format.',
     'Crossref XML Export Plugin: Export article metadata in Crossref XML format.',
     "Native XML Plugin: Import and export articles and issues in OJS's native XML format.",
@@ -108,10 +108,10 @@ const SUBMITTED = 'Articles submitted successfully';
 const ONIX_REMINDER = /missing some required information for ONIX metadata/;
 const NLM_HELP = 'The NLM Title Abbreviation for the journal. If you do not know the abbreviation,';
 const DOAJ_KEY_HELP =
-    "If you would like to register articles from within OJS, please enter your DOAJ API Key. Else, you'll still be able to export into the DOAJ XML format but you cannot register your articles with DOAJ from within OJS.";
+    'To register articles with DOAJ directly from OJS, enter your DOAJ API key. Without an API key, you can still export articles in DOAJ XML format, but you will need to submit them to DOAJ yourself.';
 const DOAJ_KEY_NOTE = 'You will find your API key on your DOAJ user page.';
 const DOAJ_AUTO =
-    'OJS will deposit articles automatically to DOAJ. Please note that this may take a short amount of time after publication to process (e.g. depending on your cronjob configuration). You can check for all unregistered articles.';
+    'Deposit newly published articles to DOAJ automatically. Deposits are sent once a day, so an article may take up to a day after publication to reach DOAJ.';
 const VALIDATE = 'Validate XML before the export and registration.';
 
 const OKAPI = 'Okapi field notes';

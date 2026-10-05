@@ -51,7 +51,7 @@ order. <sup>c</sup> <sup>td1</sup>
 
 | App | Tools listed (name: description) |
 |-----|----------------------------------|
-| journal | "DOAJ Export Plugin": "Export Journal for DOAJ." · "DataCite Export/Registration Plugin": "Export or register issue, article, galley and supplementary file metadata in DataCite format." · "Crossref XML Export Plugin": "Export article metadata in Crossref XML format." · "Native XML Plugin": "Import and export articles and issues in OJS's native XML format." · "Users XML Plugin": "Import and export users" · "PubMed XML Export Plugin": "Export article metadata in PubMed XML format for indexing in MEDLINE." |
+| journal | "DOAJ Export Plugin": "Export article metadata to the Directory of Open Access Journals (DOAJ)." · "DataCite Export/Registration Plugin": "Export or register issue, article, galley and supplementary file metadata in DataCite format." · "Crossref XML Export Plugin": "Export article metadata in Crossref XML format." · "Native XML Plugin": "Import and export articles and issues in OJS's native XML format." · "Users XML Plugin": "Import and export users" · "PubMed XML Export Plugin": "Export article metadata in PubMed XML format for indexing in MEDLINE." |
 | press | "Native XML Plugin": "Import and export books in OMP's native XML format." · "Tab Delimited Content Import Plugin": "Import submissions into presses from tab delimited data." · "Users XML Plugin": "Import and export users" · "ONIX 3.0 Monograph Export Plugin": "Export monograph metadata in the ONIX 3.0 format" |
 | preprint server | "Crossref XML Export Plugin": "Export preprint metadata in Crossref XML format." · "Native XML Plugin": "Import and export submissions in OPS's native XML format." |
 
@@ -103,8 +103,8 @@ list and issue list as the Native XML Plugin's, with "Select All" and
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Contact DOAJ for inclusion" (Settings tab) | — | A link opening DOAJ's application page in a new tab <sup>p</sup> |
-| "DOAJ API Key" (Settings tab) | No | Under the help "If you would like to register articles from within OJS, please enter your DOAJ API Key. Else, you'll still be able to export into the DOAJ XML format but you cannot register your articles with DOAJ from within OJS."; a box whose characters show as dots, at most 100 characters, with "You will find your API key on your DOAJ user page." under it (Rule 38) <sup>p</sup> |
-| "OJS will deposit articles automatically to DOAJ. Please note that this may take a short amount of time after publication to process (e.g. depending on your cronjob configuration). You can check for all unregistered articles." (Settings tab) | No | A tick box, unticked on a new journal (Rule 43) <sup>p</sup> |
+| "DOAJ API Key" (Settings tab) | No | Under the help "To register articles with DOAJ directly from OJS, enter your DOAJ API key. Without an API key, you can still export articles in DOAJ XML format, but you will need to submit them to DOAJ yourself."; a box whose characters show as dots, at most 100 characters, with "You will find your API key on your DOAJ user page." under it (Rule 38) <sup>p</sup> |
+| "Deposit newly published articles to DOAJ automatically. Deposits are sent once a day, so an article may take up to a day after publication to reach DOAJ." (Settings tab) | No | A tick box, unticked on a new journal (Rule 43) <sup>p</sup> |
 | "Validate XML before the export and registration." (Articles tab) | No | A tick box under the list, ticked each time the tab opens (Rule 40) <sup>r</sup> |
 
 The Articles tab's list is titled "Articles", with "Search" at its top
@@ -681,8 +681,9 @@ journal to another) with throwaway accounts. <sup>sc</sup>
      (open) and "Permissions" (Rule 1).
    - **The list**: "Import/Export" shows one line per tool, its name a
      link, then a colon and its description (Rule 2; Fields). On a
-     journal, these lines, in any order: "DOAJ Export Plugin": "Export Journal for
-     DOAJ.", "DataCite Export/Registration Plugin": "Export or register
+     journal, these lines, in any order: "DOAJ Export Plugin": "Export
+     article metadata to the Directory of Open Access Journals (DOAJ).",
+     "DataCite Export/Registration Plugin": "Export or register
      issue, article, galley and supplementary file metadata in DataCite
      format.", "Crossref XML Export Plugin": "Export article metadata in
      Crossref XML format.", "Native XML Plugin": "Import and export
@@ -1003,13 +1004,13 @@ journal to another) with throwaway accounts. <sup>sc</sup>
      Plugin", and its tabs are "Settings" (open) and "Articles" (Rules
      4, 34).
    - **The Settings tab**: it holds the link "Contact DOAJ for
-     inclusion"; "DOAJ API Key" under "If you would like to register
-     articles from within OJS, please enter your DOAJ API Key. Else,
-     you'll still be able to export into the DOAJ XML format but you
-     cannot register your articles with DOAJ from within OJS.", its box
-     empty, with "You will find your API key on your DOAJ user page."
-     under it; and the box "OJS will deposit articles automatically to
-     DOAJ. …", unticked (Rules 35, 43; Fields).
+     inclusion"; "DOAJ API Key" under "To register articles with DOAJ
+     directly from OJS, enter your DOAJ API key. Without an API key, you
+     can still export articles in DOAJ XML format, but you will need to
+     submit them to DOAJ yourself.", its box empty, with "You will find
+     your API key on your DOAJ user page." under it; and the box "Deposit
+     newly published articles to DOAJ automatically. …", unticked (Rules
+     35, 43; Fields).
    - **The Articles tab**: press "Articles": the list titled "Articles",
      with "Search" at its top right and the columns "Select", "ID",
      "Author; Title", "Issue" and "Status", holds two rows, "Lovelace;
@@ -1908,7 +1909,11 @@ follows the database's join plan and physical row order and so shifts
 as plugin settings are written anywhere on the install; then the tools
 of `plugins/importexport/`, in `loadFromDisk()`'s `FilesystemIterator`
 order, the file system's unsorted directory order (OJS: native, users,
-pubmed). Nothing on screen orders the list.
+pubmed). Nothing on screen orders the list. DOAJ's description reads
+"Export article metadata to the Directory of Open Access Journals
+(DOAJ)." from pkp/pkp-lib#12939 (driven 2026-10-05 on OJS at the PR head
+`43729a9952` of pkp/ojs#5894, before its merge; "Export Journal for
+DOAJ." before).
 
 <a id="fn-d"></a>
 **d** — `ImportExportPlugin::display()` assigns `pageTitle` (the display
@@ -2366,7 +2371,10 @@ showed the earlier value); both end with the required-fields note
 this form has changed. Do you wish to continue without saving?", whose
 "Cancel" stayed and "OK" moved on with the text kept; leaving the page
 asked nothing and lost the change. OMP and OPS have no DOAJ tool and no
-"DOAJ Plugin".
+"DOAJ Plugin". The API key's help and the tick box's label take their
+present English from pkp/pkp-lib#12939 (driven 2026-10-05 on OJS at the
+PR head `43729a9952` of pkp/ojs#5894, before its merge); the other
+languages keep their earlier translations, marked fuzzy.
 
 <a id="fn-q"></a>
 **q** — `index.tpl`: `doiVersioning` (`Context::SETTING_DOI_VERSIONING`)

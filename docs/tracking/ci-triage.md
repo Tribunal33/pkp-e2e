@@ -1255,3 +1255,4 @@ verdict yet) · `ready` (pushed, green at the PR ref, developer told) ·
 
 | App PR | Branch | State | Since | Note (one line) |
 |--------|--------|-------|-------|-----------------|
+| pkp/ojs#5894 (pkp/pkp-lib#12939) | `12939-main` | investigating | 2026-10-05 | DOAJ tool's English description, API-key help and automatic-deposit label reworded; U63 OJS S1, S8 and the spec follow |
