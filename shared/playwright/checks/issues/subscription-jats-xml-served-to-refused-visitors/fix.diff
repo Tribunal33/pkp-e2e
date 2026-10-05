@@ -1,0 +1,176 @@
+--- a/lib/pkp/api/v1/jats/PKPJatsController.php
++++ b/lib/pkp/api/v1/jats/PKPJatsController.php
+@@ -40,6 +40,7 @@
+ use PKP\security\authorization\UserRolesRequiredPolicy;
+ use PKP\security\Role;
+ use PKP\services\PKPSchemaService;
++use PKP\submission\PKPSubmission;
+ use PKP\submissionFile\SubmissionFile;
+ 
+ class PKPJatsController extends PKPBaseController
+@@ -303,6 +304,13 @@
+             }
+         }
+ 
++        // A published version is served to those who may read its full text (OJS: subscriptions)
++        if ($isPublished && !$this->canReadPublished($submission, $publication)) {
++            return response()->json([
++                'error' => __('api.403.unauthorized'),
++            ], Response::HTTP_FORBIDDEN);
++        }
++
+         $jatsContent = Repo::jats()->getPublicJatsContent($publication->getId(), $submission->getId());
+ 
+         if (!$jatsContent) {
+@@ -351,4 +359,15 @@
+             ->header('Cache-Control', $cacheControl)
+             ->header('ETag', $etag);
+     }
++
++    /**
++     * Whether the requester may read the full text of a published version.
++     * The JATS XML carries the article's text, so it follows the rule that
++     * gates the version's galleys; an application that restricts published
++     * content (OJS subscriptions) overrides this.
++     */
++    protected function canReadPublished(PKPSubmission $submission, PKPPublication $publication): bool
++    {
++        return true;
++    }
+ }
+--- a/api/v1/submissions/index.php
++++ b/api/v1/submissions/index.php
+@@ -24,7 +24,7 @@
+ }
+ 
+ if (in_array('jats', $urlParts)) {
+-    return new \PKP\handler\APIHandler(new \PKP\API\v1\jats\PKPJatsController());
++    return new \PKP\handler\APIHandler(new \APP\API\v1\jats\JatsController());
+ }
+ 
+ if (in_array('dataCitations', $urlParts)) {
+--- a/classes/issue/IssueAction.php
++++ b/classes/issue/IssueAction.php
+@@ -21,6 +21,9 @@
+ use APP\core\Request;
+ use APP\facades\Repo;
+ use APP\journal\Journal;
++use APP\payment\ojs\OJSCompletedPaymentDAO;
++use APP\publication\Publication;
++use APP\submission\Submission;
+ use APP\subscription\IndividualSubscriptionDAO;
+ use APP\subscription\InstitutionalSubscriptionDAO;
+ use APP\subscription\Subscription;
+@@ -161,4 +164,30 @@
+         Hook::call('IssueAction::subscribedDomain', [&$request, &$journal, &$issueId, $submission?->getId(), &$result]);
+         return (bool) $result;
+     }
++
++    /**
++     * Checks if the requester may read the full text of an article version:
++     * the decision the article page shows as "hasAccess", and the one that
++     * gates every copy of the full text served outside the galleys (the
++     * published JATS XML).
++     */
++    public function userCanReadArticle(Request $request, Journal $journal, ?Issue $issue, Submission $submission, Publication $publication): bool
++    {
++        if (!$issue || !$this->subscriptionRequired($issue, $journal)) {
++            return true;
++        }
++        if ($publication->getData('accessStatus') == Submission::ARTICLE_ACCESS_OPEN) {
++            return true;
++        }
++        $user = $request->getUser();
++        if ($this->subscribedUser($user, $journal, $issue->getId(), $submission)
++            || $this->subscribedDomain($request, $journal, $issue->getId(), $submission)) {
++            return true;
++        }
++        $completedPaymentDao = DAORegistry::getDAO('OJSCompletedPaymentDAO'); /** @var OJSCompletedPaymentDAO $completedPaymentDao */
++        return $user && (
++            $completedPaymentDao->hasPaidPurchaseIssue($user->getId(), $issue->getId())
++            || $completedPaymentDao->hasPaidPurchaseArticle($user->getId(), $submission->getId())
++        );
++    }
+ }
+--- a/pages/article/ArticleHandler.php
++++ b/pages/article/ArticleHandler.php
+@@ -322,8 +322,10 @@
+             'supplementaryGalleys' => $supplementaryGalleys,
+         ]);
+ 
+-        // Check if JATS is publicly available for this publication
+-        if ($publication->getData('jatsPublicVisibility')) {
++        // Check if JATS is publicly available for this publication, to this reader
++        $issueAction = new IssueAction();
++        $userCanReadArticle = $issueAction->userCanReadArticle($request, $context, $issue, $article, $publication);
++        if ($publication->getData('jatsPublicVisibility') && $userCanReadArticle) {
+             $templateMgr->assign([
+                 'jatsDownloadUrl' => $request->getDispatcher()->url(
+                     $request,
+@@ -381,24 +383,7 @@
+ 
+             // The issue may not exist, if this is an editorial user
+             // and scheduling hasn't been completed yet for the article.
+-            $issueAction = new IssueAction();
+-            $subscriptionRequired = false;
+-            if ($issue) {
+-                $subscriptionRequired = $issueAction->subscriptionRequired($issue, $context);
+-            }
+-
+-            $subscribedUser = $issueAction->subscribedUser($user, $context, isset($issue) ? $issue->getId() : null, $article);
+-            $subscribedDomain = $issueAction->subscribedDomain($request, $context, isset($issue) ? $issue->getId() : null, $article);
+-
+-            $completedPaymentDao = DAORegistry::getDAO('OJSCompletedPaymentDAO'); /** @var OJSCompletedPaymentDAO $completedPaymentDao */
+-            $templateMgr->assign(
+-                'hasAccess',
+-                !$subscriptionRequired ||
+-                $publication->getData('accessStatus') == Submission::ARTICLE_ACCESS_OPEN ||
+-                $subscribedUser || $subscribedDomain ||
+-                ($user && $issue && $completedPaymentDao->hasPaidPurchaseIssue($user->getId(), $issue->getId())) ||
+-                ($user && $completedPaymentDao->hasPaidPurchaseArticle($user->getId(), $article->getId()))
+-            );
++            $templateMgr->assign('hasAccess', $userCanReadArticle);
+ 
+             $paymentManager = Application::get()->getPaymentManager($context);
+             if ($paymentManager->onlyPdfEnabled()) {
+--- /dev/null
++++ b/api/v1/jats/JatsController.php
+@@ -0,0 +1,38 @@
++<?php
++
++/**
++ * @file api/v1/jats/JatsController.php
++ *
++ * Copyright (c) 2026 Simon Fraser University
++ * Copyright (c) 2026 John Willinsky
++ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
++ *
++ * @class JatsController
++ *
++ * @ingroup api_v1_jats
++ *
++ * @brief Handle API requests for JATS File operations, with OJS's subscription rules.
++ */
++
++namespace APP\API\v1\jats;
++
++use APP\facades\Repo;
++use APP\issue\IssueAction;
++use PKP\API\v1\jats\PKPJatsController;
++use PKP\publication\PKPPublication;
++use PKP\submission\PKPSubmission;
++
++class JatsController extends PKPJatsController
++{
++    /**
++     * A published version's JATS XML carries the article's text: serve it
++     * to those the article page lets read the full text.
++     */
++    protected function canReadPublished(PKPSubmission $submission, PKPPublication $publication): bool
++    {
++        $request = $this->getRequest();
++        $issueId = $publication->getData('issueId');
++        $issue = $issueId ? Repo::issue()->get((int) $issueId) : null;
++        return (new IssueAction())->userCanReadArticle($request, $request->getContext(), $issue, $submission, $publication);
++    }
++}

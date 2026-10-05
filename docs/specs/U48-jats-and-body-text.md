@@ -683,6 +683,11 @@ passwords, mail catcher's address and tooling recipe are in the footnote. <sup>v
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A22 {OJS} (issue report
+    `docs/issues/U48-A22-subscription-jats-xml-served-to-refused-visitors.md`):
+    an article in a restricted issue with "Make available with publication"
+    ticked: its "JATS XML" refused signed out and for a reader without a
+    subscription, served to a subscriber
   - the guard for A20 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): upload a JATS file on "JATS XML" and check the server log holds no PHP warning for the request.
   - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Markdown file in "Production Ready Files" lists no "Send to Text Editor".
   - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
@@ -789,7 +794,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A file sent to the Body Text editor that cannot be converted ends the import with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A21](#a21) | In French the tick box, its two windows and labels of the "Body Text" panel show raw codes | 🐞 | minor | issues (claude), 2026-10-02 — no report: unreleased 3.6 texts |
-| [A22](#a22) | In a subscription-only issue, the article page's "JATS XML" link gives the article's text to visitors the galleys refuse | 🐞 | user-visible | — |
+| [A22](#a22) | On a subscription journal, the article page's "JATS XML" gives the article's text to visitors its galleys refuse | 🐞 | high | issues (claude), 2026-10-05 — re-verified |
 | [OMP1](#omp1) | A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A published version's Body Text stays editable | ❓ | minor | — |
 | [A4](#a4) | A new version starts with an empty Body Text, though its JATS file and media are copied | ❓ | user-visible | — |
@@ -1113,19 +1118,24 @@ translates `stable-3_5_0` only; no report (issues session ruling,
 Basis: probe, 2026-09-30. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — In a subscription-only issue, the article page's "JATS XML" link gives the article's text to visitors the galleys refuse** · 🐞 · user-visible.
-On a journal that requires subscriptions, an article in a restricted
-issue whose version has "Make available with publication" ticked lists
-"JATS XML" on its page, and the link downloads for a signed-out visitor
-and a Reader with no subscription, while the galleys send them to the
-Login or "Subscriptions" page. The XML carries the article's text
-whenever there is text to carry: an uploaded JATS file in full, or a
-generated body from an HTML galley. Expected: the link shows and
-downloads only for those who may open the galleys
-([Subscriptions](U51-subscriptions.md), its Rule 11). Only unticking the
-box closes it, and its confirmation says nothing about subscriptions.
-Since: 2026-02-13 · Basis: probe, 2026-09-30. <sup>f-a22</sup>
-Report: paused — taken in the maintainer's session (2026-10-05)
+**A22 — On a subscription journal, the article page's "JATS XML" gives the article's text to visitors its galleys refuse** · 🐞 · high.
+Each article version has a "JATS XML" page in the editorial workflow
+(Publication › "JATS XML"). Its tick box "Make available with
+publication" is off by default. An editor who ticks it puts a "JATS
+XML" link beside the galleys on the article's page once the version is
+published.
+On a journal that requires subscriptions, that link downloads for a
+signed-out visitor and for a reader with no subscription, even in a
+restricted issue whose galleys send them to the Login or
+"Subscriptions" page. The XML carries the article's text whenever there
+is text to carry: an uploaded JATS file in full, or a body generated
+from an HTML galley. The link should show and download only for those
+who may open the galleys.
+The only way to close it is to untick the box. The "Enable JATS XML
+Download" window that confirms the tick says only that the file becomes
+available "for public download when the publication is published", not
+that this bypasses subscriptions.
+Since: 2026-02-13 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
 ### OMP
 
@@ -1388,6 +1398,7 @@ Issue report: [pkp-e2e#494](https://github.com/jardakotesovec/pkp-e2e/issues/494
 <a id="fn-f-a22"></a>
 **f-a22** — Note e: `PKPJatsController::publicDownload()` (lib/pkp `api/v1/jats/PKPJatsController.php:280-353` on `main`) checks only `jatsPublicVisibility` and, for an unpublished version, `Repo::submission()->canPreview()`, behind the `restrictArticleAccess` middleware of Settings bullet 2. It never makes the subscription decision of OJS `ArticleHandler::userCanViewGalley()` (`IssueAction::subscriptionRequired()`, the publication's `accessStatus`, `subscribedUser()`, `subscribedDomain()`, a purchased issue or article), and `ArticleHandler::view()` assigns `jatsDownloadUrl` on the visibility alone; OJS only registers the route (`api/v1/submissions/index.php`). The generated body is the `jatsTemplate` plugin's `ArticleBody::create()`, from the first galley it can read: HTML first, a PDF only with a `[search] index[application/pdf]` text helper configured (commented out by default). Introduced by pkp-lib `5f5066e1f6` and ojs `5f24ac954d` (Touhidur Rahman, 2026-02-13, `pkp/pkp-lib#10405`, from `pkp/pkp-lib#10436`); `pkp/pkp-lib#12728` (same author, `3ce03ceafe` 2026-05-13 and `7bec8ae39e` 2026-07-07) later made the download respect Settings bullet 2 and left subscriptions out. Live-probed 2026-09-30 (A22; Actors row 7), OJS `main` at `9d9f116f38`, lib/pkp `fab29cfeca`, as `dbarnes`: "Publishing Mode" set to subscriptions, Vol. 1 No. 2 "Access status" "Subscription", an active individual subscription for `zwoods`; two articles in that issue each given a new version, one with an HTML galley, one with an uploaded JATS file with a `<body>`, box ticked, published. Signed out and as `ddiouf` (Reader, no subscription): the galley answered 302 (to the Login page with "subscription required", to `about/subscriptions`), `…/jats/download` answered 200 with the article's text in `<body>`, and the article page listed "JATS XML" beside the galley marked restricted; `zwoods` and `dbarnes` got 200 on both. A PDF-only version gave a JATS with no `<body>`. Not tried live: institutional subscriptions, purchases, delayed open access. Proposed fix: before serving a published version, apply the galley's access decision (an OJS subclass of the controller or a hook, since `IssueAction` is OJS code), refusing with 403 or redirecting like the galley; send `Cache-Control: private` whenever the answer depends on the requester, not `public, no-cache`; show the link in `ArticleHandler::view()` / `article_details.tpl` only when `$hasAccess`. Patched temporarily and reverted: hiding the link alone left the address serving the text; the controller check with the link hidden answered 403 signed out and for `ddiouf`, 200 with `Cache-Control: no-store, private` for `zwoods` and `dbarnes`, and an article set to open access opened to all. Release check: 3.5, 3.4 and 3.3 do not have it; `stable-3_5_0`'s `PKPJatsController` has only the role-gated get, add and delete routes and no `jatsPublicVisibility`, and 3.4 and 3.3 have no JATS files. OMP and OPS do not register the route and have no subscriptions.
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Issue report: [docs/issues/U48-A22-subscription-jats-xml-served-to-refused-visitors.md](../issues/U48-A22-subscription-jats-xml-served-to-refused-visitors.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note b and note p: OMP's navigation config has no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` finds no entry after the version form's POST/PUT has run; the address keeps `importFileUrl` and `importFileName`. Probe: d28.
