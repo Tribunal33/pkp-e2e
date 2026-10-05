@@ -181,14 +181,21 @@ with the line beside "Save" that Rule 4a quotes.
      harvesting address ([OAI-PMH](U19-oai-pmh.md)).
 8. <a id="journal-redirect"></a> **"Journal redirect".** With a journal
    chosen and saved, the site's address opens that journal's home page
-   for every visitor, and the site's home page cannot be reached.
-   The site's Login and Register pages stay at the site's address.
-   Signing in on that Login page lands every account on the journal's
-   home page, the Site Administrator's included ⚠ [A8](#a8). The blank
-   choice, saved again, brings the site's home page back. Without a
-   redirect, the site's address opens the site's home page while two or
-   more journals are enabled publicly, and the one journal's home page
-   while exactly one is. <sup>e</sup> <sup>td5</sup>
+   for every visitor, and the site's home page cannot be reached. The
+   blank choice, saved again, brings the site's home page back. Without
+   a redirect, the site's address opens the site's home page while two
+   or more journals are enabled publicly, and the one journal's home
+   page while exactly one is. <sup>e</sup> <sup>td5</sup>
+
+8a. **Signing in on the site's Login page.** Under a redirect, the
+   site's Login and Register pages stay at the site's address. While
+   the site's address opens a journal (a redirect saved, or exactly one
+   journal enabled publicly), signing in on the site's Login page lands
+   every account on that journal's home page ⚠ [A8](#a8). The Site
+   Administrator and the journal's Journal Manager land there too,
+   while the journal's own Login page takes them to their Dashboard.
+   <sup>e</sup> <sup>td5</sup>
+
 9. **"Reviewer statistics"** {OJS OMP}. The figures a journal's "Add
    Reviewer" window shows for each reviewer (active reviews, reviews
    completed, declined and cancelled requests, days since the last
@@ -336,17 +343,20 @@ with the line beside "Save" that Rule 4a quotes.
 
 **Other languages**
 
-23. **French.** In the French interface these show raw codes
+23. **French.** In the French (Canada) interface these show raw codes
     ⚠ [A2](#a2): <sup>td17</sup>
-    - the "Site Setup" side tab "Security", which reads
-      "##admin.security##", and every group, label and description of its
-      form except "Longueur minimum du mot de passe (nombre de
-      caractères)";
     - on a press, the side tab "Information", which reads
       "##manager.setup.information##";
     - on a press and a preprint server, the description of "Courriels en
       lot" ("Bulk Emails"), which reads
       "##admin.settings.enableBulkEmails.description##".
+
+    The "Site Setup" side tab "Security" shows raw codes too: the tab
+    reads "##admin.security##", and every group, label and description
+    of its form is a code except "Longueur minimum du mot de passe
+    (nombre de caractères)". The tab is new in the version under
+    development (3.5 has none), and its French texts are left to the
+    translators. <sup>td17</sup>
 
 ## Side effects
 
@@ -384,7 +394,8 @@ default on a fresh installation and where each end takes effect.
    Rule 7 show it. Empty: Rule 7's fallbacks, and the tab cannot be
    saved (Rule 6, [A1](#a1)).
 2. **"Journal redirect"** (Site Setup › "Settings"; blank). A journal
-   chosen: the site's address opens it (Rule 8).
+   chosen: the site's address opens it, and a sign-in on the site's
+   Login page lands on its home page (Rules 8, 8a).
 3. **"Disable aggregated reviewer statistics"** (Site Setup › "Settings";
    unticked). Ticked: reviewer figures count this journal only (Rule 9).
 4. **"Minimum password length (characters)"** (Site Setup › "Security";
@@ -567,7 +578,7 @@ journals with throwaway accounts. <sup>s</sup>
    - **The site's Login page**: the visitor opens the site's address with
      "login" after it: the Login page opens at the site's address. The
      visitor signs in there as the Reader: the first scratch journal's
-     home page opens (Rule 8).
+     home page opens (Rule 8a).
    - **Blank again**: the Site Administrator chooses the blank first
      choice and presses "Save": "Saved". The Reader opens the site's
      address: the site's home page, with its list of journals (Rule 8).
@@ -808,6 +819,9 @@ Left out of the scenarios above, by reason:
   - the site's save (`PUT index/api/v1/site`) sent with an empty "Email
     of principal contact" refused with 400, the guard A4's report names
     (Rule 22; A4)
+- **Rarely met**:
+  - the "Security" tab's raw codes in French, texts its translators
+    have yet to enter (Rule 23)
 - **Nothing new to test**:
   - the minimum password length on the Register page, a password reset
     and an invitation's acceptance, as on Profile › Password (Rule 10)
@@ -830,7 +844,7 @@ Left out of the scenarios above, by reason:
     [Journal identity & about pages](U07-journal-identity-and-about-pages.md),
     Rule 5)
 - **Register carries it**:
-  - A2 (the French interface's raw codes; Rule 23)
+  - A2 (a press's and a preprint server's raw codes in French; Rule 23)
   - A3 (the server-log warning on most saves; Side effects)
   - A5 (the journal-only theme fields changing nothing on the site;
     Rule 17a)
@@ -838,8 +852,9 @@ Left out of the scenarios above, by reason:
     scenario 11 passes it)
   - A7 (a reload on an "Appearance", "Announcements" or "Plugins" side
     tab opening "Site Setup" › "Settings"; Rule 1)
-  - A8 (the Site Administrator's sign-in under a "Journal redirect"
-    landing on the journal's home page; Rule 8)
+  - A8 (a sign-in on the site's Login page, under a "Journal redirect"
+    or on a site with one journal, landing on the journal's home page;
+    Rule 8a)
   - A9 (a theme change in a browser that already opened the site;
     Rule 17b; scenario 8 passes it)
   - A11 (the "Journal redirect" list's order, and its shifts after a
@@ -1224,12 +1239,12 @@ there is exactly one, and `getSiteRedirectContext()` when there are two
 or more; a target redirects to its path; the site branch checks
 `$site->getRedirect()` again before rendering `indexSite.tpl`.
 `LoginHandler::_redirectAfterLogin()`: with a target context and a
-source-less sign-in by a user whose roles in the request's (site)
-context include one of the listed roles (the Site Administrator's), the
-redirect goes to `{target}/dashboard`; otherwise
+source-less sign-in, a user holding one of the listed roles is meant to
+go to `{target}/dashboard`, and everyone else to
 `PKPPageRouter::redirectHome()`, whose site home then redirects to the
-target. The list's hidden end rests on the code alone: every test install keeps
-its seeded journal enabled. The one-journal end of the site's address was
+target; f-a8 has why every sign-in takes the second way. The list's
+hidden end rests on the code alone: every test install keeps its seeded
+journal enabled. The one-journal end of the site's address was
 seen by the test tooling on 2026-09-26 while the seeded journal was the
 only one: the address opened it. Live-probed 2026-09-16 (Highlights claim
 check, all three apps):
@@ -1415,9 +1430,13 @@ returns at once unless the configuration's `[logs] log_audit` is on
 `clearTemplateCache()` and `clearCssCache()`. `_saveFileParam()` moves an
 uploaded temporary file into the site's public files (`moveTemporaryFile()`,
 named after the setting) and, for a null value, calls
-`PublicFileManager::removeSiteFile()` with the image's `uploadName`, or
-for the style sheet with the whole stored value (an array), which names
-no file. `SiteDAO::updateObject()` reads each primary column from the
+`PublicFileManager::removeSiteFile()` with the image's `uploadName`. The
+style sheet's call from `edit()` (read on `main`, 2026-10-04) passes
+no locale, so `$site->getData('styleSheet', '')` looks `''` up as a
+locale key,
+returns null, and nothing reaches `removeSiteFile()`; were it reached,
+it would get the whole stored value (an array), which names no file.
+`SiteDAO::updateObject()` reads each primary column from the
 sanitized props, and `redirectContextId` is absent there while no
 redirect is set, except on "Settings", whose save posts it (empty or a
 journal); `editTheme()` reaches it only when the theme itself
@@ -1560,7 +1579,7 @@ name and "…for the {name} web site." with one; the site-wide harvesting
 answer's `repositoryName` went from empty to the name.
 
 <a id="fn-td5"></a>
-**td5** — Live-probed 2026-09-26 (Rule 8; A8; all three apps, three
+**td5** — Live-probed 2026-09-26 (Rules 8, 8a; A8; all three apps, three
 runs): a scratch journal chosen and saved made `index`, `index/en/index`,
 `index/index/index` and the bare base address open its home page, while
 the site's Login and Register pages stayed at the site's address; signing
@@ -1685,6 +1704,12 @@ with its `.description`, `.enable` and `.enable.label`; OJS's "Courriels en
 lot" description is French. The other side tabs read "Paramètres",
 "Information" (OJS, OPS), "Langues", "Menus de navigation", "En vedette",
 "Courriels en lot", "Statistiques" and "Plugiciel de profil ORCID".
+Walked 2026-10-04 (Rule 23; OMP and OPS, `main` and `stable-3_5_0`;
+the A2 issue report, f-a2): on 3.5 the side tabs start "Paramètres |
+##manager.setup.information## | Langues", with no "Security" tab. That
+tab came with pkp-lib ffd4ae1e49 (`pkp/pkp-lib#12162`, 2026-01-12), so
+its codes are unreleased texts waiting for Weblate and get no report
+(issues session ruling, 2026-10-02); A2 covers the rest.
 
 <a id="fn-f-a1"></a>
 **f-a1** — `PKPInstall::createData()` inserts the site with no `title`
@@ -1700,9 +1725,16 @@ templates.
 
 <a id="fn-f-a2"></a>
 **f-a2** — Live-probed 2026-09-26 (all three apps, two runs; td17);
-first seen 2026-09-24 (sync claim check, French). `lib/pkp/locale/fr_CA/admin.po`
-has no `admin.security` nor the `admin.settings.security.*` keys; OMP's
-`locale/fr_CA/manager.po` has an empty `manager.setup.information`.
+first seen 2026-09-24 (sync claim check, French). OMP's
+`locale/fr_CA/manager.po` has an empty `manager.setup.information`, and
+OMP's and OPS's `locale/fr_CA/admin.po` an empty
+`admin.settings.enableBulkEmails.description`. (pkp-lib's
+`locale/fr_CA/admin.po` has no `admin.security` nor the
+`admin.settings.security.*` keys: the "Security" tab, outside this
+entry, td17.)
+Walked 2026-10-04 (OMP and OPS, `main` and `stable-3_5_0`; OJS the
+journal control; the issue report below): both codes on a press, the
+description's on a preprint server, the French description on a journal.
 Issue report: [pkp-e2e#884](https://github.com/jardakotesovec/pkp-e2e/issues/884) ([docs/issues/U60-A2-press-server-french-site-settings-raw-keys.md](../issues/U60-A2-press-server-french-site-settings-raw-keys.md)).
 
 <a id="fn-f-a3"></a>
@@ -1733,12 +1765,19 @@ and "Show Series", OPS's "Server Summary", and neither "Journal Content
 Organization".
 
 <a id="fn-f-a6"></a>
-**f-a6** — fn-m: `_saveFileParam()` passes the stored style-sheet value,
-an array, to `removeSiteFile()`, which builds a path ending "Array" and
-deletes nothing; the logo passes its `uploadName` and is deleted.
+**f-a6** — fn-m: `PKPSiteService::edit()` calls `_saveFileParam()` for
+the style sheet with no locale, so `$site->getData('styleSheet', '')`
+returns null and `removeSiteFile()` is never called; behind it, the
+non-picture branch would pass the stored value, an array, as the file
+name, building a path ending "Array" that deletes nothing, so both lines
+must change for the file to go (read on `main`, 2026-10-04; the issue
+report below). The logo passes its `uploadName` and is deleted.
 Live-probed 2026-09-26 (Rule 21; all three apps, OMP included): after
 "Remove" and "Save", `/public/site/styleSheet.css` still answered 200 with
 the file's text (td16).
+Walked 2026-10-04 (Rule 21; all three apps, `main` and
+`stable-3_5_0`; the issue report below): the removed site style sheet
+still opened at its address.
 Issue report: [pkp-e2e#780](https://github.com/jardakotesovec/pkp-e2e/issues/780) ([docs/issues/U10-A5-removed-style-sheet-stays-public.md](../issues/U10-A5-removed-style-sheet-stays-public.md)).
 
 <a id="fn-f-a7"></a>
@@ -1757,14 +1796,33 @@ Issue reports: [pkp-e2e#784](https://github.com/jardakotesovec/pkp-e2e/issues/78
 
 <a id="fn-f-a8"></a>
 **f-a8** — `LoginHandler::_redirectAfterLogin()`: with a target context
-and a sign-in without a `source`, a user whose roles at the site include
-one of the listed roles (the Site Administrator's among them) is sent to
-`{target}/dashboard`; otherwise `PKPPageRouter::redirectHome()` (fn-e).
-Live-probed 2026-09-26 (Rule 8; all three apps, three runs): with a
+(`PKPHandler::getTargetContext()`: the only enabled journal, or the
+site's redirect) and a sign-in without a `source`, a user holding one of
+the listed roles (Site Administrator, Manager, Sub-editor, Author,
+Reviewer, Assistant) is meant to go to `{target}/dashboard`. The roles
+are read from `getAuthorizedContextObject(ASSOC_TYPE_USER_ROLES)`, which
+`UserRolesRequiredPolicy` fills only when a user is signed in as the
+request starts; a sign-in request starts signed out, so the list is
+empty and every sign-in falls through to
+`PKPPageRouter::redirectHome()`, the site's home page, which
+`IndexHandler::index()` forwards to the target (fn-e). A journal's own
+Login page reaches the Dashboard because `getHomeUrl()` there reads the
+signed-in user's roles itself.
+Live-probed 2026-09-26 (Rule 8a; all three apps, three runs): with a
 scratch journal as the redirect, the Site Administrator, that journal's
 Journal Manager and a Reader of another journal each signed in at the
 site's Login page, the form's `source` empty, and each landed on the
 journal's home page.
+Walked 2026-10-04 (Rule 8a; all three apps, `main` and `stable-3_5_0`,
+default dataset; the issue report below): with the dataset's one
+journal and no redirect, `admin` signed in at the site's Login page
+landed on the journal's home page, and at the journal's own Login page
+on "Assigned to me"; with a second journal and the dataset's journal as
+the redirect, `admin` and the journal's editor `dbarnes` landed on its
+home page from the site's Login page (`POST index/en/login/signIn` →
+302 `index/en/index` → 302 `publicknowledge/en`), and `dbarnes` on
+"Assigned to me" from the journal's own. No sign-in answered a server
+error.
 Issue report: [pkp-e2e#889](https://github.com/jardakotesovec/pkp-e2e/issues/889) ([docs/issues/U60-A8-site-login-lands-on-journal-home.md](../issues/U60-A8-site-login-lands-on-journal-home.md)).
 
 <a id="fn-f-a9"></a>

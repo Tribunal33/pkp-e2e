@@ -62,7 +62,7 @@ exports.UsersRolesPage = class UsersRolesPage extends BasePage {
      * @param {string|RegExp} itemLabel
      */
     async rowAction(row, itemLabel) {
-        await row.getByRole('button', {name: /management.options/i}).click();
+        await row.getByRole('button', {name: /management.options|^More Actions$/i}).click();
         await this.page.getByRole('menuitem', {name: itemLabel}).click();
     }
 

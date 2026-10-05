@@ -59,8 +59,8 @@ one error." and the Save button stays disabled until the field is corrected.
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| **Funder** | Yes | "Search for a funder by name" queries the public ROR registry as you type, from four characters on. The field's guidance reads 'Enter the full name of the institution below, avoiding any acronyms and select the name from the dropdown. (e.g. "Simon Fraser University")'. The first, pre-highlighted suggestion is always your typed text itself, styled like a registry match but without the country and the ROR mark ⚠ [A6](#a6). Registry matches follow. Each shows a name, a country, the ROR mark and its own registry-record link (read out by screen readers as "Open link in a new tab."). If the registry does not answer, suggestions simply never appear and the field shows no error ⚠ [A9](#a9). Picking a registry match fixes the funder's identity: its registry link appears, and its name, taken from the registry in every registry language available, cannot be edited by hand. If the pick instead pops up "An unexpected error has occurred. Please reload the page and try again.", the journal's own server cannot reach the registry. The funder still saves, but with no name at all ⚠ [A3](#a3). Whether the registry name then shows everywhere on a journal whose server does reach the registry is unconfirmed ⚠ [A10](#a10). Or pick your typed text instead. The panel then switches to one name box per submission language ("Type the funder name in {language}"), and the primary-language box arrives pre-filled with your typed text. The primary language's box is marked required, but a save with any one language filled is accepted ⚠ [A12](#a12). Saving with neither a pick nor a name shows "Search and select a Funder or enter a Funder name". A "Delete" button under the chosen funder clears it so you can search again. |
-| **Funder Grants** | No | A sub-table of grants ("Add any grants associated with this funder (optional).") with the columns **Grant DOI**, **Grant Number** and **Grant Name**, an "Add" button for new rows and a per-row "Delete". All three cells are optional. A row left entirely blank is silently dropped on save. Grant DOI must look like a DOI ("10.xxxx/…"); anything else is refused with "This is not formatted correctly." on the cell. Grant Number is checked against the funder's grant registry only when the journal's grant-validation setting is on AND the funder was picked from the registry AND it is one of the supported major funders (Settings that modify behavior). A hand-named funder's grants are never checked. A failed check is meant to refuse the save with "The given grant number could not be validated against the Funder's ROR ID." ⚠ [A11](#a11) |
+| **Funder** | Yes | "Search for a funder by name" queries the public ROR registry as you type, from four characters on. The field's guidance reads 'Enter the full name of the institution below, avoiding any acronyms and select the name from the dropdown. (e.g. "Simon Fraser University")'. The first, pre-highlighted suggestion is always your typed text itself, styled like a registry match but without the country and the ROR mark ⚠ [A6](#a6). Registry matches follow. Each shows a name, a country, the ROR mark and its own registry-record link (read out by screen readers as "Open link in a new tab."). If the registry does not answer, suggestions simply never appear and the field shows no error ⚠ [A9](#a9). Picking a registry match fixes the funder's identity: its registry link appears, and its name, taken from the registry in every registry language available, cannot be edited by hand. That name is read from the install's own copy of the registry: a funder the copy already holds saves with its registry name, and the funders list shows that name, even when the journal's server cannot reach the registry. If the pick instead pops up "An unexpected error has occurred. Please reload the page and try again.", the funder is missing from the copy and the journal's own server cannot reach the registry. The funder still saves, but with no name at all ⚠ [A3](#a3). Whether a funder the copy lacks gets its registry name on a journal whose server reaches the registry, and whether the wizard and the published page show registry names, is unconfirmed ⚠ [A10](#a10). Or pick your typed text instead. The panel then switches to one name box per submission language ("Type the funder name in {language}"), and the primary-language box arrives pre-filled with your typed text. The primary language's box is marked required, but a save with any one language filled is accepted ⚠ [A12](#a12). Saving with neither a pick nor a name shows "Search and select a Funder or enter a Funder name". A "Delete" button under the chosen funder clears it so you can search again. |
+| **Funder Grants** | No | A sub-table of grants ("Add any grants associated with this funder (optional).") with the columns **Grant DOI**, **Grant Number** and **Grant Name**, an "Add" button for new rows and a per-row "Delete". All three cells are optional. A row left entirely blank is silently dropped on save. "Close" does not undo a grant row deleted or added in "Edit Funder": the next "Edit" of that funder, before a reload, shows the deleted grant missing or the added row back empty, and its "Save" stores what it shows ⚠ [A15](#a15). Grant DOI must look like a DOI ("10.xxxx/…"); anything else is refused with "This is not formatted correctly." on the cell. Grant Number is checked against the funder's grant registry only when the journal's grant-validation setting is on AND the funder was picked from the registry AND it is one of the supported major funders (Settings that modify behavior). A hand-named funder's grants are never checked. A failed check is meant to refuse the save with "The given grant number could not be validated against the Funder's ROR ID." ⚠ [A11](#a11) |
 
 ## Rules & state
 
@@ -160,10 +160,11 @@ one error." and the Save button stays disabled until the field is corrected.
 - Adding, editing, deleting or reordering funders sends no email, raises no
   notification, and writes no activity-log entry. The list simply changes.
   <sup>e</sup>
-- Picking a registry funder stores a local copy of its ROR registry record
-  (names in all registry languages, the registry link). Users never see this
-  copy. When it cannot be fetched, the funder is left nameless ([A3](#a3)).
-  <sup>d</sup>
+- Picking a registry funder that the install's copy of the registry does
+  not yet hold adds its ROR registry record to that copy (names in all
+  registry languages, the registry link); a funder the copy already holds
+  is used as it stands. Users never see this copy. When the record cannot
+  be fetched, the funder is left nameless ([A3](#a3)). <sup>d</sup>
 - Funding metadata travels outward with the publication. It is carried in
   DOI registration and metadata export (see *DOI registration & Crossref*
   and the export plugins' features). On a journal it also feeds the
@@ -433,6 +434,9 @@ Left out of the scenarios above, by reason:
     hand-entered funder's name boxes, each named for its own language
     alone
   - the guard for A4 (issue report `docs/issues/U42-A10-wizard-data-citations-funders-stale-press-server.md`): on a press and a preprint server, a funder added in the submission wizard shows in its table and on "Review" at once, without a reload
+  - a registry pick of a funder the install's copy of the registry
+    already holds, saved and listed with its registry name (Fields;
+    A10)
 - **Nothing new to test**:
   - grant validation on while the registry service is unreachable, the
     check skipped and the save going through (Settings): the save
@@ -450,10 +454,12 @@ Left out of the scenarios above, by reason:
   - A6 (the typed-text suggestion styled like a registry match; Fields)
   - A7 (a funder added after a saved order landing first; Rule 7)
   - A9 (a registry that does not answer showing no error; Fields)
-  - A10 (the registry name shown everywhere on a connected install;
-    Fields)
+  - A10 (a registry name for a funder the copy lacks on a connected
+    install, and in the wizard and on the published page; Fields)
   - A12 (a save with only a non-primary language filled accepted; Fields)
   - A14 (raw codes on the list and the panel in French; Rule 14)
+  - A15 (a grant deleted or added in "Edit Funder" and left with "Close"
+    kept, and stored by the next "Save"; Fields)
 - **No seed**:
   - a hand-named funder's grants never checked against a grant registry
     (Fields): the checked case needs a server that reaches the registry,
@@ -485,7 +491,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-28; additions
-2026-08-29 and 2026-09-30), unreviewed unless an entry notes otherwise; the team settles
+2026-08-29, 2026-09-30 and 2026-10-05), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis:
 [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -496,13 +502,14 @@ are the source; badges, Impact and Basis:
 | [A4](#a4) | On a press or preprint server the wizard's funders table and Review step still read empty after a successful save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Ordering arrows and the typed-name boxes are broken for assistive technology | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | In French the funders list and the "Add Funder" / "Edit Funder" panel show raw codes for their headings, explanations and field labels | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A15](#a15) | A grant deleted or added in "Edit Funder" and left with "Close" is kept, and the next "Save" stores it, so a deleted grant is lost | 🐞 | medium | — |
 | [A1](#a1) | "Require the author to add funder metadata" warns on the Review step without blocking the submission | ❓ | user-visible | — |
 | [A2](#a2) | Every publication version shows and edits the same funders list, though the screen presents funding per version | ❓ | minor | — |
 | [A6](#a6) | The typed-text suggestion looks like a registry match, so real funders get saved unlinked without anyone noticing | ❓ | user-visible | — |
 | [A7](#a7) | A funder added after ordering jumps to the top of the saved order | ❓ | minor | — |
 | [A8](#a8) | Re-enabling funder metadata resets the submission-time level to "Do not request" | ❓ | minor | — |
 | [A9](#a9) | A failed funder search shows no error; suggestions silently never appear | ❓ | minor | — |
-| [A10](#a10) | Whether a registry pick stores and shows the registry name on a normally connected install has not been observed | ❓ | latent | — |
+| [A10](#a10) | A registry name has been seen only for a funder the install's registry copy already held, and only on the workflow list | ❓ | latent | — |
 | [A11](#a11) | The grant-number rejection message has never been seen on screen | ❓ | latent | — |
 | [A12](#a12) | The primary-language funder name is marked required, yet a save with any one language filled is accepted | ❓ | minor | — |
 | [A13](#a13) | A saved funder never appears in the Funders table, so it cannot be edited, deleted or reordered, though the published page shows the funding (regression, pkp/pkp-lib#13003) | ✅ | retired | rebase check (claude), 2026-09-03 — fixed upstream (ui-library `f88b7e6a`), suites green on all three apps |
@@ -618,16 +625,24 @@ defect-shaped. The silence steers users into the typed-name path unaware.
 Basis: probe, during an intermittent registry-service outage. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — Registry-name storage unobserved on a connected install** · ❓ ·
+**A10 — A registry name seen only for a funder the install already held** · ❓ ·
 latent.
-On an install whose server has ordinary internet access, a registry pick is
-designed to store the funder's official registry names and show them on the
-row, in the wizard and on the published page. Only the failure branch could
-be observed ([A3](#a3)), so the working path rests on code reading alone.
-Question: does a registry pick on a normally connected install display the
-registry name everywhere? Lean: yes, as designed. Settled by one registry
-pick on an install with working server internet access.
-Basis: code reading; failure branch probed. <sup>f-a10</sup>
+A registry pick of a funder the install's copy of the registry already
+holds saves with its ROR link and its registry name, and the workflow's
+funders list shows that name, even while the server cannot reach the
+registry. Two paths remain unseen. On an install whose server reaches the
+registry, a pick of a funder the copy lacks is designed to add it to the
+copy and show its name likewise. The published page and the wizard are
+designed to show a registry name from the same copy. On the test
+installs that pick saves nameless ([A3](#a3)).
+Question: does a registry pick on a connected install show the registry
+name on the list, in the wizard and on the published page? Lean: yes, as
+designed: every screen reads the name from the same copy, whichever way
+the funder got into it. Settled by one pick of a funder the copy lacks,
+made in the wizard and read there, on the list and on the published page.
+The check waits on a server that reaches the registry, which the test
+installs lack.
+Basis: probe, 2026-10-03, for a funder the copy holds; code for the rest. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — The grant-number rejection message has never been seen on screen** · ❓ · latent.
@@ -691,6 +706,20 @@ panel's fields ask for, though a funder still saves. The side-menu entry
 codes, and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md#a4)'.
 Basis: probe, 2026-10-04. <sup>f-a14</sup>
+
+<a id="a15"></a>
+**A15 — A grant change left with "Close" in "Edit Funder" is kept and saved** · 🐞 · medium.
+On the workflow's "Funding" page, a user deletes a funder's grant row in
+"Edit Funder", or presses "Add" under "Funder Grants", and leaves with
+"Close", expecting the change dropped. Instead, the next "Edit" of the same
+funder, before the page is reloaded, shows it kept: the deleted grant is
+missing, or an empty grant row is back. That panel's "Save" stores the
+grants as shown, so the deleted grant is lost for good, with no message;
+an empty row is dropped on save like any blank row (Fields). The reopened
+panel shows the grants before the save, so a user who notices can type the
+deleted grant again. The same fault keeps an abandoned author row in "Edit
+citation" ([Citations & references A13](U42-citations-and-references.md#a13)).
+Basis: probe, 2026-10-04. <sup>f-a15</sup>
 
 ### OPS
 
@@ -826,6 +855,10 @@ unreachable (A11, f-a11). Panel validation live-confirmed the same day:
 no-funder message, DOI-format message, blank grant row silently dropped,
 and the failed-save summary "Please correct one error." with Save
 disabled; panel strings byte-identical on OMP/OPS.
+Registry copy: `PKPRorController::addOrEdit()` answers from the `rors`
+cache without fetching when it already holds the ROR id, and fetches
+`api.ror.org` only otherwise (code; the cached branch walked 2026-10-03,
+f-a10).
 
 <a id="fn-e"></a>
 **e — delete, ordering, silence.** Delete:
@@ -1115,6 +1148,18 @@ outbound HTTP, so the `rors/` cache write always fails there (f-a3). The
 working path — registry record cached, `Funder::name()` mapping registry
 names onto the submission's languages — is code-read only (2026-08-28,
 pinned checkouts).
+Live-probed 2026-10-03 on main, OJS, OMP and OPS (OJS ff004d0973, OMP
+3b0ecf794c, OPS c8af945bb7; PKP's default test dataset, whose `rors` cache
+holds the whole registry, with the server's `[proxy]` pointed at a dead
+port): picking "Natural Sciences and Engineering Research Council of
+Canada" (`https://ror.org/01h531d29`), a funder the cache holds, saved
+with its ROR id and no stored name of its own, and the workflow's Funders
+row showed the registry's name; the same with the A3 fix in and out (the
+fix leaves this path alone). The cached pick needs no server fetch (fn d).
+Not read in that walk: the wizard and the published page. A pick of a
+funder the cache lacks, on a server that reaches the registry, has not
+been driven.
+Issue report: [pkp-e2e#754](https://github.com/jardakotesovec/pkp-e2e/issues/754) ([docs/issues/U41-A5-registry-pick-saves-nameless.md](../issues/U41-A5-registry-pick-saves-nameless.md)), its neighbour check.
 
 <a id="fn-f-a11"></a>
 **f-a11 — A11 evidence.** `Repository::validate()` attaches
@@ -1178,6 +1223,23 @@ header and as each row's "…" button name. The English control read
 "Funders", "Add Funder", "Funder Name", "No funders have been added."
 and the panel's English labels.
 Re-walked 2026-10-04 on main, all three apps (3.5 has no funders list). The list's hidden "More Actions" column header and each row's "…" button name, `common.moreActions`, a released text French (Canada) never received, joined [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)), low; the rest (`submission.funders*`, which came with `pkp/pkp-lib#12392`) are main-only texts with no report under the 2026-10-02 ruling on main-only locale keys.
+
+<a id="fn-f-a15"></a>
+**f-a15 — A15 evidence.** Live-probed 2026-10-04 on main, OJS, OMP and OPS
+(OJS ff004d0973, ui-library 64d67363; OMP 3b0ecf794c and OPS c8af945bb7,
+ui-library 280f98c5), PKP's default test dataset, as the Journal Manager
+`dbarnes`: a typed-name funder saved with one grant ("u42r4-1" as Grant
+Number); "Edit", the grant row's "Delete", "Close"; "Edit" again showed no
+grant row, and its "Save" stored `grants` `[]`. A grant row added with
+"Add" and left with "Close" came back empty on the next "Edit". The same
+on all three apps. Mechanism: `FieldFunderGrants.vue`'s `addRow()` and
+`deleteRow()` `push` / `splice` the array they are given, in place, without
+emitting `change`; `useFunderManagerActions.js` fills the panel from the
+funder's stored `grants`, so the change lands in the page's own copy and
+the next "Edit" refills the panel from it (code). The wizard's Funders
+section uses the same panel (code, not walked). The fix tried on OMP
+(new arrays in `addRow()` / `deleteRow()`) kept the grant.
+Issue report: [pkp-e2e#880](https://github.com/jardakotesovec/pkp-e2e/issues/880) ([docs/issues/U42-A13-citation-author-row-kept-after-close.md](../issues/U42-A13-citation-author-row-kept-after-close.md)), shared with [Citations & references A13](U42-citations-and-references.md#a13).
 
 <a id="fn-f-ops1"></a>
 **f-ops1 — OPS1 evidence.** Live-probed 2026-08-28: the OPS submitting

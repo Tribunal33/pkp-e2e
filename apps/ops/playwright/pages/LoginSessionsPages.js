@@ -169,7 +169,7 @@ exports.UsersRolesTable = class UsersRolesTable extends BasePage {
 
     /** @param {import('@playwright/test').Locator} row */
     async openMenu(row) {
-        await row.getByRole('button', {name: /management.options/i}).click();
+        await row.getByRole('button', {name: /management.options|^More Actions$/i}).click();
         await expect(this.items.first()).toBeVisible();
     }
 

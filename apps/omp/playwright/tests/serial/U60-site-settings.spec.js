@@ -330,7 +330,7 @@ test.describe('site settings', () => {
             await expect(new PublicLook(vp, tagA).textNameLink).toHaveText(scratchName(tagA));
 
             // The site's Login page stays at the site's address; the Reader
-            // signed in there lands on the press's home page (Rule 8).
+            // signed in there lands on the press's home page (Rule 8a).
             const login = new LoginPage(vp);
             await vp.goto(SITE.login);
             await login.expectForm();

@@ -221,7 +221,11 @@ not a fix.
    locale keys, class or symptom a report in `docs/issues/` or an
    `incidentals.md` line already covers or rules on goes to its reporter
    with that pointer ("check against <report>"), so the unit starts
-   there (U13 A1, U47 A7). Group those
+   there (U13 A1, U47 A7). An entry of raw locale codes is sorted before
+   dispatch: a key that `stable-3_5_0`'s `locale/en` files lack came with
+   an unreleased page and waits for the translators, so it gets no report
+   (the maintainer's ruling in the U47 issues session, 2026-10-02), and
+   only the released keys go to a reporter (U08, U33, U49 issue walks). Group those
    that point at one fault (the same action failing on two screens, one
    wrong value showing in several places), and follow an entry's link to
    the same fault in another spec: that entry joins the unit, and its

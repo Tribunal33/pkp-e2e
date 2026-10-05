@@ -35,7 +35,7 @@ every other plugin is switched on per journal.
 |--------|--------------------|
 | **Open a journal's "Plugins" tab** (Rules 1, 3) | • whoever opens the Settings pages, on Settings › Website › "Plugins"<br>• Site Administrator, also through Administration › "Hosted Journals" › "Settings wizard" › "Plugins" (Rule 3) <sup>a</sup> |
 | **Open the site's "Plugins" tab** (Rule 2) | • Site Administrator alone, while the installation hosts no journal, or two or more <sup>b</sup> <sup>s</sup> |
-| **Tick or untick a journal's plugin** (Rules 8–11) | • whoever opens the Settings pages, on the plugins of that journal<br>• a Site Administrator with no manager-level role in the journal: the rows show, but ticking or unticking a journal plugin is refused ⚠ [A6](#a6), and nothing on screen says so ⚠ [A9](#a9) <sup>a</sup> <sup>td19</sup> |
+| **Tick or untick a journal's plugin** (Rules 8–11) | • whoever opens the Settings pages, on the plugins of that journal<br>• a Site Administrator with no manager-level role in the journal: the rows show, but ticking or unticking a journal plugin is refused ⚠ [A6](#a6), with a browser alert, a raw code except on a press (texts in ⚠ [A9](#a9)) <sup>a</sup> <sup>td19</sup> |
 | **See and switch site-wide plugins in a journal's list** (Rule 6) | • Site Administrator alone; on a press only while the installation hosts one press [OMP1](#omp1)<br>• every other role: the rows are not listed <sup>d</sup> <sup>td3</sup> |
 | **Tick or untick a plugin on the site's list** (Rules 11, 14) | • Site Administrator alone <sup>a</sup> |
 | **Use a plugin's own links** (such as "Settings"; Rules 13, 14) | • on a journal plugin: whoever opens the Settings pages, a Site Administrator with a manager-level role there included<br>• on a site-wide plugin: Site Administrator alone <sup>a</sup> <sup>td8</sup> |
@@ -646,7 +646,8 @@ Left out of the scenarios above, by reason:
     theme in use; Rule 21)
   - A5 (a failed upgrade removing the plugin; Rule 20)
   - A6 and A9 (a Site Administrator with no manager-level role in the
-    journal, whose ticks are refused with no message; Actors row 3)
+    journal, whose ticks are refused with an alert, a raw code except
+    on a press; Actors row 3)
   - A7 (the Delete notice's spelling; Rule 21; scenario 5 marks it)
   - A8 and OJS1 (the theme in use unticked, and a journal's home page
     coming up blank; Rule 12)
@@ -1376,10 +1377,17 @@ Issue report: [pkp-e2e#507](https://github.com/jardakotesovec/pkp-e2e/issues/507
 **f-a9** — fn-a: the site admin branch of `PluginAccessPolicy` refuses
 a journal plugin. Live-probed 2026-09-27 (three apps; OJS in two runs):
 td19. The server answers the `enable` and `disable` requests with
-`status:false` and a message the screen never shows:
-"##user.authorization.pluginLevel##" (an untranslated key) on a journal
-and a preprint server, "You do not have sufficient privileges to manage
-this plugin." on a press.
+`status:false` and a message, which `Handler.handleJson()` shows in a
+browser alert: "##user.authorization.pluginLevel##" (an untranslated
+key, defined only in OMP's locale files) on a journal and a preprint
+server, "You do not have sufficient privileges to manage this plugin."
+on a press. Walked 2026-10-02 on `main` and 3.5, three apps, from PKP's
+default test dataset with `admin`'s manager role exchanged for
+"Reader"
+(`shared/playwright/checks/issues/plugin-disable-refused-window-keeps-spinning/walk.js`):
+the alert showed at the tick and again at the untick, with those texts;
+the 2026-09-27 probe's tooling had closed the alert without recording
+it.
 Issue report: [pkp-e2e#512](https://github.com/jardakotesovec/pkp-e2e/issues/512) ([docs/issues/U62-A9-plugin-switch-refusal-raw-key.md](../issues/U62-A9-plugin-switch-refusal-raw-key.md)).
 Issue report: [pkp-e2e#511](https://github.com/jardakotesovec/pkp-e2e/issues/511) ([docs/issues/U62-A9-refused-confirmation-window-keeps-spinning.md](../issues/U62-A9-refused-confirmation-window-keeps-spinning.md)).
 

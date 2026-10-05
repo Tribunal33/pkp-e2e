@@ -332,15 +332,21 @@ Top to bottom: <sup>j</sup>
     galley belongs to. An older version's galley opens its reader under
     the notice "This is an outdated version published on {date}. Read the
     most recent version.", the date written like "2026-09-25" in the PDF
-    reader and like "September 25, 2026" in the HTML reader {OJS}. A new,
-    unpublished version's "PDF" pressed on its preview (Rule 4) opens the
-    PDF reader under the same notice, though that version is the next
-    one, with the date blank: "This is an outdated version published on .
-    Read the most recent version." ⚠ [A13](#a13). An older version's
-    PDF reader shows no document ("0 of 0" in an empty viewer, no
-    message), and its "Download" gets no file: the browser stays on the
-    reader page ⚠ [A2](#a2).
+    reader and like "September 25, 2026" in the HTML reader {OJS}. An
+    older version's PDF reader shows no document ("0 of 0" in an empty
+    viewer, no message), and its "Download" gets no file: the browser
+    stays on the reader page ⚠ [A2](#a2).
     <sup>d</sup> <sup>e</sup> <sup>q9</sup>
+    - 12a. **A new version's preview.** On the preview of a new,
+      unpublished version (Rule 4), the version's "PDF", and on a journal
+      its "HTML", open their readers under the same outdated notice,
+      though that version is the next one ⚠ [A13](#a13). The PDF reader
+      leaves the date blank: "This is an outdated version published on .
+      Read the most recent version." The HTML reader {OJS} dates it the
+      day the reader is opened: opened on October 4, 2026, it reads "This
+      is an outdated version published on October 4, 2026. Read the most
+      recent version."
+      <sup>q9</sup>
 13. **Galley addresses.** {OJS} The number address of a galley that has a
     URL Path forwards to its URL Path address; on a preprint server it
     answers the "404 Not Found" page ⚠ [OPS3](#ops3). A galley address
@@ -1161,7 +1167,7 @@ Left out of the scenarios above, by reason:
     `docs/issues/U13-A11-keywords-order-not-kept.md`): keywords shown in
     the order typed on the page and in the "Metadata" form (a unit test
     in pkp-lib reads entries stored with `seq` against primary-key order)
-  - the guard for A13 (Rule 12; issue report
+  - the guard for A13 (Rule 12a; issue report
     `docs/issues/U13-A13-new-version-preview-reader-called-outdated.md`),
     written once A13 is fixed: a new version's "PDF" (and, on a journal,
     "HTML") pressed on its preview opening the reader with no outdated
@@ -1210,7 +1216,7 @@ Left out of the scenarios above, by reason:
   - OPS1 (a preprint server's preview of a new version with both
     notices; Rule 4)
   - A13 (the PDF or HTML reader opened from a new version's preview,
-    under the outdated notice; Rule 12)
+    under the outdated notice; Rule 12a)
   - OJS1 (other citation formats and downloads outside a published
     issue, by who is signed in {OJS}; Rule 15c)
   - A7 and A8 (the "ABNT" citation and the RIS file's dates; Rules 15,
@@ -2319,6 +2325,14 @@ reader showed the document; after "Change File" on the new version's
 galley it showed the replacement file; with the copy's URL Path changed
 and a new galley "New" given "pdf" and a file of its own, it showed
 nothing again (two runs per app).
+Walked 2026-10-04 (Rule 12a; A13), `main` and 3.5, OJS and OPS, a new
+version made with "Create New Version" and opened with "Preview": its
+PDF reader read "This is an outdated version published on . Read the
+most recent version." on both, and OJS's HTML reader, on an HTML galley
+added to the new version, "This is an outdated version published on
+October 4, 2026. Read the most recent version.", the day of the walk
+(the walk and the cause are in [f-a13](#fn-f-a13) and the issue report
+[docs/issues/U13-A13-new-version-preview-reader-called-outdated.md](../issues/U13-A13-new-version-preview-reader-called-outdated.md)).
 
 <a id="fn-q10"></a>
 **q10** — Live-probed 2026-09-25 (Rule 13; OPS3), OJS and OPS, signed

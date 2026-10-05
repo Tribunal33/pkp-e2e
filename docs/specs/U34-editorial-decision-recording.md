@@ -345,9 +345,12 @@ before the wizard) or one choice ("Payment", a journal's first page).
     current stage, the decision opens the wizard with that round's
     reviewers offered; what "Record Decision" does to the past round is
     not known ⚠ [A11](#a11).
-    The stage is checked, the submission's status is not: "Revert
-    Decline" typed on a submission that was never declined opens, records
-    "Submission Reactivated" and emails the author ⚠ [A6](#a6).
+    The stage is checked, the submission's status is not, so "Revert
+    Decline" records on a submission that is not declined, closing on
+    "Submission Reactivated" and emailing the author each time ⚠ [A6](#a6):
+    after a real reversal, when the browser's Back, a reload of the page
+    or a second tab where it was already open brings the page back; on a
+    submission never declined, when its address is typed.
     <sup>b</sup> <sup>s1</sup>
 <a id="recommendation"></a>
 13. **Recording a recommendation.** The "Notify Editors" page is headed with
@@ -1112,7 +1115,7 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
-  - the guard for A6 (issue report `docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md`): after a real "Revert Decline", a reload of the record page or a second record of it is refused and the author receives one reversal email, and the record page opened on a submission never declined is refused (Rule 12)
+  - the guard for A6 (issue report `docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md`): after a real "Revert Decline", "Record Decision" pressed again after the browser's Back, after a reload of the page or in a second tab where it was already open is refused and the author receives one reversal email, and the record page opened on a submission never declined is refused (Rule 12)
   - the guard for OJS1 (issue report `docs/issues/U34-OJS1-waive-still-requests-publication-fee.md`): "Waive" on the "Request Payment" page of an accept decision gives the Author no fee task and no "Payment Request Notification", and the submission's "Payments" menu reads "Waived" (Rule 16; scenario 10, which marks it today)
   - the "Notify Reviewers" letter edited before the decision is recorded: each reviewer's email still carries that reviewer's own name alone, never the other reviewers' names (Rule 4): likely a bullet in scenario 6, whose reviewers' mailboxes are read after the accept
   - the guard for A9 (issue report `docs/issues/U34-A9-sub-editor-find-template-not-authorized.md`): a Section Editor's "Find Template" in the decision wizard lists the templates matching the phrase, as a Journal Editor's does (Rule 7)
@@ -1473,7 +1476,7 @@ their own dates.
 Issue report: [pkp-e2e#861](https://github.com/jardakotesovec/pkp-e2e/issues/861) ([docs/issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md](../issues/U34-OPS2-preprint-server-initials-placeholder-raw-key.md)).
 
 <a id="fn-a6"></a>
-**f-a6** — Note b: `DecisionStageValidPolicy` compares the submission's stage with the decision's and `DecisionAllowedPolicy` the user's assignment; nothing reads the submission's status, and `Repository::validate()` does not either. Live-probed 2026-09-20: `decision=16` typed on a queued Submission-stage submission (OJS, OMP) and on a queued preprint (OPS), and `decision=15` on an active review round: the one-page wizard, "Submission Reactivated" on record, the author's email "We have reversed the decision to decline your submission" and the log line "reversed the decision to decline this submission".
+**f-a6** — Note b: `DecisionStageValidPolicy` compares the submission's stage with the decision's and `DecisionAllowedPolicy` the user's assignment; nothing reads the submission's status, and `Repository::validate()` does not either. Live-probed 2026-09-20: `decision=16` typed on a queued Submission-stage submission (OJS, OMP) and on a queued preprint (OPS), and `decision=15` on an active review round: the one-page wizard, "Submission Reactivated" on record, the author's email "We have reversed the decision to decline your submission" and the log line "reversed the decision to decline this submission". Walked 2026-10-04 on `main` and `stable-3_5_0`, all three apps (Rule 12; A6), with the kept script `shared/playwright/checks/issues/revert-decline-typed-on-undeclined-submission/walk.js` ("After a reversal" and second-tab modes): after a real "Revert Decline" (OJS 18, OMP 10, OPS 4 of the default dataset), the browser's Back reopened the page with "Record Decision" offered, a second "Record Decision" closed on "Submission Reactivated", the reload reopened the page once more, and a second tab's page recorded again; the author held two "We have reversed the decision to decline your submission" emails and the Activity Log two reversal lines and two email lines. No failed request and no script error. 3.3 (a second open window of the legacy reversal form) is read in the code only, not walked.
 Issue report: [pkp-e2e#863](https://github.com/jardakotesovec/pkp-e2e/issues/863) ([docs/issues/U34-A6-revert-decline-typed-on-undeclined-submission.md](../issues/U34-A6-revert-decline-typed-on-undeclined-submission.md)).
 
 <a id="fn-a7"></a>

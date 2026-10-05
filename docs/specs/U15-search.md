@@ -48,7 +48,7 @@ Distribution settings say otherwise (Rule 13). <sup>a</sup>
 | **Open the site-wide Search page** | • Any visitor, by typing its address (Rule 10 gives its form); no link on the site's pages leads there <sup>i</sup> |
 | **Search, refine by date, page through results** | • Anyone who can open the page. There is nothing to sign in for and nothing a role adds <sup>a</sup> |
 | **See an article that is not published in the results** | • Nobody, whatever their role: the results hold only articles that have a published version, and a decline alone does not unpublish (Rule 2) <sup>c</sup> |
-| **Open a found article** | • Anyone, on an open-access article. On a journal whose content is behind subscriptions, the result is listed for everyone and the article page itself decides what the reader may open (Rule 16). On a press or server, a declined article's result opens "404 Not Found" for a visitor (Rule 2, [OMP3](#omp3) [OPS4](#ops4)) <sup>f</sup> |
+| **Open a found article** | • Anyone, on an open-access article. On a journal whose content is behind subscriptions, the result is listed for everyone and the article page itself decides what the reader may open (Rule 16). On a press or server, the result of a book or preprint returned to the workflow opens "404 Not Found" for a visitor (Rule 2, [OMP3](#omp3) [OPS4](#ops4)) <sup>f</sup> |
 | **Rebuild the search index** | • The site's system administrator, from the command line on the server, with the tool named in the Reference table at the end of this spec; no screen offers it (Side effects) <sup>o</sup> |
 | **Change what search covers and how it runs** | • The system administrator, in the configuration file (Settings that modify behavior). The Journal Manager sets the results-per-page count and the publishing mode on the journal's own settings screens, described in their owning features (Settings that modify behavior) <sup>n</sup> |
 
@@ -91,10 +91,13 @@ shared. <sup>b</sup>
    A decline alone does not unpublish: a published article that is returned
    to the workflow and then declined keeps its published version and stays
    in the results on every application. On a journal its title still opens
-   the landing page; on a press or a preprint server a visitor who presses
-   the title gets the page "404 Not Found" instead, so the result is a dead
-   link for readers ⚠ [OMP3](#omp3) ⚠ [OPS4](#ops4). The decline itself is
-   described in [Submission stage](U25-submission-stage.md). <sup>c</sup>
+   the landing page. On a press or a preprint server, "Return to Workflow"
+   alone takes the item offline for visitors: from the return on, a
+   visitor who presses the title gets the page "404 Not Found" and the book
+   or preprint is gone from the catalog or the preprint list, while Search
+   keeps listing it, so the result is a dead link for readers; a decline
+   afterwards changes nothing ⚠ [OMP3](#omp3) ⚠ [OPS4](#ops4). The decline
+   itself is described in [Submission stage](U25-submission-stage.md). <sup>c</sup>
 3. **What text is searched.** The words are looked for in the article's
    title (with its prefix and subtitle), its abstract and the names of its
    contributors. The text of the article's galleys is not searched: the
@@ -260,7 +263,10 @@ shared. <sup>b</sup>
     reviewer whose review of the article was open (not anonymous); and a
     sort by title, ascending or descending ⚠ [A8](#a8). The sort by
     published date the page is built to accept answers an error page
-    instead of the results ⚠ [A12](#a12). Paging keeps
+    instead of the results ⚠ [A12](#a12). A sort the page does not know,
+    such as a misspelt one or "publicationDate" (the date sort's name in a
+    Search address made on release 3.5), answers the same empty error page,
+    where 3.5 ignored it and listed the results ⚠ [A17](#a17). Paging keeps
     the sort but drops the other address-only refinements. On a press an
     empty search box means the bare page (Rule 5), whatever refinements the
     address carries. These are documented here because a bookmarked or
@@ -311,11 +317,17 @@ shared. <sup>b</sup>
 - Installing or upgrading the site rebuilds the whole index. The system
   administrator can rebuild it at any time from the command line (the tool
   is named in the Reference table at the end of this spec), for the
-  whole site or for one journal named by its path; on a press or preprint
-  server the path is accepted but ignored and the whole site is rebuilt
-  ⚠ [OMP1](#omp1) ⚠ [OPS3](#ops3). A rebuild first empties the index, so
-  searches return nothing for the articles not yet re-indexed while it
-  runs. <sup>o</sup>
+  whole site or for one journal named by its path. Every rebuild, by path
+  or not, first empties the whole site's index, so searches return
+  nothing for the articles not yet indexed again while it runs.
+  <sup>o</sup> After a rebuild by path:
+  - On a journal site only the named journal is indexed again, so Search
+    on every other journal answers "No Results" for everything until the
+    whole site is rebuilt ⚠ [OJS4](#ojs4). <sup>o</sup>
+  - On a press or preprint server site the path is ignored: every press
+    or server is indexed again through the site's background jobs, and
+    Search on the others finds nothing until those jobs have run
+    ⚠ [OMP1](#omp1) ⚠ [OPS3](#ops3). <sup>o</sup>
 
 ## Settings that modify behavior
 
@@ -641,12 +653,12 @@ Common to every application:
     - **Returned to the workflow and declined**: the Journal Manager opens
       the first article's workflow, presses "Return to Workflow"
       ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#done))
-      and then declines it with "Decline Submission"
-      ([Submission stage](U25-submission-stage.md) describes the decline).
-      The visitor's search for the word still lists the article on every
-      application; its title opens the landing page on a journal, and on a
-      press or preprint server the page "404 Not Found" [OMP3](#omp3)
-      [OPS4](#ops4) (Rule 2).
+      and then, on the stage it returns to (Submission; Production on a
+      server), presses "Decline Submission". The visitor's search still
+      lists the article on every application; its title opens the landing
+      page on a journal, and on a press or preprint server the page "404
+      Not Found", brought by the return alone, not the decline
+      [OMP3](#omp3) [OPS4](#ops4) (Rule 2).
     - **Deleted**: the Journal Manager deletes the declined submission with
       "Delete" ([Submission stage](U25-submission-stage.md#delete)). The
       visitor's search for the word reads "No Results" at once (on a press,
@@ -688,8 +700,10 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - OPS2 (a server's gate and hidden archive box unreachable from its
     settings; Rules 13, 17, Settings)
-  - OMP1 and OPS3 (the rebuild for one press or server by path rebuilding
-    every one; Side effects)
+  - OJS4 (the rebuild for one journal by path leaving every other
+    journal's Search empty until a full rebuild; Side effects)
+  - OMP1 and OPS3 (the rebuild for one press or server by path emptying
+    and re-indexing every one; Side effects)
   - A11 (galley text never searched, and the galley converters having no
     reachable effect; Rule 3, Settings)
   - A5 (several words all matching on PostgreSQL, any one on MySQL; Rule 4)
@@ -712,10 +726,13 @@ Left out of the scenarios above, by reason:
   - A3 (edits after publication never reaching the index; Rule 12)
   - A8 and A12 (the address-only refinements, paging keeping the sort
     alone, the date sort answering an error page; Rules 8, 14)
+  - A17 (a sort the page does not know answering an empty error page;
+    Rule 14)
   - A13 (a page number that is not a number giving a completely empty page;
     Rule 8)
-  - OMP3 and OPS4 (a declined book or preprint still listed, its title
-    opening "404 Not Found" for a visitor; Rule 2)
+  - OMP3 and OPS4 (a book or preprint returned to the workflow, declined
+    or not, still listed by Search while its title opens "404 Not Found"
+    for a visitor and it is gone from the catalog or preprint list; Rule 2)
   - A9 (two configuration settings nothing reads; Settings)
 - **No seed**:
   - a subscription journal's restricted articles listed like any other,
@@ -768,8 +785,10 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
+| [A17](#a17) | A Search address carrying a sort the page does not know shows an empty error page | 🐞 | user-visible · crash: server | — |
 | [OJS1](#ojs1) | Screen readers hear a raw code, or "Found one item.", when a search finds several items | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [OJS4](#ojs4) | Rebuilding one journal's search index by its path leaves Search empty on every other journal until a full rebuild | 🐞 | medium | — |
 | [OMP1](#omp1) | Rebuilding one press's search index by its path empties Search on every other press until the queue re-indexes them | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP3](#omp3) | Returning a published book or preprint to the workflow takes its page offline for readers, while Search still links to it | 🐞 | high | issues (claude), 2026-10-03 — re-verified |
 | [OPS1](#ops1) | On a preprint server the screen-reader result count always says "Found one item." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1011,6 +1030,17 @@ Lean: it should; a journal's own settings ought to hold wherever its
 content is listed.
 Basis: judgment. <sup>f-a16</sup>
 
+<a id="a17"></a>
+**A17 — A Search address carrying a sort the page does not know shows an empty error page** · 🐞 · user-visible · crash: server.
+A reader who opens a Search results address whose sort the page does not
+know gets an empty page instead of the results: the server fails. Such
+an address is a mistyped one, or one made on 3.5, which named the date
+sort `orderBy=publicationDate`. On 3.5 the page ignored an unknown sort
+and listed the results in its usual order. No control on the page offers
+a sort, so only a typed, bookmarked or shared address reaches it. The
+cause is its own: a fix for [A12](#a12) alone does not cure it.
+Basis: probe, 2026-10-03. <sup>f-a17</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1059,6 +1089,20 @@ Lean: yes; a Login page suggests the content is there for members, which
 is not what the setting means.
 Basis: probe. <sup>f-ojs3</sup>
 
+<a id="ojs4"></a>
+**OJS4 — Rebuilding one journal's search index by its path leaves Search empty on every other journal until a full rebuild** · 🐞 · medium.
+A system administrator who rebuilds the search index for one journal
+with `php tools/rebuildSearchIndex.php <path>` expects only that journal
+to be re-indexed. Instead the tool empties the whole site's index and
+indexes only the named journal again. Search on every other journal on
+the site answers "No Results" for everything until someone rebuilds the
+whole site. The tool prints nothing and nobody is told.
+
+On 3.5 the same command rebuilds the named journal alone, and the other
+journals stay searchable. Presses and servers have their own fault on
+the same command, [OMP1](#omp1) and [OPS3](#ops3).
+Since: 2025-08 (about a year). Basis: probe, 2026-10-03. <sup>f-ojs4</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1070,7 +1114,7 @@ the named one. Search on the other presses finds nothing until the
 queue reaches their books; with the default settings the queue moves
 only as visitors open pages, at most 30 items per page visit. On a
 journal site the same command leaves every other journal's Search empty
-until a full rebuild (the issue report's journal half). The tool
+until a full rebuild, [OJS4](#ojs4). The tool
 refuses an unknown path with "The given press path "{path}" could not
 be resolved to a press."
 Basis: probe, 2026-10-03. <sup>f-omp1</sup>
@@ -1269,7 +1313,8 @@ live landing page, on all three apps; the probe did not record whether the
 page was read signed out. Suite runs of 2026-09-13, the page read as a
 visitor after the same decline: OJS `article/view/{id}` answered the
 landing page; OMP `catalog/book/{id}` and OPS `preprint/view/{id}`
-answered status 404 with the page "404 Not Found" (f-omp3, f-ops4). OJS
+answered status 404 with the page "404 Not Found" (f-omp3, f-ops4; walked
+2026-10-03, the return alone brings it). OJS
 subscription case: an article in
 an issue whose Access tab reads "Subscription" (the journal's Publishing
 Mode set to "The journal will require subscriptions to access some or all
@@ -1620,11 +1665,15 @@ config (`config.test.inc.php`) keeps `driver = database` and no
 `createIndex()` and `update()` in chunks of 100 over
 `filterByContextIds([$journal?->getId() ?? SITE_CONTEXT_ID_ALL])`. OMP
 and OPS assign the resolved context to `$press` / `$server` but filter on
-the never-set `$journal` → always all contexts (OMP1, OPS3; the OJS copy
-is correct). `DatabaseEngine::flush()` truncates `submissions_fulltext`;
+the never-set `$journal` → always all contexts (OMP1, OPS3). OJS filters
+on the named journal, but the `flush()` before it has already emptied the
+whole site's index, so the other journals' entries are gone until a full
+rebuild (OJS4). `DatabaseEngine::flush()` truncates `submissions_fulltext`;
 `createIndex()`/`deleteIndex()` are no-ops on the database driver and
 create/drop the mapping on OpenSearch. `Installer::rebuildSearchIndex()`
-flushes and re-updates everything at install/upgrade. Not run (no screen).
+flushes and re-updates everything at install/upgrade. The rebuild by path
+was walked on 2026-10-03 on the three apps (f-ojs4, f-omp1, f-ops3); the
+site-wide rebuild and the install were not run.
 
 <a id="fn-p"></a>
 **p — the OPS archive header.**
@@ -1769,13 +1818,17 @@ Live-probed 2026-09-02 (fn-p).
 **s12** — Two published articles seeded as fn-s, the manager from the
 context's `users[]`. On screen, as the manager: the workflow header's
 "Return to Workflow" → "Confirm" (U24 #done), then "Decline Submission" →
-"Record Decision" on the stage the article was published from (OPS:
-Production; stage bubble "Declined"), then "Delete" ("Are you sure you
+"Record Decision" on the stage the article was published from (a seeded
+article: Submission, as the OJS and OMP suites assert; OPS: Production;
+stage bubble "Declined"; on OMP `main` a book returned to Production is
+offered "Schedule For Publication" and "Move To Copyediting" but no
+"Decline Submission", the 2026-10-03 walk of f-omp3), then "Delete" ("Are you sure you
 want to permanently delete this submission?"). The decline leaves the
 publication `status = STATUS_PUBLISHED`, so the SQL still lists it on every
 app; `article/view/{id}` still answers on OJS, while `catalog/book/{id}`
 and `preprint/view/{id}` answered a visitor 404 in the suite runs of
-2026-09-13 (fn-c, f-omp3, f-ops4), so the press and server expectations
+2026-09-13 (fn-c, f-omp3, f-ops4; the 2026-10-03 walk traced the 404 to
+the return itself, not the decline), so the press and server expectations
 end at the listing and the title's address; the delete cascades the
 `submissions_fulltext` rows (`ON DELETE CASCADE`, fn-k), so the visitor's
 "No Results" is read with no `runJobs()` in between. Live-probed
@@ -1925,6 +1978,22 @@ in place, points to yes.
 <a id="fn-f-a16"></a>
 **f-a16** — fn-i. The question was raised on 2026-09-02.
 
+<a id="fn-f-a17"></a>
+**f-a17** — fn-m: `SubmissionSearchResult::builderFromRequest()` passes
+any `orderBy` value to the builder, and `DatabaseEngine::buildQuery()`
+throws on one it does not know. Walked 2026-10-03 as a visitor on OJS,
+OMP and OPS `main` (PostgreSQL, PKP's default test dataset): a Search
+results address with `orderBy=publicationDate` answered status 500 with
+an empty body, the server log reading `Order-by "publicationDate" not
+supported by DatabaseEngine!`; on `stable-3_5_0` the same address listed
+the results (`SubmissionSearch::getResultSetOrdering()` falls back to
+relevance for an unknown value). Read in the code only, not walked:
+`orderBy=featured` on a journal or server fails with "Features not
+supported in 1!", the engine's app-name check assigning the comparison's
+result. Recorded beside the date-sort report,
+[docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md)
+(Cause, Reach), which leaves it out of its fix.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-g: `templates/frontend/pages/search.tpl` passes `count`
 to `search.searchResults.foundPlural`, whose `en` entry ("Found {$count}
@@ -1959,9 +2028,31 @@ became the Login page with the Search page as its source; Reader, Author,
 Translator and Reviewer saw "This journal does not publish its content
 online." (fn-l).
 
+<a id="fn-f-ojs4"></a>
+**f-ojs4** — fn-o: `flush()` truncates `submissions_fulltext` for the
+whole site, then `filterByContextIds([$journal->getId()])` re-indexes
+the named journal alone. Introduced with the database search driver
+(pkp/ojs `71a7bfccec`, 2025-08-01, for pkp/pkp-lib#8920); 3.5's
+`ArticleSearchIndex::rebuildIndex()` cleared only the named journal's
+entries. Walked 2026-10-03 on OJS `main` (PostgreSQL, PKP's default test
+dataset plus a second, empty journal `u15i`): `php
+tools/rebuildSearchIndex.php u15i` printed nothing and exited 0, "We have
+0 queued jobs" followed, and a visitor's search of `publicknowledge` for
+"Signalling" (submission 1, "Signalling Theory Dividends"), listed
+before, read "No Results" after the rebuild and again after the queue
+was worked off. On `stable-3_5_0` the tool printed "Indexing "u15i
+Second" ... 0 articles scheduled for indexation" and `publicknowledge`
+stayed searchable.
+Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md), filed as [pkp-e2e#727](https://github.com/jardakotesovec/pkp-e2e/issues/727).
+
 <a id="fn-f-omp1"></a>
-**f-omp1** — fn-o: `$press` assigned, `$journal` filtered. Judgment from
-the tool's source; not run.
+**f-omp1** — fn-o: `$press` assigned, `$journal` filtered. Walked
+2026-10-03 on OMP `main` (PKP's default test dataset plus a second,
+empty press `u15i`): `php tools/rebuildSearchIndex.php u15i` printed
+nothing and exited 0, and "We have 18 queued jobs" followed, one per
+submission of `publicknowledge`; on `stable-3_5_0` the tool refused the
+path with "This search implementation does not allow per-press
+re-indexing.".
 Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md), filed as [pkp-e2e#727](https://github.com/jardakotesovec/pkp-e2e/issues/727).
 
 <a id="fn-f-omp2"></a>
@@ -1979,9 +2070,21 @@ listed the book with its title linking to `catalog/book/{id}`; that
 address answered status 404 with the page "404 Not Found" (the run's page
 snapshot holds the level-1 heading "404 Not Found" and nothing else). The
 same address had answered 200 with the book's title before the decline,
-and answered 200 to the signed-in Press Manager after it. Mechanism not
-traced; the decline leaves the publication's status published (fn-s12),
-so the catalog page's own gate, not the index, refuses the visitor.
+and answered 200 to the signed-in Press Manager after it. Walked
+2026-10-03 on OMP and OPS `main` (PKP's default test dataset; OMP book
+14, OPS preprint 12; OJS article 17 as the control): from "Return to
+Workflow" → "Confirm" on, before any decline, the visitor's book or
+preprint address answered 404 "404 Not Found" and the item left the
+catalog (OPS: the preprint list), while the search (OMP: "One title was
+found which matched your search for "LEGO".") still listed it; on OPS a later
+"Decline Submission" → "Record Decision" changed nothing for the
+visitor; the OJS article kept its page, its table-of-contents entry and
+its result. Cause: `ReturnToWorkflow::getNewStatus()` sets the
+submission's status to `STATUS_QUEUED` while the publication stays
+`STATUS_PUBLISHED`, and `CatalogBookHandler::book()` and
+`PreprintHandler::initialize()`, like the catalog and preprint lists,
+read the submission's status, whereas the search reads the
+publication's.
 Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
 
 <a id="fn-f-ops1"></a>
@@ -2002,8 +2105,13 @@ the setting; every actor got the Search page and the archive box, no
 `##…##` text anywhere. The gated state was not reached.
 
 <a id="fn-f-ops3"></a>
-**f-ops3** — fn-o: `$server` assigned, `$journal` filtered. Judgment from
-the tool's source; not run.
+**f-ops3** — fn-o: `$server` assigned, `$journal` filtered. Walked
+2026-10-03 on OPS `main` (PKP's default test dataset plus a second,
+empty server `u15i`): `php tools/rebuildSearchIndex.php u15i` printed
+nothing and exited 0, and "We have 19 queued jobs" followed; on
+`stable-3_5_0` it printed "Indexing "Public Knowledge Preprint Server"
+... 19 articles scheduled for indexation", and the index's 136 rows went
+to 0 and back to 136 once the queue had run.
 Issue report: [docs/issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md](../issues/U15-OMP1-OPS3-search-rebuild-by-path-empties-other-contexts.md), filed as [pkp-e2e#727](https://github.com/jardakotesovec/pkp-e2e/issues/727).
 
 <a id="fn-f-ops4"></a>
@@ -2015,7 +2123,8 @@ the visitor's search still listed the preprint with its title linking to
 Found" (the run's page snapshot holds the level-1 heading "404 Not Found"
 and nothing else), where an undeclined preprint's `preprint/view/{id}` had
 answered 200 earlier in the same run. Not read as the signed-in Preprint
-Server Manager. Mechanism not traced (f-omp3).
+Server Manager. The 2026-10-03 walk and the cause, with the decline
+changing nothing after the return: f-omp3.
 Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
 
 ## Reference — entry points & surfaces

@@ -30,7 +30,7 @@ own features. This table covers only the ORCID capability on each of them.
 | **Enable & configure ORCID for one journal** | • Site Administrator; Journal Manager: the "ORCID" tab on Settings → Users & Roles (Rule 1). The tab is locked read-only while the site-wide configuration is active (Rule 3) <sup>a</sup> |
 | **Enable & configure ORCID site-wide** | • Site Administrator: the "ORCID" tab on Site Settings. The tab exists only while the install hosts more than one journal (Rule 2) <sup>b</sup> |
 | **Connect / authorize own iD** | • Any signed-in user: profile, Identity tab (Rules 5–6)<br>• Any visitor: a journal's registration page (Rule 7). Not offered on the site-level registration page <sup>c</sup> |
-| **Remove own iD** | • The user themselves: "Delete" beside the connected iD on the Identity tab (Rule 6c) <sup>d</sup> |
+| **Remove own iD** | • The user themselves, while their iD is verified: "Delete" beside it on the Identity tab (Rule 6c)<br>• ⚠ [A13](#a13) nobody while the iD is unauthenticated: the tab offers no "Delete" for it <sup>d</sup> |
 | **Request a contributor's verification by email** | • Site Administrator; Journal Manager; Section Editor assigned to the submission: "Request verification" on the contributor's ORCID iD field (Rule 8)<br>• Author of the submission: the same button, from the submission wizard's Contributors step. On a journal or press the contributor list on the author's own dashboard is read-only. On a preprint server that list offers "Edit" on the author's not-yet-posted preprint, and the form it opens carries the same button (the preprint baseline is described in [Contributors & affiliations](U41-contributors-and-affiliations.md#ops1))<br>• ⚠ [A5](#a5) an Assistant who can edit the contributor is offered the same button. The request is refused, yet the field reports it as sent <sup>e</sup> |
 | **Remove a contributor's iD** | • The same roles as the row above: "Delete" on the contributor's ORCID iD field (Rule 8a) ⚠ [A5](#a5) <sup>e</sup> |
 | **Verify via the emailed link** | • Whoever holds the emailed authorization link. It works signed out, and the link is single-use (Rule 9) <sup>f</sup> |
@@ -86,20 +86,23 @@ What the field shows in the French interface: Rule 17a.
    journal an ORCID block appears. What it holds depends on the account's iD.
    With no iD: a "Create or Connect your ORCID iD" button. With an
    unauthenticated iD: the iD as a hollow-icon link suffixed
-   "(unauthenticated)" and an "Authorize and Connect your ORCID iD" button.
-   With a verified iD: only the iD as a solid-icon link and its "Delete"
-   button; the connect button and the "What is ORCID?" link beside it are
-   gone. The connect/authorize button opens ORCID's sign-in in a popup
-   window. Completing it stores the verified iD and reloads the
-   tab. <sup>c</sup> <sup>h</sup>
+   "(unauthenticated)" and an "Authorize and Connect your ORCID iD" button,
+   but no "Delete" (Rule 6c). With a verified iD: only the iD as a
+   solid-icon link and its "Delete" button; the connect button and the
+   "What is ORCID?" link beside it are gone. The connect/authorize button
+   opens ORCID's sign-in in a popup window. Completing it stores the
+   verified iD and reloads the tab. <sup>c</sup> <sup>h</sup>
 6. Companions of the profile flow:
    6a. ⚠ [A4](#a4) the "What is ORCID?" link beside the button opens the same
    sign-in popup instead of the What-is-ORCID page it names. <sup>c</sup>
    6b. Denying access on ORCID's consent screen records the refusal. The
    stored iD and token, if any, are cleared. <sup>f</sup>
-   6c. "Delete" beside a verified iD asks "Are you sure you want to remove this
-   ORCID?" Confirming removes the iD at once, with no separate save, and
-   tells ORCID to cancel this install's access token. <sup>d</sup>
+   6c. "Delete" beside a verified iD opens a window titled "Confirm" that
+   asks "Are you sure you want to remove this ORCID?", with "OK" and
+   "Cancel". "OK" removes the iD at once, with no separate save, and tells
+   ORCID to cancel this install's access token. ⚠ [A13](#a13) an
+   unauthenticated iD has no "Delete", so its owner cannot remove it from
+   the profile. <sup>d</sup>
 7. **Connecting while registering.** A journal's registration page offers the
    same "Create or Connect your ORCID iD" button at the top of the form.
    Completing ORCID's sign-in fills the name, email, country and affiliation
@@ -323,7 +326,8 @@ the footnote. <sup>s</sup>
      ORCID?" link beside it are gone (Rule 5).
    - **The second user's Identity tab, unauthenticated iD**: shows the iD as
      a hollow-icon link suffixed "(unauthenticated)" and an "Authorize and
-     Connect your ORCID iD" button (Rule 5).
+     Connect your ORCID iD" button (Rule 5); ⚠ [A13](#a13) no "Delete" is
+     offered.
    - **"Delete"**: on the first user's tab, press Delete. The dialog asks
      "Are you sure you want to remove this ORCID?"; confirm. The iD is gone.
    - **Control**: the "Create or Connect your ORCID iD" button is back.
@@ -498,6 +502,7 @@ Left out of the scenarios above, by reason:
   - the guard for A11 (issue report `docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md`): in French (Canada), both ORCID tabs (the site's and the journal's) read "ORCID".
   - the guard for A12 (issue report `docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md`): in French (Canada), the site's ORCID switch and every state of the contributor's ORCID iD field show no untranslated text key (A11's switch too).
   - the guard for A5's refusal (issue report `docs/issues/U04-A5-assistant-orcid-controls-refused.md`): an Assistant whose assignment has the "Permissions" box presses "Request verification" (the email arrives) and "Delete" (the iD is gone), and one without the box is offered no "Edit".
+  - the profile's "Delete" window titled "Confirm", with "OK" and "Cancel" (Rule 6c; scenario 3's "Delete" bullet).
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -519,6 +524,7 @@ Left out of the scenarios above, by reason:
   - OPS3 (the legacy ORCID Profile plugin on preprint servers; Rule 16)
   - A11 (the French interface: both ORCID tabs named after the old plugin, the site switch in raw codes; Rule 17)
   - A12 (the French interface: the contributor's ORCID iD field in raw codes; Rule 17a)
+  - A13 (no "Delete" for the owner's unauthenticated iD on the Identity tab; Actors row 4, Rule 6c; scenario 3 marks it)
 - **No seed**:
   - the Site Administrator enabling ORCID site-wide (Actors row 2, Rule 2): Site Settings → ORCID is one setting shared by every test running at once, so it stays off
   - the journal tab locked read-only under the site-wide configuration (Rule 3): the same site-wide setting
@@ -549,7 +555,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-07; additions
-2026-08-29 and 2026-09-28), unreviewed unless an entry notes otherwise; the team settles
+2026-08-29, 2026-09-28 and 2026-10-05), unreviewed unless an entry notes otherwise; the team settles
 them on spec review. The summary is sorted 🐞 → ❓ → ✅ and the entries below
 are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
@@ -567,6 +573,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
 | [A7](#a7) | The re-authorization email template is not editable in any app. Resolved upstream for journals and presses (pkp/pkp-lib#13050); the preprint-server gap is [OPS2](#ops2)'s | ❓ | latent | rebase check (claude) 2026-08-25 |
 | [A9](#a9) | The site tab's absence on single-journal installs rests on its switch-on condition, not observation | ❓ | minor | — |
+| [A13](#a13) | A user whose own iD is unauthenticated is offered no "Delete" on the profile's Identity tab | ❓ | minor | — |
 | [OPS1](#ops1) | The author-email toggle exists on a preprint server that can never trigger it | ❓ | latent | — |
 | [A10](#a10) | Deleting a contributor's unauthenticated iD fails: the confirm never completes and the iD stays (regression, pkp/pkp-lib#13003) | ✅ | retired | rebase check (claude), 2026-09-03 — fixed upstream (pkp-lib `ecd12271ed` + `d9e9b3fc7c`), suites green on all three apps |
 | [OMP1](#omp1) | A press requests and verifies iDs but deposits no works | ✅ | user-visible | — |
@@ -717,6 +724,22 @@ The buttons still work ("Oui" sends the email or removes the iD), but
 the manager cannot read what they confirm.
 Basis: probe, 2026-10-03. <sup>[f-a12](#fn-a12)</sup>
 
+<a id="a13"></a>
+**A13 — An unauthenticated iD cannot be removed from its owner's profile** · ❓ · minor.
+On the profile's Identity tab a verified iD has a "Delete" button, but an
+unauthenticated one has none (Rules 5, 6c). A user whose account holds an
+iD they never verified, one imported or one connected while registering
+([A3](#a3)), cannot remove it themselves: the tab's only button for it,
+"Authorize and Connect your ORCID iD", opens ORCID's sign-in. The
+contributor's ORCID iD field differs: it offers "Delete" for an
+unauthenticated iD and its note asks for that iD to be removed (Fields &
+validation).
+Question: should the owner of an unauthenticated iD be able to remove it
+from their profile?
+Lean: yes. The iD is unverified data on their own account, and the
+contributor field already allows the same removal.
+Basis: probe, 2026-10-01. <sup>[f-a13](#fn-a13)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -859,7 +882,17 @@ expiry) and reloads the profile tab. The About link:
 orcid/verified and calls `OrcidManager::removeOrcidAccessToken($user)` which
 dispatches `PKP\jobs\orcid\RevokeOrcidToken` (JOB-018 — POST to ORCID's
 `oauth/revoke`) and clears token fields. Live-probed 2026-08-07: confirming
-the modal removes the iD at once — no separate form save.
+the modal removes the iD at once — no separate form save. The modal is the
+shared `linkAction/buttonConfirmationLinkAction.tpl`: title
+`form.confirmSubmit.title` ("Confirm"), buttons `common.ok` / `common.cancel`;
+`identityForm.tpl`, `orcidProfile.tpl` and the three locale strings are
+identical in the three apps' lib/pkp, with no app override. Live-probed
+2026-10-01 (OJS, two runs, a journal with ORCID on, two throwaway Readers
+signed in on the Identity tab; kept walk
+`shared/playwright/checks/U14/Ks01/ks01.js`, its `orcid` phase): the
+verified Reader's "Delete" opened the window "Confirm" with the question,
+"OK" and "Cancel"; the unauthenticated Reader's tab carried no "Delete"
+button at all (finding A13).
 
 <a id="fn-e"></a>
 **e** — Contributor field: `PKP\components\forms\FieldOrcid` added to
@@ -1142,11 +1175,23 @@ Issue report: [pkp-e2e#736](https://github.com/jardakotesovec/pkp-e2e/issues/736
 **f-a2** — `orcidVerify.tpl` denied branch: `{translate
 key="orcid.authDenied"}`; no `msgid "orcid.authDenied"` exists in any
 `locale/` tree (the defined key is `orcid.verify.denied`, which nothing
-renders). Missing keys render as `##orcid.authDenied##`. Reaching the
-branch requires ORCID's consent screen returning `error=access_denied` with
-a valid email token — orcid.org is unreachable through the dead-port
-`[proxy]` (and no real account backs the dummy credentials), so the basis
-stays code.
+renders). Missing keys render as `##orcid.authDenied##`. The branch is
+reached without ORCID's consent screen: "Deny" there only returns the
+browser to the authorization link's `redirect_uri`
+(`{journal}/orcid/verify?token=…&state=…&author_id=…`) with
+`error=access_denied&error_description=…` appended, and that address,
+read from the verification email and opened directly, lands on the branch
+(`OrcidHandler::verify()` → `handleUserDeniedAccess()`; `error_description`
+is required). Live-probed 2026-10-03 on `main` and `stable-3_5_0`, OJS, OMP and
+OPS, signed out, on the default datasets with a Member Sandbox placeholder
+client (kept walk
+`shared/playwright/checks/issues/orcid-denied-page-raw-placeholder/walk.js`):
+under "ORCID Authorization" the failure box read `##orcid.authDenied##`,
+then the `orcid.failure.contact` line; the page answered 200 with no
+console error; a denial carrying a token no contributor holds showed the
+generic "could not be verified" failure instead. ORCID's consent screen
+itself was not driven (orcid.org is unreachable through the dead-port
+`[proxy]`, and the placeholder client would be refused).
 Issue report: [pkp-e2e#737](https://github.com/jardakotesovec/pkp-e2e/issues/737) ([docs/issues/U04-A2-orcid-denied-page-raw-placeholder.md](../issues/U04-A2-orcid-denied-page-raw-placeholder.md)).
 
 <a id="fn-a3"></a>
@@ -1256,6 +1301,21 @@ locale cause). Seen identically on OJS, OMP and OPS in two runs,
 2026-09-28, with no failure behind either request; the English field on
 the same journals is the control.
 Issue report: [pkp-e2e#740](https://github.com/jardakotesovec/pkp-e2e/issues/740) ([docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md](../issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md)).
+
+<a id="fn-a13"></a>
+**f-a13** — Note d: `identityForm.tpl` renders `#deleteOrcidButton` and its
+confirmation only under `{if $orcid && $orcidAuthenticated}`; the
+unauthenticated branch of `orcidProfile.tpl` renders the hollow-icon link
+and the `orcid.authorise` button and nothing else. Contrast note e:
+`FieldOrcid.vue` offers its delete button for an unverified iD beside
+`orcid.field.unverified.shouldRequest`. Live-probed 2026-10-01 (OJS, two runs;
+the `orcid` phase of `shared/playwright/checks/U14/Ks01/ks01.js`): a
+throwaway Reader seeded with an unverified iD, signed in on a journal with
+ORCID on, found no "Delete" on the Identity tab, while a second Reader's
+verified iD offered it. OMP and OPS were not walked by that check; both
+templates are identical in their lib/pkp, with no app override, and each
+app's scenario 3 test already expects no `#deleteOrcidButton` on the
+second user's unauthenticated tab.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:

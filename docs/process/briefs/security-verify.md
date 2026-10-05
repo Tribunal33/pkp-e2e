@@ -49,7 +49,7 @@ Task:
 3. Update the entry as "The private file" says (confirmed: `status: verified {{date}}` with its `verified-by:` line; not confirmed or not verifiable here: delete it, or revert an older entry to what it was before this feature's probe extended it). Leave the file tidy as it says.
 4. Keep every detail inside the private file. Scripts and snapshots go under `.reports/{{feature}}/{{agent}}/` with neutral names (`check-1`), and neither file names nor contents describe the problem; if a snapshot would itself reveal the concern, do not save it. Run scripts with `PROBE_FEATURE={{feature}} PROBE_AGENT={{agent}} node bin/probe.js <app> <script>`, and open the browser with `launch(app, {record: false})` so the kit's own run record carries no address. This session is {{vm_or_local}}.
 
-Read `.reports/{{feature}}/screen-notes.md` first, but add nothing to it (no `note()`): other agents read that file, and what you learn here belongs in the private file. Your only writes are the private file and `.reports/{{feature}}/{{agent}}/`. Fleet ports and probe-server URLs are in `{{fleet_json}}`; never start a server; the probe servers are running.
+Read `.reports/{{feature}}/screen-notes.md` first when it exists (an issues-session feature has none: its reporter's notes are its `.reports/issues/<agent>/steps.md` and run records; U06, U14, U27 probes), but add nothing to it (no `note()`): other agents read that file, and what you learn here belongs in the private file. Your only writes are the private file and `.reports/{{feature}}/{{agent}}/`. Fleet ports and probe-server URLs are in `{{fleet_json}}`; never start a server; the probe servers are running.
 
 Size: about 15 browser calls; finish the item even if it takes more.
 

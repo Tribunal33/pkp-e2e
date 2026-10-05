@@ -20,6 +20,29 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-10-05 (housekeeping, six incidentals rows seen on `stable-3_5_0`
+  only by the issues sessions' 3.5 walks, 2026-10-02/03; `main` fine or
+  fixed): (1) OJS: after an automatic reminder the assignment's activity
+  log reads "An automatic reminder email was sent to to Julie Janssen…"
+  (U27 A15 reporter); (2) OJS: the older review window's "Confirm" on an
+  unanswered request leaves the reviewer on "1. Request" with nothing to
+  do (pkp/pkp-lib#10544, open; U27 OMP4 report's Cause); (3) OPS: a
+  galley's "Change File", then "Cancel" after the upload, answers
+  `status:false`, the window stays open and the galley keeps the new file,
+  where `main` restores it (U36 A5 reporter; maybe the 3.5 state of
+  docs/reports/2026-09-27-pkp-lib-13288.md); (4) OPS: "Create New Galley"'s
+  header "Close" after a refused "Save" fails a page script "Cannot read
+  properties of undefined (reading 'dataChanged')", fixed on `main` by
+  ui-library 1afd40a9 (U46 OPS2 walk); (5) OJS, OMP, OPS: a Site
+  Administrator whose manager role was ended (assistant left) opens a
+  workflow with no Publication pages and a page script `TypeError: object
+  is not iterable` (U40 A19 reporter, `change-language-offered-then-refused/walk.js`
+  with `PKP_E2E_LINE=stable-3_5_0`); (6) OMP: a monograph's Publication ›
+  "Identifiers" with individual URN suffixes on shows no "URN" box and
+  `TypeError: Cannot read properties of null (reading 'length')`
+  (`FieldTextUrn.js` lacks the null check OJS took in 1f04ae4160; U44 A6
+  report, Evidence). Each is a question for the stable-line read: a 3.5
+  regression report, a backport note, or dismissed.
 - 2026-10-03 (issues session, U41 A9): on `stable-3_5_0` publishing an
   article, book or preprint logged a PHP warning, `Undefined property:
   stdClass::$type` at lib/pkp `PKPBaseController.php` line 489, while the

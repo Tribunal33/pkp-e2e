@@ -1222,6 +1222,17 @@ trips.
   stability wait). **Watch condition**: a second sighting; then read the
   retry's trace for the window's transition.
 
+- **The OPS wizard's galley "Add File" never offered** (U40 S11, OPS,
+  CI once): the push run 36984010083 (2026-10-02,
+  `main` at `c3edce8`, shard 2) timed out at 180 s in `addGalleyFile`
+  (`SubmissionWizardPages.js:264`) still waiting for the author's
+  "Add File" link on the Upload Files step; green on retry in 12.4 s. No
+  server death in the job (`[server-deaths] total 0`). The error context
+  is the manager's Distribution page (the test's first page), so it does
+  not show the author's wizard. Read in the housekeeping session
+  2026-10-05 (`.reports/hk05/u40s11/`). **Watch condition**: a second
+  sighting; then read the retry's trace for the Files step's galley grid.
+
 ## Companion branches — pkp-e2e branches waiting on app PRs
 
 One row per branch prepared for a developer's open OJS, OMP or OPS pull

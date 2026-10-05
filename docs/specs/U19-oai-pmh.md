@@ -303,6 +303,13 @@ message. <sup>m</sup>
      a `set`, it lists the first journal's instead. The site-wide
      address lists every journal's, but not a journal's that `set`
      names. <sup>n</sup> <sup>q8</sup>
+   - 4c. {OMP OPS} "Return to Workflow" on a published book or a posted
+     preprint leaves its version published ([→ Done](U24-workflow-screen-and-stage-access.md#done)),
+     so its records should stay listed (Rule 3). They leave the lists
+     instead. A preprint server turns the preprint's record into a
+     deleted record at that moment ⚠ [OPS5](#ops5). A press drops the
+     records of the book's formats, with no deleted record in their
+     place ⚠ [OMP8](#omp8). <sup>n</sup>
 5. **Datestamps.** On a journal a record's datestamp is its last change:
    the latest change to the article, its current version or its issue.
    On a press and a preprint server it stays at the time the item was
@@ -529,8 +536,10 @@ message. <sup>m</sup>
   or deleting an issue (*[Issues](U50-issues.md)*); a journal no longer
   enabled publicly, and a journal removed under Administration › Hosted
   Journals (*Hosted journals*), though a removed preprint server leaves
-  none ⚠ [OPS4](#ops4); and {OMP} a format made unavailable (Rule 4a).
-  <sup>n</sup>
+  none ⚠ [OPS4](#ops4); {OMP} a format made unavailable (Rule 4a); and,
+  wrongly, {OPS} "Return to Workflow" on a posted preprint (*[Workflow
+  screen & stage access](U24-workflow-screen-and-stage-access.md#done)*;
+  Rule 4c, [OPS5](#ops5)). <sup>n</sup>
 
 ## Settings that modify behavior
 
@@ -624,6 +633,10 @@ message. <sup>m</sup>
 - [Issues](U50-issues.md) owns issues, their publishing, unpublishing
   and deleting, which put an article's issue in its records and turn
   them into deleted records (Rules 3, 4).
+- [Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#done)
+  owns "Return to Workflow" and "Return to Done" (Rule 4c). The readers'
+  side of Rule 4c's fault, the item's own page, is in
+  [Search](U15-search.md#omp3).
 - [Sections](U17-sections.md) owns the sections, their abbreviation and
   type (Rule 7; Settings bullet 11) and carries the entry for a preprint
   without an abstract ([OPS2](#ops2)).
@@ -1234,6 +1247,11 @@ Left out of the scenarios above, by reason:
     in the `driver` set as a deleted record, its header naming "driver"
     {OJS} (Rule 23a; on a scratch journal once A1 is fixed, since only
     the installation's first journal lists its own deleted records today)
+  - the guard for OMP8 and OPS5 (issue report
+    `docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md`):
+    a published book and a posted preprint returned with "Return to
+    Workflow" still listed with their metadata, and no deleted record
+    for either {OMP OPS} (Rule 4c; once fixed)
 - **Rarely met**:
   - a list longer than one answer holds (more than 100 records), paged
     with "Resume" to its last part (Rule 13): only a harvester pages
@@ -1323,6 +1341,9 @@ Left out of the scenarios above, by reason:
     Core table)
   - OMP6 (a series with no prefix; Rule 7b)
   - OMP7 (a book's new version changing its format identifiers; Rule 4a)
+  - OMP8, OPS5 (a book returned to the workflow leaving the lists with no
+    deleted record; a preprint returned to the workflow turned into a
+    deleted record; Rule 4c)
   - OPS3 (a preprint server's "Identify items posted in this section as
     a(n)"; Settings bullet 11)
   - OPS4 (a removed preprint server leaving no deleted record; Side
@@ -1368,9 +1389,11 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answer a server error once one book is published without an abstract | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP6](#omp6) | A press's OAI-PMH set list names every series that has no prefix with a leading space | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OMP8](#omp8) | A published book returned to the workflow leaves the press's OAI records with no deleted record | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint server's OAI-PMH lists answer a server error whenever the harvester gives an "until" date | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS2](#ops2) | One preprint without an abstract makes the server's record lists fail | 🐞 | user-visible · crash: server | — |
 | [OPS4](#ops4) | Removing a preprint server leaves no deleted records for its posted preprints at the site-wide OAI address | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [OPS5](#ops5) | A posted preprint returned to the workflow is reported to harvesters as deleted | 🐞 | user-visible | — |
 | [A6](#a6) | "Supporting Agencies", "Rights" and "Source" reach no record | ❓ | minor | — |
 | [A9](#a9) | A journal that does not publish online still hands out records, the MARC ones with the article's address {OJS} | ❓ | minor | — |
 | [A14](#a14) | "Language" writes a galley's language with an underscore {OJS OPS} | ❓ | minor | — |
@@ -1831,6 +1854,18 @@ deleted records for the old ones? Lean: 🐞 either way; as built, a
 harvester holds every versioned book twice.
 Basis: probe, 2026-09-26. <sup>f-omp7</sup>
 
+<a id="omp8"></a>
+**OMP8 — A published book returned to the workflow leaves the press's OAI records with no deleted record** · 🐞 · minor.
+A deciding editor presses "Return to Workflow" on a published book to
+keep working on it, and its version stays published. A harvester expects
+the book's records to stay in the press's lists. From the return on,
+ListRecords no longer lists them, and no deleted record takes their
+place. A harvester that already holds the book is told nothing; one that
+starts afresh never gets it. No release has "Return to Workflow" yet.
+The readers' side, the book's page answering "404 Not Found", is
+[Search](U15-search.md#omp3)'s entry (its OMP3).
+Since: 2026-06-09 · Basis: probe, 2026-10-03. <sup>f-omp8</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1875,6 +1910,18 @@ address is the only place its deleted records could be read. It was
 checked on an installation that keeps another preprint server; removing
 an installation's only server was not checked.
 Basis: probe, 2026-10-01. <sup>f-ops4</sup>
+
+<a id="ops5"></a>
+**OPS5 — A posted preprint returned to the workflow is reported to harvesters as deleted** · 🐞 · user-visible.
+A deciding editor presses "Return to Workflow" on a posted preprint to
+keep working on it, and its version stays posted. A harvester expects
+the preprint's record to stay in the server's lists. At the return, the
+server turns it into a deleted record instead (Rule 4), so a harvester
+that follows the lists removes a preprint that is still posted. No
+release has "Return to Workflow" yet. The readers' side, the preprint's
+page answering "404 Not Found", is [Search](U15-search.md#ops4)'s entry
+(its OPS4).
+Since: 2026-06-09 · Basis: probe, 2026-10-03. <sup>f-ops5</sup>
 
 ### Retired
 
@@ -1928,7 +1975,7 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **m** — `OAI::error($code, $message)`: for `badVerb` and `badArgument` the `<request>` element carries no attributes; for the others it repeats the request's parameters. "Multiple values are not allowed for the {argument} parameter" is never reached: `OAIUtils::parseStr()` makes a repeated key an array, and `OAI::getParam()`, typed `?string`, throws a TypeError before `checkParams()` can refuse it (A16). Messages as in the table, from `OAI.php` and `OAIMetadataFormat_JATS.php`. `listSets()` answers `noSetHierarchy` "This repository does not support sets" when no set exists, which a site with a journal never meets. `listMetadataFormats()` answers `noMetadataFormats` "No metadata formats are available" when no format plugin is enabled, which cannot happen (the DC format cannot be disabled). Live-probed 2026-09-26 (Errors; Rules 2, 14), all three apps, 35 refusals each: notes q15, q16, f-a16.
 
 <a id="fn-n"></a>
-**n** — Deleted records (tombstones, `data_object_tombstones` with their set objects). OJS `ArticleTombstoneManager`: `reconcileTombstonesOnUnpublish()` (from `Repo::publication()->unpublish()`, `delete()` of a published publication, and `IssueGridHandler::deleteIssue()`) inserts the bare identifier's tombstone when no published version is left; `reconcileTombstonesOnPublish()` deletes it; `IssueGridHandler::unpublishIssue()` unpublishes and re-publishes each article into the now-unpublished issue (status scheduled), leaving the tombstone; `insertTombstonesByContext()` / `deleteTombstonesByContextId()` on `enabled` changes and before a context is deleted. OPS `Repository::updateStatus()` inserts a `PreprintTombstoneManager` tombstone when the submission leaves `STATUS_PUBLISHED` and deletes it when it returns. OMP `PublicationFormatTombstoneManager`: on `unpublish()` for each format of the version, on a format's "Format Availability" or approval change (`PublicationFormatGridHandler::setAvailable()` / `setApproved()`), deleted on publish. The tombstone query (note e) joins the context's set objects with `->when(isset($journalId), function ($query, $journalId) { … use ($journalId) … (int) $journalId })` in OJS and `->when(isset($pressId), function ($query, $pressId) …)` in OMP: Laravel passes the condition (`true`) as the closure's second argument, so the join asks for context 1 (A1); OPS writes `function ($query) use ($serverId)`. Without a context (site-wide) no join applies; with a `set`, the site-wide query takes the journal's filter and loses its deleted records the same way (A1). The site-wide union lists the tombstones after every context's live rows (Rule 6); at an OMP press's own address the first press's tombstones, which carry its `press_id`, sort before the press's own rows (2026-09-29, note q8). A context removed under Hosted Journals leaves its tombstones on OJS and OMP and none on OPS (OPS4). On OMP and OPS, unpublishing, publishing again and saving a published version leave `submissions.last_modified` where it was (read in the database, A18). Live-probed 2026-09-26 (Rules 4, 4a, 4b, 16b; Side effects): notes q8, q17, f-ops4.
+**n** — Deleted records (tombstones, `data_object_tombstones` with their set objects). OJS `ArticleTombstoneManager`: `reconcileTombstonesOnUnpublish()` (from `Repo::publication()->unpublish()`, `delete()` of a published publication, and `IssueGridHandler::deleteIssue()`) inserts the bare identifier's tombstone when no published version is left; `reconcileTombstonesOnPublish()` deletes it; `IssueGridHandler::unpublishIssue()` unpublishes and re-publishes each article into the now-unpublished issue (status scheduled), leaving the tombstone; `insertTombstonesByContext()` / `deleteTombstonesByContextId()` on `enabled` changes and before a context is deleted. OPS `Repository::updateStatus()` inserts a `PreprintTombstoneManager` tombstone when the submission leaves `STATUS_PUBLISHED` and deletes it when it returns. OMP `PublicationFormatTombstoneManager`: on `unpublish()` for each format of the version, on a format's "Format Availability" or approval change (`PublicationFormatGridHandler::setAvailable()` / `setApproved()`), deleted on publish. The tombstone query (note e) joins the context's set objects with `->when(isset($journalId), function ($query, $journalId) { … use ($journalId) … (int) $journalId })` in OJS and `->when(isset($pressId), function ($query, $pressId) …)` in OMP: Laravel passes the condition (`true`) as the closure's second argument, so the join asks for context 1 (A1); OPS writes `function ($query) use ($serverId)`. Without a context (site-wide) no join applies; with a `set`, the site-wide query takes the journal's filter and loses its deleted records the same way (A1). The site-wide union lists the tombstones after every context's live rows (Rule 6); at an OMP press's own address the first press's tombstones, which carry its `press_id`, sort before the press's own rows (2026-09-29, note q8). A context removed under Hosted Journals leaves its tombstones on OJS and OMP and none on OPS (OPS4). On OMP and OPS, unpublishing, publishing again and saving a published version leave `submissions.last_modified` where it was (read in the database, A18). Live-probed 2026-09-26 (Rules 4, 4a, 4b, 16b; Side effects): notes q8, q17, f-ops4. Live-probed 2026-10-03 (Rule 4c; Side effects): "Return to Workflow" sets the submission's status to queued while its version stays published, which OPS `Repository::updateStatus()` answers with a tombstone and OMP's record query, reading `ms.status`, answers by leaving the formats out; notes f-omp8, f-ops5.
 
 <a id="fn-o"></a>
 **o** — OJS `classes/components/forms/context/AccessForm.php` and OPS's: `FieldOptions('enableOai', type radio, options true "Enable" (`common.enable`) / false "Disable" (`common.disable`))`, label `manager.setup.enableOai` "Enable OAI", description `manager.setup.enableOai.description` (the Open Archives Initiative link). `schemas/context.json` `enableOai` boolean, `default: 1`, so a new context gets the row; the tab posts `enableOai=true` untouched (scenarios.md, the `publishingMode` key). OMP has no `enableOai` in its schema or forms and no "Access" tab (U51 note b). Live-probed 2026-09-26 (the "Enable OAI" field; Actors row 3; Rules 17, 17a; Settings bullet 1), OJS and OPS, two runs: notes q6, q18.
@@ -2133,6 +2180,10 @@ Issue report: [pkp-e2e#334](https://github.com/jardakotesovec/pkp-e2e/issues/334
 <a id="fn-f-omp7"></a>
 **f-omp7** — Live-probed 2026-09-26: a book whose formats were `publicationFormat/131` and `/132` listed `/136` and `/137` once "Version of Record 2.0" was published on screen, and GetRecord of `/131` answered "No matching identifier in this repository", with no deleted record. Code: note e (each version has formats of its own, and the record is a format of the current version).
 
+<a id="fn-f-omp8"></a>
+**f-omp8** — Live-probed 2026-10-03 on OMP `main` (`3b0ecf794c`, lib/pkp `3dc90c81a6`), PKP's default test dataset (pkp/datasets `e8dafbc`), PostgreSQL: book 14 ("From Bricks to Brains: …"), published, returned with "Return to Workflow" › "Confirm" as `dbarnes`; the press's signed-out ListRecords in `oai_dc` then no longer carried the book, and held no deleted record for it. With omp `OAIDAO` reading the current publication's status in place of the submission's (the fix the issue report proposes, tried the same day), the book's record was listed again. Code: `ReturnToWorkflow::getNewStatus()` returns `PKPSubmission::STATUS_QUEUED` and the version keeps `PKPPublication::STATUS_PUBLISHED`; omp `OAIDAO` lists formats of submissions with `ms.status = STATUS_PUBLISHED`, and OMP writes format tombstones only on unpublish and on a format's availability or approval change (note n). OJS's `OAIDAO` selects on `p.status` (the publication), so a returned article stays listed (read in the code, not walked). Since: d52aa4c84b (pkp/pkp-lib#12881 for pkp/pkp-lib#12799, 2026-06-09), which created the decision. Kept walk: `shared/playwright/checks/issues/returned-item-gone-search-still-lists/walk.js` (step 4 reads the OAI list).
+Issue report (the Search spec's OMP3 and OPS4, this entry under its "Reach"): [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
+
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-26: note q11, the preprint server part. Code: note l; the column name `a.last-modified` came with ops `5df1969511` "pkp/pkp-lib#6963 Port OAI rewrite to Laravel to OPS" (2021-06-11). Postgres answers "column … does not exist".
 Issue report: [pkp-e2e#252](https://github.com/jardakotesovec/pkp-e2e/issues/252) ([docs/issues/U19-OPS1-preprint-server-oai-until-fails.md](../issues/U19-OPS1-preprint-server-oai-until-fails.md)).
@@ -2146,6 +2197,10 @@ Issue report: [pkp-e2e#252](https://github.com/jardakotesovec/pkp-e2e/issues/252
 <a id="fn-f-ops4"></a>
 **f-ops4** — Live-probed 2026-09-26, all three apps, two runs: after "Remove" under Administration › Hosted Journals ("Are you sure you want to permanently delete … and all of its contents?", "OK"), site-wide GetRecord of a posted preprint answered "No matching identifier in this repository" and no tombstone row was left; a removed journal's and press's items read as deleted, with a tombstone row each. Code: note n.
 Issue report: [pkp-e2e#302](https://github.com/jardakotesovec/pkp-e2e/issues/302) ([docs/issues/U19-OPS4-removed-preprint-server-no-deleted-records.md](../issues/U19-OPS4-removed-preprint-server-no-deleted-records.md)).
+
+<a id="fn-f-ops5"></a>
+**f-ops5** — Live-probed 2026-10-03 on OPS `main` (`c8af945bb7`, lib/pkp `3dc90c81a6`), PKP's default test dataset (pkp/datasets `e8dafbc`), PostgreSQL: preprint 12 ("Sodium butyrate improves growth performance …"), posted, returned with "Return to Workflow" › "Confirm" as `dbarnes`. With the server's list query changed to read the current publication's status (a trial of the issue report's fix), the signed-out ListRecords in `oai_dc` answered 18 records after the return where it had answered 17 before: the preprint's live record and the deleted record written at the return. The unchanged query lists only submissions with `a.status = STATUS_PUBLISHED`, so on an unpatched server the live record leaves and the deleted record alone remains (read in the code; the Search spec's OPS4 records the same day's probe). Code: `ReturnToWorkflow::getNewStatus()` returns `PKPSubmission::STATUS_QUEUED`, which ops `Repository::updateStatus()` takes as the submission leaving `STATUS_PUBLISHED` and answers with a `PreprintTombstoneManager` tombstone (note n), while the version keeps `PKPPublication::STATUS_PUBLISHED`. A decline after the return, and "Return to Done", were not read in the OAI lists. Since: d52aa4c84b (pkp/pkp-lib#12881 for pkp/pkp-lib#12799, 2026-06-09), which created the decision. Kept walk: `shared/playwright/checks/issues/returned-item-gone-search-still-lists/walk.js` (step 4 reads the OAI list).
+Issue report (the Search spec's OMP3 and OPS4; this half under its "Reach" and "What goes with it", and left out of its OPS diff): [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md](../issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.md), filed as [pkp-e2e#709](https://github.com/jardakotesovec/pkp-e2e/issues/709).
 
 ## Reference — entry points & surfaces
 

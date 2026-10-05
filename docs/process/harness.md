@@ -298,6 +298,12 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   files and public dirs, the cache path, SMTP to this slot's Mailpit, the
   dead-port `[proxy]`); everything else stays the team's (`job_runner`
   and `task_runner` On, `enable_minified` Off, the dataset's `app_key`).
+  Every reset writes the config afresh, so a walk that needs another
+  value (`strict = On`, a short `session_lifetime`, an `api_key_secret`,
+  which the dataset leaves empty so its emailed unsubscribe links open
+  "404 Not Found") sets it in `config.test.ds<n>.inc.php` after each
+  reset, a trial's resets included, and the Steps name the setting as the
+  team sets it in `config.inc.php` (U01, U05, U27, U39 issue walks).
   `database.sql` is a `pg_dump --clean` dump owned by `<app>-ci`: the
   load leaves out the leading drops and the `OWNER TO` lines and runs the
   rest in one transaction with `ON_ERROR_STOP`, so it lands whole or
@@ -325,7 +331,15 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   fleet). `signIn(page, '<username>')` signs in a dataset user as it does
   a roster one: the password rule is the same (the username twice,
   `admin`/`admin`); proven as `dbarnes` and `admin` on the three apps of
-  all four lines. `app.variant()` throws (no validation server); the
+  all four lines. Without `{contextPath: 'publicknowledge'}` it goes
+  through the site login, which lands an editor or manager on the
+  journal's reader home (no side menu, no "Tasks"), so a walk that starts
+  in the back office passes it (U05, U23, U58, U62 issue walks; live
+  2026-10-05). The dataset's contexts are bilingual (en, fr_CA): a
+  multilingual field draws a box per language, so a page-object locator
+  written on the English-only campaign seed (`input[name^="name"]`,
+  `iframe[id^="biography"]`) matches two there and fails strict mode;
+  scope it to the locale (U03, U27, U29, U73 issue walks). `app.variant()` throws (no validation server); the
   runner's worker ports and the setup project are never involved, and
   `app.users` is still the campaign roster, which the dataset does not
   hold.
@@ -352,7 +366,11 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   (`<username>@mailinator.com`) are the same in the three apps and every
   fleet of the slot mails the one Mailpit, so a mailbox read filters by
   recipient and time (`app.mail.find({to, since})`, `since` taken before
-  the action that sends; `count()` takes it too).
+  the action that sends; `count()` takes it too); a walk beside another
+  reporter's, or a 3.5 walk beside a `main` one, mails the same addresses
+  within the minute, so a read that must be its own fleet's goes through
+  `app.fleetMail`, which keeps only the messages naming the fleet's host
+  (U27, U49, U55, U65, U70 issue walks).
 - **Proof** (2026-09-30): `shared/playwright/checks/harness/dataset/dataset.js`
   signs in as `dbarnes`, records the dashboard and one submission's
   workflow, then `admin` on Administration (`scratch` as its argument

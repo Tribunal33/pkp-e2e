@@ -63,7 +63,7 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
 | "Principal Contact Email address" | yes | An email address: "This is not a valid email address."; empty: "This field is required." |
 | "Country" | carries no mark, yet refused empty ⚠ [A1](#a1) | A list of 249 countries by name, none selected when the window opens and no way back to none once one is picked; a name with an accented letter sorts after its plain neighbours ("Czechia" then "Côte d'Ivoire", "Åland Islands" last). It stands under "Select the country where this journal is located, or the country of the mailing address for the journal or publisher." ("press", "server"). Empty: "This is not a valid string." and "This is not a valid country." |
 | "Journal description" ("Press description", "Server description") | no, per language | Formatted text. Readers see it as the journal's summary (Rules 9, 20) |
-| "Path" | yes | The site's base address and "/" stand in front of the box ⚠ [A3](#a3). Letters, digits, "_" and "-" only, beginning and ending with a letter or digit, otherwise "The path can only include letters, numbers and the characters _ and -. It must begin and end with a letter or number."; a path another journal has: "The path you provided is already in use by another journal." ("The selected path is already in use by another press.", "The path you provided is already in use by another server."); the path "0": "A path is required." [OPS1](#ops1) <sup>td3</sup> |
+| "Path" | yes | The site's base address and "/" stand in front of the box ⚠ [A3](#a3). Letters, digits, "_" and "-" only, beginning and ending with a letter or digit, otherwise "The path can only include letters, numbers and the characters _ and -. It must begin and end with a letter or number."; a path another journal has: "The path you provided is already in use by another journal." ("The selected path is already in use by another press.", "The path you provided is already in use by another server."); the path "0": "A path is required." [OPS1](#ops1); the path "00" draws the same refusal, as if no path had been typed ⚠ [A11](#a11) <sup>td3</sup> |
 | "Languages" | yes; "Create Journal" only | One box per language the site offers, none ticked when the window opens. Empty: "This field is required." What the ticked ones become for the journal: [Languages & locales](U57-languages-and-locales.md#journal-languages), Rule 8 |
 | "Primary locale" | yes; "Create Journal" only | One choice per language the site offers, none picked when the window opens. Empty: "This field is required." A choice not ticked under "Languages": "The primary locale must be one of the journal's supported locales." ("press's", "server's") |
 | "Enable" | no | One box, "Enable this journal to appear publicly on the site" ("Enable this press to appear publicly on the site", "Enable this preprint server to appear publicly on the site"). Unticked when "Create Journal" opens (Rule 11) |
@@ -182,13 +182,14 @@ wizard, the journal's primary language. <sup>c</sup> <sup>d</sup>
    Where readers meet those values is
    [Journal identity & about pages](U07-journal-identity-and-about-pages.md)'s
    (Rules 7–10); the site's list of Rule 20 is this spec's.
-10. **Changing "Path".** Once a new path is saved, every address of the
-    journal carries it at once, and the old address answers "404 Not
-    Found". {OJS OMP} The default "For Readers" and "For Authors" texts
-    keep linking to the old address ⚠ [A5](#a5). On the Settings Wizard,
-    the page's further saves, and the actions of its "Languages",
-    "Installed Plugins" and "Users" lists, fail until it is reloaded
-    ⚠ [A4](#a4). <sup>h</sup> <sup>td7</sup>
+10. **Changing "Path".** Once a new path is saved, every journal address
+    carries it, and the old address answers "404 Not Found".
+    {OJS OMP} The default "For Readers" and "For Authors" texts keep
+    linking to the old address ⚠ [A5](#a5). On the Settings Wizard,
+    until a reload, a further save shows an error notice and keeps
+    nothing; a box pressed in the "Languages" tab's "Website Languages"
+    list or "Installed Plugins" list does not change; "Users" › "Add
+    User" opens an "Error" window ⚠ [A4](#a4). <sup>h</sup> <sup>td7</sup>
 11. <a id="enabled-publicly"></a>**Enabled publicly.** While "Enable
     this journal to appear publicly on the site" is ticked and saved,
     the site's home page lists the journal (Rule 20). Unticked and
@@ -835,6 +836,7 @@ Left out of the scenarios above, by reason:
   - A9 ("Register" and "Home" reloading that Login page; Rule 11)
   - A10 ({OMP OPS} "Remove" failing on a press or preprint server that
     holds an institution; Rule 14)
+  - A11 (the path "00" refused with "A path is required."; Fields)
   - OPS1 (the path "0" refused with a raw code on a preprint server;
     Fields)
 - **No seed**:
@@ -904,6 +906,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Hosted Journals: closing the "Edit" or "Create Journal" window right after it opens makes the page's script fail | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | Signing in at a journal not enabled publicly leads to the Dashboard or home page, not the page asked for | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | A press or preprint server that holds an institution cannot be removed and is left half deleted {OMP OPS} | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
+| [A11](#a11) | Journal form: the path "00" is refused with "A path is required." although a path was typed | 🐞 | minor | — |
 | [OPS1](#ops1) | Hosted Servers: a path of zeros ("0", "00") on a preprint server is refused with a raw code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A5](#a5) | A changed path leaves the default "For Readers" and "For Authors" texts linking to the old address {OJS OMP} | ❓ | minor | — |
 | [A9](#a9) | On the Login page of a journal not enabled publicly, "Register" and "Home" load the Login page again | ❓ | minor | — |
@@ -1060,6 +1063,17 @@ and its Settings pages closed even to the Site Administrator (Rule 14). The Inst
 [A8](U66-institutions.md#a8) records the same failure from the
 institutions' side.
 Basis: probe, 2026-10-02. <sup>f-a10</sup>
+
+<a id="a11"></a>
+**A11 — Journal form: the path "00" is refused with "A path is required." although a path was typed** · 🐞 · minor.
+The Site Administrator types "00" in "Path" on "Create Journal", which
+the field's rule (letters, digits, "_" and "-") allows, and presses
+"Save". The save is refused with "A path is required." under "Path", as
+if the box were empty, so the message gives the wrong reason. A
+preprint server refuses "00" the same way, its message showing as the
+raw code of [OPS1](#ops1). A press runs the same check; that was read
+from the code, not seen on screen.
+Basis: probe, 2026-10-02. <sup>f-a11</sup>
 
 ### OPS
 
@@ -1320,8 +1334,9 @@ arrow (screen-reader name "Settings") showed "Edit", "Remove" and
 "Settings wizard". "Order", "Cancel ordering", a row's arrow and "Edit"
 raised no page script error on any app. The "clientWidth" error sighted
 on 2026-09-26 did not recur on that probe's "Close"s; the test runs of
-2026-09-28 raised it on every "Close" pressed within about 0.7 s of the
-window's form showing (A7, note f-a7).
+2026-09-28 raised it on "Close"s pressed right after the window's form
+showed, and a timed walk of 2026-10-02 put the limit at about 0.4 s
+(A7, note f-a7).
 
 <a id="fn-e"></a>
 **e** — `PKPContextService::add()`: fills `primaryLocale` and
@@ -1442,7 +1457,8 @@ pages answer "404 Not Found" at any path. On the Settings Wizard, after
 "Appearance"'s, "Search Indexing"'s and "Restrict Bulk Emails"' saves
 went to `{old path}/api/v1/contexts/{id}` (`…/theme`), answered 404,
 showed "Saving" for about 0.1 s and the notice, and stored nothing; a
-"Languages" box (`manage-language-grid/save-language-setting`) and an
+box of the "Languages" tab's "Website Languages" list
+(`manage-language-grid/save-language-setting`) and an
 "Installed Plugins" "Enabled" box (`settings-plugin-grid/enable`)
 answered 404 with no message, and "Add User" (`user-grid/add-user`) the
 "Error" dialog. After a reload every one went to the new path and was
@@ -1769,7 +1785,14 @@ Issue report: [pkp-e2e#498](https://github.com/jardakotesovec/pkp-e2e/issues/498
 users) are likewise built with the page's journal path. Live-probed
 2026-09-27, three apps, two runs: note td7. A "Saved" still on screen
 from the path save can read as the second save's; once it had gone,
-nothing followed "Saving".
+nothing followed "Saving". Walked again 2026-10-02 on `main` and 3.5,
+three apps, for the issue report
+(`shared/playwright/checks/issues/wizard-saves-fail-after-path-change/walk.js`;
+Rule 10): the "Languages" tab heads its list "Website Languages", and
+there a pressed "Forms" box stayed ticked, while the "Enabled" box of
+the "Developed By" block on "Installed Plugins" stayed unticked; both
+requests answered 404 at the old path, and "Add User" opened the
+"Error" window.
 Issue report: [pkp-e2e#499](https://github.com/jardakotesovec/pkp-e2e/issues/499) ([docs/issues/U59-A4-wizard-saves-fail-after-path-change.md](../issues/U59-A4-wizard-saves-fail-after-path-change.md)).
 
 <a id="fn-f-a5"></a>
@@ -1797,6 +1820,14 @@ Issue report: [pkp-e2e#500](https://github.com/jardakotesovec/pkp-e2e/issues/500
 prefix, here "Path" with the site's address in front (A3), measures
 `this.$refs.prefix.clientWidth` in a `setTimeout(…, 700)`; a window
 closed before the timer fires leaves it measuring a box that is gone.
+"Close" reaches `ModalHandler.prototype.modalClose`
+(`lib/pkp/js/controllers/modal/ModalHandler.js`), which waits 300 ms
+before it unmounts the form, so only a "Close" less than 700 − 300 ms,
+about 0.4 s, after the form shows raises the error. Timed 2026-10-02 on
+`main`, three apps (the `timing` mode of
+`shared/playwright/checks/issues/journal-form-quick-close-script-error/walk.js`):
+a "Close" on "Edit" 182–283 ms after the "Path" box showed raised it,
+one 381 ms or later (up to 692 ms) did not.
 The field is shared by the three apps' forms. Test runs 2026-09-28,
 traced (OJS two serial runs; OMP and OPS one serial and one solo run
 each; all green), read from the traces' page errors: "TypeError: Cannot
@@ -1844,6 +1875,21 @@ it), so the request dies after the roles are gone and before the context
 is. First seen 2026-09-28 (the Institutions spec's A8). Live-probed
 2026-09-29, three apps, two runs each: note td10.
 Issue report: [pkp-e2e#1](https://github.com/jardakotesovec/pkp-e2e/issues/1) ([docs/issues/U66-A3-A8-omp-ops-institution-delete-fails.md](../issues/U66-A3-A8-omp-ops-institution-delete-fails.md)).
+
+<a id="fn-f-a11"></a>
+**f-a11** — `PKPContextService::validate()` refuses the path with
+`admin.contexts.form.pathRequired` when `$props['urlPath'] == '0'`, a
+loose comparison: PHP holds "00", and by the code also "000" and "0e5",
+equal to "0" as numbers, and each passes the path's pattern (note d).
+The check came with pkp/pkp-lib@118d293e75 (2021-01-28), which stops
+the path "0" that breaks the router. Walked 2026-10-02 on `main`, OJS
+and OPS, for the OPS1 issue report (the `reach` mode of
+`shared/playwright/checks/issues/preprint-server-path-zero-raw-code/walk.js`):
+"Create Journal" with "00" in "Path" was refused, OJS showing "A path
+is required." and OPS "##admin.contexts.form.pathRequired##" under
+"Path"; with "Path" left empty the browser refused the save with "This
+field is required." and sent nothing. OMP was read in the code only:
+the check is lib/pkp's, and OMP defines the key with OJS's sentence.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `PKPContextService::validate()` adds

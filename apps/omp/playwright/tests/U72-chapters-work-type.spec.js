@@ -22,7 +22,9 @@
  * - A5 🐞: S3 never presses the Review panel's "Edit".
  * - A6 🐞: no test drags a chapter; S2 reads that the chapters keep their
  *   order across an author drag.
- * - A7 🐞: S2 reloads the page between one "Done" and the next ordering.
+ * - A7 🐞: S2's drag never leaves an author n-th in the chapter while
+ *   (n + 1)-th on Contributors (Rule 8b), and it reloads the page between
+ *   one "Done" and the next ordering.
  * - A8 🐞: S8 reads "Harbours"' own address, not the sentence above it.
  * - A9 ❓: no chapter is added to a published Edited Volume.
  *

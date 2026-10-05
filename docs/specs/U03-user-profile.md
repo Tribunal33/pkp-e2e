@@ -294,9 +294,14 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      a preprint server offers "Reader" and "Author" only [OPS1](#ops1).
      Every other role (Journal Manager, Section Editor, Copyeditor and so
      on) never appears here and cannot be taken or dropped on this tab. A
-     journal closed to registrations shows an empty first section on its own
-     tab and stays listed by name, with no boxes, in the other-journal lists
-     ⚠ [A4](#a4).
+     journal closed to registrations has no boxes on its own tab, and nothing
+     on screen marks where they would be. It stays listed by name, with no
+     boxes, in other journals' "Register with other journals" lists, on the
+     site-level profile's Roles tab and on the site-wide Register page
+     ([Registration & account validation A4](U02-registration-and-account-validation.md#a4))
+     ⚠ [A4](#a4). When exactly one other journal accepts registrations, the
+     closed journal's own tab has no "Register with other journals" link at
+     all [A4](#a4).
    - 8b. **Ticking and unticking.** A box is ticked when the user currently
      holds that role. Ticking a box and pressing "Save" grants the role at
      once, exactly as registering for it would, with no confirmation;
@@ -367,9 +372,11 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
       under "New password", in place of the hint. The three boxes are
       emptied and nothing changes.
     - 10b. Saving a valid form changes the password at once and shows "Your
-      changes have been saved." at the top right; the tab's content is left
-      as it was, typed passwords included, the hint gone, and an earlier
-      error notice still on screen ⚠ [A11](#a11). The session that made the
+      changes have been saved." at the top right; an earlier attempt's
+      "Errors occurred processing this form" notice goes. The three boxes
+      still hold the passwords just typed, and after a refused attempt the
+      line under "New password" stays empty instead of showing the hint
+      again ⚠ [A11](#a11). The session that made the
       change stays signed in; every other session of the account is ended:
       in that other browser, the next press on any tab leaves the tab's
       content area empty, with no message, and the next full page load
@@ -476,9 +483,11 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
   Manager will register all user accounts. Editors or Section Editors may
   register user accounts for reviewers."; on a preprint server "The Server
   Manager will register all user accounts.") instead of letting visitors
-  register offers no boxes anywhere on the Roles tab: an empty section on
-  its own tab, and its name with nothing under it in every other-journal
-  list [A4](#a4) (Rule 8a). The setting belongs to *Roles configuration*.
+  register offers no boxes anywhere on the Roles tab: none on its own tab,
+  and only its name, with nothing to tick, in other journals' "Register
+  with other journals", on the site-level profile and on the site-wide
+  Register page [A4](#a4) (Rule 8a). The setting belongs to *Roles
+  configuration*.
   <sup>e</sup>
 - **"Allow user self-registration" (per role).** Only roles carrying this
   flag get a box on the Roles tab (Rule 8a). Managers set it on the Roles
@@ -851,9 +860,10 @@ tooling recipe are in the footnote. <sup>s</sup>
      in place of the hint (Rule 10a).
    - **A valid change**: type the right current password and "newpass99"
      into both new-password boxes, and save: "Your changes have been
-     saved." at the top right, while the previous attempt's error notice is
-     still above the form [A11](#a11); the password has changed all the
-     same.
+     saved." at the top right, and the previous attempt's "Errors occurred
+     processing this form" notice is gone. The three boxes still hold the
+     typed passwords and the line under "New password" is empty
+     [A11](#a11).
    - **The other browser**: in the other browser, load the page afresh (a
      full reload, not a tab press): it lands on the Login page.
    - **The mailbox**: the account's mailbox has received nothing: no email
@@ -1017,6 +1027,10 @@ Left out of the scenarios above, by reason:
     ([A2](#a2); Rule 9a): the guard the issue report
     (`docs/issues/U03-A2-refused-gif-wipes-profile-image.md`)
     proposes, once fixed
+  - after a refused attempt on the Password tab, a valid save clearing
+    the "Errors occurred processing this form" notice beside "Your
+    changes have been saved." (Rule 10b; scenario 8 reads it, no suite
+    asserts it yet)
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1025,7 +1039,7 @@ Left out of the scenarios above, by reason:
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
 - **Register carries it**:
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
-  - A11 (the stale error notice beside the saved message; Rule 10b; scenario 8 marks it)
+  - A11 (the typed passwords kept, and the hint not shown again after a refused attempt, once a password change is saved; Rule 10b; scenario 8 marks it)
   - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
   - A18 ("confirm" and "reject" landing an account with roles in more than one journal on the site-level profile; Rules 6c and 6d)
   - A19 (text typed only into "Signature", "Mailing Address" or "Bio Statement" lost unasked on the next tab or a reload; Rules 2c and 2e)
@@ -1071,7 +1085,7 @@ unless its Basis line says otherwise.
 | [A4](#a4) | Saving Roles in a journal closed to registrations ends the user's roles in another journal; the closed one stays listed | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | An email change asked for on the site-wide Profile page sends a message signed "Kind regards, Array" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | After a successful password change the previous attempt's error notice stays on screen beside the saved message | 🐞 | minor | — |
+| [A11](#a11) | After a successful password change the Password tab keeps the typed passwords, and after a refused attempt the hint under "New password" does not come back | 🐞 | minor | issues (claude), 2026-10-03 — rescoped |
 | [A12](#a12) | "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
@@ -1218,15 +1232,16 @@ no role in any journal are left on it.
 Basis: probe, 2026-10-03. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — A stale error notice survives a successful password change** · 🐞 · minor.
-After a refused attempt on the Password tab, a successful save shows "Your
-changes have been saved." at the top right while the earlier "Errors
-occurred processing this form" notice, with its sentences, stays above the
-form; the typed passwords stay in the boxes and the hint under "New
-password" is gone. The password did change. Every other tab re-renders on
-success; this one does not, so the user reads a refusal and a success at
-once.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a11](#fn-a11)</sup>
+**A11 — The Password tab is not cleared after a successful change** · 🐞 · minor.
+A successful save on the Password tab shows "Your changes have been
+saved." at the top right, and an earlier attempt's "Errors occurred
+processing this form" notice goes. The three boxes still hold the
+passwords just typed, and when an attempt was refused first, the line
+under "New password" stays empty: the hint "The password must be at
+least {N} characters." does not come back. The password did change,
+but the tab looks as if nothing had been done; the Contact and API Key
+tabs are drawn afresh after a save, this one is not.
+Basis: probe, 2026-10-03. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question** · 🐞 · low.
@@ -1274,7 +1289,7 @@ before anything is sent, with "Please enter a valid URL." under the box.
 Correcting the address and saving shows "Your changes have been saved." at
 the top right, but the refusal stays under the accepted address (typing does
 not clear it either) until the page is reloaded, so the user reads a refusal
-and a success at once, as on the Password tab ([A11](#a11)).
+and a success at once.
 Basis: probe, 2026-09-04. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
@@ -1789,8 +1804,18 @@ boxes (a collapsed fold still reports its contents visible to Playwright's
 only one journal accepts registrations was not seen (the fleets already held
 many scratch contexts). Closing a journal (Users & Roles › Site Access
 Options › "The Journal Manager will register all user accounts…"): its own
-tab opens with an empty section, other journals' folds and the site-level
-list keep its name with no boxes (A4). Tick "Author" / Save: Users & Roles
+tab holds an empty `.section` that is zero pixels tall, so nothing shows
+(its `user.register.registerAs` label never prints, because
+`form/formSection.tpl` with `translate` off assigns `$FBV_Label` instead
+of `$FBV_label`), and other journals' folds, the site-level list and the
+site-wide Register page keep its name with no boxes (A4; live-probed
+2026-10-03 for the issue report on `main` and `stable-3_5_0`, all three
+apps, on PKP's default test dataset). The same walk settled the closed
+journal's own tab beside exactly one journal open to registrations, on
+`main`, all three apps: no "Register with other journals" link
+(`showOtherContexts` counts the open journals, the current one included,
+and asks for more than one); the Roles tab then held only "Reviewing
+interests" (OJS, OMP) or nothing but the "Roles" heading (OPS). Tick "Author" / Save: Users & Roles
 lists "Reader" and "Author" with today's start date; untick: "Reader" only;
 a Section editor / Series editor / Moderator plus Author saving nothing
 changed keeps both, unticking Author keeps the editorial role. Author with a
@@ -1939,8 +1964,9 @@ pair gives "The current password you entered was incorrect. The passwords do
 not match." in one notice with only the second sentence repeated under "New
 password"; every failed save re-renders the panel with the boxes empty;
 `password1234` was accepted (the outside service is unreachable on the test
-fleets). Success: the toast only, the panel untouched, the earlier notice
-still showing (A11); "Cancel" is `a.cancelButton` with `href="#"` and sent
+fleets). Success: the toast only and the panel not drawn again, the boxes
+still filled (A11; the earlier notice clears once the answer arrives, note
+f-a11); "Cancel" is `a.cancelButton` with `href="#"` and sent
 nothing (A12). The other browser's tab press fetched the tab and was
 answered with a redirect to `login?source=…` (twice nested) that the panel
 never rendered, leaving it empty; its full load reached
@@ -2378,15 +2404,25 @@ regards, Array". Live-probed 2026-09-04 (claim check), all three apps: holds.
 Issue report: [pkp-e2e#789](https://github.com/jardakotesovec/pkp-e2e/issues/789) ([docs/issues/U03-A10-site-profile-email-change-signs-off-array.md](../issues/U03-A10-site-profile-email-change-signs-off-array.md)).
 
 <a id="fn-a11"></a>
-**f-a11** — `ChangePasswordForm` success returns a content-less
-`JSONMessage(true)`; the `AjaxFormHandler` leaves the rendered form as it
-is, and the in-place `.pkp_notification` from the previous failed render
-(which came back as a full re-render) is never cleared; the sublabel's
-error state is removed without restoring the hint. Live-probed 2026-09-03,
-all three apps: after a wrong-current-plus-mismatch attempt, a valid save
-showed the toast with "Errors occurred processing this form / The current
-password you entered was incorrect. The passwords do not match." still above
-the form, the three boxes filled and the hint line empty. Live-probed 2026-09-04 (claim check), all three apps: holds.
+**f-a11** — `ProfileTabHandler::savePassword()` answers a successful save
+with a bare `JSONMessage(true)` and does not fetch the form again, where the
+Contact and API Key saves return the re-fetched form; so the
+`AjaxFormHandler` leaves the rendered form as it is (boxes filled), and the
+sublabel's error state is removed without restoring the hint. The bare
+answer dates from pkp-lib 90a749ab58 (`pkp/pkp-lib#491`, 2015), which moved
+the form into the profile tabs; the same code is on `stable-3_5_0`,
+`stable-3_4_0` and `stable-3_3_0`. Live-probed 2026-10-03 (issue-session walk) on `main` and
+`stable-3_5_0`, all three apps, PKP's default test dataset, as `dbarnes`
+(kept script `shared/playwright/checks/issues/profile-saved-tab-keeps-refusal/walk.js`):
+a wrong current password with two different new ones, then a valid save:
+the "Errors occurred processing this form" notice was still up about
+300 ms after "Save", before the answer, and gone by 3 s, beside the toast
+"Your changes have been saved."; the three boxes kept the typed passwords
+and the line under "New password" stayed empty; signing in with the new
+password worked. The 2026-09-03 and 2026-09-04 probes, which recorded the
+notice still above the form, most likely read the screen before the answer.
+An untried fix sits beside the script (`fix.diff`: `initData()` and return
+the fetched form on success, as Contact does).
 
 <a id="fn-a12"></a>
 **f-a12** — `changePassword.tpl` renders `{fbvFormButtons}` without

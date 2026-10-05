@@ -132,7 +132,7 @@ address}` is the journal's home page address, such as
 | "Search" | always; a press lists no Search page ⚠ [A4](#a4) | OJS OPS <sup>q2</sup> |
 | "Current" and "Archive" | unless "Publishing Mode" says the journal does not publish online (Rule 2b) | OJS <sup>q4</sup> |
 | each published issue's page | the same (Rule 2b); no article or galley page is ever listed (Rule 2a) [OJS2](#ojs2) | OJS <sup>q2</sup> <sup>q3</sup> |
-| "Catalog", then each published book's page, followed by its chapters' pages and its files' pages | always; a chapter while "Show this chapter on its own page…" is ticked for it; a file while its format is approved and available and the file is open access or priced; from "Create New Version" until that version is published, the new version's chapters instead (Rule 2c) [OMP4](#omp4) | OMP <sup>q2</sup> |
+| "Catalog", then each published book's page, followed by its chapters' pages and its files' pages | always; a chapter while "Show this chapter on its own page…" is ticked for it; a file while its format is approved and available and the file is open access or priced; once "Create New Version" is pressed, each chapter at an address that answers "404 Not Found" (Rule 2c) [OMP4](#omp4) | OMP <sup>q2</sup> |
 | "New Releases", each series' page, each category's page | always; no category page on a journal or a preprint server [A4](#a4) | OMP <sup>q2</sup> |
 | each posted preprint's page | always | OPS <sup>q2</sup> <sup>q6</sup> |
 
@@ -194,7 +194,7 @@ in. <sup>i</sup> <sup>q14</sup>
 | "DC.Source.URI" | the journal's home page address ⚠ [OJS1](#ojs1) | OJS OMP <sup>q14</sup> |
 | "DC.Subject" | one per subject and one per keyword, per language | OJS OMP <sup>q14</sup> |
 | "DC.Title", "DC.Title.Alternative" | the title with its subtitle in the submission's language; one alternative per other language the title has | OJS OMP <sup>q14</sup> |
-| "DC.Type" | "Text.Serial.Journal" on a journal, "Text.Book" on a press; then "Type", per language | OJS OMP <sup>q14</sup> |
+| "DC.Type" | "Text.Serial.Journal" on a journal; on a press "Text.Book" on the book's and the chapters' pages [OMP3](#omp3) and "Text.Chapter" on every file's view page (Rule 17); then "Type", per language | OJS OMP <sup>q14</sup> |
 | "DC.Type.articleType" | the title of the article's section | OJS <sup>q14</sup> |
 
 ## Rules & state
@@ -222,11 +222,12 @@ in. <sup>i</sup> <sup>q14</sup>
    - 2b. {OJS} With "Publishing Mode" set to "OJS will not be used to
      publish the journal's contents online." the sitemap lists no
      "Current", "Archive" or issue page. <sup>q4</sup>
-   - 2c. {OMP} From "Create New Version" on a published book until that
-     version is published, the book's chapter entries are the new
-     version's chapter pages, which answer "404 Not Found", in place of
-     the published ones; its file entries do not change ⚠
-     [OMP4](#omp4). <sup>q2</sup>
+   - 2c. {OMP} Once "Create New Version" is pressed on a published book,
+     the sitemap lists each of its chapter pages at an address that
+     answers "404 Not Found", in place of the address the book's page
+     links to, which still opens the chapter. Publishing the new version
+     leaves these entries as they are. The book's own entry and its file
+     entries do not change ⚠ [OMP4](#omp4). <sup>q2</sup>
 3. **Entries other settings decide.** <sup>e</sup> <sup>q5</sup>
    - "Register" leaves the list while "User Registration" is set to "The
      Journal Manager will register all user accounts. …".
@@ -347,7 +348,8 @@ in. <sup>i</sup> <sup>q14</sup>
     date of its own takes the book's). Dublin Core gives the chapter's
     DOI, Google Scholar the book's. "DC.Identifier" and
     "DC.Identifier.URI" still give the book's (its "URL Path" and its
-    page's address), and "DC.Type" reads "Text.Book". Keywords, subjects
+    page's address). "DC.Type" reads "Text.Book", as on the book's page
+    [OMP3](#omp3). Keywords, subjects
     and references are the book's. Google Scholar lists the chapter's
     files in place of the book's. <sup>h</sup> <sup>i</sup>
     <sup>q18</sup>
@@ -900,6 +902,8 @@ Left out of the scenarios above, by reason:
   - OMP4 {OMP} (a published book with a chapter page and "Create New Version", then the new version published: the sitemap lists the chapter page at the address the book's page links to, and it opens; Rule 2c)
   - A6 (an author whose account holds an English name only submits in French: "citation_author" and "DC.Creator.PersonalName" carry the full name; Fields, "citation_author")
   - OMP5 {OMP} (a book file's view page: "DC.Identifier.URI" names that view page; Rule 17)
+  - {OMP} a chapter with "Show this chapter on its own page…" ticked: its entry in the sitemap, and its page's own tags, the chapter's title, contributors and abstract beside the book's identifiers (Fields, "What the sitemap lists"; Rule 16; Settings bullet 15)
+  - {OMP} a series' page in the sitemap (Fields, "What the sitemap lists")
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -953,9 +957,6 @@ Left out of the scenarios above, by reason:
   - OPS1 {OPS} (a preprint with a "URL Path": the HTML full-text tag;
     Fields, "citation_fulltext_html_url")
 - **No seed**:
-  - {OMP} a chapter with its own page, in the sitemap and with its own
-    tags, the book's identifiers and "Text.Book" among them, and a
-    series' page (Fields, "What the sitemap lists"; Rule 16)
   - {OMP} the ISBNs of a format (Fields, "citation_isbn"; Rule 17)
   - the DOI tags (Fields, "citation_doi", "DC.Identifier.DOI")
   - "Pages", "Coverage", "Type" and the copyright and license tags
@@ -1289,7 +1290,7 @@ OMP's own code.
 **q1** — Live-probed 2026-09-26 (Purpose, the absence paragraph; the plugins table), all three apps, on a new scratch context of each, as its manager: under "Generic Plugins" OJS and OMP listed "Dublin Core Indexing Plugin" ticked (OJS "…in article views…", OMP "…in monograph views…"); every app listed "Google Scholar Indexing Plugin" ticked and "Google Analytics Plugin" unticked, with the descriptions the table quotes; OPS listed no Dublin Core row. Signed out, a posted preprint's page source held no "DC." tag and no Dublin Core schema link, and seven "citation_" tags; an OJS article page held 17 "DC." tags, an OMP book page 13.
 
 <a id="fn-q2"></a>
-**q2** — Live-probed 2026-09-26 (Rules 1, 2, 2c; the sitemap table), all three apps, signed out: `{journal address}/sitemap` answered `application/xml`, shown inline, Chromium printing "This XML file does not appear to have any style information associated with it. The document tree is shown below." above the tree; each entry held its address alone; the entries came in the table's order on every read, on contexts made with nothing enabled too. A submitted item, a scheduled one and a second context's item never appeared. On a press and a preprint server "Unpublish" ("Unpost") on the workflow removed the item at the next load and publishing again restored it; on a journal publishing, unpublishing and republishing an article changed nothing (OJS2). A scan of 14 other editorial, administration and public pages found no other link to the sitemap. OMP: a chapter with "Show this chapter on its own page…" ticked was listed and an unticked one was not; "Not Available" on the format, or "Not Available" in the file's terms, removed the file's entry and "Available" or "Open Access" restored it (the priced end not driven); a file still "Awaiting Approval" on its own row was listed. After "Create New Version" on a published book the entry `catalog/book/sea-study/chapter/1` gave way to `…/chapter/3`, which answered "404 Not Found", while the book read "Status: Unpublished" for the new version (OMP4). The seeded press listed "New Releases", both series and all seven categories; the seeded journal and server, holding the same categories, listed none. OPS listed both posted preprints and not the submitted or scheduled one.
+**q2** — Live-probed 2026-09-26 (Rules 1, 2, 2c; the sitemap table), all three apps, signed out: `{journal address}/sitemap` answered `application/xml`, shown inline, Chromium printing "This XML file does not appear to have any style information associated with it. The document tree is shown below." above the tree; each entry held its address alone; the entries came in the table's order on every read, on contexts made with nothing enabled too. A submitted item, a scheduled one and a second context's item never appeared. On a press and a preprint server "Unpublish" ("Unpost") on the workflow removed the item at the next load and publishing again restored it; on a journal publishing, unpublishing and republishing an article changed nothing (OJS2). A scan of 14 other editorial, administration and public pages found no other link to the sitemap. OMP: a chapter with "Show this chapter on its own page…" ticked was listed and an unticked one was not; "Not Available" on the format, or "Not Available" in the file's terms, removed the file's entry and "Available" or "Open Access" restored it (the priced end not driven); a file still "Awaiting Approval" on its own row was listed. After "Create New Version" on a published book the entry `catalog/book/sea-study/chapter/1` gave way to `…/chapter/3`, which answered "404 Not Found", while the book read "Status: Unpublished" for the new version (OMP4). The seeded press listed "New Releases", both series and all seven categories; the seeded journal and server, holding the same categories, listed none. OPS listed both posted preprints and not the submitted or scheduled one. Walked again 2026-10-03 (Rule 2c; OMP4), OMP `main` and `stable-3_5_0`, on PKP's default test dataset (`shared/playwright/checks/issues/sitemap-new-version-chapter-pages-404/walk.js`): signed out, the sitemap listed book 14's chapter 1 as `…/catalog/book/14/chapter/54`, which opened "Chapter 1: Mind Control—Internal or External?"; after "Create New Version" it listed `…/catalog/book/14/chapter/72` instead, which answered "404 Not Found", and still did after the new version was published, while the book's page linked the chapter as `…/chapter/54`, which opened it, before and after; the book and file entries stayed.
 
 <a id="fn-q3"></a>
 **q3** — Live-probed 2026-09-26 (Rule 2a; OJS2), OJS: on a scratch journal with a published issue holding two published articles and a third article published with "Don't Assign To An Issue" ("This will be published immediately without any issue association."), the sitemap listed the issue's page (`issue/view/7`) and none of the three articles or their galleys, while the issue page linked the articles and their galleys; the same on two other scratch journals and on `publicknowledge`.
@@ -1404,11 +1405,11 @@ Issue report: [docs/issues/U20-OMP1-book-epub-announced-as-html.md](../issues/U2
 Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U20-OMP2-book-page-announces-one-pdf.md), filed as [pkp-e2e#665](https://github.com/jardakotesovec/pkp-e2e/issues/665).
 
 <a id="fn-f-omp3"></a>
-**f-omp3** — Note i: `monographFileView()` always adds `DC.Type` `Text.Chapter`, while `monographView()` adds `Text.Book`. Live-probed 2026-09-26: note q19.
+**f-omp3** — Note i: `monographFileView()` always adds `DC.Type` `Text.Chapter`, while `monographView()` adds `Text.Book` on the book's page and on a chapter's page alike (it reads `isChapterRequest` for the other chapter tags). Live-probed 2026-09-26: notes q18, q19. Walked 2026-10-03, OMP `main` and `stable-3_5_0`, on PKP's default test dataset (`shared/playwright/checks/issues/book-file-page-type-chapter/walk.js`): book 14's chapter 1 page (`…/catalog/book/14/chapter/54`) carried "DC.Title" "Chapter 1: Mind Control—Internal or External?" and "DC.Type" "Text.Book"; the whole-book file's view page (`…/catalog/view/14/3/108`) carried the book's title and authors and "DC.Type" "Text.Chapter"; the book's page read "Text.Book" and the chapter file's view page "Text.Chapter".
 Issue report: [docs/issues/U20-OMP3-book-file-page-type-chapter.md](../issues/U20-OMP3-book-file-page-type-chapter.md), filed as [pkp-e2e#669](https://github.com/jardakotesovec/pkp-e2e/issues/669).
 
 <a id="fn-f-omp4"></a>
-**f-omp4** — Note e: OMP's `SitemapHandler` takes a book's chapters from `getLatestPublication()` and its formats from `getCurrentPublication()`, so an unpublished new version's chapters replace the published ones. Live-probed 2026-09-26: note q2.
+**f-omp4** — Note e: OMP's `SitemapHandler::_createContextSitemap()` takes a book's chapters from `getLatestPublication()` (its formats from `getCurrentPublication()`) and writes each chapter copy's own `getId()`, while a chapter page is addressed by the first version's number: `CatalogBookHandler::setChapter()` looks it up with `ChapterDAO::getBySourceChapterId()`, and the book's page links `getSourceChapterId()`. A new version copies every chapter under a new id, so the listed address matches no chapter page, before the version is published and after. A chapter is listed when `Chapter::isPageEnabled()` is true, which a chapter DOI also makes true (read in the code, not driven). Live-probed 2026-09-26 and walked 2026-10-03: note q2.
 Issue report: [docs/issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md](../issues/U20-OMP4-sitemap-new-version-chapter-pages-404.md), filed as [pkp-e2e#670](https://github.com/jardakotesovec/pkp-e2e/issues/670).
 
 <a id="fn-f-omp5"></a>

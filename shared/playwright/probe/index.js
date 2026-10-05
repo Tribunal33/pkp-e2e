@@ -282,6 +282,7 @@ function currentRecord() {
 }
 
 const runFiles = new Map(); // app name → this process's run-record file
+const dialogsSaid = new Map(); // run record → the dialog count flush() last printed
 
 /**
  * Every process of an agent keeps its own files: the run record is
@@ -323,6 +324,16 @@ function flush() {
             if (known > 0) {
                 console.error(`[probe] ${record.app}: ${known} known test-install failure(s), not findings ("known" in "crashes")`);
             }
+            // A browser alert or confirm the kit answered is on no screen()
+            // read: say so, so a refusal shown as an alert is not written
+            // up as "no message" (U31, U36, U62 issue walks).
+            if (record.dialogs.length > (dialogsSaid.get(record) || 0)) {
+                dialogsSaid.set(record, record.dialogs.length);
+                console.error(
+                    `[probe] ${record.app}: ${record.dialogs.length} browser dialog(s) (alert, confirm, page-leave) during this run — ` +
+                        `see "dialogs" in ${path.basename(file)}`,
+                );
+            }
         }
         // flush() runs at the end of withApp and again on exit: append only
         // the rows not written yet.
@@ -346,9 +357,44 @@ process.on('exit', flush);
 // withApp / forEachApp
 
 /**
+ * `app.fleetMail`: a PkpMail whose reads (`find`, `count`, `expectNone`,
+ * `inboxFor`) keep only the messages that name this fleet's own host
+ * (its base URL's host:port, in a link or the text). Every fleet of a
+ * slot mails the one Mailpit, both lines' and every dataset fleet's, and a
+ * dataset user's address is the same on all of them, so a read by
+ * recipient and time can return another fleet's message (U27, U49, U55,
+ * U65, U70 issue walks). A message that names no address of its install
+ * is left out as well: read that one through `app.mail` with a subject.
+ */
+class FleetMail extends PkpMail {
+    constructor({url, baseURL}) {
+        super({url});
+        this.host = new URL(baseURL).host;
+        this.ours = new Map(); // message ID → names this host
+    }
+
+    async _search(query) {
+        const result = await super._search(query);
+        const kept = [];
+        for (const message of result.messages || []) {
+            if (!this.ours.has(message.ID)) {
+                const full = await this.fullMessage(message.ID);
+                this.ours.set(message.ID, `${full.HTML || ''}\n${full.Text || ''}`.includes(this.host));
+            }
+            if (this.ours.get(message.ID)) {
+                kept.push(message);
+            }
+        }
+        result.messages = kept;
+        return result;
+    }
+}
+
+/**
  * Hand `fn` one app's bag: {app, name, root, baseURL, port, api, mail,
  * users, contextPath, url(), variant()}. `api` is a PkpApi on the probe
- * server with that app's own key; `mail` is a PkpMail on the shared Mailpit.
+ * server with that app's own key; `mail` is a PkpMail on the shared Mailpit,
+ * `fleetMail` the same kept to this fleet's own messages (FleetMail).
  * Sets the PKP_* process env for the app while `fn` runs (some harness
  * helpers read it).
  *
@@ -369,6 +415,7 @@ async function withApp(name, fn) {
     });
     app.api = new PkpApi(apiContext);
     app.mail = new PkpMail({url: app.mailpitUrl});
+    app.fleetMail = new FleetMail({url: app.mailpitUrl, baseURL: app.baseURL});
     app.users = users;
     runRecord(app);
     const openBefore = new Set(openBrowsers);
@@ -637,6 +684,33 @@ async function signOut(page, {origin = ''} = {}) {
         timeout: 15_000,
         waitUntil: 'commit',
     });
+}
+
+/**
+ * Switch the interface language from a back-office page as a person does:
+ * open the user (initials) menu and press the link to `setLocale/<locale>`,
+ * found by its address, since its label varies ("français" for fr_CA on
+ * `main` and 3.5, not "Français (Canada)"; U38, U41, U54, U60 issue
+ * walks). Waits for the page to open again at an address carrying the
+ * locale. The reader side has no such menu (open the dashboard first), and
+ * a workflow window's overlay takes the click (close it first).
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} locale e.g. 'fr_CA'
+ */
+async function switchLanguage(page, locale) {
+    const menuButton = page.locator('[data-cy="app-user-nav"] button').first();
+    if (!(await menuButton.isVisible())) {
+        throw new Error(`switchLanguage: no user menu on ${page.url()} (the reader side has none: open the dashboard first)`);
+    }
+    await menuButton.click();
+    const link = page.locator(`a[href*="/user/setLocale/${locale}?"], a[href$="/user/setLocale/${locale}"]`).first();
+    await link.waitFor({state: 'visible', timeout: 10_000});
+    await Promise.all([
+        page.waitForURL(new RegExp(`/${locale}(/|$|\\?|#)`), {timeout: 30_000}),
+        link.click(),
+    ]);
+    await idle(page);
 }
 
 // ---------------------------------------------------------------------------
@@ -1069,7 +1143,9 @@ async function settled(page, locator, {timeout = 15_000} = {}) {
  * mail, a search-index or usage chain). Not `support/jobs.js` `runJobs()`,
  * which is the serial project's and polls worker 0, down outside a run.
  * Runs the app's own worker, `php lib/pkp/tools/jobs.php work
- * --stop-when-empty` under the fleet's test config (a chain's next job is
+ * --stop-when-empty=1` under the fleet's test config (the `=1` form because
+ * stable-3_5_0's jobs.php reads the bare flag as `stop-when-empty`, never
+ * `--stop-when-empty`, and both lines read the key=value form; a chain's next job is
  * taken in the same pass, where `jobs.php run` returns between two), and
  * passes again while the probe server's `_test/jobs` still counts queued
  * or reserved jobs six seconds later (a failed attempt is back after five,
@@ -1085,7 +1161,7 @@ async function settled(page, locator, {timeout = 15_000} = {}) {
 async function drainJobs(app, {passes = 6, timeoutMs = 300_000} = {}) {
     const work = () => {
         try {
-            return execFileSync('php', ['lib/pkp/tools/jobs.php', 'work', '--stop-when-empty'], {
+            return execFileSync('php', ['lib/pkp/tools/jobs.php', 'work', '--stop-when-empty=1'], {
                 cwd: app.root,
                 env: {...process.env, PKP_CONFIG_FILE: app.configFile},
                 encoding: 'utf8',
@@ -1234,6 +1310,7 @@ module.exports = {
     launch,
     signIn,
     signOut,
+    switchLanguage,
     screen,
     rawKeys,
     shot,

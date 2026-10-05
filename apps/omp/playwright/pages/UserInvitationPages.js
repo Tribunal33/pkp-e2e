@@ -114,7 +114,7 @@ class UsersAccessPage {
      */
     async userRowAction(rowText, actionLabel) {
         await this.userRow(rowText)
-            .getByRole('button', {name: /management[. ]options/i})
+            .getByRole('button', {name: /management[. ]options|^More Actions$/i})
             .click();
         await this.page.getByRole('menuitem', {name: actionLabel}).click();
     }

@@ -452,7 +452,7 @@ read; the list below is what changes *these* screens.
   submissions in the section instead of "None / Free Form Review" (Rule
   12).
 - **The test installs' clock.** The daily reminder task and the mail queue
-  are off on the test installs, so Rule 9 is described from the code.
+  are off on the test installs, so no scenario drives Rule 9. <sup>i</sup>
 
 ## Cross-feature interactions
 
@@ -984,7 +984,8 @@ completely. Every journal and press that used reminders in 3.4 is in
 that state after upgrading to 3.5 or later, and so is a new install
 whose manager sets only the "After Due Date" sliders. Setting a "Before
 Due Date" reminder too, or reminding reviewers by hand before the due
-date, gets round it. Basis: probe, 2026-10-04. <sup>f-a1</sup>
+date, gets round it.
+Since: 2024-08-30 (two years) · Basis: probe, 2026-10-04. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — Deactivating a form in use** · ❓ · minor.
@@ -1602,7 +1603,8 @@ email was sent to {$recipientName} regarding their review assignment").
 `[schedule] task_runner = Off` and `[queues] job_runner = Off`
 (seed-facts.md), so the clock, its emails and its log row are not
 observable through any screen there: Rule 9 and the reminder side effect
-are read from the code, and no screen settles them.
+are read from the code, except Rule 9d, live-probed 2026-10-04 with the
+task started by hand (footnote [f-a1](#fn-f-a1)).
 
 <a id="fn-s0"></a>
 **s0** — Scratch journal: `POST scenarios/context` with a throwaway
@@ -1760,11 +1762,31 @@ and after "Mark as Complete": footnote d (2026-09-06).
 `numDaysAfterReviewResponseReminderDue` and
 `numDaysAfterReviewSubmitReminderDue` checks live in the `else` branch of
 `if ($reviewAssignment->getDateReminded() === null)`, so an assignment
-never reminded is only ever considered for the "before" thresholds. The
-scenario API cannot advance the clock and the task runner is off on the
-fleets, so the finding is read from the code and no screen shows it; a
-re-check needs a server whose scheduler runs. Since: the reminder rewrite that introduced the four
-sliders (pkp-lib 3.5).
+never reminded is only ever considered for the "before" thresholds.
+Live-probed 2026-10-04 (Rule 9d; A1) on OJS and OMP, `main` and
+`stable-3_5_0`, on the default datasets, by the kept script
+`shared/playwright/checks/issues/after-due-reminders-never-sent/walk.js`:
+both "After Due Date" sliders at 1 day and both "Before Due Date" sliders
+at "No reminder set" (the form then read "1 days after due date"); an
+unanswered and an accepted request moved past their due dates in the
+reviewer row's "Edit" window (both rows read "Overdue"); the task started
+by hand with `php lib/pkp/tools/scheduler.php test
+--name='PKP\task\ReviewReminder'` (it reported `DONE`), then the jobs it
+queued run. Neither reviewer got a reminder, the Activity Log had
+no reminder line, and both assignments' `date_reminded` stayed empty.
+With the report's fix applied on `main`, the same steps sent "Will you
+be able to review this for us?" (OMP "Manuscript Review Request") and
+"A reminder to please complete your review" and logged both reminder
+lines. The upgrade reach is read in the code: the 3.5 migration
+`I5885_RenameReviewReminderSettingsName` renames 3.4's
+`numDaysBeforeInviteReminder` and `numDaysBeforeSubmitReminder` (which
+3.4 used as days after the due date) to the two "After Due Date"
+settings and leaves the "Before" ones unset; the walk did not run an
+upgrade. The way round by "Send Reminder" before the due date is read in
+the code (`ReviewReminderForm` stamps the same `dateReminded`). Since:
+pkp-lib 41b38eb240 (`pkp/pkp-lib#9612`, 2024-08-30), the reminder rewrite
+that introduced the four sliders; 3.4 and 3.3 send their one overdue
+reminder to any assignment not yet reminded (read in the code).
 Issue report: [pkp-e2e#909](https://github.com/jardakotesovec/pkp-e2e/issues/909) ([docs/issues/U29-A1-after-due-reminders-never-sent.md](../issues/U29-A1-after-due-reminders-never-sent.md)).
 
 <a id="fn-f-a2"></a>

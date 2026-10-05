@@ -339,6 +339,14 @@ a journal. Fields in screen order: <sup>m</sup>
       no preprints and page links such as "Previous 7-6 of 5" ⚠ [OPS5](#ops5).
     - 14c. A server with nothing posted shows nothing under the archive
       header: no sentence says that nothing has been posted ⚠ [OPS1](#ops1).
+    - 14d. The list runs over as many pages as "Items per page" needs
+      (Settings bullet 17), and each posted preprint is meant to show on
+      exactly one of them. The list orders by the day of posting alone,
+      so preprints posted on the same day stand in no fixed order among
+      themselves. Where they run across a page break, paging with "Next"
+      shows some of them on two or more pages and others on none
+      ⚠ [OPS7](#ops7).
+      <sup>f</sup>
 <a id="archive-header-home"></a>
 15. **The archive header on the home page** {OPS}. A preprint server's
     home page carries the same archive header, search box and category
@@ -470,9 +478,12 @@ on Settings › Journal › "Sections", a row's "Edit" (Settings › Press ›
     Settings bullet 10 there). <sup>k</sup>
 11. **"Identify items published in this section as a(n)"** {OJS OPS}.
     Empty by default; "Review Article" on the seeded journal's "Reviews".
-    Filled: the words become the type of the section's articles in the
-    records the journal hands to harvesters (*OAI-PMH*); no page of the
-    journal shows them. <sup>k</sup>
+    Filled, on a journal: the words become the type of the section's
+    articles in the records the journal hands to harvesters (*OAI-PMH*);
+    no page of the journal shows them. On a preprint server the box
+    changes nothing: no page shows the words, and the harvested records
+    call every preprint a preprint whatever the box holds [OPS2](#ops2).
+    <sup>k</sup>
 12. **"Abbreviation"** {OJS OPS}. Required. Names the section as a set in
     the records handed to harvesters (*OAI-PMH*); no page shows it.
     <sup>k</sup>
@@ -925,6 +936,10 @@ Left out of the scenarios above, by reason:
   - {OPS} the section window without the "Identify items posted in this
     section as a(n)" box, or the box's help giving examples, as the team
     decides ([OPS2](#ops2)): the guard the issue report proposes
+  - {OPS} "Archives" holding 272 preprints posted on one day (11 pages
+    of 25, as walked), paged with "Next" to the end: each preprint on
+    exactly one page (Rule 14d, [OPS7](#ops7)): the guard the issue
+    report proposes
 - **Rarely met**:
   - {OJS} "Omit author names for section items from issues' table of
     contents." ticked, the issue's table of contents without the section's
@@ -993,8 +1008,11 @@ Left out of the scenarios above, by reason:
   - OPS4 (no link leading to a section's page; Rule 16b)
   - OPS6 (a preprint posted without an abstract breaking the server's
     harvesting; Settings bullet 5)
-  - OPS2 (the "(For example etc.)" help; Fields, "Identify items posted in
-    this section as a(n)")
+  - OPS2 (the "(For example etc.)" help, and the box changing nothing on
+    a preprint server; Fields, "Identify items posted in this section as
+    a(n)"; Settings bullet 11)
+  - OPS7 (same-day preprints repeated and skipped across the "Archives"
+    pages; Rule 14d)
 - **Owned by another feature**:
   - the roles without the Settings pages refused the "Sections" tab
     (Actors preamble; *[Journal identity & about
@@ -1027,9 +1045,9 @@ Left out of the scenarios above, by reason:
   - {OJS} "Will not be peer-reviewed" ticked, with no Publication Facts
     Label either way (Settings bullet 7; *[Article landing page &
     reading](U13-article-landing-page-and-reading.md)*, its OJS5)
-  - "Identify items published in this section as a(n)" and
-    "Abbreviation" in the records handed to harvesters (Settings bullets
-    11, 12; *OAI-PMH*)
+  - "Abbreviation", and on a journal "Identify items published in this
+    section as a(n)", in the records handed to harvesters (Settings
+    bullets 11, 12; *OAI-PMH*)
   - {OMP} a series' "Path" as its page's address, the old address opening
     the Catalog once the path is changed, its cover on that page, and its
     name and ISSNs under "Series" on its books' pages (Rules 10, 10a, 10b;
@@ -1062,6 +1080,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS2](#ops2) | Preprint server sections: the "Identify items posted in this section as a(n)" box has no examples and no effect | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS5](#ops5) | A typed "Archives" page number past the last page opens an empty page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS6](#ops6) | One preprint posted without an abstract makes the server's harvesting record lists fail | 🐞 | user-visible · crash: server | — |
+| [OPS7](#ops7) | Paging through "Archives" shows some preprints posted on the same day on several pages and others on none | 🐞 | medium | — |
 | [A2](#a2) | A negative "Word Count" is saved and then refuses every abstract in the section, at submission and on "Title & Abstract" | ❓ | user-visible | — |
 | [A3](#a3) | "Will not be included in the indexing of the journal" changes nothing anywhere | ❓ | minor | — |
 | [A4](#a4) | The sections interface fails with a server error on its search-phrase and type filters | ❓ | latent · crash: server | — |
@@ -1392,6 +1411,20 @@ section setting is the way to the state. It broke in a July 2026 change
 to the server's harvested records: decay, not a choice.
 Since: 2026-07-07 (about three months) · Basis: probe, 2026-09-25; its start, commit. <sup>f-ops6</sup>
 
+<a id="ops7"></a>
+**OPS7 — Paging through "Archives" repeats some same-day preprints and skips others** · 🐞 · medium.
+A visitor who presses "Next" through a preprint server's "Archives"
+expects to meet every posted preprint once. Where preprints posted on
+the same day run across a page break, some show on two or more pages
+and others on none, and nothing says so: on a server with 272 preprints
+posted on one day, the 11 pages showed 268 different preprints, one of
+them on pages 1 to 5, and four on no page. A reader browsing the
+archive cannot reach those four except by search. The same fault pages
+the export list and the editorial dashboard
+(*[Import & export](U63-import-export.md#a24)* A24), and one fix
+reaches all of them.
+Basis: probe, 2026-10-04. <sup>f-ops7</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1452,7 +1485,7 @@ checked by requests typed into a signed-in browser, as each role
 **j** — OJS `SectionForm::fetch()` assigns `reviewFormOptions` from `ReviewFormDAO::getActiveByAssocId()`; the template renders the `reviewFormId` select only `{if count($reviewFormOptions)>0}`, `defaultLabel` `manager.reviewForms.noneChosen` "None / Free Form Review". Effect: `ReviewerForm::initData()` preselects `$section->getReviewFormId()` for the submission's section. OMP's `schemas/section.json` carries `reviewFormId` but no window field sets it. Live-probed 2026-09-25 (Fields "Review Form"; Settings bullet 6), OJS: the list read "None / Free Form Review" and the journal's one active form; a journal without a form had no such field; a form chosen and saved arrived preselected in Add Reviewer, for the Journal Manager and an assigned Section Editor, on a submission in that section, and "None / Free Form Review" on one in another.
 
 <a id="fn-k"></a>
-**k** — Box keys: `manager.sections.form.deactivateSection` (`isInactive`), `manager.sections.submissionReview` "Will not be peer-reviewed" (`metaReviewed`, stored inverted: ticked saves `meta_reviewed = 0`), `manager.sections.abstractsNotRequired`, `manager.sections.submissionIndexing` (`metaIndexed`, inverted), `manager.sections.editorRestriction` (`editorRestricted`; OPS field id `editorRestriction`), `manager.sections.hideTocTitle`, `manager.sections.hideTocAuthor`. New-context section: `ContextService::afterAddContext()` sets `metaIndexed` and `metaReviewed` true and `editorRestricted`, `hideTitle` false (all boxes unticked). Inactive: grid cell actions `activateSection`/`deactivateSection` (OMP `…Series`) in `RemoteActionConfirmationModal`s with `manager.sections.confirmActivateSection` / `confirmDeactivateSection` and the default title `common.confirm` "Confirm", buttons `common.ok` / `common.cancel`; OJS/OPS `deactivateSection()` refuses when the context's active count is not above 1 with an error trivial notification `manager.sections.confirmDeactivateSection.error`; `SectionForm::validate()` adds the same error to `isInactive` when no other section is active. OMP `deactivateSeries()` and `SeriesForm` have no such check. "(Inactive)": `Repo::section()->getSectionList()` feeds OJS and OPS `IssueEntryForm` `sectionId` labels `publication.inactiveSection` "{$section} (Inactive)"; OMP `CatalogEntryForm` labels inactive series `publication.inactiveSeries` "{$series} (Inactive)". Dashboard: `DashboardHandler::getSubmissionFiltersForm()` passes every section of the context. The OPS section page (`SectionsHandler`) does not filter on `is_inactive`. Effects of the other boxes: `metaReviewed` is read only by the Publication Facts Label plugin (`PflPlugin::displayArticlePfl()`) and the native export; `metaIndexed` only by the native export filters (`IssueNativeXmlFilter`, `NativeXmlIssueFilter`), not by the OAI data access objects, the search index or any template (A3); `identifyType` by `plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php` and the MARC templates; the abbreviation by `OAIDAO` as the set spec; `hideTitle` by `IssueHandler` and the CSL citation; `hideAuthor` by `article_summary.tpl`; `abstractsNotRequired` and the word count by `Submission\Repository::validateSubmit()` (abstract and plain language summary, `HasWordCountValidation`) and `WorkflowHandler` (`sectionWordLimits`). Live-probed 2026-09-25 (Settings bullets 5, 7, 9, 10), OJS and OPS where the box exists: "Do not require abstracts" ticked let a submission reach "Review" with "Abstract None provided" and be published ("Post the preprint" on a server) with no abstract, and "Title & Abstract" save an empty one; unticked, both refused an empty abstract with "This field is required.". "Will not be peer-reviewed" ticked or not, no article showed a Publication Facts Label, with the label's plugin on or off. "Omit the title…" ticked left the section's block of the issue page and of the home page's current issue without a heading; "Omit author names…" left its articles there without an author line, the article pages unchanged.
+**k** — Box keys: `manager.sections.form.deactivateSection` (`isInactive`), `manager.sections.submissionReview` "Will not be peer-reviewed" (`metaReviewed`, stored inverted: ticked saves `meta_reviewed = 0`), `manager.sections.abstractsNotRequired`, `manager.sections.submissionIndexing` (`metaIndexed`, inverted), `manager.sections.editorRestriction` (`editorRestricted`; OPS field id `editorRestriction`), `manager.sections.hideTocTitle`, `manager.sections.hideTocAuthor`. New-context section: `ContextService::afterAddContext()` sets `metaIndexed` and `metaReviewed` true and `editorRestricted`, `hideTitle` false (all boxes unticked). Inactive: grid cell actions `activateSection`/`deactivateSection` (OMP `…Series`) in `RemoteActionConfirmationModal`s with `manager.sections.confirmActivateSection` / `confirmDeactivateSection` and the default title `common.confirm` "Confirm", buttons `common.ok` / `common.cancel`; OJS/OPS `deactivateSection()` refuses when the context's active count is not above 1 with an error trivial notification `manager.sections.confirmDeactivateSection.error`; `SectionForm::validate()` adds the same error to `isInactive` when no other section is active. OMP `deactivateSeries()` and `SeriesForm` have no such check. "(Inactive)": `Repo::section()->getSectionList()` feeds OJS and OPS `IssueEntryForm` `sectionId` labels `publication.inactiveSection` "{$section} (Inactive)"; OMP `CatalogEntryForm` labels inactive series `publication.inactiveSeries` "{$series} (Inactive)". Dashboard: `DashboardHandler::getSubmissionFiltersForm()` passes every section of the context. The OPS section page (`SectionsHandler`) does not filter on `is_inactive`. Effects of the other boxes: `metaReviewed` is read only by the Publication Facts Label plugin (`PflPlugin::displayArticlePfl()`) and the native export; `metaIndexed` only by the native export filters (`IssueNativeXmlFilter`, `NativeXmlIssueFilter`), not by the OAI data access objects, the search index or any template (A3); `identifyType` by OJS's `plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php` and the MARC templates, and by nothing in OPS, whose `Dc11SchemaPreprintAdapter` writes two fixed types (OPS2, note f-ops2); the abbreviation by `OAIDAO` as the set spec; `hideTitle` by `IssueHandler` and the CSL citation; `hideAuthor` by `article_summary.tpl`; `abstractsNotRequired` and the word count by `Submission\Repository::validateSubmit()` (abstract and plain language summary, `HasWordCountValidation`) and `WorkflowHandler` (`sectionWordLimits`). Live-probed 2026-09-25 (Settings bullets 5, 7, 9, 10), OJS and OPS where the box exists: "Do not require abstracts" ticked let a submission reach "Review" with "Abstract None provided" and be published ("Post the preprint" on a server) with no abstract, and "Title & Abstract" save an empty one; unticked, both refused an empty abstract with "This field is required.". "Will not be peer-reviewed" ticked or not, no article showed a Publication Facts Label, with the label's plugin on or off. "Omit the title…" ticked left the section's block of the issue page and of the home page's current issue without a heading; "Omit author names…" left its articles there without an author line, the article pages unchanged.
 
 <a id="fn-td9"></a>
 **td9** — Live-probed 2026-09-25 (Rules 5, 6; Side effects; OMP5), all three apps, two runs: the "Inactive" box asked under "Confirm" "Are you sure you wish to deactivate this section?" (a press the same), "Cancel" left it, "OK" ticked it with "Your changes have been saved."; the ticked box asked "…activate this section?" and "OK" unticked it; the window's box did the same on "Save". An inactive section left the start form for the Author, the Section Editor (Moderator) and the manager, and an Author's draft in it opened "Section Closed"; it stayed in the dashboard filter, opened its page (OPS), read "{section} (Inactive)" on "Publication Settings" ("Preprint entry"), kept its published item in the issue, on the article page, in "Archives" and on the section page, and left the "Submissions" page for a visitor, Reader and Author. A press's inactive series left the wizard's "Series" choice and read "{series} (Inactive)" on "Catalog Entry". On the last active section the box and "OK" left it unticked with "At least one section must be active. Visit the workflow settings to disable all submissions to this journal." ("…to this server."); the window's box and "Save" left the window open with the box ticked and the same sentence as a notice; "Delete" and "OK" kept the row with it. A press deactivated and deleted both its series. No email reached the five scratch users, and a published item's "Activity Log & Notes" gained no entry for a rename, a deactivation or a reactivation.
@@ -1627,7 +1660,7 @@ Issue report: [pkp-e2e#487](https://github.com/jardakotesovec/pkp-e2e/issues/487
 Issue report: [pkp-e2e#488](https://github.com/jardakotesovec/pkp-e2e/issues/488) ([docs/issues/U17-OPS1-archives-empty-server-says-nothing.md](../issues/U17-OPS1-archives-empty-server-says-nothing.md)).
 
 <a id="fn-f-ops2"></a>
-**f-ops2** — OPS `locale/en/manager.po` `manager.sections.identifyTypeExamples` "(For example etc.)". Live-probed 2026-09-25, with OJS's window as the control.
+**f-ops2** — OPS `locale/en/manager.po` `manager.sections.identifyTypeExamples` "(For example etc.)". Live-probed 2026-09-25, with OJS's window as the control. OPS `Dc11SchemaPreprintAdapter::extractMetadataFromDataObject()` writes the fixed types `info:eu-repo/semantics/preprint` and `info:eu-repo/semantics/draft` and reads nothing from the section; nothing else in OPS or its lib/pkp reads `identifyType` (ops `512707bc6d`, 2019, took the section's value out of the record and left the box). Walked 2026-10-02 on OPS and OJS `main` and `stable-3_5_0`, default test dataset (Settings bullet 11): "Working Paper" typed in the box of "Preprints" saved ("Your changes have been saved.") and showed again on reopening, and all 17 records of `{server}/oai?verb=ListRecords&metadataPrefix=oai_dc` kept only those two `dc:type` values; the same on OJS's "Articles" added `<dc:type>Working Paper</dc:type>` to its records. Kept script: `shared/playwright/checks/issues/section-type-box-no-examples-no-effect/walk.js`.
 Issue report: [pkp-e2e#489](https://github.com/jardakotesovec/pkp-e2e/issues/489) ([docs/issues/U17-OPS2-section-type-box-no-examples-no-effect.md](../issues/U17-OPS2-section-type-box-no-examples-no-effect.md)).
 
 <a id="fn-f-ops3"></a>
@@ -1642,6 +1675,10 @@ Issue report: [pkp-e2e#490](https://github.com/jardakotesovec/pkp-e2e/issues/490
 
 <a id="fn-f-ops6"></a>
 **f-ops6** — OPS `plugins/metadata/dc11/filter/Dc11SchemaPreprintAdapter.php` passes `$publication->getData('abstract')`, null for a preprint without an abstract, to `addLocalizedElements(…, array $localizedValues)`, a TypeError; OJS's adapter casts to `(array)`. The array typing came with ops `25e6954e81` "pkp/pkp-lib#12950 add version relations to OAI DC" (2026-07-07). Live-probed 2026-09-25, two runs: `{server}/oai?verb=ListRecords&metadataPrefix=oai_dc` and the section's set (`…&set={server}:{abbreviation}`) answered 500 with an empty body, the probe server logging "Uncaught TypeError: …Dc11SchemaPreprintAdapter::addLocalizedElements(): Argument #3 ($localizedValues) must be of type array, null given"; the other sections' sets answered 200 with their records; the same case on a journal answered 200 with both records. Written up for the team in `docs/reports/2026-09-25-ops-oai-empty-abstract.md` (a temporary report, deleted once addressed; git history keeps it).
+
+<a id="fn-f-ops7"></a>
+**f-ops7** — fn f: `PreprintsHandler::index()` orders by `ORDERBY_DATE_PUBLISHED` (`po.date_published`, a date with no time) with no second key, and each page is its own `LIMIT`/`OFFSET` query, so the database may order tied rows differently on each page. Walked 2026-10-04 on PostgreSQL, OPS `main` (ops `c8af945bb7`, lib/pkp `3dc90c81a6`) and `stable-3_5_0` (ops `38b61882d3`), signed out, on the default test dataset with 272 preprints posted on one day (copies made with the Native XML import): "Archives" ("1-25 of 272") paged with "Next" to the last of 11 pages showed 268 different preprints on main, submission 19 "Finocchiaro: Arguments About Arguments" on pages 1 to 5 and four on no page; 268 of 272 on 3.5 too, submission 11 on five pages. No request failed and no page script failed. A section's page (`SectionsHandler::section()`, note q) orders the same way (code read, not driven). The proposed fix, a last sort key `s.submission_id` in `PKP\submission\Collector`, tried on main, showed 272 of 272. Kept script: `shared/playwright/checks/issues/export-list-repeats-submissions-across-pages/walk.js` (mode `reader`).
+Issue report: [pkp-e2e#919](https://github.com/jardakotesovec/pkp-e2e/issues/919) ([docs/issues/U63-A24-export-list-repeats-submissions-across-pages.md](../issues/U63-A24-export-list-repeats-submissions-across-pages.md)).
 
 ## Reference — entry points & surfaces
 

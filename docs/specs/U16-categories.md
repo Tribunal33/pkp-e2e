@@ -78,7 +78,7 @@ top to bottom: <sup>d</sup> <sup>td1</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Name" | yes, in the primary language | Plain text, per language. What the tab, the category's page, the "Browse" block and the pickers show. Two categories may share a name <sup>d</sup> |
-| "Path" | yes | Under it: "The category's URL will be: {address}", the journal's address followed by "catalog/category/path" ("preprints/category/path" on a preprint server). Letters, digits, "-", "_", "." and "/" are accepted; anything else is refused with "The category path must consist of only letters and numbers." ⚠ [A9](#a9). A path another category of the journal already has is refused with "The category path already exists. Please enter a unique path." A path that differs from another only in letter case is accepted ("ARTS" beside "arts"), and each address opens its own category. A path containing "/" is saved, and every link prints it ("sci%2Fphys"), but following one opens the page of the category whose path is the part before the "/" ("Slashed", path "sci/phys", opens "Science"), or the not-found page of Rule 13 when there is none ⚠ [A8](#a8). What the path does: Rule 5 <sup>d</sup> <sup>td2</sup> |
+| "Path" | yes | Under it: "The category's URL will be: {address}", the journal's address followed by "catalog/category/path" ("preprints/category/path" on a preprint server): the last word stays "path" whatever the box holds, also in "Edit Category" for a saved category ⚠ [A21](#a21). Letters, digits, "-", "_", "." and "/" are accepted; anything else is refused with "The category path must consist of only letters and numbers." ⚠ [A9](#a9). A path another category of the journal already has is refused with "The category path already exists. Please enter a unique path." A path that differs from another only in letter case is accepted ("ARTS" beside "arts"), and each address opens its own category. A path containing "/" is saved, and every link prints it ("sci%2Fphys"), but following one opens the page of the category whose path is the part before the "/" ("Slashed", path "sci/phys", opens "Science"), or the not-found page of Rule 13 when there is none ⚠ [A8](#a8). What the path does: Rule 5 <sup>d</sup> <sup>td2</sup> |
 | "Description" | no | Formatted text per language with the buttons "Bold", "Italic", "Superscript", "Subscript", "Insert/edit link" and "Blockquote". Shown on the category's page (Rule 9) <sup>d</sup> |
 | "Order of articles" ("Order of monographs" on a press, "Order of preprints" on a preprint server) | always has a value | A list under "Choose how to order articles in this category." ("…books…", "…preprints…"): "Title (A-Z)", "Title (Z-A)", "Publication date (oldest first)" and "Publication date (newest first)", the last preselected on a new category; a press adds "Series position (lowest first)" and "Series position (highest first)". What it changes: Rule 10 <sup>d</sup> |
 | "Cover Image" | no | An upload box for a .jpg, .png or .gif picture, with its "Alternate text" box once a picture is in; the box works as the upload boxes of [Appearance & theming](U10-appearance-and-theming.md) (Fields) describe. A file of another type is refused as it is dropped ("You can't upload files of this type."); a file named as a picture but holding none is refused at "Save" with "An invalid image was uploaded. Accepted formats are .png, .gif, or .jpg.", after leaving a broken preview ⚠ [A17](#a17). Shown on the category's page (Rule 12) <sup>d</sup> |
@@ -232,8 +232,12 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
    page shows ⚠ [OMP5](#omp5). <sup>g</sup> <sup>td7</sup> <sup>td8</sup>
 10. **The order of the list.** The category's "Order of articles" is meant
     to set the order of this page. It does not: whatever it is set to, the
-    page lists the articles in the same order ⚠ [A2](#a2). A press puts
-    its featured books first (*Catalog browse*). <sup>i</sup> <sup>td9</sup>
+    page lists the articles in the same order ⚠ [A2](#a2). A press lists
+    first every book featured anywhere on the press, in its catalog, a
+    series or another category, not only the books featured in this
+    category ([Catalog management](U70-catalog-management.md#a10), its
+    A10; [Catalog browse](U68-catalog-browse.md), its Rule 14).
+    <sup>i</sup> <sup>td9</sup>
 11. **The breadcrumb.** "Home" links to the journal's home page and the
     parent's name to the parent's page; the category's own name is not a
     link. Only the nearest parent is named: the page of a third-level
@@ -248,6 +252,11 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
     press the page shows the browser's broken-picture mark, with the
     category's name beside it, instead of the picture ⚠ [OMP1](#omp1).
     <sup>g</sup> <sup>td11</sup>
+    - 12a. **A category with no picture.** The small copy's address (the
+      footnote gives it), typed for a category with no "Cover Image",
+      should answer the not-found page of Rule 13. On a journal and a
+      preprint server it never finishes loading: the server fails
+      ⚠ [A22](#a22); a press is not covered. <sup>td15</sup>
 13. **An unknown path.** A category address whose path no category of the
     journal has answers a bare page reading "404 Not Found", with no
     header and no links, as an unknown article's or preprint's address
@@ -889,6 +898,10 @@ Left out of the scenarios above, by reason:
     page; the scenarios keep two items or more on every page they count)
   - A20 (the breadcrumb's grey bar while the "Browse" block is placed;
     Rule 14)
+  - A21 (the "Path" help in "Edit Category" for a saved category;
+    Fields, "Path"; scenario 1 reads it in "Add Category")
+  - A22 (the small copy's address typed for a category with no picture;
+    Rule 12a)
   - OMP1 ("Cover Image Max Width" and "Cover Image Max Height" changed,
     with no picture shown to size; Settings bullet 6)
   - OMP3 (the press's "Browse" for a screen reader; Fields, the "Browse"
@@ -924,6 +937,9 @@ Left out of the scenarios above, by reason:
   - {OPS} a preprint's page naming a sub-category after its parent (Rule
     17; *[Article landing page &
     reading](U13-article-landing-page-and-reading.md)*, scenario 1)
+  - {OMP} a book featured in the press's catalog or a series, not in the
+    category, listed first on the category's page (Rule 10; *[Catalog
+    management](U70-catalog-management.md#a10)*, its A10)
 
 ## Findings register
 
@@ -948,6 +964,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | The box where a manager types a category's name to delete it has no name for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With the "Browse" block in a journal's sidebar, every page's breadcrumb gets a grey bar | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A22](#a22) | The picture address of a category with no picture never finishes loading on a journal or preprint server | 🐞 | minor · crash: server | — |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -958,6 +975,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A category cannot be moved to another parent or to the top level | ❓ | minor | — |
 | [A5](#a5) | The breadcrumb names only the nearest parent | ❓ | minor | — |
 | [A14](#a14) | A category added after a submission arrives brings no editors | ❓ | minor | — |
+| [A21](#a21) | The "Path" help ends in the word "path", never in a saved category's own path | ❓ | minor | — |
 
 ### All apps
 
@@ -1199,6 +1217,32 @@ No released version has it: it came with a change on `main` and would
 ship with the next release. Pages work as before; the breadcrumb only
 looks like a selected menu entry.
 Basis: probe, 2026-10-02. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — The "Path" help ends in the word "path", never in a saved category's own path** · ❓ · minor.
+Under "Path" the window reads "The category's URL will be:" with the
+journal's address followed by "catalog/category/path"
+("preprints/category/path" on a preprint server). In "Add Category" the
+word "path" stands in for a path not chosen yet. In "Edit Category" a
+manager expects the category's own address ("…/catalog/category/arts"
+for the path "arts") and reads the same sample, an address no category
+has. Nothing is lost: the box holds the saved path and the page lives
+at its own address.
+Question: should "Edit Category" show the category's own address?
+Lean: yes, a defect, the twin of a press's series window
+([Sections](U17-sections.md#omp8), its OMP8); seen in "Add Category",
+the "Edit Category" case read from the code.
+Basis: probe, 2026-09-25; the edited category, code reading. <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — The picture address of a category with no picture never finishes loading on a journal or preprint server** · 🐞 · minor · crash: server.
+On a journal or a preprint server, the address of a picture's small
+copy (Rule 12a), typed for a category with no "Cover Image", is expected
+to answer the bare "404 Not Found" page of an unknown address. Instead
+the server fails and the page never finishes loading. Nothing on the
+site links to that address, so only a typed or bookmarked address
+reaches it.
+Basis: probe, 2026-10-02. <sup>f-a22</sup>
 
 ### OMP
 
@@ -1610,7 +1654,12 @@ category page's links) and, on OMP, by `featured`;
 Before: stable-3_5_0 `PKPCatalogHandler::category()` passed them to
 `Repo::submission()->getCollector()->orderBy($orderBy, $orderDir)`.
 Changed by pkp/pkp-lib#8920 (lib/pkp `ce23e18e83` 2026-01-09, `d6a9c82dbf`
-2026-01-13).
+2026-01-13). OMP's `orderBy('featured')`: `DatabaseEngine` joins
+`features` on `submission_id` alone and ranks by `MAX(f.seq)`, so a
+book featured in any list (the catalog, a series, another category)
+comes first; 3.5's OMP `Collector::getQueryBuilder()` read only the
+category's own featured list (the A2 issue report's Cause, 2026-10-02;
+3.5 not driven for it).
 Live-probed 2026-09-25 (Rules 2, 10; A2): notes td5 and td9.
 
 <a id="fn-j"></a>
@@ -1877,7 +1926,11 @@ Item", "Alpha Item" and "Gamma Item" published in that order into
 "Ordering" (one publication date); saved at each of the four choices (OMP
 also the two series-position choices), the page listed "Beta Item",
 "Alpha Item", "Gamma Item" every time. OMP: "Gamma Item" made featured in
-the Catalog moved to the top.
+the Catalog moved to the top, though featured in no category. Catalog
+browse's claim check (2026-09-27, its note td9) saw a book featured in
+its series only and one featured in the catalog only listed first as
+well; Catalog management's A10 (walked 2026-10-03) owns the order. Why:
+note i.
 
 <a id="fn-td10"></a>
 **td10** — Live-probed 2026-09-25 (Rule 11; A5), all three apps: the seeded
@@ -1944,6 +1997,19 @@ screen ("Unpublish", OPS "Unpost", confirming "Are you sure you don't
 want this to be published?" / "…posted?") left the list before any job
 ran. The seeded "Applied Science" read "0 Items" while "Engineering"
 listed items.
+
+<a id="fn-td15"></a>
+**td15** — Walked 2026-10-02 (Rule 12a; A22), OJS and OPS on `main`,
+the default dataset, in passing by the OMP1 issue report's walk
+(`shared/playwright/checks/issues/category-picture/walk.js`,
+`WALK=nb-template`): "Computer Science", which has no picture, its small
+copy's address typed (`…/catalog/thumbnail?type=category&id={id}`, OPS
+`…/preprints/thumbnail?…`, `{id}` the category's id). The server log read "Trying to access array
+offset on null" (`PKPCatalogHandler.php` line 145, `thumbnail()`) and
+the browser never finished loading. `fullSize()` reads the same array
+(line 121) and is expected to fail the same way; not typed. A press was
+not walked for this: its picture addresses answer an empty page today
+(OMP1), and the OMP1 report's fix would hand them to the same code.
 
 <a id="fn-f-a1"></a>
 **f-a1** — `catalogCategory.tpl` (all three apps) tests `{if
@@ -2104,6 +2170,27 @@ OJS and OPS: "About the Journal" had no bar before the block was placed and
 a 4 px left border in rgb(221, 221, 221) with padding after it, as every
 category page's breadcrumb did; OMP's breadcrumb had no bar.
 Issue report: [pkp-e2e#604](https://github.com/jardakotesovec/pkp-e2e/issues/604) ([docs/issues/U16-A20-browse-block-restyles-breadcrumb.md](../issues/U16-A20-browse-block-restyles-breadcrumb.md)).
+
+<a id="fn-f-a21"></a>
+**f-a21** — Note d: `CategoryForm` builds the description
+`grid.category.urlWillBe` from a sample URL for `catalog/category/path`
+(OPS `preprints/category/path`). `ManagementHandler` builds one
+`CategoryForm` per settings page, and the window reuses it for "Add" and
+"Edit", so the server cannot put a category's own path into the help.
+Live-probed 2026-09-25: note td2 (the new category's window, the literal
+"path" kept while typing). The "Edit Category" case is a code reading,
+2026-10-02, by the Sections OMP8 issue report
+([docs/issues/U17-OMP8-series-path-help-never-shows-path.md](../issues/U17-OMP8-series-path-help-never-shows-path.md),
+Cause, "Reach"), which leaves the category window out of its fix.
+
+<a id="fn-f-a22"></a>
+**f-a22** — Note td15: `PKPCatalogHandler::thumbnail()` reads the
+category's `image` setting, null for a category with no picture, logs
+the PHP warning "Trying to access array offset on null" and sends a
+response the browser never completes. A guard that answers
+`NotFoundHttpException` when the category has no picture, in
+`thumbnail()` and `fullSize()`, would give the 404 (the OMP1 report's
+"What goes with it", 2026-10-02).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read

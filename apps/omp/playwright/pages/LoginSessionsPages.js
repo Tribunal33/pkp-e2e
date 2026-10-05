@@ -66,14 +66,14 @@ const userRow = (page, text) => usersTable(page).getByRole('row').filter({hasTex
 
 /** Open a users row's "More Actions" menu; the items portal to the page. */
 async function openUserRowMenu(page, row) {
-    await row.getByRole('button', {name: /management[. ]options/i}).click();
+    await row.getByRole('button', {name: /management[. ]options|^More Actions$/i}).click();
     await expect(page.getByRole('menuitem').first()).toBeVisible();
     return page.getByRole('menuitem');
 }
 
 /** Close an open row menu by pressing its button again (never Escape near a workflow dialog). */
 async function closeUserRowMenu(row) {
-    await row.getByRole('button', {name: /management[. ]options/i}).click();
+    await row.getByRole('button', {name: /management[. ]options|^More Actions$/i}).click();
 }
 
 /** The "Login As" confirmation, a page dialog of the app (not a browser dialog). */

@@ -44,7 +44,7 @@ preservation network's software reads them signed in as nobody.
 |--------|--------------------|
 | **Open the "Archiving" tab and its two side tabs** (Settings › Distribution; Rules 1, 2) | • whoever opens the Settings pages; nobody else <sup>b</sup> |
 | **Tick or untick "LOCKSS" and "CLOCKSS" and save** (Rule 3) | • whoever opens the Settings pages; nobody else <sup>b</sup> <sup>e</sup> |
-| **Turn the PKP Preservation Network on** (Rule 2) | • nobody on an install without the PN plugin: the side tab offers no control<br>• with the plugin installed and enabled, whoever opens the Settings pages, through the tab's box (Rule 2a) [A3](#a3) <sup>c</sup> <sup>d</sup> |
+| **Turn the PKP Preservation Network on** (Rule 2) | • nobody on this tab: the side tab offers no control, whether the PN plugin is installed or not, enabled or not (Rule 2a) [A3](#a3) <sup>c</sup> <sup>d</sup> |
 | **Read the journal's LOCKSS or CLOCKSS page** (Rules 5–12) | • any visitor, signed in or not, while the matching box is ticked and saved; unticked, the address lands everyone on the journal's home page, managers included (Rule 5)<br>• on a journal that requires sign-in to view the site, or that is not enabled publicly, a signed-out visitor is sent to the Login page instead; the journal's Reader, its Journal Manager and the Site Administrator, signed in, read the page (Rule 14) [A4](#a4) <sup>g</sup> <sup>k</sup> <sup>t9</sup> |
 | **Read the site's LOCKSS or CLOCKSS list** (Rule 13) | • any visitor, signed in or not <sup>j</sup> <sup>t7</sup> |
 
@@ -119,15 +119,16 @@ with the differences of Rule 12. <sup>i</sup>
    installed from the Plugin Gallery, which [Plugins management](U62-plugins-management.md)
    describes. The plugin is not part of the install, so the tab offers
    nothing to press. <sup>c</sup> <sup>t1</sup>
-   - 2a. **With the plugin installed and enabled** (never on the test
-     installs), the tab instead reads "The PKP Preservation Network (PN)
-     provides free preservation services for any OJS journal that meets
-     a few basic criteria.", then "View the plugin settings to accept the
-     terms of use for the PKP PN.", "plugin settings" opening the
-     plugin's settings, then a ticked box "Enable the PKP PN plugin".
-     Unticking the box disables the plugin at once, without "Save". An installed plugin that is disabled brings back the
-     text of Rule 2, so the tab never offers to enable it ⚠ [A3](#a3).
-     <sup>d</sup>
+   - 2a. **With the plugin installed.** An installed PN plugin changes
+     nothing on the tab, whether it is enabled in the journal or not: the
+     tab still shows the text of Rule 2 and nothing to press ⚠ [A3](#a3).
+     The tab was built to show a box instead. Under "The PKP Preservation
+     Network (PN) provides free preservation services for any OJS journal
+     that meets a few basic criteria." comes the box "Enable the PKP PN
+     plugin", unticked while the plugin is disabled. With the plugin
+     enabled, the box is ticked, with the line "View the plugin settings
+     to accept the terms of use for the PKP PN." above it, whose "plugin
+     settings" opens the plugin's settings. <sup>d</sup>
 3. **Saving the LOCKSS and CLOCKSS tab.** "Save" stores both boxes
    together and shows "Saved". A tick that is not saved changes nothing
    and follows Rule 5 of [Journal identity & about
@@ -273,8 +274,9 @@ with the differences of Rule 12. <sup>i</sup>
    "Journal URL" row ends in the language the page is read in. <sup>i</sup>
    <sup>t6</sup>
 9. **The PN plugin** (not installed on a new install; [Plugins
-   management](U62-plugins-management.md)). Installed and enabled, the PN side tab offers its box
-   (Rule 2a). <sup>c</sup> <sup>d</sup>
+   management](U62-plugins-management.md)). Installed, disabled or
+   enabled, it changes nothing: the PN side tab still asks for it to be
+   installed (Rule 2a) [A3](#a3). <sup>c</sup> <sup>d</sup>
 10. **The principal contact's "Email address"** (Settings › Journal ›
     "Contact"; [Journal identity & about
     pages](U07-journal-identity-and-about-pages.md); required, and set on
@@ -562,10 +564,7 @@ Left out of the scenarios above, by reason:
   - A2 (a subscription journal's "Rights" row still reading the open
     access text; Fields, row "Rights"; scenario 1 reads the row)
   - A3 (the PN plugin installed, disabled or enabled, the side tab asking
-    for it to be installed; Rule 2a)
-- **No seed**:
-  - the PN plugin installed and enabled, the side tab offering "Enable
-    the PKP PN plugin" (Rule 2a; Settings bullet 9)
+    for it to be installed; Rule 2a; Settings bullet 9)
 - **Owned by another feature**:
   - the roles without "Settings" in the side menu, refused at Settings ›
     Distribution (Actors preamble and row 1; *[Journal identity & about
@@ -671,7 +670,7 @@ Code read 2026-09-28 on ojs `9d9f116f38` (lib/pkp `fab29cfeca`, ui-library `1980
 **c** — `SettingsHandler::distribution()`: `PluginRegistry::getPlugin('generic', 'plnplugin')` is null on a stock install (no `plugins/generic/pln` in the ojs tree or its submodules), so `archivePn` is a `FormComponent('archivePn', 'PUT', 'dummy', …)` whose one page has `'submitButton' => null` and whose one field is a `FieldHTML` `pn` with label `manager.setup.plnPluginArchiving` and description `manager.setup.plnPluginNotInstalled` ("The PKP Preservation Network (PN) provides free preservation services for any OJS journal that meets a few basic criteria. To archive your journal in the PN, ask your administrator to install the PKP|PN Plugin from the Plugin Gallery."). ui-library `FormPage.vue`'s footer (`hasFooter`) renders only with a submit, previous or cancel button, so no "Save"; `FieldHtml.vue` prints the label as the heading and the description as HTML. Live-probed 2026-09-28 (Fields, the PN side tab; Rule 2; Actors row 3): for the Journal Manager, the Editor, the Production Editor and the Site Administrator the panel read the text above under its heading, with no button, link, box or "Save"; "Plugin Gallery" is plain text. The form holds a hidden submit input that cannot be pressed.
 
 <a id="fn-d"></a>
-**d** — With the plugin registered: `APP\components\forms\FieldArchivingPn` (component `field-archiving-pn`, ui-library `Form/fields/FieldArchivingPn.vue`) with label "PKP Preservation Network (PN)", description `manager.setup.plnDescription`, terms `manager.setup.plnSettingsDescription` ("View the <button>plugin settings</button> to accept the terms of use for the PKP PN.", shown while ticked), one option `manager.setup.plnPluginEnable` "Enable the PKP PN plugin", `value => (bool) $plnPlugin` (always true when the branch runs). Changing the box posts to `grid.settings.plugins.SettingsPluginGridHandler` `enable` / `disable` at once, with `common.pluginEnabled` / `common.pluginDisabled` as the messages; the button opens the plugin's `manage?verb=settings`. `PluginRegistry::getPlugin()` returns only registered plugins, and `Dispatcher` loads generic plugins with `PluginRegistry::loadCategory('generic', true)` (enabled only), so an installed but disabled plugin falls to the `FieldHTML` branch (A3). No screen of the test installs reaches this branch: none carries the PN plugin, and the Plugin Gallery cannot install one there (its list fails with a server error, a known Plugins management finding).
+**d** — With the plugin registered: `APP\components\forms\FieldArchivingPn` (component `field-archiving-pn`, ui-library `Form/fields/FieldArchivingPn.vue`) with label "PKP Preservation Network (PN)", description `manager.setup.plnDescription`, terms `manager.setup.plnSettingsDescription` ("View the <button>plugin settings</button> to accept the terms of use for the PKP PN.", shown while ticked), one option `manager.setup.plnPluginEnable` "Enable the PKP PN plugin", `value => (bool) $plnPlugin` (always true when the branch runs). Changing the box posts to `grid.settings.plugins.SettingsPluginGridHandler` `enable` / `disable` at once, with `common.pluginEnabled` / `common.pluginDisabled` as the messages; the button opens the plugin's `manage?verb=settings`. `PluginRegistry::getPlugin()` returns only registered plugins, and `Dispatcher` loads generic plugins with `PluginRegistry::loadCategory('generic', true)` (enabled only), so an installed but disabled plugin falls to the `FieldHTML` branch (A3). The lookup is by the exact, case-sensitive key `plnplugin`, which only the 3.3 release carries (`PLNPlugin` 2.0.4.x, named by `LazyLoadPlugin::getName()`); every release from pln 3.0.0.0 on, the ones the Plugin Gallery offers for 3.4 and 3.5, registers as `PlnPlugin`, so an enabled one falls to the `FieldHTML` branch too, and the box is reached on no current line (A3). The branch's enable, disable and settings addresses also carry `plugin => 'plnplugin'`, which `PluginRequiredPolicy` would refuse for those releases. The test installs carry no PN plugin, and the Plugin Gallery cannot install one there (its list fails with a server error, a known Plugins management finding). The box's wording and states in Rule 2a are therefore read from the code. Live-probed 2026-10-04 (Rule 2a; Actors row 3; Settings bullet 9) on `main` and `stable-3_5_0` with pln 4.0.1.0 installed from outside the app folder and enabled as `LazyLoadPlugin::setEnabled()` writes it: disabled and enabled, the side tab showed the install text of note c and no box, button or link, and no request or page script failed (kept walk `shared/playwright/checks/issues/pn-tab-asks-to-install-installed-plugin/walk.js`; note f-a3).
 
 <a id="fn-e"></a>
 **e** — `APP\components\forms\context\ArchivingLockssForm` (id `archivingLockss`, method PUT): `FieldOptions` `enableLockss` (label `manager.setup.lockssTitle` "LOCKSS", one option `manager.setup.lockssEnable` with `{$lockssUrl}` = `gateway/lockss` of the journal) and `enableClockss` (`manager.setup.clockssTitle` "CLOCKSS", `manager.setup.clockssEnable`, `gateway/clockss`); both values `(bool) $context->getData(...)`. The option labels are HTML (`<a href="{$lockssUrl}" target="_blank">Publisher Manifest</a>`) rendered through `v-strip-unsafe-html` in `FieldOptions.vue`. Schema: lib/pkp `schemas/context.json` `enableLockss`, `enableClockss` boolean, nullable, no default (a new journal has no row: unticked). The field descriptions (`manager.setup.lockssLicenseDescription`, `…clockss…`) were removed on main by ojs `d8a46d1bcd` (2026-03-18, pkp/pkp-lib#6682); stable-3_5_0 still shows them. Live-probed 2026-09-28 (Fields, the LOCKSS and CLOCKSS tab; Rules 3, 4): the boxes' accessible names are the two sentences, both unticked on a new journal and on the seeded journal; one "Save" posted both values together (`POST {journal}/api/v1/contexts/{id}`, `X-Http-Method-Override: PUT`, `enableLockss=true&enableClockss=false` and each other pair, 200) and showed "Saved" beside the button with no page notice, for LOCKSS alone, CLOCKSS alone, both, neither and an unchanged save; a reload showed what was saved. Each "Publisher Manifest" link (`target="_blank"`) opened a new browser tab and the Settings page stayed as it was. An unsaved tick survived switching to the PN side tab and to "Access" and back, and was gone after leaving the page or reloading, with no dialog either time.

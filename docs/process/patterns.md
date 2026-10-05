@@ -134,7 +134,9 @@ Each of these has bitten at least once.
    or `a:visible` (U31, 2026-09-06).
 8. **Confirmation dialogs.** Use `[role="dialog"]:has-text(...)` or the legacy
    `[data-cy="dialog"]`. Button labels vary (OK/Yes/No) between reka-ui and
-   jQuery UI.
+   jQuery UI. On `stable-3_5_0` a confirmation whose action the server
+   refuses stays open with "OK" and "Cancel" greyed, and only Escape
+   closes it (U36, U59, U73 issue walks).
 9. **fbvElement ids are runtime-suffixed** (`$FBV_uniqId`). Select by `name=`,
    not `#id`.
 10. **Legacy pkp jQuery grids.** Row controls stay hidden until `a.show_extras`
@@ -612,7 +614,9 @@ name, root, baseURL, port, api, mail, users, contextPath, url(path),
 variant('validation')}`. `api` is the `_test` client with that app's own
 key, `mail` the shared Mailpit (`find`, `count` and `expectNone` take a
 `since`, a Date taken before the action, for an address other walks on
-the slot also mail), `baseURL` the probe server (base port + 50),
+the slot also mail), `fleetMail` the same reads kept to the messages that
+name this fleet's own host (a dataset user's address is mailed by every
+fleet of the slot, both lines', within the same minute), `baseURL` the probe server (base port + 50),
 `variant('validation')` the +90 server with email validation and ALTCHA on,
 `db` the fleet's database, which `sql(app, query)` queries through psql
 (rows as lines, columns joined by `|`), and `contextTables` the per-app
@@ -706,7 +710,14 @@ return, so read them through `settled()` on the form's footer or an editor
 field, never straight after the click; and a preprint server heads these
 pages "Preprint: …" where a journal or press reads "Publication: …", so a
 heading wait keyed on "Publication" burns its timeout on OPS (U40 K1,
-2026-09-09). `rawKeys(page, {scope})` lists every raw locale key
+2026-09-09). The header's "Publish" (`workflow-controls-right`) stands
+only on these pages: a workflow opened by its address without a menu key
+lands on the current stage's view, whose header has none, while a
+declined or posted preprint lands on "Title & Abstract", which has no
+decision buttons and no "Participants", so a publish helper opens a
+publication page first and a decision or participant step on OPS passes
+the stage key (`workflow_5`) (U16, U24, U34, U44, U46, U70, U72 issue
+walks). `rawKeys(page, {scope})` lists every raw locale key
 (`##key##`) on a translated page, in text, `<option>`s and attributes,
 with where each sits and whether it is rendered; `screen().text` follows
 CSS `text-transform`, so an upper-cased heading there is no code (U07,
@@ -719,6 +730,11 @@ file's earlier one instead of overwriting it (U07, U08, U38, sync);
 `outFile(name)` names a file the script writes itself (a state file, an
 export) the same way, and `PROBE_RUN=r1` puts the run in all three
 names (`<name>-r1-<app>`), so two runs at once keep apart (U07, U10, U63);
+the names are the agent folder's, not the script's: two kept scripts of
+one agent (a unit split into several reports) that both write `walk`
+overwrite each other, and `merge` folds into whatever file of that name
+is there, an earlier session's included, so each script takes names (or
+a `PROBE_RUN`) of its own (U06, U36, U48, U53, U74 issue walks);
 `loc(page, description, locator)` a row in
 `locators.md` (selector, match count, visibility) for the test author,
 appended under a dated heading when the process exits, so several
@@ -749,6 +765,9 @@ makes a scratch tag that follows the tag conventions above. `signIn` uses
 the roster password rule, so it works for scratch users too; `signIn(page,
 user, {contextPath})` goes through that journal's own login page (which
 decides where the user lands), and any open session is signed out first.
+`switchLanguage(page, locale)` presses the user menu's link to that
+locale, found by its address (French (Canada) reads "français" there),
+from a back-office page with no window open.
 
 `npm run lint:probe-imports` fails when `playwright/probe` appears under
 `apps/` or `shared/playwright/{tests,pages,support}`.
@@ -760,7 +779,8 @@ elsewhere), so use a bounded wait there; and the kit dismisses a browser
 `confirm()` or `alert()`, as Playwright does, so a screen that may ask (a
 tab switch with unsaved changes, a refused upload) needs `page.on('dialog',
 …)` before the action, or the script silently takes the Cancel branch;
-the run record's `dialogs` shows what asked. The kit accepts a page-leave
+the run record's `dialogs` shows what asked, and the kit prints their
+count when the process ends. The kit accepts a page-leave
 question (`beforeunload`) while its listener is the page's only one,
 because dismissing it cancels the navigation and the next `goto()` or
 `signOut()` fails with `ERR_ABORTED`; a script's own dialog listener
@@ -798,8 +818,10 @@ the body there.
 A probe that needs a queued job's outcome (a DOI deposit, job-sent mail,
 the search index, a usage chain) calls `await drainJobs(app)`, never
 `support/jobs.js` `runJobs()`, which polls worker 0, down outside a run:
-it runs `php lib/pkp/tools/jobs.php work --stop-when-empty` under the
-fleet's test config and passes again while the probe server still counts
+it runs `php lib/pkp/tools/jobs.php work --stop-when-empty=1` under the
+fleet's test config (the `=1` form, which 3.5's `jobs.php` reads too: it
+never sees the bare flag, so its worker waited out every timeout; U06,
+U64, U65 issue walks) and passes again while the probe server still counts
 a queued job six seconds on (a failed attempt is retried after five
 seconds and `--stop-when-empty` exits while it waits). `jobs.php run`
 stops at the first failing job of any feature and returns between two

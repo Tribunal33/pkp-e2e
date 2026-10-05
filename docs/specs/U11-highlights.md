@@ -434,9 +434,8 @@ Left out of the scenarios above, by reason:
   - A4 ("Edit Highlight" closed with its close control leaving the
     unsaved title on the row for the next "Save" to store; Rule 6)
   - A6 (a dot pressed under the carousel; Rule 4; scenario 3 marks it)
-  - A7 (a press's and a preprint server's carousel arrows, and the
-    fourth tab across the top of Settings › Website, named by raw keys in
-    the French interface; Rule 11)
+  - A7 (a press's and a preprint server's carousel arrows named by raw
+    keys in the French interface; Rule 11)
   - A8 ("Save Order" on an empty list; Rule 9a)
   - A9 (the image replaced on an edit emptying "Alternate text"; Rule 10)
 - **No seed**:
@@ -471,7 +470,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site administrator cannot add site highlights: "Save" leaves the panel open and "Save Order" shows an error | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | In the French interface a press's and a server's carousel arrows read raw keys, and the fourth top tab of Settings › Website reads "##navigation.content##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A7](#a7) | In the French interface a screen reader names a press's and a server's carousel arrows by raw keys | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | "URL" accepts any text although its hint asks for a full web address, so a slide's button can point nowhere | ❓ | user-visible | — |
 | [A6](#a6) | The carousel's dots do nothing when pressed and have no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | "Save Order" on an empty list shows the generic "An unexpected error has occurred…" dialog | ❓ | minor | — |
@@ -555,19 +554,16 @@ slide picker, and the arrows alone make a long carousel slow to page.
 Basis: probe. <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — Raw keys in the French interface** · 🐞 · low.
+**A7 — Raw keys on the carousel's arrows in the French interface** · 🐞 · low.
 In the French (Canada) interface a screen reader names a press's and a
 preprint server's home page carousel arrows by codes,
 "##plugins.themes.default.prevSlide##" and
 "##plugins.themes.default.nextSlide##", where a journal's read "À la
 diapositive précédente" and "À la diapositive suivante": the two texts
 are missing from OMP's and OPS's French (Canada) theme files, the same
-cause as [Appearance & theming A6](U10-appearance-and-theming.md#a6). On
-`main`, on every app, the fourth tab across the top of Settings ›
-Website, the page whose "Setup" tab holds Highlights, reads
-"##navigation.content##"; 3.5 has no such tab. The Highlights side tab,
-the list's heading and the carousel's heading read "En vedette", and
-the highlight's own French text shows.
+cause as [Appearance & theming A6](U10-appearance-and-theming.md#a6).
+The Highlights side tab, the list's heading and the carousel's heading
+read "En vedette", and the highlight's own French text shows.
 Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
@@ -1062,8 +1058,7 @@ carries `aria-current="true"`.
 
 <a id="fn-f-a7"></a>
 **f-a7 — A7 evidence.** OMP's and OPS's default-theme `fr_CA` locale
-lack `plugins.themes.default.prevSlide|nextSlide`, which OJS's carries;
-`lib/pkp/locale/fr_CA/common.po` has no `navigation.content` entry.
+lack `plugins.themes.default.prevSlide|nextSlide`, which OJS's carries.
 Live-probed 2026-09-16, OJS, OMP and OPS: under `/fr_CA/` the side tab,
 the panel's heading and the carousel's `<h2>` read
 "##common.highlights##", the fourth top tab "##navigation.content##",
@@ -1081,7 +1076,17 @@ en vedette", the add panel headed "Mettre en vedette" and the edit panel
 Site Setup tab "En vedette"; the fourth top tab still
 `##navigation.content##`; the arrows' `aria-label` "À la diapositive
 précédente" / "À la diapositive suivante" on OJS and the raw theme keys
-on OMP and OPS.
+on OMP and OPS. Live-probed 2026-10-04 on `main` and `stable-3_5_0`, OJS,
+OMP and OPS, with
+`shared/playwright/checks/issues/french-appearance-settings-raw-keys/carousel.js`:
+the arrows as above on both lines. The fourth top tab, which this entry
+carried until 2026-10-05, is out: `navigation.content` was added in
+English on `main` for `pkp/pkp-lib#11783` (2025-09-04), only `en` and
+`hi` carry it in `lib/pkp/locale/*/common.po`, and 3.5's Settings ›
+Website shows three top tabs ("Apparence", "Configuration",
+"Plugiciels") with no such tab; a text new on `main` and awaiting its
+translations is not a defect (team ruling, 2026-10-02; the U10 A6 report
+lists it under "Left out").
 Issue report: [pkp-e2e#777](https://github.com/jardakotesovec/pkp-e2e/issues/777) ([docs/issues/U10-A6-french-appearance-settings-raw-keys.md](../issues/U10-A6-french-appearance-settings-raw-keys.md)), the carousel arrows.
 
 <a id="fn-f-a8"></a>

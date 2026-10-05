@@ -272,8 +272,8 @@ and the reviewer forms to *Reviewer assignment & management*.
   only revised file is deleted: the status and the My Submissions row revert
   to their requested state (Rule 7) while the task list stays silent
   ⚠ [A9](#a9). The new-round variant's task reads "Resubmit for review." in
-  both apps and stays in the author's list even after they upload
-  ⚠ [A1](#a1). The decision's own notifications and emails belong to
+  both apps, and it stays in the author's Tasks panel after they upload a
+  revised file ⚠ [A13](#a13). The decision's own notifications and emails belong to
   *Editorial decision recording*. <sup>m</sup>
 - **Round created.** An internal round-status notice record is created. It
   currently surfaces nowhere (footnote only). <sup>n</sup>
@@ -447,8 +447,8 @@ are in the footnote. <sup>s</sup>
      new review round needs to be created."
    - **A further file**: Author: the "Revisions Uploaded" panel's own
      "Upload" control opens the same upload wizard (the bottom "Upload
-     revisions" button is gone and the "Resubmit for review." task stays
-     [A1](#a1); neither is a pass or fail here).
+     revisions" button is gone [A1](#a1) and the "Resubmit for review."
+     task stays [A13](#a13); neither is a pass or fail here).
    - **Control**: after the in-round upload of scenario 4, the bottom
      "Upload revisions" button is still offered. <sup>s</sup>
 
@@ -673,7 +673,7 @@ Left out of the scenarios above, by reason:
   - A2 (the same status box for every role; the author gets the editor's wording; Actors row 2, Rule 4)
   - A7 (unticking a file changes nothing the editor can see; the checkboxes do not mirror the panel; Rule 8)
   - A1 (the bottom "Upload revisions" button gone after the first new-round upload while the panel's "Upload" still works; Rule 9)
-  - A1 (the "Resubmit for review." task staying after the upload; Side effects)
+  - A13 (the "Resubmit for review." task staying after the upload; Side effects)
   - A8 (a past round's panels still act: a reviewer or file lands there; Rules 1, 10)
   - OMP2 (no recommendation line on a press; Rule 15)
   - OJS1 (the journal's window showing no review text; Rule 15)
@@ -712,6 +712,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS1](#ojs1) | On a journal, the author's "Read Review" window shows no review text; remarks shared with the author are missing (a press shows them) | 🐞 | user-visible | — |
 | [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A13](#a13) | After "Resubmit for Review", the Author's "Resubmit for review." task stays in their Tasks panel once they have uploaded a revised file | 🐞 | minor | — |
 | [A2](#a2) | The author sees the editor's status wording; the author-tailored wording exists but is never shown | ❓ | user-visible | — |
 | [A3](#a3) | What the read-review window's attachments section lists: observation recorded privately with the maintainer pending a fix | ❓ | latent | — |
 | [A4](#a4) | A round whose only reviewers declined reports "All reviews are confirmed and a decision is needed." | ❓ | user-visible | — |
@@ -883,6 +884,16 @@ notice is early; the file removal reads as the window doing what its
 "Cancel" promises.
 Since: 2026-09-12 · Basis: test run (a journal, one run; the press was not
 driven on this path). <sup>[f-a11](#fn-a11)</sup>
+
+<a id="a13"></a>
+**A13 — After "Resubmit for Review", the Author's "Resubmit for review." task stays after their upload** · 🐞 · minor.
+When an editor requests revisions that will go to a new review round,
+the Author's Tasks panel gets the task "Resubmit for review.". After the
+Author uploads a revised file, the task is still there. When revisions
+are requested without a new round, the revisions task disappears with
+the first upload (see *Side effects*). The Author keeps being asked to
+resubmit work they have already sent.
+Basis: probe, 2026-10-02. <sup>[f-a13](#fn-a13)</sup>
 
 ### OJS
 
@@ -1299,7 +1310,8 @@ claim check): the OJS Tasks panel entry reads
 "Revision requested" with a "Submit revisions" button in both apps, and the
 task cleared on the in-round upload. The new-round variant (Resubmit)
 produces a different, decision-owned task ("Resubmit for review.", verbatim
-in both apps) — side-effect line only here.
+in both apps) — side-effect line only here; it does not clear on upload,
+finding A13 (note f-a13).
 
 <a id="fn-n"></a>
 **n** — `DecisionType::createReviewRound()` creates one
@@ -1468,8 +1480,9 @@ itself belongs to the *Submission stage* feature, not this register.
 resubmit-path round enters on the author's first upload (note c). The
 in-round path (statuses 1→11) keeps the button through both states. Probed
 2026-07-31 (contrast, same probe: the in-round path keeps
-the button and its task clears on upload); the persisting "Resubmit for
-review." task is the decision-owned resubmit task (note m).
+the button and its task clears on upload). The "Resubmit for review."
+task that stays after the upload is a separate fault, finding A13 (note
+f-a13).
 Issue report: [pkp-e2e#520](https://github.com/jardakotesovec/pkp-e2e/issues/520) ([docs/issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md](../issues/U26-A1-upload-revisions-button-gone-after-resubmit-upload.md)).
 
 <a id="fn-a2"></a>
@@ -1579,6 +1592,24 @@ Mechanism, read not driven: lib/pkp
 `wizardCancelRequested` deletes the uploaded file when cancel follows an
 upload; the email goes out at the step-1 add (note l). The press was not
 driven on the Cancel path.
+
+<a id="fn-a13"></a>
+**f-a13** — Live-probed 2026-10-02 on OJS and OMP, `main` and `stable-3_5_0`,
+on PKP's default test dataset (OJS submission 10, OMP submission 16, the
+walk of finding A1's issue report): after the editor's "Request
+Revisions" with "Revisions will be subject to a new round of peer
+reviews." and the Author's first upload through "Upload revisions", the
+Author's Tasks panel, opened from My Submissions, still listed
+"Resubmit for review."; same result on both lines and both apps. Kept
+walk: `shared/playwright/checks/issues/upload-revisions-button-gone-after-resubmit-upload/walk.js`
+(its last step reads the Tasks panel). The task staying was first seen
+2026-07-31 on the A1 probe (note f-a1) and was carried under A1 until
+that issue report found it a fault of its own. Mechanism, read and not
+traced further: the task is the decision-owned resubmit row (note m,
+`NOTIFICATION_TYPE_EDITOR_DECISION_RESUBMIT`), and the code that clears
+the revisions task on a revision upload
+(`PendingRevisionsNotificationManager`, `PKPManageFileApiHandler`) names
+`NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS` only.
 
 <a id="fn-a10"></a>
 **f-a10** — Probed 2026-08-02, editorial view (Journal/Press Manager), on

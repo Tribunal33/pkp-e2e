@@ -151,6 +151,16 @@ In French most of its headings and descriptions are raw codes
    Current/Back Issue" with that issue chosen. A save of its Publication
    Settings page beforehand, even of only an Update Type, makes the
    button skip the panel (Rule 3a). <sup>h</sup>
+3c. **A refused Confirm {OJS}.** A Confirm missing a Publication Stage,
+   a Revision Significance or the issue its assignment names stays in
+   the panel, with "This field is required." under the empty field
+   (Fields). A Confirm refused with the passing notice "The form was
+   not saved because 1 error(s) were encountered. Please correct these
+   errors and try again.", such as a required summary's (Rule 4),
+   marks nothing in the panel. On a version with no Publication Stage
+   yet it opens a second panel over the first, "Publication Stage" and
+   "Revision Significance" empty, and one "Cancel" closes both
+   ⚠ [OJS5](#ojs5). <sup>h</sup>
 4. **The confirmation window.** The final window is titled "Schedule For
    Publication" on a journal and press, and "Post the preprint" on a
    preprint server. It shows, in order: an optional warning list ("The
@@ -167,13 +177,15 @@ In French most of its headings and descriptions are raw codes
    have a version stage assigned before it can be published." instead: a
    sentence phrased as an unmet requirement right under the all-met line,
    though it blocks nothing ⚠ [A7](#a7). On a journal whose settings
-   *require* a plain language summary, a version without one gets neither
-   text nor button. The Confirm is refused with no message and publishing
-   is never reached ⚠ [OJS1](#ojs1). Confirming closes the window, and
-   the Publication area shows the new state at once: the head's status
-   and, in place of the publish button, "Unpublish" ("Unpost") or
-   "Unschedule" (Rules 6, 8, 9). This holds whether the window opened
-   after "Review Publishing Details" or directly (Rule 3). <sup>l</sup>
+   *require* a plain language summary, the panel's Confirm is refused,
+   even with a summary saved, and nothing names it (Rule 3c)
+   ⚠ [OJS1](#ojs1); only a version skipping the panel (Rule 3) reaches
+   the window ⚠ [OJS6](#ojs6).
+   Confirming closes the window, and the Publication area shows the new
+   state at once: the head's status and, in place of the publish
+   button, "Unpublish" ("Unpost") or "Unschedule" (Rules 6, 8, 9).
+   This holds after "Review Publishing Details" or directly (Rule 3).
+   <sup>l</sup>
 5. **What the issue choice decides {OJS}.** The four assignments map to
    outcomes. Only the choices the journal's issues allow are offered: with
    no future issue there are no "Future Issue" options, and with no issues
@@ -380,9 +392,11 @@ In French most of its headings and descriptions are raw codes
   not). Two templates exist, "Preprint Posted Acknowledgement" for the
   first version and "New Version Posted Acknowledgement" for later ones,
   but every post sends the new-version one. The first-post acknowledgement
-  never goes out ⚠ [OPS4](#ops4). The acknowledgement is governed by one
-  Workflow › Emails setting (Settings below) and is sent even when the post
-  only scheduled the preprint ⚠ [OPS2](#ops2). <sup>z</sup>
+  never goes out ⚠ [OPS4](#ops4). Were it sent, its "Preprint URL" would
+  lead the contributor to the preprint's workflow on the editorial
+  dashboard, not to its public page ⚠ [OPS6](#ops6). The acknowledgement
+  is governed by one Workflow › Emails setting (Settings below) and is
+  sent even when the post only scheduled the preprint ⚠ [OPS2](#ops2). <sup>z</sup>
 - **Activity log**: one line per act. "The submission was published." /
   "…was scheduled for publication." for the first version; "A new version
   was published." / "…scheduled…" for later versions; "The submission was
@@ -437,7 +451,7 @@ In French most of its headings and descriptions are raw codes
   pages, the edit locks that published/scheduled states impose, and the
   copyright fill's field-level story (its Rule 12). This spec owns the
   publishing acts that trigger them. Its plain-language-summary finding
-  surfaces here as the silent Confirm refusal ⚠ [OJS1](#ojs1).
+  surfaces here as the panel's refused Confirm ⚠ [OJS1](#ojs1).
 - [Submission stage](U25-submission-stage.md#schedule): the journal's
   Submission-stage "Schedule For Publication" shortcut that lands here.
 - *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#stage-access)*:
@@ -1021,7 +1035,7 @@ Left out of the scenarios above, by reason:
   - A10 (in French the version dialog and the entry page reading raw
     codes; Fields)
   - OJS1 (a required plain language summary refusing the panel's Confirm
-    with no message; Rule 4)
+    without naming the summary; Rule 4)
   - OJS2's second half (where only future issues exist, a Publication
     Settings save for another field recording "Don't Assign To An
     Issue"; Fields)
@@ -1029,10 +1043,13 @@ Left out of the scenarios above, by reason:
     no version under answering a blank server error; Rule 11)
   - OJS4 (a publish without an issue failing for a contributor with a
     verified ORCID iD under the member API; Rule 15)
+  - OJS5 (a refused Confirm opening a second, blank panel; Rule 3c)
   - OPS1 (the scheduled preprint waiting forever; Rule 6; scenario 15
     marks it)
   - OPS3 (a screening plugin lifting the author block with no Post
     control appearing; Actors; scenario 16 marks it)
+  - OPS6 (the first-post acknowledgement's "Preprint URL" leading to the
+    editorial workflow, not the public preprint; Side effects)
 - **No seed**:
   - the warning list "The following issues were found, but will not
     prevent publishing" (Rule 4): plugins alone add entries, none in a
@@ -1100,14 +1117,17 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
+| [OJS5](#ojs5) | A refused Confirm in "Review Publishing Details" opens a second, blank panel over the first | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [OPS6](#ops6) | The first-post acknowledgement's "Preprint URL" links the preprint's editorial workflow, not its public page | 🐞 | latent | — |
 | [A1](#a1) | The new-version email announces itself to editors but goes to every stage-assigned user, the submitting author included | ❓ | user-visible | — |
 | [A2](#a2) | Publishing is offered to managers only, although the app's deeper plumbing names Section Editors and Assistants; on a preprint server that leaves Moderators without a Post button | ❓ | user-visible | — |
 | [A3](#a3) | A published non-final version leaves the submission itself listed as unpublished, and a press's catalog page down | ❓ | user-visible | — |
 | [A4](#a4) | Switching the Publication Stage silently re-selects "Minor Revision", discarding the user's choice | ❓ | minor | — |
 | [A7](#a7) | The press's and preprint server's confirmation shows a requirement-shaped stage sentence under "All … requirements have been met" | ❓ | minor | — |
 | [A9](#a9) | Unassigned versions made the same day carry identical names in every version list | ❓ | minor | — |
+| [OJS6](#ojs6) | With a summary required, a version with saved details skips the refused panel and would publish without one | ❓ | latent | — |
 | [OMP1](#omp1) | The press's publish confirmation promises to make the entry public while a future date schedules it instead | ❓ | minor | — |
 | [OPS2](#ops2) | The posted acknowledgement is sent even when the post only scheduled the preprint | ❓ | minor | — |
 | [OPS3](#ops3) | An author granted posting by a plugin still finds no Post control on the workflow | ❓ | latent | — |
@@ -1306,14 +1326,13 @@ Since: 2026-09-30 · Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — A required plain language summary blocks Confirm silently** · 🐞 · high.
+**OJS1 — A required plain language summary blocks Confirm without naming itself** · 🐞 · high.
 On a journal that requires a plain language summary, the "Review
 Publishing Details" panel's Confirm is refused for every version, one
-that already holds a summary included. Publishing and scheduling are
-never reached. Nothing names the summary: a passing notice counts "1
-error(s)", nothing in the panel is marked, and a second, blank copy of
-the panel opens over the first. The requirement's save-blocking side
-is [Publication metadata](U40-publication-metadata.md#a1)'s finding,
+that already holds a summary included, so publishing and scheduling
+are never reached from it ([OJS6](#ojs6)). Nothing names the summary
+(Rule 3c, [OJS5](#ojs5)). The requirement's
+save-blocking side is [Publication metadata](U40-publication-metadata.md#a1)'s finding,
 with the same cause; a press and preprint server publish without a
 summary. Since: 2026-08-28 · Basis: probe, 2026-10-02.
 <sup>[f-ojs1](#fn-ojs1)</sup>
@@ -1358,6 +1377,29 @@ resend either. Publishing without an issue is new on `main`. The fault
 needs that, the member API, a contributor with a verified iD, and DOIs
 turned on for the journal. Basis: probe, 2026-10-02.
 <sup>[f-ojs4](#fn-ojs4)</sup>
+
+<a id="ojs5"></a>
+**OJS5 — A refused Confirm opens a second, blank details panel** · 🐞 · minor.
+When "Review Publishing Details" is refused with the passing "1
+error(s)" notice (Rule 3c) on a version with no Publication Stage yet,
+a second copy of the panel opens over the first, "Publication Stage"
+and "Revision Significance" empty. The editor expects to stay in the
+filled-in panel with the problem marked, and faces an empty one; one
+"Cancel" closes both. It was seen with a required plain
+language summary ([OJS1](#ojs1)), but is a fault of its own: fixing
+that requirement removes one trigger, and any other refusal of this
+kind would open the copy too. A refusal for an empty field of the
+panel stays in place. Basis: probe, 2026-10-02 (that other refusals do
+the same is a code reading). <sup>[f-ojs5](#fn-ojs5)</sup>
+
+<a id="ojs6"></a>
+**OJS6 — With a plain language summary required, a version that skips the panel would publish without one** · ❓ · latent.
+On a journal that requires a plain language summary, a version whose
+issue choice and stage are already saved skips the refused panel
+([OJS1](#ojs1)) for the confirmation window (Rule 3), where nothing
+checks the summary. Question: should publishing require it too? Lean:
+no; the setting asks for it "before accepting their submission", and a
+press and preprint server publish without one. Basis: code, 2026-10-05. <sup>[f-ojs6](#fn-ojs6)</sup>
 
 ### OMP
 
@@ -1433,6 +1475,17 @@ published." Question: should the Post vocabulary reach these surfaces
 too? Lean: yes. The leftovers read as another application's words. Since:
 2026-08-29 · Basis: probe.
 <sup>[f-ops5](#fn-ops5)</sup>
+
+<a id="ops6"></a>
+**OPS6 — The first-post acknowledgement links the editorial workflow, not the preprint** · 🐞 · latent.
+"Preprint Posted Acknowledgement", the email meant for a preprint's first
+post, tells each contributor "Your preprint, "{title}" has been posted
+online on {server}." and gives a "Preprint URL" that leads to the
+preprint's workflow on the editorial dashboard, not to the public page
+the email announces. On `main` the email is never sent
+([OPS4](#ops4)); once it is, every first post sends this link, as the
+3.5 release already does. Basis: probe, 2026-10-02.
+<sup>[f-ops6](#fn-ops6)</sup>
 
 ### Retired
 
@@ -1601,6 +1654,9 @@ first "Publish" opened the panel on "Version of Record (VoR)", "Minor
 Revision", "New Version", "Assign To Current/Back Issue" and "Vol. 1
 No. 1 (2025)"; both had been retitled first, and a Title & Abstract
 save stores no issue choice.
+Rule 3c: the in-place refusals are fn-o's empty Confirm and this
+footnote's Confirm without an issue; the second panel was walked
+2026-10-02 (f-ojs5).
 
 <a id="fn-i"></a>
 **i** — `useWorkflowVersionForm('createNewVersion')`: `versionSource`
@@ -2252,8 +2308,15 @@ Issue report: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with
 "Require the author to provide a plain language summary…" on, the
-panel's Confirm was refused with no message on a summary-less version;
-OMP published and OPS posted under the same requirement. The
+panel's Confirm was refused with no message in the panel on a
+summary-less version; OMP published and OPS posted under the same
+requirement. Walked again 2026-10-02 (PKP's default dataset, `dbarnes`,
+OJS `main`): refused before and after a summary was saved on "Title &
+Abstract", each time with the panel's `PUT` answering 400
+`{"plainLanguageSummary":{"en":["This field is required."]}}`, a
+passing notice "The form was not saved because 1 error(s) were
+encountered. Please correct these errors and try again.", no field
+marked, and the second panel of f-ojs5. The
 requirement is checked against what each save sends; the panel's save
 does not carry the summary field.
 Issue report: [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323) ([docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md](../issues/U21-A20-plain-summary-required-refuses-other-saves.md)).
@@ -2343,6 +2406,34 @@ contributor normally under "Member Sandbox" (fn-ac). The no-issue path
 on a journal with issues ("Don't Assign To An Issue") was not driven.
 Issue report: [pkp-e2e#549](https://github.com/jardakotesovec/pkp-e2e/issues/549) ([docs/issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md](../issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md)).
 
+<a id="fn-ojs5"></a>
+**f-ojs5** — ui-library `useWorkflowVersionForm()`
+(`src/pages/workflow/composables/useWorkflowVersionForm.js`, at
+68972cca81) calls the panel's `onSubmitFn` whether or not the save
+succeeded (`isSuccess` gates only `closeDialog`), and the publish flow
+it calls back into reopens "Review Publishing Details" while the
+version still has no `versionStage` (fn-h). The panel is built with
+`showErrorFooter: false`, so a server-side refusal of a field it does
+not hold marks nothing. Walked 2026-10-02 (PKP's default dataset,
+`dbarnes`, OJS `main`, plain language summary required; f-ojs1): each
+refused Confirm opened a second panel with "Publication Stage" and
+"Revision Significance" empty, and one "Cancel" closed both. Kept walk:
+`shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/publish-confirm.js`.
+The in-place refusals (an empty stage, significance or issue) are
+client-side and send no request (fn-h, fn-o). Not reported; it rides
+with [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)'s
+Cause.
+
+<a id="fn-ojs6"></a>
+**f-ojs6** — Code read 2026-10-05 (OJS `main`, lib/pkp `987776cd04`):
+`validatePublish()` (pkp-lib and OJS publication `Repository`) checks
+no `plainLanguageSummary`; only `validate()`, run on each save, does
+(f-ojs1). The publish button skips the panel by the version's stored
+stage and status (fn-h), so that path sends no save. Not walked. The
+setting's text: "Require the author to provide a plain language summary
+before accepting their submission."; pkp-e2e#323's Fix notes call a
+check at publishing a product decision.
+
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `PublishForm` shows the single confirmation string for
 every date; `setStatusOnPublish()` decides scheduled-vs-published only
@@ -2405,6 +2496,20 @@ new version of your submission, "{title}", was published." — the OPS
 locale does not override these (`NotifyAuthorOnPublication`'s mailable
 and `notification.type.publicationPublished` render the shared
 wording).
+
+<a id="fn-ops6"></a>
+**f-ops6** — `emails.postedAck.body` (OPS locale) links "Preprint URL"
+to `{$submissionUrl}`, and `{$submissionUrl}` is `SubmissionEmailVariable::SUBMISSION_URL`
+(`getSubmissionUrl()`), the editorial workflow address. Walked
+2026-10-02 (PKP's default dataset, `dbarnes` posting preprint 1, the
+mail at `ccorino@mailinator.com`) on OPS `stable-3_5_0` and on `main`
+with the OPS4 first-post fix tried: "Preprint Posted Acknowledgement"
+arrived with "Preprint URL"
+`…/dashboard/editorial?workflowSubmissionId=1`.
+Kept walk:
+`shared/playwright/checks/issues/preprint-posted-acknowledgement/walk.js`.
+Not reported; noted under "What goes with it" in
+[docs/issues/U49-OPS4-first-post-thanked-for-new-version.md](../issues/U49-OPS4-first-post-thanked-for-new-version.md).
 
 <a id="fn-s1"></a>
 **s1 — scenario 1 seeding.** A scratch submission moved to Production

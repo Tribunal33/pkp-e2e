@@ -134,9 +134,18 @@ browser tab reads "Change Password | {journal name}", but after a refused
    Ticked or not, the sign-in survives browser restarts, unless the
    installation is configured to end sessions at browser close. Unticked,
    the session ends when its idle lifetime runs out (a config default of
-   7 days without a visit). Ticking "Keep me logged in" extends the sign-in
+   7 days without a visit). Ticked, "Keep me logged in" keeps the sign-in
    past that idle limit, for a fixed window from login (config default
-   30 days). <sup>c</sup>
+   30 days), but only in part (Rule 5a). <sup>c</sup>
+5a. **Back after the idle limit, half signed in.** A user who signed in
+   with "Keep me logged in" ticked and comes back after the idle limit
+   still opens the Dashboard and the other editorial pages signed in.
+   But the journal's public pages offer "Register" and "Login" as if
+   they were signed out, the Login page shows its form instead of
+   sending them home (Rule 1), and "Login As" fails (Rule 14)
+   ⚠ [A8](#a8). Signing in again, on that Login page or after signing
+   out, puts all three right: their name back in the public header, the
+   Login page sending them home, "Login As" impersonating. <sup>c</sup>
 6. **Signing out.** The user menu (top-right initials) offers "Logout".
    Signing out returns the browser to the Login page and ends only this
    browser's session. The same account signed in elsewhere stays signed in.
@@ -211,10 +220,11 @@ browser tab reads "Change Password | {journal name}", but after a refused
     address with the number changed. Opened for an out-of-reach user, it
     shows an error page, "Sorry, you do not have administrative rights over
     this user…", listing the possible causes, with a link back to the users
-    list. In a session the site can no longer fully resolve (one that
-    outlived a server-side reset, say), the same address answers a blank
-    server error instead of impersonating or turning the visitor away
-    ⚠ [A8](#a8). <sup>h</sup>
+    list. In a sign-in "Keep me logged in" has kept past the idle limit
+    (Rule 5a), "Login As" fails on the server and the browser shows a
+    blank page, instead of impersonating or turning the user away, both
+    when pressed on a row and at a hand-built address [A8](#a8).
+    <sup>h</sup>
 15. **Returning.** "Logout as", the user menu's "Logout as {username}" or
     the Participants panel's "Logout as {full name}", restores the original
     account without asking for credentials. Pressed on a workflow screen,
@@ -250,8 +260,12 @@ browser tab reads "Change Password | {journal name}", but after a refused
     role does not allow is shown a message page stating the denial. The exact
     sentence varies with the screen; most commonly it is "The current role
     does not have access to this operation." Nothing of the refused screen
-    renders. Signed out, the same address shows the Login page instead
-    (Rule 4). <sup>l</sup>
+    renders. The page around the sentence belongs to
+    [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md),
+    which records that its heading and the last step of its breadcrumb are
+    empty and its browser tab carries no page name
+    (its finding [A3](U08-navigation-menus-and-site-chrome.md#a3)). Signed out, the
+    same address shows the Login page instead (Rule 4). <sup>l</sup>
 18. **Sessions end from the outside too.** The installation can be
     configured to end a session whose network address changes mid-visit (on
     by default). The Site Administrator can also expire every session at
@@ -599,9 +613,9 @@ Left out of the scenarios above, by reason:
     (`docs/issues/U01-A7-dashboard-address-signed-out-server-error.md`)
     proposes, once fixed
   - a user signed in with "Keep me logged in" and back after the idle
-    limit seeing their name, not "Register" and "Login", in the public
-    header, and "Login As" impersonating ([A8](#a8)): the guard the
-    issue report
+    limit opening the Dashboard signed in, seeing their name, not
+    "Register" and "Login", in the public header, and "Login As"
+    impersonating (Rules 5a, 14; [A8](#a8)): the guard the issue report
     (`docs/issues/U01-A8-login-as-after-idle-limit-server-error.md`)
     proposes, once fixed
   - the Site Administrator's "Edit User" on a flagged account opening
@@ -979,7 +993,19 @@ expiry — so it survives browser close; ticked, a separate `remember_web_*`
 cookie (30 days) appears alongside the same session cookie. With
 `session_expire_on_close` unset (the default), nothing ends at browser close
 in either case — the earlier gloss "extends the session past closing the
-browser" was wrong and is corrected as of this probe.
+browser" was wrong and is corrected as of this probe. Live-probed
+2026-10-04 (Rule 5a; OJS, OMP, OPS on `main`, and on `stable-3_5_0`; PKP's default
+test dataset, the manager `rvaca` signed in with "Keep me logged in" left
+ticked as the page shows it; kept script
+`shared/playwright/checks/issues/login-as-after-idle-limit-server-error/walk.js`):
+the idle limit stood in for by moving every session's last activity back
+eight days, Settings › Users & Roles still opened signed in, the journal's
+home page header ended "Search Register Login" and the Login page showed
+its "Username or Email" and "Password" form; after signing out and in
+again, both were back to normal. With the box unticked, the same lapse
+signs the user out entirely (Users & Roles → the Login page). Cause: the
+remember cookie restores the user without the session's own user id
+(finding A8, note f-a8).
 
 <a id="fn-d"></a>
 **d** — `LoginHandler::signOut()` → `Validation::logout()`: invalidates the
@@ -1212,7 +1238,15 @@ none touches `authorizationDenied` or the ops in this spec. Live-probed
 2026-07-31 (all three apps): the signed-in denial reads "The current role
 does not have access to this operation."; signed out, the same address
 shows the plain Login page and continues to the requested screen after
-sign-in.
+sign-in. The page's frame (`frontend/pages/message.tpl` with no
+`pageTitle` assigned) is [Navigation menus & site chrome A3](U08-navigation-menus-and-site-chrome.md#a3):
+live-probed 2026-10-03 on OJS, OMP and OPS `main` and `stable-3_5_0` (kept
+script `shared/playwright/checks/issues/access-denied-page-no-heading/walk.js`),
+and live-probed again 2026-10-02 on OJS `main` by an Author, a Reviewer and a
+section editor typing the role-invitation address
+`invitation/create/userRoleAssignment` (kept script
+`shared/playwright/checks/U06/S02/s02.js`): an empty `h1`, the breadcrumb
+"Home /", HTTP 200 after a redirect.
 
 <a id="fn-m"></a>
 **m** — `config.inc.php` `[security]`: `force_ssl`, `force_login_ssl`
@@ -1407,6 +1441,21 @@ that state) into the int-typed second parameter of
 GET → 302 to Login; freshly signed-in session → impersonation proceeds
 (200 → dashboard). Fix per ruling: treat an unresolvable session user as
 signed out (redirect to Login) before the administration-level check.
+That first lead, a session that outlived a database reset, gave the same
+error line; that it is the same state stays unverified. Live-probed
+2026-10-04 (OJS, OMP, OPS on `main` and `stable-3_5_0`; default dataset; kept script
+`shared/playwright/checks/issues/login-as-after-idle-limit-server-error/walk.js`,
+the idle limit stood in for as in note c): after a "Keep me logged in"
+sign-in lapses, "Login As" on the Users & Roles row "David Buskins"
+answers HTTP 500 with an empty body at `login/signInAsUser/{id}`, the log
+reading `Validation::getAdministrationLevel(): Argument #2
+($administratorUserId) must be of type int, null given`; the hand-built
+address for `admin`, out of the manager's reach, answers the same 500.
+The cause is `PKPSessionGuard::getUserId()`: Laravel's recaller restores
+the user, but `setUserDataToSession()` never runs on that path, so PKP's
+own `userId` session key is null and `Validation::isLoggedIn()` reads the
+user as signed out (the public header and the Login page, Rule 5a).
+Control: signed out and in again, the same "Login As" impersonates.
 Issue report: [pkp-e2e#828](https://github.com/jardakotesovec/pkp-e2e/issues/828) ([docs/issues/U01-A8-login-as-after-idle-limit-server-error.md](../issues/U01-A8-login-as-after-idle-limit-server-error.md)).
 
 <a id="fn-a9"></a>

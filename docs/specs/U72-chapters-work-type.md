@@ -86,11 +86,11 @@ asterisk: *", then "Save" and "Cancel". <sup>g</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| **Title** | Yes, in the book's language | One box per language the press offers for forms (Settings › Website › Setup › Languages, "Forms"), the book's language first; with a single form language the one box is in the book's language. Typing stops at 255 characters. An empty title in the book's language is refused with "This field is required." under its box: the window stays open and nothing is saved <sup>td6</sup> |
+| **Title** | Yes, in the book's language, and in the press's primary language when its box shows | One box per language the press offers for forms (Settings › Website › Setup › Languages, "Forms"), the book's language first; with a single form language the one box is in the book's language. Typing stops at 255 characters. An empty title in the book's language is refused with "This field is required." under its box: the window stays open and nothing is saved. A book in another language needs the title in the press's primary language too: on a press whose primary language is English, a French book's chapter titled in French alone is refused with "This field is required." under the English box ⚠ [A10](#a10) <sup>td6</sup> |
 | **Subtitle** | No | One box per language, like Title; typing stops at 255 characters <sup>g</sup> |
 | **Abstract** | No | A rich-text editor, one per language, like Title <sup>g</sup> |
 | **Pages** | No | Free text (for example "1-24"); nothing checks its form <sup>g</sup> |
-| **Date Published** | No | Shown only while the book's "Publication Dates" reads "Each chapter may have its own publication date." (Rule 11). A date picker. On a chapter that has no date the box shows today's date, which "Save" does not store ⚠ [A4](#a4) <sup>g</sup> <sup>e</sup> |
+| **Date Published** | No | Shown only while the book's "Publication Dates" reads "Each chapter may have its own publication date." (Rule 11). A date picker. A chapter with no date opens with the box empty until saved with it empty; from then on the box shows today's date at every opening, though "Save" leaves the chapter's stored date empty ⚠ [A4](#a4) <sup>g</sup> <sup>e</sup> <sup>td19</sup> |
 | **License URL** | No | Shown on an Edited Volume only (Rule 12a). Above the box, when a license applies by default, the sentence "The license will be set automatically to {license} when this is published." <sup>g</sup> <sup>o</sup> |
 | **Chapter Page** | — | One box, "Show this chapter on its own page and link to that page from the book's table of contents.", unticked for a new chapter. On a chapter that has a DOI, the note "(This chapter will always be shown on its own page because it has a DOI.)" under it (Rule 10) <sup>g</sup> <sup>n</sup> |
 | **Add Contributor** | No | One box per contributor of this version, by full name: this chapter's authors first, ticked, in their chapter order, then the version's other contributors in their Contributors-list order. Absent when the version has no contributors (Rule 6) <sup>td7</sup> |
@@ -185,9 +185,11 @@ wizard on Review ⚠ [A5](#a5). <sup>h</sup>
      is the order the chapters were added in, and it is the book's
      table-of-contents order. <sup>l</sup> <sup>td11</sup>
    - 8b. Dragging an author moves them among that chapter's authors, and
-     "Done" saves the new order; after an earlier "Done" in the same
-     visit, a new author order is lost ⚠ [A7](#a7). "Cancel ordering" puts the
-     list back as it was. <sup>l</sup> <sup>td11</sup>
+     "Done" saves the new order. An author who ends up n-th in the
+     chapter while being (n + 1)-th on the version's "Contributors" list
+     (second in the chapter and third on the list, say) keeps their old
+     place ⚠ [A7](#a7). "Cancel ordering" puts the list back as it was.
+     <sup>l</sup> <sup>td11</sup>
 9. **Deleting a chapter.** The arrow before a chapter's title, then
    "Delete", opens a window headed "Delete", "Are you sure you wish to
    delete this item? This action cannot be undone.", with "OK" and
@@ -723,8 +725,8 @@ Left out of the scenarios above, by reason:
     "Save" on "Publication Dates", while the Press editor changes both
 - **Nothing new to test**:
   - two form languages on the press: one "Title", "Subtitle" and
-    "Abstract" box per language, the book's language first, and a title
-    typed only in the other language refused (Fields, Title)
+    "Abstract" box per language, the book's language first, and an
+    English book's title typed only in French refused (Fields, Title)
   - an Edited Volume or a Monograph submitted with no chapter, the Review
     panel showing only its heading and "Edit" (Rule 16)
   - a switch between "Edit Metadata" and "Identifiers" with a change
@@ -747,6 +749,8 @@ Left out of the scenarios above, by reason:
     to the assistant roles and refused; Actors rows 6, 7)
   - A5 (the Review panel's "Edit"; Fields, the Review panel)
   - A9 (a chapter added after an Edited Volume is published; Rule 12b)
+  - A10 (a French book's chapter titled in French alone on a press whose
+    primary language is English; Fields, Title)
 - **Owned by another feature**:
   - the chapter window's "Identifiers" tab and who is offered it (Actors
     row 5; *[Identifiers](U44-identifiers.md)*)
@@ -773,6 +777,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The "Edit" of the wizard's Review panel "Chapters" does nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | Chapter authors dragged into a new order snap back on "Done" when they are among the book's first contributors | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Chapter window promises an automatic license above a chapter's own License URL and on a published book | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A10](#a10) | A book in a press's second language cannot get a chapter titled in that language alone | 🐞 | medium | — |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
 | [A9](#a9) | A chapter added to a published Edited Volume may stay without a license | ❓ | minor | — |
 
@@ -911,6 +916,19 @@ again.
 Question (a product ruling no screen settles): should a chapter added to a published version take the version's "Default Chapter License URL" when it is saved?
 Lean: yes, or the sentence should not show there; a second sighting of the empty box would make this a 🐞.
 Basis: probe. <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — A book in a press's second language cannot get a chapter titled in that language alone** · 🐞 · medium.
+On a press whose primary language is English and which also takes
+books in French, an editor adds a chapter to a French book and types
+its title in the French box only. "Save" is refused with "This field is
+required." under the English box, and nothing is saved. The press can
+save only by typing a title in the English box too, and that title
+then shows to readers who browse the press in English. A publication
+format's name is refused the same way
+([→ Publication formats & proof terms](U73-publication-formats-proof-terms.md#a15)).
+Expected: the title is required in the book's language only.
+Since: 2023-01-20 (pkp/pkp-lib#8554) · Basis: probe, 2026-10-04. <sup>f-a10</sup>
 
 ---
 
@@ -1208,12 +1226,33 @@ open, the list was unchanged and no request was sent. 300 characters
 typed left 255 in the box, and 255 after saving and reopening. On a
 press whose form languages are English and French, two boxes show, the
 book's language first; a title typed in the French box only was refused
-under the English box on an English book, and the reverse on a French
-book, and filling the book's own language saved. On a press whose only
+under the English box on an English book, where the English title alone
+saved, and a title typed in the English box only was refused under the
+French box on a French book. Walked again 2026-10-04 on OMP `main` and
+3.5 with the default dataset, whose press has English as its primary
+language (kept script
+`shared/playwright/checks/issues/format-name-required-primary-language/walk.js`,
+`MODE=nb`): a French book's chapter with "Chapitre u73j" in the French
+box alone was refused with "This field is required." under the English
+box, and no request was sent (A10). On a press whose only
 form language is English but whose submission languages are English
 and French, one box shows, in the book's language: English on an
 English book, French on a French book, where the title saved under
 French.
+
+<a id="fn-td19"></a>
+**td19** — Walked 2026-10-04 on OMP `main` and 3.5 with the default
+dataset (Fields, Date Published; A4), kept script
+`shared/playwright/checks/issues/chapter-date-published-shows-today/walk.js`:
+with "Each chapter may have its own publication date." saved on
+"How Canadians Communicate", the chapter "Introduction: Contexts of
+Popular Culture", never saved with chapter dates on (stored date
+`NULL`), opened with "Date Published" empty; after a "Save" with the box
+empty (stored `''`), every later opening showed today's date
+("2026-10-04"), and so did "u72b Undated chapter", added with the box
+empty. The visible box comes from `textInput.tpl`'s `!== null` check
+through `PKPTemplateManager::smartyDateFormat()`, which reads `''` as
+the current moment.
 
 <a id="fn-td7"></a>
 **td7** — Live-probed 2026-09-28 (Fields, Add Contributor; Rule 6). On a
@@ -1328,12 +1367,27 @@ ordering", and chapter titles stopped being links. In six runs on five
 books, the wizard among them, a chapter dragged above another never
 moved, and "Done" left the order unchanged; dragging a chapter title
 only moved it in among its own authors. Of two authors, the second
-dragged above the first with "Done" held, on the page and after a
-reload; after an earlier "Order" › "Done" in the same visit, the same
-drag and "Done" showed the old order at once and after a reload, on two
-books, while with three authors the drag held. The page posts the new
-order, and both author links are then stored at the same position.
-"Cancel ordering" after an author move put the list back, on the page
+dragged above the first with "Done" read in the new order, on the page
+and after a reload; after that "Done", the same drag and "Done" in the
+same visit showed the old order at once and after a reload, on two
+books, while with three authors the drag held. Walked again 2026-10-04
+on OMP `main` and 3.5 with the default dataset (kept script
+`shared/playwright/checks/issues/chapter-author-order-change-lost/walk.js`),
+reading what each "Done" stores: the save compares each author's new
+place in the chapter with their place on the Contributors list
+(`getDataElementInCategorySequence()` returns `authors.seq`, not
+`submission_chapter_authors.seq`) and skips the author when the two
+match, so an author who ends n-th in the chapter while (n + 1)-th on
+the Contributors list keeps their old place, whatever came before in
+the visit. On `main`, in "Connecting ICTs to Development", Raymond Hyma
+dragged above Frank Tulus (the book's fourth and third contributors)
+read Frank Tulus first again at once and after a reload, while Khaled
+Fourati dragged above John Valk (sixth and fifth) held; on 3.5 a new
+chapter of "The West and Beyond" with Peter Fortna and Gerald Friesen
+(third and fourth) went back the same way. The 2026-09-28 first drag
+only seemed to hold: that "Done" stored both authors at one place, and
+PostgreSQL listed the tie in the wanted order. "Cancel ordering" after
+an author move put the list back, on the page
 and after a reload. In the wizard, a chapter's authors reordered with
 "Done" read in the new order on the Details step while the Review panel
 kept the old order until a reload. A reader's table of contents follows
@@ -1622,7 +1676,8 @@ Issue report: [pkp-e2e#415](https://github.com/jardakotesovec/pkp-e2e/issues/415
 
 <a id="fn-f-a7"></a>
 **f-a7** — Note l (`setDataElementInCategorySequence()`). Live-probed
-2026-09-28: note td11, two books.
+2026-09-28: note td11, two books; walked 2026-10-04 on OMP `main` and
+3.5: note td11.
 Issue report: [pkp-e2e#854](https://github.com/jardakotesovec/pkp-e2e/issues/854) ([docs/issues/U72-A7-chapter-author-order-change-lost.md](../issues/U72-A7-chapter-author-order-change-lost.md)).
 
 <a id="fn-f-a8"></a>
@@ -1640,6 +1695,17 @@ added to a published Edited Volume whose chapters had CC Attribution
 4.0, kept an empty "License URL" after a reload under "The license will
 be set automatically to CC Attribution 4.0 when this is published.". A
 second run of the same settles it.
+
+<a id="fn-f-a10"></a>
+**f-a10** — Note td6. `lib/pkp/templates/form/textInput.tpl` marks
+required, besides the form's own language box, the box whose language
+is `$primaryLocale`, which `Form::fetch()` sets to the press's primary
+language; `ChapterForm` requires the book's language
+(`Form::getRequiredLocale()`), which the template never reads. The line
+came with pkp/pkp-lib#8554 (7f4ef28995, 2023-01-20). The refusal in
+"Edit Chapter" and in the submission wizard's chapter list was read in
+the code, not walked.
+Issue report: [pkp-e2e#806](https://github.com/jardakotesovec/pkp-e2e/issues/806) ([docs/issues/U73-A15-format-name-required-primary-language.md](../issues/U73-A15-format-name-required-primary-language.md)).
 
 ## Reference — entry points & surfaces
 

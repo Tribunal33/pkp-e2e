@@ -315,7 +315,9 @@ page. Every row below assumes the journal has public comments switched on
     stage](U25-submission-stage.md)*'s "Delete") deletes its comments and
     their reports. Merging a user account into
     another (Users & Roles › Users › the row's "Merge user") deletes the
-    comments and the reports the merged account wrote; "Remove User" on
+    comments and the reports the merged account wrote, although the rest
+    of its work passes to the account it is merged into ⚠ [A16](#a16);
+    "Remove User" on
     the same row only ends the person's roles in the journal and keeps
     their comments and reports listed. In both cases every moderator's
     tasks about the deleted comments stay in the Tasks panel, blank and
@@ -798,7 +800,8 @@ and a preprint server. <sup>s0</sup>
     - **"Merge user"**: on B's row press "Merge user" and merge the account
       into A's: B's comment is gone from every tab of the Comments page and
       from the landing page; A's comment's "Reports" table reads "No one has
-      reported this comment yet" and "Reported" reads "No Items".
+      reported this comment yet" and "Reported" reads "No Items"
+      ⚠ [A16](#a16).
     - **"Remove User"**: on A's row press "Remove User" and confirm: A's
       comment is still listed under "All" and "Approved".
     - **The Tasks panel**: the Journal Manager's rows about B's comment and
@@ -865,7 +868,7 @@ Left out of the scenarios above, by reason:
   - creating and publishing the new version scenario 11 needs (Cross-feature interactions; *Publish, schedule & versions*, scenarios 4 and 5)
   - unpublishing and publishing again the version scenario 12 walks through (Rule 18; *Publish, schedule & versions*, scenarios 3 and 10)
   - declining and deleting the submission scenario 12 ends with (Rule 18; *Submission stage*, scenarios 4 and 6)
-  - "Remove User" and "Merge user" themselves, beyond what they do to comments (Rule 18; *Users management*)
+  - "Remove User" and "Merge user" themselves, beyond what they do to comments (Rule 18; *[Users management](U53-users-management.md)*, scenarios 5 and 6)
   - "Permit changes to Settings" on a role (Cross-feature interactions; *Users management*)
   - the profile's name, ORCID iD and affiliation a comment shows (Cross-feature interactions; *User profile*, *ORCID integration*)
   - the Website settings screen around the "Comments" tab, and "Items per page" itself (Cross-feature interactions; *Journal identity & about pages*, *Appearance & theming*)
@@ -893,6 +896,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Closing the report panel wipes the open comment's number from the address too | ❓ | minor | — |
 | [A9](#a9) | A Site Administrator whose only journal role is Reader gets an "Error" dialog on every editorial page, the Comments page included | ❓ | minor | claim check (claude), 2026-09-28 — the dialog is the side menu's |
 | [A15](#a15) | Under a comment, nothing but the icon's fill tells an unverified ORCID iD from a verified one, and the iD is no longer written out | ❓ | minor | — |
+| [A16](#a16) | Merging an account deletes the comments and reports it wrote, while the rest of its work passes to the account it is merged into | ❓ | user-visible | — |
 | [OMP1](#omp1) | On a press, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 | [OPS1](#ops1) | On a preprint server, a Site Administrator holding no manager role is offered Content › Comments but the page answers the access-denied page | ❓ | minor | — |
 | [A11](#a11) | Retired: on a press and a preprint server, deleting a comment removed the task about an unrelated report or comment that shared its number; it now removes only its own tasks {OMP OPS} | ✅ | retired | upstream sync (claude), 2026-09-29 — fixed upstream |
@@ -1098,6 +1102,25 @@ verified and an unverified iD? Lean: the look is intended, since the page
 was changed on purpose to show the iD as an icon after the name; the
 shared name is an oversight, two states read out as one.
 Since: 2026-10-01 · Basis: probe. <sup>f-a15</sup>
+
+<a id="a16"></a>
+**A16 — Merging an account deletes the comments and reports it wrote** · ❓ · user-visible.
+A Journal Manager merges a reader's account into another one (Users &
+Roles › Users › the row's "Merge user", "Merge into this User", "OK").
+The chosen account takes over the merged account's roles, its places as
+a participant on submissions, its review assignments, its files, its
+decisions and its messages in discussions, but not its public comments
+or its reports: those are deleted with the merged account. The comments
+leave the article's landing page and every tab of the Comments page, its
+reports leave the "Reports" table of the comments they were filed on,
+and nothing says so. Expected the comments and reports to pass to the
+chosen account like the rest of the account's work; observed them
+deleted, after a confirmation that says "This action is not reversible."
+Question: should a merge hand the merged account's comments and reports
+over to the chosen account? Lean: oversight; the merge hands over
+everything else the account wrote, and two accounts merged are usually
+one person's, whose public comments should survive it.
+Basis: probe, 2026-10-04; code for what the merge hands over. <sup>f-a16</sup>
 
 ### OMP
 
@@ -1924,10 +1947,13 @@ and Setup › Lists forms, the control, showing "Saving" then "Saved" in
 place.
 
 <a id="fn-f-a6"></a>
-**f-a6 — A6.** In the comment panel and the report panel `PkpOrcidDisplay`
-(the shared ORCID display) takes `userOrcidDisplayValue`, which already
-carries the "(unauthenticated)" suffix for an unverified iD, as both the
-link's text and its address. Live-probed 2026-09-16, the landing page (journal) and
+**f-a6 — A6.** The comment panel (`UserCommentDetailModal.vue`) and the
+report panel (`UserCommentReportDetailModal.vue`) render a plain link, not
+`PkpOrcidDisplay`, whose `:href` is `userOrcidDisplayValue`, the field
+they also print as its text; `Identity::getOrcidDisplayValue()` appends
+the "(unauthenticated)" suffix to an unverified iD. The comment's API
+answer carries the bare iD as `userOrcid` beside it; the report's
+(`UserCommentReportResource`) does not. Live-probed 2026-09-16, the landing page (journal) and
 the comment panel (the three apps): verified, the address and the text
 `https://orcid.org/0000-0002-1825-0097` with the solid icon; unverified,
 the text and the address both `https://orcid.org/0000-0001-5109-3700
@@ -1944,8 +1970,16 @@ opened a new tab at
 `https://orcid.org/0000-0001-5109-3700%20(unauthenticated)`; the verified
 link opened the bare iD. The opened addresses were read against a
 stand-in for orcid.org (the install has no outside network); what ORCID
-answers to the suffixed address was not read. The panels on a press and a
-preprint server rest on the 2026-09-16 read. The profile's own display
+answers to the suffixed address was not read. Live-probed 2026-10-04 on
+OJS `main` (`ff004d0973`, lib/ui-library `64d67363`) with the kept walk
+`shared/playwright/checks/issues/comment-panel-unverified-orcid-link-broken/walk.js`:
+both panels' unverified link read and pointed at
+`https://orcid.org/0000-0001-5109-3700 (unauthenticated)` and opened
+`…%20(unauthenticated)`; the verified writer's link opened the bare iD.
+On a press and a preprint server the panels are the same shared code,
+but those apps have no comment box, so the fault shows there only on
+comments and reports the tooling makes, as it made them for the
+2026-09-16 read; the issue report's reach is OJS. The profile's own display
 of an iD is *[ORCID integration](U04-orcid-integration.md)*'s.
 Issue report: [pkp-e2e#902](https://github.com/jardakotesovec/pkp-e2e/issues/902) ([docs/issues/U14-A6-comment-panel-unverified-orcid-link-broken.md](../issues/U14-A6-comment-panel-unverified-orcid-link-broken.md)).
 
@@ -2170,6 +2204,26 @@ no `title`; the icons were `#icon-Orcid` for the verified and
 `#icon-OrcidUnauthenticated` for the unverified; hovering either showed
 no tooltip. The comment panel's link still reads "{iD} (unauthenticated)"
 (A6).
+
+<a id="fn-f-a16"></a>
+**f-a16 — A16.** `PKP\user\Repository::mergeUsers()` hands the merged
+account's submission files, notes, decisions, review assignments,
+editorial (submission) comments, notifications, roles and stage
+assignments to the chosen account and has no line for `user_comments` or
+`user_comment_reports`; both go by their `user_id` cascade (footnote o)
+when it deletes the merged account at the end. Read 2026-10-04 on OJS
+`main` (lib/pkp `987776cd04`), the same file in OMP's and OPS's lib/pkp
+(`3dc90c81a6`). Live-probed 2026-09-16 on a journal (footnote o): after
+"Merge user" the merged account's comment and report were gone from the
+Comments page and the landing page, the other writer's comment kept.
+Live-probed 2026-10-04 on OJS `main` with the kept walk
+`shared/playwright/checks/issues/deleted-comment-tasks-stay-blank/walk.js`
+(its steps 14 to 17): the merged reader's pending comment was on none of
+the Comments page's four tabs. The press and the server were not driven:
+they have no comment box. The A10 issue report
+([pkp-e2e#904](https://github.com/jardakotesovec/pkp-e2e/issues/904))
+names this question and leaves it out; its fix for the blank tasks is
+needed either way.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`

@@ -105,13 +105,19 @@ async function main() {
     let perPage = 20;
     let json = false;
     const queries = [];
+    const usage = "usage: node bin/gh-search.js [--per-page n] [--json] 'repo:pkp/pkp-lib <words>' […]";
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--per-page') perPage = Number(args[++i]) || perPage;
         else if (args[i] === '--json') json = true;
-        else queries.push(args[i]);
+        else if (args[i] === '-h' || args[i].startsWith('--')) {
+            // --help (or any other flag) prints the usage and spends no search
+            // call: the allowance is the machine's (U17, U44, U08 issue walks).
+            console.error(`${args[i] === '--help' || args[i] === '-h' ? '' : `gh-search: unknown option ${args[i]}\n`}${usage}`);
+            process.exit(args[i] === '--help' || args[i] === '-h' ? 0 : 2);
+        } else queries.push(args[i]);
     }
     if (!queries.length) {
-        console.error("usage: node bin/gh-search.js [--per-page n] [--json] 'repo:pkp/pkp-lib <words>' […]");
+        console.error(usage);
         process.exit(2);
     }
     let failed = 0;
