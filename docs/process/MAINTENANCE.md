@@ -386,7 +386,8 @@ stayed on it is reported, not a pause.
    (`<spec>-<entries>-<slug>.md`, from `briefs/issue-report.md` step 6),
    and the register footnotes take the issue's link. A filed report
    this work changed (a join, a refresh, a label, a new fact) is brought
-   up to date on GitHub (`gh issue edit` with the body and labels), and
+   up to date on GitHub (`gh issue edit` with the body, built the same
+   way, and the labels), and
    a refresh's `Report:` line is deleted. Then commit and push again.
 
 **A report's life.** It stays in `docs/issues/` while its issue is open,
