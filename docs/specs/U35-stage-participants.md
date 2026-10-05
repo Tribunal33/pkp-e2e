@@ -952,10 +952,8 @@ Left out of the scenarios above, by reason:
     `docs/issues/U35-A15-assign-editor-email-two-footers.md`):
     the Submission stage's "Assign Editor" letter ending with the
     sender's signature and the discussion footer alone
-  - the guard for A5 (issue report
-    `docs/issues/U35-A5-message-discussion-created-by-recipient.md`):
-    after "Notify" the discussions panel's row reading "Created by:"
-    the sender
+  - a guard for retired A5: after "Notify" the discussions panel's row
+    reading "Created by:" the sender
   - the guard for A9 (issue report
     `docs/issues/U35-A9-permissions-tick-carries-to-other-role.md`):
     in "Assign Participant" a Section Editor chosen, then the role
@@ -972,10 +970,7 @@ Left out of the scenarios above, by reason:
     `docs/issues/U35-A16-notify-message-ignores-email-opt-out.md`):
     "Notify" to a participant who ticked "Do not send me an email…"
     under "Discussion added.", the mailbox empty and the Tasks entry there
-  - the guards for A10 (issue reports
-    `docs/issues/U35-A10-added-message-template-not-sent.md` and
-    `docs/issues/U35-A10-role-limited-message-template-not-sent.md`):
-    a template added in Settings sent from "Notify", and a template
+  - guards for retired A10: a template added in Settings sent from "Notify", and a template
     limited to a role sent from "Notify" by a manager outside that role
   - the guard for OPS3 (issue report
     `docs/issues/U35-OPS3-moderator-assigned-email-never-sent.md`):
@@ -989,13 +984,11 @@ Left out of the scenarios above, by reason:
   - the guard for OMP1 (issue report
     `docs/issues/U35-OMP1-internal-review-no-predefined-message.md`):
     the predefined messages of a press's Internal Review, read as a set
-    ("Discussion (Review)" there once pkp/omp#2487 merges)
-  - the guard for A3 (issue report
-    `docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md`):
-    a message typed in "Notify" and in "Assign Participant" with the
+    ("Discussion (Review)" there since pkp/omp#2487)
+  - a guard for retired A3: a message typed in "Notify" and in "Assign Participant" with the
     list on its blank entry, the recipient's mailbox and the stage's
-    discussions panel read ("Discussion (…)" once pkp/pkp-lib#13385
-    merges; Rule 5b)
+    discussions panel read ("Discussion (…)" since pkp/pkp-lib#13385;
+    Rule 5b)
   - "Notify" after the list was set back to its blank entry: "Message"
     emptied, a typed message sent under the stage's "Discussion (…)"
     (Rule 11b; A17 retired)
@@ -1318,6 +1311,7 @@ An editor assigning someone on Internal Review can still pick
 "Discussion (Review)" and type the letter, or type it with the list
 left blank.
 Basis: probe, 2026-10-02, before the merge. <sup>[f-omp1](#fn-omp1)</sup>
+Report: refresh owed — narrow pkp-e2e#308 (docs/issues/U35-OMP1-internal-review-no-predefined-message.md) to the missing "Assign Editor": "Discussion (Review)" is offered since pkp/omp#2487, and its link to the deleted A3 report goes (2026-10-05)
 
 ### OPS
 
@@ -1350,6 +1344,7 @@ Editor" discussion with no message. Every preprint server created on
 site that was upgraded from 3.5. A server that existed before the
 upgrade keeps its letter.
 Basis: probe, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
+Report: refresh owed — docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md links the A10 report, deleted at the merge of pkp/pkp-lib#13385 (A10 fixed, so "every template added in Settings already fails one line later" no longer holds): point it at pkp-e2e#315 (closed) and drop that clause (2026-10-05)
 
 <a id="ops3"></a>
 **OPS3 — A preprint server never emails its moderators that a new preprint was assigned to them** · 🐞 · medium.
@@ -1507,7 +1502,7 @@ Issue report: [pkp-e2e#311](https://github.com/jardakotesovec/pkp-e2e/issues/311
 
 <a id="fn-a3"></a>
 **f-a3** — Live-probed 2026-09-22 (all three apps, two scratch journals each; a press's Internal Review too): note td4. With the list blank, `PKPStageParticipantNotifyForm::sendMessage()` runs `Template::withContextId()->find('')`, which the Postgres test database refuses ("invalid input syntax for type bigint"), so both requests answer a server error; on "Assign" the person is assigned all the same, and neither the log line nor a notice follows. Introduced with pkp/pkp-lib#12593 (lib/pkp `b3b882bec`, 2026-06-01). A MySQL install may read the empty id as no template and return early, and would then show "Notification sent to users." with nothing sent (not driven). The list's own wording (`stageParticipants.notify.chooseMessage` "Choose a predefined message to use, or fill out the form below.") presents the message box as an alternative to the list. Live-probed 2026-09-29 (Fields "Notify"; all three apps, two runs each, as Journal Manager): a predefined message chosen in "Notify" and the list set back to its blank entry, the text kept and nothing shown, while the request it posts (`StageParticipantGridHandler::fetchTemplateBody()` with an empty `template`) answered a server error with an empty body, the only one of each run. The handler runs `Template::with('userGroups')->withContextId()->find('')`, the same empty-id lookup as `sendMessage()`. The "Assign" window's list posts the same request (not driven). At pkp/pkp-lib#13385's head `2af7ddfcb2` (with pkp/omp#2487's head `e50a757bdc` on OMP), before their merge, read and live-probed 2026-10-02 on all three apps (`checks/sync/pkp-lib-13385/rr.js`, `.reports/sync/r2/result-after2-<app>.json`): the blank list sends under the stage's "Discussion (…)" on every stage of a fresh install, a press's Internal Review included (note g); on a journal whose "Discussion (Submission)" the manager deleted under Settings › Workflow › "Tasks and Discussions", "Notify" and "OK" on "Assign" with the list blank both answered 500, the window open as filled, no email, no discussion (leg s5, OJS; server log "Call to a member function promote() on null" at `PKPStageParticipantNotifyForm.php:194`), since the fallback finds no template. The lookup and the null are shared code; OMP and OPS were read, not driven, for this case. Reported with the round-1 PR review (`docs/reports/2026-09-28-pkp-lib-13385.md`, Finding 1). At the PR heads `62077d1f6f` and `ecd65eebb0`, before their merge, read and live-probed 2026-10-03 on all three apps (`.reports/sync/r3/result-after3-<app>.json`, leg s5 now on every app): with no template found, `sendMessage()` builds an anonymous `Mailable` with the `Sender` and `Recipient` traits and titles the discussion from `Repository::getDiscussionTitles()`; the discussion and its head note are created, then `$mailable->allowUnsubscribe($notification)` (the `Unsubscribe` trait, through `Discussion`, which only `TemplateVariables` carries) throws, so both requests answered 500 (server log "Uncaught BadMethodCallException: Call to undefined method PKP\mail\Mailable@anonymous"), the window open as filled, no email, a "Discussion (Submission)" ("Discussion (Production)" on OPS) discussion per press with the typed text and a new-discussion notification for the recipient. Building the fallback as `new TemplateVariables($query, …)` from the discussion just created sent both, with the discussion footer (tried on OJS, `.reports/sync/r3/result-fix3-ojs.json`). Reported in the round-3 PR review (`docs/reports/2026-09-28-pkp-lib-13385.md`, Finding 1). At the PR heads `e39fdee199` and `27a00dd1a1`, before their merge, read and live-probed 2026-10-05 on all three apps (`.reports/sync/r4/result-after4-<app>.json`, leg s5): `e39fdee199` ("Add template variables for mailable footer") gives the anonymous fallback `Mailable` the `Discussion` trait and a constructor taking the submission and the context, so `allowUnsubscribe()` is there and the footer's variables resolve; with "Discussion (Submission)" ("Discussion (Production)" on OPS) deleted, "Notify" and "OK" on "Assign" with the list blank both answered 200 and closed with "Notification sent to users." (on OPS "Notify" shows it as OPS4 describes), one discussion each, and the author and the Section editor each received "Discussion (Submission)" with the typed text and the footer "Reply to this comment at #{id} {authors} or unsubscribe … from emails sent by {journal}". A3 retired.
-Issue report: [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307) ([docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md](../issues/U35-A3-OMP1-typed-participant-message-not-sent.md)).
+Issue report: pkp-e2e#307, closed at the merge of pkp/pkp-lib#13385 (2026-10-05; the report deleted, git keeps it).
 
 <a id="fn-a4"></a>
 **f-a4** — Live-probed 2026-09-22 (all three apps): note td5. `AddParticipantForm::validate()` returns `Repo::userGroup()->userInGroup($userId, $userGroupId) && Repo::userGroup()->get($userGroupId) && parent::validate()`: with no user, or with a user who does not hold the newly chosen role, the first test is false and `parent::validate()`, which would record the `userId` check's message, never runs; `saveParticipant()` answers the redrawn form with no error.
@@ -1515,7 +1510,7 @@ Issue report: [pkp-e2e#348](https://github.com/jardakotesovec/pkp-e2e/issues/348
 
 <a id="fn-a5"></a>
 **f-a5** — `PKPStageParticipantNotifyForm::sendMessage()` creates the discussion with `'createdBy' => $user->getId()`, `$user` being the recipient, while the head note's `userId` and the task's sender are the signed-in user. Live-probed 2026-09-18 (Copyediting stage, OJS and OMP): the "Request Copyedit" discussion listed as "Discussion Request Copyedit Created by: {Copyeditor}"; live-probed 2026-09-19 (all three apps, the "Notify" window): the discussion reading "Created by: {the recipient}". Live-probed 2026-09-22 (all three apps, from "Assign" and "Notify"): the panel row "Discussion {name} Created by: {the recipient's username}", the discussion's first entry "Message from {the sender's username}", the recipient's task naming the sender. At pkp/pkp-lib#13385's head `2af7ddfcb2` (with pkp/omp#2487's head `e50a757bdc` on OMP), before their merge, read and live-probed 2026-10-02 on all three apps (`checks/sync/pkp-lib-13385/rr.js`, `.reports/sync/r2/result-after2-<app>.json`): `createdBy` the sender; the panel rows "Created by: {the sender's username}" for the manager's and the Section Editor's messages (`edit_tasks.created_by`, legs s1, s4, s6).
-Issue report: [pkp-e2e#343](https://github.com/jardakotesovec/pkp-e2e/issues/343) ([docs/issues/U35-A5-message-discussion-created-by-recipient.md](../issues/U35-A5-message-discussion-created-by-recipient.md)).
+Issue report: pkp-e2e#343, closed at the merge of pkp/pkp-lib#13385 (2026-10-05; the report deleted, git keeps it).
 
 <a id="fn-a6"></a>
 **f-a6** — Live-probed 2026-09-22 (all three apps): note td6. `sendMessage()`'s `switch ($templateKey)` raises `NOTIFICATION_TYPE_EDITOR_ASSIGN` (`notification.type.editorAssign` "You have been assigned as an editor to the submission "{$title}".") only for the key `EDITOR_ASSIGN`; the installed "Assign Editor" templates carry `EDITOR_ASSIGN_SUBMISSION`, `EDITOR_ASSIGN_REVIEW` and `EDITOR_ASSIGN_PRODUCTION` (`registry/taskTemplates.xml`, keys made mandatory by pkp/pkp-lib#12593, ojs `4157f8331c`, 2026-08-07), so they fall to the default branch, which only logs. No other code raises that task.
@@ -1534,8 +1529,8 @@ Issue report: [pkp-e2e#339](https://github.com/jardakotesovec/pkp-e2e/issues/339
 
 <a id="fn-a10"></a>
 **f-a10** — Live-probed 2026-09-22 (all three apps): templates added under a stage's "Add template", unrestricted, limited to Author and limited to an editor role, each listed; choosing one leaving "Message" unchanged; "Notify" to a person who holds the role, to one who does not and to the Author each staying open with no notice, no email; the unrestricted one adding its discussion with no message to the panel; "OK" on "Assign" staying open with the person assigned. Both the choice's request and the send answer a server error. For a role-limited template the cause is traced: `editorialTask/Repository::isTemplateAccessibleToUser()` filters on an unqualified `user_group_id`, which the Postgres test database refuses as ambiguous; the unrestricted template's failure was seen, not traced. Control: "Discussion (Submission)" on the same screen sends. At pkp/pkp-lib#13385's head `2af7ddfcb2` (with pkp/omp#2487's head `e50a757bdc` on OMP), before their merge, read and live-probed 2026-10-02 on all three apps (`checks/sync/pkp-lib-13385/rr.js`, `.reports/sync/r2/result-after2-<app>.json`): the choice and the send answer 200 for every template added in Settings, unrestricted, limited to the Author, limited to an editor role (note g; legs s4, s6).
-Issue report (a template added in Settings): [pkp-e2e#315](https://github.com/jardakotesovec/pkp-e2e/issues/315) ([docs/issues/U35-A10-added-message-template-not-sent.md](../issues/U35-A10-added-message-template-not-sent.md)).
-Issue report (a template limited to specific roles): [pkp-e2e#317](https://github.com/jardakotesovec/pkp-e2e/issues/317) ([docs/issues/U35-A10-role-limited-message-template-not-sent.md](../issues/U35-A10-role-limited-message-template-not-sent.md)).
+Issue report (a template added in Settings): pkp-e2e#315, closed at the merge of pkp/pkp-lib#13385 (2026-10-05; the report deleted, git keeps it).
+Issue report (a template limited to specific roles): pkp-e2e#317, closed at the merge of pkp/pkp-lib#13385 (2026-10-05; the report deleted, git keeps it).
 
 <a id="fn-a11"></a>
 **f-a11** — Live-probed 2026-09-22 (journal and press): a reviewer on round 1 with "Anonymous Reviewer/Anonymous Author", found under their Funding coordinator and Translator roles and chosen on the Submission stage and on the review stage, and a reviewer with "Anonymous Reviewer/Disclosed Author" on a scratch journal set to that type, and a press's Internal Review: no warning, and "OK" assigning them with "User added as a stage participant.". The window's data listed the right reviewers (not declined, anonymous types only, "Open" left out). Controls with no warning expected: a declined reviewer, a person with no review, Copyediting, and an "Open" review. Cause: note n. The warning dates from 2018; when the check broke was not traced.
@@ -1570,7 +1565,7 @@ Issue report: [pkp-e2e#346](https://github.com/jardakotesovec/pkp-e2e/issues/346
 <a id="fn-omp1"></a>
 **f-omp1** — Live-probed 2026-09-22 (press): "Assign" (as Press Manager and as Series editor) and "Notify" on Internal Review offering only the blank entry; "Notify" with "Hello" typed staying open as filled, nothing received, no discussion; "OK" on "Assign" with a typed message staying open while the person was assigned; neither logged. Control: External Review lists "Discussion (Review)" and "Assign Editor". Code: OMP `registry/taskTemplates.xml` has no template with `stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"` and OMP's locale no Internal Review discussion name; `PKPStageParticipantNotifyForm::fetch()` filters by the stage (note f), and `sendMessage()` needs a template (A3's footnote). At pkp/pkp-lib#13385's head `2af7ddfcb2` (with pkp/omp#2487's head `e50a757bdc` on OMP), before their merge, read and live-probed 2026-10-02 on all three apps (`checks/sync/pkp-lib-13385/rr.js`, `.reports/sync/r2/result-after2-<app>.json`) (press): "Assign" and "Notify" on Internal Review list "Discussion (Review)" alone; it fills "Please enter your message." and a typed message goes out under it, the blank list too (leg s2). pkp/omp#2487 adds `DISCUSSION_NOTIFICATION_INTERNAL_REVIEW` only; the issue report's `EDITOR_ASSIGN_INTERNAL_REVIEW` row is not in it.
 Issue report: [pkp-e2e#308](https://github.com/jardakotesovec/pkp-e2e/issues/308) ([docs/issues/U35-OMP1-internal-review-no-predefined-message.md](../issues/U35-OMP1-internal-review-no-predefined-message.md)).
-Issue report (a typed message not sent, this stage included): [pkp-e2e#307](https://github.com/jardakotesovec/pkp-e2e/issues/307) ([docs/issues/U35-A3-OMP1-typed-participant-message-not-sent.md](../issues/U35-A3-OMP1-typed-participant-message-not-sent.md)).
+Issue report (a typed message not sent, this stage included): pkp-e2e#307, closed at the merge of pkp/pkp-lib#13385 (2026-10-05; the report deleted, git keeps it).
 
 <a id="fn-omp2"></a>
 **f-omp2** — pkp/omp#2487 (head `e50a757bdc`, before its merge) installs the template on new presses from `registry/taskTemplates.xml` with the text `emails.discussion.body`, and on existing presses with `APP\migration\upgrade\v3_6_0\I12593_DiscussionInternalReviewTemplate`, which writes `description` from `mailable.discussionReview.description`, the mailable's admin description, in each of the site's locales. pkp-lib's `I12593_EmailToTaskTemplates` gave the other stages' "Discussion (…)" the 3.5 email text, `emails.discussion.body`. `fetchTemplateBody()` and the "Add" window fill "Message" from `description` (note f). Driven 2026-10-02 on OMP (`checks/sync/pkp-lib-13385/migrate-ir.php`, `.reports/pr12593r2/migrate-ir.json`; in a rolled-back transaction, every Internal Review row deleted as on a press upgraded from 3.5, then the migration's `up()`): one row per press, title "Discussion (Review)" / "Discussion (évaluation)", description "This email is sent when a discussion is created or replied to in the review stage." / "Ce courriel est envoyé lorsqu'une discussion ou un message sont ajoutés à l'étape de l'évaluation.", while a fresh install's row and the External Review row read "Please enter your message." / "Prière de saisir votre message.". The window filling with it was read in the code, not driven on an upgraded press. Reported: `docs/reports/2026-09-28-pkp-lib-13385.md` (round 2, Finding 3). At the PR head `ecd65eebb0` (2026-10-03, `e125b898c9`), the migration takes `emails.discussion.body`: the same driver read "Please enter your message." / "Prière de saisir votre message." for the upgraded row (`.reports/pr12593r3/migrate-ir.json`).

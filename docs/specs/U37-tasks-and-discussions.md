@@ -1606,6 +1606,7 @@ sent to is offered "Edit" too, and their "Save" adds a message under
 their own name. Every discussion such a message opens is affected, in
 every stage.
 Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
+Report: refresh owed — pkp-e2e#422 (docs/issues/U37-A9-participant-message-edit-adds-message.md) links the report of *Stage participants*' A5, deleted at the merge of pkp/pkp-lib#13385: point it at pkp-e2e#343 (closed) and re-read the recipient's name now that the discussion is created by the sender (2026-10-05)
 
 <a id="a10"></a>
 **A10 — A task's "Due Date" before today is refused with a message about a start date** · 🐞 · low.

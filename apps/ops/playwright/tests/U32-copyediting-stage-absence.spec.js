@@ -13,7 +13,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A2 🐞,
- * A6 🐞, A7 🐞, A9 🐞, A1 ❓, A3 ❓, A4 ❓, A5 ❓, A8 ❓, A10 ❓ (journal and press
+ * A6 🐞, A7 🐞, A1 ❓, A3 ❓, A4 ❓, A5 ❓, A8 ❓, A10 ❓ (journal and press
  * surfaces of a stage a preprint server never shows), OMP1 ✅ (press
  * routing). OPS1 ✅ is what S10 asserts, as the spec's stated absence, never
  * the Production stage's own behaviour, which belongs to *Production stage*

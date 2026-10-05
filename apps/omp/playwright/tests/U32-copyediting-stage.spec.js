@@ -13,8 +13,7 @@
  * of everything else left out): A1, A6, A8, A10 (no scenario reaches them);
  * A2 (S4 opens the "Copyedited Files" window without reading its title),
  * A7 (S4 deletes the copyedited file and reads the row gone, not the
- * notice after), A9 (S3 reads the "Request Copyedit" discussion listed, not
- * its creator), A4 (S3 deletes the task through the panel's own "Delete",
+ * notice after), A4 (S3 deletes the task through the panel's own "Delete",
  * the working path; nothing is asserted about copyedits clearing it), A5
  * (S1 reads the recommending Series editor's screen without the decision
  * buttons, and nothing about recommendation controls). A3: S4 reads the

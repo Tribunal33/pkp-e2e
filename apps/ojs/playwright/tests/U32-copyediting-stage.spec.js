@@ -14,8 +14,6 @@
  *   its title (it is anchored by its "Upload File" link).
  * - A7 🐞: S4 deletes the last copyedited file and asserts nothing about the
  *   Editor's notice afterwards.
- * - A9 🐞: S3 asserts the "Request Copyedit" discussion is listed and
- *   nothing about whose name it is listed under.
  * - A6 🐞, A8 ❓, A10 ❓, A1 ❓: no scenario reaches them here.
  * - A3 ❓: S4 seeds the Copyeditor without a message and reads the Editor's
  *   notice only after the upload (its absence), never the flip that the
