@@ -421,6 +421,13 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   is slot 0, CI's values. The per-slot key is a tripwire: a run that adopts
   another slot's leftover server (`reuseExistingServer`) gets 401 on its
   first seed instead of writing into another slot's database.
+- **The private security repo.** `/home/e2e/pkp-e2e-sec`, the
+  `../pkp-e2e-sec` of every slot, is one clone they share (its
+  `security_policy.md` is the rule for anything security-shaped). The
+  SessionStart hook pulls it when it is clean and says so; a session
+  pulls with `--rebase` before writing there and pushes before it ends;
+  a slot is freed only when this clone is clean too. If the hook reports it
+  missing, clone it there (the VM's GitHub token reaches it).
 - **Kept checks** name their database `dbName(app.name)` (`bin/apps.js`) or
   the probe kit's `app.db`, never a literal `<app>_test`, which is slot 0's.
 - **Mailpit.** Slot 0's is the systemd service. Slot n's is started on

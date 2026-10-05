@@ -11,8 +11,9 @@
  * The rules, all decided by state:
  * - A new session takes a free slot, the one used longest ago first.
  * - When a session pauses or ends, its slot is freed if it left a clean
- *   tree (nothing uncommitted, untracked, stashed or unpushed in this repo;
- *   the app checkouts do not count). Otherwise the slot stays BLOCKED for
+ *   tree (nothing uncommitted, untracked, stashed or unpushed in this repo
+ *   or in the shared private security repo beside it, ../pkp-e2e-sec; the
+ *   app checkouts do not count). Otherwise the slot stays BLOCKED for
  *   that thread, and the bot mentions the owner in the thread.
  * - A resumed thread goes back to its own slot unless another session holds
  *   it right now; then it starts FRESH in a free slot (no --resume across
@@ -222,6 +223,39 @@ function checkClean(dir) {
     return {clean: reasons.length === 0, reasons};
 }
 
+/**
+ * The private security repo (pkp-e2e-sec, `security_policy.md` there), one
+ * clone beside the slots that they all share. A slot counts as clean only
+ * when it is clean too, so security work is never left uncommitted.
+ */
+const SEC_REPO = 'pkp-e2e-sec';
+const secDir = (dir) => path.resolve(dir, '..', SEC_REPO);
+
+/** checkClean() of the slot's clone and of the security repo beside it. */
+function checkSlotClean(dir) {
+    const check = checkClean(dir);
+    const sec = secDir(dir);
+    if (!fs.existsSync(path.join(sec, '.git'))) return check;
+    const c = checkClean(sec);
+    return {clean: check.clean && c.clean, reasons: [...check.reasons, ...c.reasons.map((r) => `${SEC_REPO}: ${r}`)]};
+}
+
+/** Brings the security repo to its remote tip when it is clean; one line saying what it found. */
+function syncSecRepo(dir) {
+    const sec = secDir(dir);
+    if (!fs.existsSync(path.join(sec, '.git'))) {
+        return `The private security repo ${sec} is missing: clone it (\`git clone https://github.com/jardakotesovec/${SEC_REPO} ${sec}\`) before any security work.`;
+    }
+    const c = checkClean(sec);
+    if (!c.clean) return `The private security repo ${sec} is not clean (${c.reasons.join('; ')}): another session may be writing there. Do not discard that work; \`git pull --rebase\` before you write.`;
+    try {
+        execFileSync('git', ['pull', '--ff-only', '-q'], {cwd: sec, stdio: 'ignore', timeout: 20000});
+        return `The private security repo ${sec} is pulled, at ${git(sec, ['rev-parse', '--short', 'HEAD'])}.`;
+    } catch {
+        return `The private security repo ${sec} could not be pulled: run \`git -C ${sec} pull --rebase\` and check its access before any security work.`;
+    }
+}
+
 /** What is checked out in a slot: the repo and every app checkout. */
 function snapshot(dir) {
     const snap = {
@@ -414,7 +448,7 @@ function stopSlotServers(dir) {
 
 function releaseSlot(reg, n, thread, dir) {
     stopSlotServers(dir);
-    const check = checkClean(dir);
+    const check = checkSlotClean(dir);
     const snap = snapshot(dir);
     const entry = reg.slots[n] || {};
     closeUse(reg, n, thread);
@@ -580,6 +614,7 @@ const RULES = [
     '- Work only inside this slot\'s clone. Other slots (/home/e2e/pkp-e2e*) belong to other sessions: never read, write, reset or kill anything there, and never pkill broadly (only processes whose command line names this slot\'s paths or ports).',
     '- Whole suites run on CI (`node bin/ci.js watch|dispatch`), not here. Every local Playwright run takes the machine-wide test lock (shared with your own parallel runs, exclusive against other slots, in request order). A run can wait behind another slot, so start fleet-prep, any run that may queue, and bin/ci.js with run_in_background, and keep the keepalive Monitor armed while anything is in flight, one tick every 6 minutes (the bot warns after 7 idle minutes and pauses after 10; RUNBOOK "Keep the thread ticking"); never stop the Monitor while a run, agent or CI job is still going. `node shared/playwright/test-lock.js status` shows who holds it.',
     '- Finish by committing and pushing (RUNBOOK step 10 / MAINTENANCE): the bot frees this slot only when this clone is clean (nothing uncommitted, untracked, stashed or unpushed). Anything left behind blocks the slot and pings the owner.',
+    `- The private security repo ../${SEC_REPO} (one clone the slots share; its security_policy.md is the rule for anything security-shaped) is kept like this clone: pulled at session start (this hook does it when it is clean), \`git pull --rebase\` before writing there, committed and pushed before the session ends. The slot is freed only when it is clean too.`,
 ];
 
 function hook(input) {
@@ -658,6 +693,7 @@ function hook(input) {
     }
     const check = checkClean(s.dir);
     if (!check.clean) body.push(`This clone is not clean now: ${check.reasons.join('; ')}.`);
+    if (source !== 'compact') body.push(syncSecRepo(s.dir));
     let lock = 'free';
     try {
         const {machineHolder, describeHolder} = require('../shared/playwright/test-lock.js');
@@ -749,6 +785,6 @@ function main() {
     }
 }
 
-module.exports = {acquire, release, reconcile, freeSlot, stopSlotServers, claim, unclaim, listClaims, status, hook, checkClean, snapshot, diffSnapshots};
+module.exports = {acquire, release, reconcile, freeSlot, stopSlotServers, claim, unclaim, listClaims, status, hook, checkClean, checkSlotClean, syncSecRepo, snapshot, diffSnapshots};
 
 if (require.main === module) main();
