@@ -85,7 +85,7 @@ that fails validation keeps the panel open with the error on the field and
 | **Arxiv** | No | Help text "e.g. 1234.123456v2, arxiv:1234.123456v2, https://arxiv.org/abs/1234.123456v2". A bare ID is kept as typed ("2101.12345v2"). Typed as "arxiv:2101.12345v2" or "https://arxiv.org/abs/2101.12345v2", it is stored as "2101.12345", without its version ⚠ [A12](#a12). Anything else: "This is not formatted correctly." <sup>f</sup> |
 | **Handle** | No | Help text "e.g. 20.1000/100, handle:20.1000/100, https://hdl.handle.net/20.1000/100". Kept as the bare handle. Anything else: "This is not formatted correctly." <sup>f</sup> |
 | **Title** | No | The cited work's title. <sup>f</sup> |
-| **Author Information** | No | A small table with the columns **Given Name**, **Family Name** and **ORCID iD**, an "Add" button for a new row and a "Delete" per row. The boxes have no names for a screen reader ⚠ [A14](#a14). A row added and left empty is saved as an author with no name [A13](#a13). <sup>f</sup> |
+| **Author Information** | No | A small table with the columns **Given Name**, **Family Name** and **ORCID iD**, an "Add" button for a new row and a "Delete" per row. The boxes have no names for a screen reader ⚠ [A14](#a14). A row added and left empty is saved as an author with no name [A13](#a13). The ORCID iD box takes any text and keeps it as typed, and the expanded row links the author's ORCID icon to it ⚠ [A22](#a22). <sup>f</sup> |
 | **Source Name** · **Source Issn** · **Publisher or Host** | No | Free text: the journal, book series or platform the cited work appeared in. <sup>f</sup> |
 | **Source Type** | No | A list: Book Series, Conference, Ebook Platform, Journal, Metadata, Other, Repository. It arrives with nothing chosen and has no empty entry: once a value is picked it can be changed but not cleared. <sup>f</sup> |
 | **Publication Date** | No | A date picker. <sup>f</sup> |
@@ -106,7 +106,7 @@ the same fields as text; its only button is the panel's "Close".
 | **Relationship type** | Yes | Four choices: "Supporting data without specifying whether they were generated or analyzed (supporting).", "Supporting data that were generated for the study (generated).", "Supporting data that were analyzed but not generated for the study (analyzed).", "Referenced data that were neither generated nor analyzed for the study (non-analyzed)." It arrives with nothing chosen. <sup>l</sup> |
 | **Repository** | No | Free text: where the dataset is held, or its publisher. <sup>l</sup> |
 | **Year** | No | A four-digit year. "202" or "20245" is refused with "This must be 4 digits long."; a value with letters ("20a4") gets "This is not a valid integer." and "This must be 4 digits long." together. <sup>l</sup> |
-| **Creators** | No | The same Given Name / Family Name / ORCID iD table as a reference's authors. An ORCID iD is accepted only as the full address ("https://orcid.org/0000-0002-1825-0097"). Anything else, the bare iD included, is refused with "The ORCID iD you specified is invalid. Please include the full URI (e.g. "https://orcid.org/0000-0002-1825-0097")." <sup>l</sup> |
+| **Creators** | No | The same Given Name / Family Name / ORCID iD table as a reference's authors, but here an ORCID iD is accepted only as the full address ("https://orcid.org/0000-0002-1825-0097"). Anything else, the bare iD included, is refused with "The ORCID iD you specified is invalid. Please include the full URI (e.g. "https://orcid.org/0000-0002-1825-0097")." <sup>l</sup> |
 | **URL** | No | Must be a web address, or "This is not a valid URL." <sup>l</sup> |
 
 **Typing that is not added or saved is dropped without a question.** Lines
@@ -996,6 +996,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A22](#a22) | A reference author's "ORCID iD" takes any text, and the References page links the author's ORCID icon to it | 🐞 | user-visible | — |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
@@ -1292,6 +1293,20 @@ server's heading "##submission.publication## : Références", are
 finding, and why a missing French text shows as a code at all is the
 question [Languages & locales](U57-languages-and-locales.md#a4) asks.
 Basis: probe, 2026-10-04. <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — A reference author's "ORCID iD" takes any text, and the References page links the author's ORCID icon to it** · 🐞 · user-visible.
+A reference author's "ORCID iD" is expected to be checked like a data
+citation creator's: only a full https://orcid.org/ address. Any text is
+saved as typed instead, an off-site address or a link of any other kind.
+With metadata lookup on, the expanded row then offers it as the author's
+ORCID icon ("ORCID profile for {name}"). The submitting Author can set
+it on their own submission while it is still in the wizard (directly,
+not through a screen), and afterwards while they may edit its metadata
+(by default on a preprint server). A Journal Manager, Section Editor or
+Assistant who clicks the icon follows the Author's link, not an ORCID
+profile. The published page does not show it.
+Since: 2025-09-16 · Basis: probe, 2026-09-30. <sup>f-a22</sup>
 
 ### Retired
 
@@ -2257,6 +2272,57 @@ showed "Enregistré" and the new row, listed again after a reload; "Edit
 citation" and the "Delete all references" dialog were closed with
 "Fermer" and "Annuler". No request failed and no script error showed.
 Re-walked 2026-10-04 on main, all three apps (3.5 has no structured References page). The row menu's `common.moreActions`, a released text French (Canada) never received, joined [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)), low; the rest (`submission.citations.structured*`, `list.collapse`) are main-only texts with no report under the 2026-10-02 ruling on main-only locale keys.
+
+<a id="fn-f-a22"></a>
+**f-a22 — A22 evidence.** lib/pkp `schemas/citation.json:43-45` declares
+`authors.items.orcid` a bare `string` with no `validation`, so
+`PKPCitationController::edit()` (`Repo::citation()->validate()`) stores
+any text. ui-library `CitationManagerCellCitation.vue:57` binds it as
+`:href="author.orcid"` with `target="_blank"` and no `rel`;
+`FieldAuthorsDisplay.vue:14` has the same binding (it shows data
+citations, whose ORCID is validated). The sibling `dataCitation.json`
+gives `authors.items.orcid` `"validation": ["orcid"]`. Writes pass the
+citations route's roles (manager, sub-editor, assistant, author) and
+`PublicationWritePolicy` (`Repository::canEditPublication()`); the
+submitter's assignment has `canChangeMetadata` while the submission is
+incomplete, and the default Author group has `permitMetadataEdit` 1 on
+OPS, 0 on OJS and OMP. The wizard shows only the plain References box,
+so the pre-submission write is a direct `PUT
+submissions/{id}/publications/{pid}/citations/{cid}`. The cell renders
+only with `citationsMetadataLookup` on and the row `isStructured`; the
+value is stored either way. Live-probed 2026-09-30 on OJS, OMP and OPS
+main (lib/pkp `fab29cfeca`), `authors[0].orcid` set to an off-site
+`https://example.com/…` address: 200 and stored as sent for the
+submitting author before "Submit" (OJS and OPS `ccorino`, OMP
+`afinkel`), OPS `ccorino` after submission, OJS `ccorino` with "can
+change metadata" ticked on the assignment, OJS `dbuskins` and `dbarnes`;
+401 for OJS `ccorino` after submission by default, the unassigned
+`minoue`, and OPS `zwoods` on another author's preprint. Read in a
+browser on OJS (as `dbarnes`) and OPS (`dbarnes`, `ccorino`): the
+"ORCID profile for …" anchors had `href` exactly the stored values, an
+`https:` address and a value with a made-up scheme, `target="_blank"`,
+`rel=""`. The landing pages print only the raw text
+(`getRawCitationWithLinks()|strip_unsafe_html`), and the JATS and
+Crossref exports carry no reference author's ORCID. By code a
+`javascript:` value is kept the same way (Vue does not sanitize a bound
+`href`, and the backend sends no Content-Security-Policy header);
+whether it runs on a click from this `target="_blank"` link was not
+tried. Introduced by GaziYucel in pkp/pkp-lib#10692 "structured
+citations" (pkp-lib `4730f6707e`, ui-library `c2f8e07d`, 2025-09-16);
+pkp/pkp-lib#11902 "PIDs validation" (`2516e5a60c`, GaziYucel,
+2025-10-24) added rules for arXiv, DOI and handle but not this field.
+Proposed fix: give `authors.items.orcid` `"validation": ["nullable",
+"orcid"]`, the existing rule (`ValidationServiceProvider.php:164`, an
+`https://(sandbox.)orcid.org/` address with a valid checksum; tried on
+OJS 2026-09-30: the off-site value refused with "The ORCID iD you
+specified is invalid…", a full or sandbox address and an empty value
+accepted), and in both Vue files render the link only for
+`^https://(sandbox\.)?orcid\.org/`, with `rel="noopener noreferrer"`,
+which also covers rows stored before the fix and values the lookup
+writes without schema validation. 3.5, 3.4 and 3.3 do not have it: they
+have no structured references (no `citation.json`, citations API or
+CitationManager).
+Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where

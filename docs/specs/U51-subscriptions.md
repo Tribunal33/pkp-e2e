@@ -255,7 +255,10 @@ sidebar, Settings bullet 13), headed "Subscription"; its lines are Rule
    is restricted, except one whose "Open Access" box is ticked on the
    issue's "Table of Contents" tab, which opens for everyone like an
    open-access article. An issue whose "Access status" is "Open access"
-   is not restricted. <sup>e</sup> <sup>m</sup>
+   is not restricted. An article published with "Don't Assign To An
+   Issue" ([Issues](U50-issues.md)) belongs to no issue and is never
+   restricted, and its galleys open to signed-out visitors even under
+   Rule 13 ⚠ [A30](#a30). <sup>e</sup> <sup>m</sup>
 8. **What stays open.** Restriction covers the galleys only: an
    article's galleys (its additional files included) and the issue's
    "Full Issue" galleys. The article's page, with its title, authors,
@@ -1546,6 +1549,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A27](#a27) | Subscribers get no expiry reminders: the reminder task stops with an error and sends nothing | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A28](#a28) | After a refused "Save", a subscription's empty date boxes show today's date, but the form does not submit it | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A29](#a29) | Readers get the "Free to read" email twice for an issue opening on 1 March, May, July, October or December | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [A30](#a30) | An article published with no issue opens its galleys to everyone, past the subscription and "registered readers" restrictions | 🐞 | user-visible | — |
 | [OPS1](#ops1) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A1](#a1) | "Publishing Mode" shows no choice on a new journal, which publishes as open access | ❓ | minor | — |
 | [A5](#a5) | Without payments set up, a signed-in reader pressing a locked galley lands on the home page with no word | ❓ | user-visible | — |
@@ -1912,6 +1916,20 @@ reader who follows it finds the issue still restricted. In a leap year
 an issue opening on 29 February gets its email again on 1 March. Since:
 2006-04-18 · Basis: probe, 2026-10-01. <sup>f-a29</sup>
 
+<a id="a30"></a>
+**A30 — An article published with no issue opens its galleys to everyone, past the subscription and "registered readers" restrictions** · 🐞 · user-visible.
+An editor publishes an article with "Don't Assign To An Issue". On a
+journal that requires subscriptions, a signed-out visitor or a signed-in
+Reader without a subscription should be sent to the Login page or the
+"Subscriptions" page when pressing its galley, as for an article in a
+restricted issue (Rule 12); with "Users must be registered and log in to
+view open access content." ticked, a signed-out visitor should get the
+Login page (Rule 13). Instead each of them opens and downloads the full
+text, and the article's page shows its galley link without a padlock.
+The Journal Manager is not warned, and no setting restricts such an
+article: an article's "Open Access" box exists only in an issue's table
+of contents. Since: 2025-06-10 · Basis: probe, 2026-09-30. <sup>f-a30</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -2214,6 +2232,9 @@ Issue report: [pkp-e2e#403](https://github.com/jardakotesovec/pkp-e2e/issues/403
 <a id="fn-f-a29"></a>
 **f-a29** — Test run 2026-10-01 (Side effects; scenario 12), OJS main (ojs `bade233f73`, lib/pkp `2e377d27fc`): after the scheduled task `APP\tasks\OpenAccessNotification` ran once and the jobs ran, the mail catcher held two emails "Free to read: Vol. 1 No. 1 (2026) of {journal} is now open access" for the Reader and two for the Journal Manager (one expected). Seen on the VM on a reset database and on every OJS CI run of 2026-10-01; the same check passed on every run of 2026-09-30. Mechanism (code read): `executeActions()` calls `sendNotifications()` for today, then, on the 1st of a month whose previous month is in `$shortMonths = [2,4,6,9,11]`, again for a simulated 31st of that month, and on 1 March for a simulated 30 February and, unless `date('L', mktime(0, 0, 0, 0, 0, $year))` (which reads the previous year) says leap, 29 February. `sendNotifications()` matches `strtotime($openAccessDate) == mktime(0, 0, 0, $month, $day, $year)`; PHP's `mktime()` rolls 31 April, June, September and November over to the 1st of the next month, 29 February of a common year and 30 February of a leap year to 1 March, so an issue opening today matches twice and gets two `OpenAccessMailUsers` batches. In the year after a leap year the 29th is skipped and 30 February falls on 2 March, so 1 March sends once. Only 1 October was driven; the other days are read in the code and checked against PHP's date arithmetic. The simulation dates from the task's first version (OJS `b33af3e5a5`, 2006-04-18, then with the list `2,4,6,8,10,12`); the task runs daily (`classes/scheduler/Scheduler.php`, `daily()`).
 Issue report: [pkp-e2e#406](https://github.com/jardakotesovec/pkp-e2e/issues/406) ([docs/issues/U51-A29-open-access-email-sent-twice.md](../issues/U51-A29-open-access-email-sent-twice.md)).
+
+<a id="fn-f-a30"></a>
+**f-a30** — OJS main `pages/article/ArticleHandler.php:622-626`, in `userCanViewGalley()`: after `canPreview()`, a published publication with no issue hits `if (!$issue) { return true; }`, before the `restrictArticleAccess` login check and the subscription and purchase chain of note e. `IssueAction::subscriptionRequired()` is defined per issue only, and `view()` likewise leaves `subscriptionRequired` false with no issue, so `hasAccess` draws the link unlocked. The per-article `accessStatus` toggle lives only in `TocGridHandler`. Introduced by ojs `234fdf6586` (Touhidur Rahman, 2025-06-10, pkp/pkp-lib#9295 "replace setting continuousPublication with first class column published"), which replaced `if ($issue && $issue->getPublished() && …STATUS_PUBLISHED)`, whose else-branch refused, with the early return; publishing with no issue came with `ada320fd81` (2025-05-12, the same pkp-lib#9295), and pkp/dev-team#310 (Alec Smecher, 2026-07-23) moved the condition to the publication's status without touching the return. Live-probed 2026-09-30, OJS main (ojs `9d9f116f38`, lib/pkp `fab29cfeca`), on the seeded journal: an article published with "Don't Assign To An Issue" and a PDF galley, against an article with a PDF galley in a published issue. With "Users must be registered…" ticked, signed out: the control's `article/download` and `article/view` led to Login, the issueless PDF was served. With subscription mode and the control's issue on "Subscription": signed out, Login against served; a Reader without a subscription, `about/subscriptions` against served; the landing page drew the issueless galley link without `restricted`. The Journal Manager opened both (preview). Not driven: a valid subscriber, domain/IP subscriptions, purchases and membership. Proposed fix: drop the early return; with no issue, derive `subscriptionRequired` from `publishingMode == PUBLISHING_MODE_SUBSCRIPTION`, pass `$issue?->getId()` to `subscribedDomain()` and `subscribedUser()` (both already handle a null issue), skip the issue purchase, and use the same rule in `view()` for `hasAccess`; and give issueless articles a way to be made open access (the article `accessStatus`, for instance in the publish form), since otherwise every issueless article of a subscription journal becomes subscription-only; whether they default to open or restricted is an upstream decision. Patched live 2026-09-30 and reverted: this closed both restrictions and left an open journal's galleys open; copying only the login check into the no-issue branch left the subscription bypass. 3.5 (`ArticleHandler.php:550`), 3.4 (`:539`) and 3.3 (`ArticleHandler.inc.php:471`) enter the reader checks only on `$issue && $issue->getPublished()` and redirect otherwise, and publishing there requires an issue, so none of them has the fault. Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Live-probed 2026-09-23 by the Navigation menus claim check (its OPS2): "Saved" shown, the next load with neither choice marked, "Archives" still in the header; the Search claim check saw every role still reach the Search page. Live-probed 2026-09-25 (td1) on a scratch server: "OPS will not be used…" and "The server will provide open access…" each saved with "Saved" and came back unselected; with the second saved, the visitor and the Reader still saw "Archives", the preprint page and its PDF. OPS `schemas/context.json` has no `publishingMode`, so the context API drops the value (note b); OPS `OpsServerMustPublishPolicy` and the archive header still read it.

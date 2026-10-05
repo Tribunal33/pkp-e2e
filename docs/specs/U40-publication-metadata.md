@@ -227,7 +227,9 @@ descriptions as raw codes ⚠ [OPS3](#ops3). <sup>g</sup>
    see at once. <sup>j</sup>
 9. **A published or scheduled version locks the Author out.** A
    published or scheduled version is read-only for the Author (Rule 10);
-   the submission's other versions are not. The published version
+   the submission's other versions are not, and through them the Author
+   can still change what the versions share: the funders and the
+   associated review round ⚠ [A21](#a21). The published version
    additionally shows the banner "This version has been published and
    can not be edited." ("This version has been posted and can not be
    edited." on a preprint server, which shows a raw code in its place
@@ -986,7 +988,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-28; A16, A17 and the
-retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28; OPS3 and the correction of A15's press face 2026-09-30), unreviewed unless an entry notes otherwise;
+retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28; OPS3 and the correction of A15's press face 2026-09-30; A21 2026-10-05), unreviewed unless an entry notes otherwise;
 the team settles them on spec review. The summary
 is sorted 🐞 → ❓ → ✅ and the entries below are the source; badges, Impact
 and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -998,6 +1000,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A15](#a15) | Change Submission Language: a language picked while the panel loads saves the old title as the new one | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A21](#a21) | Through a new version of a published item, the permitted Author changes the published version's funders and can take its review round | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1266,6 +1269,19 @@ Question: should the sentence follow the stored value, or disappear
 once the field holds one? Lean: disappear, as for OPS2. It describes an
 automatic fill that will not happen.
 Basis: probe. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — An Author's edits on a new version change the published version's funders and review round** · 🐞 · user-visible.
+On a new version of a published item, the permitted Author (Rule 9)
+changes two things the published version shares with it. On a journal, a
+funder added, edited or deleted on the new version's "Funding" page
+changes the published article's page and its next Crossref or DataCite
+deposit (a press or preprint server has no such page; a hand-made request
+does the same). A hand-made save of the new version also takes the
+published version's review round, a choice the screen offers disabled.
+Expected: both stay as published, like the title. Funders being one list
+for every version is *[Funding](U43-funding.md#a2)* A2.
+Since: 2026-09-08 · Basis: probe, 2026-09-30 (OJS); code (OMP, OPS). <sup>f-a21</sup>
 
 ### OJS
 
@@ -2729,6 +2745,61 @@ reads the publication's own `licenseUrl`, else the context's, when the
 form is built, hence the change only after a reload (f-omp4).
 Live-probed 2026-09-28 on OJS, OMP and OPS (fn-g, f-omp4; three runs,
 identical).
+
+<a id="fn-f-a21"></a>
+**f-a21 — A21 evidence.** The lock became per version with
+pkp/pkp-lib#13109 (Vitaliy-1, `18f402e585` 2026-09-01, PR #13273 merged
+`0834aa8e34` 2026-09-08): `Repo::submission()->canEditPublication($publication, $user)`
+(lib/pkp `classes/submission/Repository.php:548-574` at `a7f5e3081b`)
+refuses the Author only on the publication it is given, which
+`PublicationWritePolicy` takes from the URL. Two writes reach data that
+publication does not own. Funders: `PKPFunderController::authorize()`
+(`api/v1/funders/PKPFunderController.php:102-116`) applies
+`PublicationWritePolicy` to `{publicationId}`, while `add()`, `edit()`,
+`delete()` and `saveOrder()` store and change funders by the
+submission's id (`funders.submission_id`), from pkp/pkp-lib#12392
+(Antti-Jussi Nygård, `d50c812aaf`, 2026-07-06), safe while the lock
+covered every version. Review rounds: the `reviewRoundIds` check in
+`Repo::publication()->validate()` (`classes/publication/Repository.php:250-266`)
+only asks that each round belong to the submission, and
+`PKPSubmissionController::editPublication()`
+(`api/v1/submissions/PKPSubmissionController.php:1399-1420`) re-points
+every listed round to the addressed publication, from
+pkp/pkp-lib#12800 (Erik Hanson, `9080316078`, 2026-07-29); the
+"Associated review round" options disable a round another version holds
+(`useWorkflowPublicationFormReviewRound`), the server does not. Live-probed
+2026-09-30 on OJS `main` (submission 1: version 1 published, version 2
+queued; `amwandenga` with the metadata-edit permission): on version 1 the
+publication, contributors, citations, data citations and funders writes
+all answered 401 `api.submissions.403.userCantEdit`; on version 2 all
+passed the gate (harmless requests answering 400 or 404, so A17's
+Contributors saves are not refused by it); `POST …/publications/2/funders`
+added a funder and grant that showed on the signed-out `/article/view/1`
+and on `GET …/publications/1/funders`, then deleted through version 2;
+`PUT …/publications/2` with `{"reviewRoundIds":[1]}` answered 200 and set
+round 1's `publication_id` from 1 to 2 (restored). Controls: `dbuskins`
+(Section Editor) and `dbarnes` (Journal Manager) passed on both versions
+(Rule 8); the same Author with the permission off, `sberardo` without it,
+and `ccorino` (another submission's Author) were refused. The Author
+cannot create a version (`POST …/version` 401 `roleBasedAccessDenied`,
+OJS and OPS). OMP (`mdawson`, book 14) and OPS (`zwoods`, preprint 19):
+the published side refused live; the funder write through a new version
+from the code only (same lib/pkp route; no new version in their test
+data). The front ends print funders (`article_details.tpl`,
+`monograph_full.tpl`, `preprint_details.tpl`) and the Crossref filter
+sends them (`ArticleCrossrefXmlFilter`). Proposed fix: funder add, edit,
+delete and order require `canEditPublication()` on every publication of
+the submission (or funders become per version); the `reviewRoundIds`
+check refuses a round whose `publicationId` is set and differs from the
+addressed publication, the rule the options already apply. Both were
+patched into OJS `main` and probed, then reverted: the Author's funder
+writes on version 2 refused (403) while the Section Editor's passed, and
+the review-round move refused with "This review round is not part of
+this submission." with the round unchanged. 3.5, 3.4 and 3.3 do not have
+it: 3.5's `canEditPublication(int $submissionId, …)` locks the Author out
+of every version once one is published (`classes/submission/Repository.php:514-547`),
+and none of them has the funders API or `reviewRoundIds`.
+Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1 — OJS1 evidence.** An OJS submission whose publication is

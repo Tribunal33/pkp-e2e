@@ -35,7 +35,7 @@ account.
 
 | Action | Who may, and when |
 |--------|--------------------|
-| **Open Settings › Website › "Setup" › "Navigation" and add, edit or delete the journal's menus and items** (Rules 1, 3–14) | • whoever opens the Settings pages; nobody else: every other role has no "Settings" in the side menu and gets the access-denied page at the Settings address <sup>b</sup> |
+| **Open Settings › Website › "Setup" › "Navigation" and add, edit or delete the journal's menus and items** (Rules 1, 3–14) | • whoever opens the Settings pages; nobody else: every other role has no "Settings" in the side menu and gets the access-denied page at the Settings address <sup>b</sup><br>• a manager-level role without "Permit changes to Settings" is refused the tab, yet can still add, rename and rearrange the journal's menus through the requests the menu window sends ⚠ [A26](#a26) |
 | **Add, edit or delete the site's menus and items** (Administration › "Site Settings" › "Site Setup" › "Navigation", Rule 1b) | • the Site Administrator, while the site hosts two or more journals; with exactly one journal the side tab is not offered<br>• there, the menus can be removed and the items added, edited and removed, but "Add Menu" and a menu's "Edit" open no window, so a site menu cannot be added or edited (Rule 1b, [A4](#a4)) <sup>c</sup> |
 | **See the public header, the footer, breadcrumbs, page links and skip links** (Rules 15–24) | • any visitor, signed in or not, on any public page of a journal or of the site but the bare "404 Not Found" (Rule 26b); a journal closed to signed-out visitors sends them to Login first ([Journal identity & about pages](U07-journal-identity-and-about-pages.md), Rule 22) <sup>d</sup> |
 | **Use the public user menu** (Rules 18–19) | • signed out: "Login", and "Register" while the journal accepts registrations<br>• signed in: the username, "Dashboard", "View Profile", "Logout"<br>• "Administration": the Site Administrator only<br>• where "Dashboard" leads depends on the role, Rule 19; a Section Editor is sent to the Profile page [A2](#a2) <sup>e</sup> |
@@ -1301,6 +1301,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A23](#a23) | In French, the side menu's "Content" group {OJS OMP}, "DOIs" entry {OMP OPS}, "Search submissions" box and a press's "Monographs" entry {OMP} read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | In French, the item window's "Query Parameters" box, the menu window's drag handles and a press's "New Releases" type read raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A26](#a26) | A role kept out of Settings can still add, rename and rearrange the journal's navigation menus | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | Menu window marks "Subscriptions" and "My Subscriptions" items with no eye, so their notices never show {OJS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | A preprint server's "Posting Mode" says "Saved" but keeps nothing, so the server goes on posting {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | {OPS} On a preprint server's French (Canada) pages, screen readers hear the "Developed By" heading as a text key | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1664,6 +1665,18 @@ Question: should the initials menu close on Escape too? Lean: yes;
 Escape is the key a keyboard or screen-reader user reaches for to close
 a menu, and the other menus here answer it.
 Basis: test run. <sup>f-a25</sup>
+
+<a id="a26"></a>
+**A26 — A role kept out of Settings can still add, rename and rearrange the journal's navigation menus** · 🐞 · user-visible.
+A manager-level role whose "Permit changes to Settings" is unticked
+should stay off the journal's menus, as it stays off the Navigation tab:
+the tab and both its tables refuse its holders. The requests the menu
+window sends do not: a holder who sends them from the browser can list
+the journal's items, add menus, rename them, move a menu into or out of
+a header area, and reorder or empty a menu's items, which rearranges or
+blanks the public header and user menu. Items cannot be changed and
+menus cannot be deleted this way. All three apps.
+Since: 2026-01-22 · Basis: probe, 2026-09-30. <sup>f-a26</sup>
 
 ### OJS
 
@@ -3031,6 +3044,36 @@ focus half of the symptom is read from `closeOnBlur()`, not run. The
 header's "About" list closes on Escape (note q), the menu window too
 (note td7). Test run 2026-09-26, OJS: Escape left the menu shown three
 times out of three; OMP and OPS share the component.
+
+<a id="fn-f-a26"></a>
+**f-a26** — On `main` (lib/pkp `a7f5e3081b`),
+`PKPNavigationMenuController::authorize()`
+(`lib/pkp/api/v1/navigationMenus/PKPNavigationMenuController.php:90-102`)
+adds `UserRolesRequiredPolicy` and the role policies only, and
+`getRouteGroupMiddleware()` admits `ROLE_ID_SITE_ADMIN` and
+`ROLE_ID_MANAGER`: no `CanAccessSettingsPolicy`, which the grids it
+replaced still add (`NavigationMenusGridHandler::authorize()`,
+`NavigationMenuItemsGridHandler::authorize()`) since pkp-lib#5504
+(`1330ac1283`, Alec Smecher, 2024-11-18). Brought in by pkp-lib#12177
+(PR #12178, `e0a5aa2b02`, Blesilda Biazon, 2026-01-22), when the API
+replaced the grid's add and edit. Live-probed 2026-09-30, all three
+apps (lib/pkp `fab29cfeca`), as a user holding only a custom
+manager-level role with the box unticked: Settings › Website answered
+302 to the access-denied page and the grids "Access denied.", while
+`GET items` answered 200, `POST` with an empty title 422 and `PUT 0`
+404, all past authorization; on OJS a real `POST` (201) and a rename
+`PUT` (200) went through. The Journal Manager passed (by design); the
+Section Editor got 401. Proposed fix: `$this->addPolicy(new
+CanAccessSettingsPolicy());` in `authorize()`, as #5504 did for the
+contexts and email-templates APIs; tried on OJS, the restricted role then
+got 401 on all three requests while the Journal Manager and the Site
+Administrator still passed. 3.5 has no such API: menus are edited in
+the grids, which add `CanAccessSettingsPolicy`
+(`NavigationMenusGridHandler.php:72`,
+`NavigationMenuItemsGridHandler.php:73`); 3.4 and 3.3 have no API and
+no "Permit changes to Settings". Release check 2026-10-05 at the
+stable-3_5_0, stable-3_4_0 and stable-3_3_0 tips: none has the fault.
+Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — OJS `NavigationMenuService` gives `NMI_TYPE_SUBSCRIPTIONS`

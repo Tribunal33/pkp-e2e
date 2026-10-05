@@ -56,7 +56,7 @@ what a visitor may open is *Subscriptions & open access control*'s.
 | Action | Who may, and when |
 |--------|--------------------|
 | **Read a published version's page** (the current version, or an older one at its own address) | • anyone, signed in or not (Rules 1, 2) <sup>b</sup> <sup>q1</sup> |
-| **Open an unpublished version's page** | • the Journal Manager, the Site Administrator and a Section Editor assigned to the submission, whose workflow offers "Preview" ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), Rule 6), under the preview notice (Rule 4)<br>• the submission's Author, by typing the page's address; the Author's workflow offers no "Preview"<br>• a visitor, a Reader and a Reviewer get the "404 Not Found" page (Rule 3) <sup>b</sup> <sup>q3</sup> |
+| **Open an unpublished version's page** | • the Journal Manager, the Site Administrator and a Section Editor assigned to the submission, whose workflow offers "Preview" ([Workflow screen & stage access](U24-workflow-screen-and-stage-access.md), Rule 6), under the preview notice (Rule 4)<br>• the submission's Author, by typing the page's address; the Author's workflow offers no "Preview"<br>• a Section Editor, a Subscription Manager, or a Copyeditor, Layout Editor, Proofreader or other assistant role of the journal not assigned to the submission, by typing the page's address, once the submission has reached copyediting or production; it opens for them at every earlier stage too, a declined submission included ⚠ [A16](#a16)<br>• a visitor, a Reader and a Reviewer get the "404 Not Found" page (Rule 3) <sup>b</sup> <sup>q3</sup> |
 | **Open or download a galley** | • anyone who may read the page, on a journal whose content is open and on every preprint server (Rules 10, 11)<br>• on a journal with subscriptions, *Subscriptions & open access control* decides <sup>b</sup> |
 | **Show the citation in another format; download a citation** | • anyone who may read the page, while the "Citation Style Language" plugin is on (Rule 15) ⚠ [OJS1](#ojs1) <sup>h</sup> |
 | **Configure "How to Cite" and the journal's extra blocks** (the plugins' "Settings" windows, the chart choice) | • whoever opens the Settings pages ([→ settings access](U07-journal-identity-and-about-pages.md#settings-access)), on Settings › Website › "Plugins" and "Appearance" (Rules 16, 17, 19, 20) <sup>i</sup> |
@@ -1372,6 +1372,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [A11](#a11) | Keywords on an article, book or preprint page can appear in another order than the editor typed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | The PDF or HTML reader opened from a new version's preview calls that version outdated | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | In Japanese, Spanish (Mexico) and other languages whose translation lacks the entry, every "Versions" entry reads "##submission.versionIdentity##", with no date or version name | 🐞 | minor | — |
+| [A16](#a16) | A Section Editor or assistant role not assigned to a submission reads its unpublished page at every stage, declined submissions included | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | Readers get no other citation format or citation download on an article published outside a published issue | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | Publication Facts Label settings always warn "Funding Plugin Not Present", for a plugin that no longer exists | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | In French (Canada) and every other language without its own labels, article pages show no "Publication Facts" panel | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1650,6 +1651,24 @@ the entry: Japanese holds it empty, Spanish (Mexico) lacks it. The
 whole entry is therefore the key, and [A1](#a1)'s key, which French
 (Canada) shows inside the entry, never appears there.
 Basis: probe, 2026-10-05. <sup>[f-a15](#fn-f-a15)</sup>
+
+<a id="a16"></a>
+**A16 — A Section Editor or assistant role not assigned to a submission reads its unpublished page at every stage, declined submissions included** · 🐞 · user-visible.
+A Section Editor, a Subscription Manager, or a Copyeditor, Layout
+Editor, Proofreader or other assistant role of the journal, not
+assigned to a submission, types its page's address (the submission's
+number) and reads its title, abstract, authors and affiliations while
+it is still in the Submission or Review stage, or after it was
+declined. Their dashboard does not list it and the workflow refuses
+them. They expect "404 Not Found" until the submission reaches
+copyediting, as in the releases. A staff member who also reviews the
+submission double-anonymously reads on that page the authors' names
+the review screens hide. On a journal, the version's "JATS XML"
+download, once "Make available with publication" is ticked, lets the
+same people download it at the same stages. Nothing can be changed;
+files, reviews and discussions stay closed. A preprint server was seen
+only with preprints in production, so there it rests on the code.
+Since: 2026-02-18 (the earlier-stage preview change) · Basis: probe, 2026-09-30. <sup>[f-a16](#fn-f-a16)</sup>
 
 ### OJS
 
@@ -3110,6 +3129,54 @@ walked). By the code, 25 of the 70 other languages have no text for it
 (12 lack the entry, 8 hold it empty, 5 have no `submission.po`); A1's
 proposed fix leaves them out. Live-probed 2026-10-05, note q5, two runs:
 OJS, OPS and the press's book page alike.
+
+<a id="fn-f-a16"></a>
+**f-a16** — Note b: on `main`, `Repo::submission()->canPreview()`
+(lib/pkp `classes/submission/Repository.php:580-603`) returns true
+through `_roleCanPreview()` (`:1530-1551`) for any user holding
+`ROLE_ID_MANAGER`, `ROLE_ID_SUB_EDITOR`, `ROLE_ID_ASSISTANT` or
+`ROLE_ID_SUBSCRIPTION_MANAGER` in the context, reading no assignment and
+no stage; the workflow's `SubmissionAccessPolicy` admits sub-editors and
+assistants only when assigned. Callers: OJS `ArticleHandler` (page and
+galley download), OPS `PreprintHandler`, OMP `CatalogBookHandler`, and
+`PKPJatsController::publicDownload()`
+(`submissions/{id}/publications/{pid}/jats/download`, a route new on
+`main`, pkp/pkp-lib#10405). Introduced by pkp/pkp-lib#12245 (PR #12247,
+`768b0a3991`, Alec Smecher, 2026-02-18), which deleted the stage limit
+so that assigned editors could preview earlier stages; the role
+shortcut lost it too. `b4ef319c72` (2026-05-14) only excludes incomplete
+submissions. Proposed fix: managers, the Site Administrator and anyone
+assigned to the submission preview it at every stage; the role shortcut
+alone keeps the stage limit (`WORKFLOW_STAGE_ID_EDITING`,
+`WORKFLOW_STAGE_ID_PRODUCTION` and `WORKFLOW_STAGE_ID_DONE`, where
+published submissions sit). Patched into OJS and OMP `main` 2026-09-30
+and reverted: the unassigned Layout Editor, Section Editor and
+Proofreader got "404 Not Found" before copyediting and kept the
+copyediting preview, the assigned Section Editor, the manager and the
+Author were unchanged, and the JATS download answered 403 to the
+unassigned. Restoring the old check at the top of `canPreview()` instead
+breaks #12245: the assigned Section Editor and the Author lose the
+early preview, and the manager loses a published article's unpublished
+version 2. Releases: `stable-3_5_0` and `stable-3_4_0` `canPreview()`
+return false outside copyediting and production, OJS `stable-3_3_0`
+`IssueAction::allowedPrePublicationAccess()` refuses before
+`WORKFLOW_STAGE_ID_EDITING`, and the public JATS download does not exist
+before `main`: 3.5, 3.4 and 3.3 do not have the fault. Live-probed
+2026-09-30, OJS, OMP and OPS `main`, seeded data: unassigned `gcox`
+(Layout Editor), `svogt` (Copyeditor) and `minoue` (Section Editor)
+opened OJS submissions 4 (Submission), 20 (Review, double-anonymous) and
+18 (declined), each read with the submission API answering 401;
+`cturner` (Proofreader, double-anonymous reviewer of 20) saw "Zayan
+Zedd; Nargis Parvin" on 20's page while the review API gave an empty
+`authorsString`; `amccrae` (Reviewer only), `zwoods` (another Author)
+and signed out got 404. With 20's JATS public visibility ticked by
+`dbarnes` (reset after), `cturner`, `gcox` and `minoue` downloaded its
+XML naming the authors (200); `amccrae`, `zwoods` and signed out got
+403. OMP: `mfritz` (Copyeditor) and `cturner` opened books 3, 6 and 18
+before copyediting. OPS: only preprints 1 and 4, in production, were
+walked; earlier stages by the code. The Subscription Manager: by the
+code. Security-shaped and unreleased: its issue report carries
+"- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `CitationStyleLanguagePlugin::getTemplateData()` passes

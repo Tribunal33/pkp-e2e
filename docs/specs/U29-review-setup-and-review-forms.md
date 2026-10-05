@@ -52,7 +52,7 @@ some reviewer has chosen on a submitted review (Rule 18). <sup>c</sup>
 | **Save "Setup" and "Reviewer Guidance"** | • Manager roles and the Site Administrator: the tab's "Save" <sup>c</sup> |
 | **Create, edit, copy, preview, order, activate and deactivate review forms** | • Manager roles and the Site Administrator. "Edit" and "Delete" are offered only on a form not in use (Rule 12); "Copy", "Preview" and the "Active" tick are offered on every form <sup>c</sup> |
 | **Add, edit, delete and order a form's items** | • Manager roles and the Site Administrator, only while the form is not in use (Rule 12): the "Form Items" tab is greyed out for a form in use <sup>c</sup> |
-| **Add, edit, delete, activate and deactivate a reviewer recommendation** {OJS} | • Manager roles and the Site Administrator. "Edit" and "Delete" are offered only on a recommendation not in use (Rule 18); the "Activate" tick is offered on every row <sup>c</sup> |
+| **Add, edit, delete, activate and deactivate a reviewer recommendation** {OJS} | • Manager roles and the Site Administrator. "Edit" and "Delete" are offered only on a recommendation not in use (Rule 18); the "Activate" tick is offered on every row<br>• Section Editor, and a role at the Journal Manager level whose settings access is switched off: no screen of theirs offers it, but the app accepts the same changes when they are sent to it directly ⚠ [A13](#a13) <sup>c</sup> |
 
 ## Fields & validation
 
@@ -919,6 +919,8 @@ Left out of the scenarios above, by reason:
     unsaved title on the row for the next "Save" to store; Rule 18)
   - A12 (the "Activate" tick boxes and the "Active Upon Saving" list
     without a name for a screen reader; Fields "Reviewer Recommendations")
+  - A13 (a Section Editor, or a manager-level role without settings
+    access, changing the recommendations without the screen; Actors row 6)
   - OMP3 (the "Internal Review Guidelines" toolbar without quote and list
     buttons; Fields)
 - **No seed**:
@@ -969,6 +971,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | Saving a reviewer's "Edit" window silently takes a deactivated review form off the review | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A12](#a12) | On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name | 🐞 | minor | — |
+| [A13](#a13) | A Section Editor, or a manager-level role without settings access, can add, change, delete and deactivate the journal's reviewer recommendations | 🐞 | user-visible | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1133,6 +1136,19 @@ Recommendation", as a click does. The same mistake as the DOIs page's
 row tick boxes ([DOIs' A8](U45-dois.md#a8)).
 Basis: probe, 2026-10-05. <sup>f-a12</sup>
 
+<a id="a13"></a>
+**A13 — A Section Editor, or a manager-level role without settings access, can change the journal's reviewer recommendations** · 🐞 · user-visible.
+On a journal, a Section Editor and a role at the Journal Manager level
+whose settings access is switched off are refused "Reviewer
+Recommendations", and should not change its list. Yet the app accepts
+their add, edit, delete, activate and deactivate requests when they are
+sent to it directly: a new entry shows at once in every reviewer's
+"Recommendation" list, an unused entry can be renamed, retyped or deleted,
+and any entry can be deactivated, one in use included (A6 then blanks it in
+the editor's "Read Review" window). An entry in use still cannot be renamed
+or deleted, and a manager sees and can undo every change on the tab.
+Since: 2025-04-29 (a year and a half) · Basis: probe, 2026-09-30. <sup>f-a13</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1261,7 +1277,9 @@ ReviewFormGridRow::initialize()` adds them only when
 recommendation manager (`ReviewerRecommendationManager.vue`) renders the
 row menu only for `item.removable`, and the OJS API
 (`api/v1/reviewers/recommendations/ReviewerRecommendationController.php`)
-refuses `edit` and `delete` on a non-removable entry with 406. Live-probed
+refuses `edit` and `delete` on a non-removable entry with 406; that API
+has no settings-access check and admits Section Editors too (A13,
+footnote f-a13). Live-probed
 2026-09-06 (Actors rows 1–5; OJS, OMP and OPS, one account per level:
 `manager.maya`, `editor.diana`, `admin`, `sectioneditor.ana`,
 `assistant.rita`, `reviewer.julia`, `author.alex`, `reader.rosa`): the three
@@ -2012,6 +2030,53 @@ nothing was sent. No server error, page error or console error in either
 run. Kept script `shared/playwright/checks/U28/I05/i05.js` (phase `recs`).
 First noted 2026-10-01 in the code by the DOIs page's A8 write-up, which
 names it as outside that fix (`docs/issues/U45-A8-doi-page-controls-unnamed.md`).
+
+<a id="fn-f-a13"></a>
+**f-a13** — OJS `main`
+`api/v1/reviewers/recommendations/ReviewerRecommendationController.php`:
+`getRouteGroupMiddleware()` (:52-57) admits `ROLE_ID_SITE_ADMIN`,
+`ROLE_ID_MANAGER` and `ROLE_ID_SUB_EDITOR` on every route, and
+`authorize()` (:64-82) adds only `UserRolesRequiredPolicy`,
+`ContextAccessPolicy` and, on the single-entry routes,
+`RecommendationAccessPolicy` (the entry belongs to this journal); there is
+no `CanAccessSettingsPolicy`, which gates the page itself (footnote c). No
+Section Editor screen calls the API: the dashboard and the reviewer's form
+read the entries from the database, and the only caller is the settings
+tab's `reviewerRecommendationManagerStore.js`. Since: Touhidur Rahman's
+pkp/pkp-lib#1660 work wrote the role list in lib/pkp `d4f7d18e50`
+(2024-11-06), before Alec Smecher's pkp/pkp-lib#5504 (`1330ac1283`,
+2024-11-18, PR #10380) brought `permitSettings` and
+`CanAccessSettingsPolicy`, so the controller never got the policy; it moved
+into OJS in `b14943ce19` (2025-03-03) with the same list and reached `main`
+with OJS PR #4505 and pkp-lib PR #10583, merged 2025-04-29. Live-probed
+2026-09-30 on OJS `main` (`9d9f116f38`, lib/pkp `fab29cfeca`) on PKP's
+default test dataset: Section Editors `dbuskins`, `minoue` and `sberardo`,
+and a throwaway user holding only a manager-level role created with
+"Permit changes to Settings" unticked, were each sent to the access-denied
+page by Settings › Workflow and each listed, created, renamed, deactivated
+and deleted a throwaway entry through the API (200 each); `rvaca`, `dbarnes`
+and `admin` likewise (by design); `mfritz`, `jjanssen` and `ccorino` were
+refused (401); another journal's entry id was refused (401). A new entry
+appeared in `amccrae`'s step-3 list. On a scratch journal a Section Editor
+renamed the starting "Accept Submission", deleted "Resubmit Elsewhere" and
+deactivated every entry. On entries in use (one on a saved draft review,
+one on a submitted review) rename and delete answered 406 and deactivate
+200; the submitted review's line in the editor's reviewer grid then read
+"Recommendation: " with no text until the entry was reactivated. From the
+code only: with every entry inactive, a reviewer who has not chosen yet
+gets an empty list and cannot submit (`ReviewerReviewStep3Form`). The API
+keeps no record of who changed what. Proposed fix: drop
+`Role::ROLE_ID_SUB_EDITOR` from the role list and add
+`$this->addPolicy(new CanAccessSettingsPolicy());` to `authorize()`, as the
+contexts, email-templates, categories, contributor-roles and
+task-template controllers do; tried on the probe install, it refused the
+Section Editor and the restricted role (401) and kept the Journal Manager,
+Journal Editor and Site Administrator working, the tab's list still
+loading. OMP and OPS `main` have no such API
+(`hasCustomizableReviewerRecommendation()` false; the route 404s), and
+OJS 3.5, 3.4 and 3.3 have no recommendations API at all, so no release
+carries it. Security-shaped and unreleased: its issue report carries
+"- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the

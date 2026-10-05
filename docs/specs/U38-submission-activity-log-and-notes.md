@@ -57,7 +57,7 @@ preprint server an Editorial Board Member). <sup>c</sup>
 |--------|--------------------|
 | **Open "Activity Log & Notes"** (the header's "Activity Log"; Rule 1) | • The editorial readers<br>• A Site Administrator whose journal roles are all assistant roles: yes ([A4](#a4))<br>• Assistant roles (Copyeditor, Layout Editor, Proofreader, Funding Coordinator and the others), Author, Reviewer, Reader: never; their header has no "Activity Log"<br>• A Site Administrator whose only journal role is Reader: never; the submission does not open for them (an "Error" window reading "The current role does not have access to this operation." over an empty workflow screen with no header buttons) <sup>b</sup> <sup>c</sup> |
 | **Read "History"**, with its "Download" and "View Email" (Rules 2–9) | • Every editorial reader. One who is also an author of the submission reads it with the reviewers of anonymous reviews hidden (Rule 9)<br>• A Site Administrator whose journal roles are all assistant roles: no; the window shows the "Notes" tab alone ⚠ [A4](#a4) <sup>c</sup> |
-| **"View changes"** {OJS OMP} (a review line's action; Rule 5) | • The editorial readers, except one who is also an author of the submission (Rule 9). The window it opens is [→ Reviewer assignment & management](U27-reviewer-assignment-and-management.md#read-review)'s <sup>f</sup> |
+| **"View changes"** {OJS OMP} (a review line's action; Rule 5) | • The editorial readers, except one who is also an author of the submission (Rule 9), and only for the review lines on that submission's own "History" ⚠ [A11](#a11). The window it opens is [→ Reviewer assignment & management](U27-reviewer-assignment-and-management.md#read-review)'s <sup>f</sup> |
 | **Add a note** ("Notes"; Rule 10a) | • Everyone the window opens for, the Site Administrator with assistant roles included <sup>d</sup> |
 | **Delete a note** ("Notes"; Rule 10c) | • Every editorial reader, on any note, whoever wrote it<br>• A Site Administrator whose journal roles are all assistant roles: no "Delete" on any note, their own included ([A4](#a4)) <sup>d</sup> |
 
@@ -554,6 +554,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Activity Log file lines show an empty file name when read in a language other than the submission's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A11](#a11) | "View changes" opens any edited review on the site, not only those on the submission's own "History" | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
@@ -684,6 +685,19 @@ while typed text would be lost; once "Notes" is opened again, "Close"
 rightly asks nothing. A user asked twice cannot tell whether the text
 was kept.
 Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
+
+<a id="a11"></a>
+**A11 — "View changes" opens any edited review on the site, not only those on the submission's own "History"** {OJS OMP} · 🐞 · user-visible.
+The "View Review" window behind "View changes" is expected to show only
+the review changes listed on the submission's own "History". It shows
+any one it is asked for by number: a Section Editor assigned to one
+submission, or a Journal Manager of another journal on the same site,
+reads the old and new comments, recommendation, review form answers and
+competing interests of any review an editor has edited, anonymous ones
+included. The window names neither reviewer nor submission, but the text
+often gives it away, and an editor who is also an author can read the
+edited review of their own submission. Nothing can be changed.
+Since: 2026-08-20 · Basis: probe, 2026-09-30. <sup>[f-a11](#fn-a11)</sup>
 
 ### OMP
 
@@ -1334,6 +1348,45 @@ raised no page-leave question, and "Notes" read "There are no notes to
 display." before and after. Control: the same switch, then "Notes"
 opened again before "Close": no question.
 Issue report: [pkp-e2e#892](https://github.com/jardakotesovec/pkp-e2e/issues/892) ([docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md)), with A3 and A9.
+
+<a id="fn-a11"></a>
+**f-a11** — Note f. `SubmissionReviewEventLogGridHandler::viewReviewChange()`
+(`lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php:46`
+on `main`) loads `Repo::eventLog()->get((int) $args['logEntryId'])`, by
+primary key only, and never checks that the entry belongs to the
+request's `submissionId`; the role and workflow checks (managers, site
+administrators, sub-editors) cover only that `submissionId`. The grid's
+own list, `SubmissionEventLogGridHandler::getReviewChangeEntries()`, is
+scoped correctly, and `EventLogGridRow` hides the action from an assigned
+author, but the endpoint checks neither. Entries carry `assocType` review
+assignment (517) or submission review comment (1048595), so the
+`assocType`/`assocId` check the "View Email" fix uses would refuse every
+legitimate "View changes" too. Introduced by pkp/pkp-lib#13192 (Taslan
+A. Graham, `30a2572a7a`, 2026-08-20); the entries come from
+pkp/pkp-lib#13117's review edit (`b5c86a8cb7`, 2026-08-18), and
+pkp/pkp-lib#13291 (`5af3b39336`, 2026-09-22) added the
+competing-interests type. pkp/pkp-lib#13434's `main` port (`461f9a9a45`)
+fixed `viewEmail()` only; `viewReviewChange()` is unchanged. Proposed
+fix: serve only an entry that `getReviewChangeEntries($this->getSubmission())`
+lists, refuse when `_isCurrentUserAssignedAuthor`, and answer
+`api.404.resourceNotFound` otherwise (which also replaces the server
+error an unknown id gets now); patched into OJS `main` and probed: the
+submission's own editors still read their entries, the other users were
+refused. 3.5, 3.4 and 3.3 do not have it: the handler and the
+review-edit API do not exist there. Live-probed 2026-09-30, OJS `main`:
+`dbarnes` edited review 15 (submission 10, double-anonymous) through
+`PUT …/reviewAssignments/15/review` (comments and recommendation,
+`event_log` 347 and 348); `minoue` (Section Editor on 2, 9 and 19) with
+`view-review-change?submissionId=19&logEntryId=347|348` read both; a
+Journal Manager of a scratch second journal, with a submission of that
+journal, read both; `minoue` on submission 10 and `svogt` (Assistant),
+`zwoods` (Author) and `amccrae` (Reviewer) on 19 were refused; `dbarnes`
+and `dbuskins` on 10 read their own. OMP `main`: `minoue` (Series Editor
+on 6 only) read entry 641 of submission 16. Seen again 2026-10-02 on OJS
+`main` (`minoue` with submission 2 read submission 1's comment-edit
+entry). Code only: review form and competing-interest entries, the
+author-editor case, OPS (no reviews).
+Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note o. Live-probed 2026-09-23 (the submission-files claim

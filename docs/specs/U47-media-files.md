@@ -41,6 +41,10 @@ Manager, Editor, Production Editor and Site Administrator count without
 an assignment. **May edit the publication** is the publication's edit
 gate ([→ edit gate](U40-publication-metadata.md#edit-gate)): every
 change the page sends is checked against it, whatever the page offered.
+The server does not ask for the Production role the page goes by, only
+for a role on the stage the submission is in now, so a Copyeditor whose
+assignment carries the "Permissions" box can change the media files
+during Copyediting, though no page offers them the set ⚠ [A8](#a8).
 <sup>a</sup> <sup>b</sup> <sup>c</sup>
 
 | Action | Who may, and when |
@@ -881,6 +885,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | A name typed in "Edit Metadata" and left with "Yes" shows in the list, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Each media file added leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | In French the "Media" page, its windows and the delete dialog show raw codes such as "##publication.mediaFiles.add##" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A8](#a8) | Outside Production, a Copyeditor allowed to edit the publication can change its media files, which no page offers them | 🐞 | user-visible | — |
 | [OMP2](#omp2) | On a press, the Copyeditor is offered the "Media" page, and pressing a file name shows a raw refusal | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | The "ID" column shows a pair's number for linked files and another kind of number for the rest | ❓ | minor | — |
 | [OJS1](#ojs1) | A reader who is not signed in sees a media change on an HTML galley up to a day late | ❓ | user-visible | — |
@@ -1002,6 +1007,22 @@ screen & stage access](U24-workflow-screen-and-stage-access.md#a11)'s,
 and why a missing French text shows as a code at all is [Languages &
 locales](U57-languages-and-locales.md#a4)'.
 Basis: probe, 2026-10-02. <sup>f-a7</sup>
+
+<a id="a8"></a>
+**A8 — Outside Production, a Copyeditor allowed to edit the publication can change its media files, which no page offers them** · 🐞 · user-visible · {OJS OMP}.
+The "Media" page offers its changes only to a role on the submission's
+Production stage: a journal does not show the Copyeditor the page, and
+a press shows them the list without its buttons. The server accepts the
+same changes from anyone with a role on the stage the submission is in
+now whose assignment carries the "Permissions" box. So a Copyeditor
+given that box can add, rename, relink and delete media files, other
+people's included, by sending the changes straight to the server while
+the submission is in Copyediting; in Production they are refused. They
+may already change the version's metadata and its JATS XML there, so
+the page and the server disagree rather than a new right opening; one
+of the two should change. A journal's body text behaves the same way
+([JATS XML & body text](U48-jats-and-body-text.md)).
+Since: 2026-09-17 · Basis: probe, 2026-09-30. <sup>f-a8</sup>
 
 ### OJS
 <a id="ojs1"></a>
@@ -1812,6 +1833,52 @@ a `fr_CA` entry; the English `publication.mediaFiles.confirmDelete`
 carries the file name. The "More Information" window's History line
 with an empty file name is *Submission activity log & notes*' finding.
 Issue report: [pkp-e2e#457](https://github.com/jardakotesovec/pkp-e2e/issues/457) ([docs/issues/U53-A11-users-tab-french-raw-keys.md](../issues/U53-A11-users-tab-french-raw-keys.md)).
+
+<a id="fn-f-a8"></a>
+**f-a8** — Notes b and c. On `main`, lib/pkp
+`api/v1/submissions/MediaFilesController.php:132-134` and
+`api/v1/bodyText/PKPBodyTextController.php:102-105` guard every write
+with `PublicationWritePolicy` alone, whose `StageRolePolicy([SUB_EDITOR,
+ASSISTANT, AUTHOR])` takes no stage id
+(`classes/security/authorization/PublicationWritePolicy.php:42`), so it
+checks the submission's current stage, not Production; the page's offer
+(note b) and OJS's side menu, which lists Body Text and Media only with
+an editorial role in Production, go by Production. Brought by
+pkp/pkp-lib#12702 (PR #13054, Touhidur Rahman; lib/pkp `c967e34ba4`,
+`2b13599365`, `462d628de3`, on `main` 2026-09-17), which dropped
+`SubmissionFileStageAccessPolicy` from these routes so assigned Section
+Editors could upload JATS; media `add` had no stage check from the
+start (pkp/pkp-lib#12251, Erik Hanson, `f4eccf8b9f`, on `main`
+2026-04-30). The old check was no clean Production rule either: it took
+the file stage from the request (Body Text save passed with
+`fileStage=9`) and refused every assigned participant's Body Text and
+JATS saves, the #12702 bug. Live-probed 2026-09-30, OJS and OMP `main`
+(lib/pkp `fab29cfeca`), standard test data, "Permit submission metadata
+edit" ticked by `dbarnes` on the assignments and unticked afterwards:
+Copyeditor `mfritz` on OJS submission 3 (Copyediting): media add, edit,
+link and delete, body text save and delete, all 200; Copyeditor
+`svogt` on OMP submission 1 (Copyediting): media add, edit, link and
+delete, all 200. Refused 401: the box unticked, a Copyeditor not
+assigned, the same Copyeditor with the submission in Production (OJS 5,
+OMP 4, `accessibleWorkflowStage`), the Author `ckwantes`. Accepted as
+intended: Section Editor `dbuskins`, managers `dbarnes` and `rvaca`,
+Layout Editor `gcox` with the box in Production. Code only: the Funding
+Coordinator (Submission, Review) and the Marketing and Sales
+Coordinator (Copyediting) stand as the Copyeditor; OPS has the route,
+but a preprint is always in Production, so it cannot meet this. A1 is
+the reverse case (offered, refused) and OMP2 the press's download link;
+both are separate faults. Proposed fix, if the page's rule is the
+intended one: on both controllers' write actions add
+`StageRolePolicy([Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT],
+WORKFLOW_STAGE_ID_PRODUCTION)` after `PublicationWritePolicy`; tried
+live 2026-09-30 on OJS and reverted: the Copyeditor's Body Text, media
+add and batch link refused 401, JATS still accepted, Section Editor,
+managers and Layout Editor in Production still accepted. If the team
+keeps the server's rule, the page and the side menu should offer Body
+Text and Media to whoever may edit the publication at the current
+stage. 3.5 has only the JATS route, whose server rule matches its page,
+and 3.4 and 3.3 have none of these routes: not affected.
+Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note q29. `HtmlArticleGalleyPlugin`, the galley view: a

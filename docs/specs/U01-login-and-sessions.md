@@ -242,14 +242,17 @@ browser tab reads "Change Password | {journal name}", but after a refused
 16. **The Confirm Access gate.** When the installation's configuration sets a
     re-authentication window (in minutes), every Administration screen first
     shows the "Confirm Access" form (Fields above). The correct password
-    opens Administration for the window's duration. Working inside
-    Administration keeps refreshing the window, so the prompt returns only
-    after the administrator has been away from it longer than the window. A
-    button press that needs Administration rights after the window lapsed
-    also lands on Confirm Access. Pressing Administration's "Delete Template
-    Cache" button after idling past the window is one example. The pressed
-    action is **not** replayed: after confirming, a notice says "Your last
-    action was not completed. Please try again." Opening the Confirm Access
+    opens Administration for the window's duration. Moving between
+    Administration screens keeps refreshing the window, so the prompt returns only
+    after the administrator has been away from it longer than the window.
+    After the window lapsed, a press of one of the buttons that reload an
+    Administration page, such as "Delete Template Cache", also lands on
+    Confirm Access. The changes the screens save in place do not: adding or
+    deleting a journal, saving Site Settings, its Languages and Plugins, and
+    retrying or deleting failed jobs all go through without the password
+    ⚠ [A13](#a13). The page button's action is **not** replayed: after
+    confirming, a notice says "Your last action was not completed. Please
+    try again." Opening the Confirm Access
     address directly, with nothing to continue to, never shows the form.
     That is the address trimmed of the interrupted page it carries in the
     address bar whenever the gate fires. The browser is sent straight home
@@ -672,6 +675,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | The Site Administrator's "Edit User" never shows "Change Password" ticked, and saving it removes the flag | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
+| [A13](#a13) | With re-authentication on, the Site Administrator's session adds and deletes journals and saves Site Settings without Confirm Access; only opening Administration's screens asks | 🐞 | user-visible | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A6](#a6) | With rate limiting on, even the correct password is refused as "Invalid username/email or password" during the cool-down; the concealment is intended | ✅ | latent | Jarda 2026-08-25 |
@@ -908,6 +912,18 @@ Login page. The user is given no reason and may well conclude that their
 own password is wrong. After a wrong-password or unknown-username refusal,
 the next correct sign-in lands at once.
 Basis: probe. <sup>[f-a12](#fn-a12)</sup>
+
+<a id="a13"></a>
+**A13 — With re-authentication on, Administration's changes go through without Confirm Access** · 🐞 · user-visible.
+The configured gate (Rule 16) is meant to make the Site Administrator
+re-enter the password before working in Administration. It asks only when
+an Administration screen opens or one of its page buttons reloads it. In a
+session that never confirmed, or whose window lapsed, an Administration tab
+left open still adds and deletes journals in Hosted Journals, saves Site
+Settings, manages its Languages and Plugins, and retries or deletes failed
+jobs, with no password asked. Someone at an unattended administrator's
+browser can delete a journal without knowing the password.
+Since: 2026-04-09 (pkp/pkp-lib#12338) · Basis: probe, 2026-09-30. <sup>[f-a13](#fn-a13)</sup>
 
 ---
 
@@ -1199,12 +1215,14 @@ view of the same submission, with a plain "Logout" in the menu again.
 <a id="fn-k"></a>
 **k** — Gate: `[security] password_timeout` (minutes; commented out/0 =
 off) → `Validation::isReauthenticationRequired()`;
-`ReauthenticationRequiredPolicy` is attached to **every** Administration op
-except the confirm pair, and redirects to `admin/confirmAccess` with the
+`ReauthenticationRequiredPolicy` is attached to **every** Administration
+page op except the confirm pair (in `AdminHandler::authorize()` only; the
+API and grid requests the screens send carry none, see
+[f-a13](#fn-a13)), and redirects to `admin/confirmAccess` with the
 interrupted address as `source` (POST-ish requests flagged
 `isActionRequest`). Window: `PKPSessionGuard::isElevatedSessionActive()` —
 a session timestamp younger than the window, refreshed on each
-Administration request while inside it; only site admins can hold it.
+Administration page request while inside it; only site admins can hold it.
 Form: `PKP\user\form\ConfirmPasswordForm` (`user/confirmPassword.tpl`,
 heading `user.confirmAccess` "Confirm Access", description
 `user.confirmAccess.description`); wrong password re-renders with
@@ -1530,6 +1548,41 @@ seventh, an OJS repeat on the same context, bounced that attempt to
 `login?source=…login%2FsignIn` with no message instead, the next try
 getting in. No server error and no page error in any run. Cause not
 traced.
+
+<a id="fn-a13"></a>
+**f-a13** — `AdminHandler::authorize()` (`lib/pkp/pages/admin/AdminHandler.php:111`
+on main) is the only place that adds `ReauthenticationRequiredPolicy`. The
+controllers the Administration screens call authorize by role alone:
+`PKPJobController` (failed jobs list, delete, redispatch),
+`PKPSiteController` (`PUT site`, also theme), `PKPContextController` (the
+site-admin `add`/`delete` routes), and the grids `ContextGridHandler`,
+`AdminLanguageGridHandler`, `AdminPluginGridHandler`. Nor do those requests
+refresh the window: `PKPSessionGuard::isElevatedSessionActive()` is called
+only from the page policy. Introduced with the gate itself, pkp-lib
+`cf5798f06e` (Taslan A. Graham, 2026-04-09; pkp/pkp-lib#12338, PR #12505):
+the API and grid controllers were not touched. Live-probed 2026-09-30 (OJS
+main, a scratch server with `password_timeout = 1`): in a never-confirmed
+session and after a confirmed window lapsed (`admin/systemInfo` 302 to
+`confirmAccess` before and after), `POST contexts` created a throwaway
+journal and `DELETE contexts/{id}` and the Hosted Journals grid's
+`delete-context` deleted one (200), `PUT site` 200, `GET jobs/failed/all`
+200, `DELETE jobs/failed/delete/{id}` reached the handler, the Hosted
+Journals, Languages and Plugins grids' fetch and the plugin upload form
+answered (those grids' writes and the jobs redispatch read from code, same
+handlers); `POST admin/clearDataCache` went to `confirmAccess` with
+`isActionRequest=1`. Journal Managers were refused all of them. OMP and OPS
+from code (the files are byte-identical). Proposed fix: add the policy to
+the jobs and site controllers, to the contexts controller's `add` and
+`delete` only (`PUT contexts/{id}` also saves a journal's own Settings,
+which the issue left ungated), and to the three admin grids' `authorize()`,
+and have the policy answer API and grid requests with a JSON deny (e.g. a
+401 carrying a "Confirm Access" flag) instead of the page redirect: a
+redirect breaks those callers, and on the whole contexts controller it
+sent Journal Managers to `confirmAccess` even with the gate off (tried
+live, then reverted). Gated requests would then also extend the window.
+3.5, 3.4 and 3.3 do not have it: none has `password_timeout` or the policy.
+Security-shaped and unreleased: its issue report carries
+"- **Security** unreleased" (REPORT.md).
 
 ## Reference — entry points & surfaces
 
