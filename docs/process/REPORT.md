@@ -310,9 +310,9 @@ note that it is removed when upstream picks one.
 snapshots, the before-side drive and where it ran, the apps and lines not
 driven, and what stays unverified, as a bulleted list. This is the only
 section where agent names, `.reports/` paths and campaign vocabulary
-appear. An issue report's Evidence stays out of the issue's body, which
-links to it in the file ("As a GitHub issue"), and holds only what the
-team can open: the kept script and how to run it, what each
+appear. An issue report's Evidence stays in the file and out of the
+issue's body ("As a GitHub issue"), and holds only what the team can
+open: the kept script and how to run it, what each
 code read looked at, the apps and versions not driven, and what stays
 unverified. Run folders and agent names stay in the session's
 `.reports/`.
@@ -408,11 +408,8 @@ file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
   top of the header, never the only place a fact is written.
 - The body is the file below the title, header included, unchanged, up
   to the Evidence section, which stays in the file to keep the issue
-  lean; one last line links to it:
-  `Evidence: https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/<file>.md#evidence`.
-  `awk 'NR>1 && /^## Evidence/{exit} NR>1' <file>` prints the body
-  above that line. Every link in the body is a full address that works
-  on GitHub: a pkp commit as its URL (`https://github.com/pkp/pkp-lib/commit/<sha>`),
+  lean: `awk 'NR>1 && /^## Evidence/{exit} NR>1' <file>` prints it.
+  Every link in the body is a full address that works on GitHub: a pkp commit as its URL (`https://github.com/pkp/pkp-lib/commit/<sha>`),
   and pkp-e2e's own files as
   `https://github.com/jardakotesovec/pkp-e2e/blob/main/<path>` (the
   spec's register entry with its anchor, the kept script).
