@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U21 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a20), spec U40 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#a1), spec U49 [OJS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#ojs1)
 - **Checked** 2026-10-01 (journal publishing again 2026-10-02), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

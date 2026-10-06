@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10927` (open) reports these codes under the box on OJS, and the window's intro line shown twice; it has no cause or fix
 - **Tracked in** spec U44 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#a10)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

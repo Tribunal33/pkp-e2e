@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11027` (open), covering one symptom: "Institution name" on the institutional list, on 3.4
 - **Tracked in** spec U51 [A22](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a22)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

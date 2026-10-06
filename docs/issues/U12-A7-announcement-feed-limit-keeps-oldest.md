@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11551` (closed with a fix for the Announcements page, the home page, the management list and the API; the issue names the feed plugin, which the fix left out)
 - **Tracked in** spec U12 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a7)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

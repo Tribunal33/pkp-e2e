@@ -1,5 +1,7 @@
 # A preprint server's RSS 1.0 feed names its publisher "Array"
 
+Model: claude-opus-5-5.
+
 Regression. OPS at `61cd158ce3` (lib/pkp `76a315591b`; the Web Feed
 plugin at `7436935`); introduced by pkp/webFeed#14 (`85a7d80`,
 2025-09-09, merged 2025-09-15). stable-3_5_0: shows it too (by code) at

@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-01, again 2026-10-03)
 - **Tracked in** spec U13 [OJS8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ojs8), spec U27 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U27-reviewer-assignment-and-management.md#a16)
 - **Checked** 2026-10-01 and 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

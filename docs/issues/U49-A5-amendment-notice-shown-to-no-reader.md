@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12624` (open, the amendment notice's umbrella issue): of its to-do items only "Consider exact placement of Amendment notice for OPS/OMP" concerns the reader page, still open, and none names OJS
 - **Tracked in** spec U49 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#a5)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

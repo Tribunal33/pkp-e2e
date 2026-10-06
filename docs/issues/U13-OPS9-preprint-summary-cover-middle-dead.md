@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-01)
 - **Tracked in** spec U13 [OPS9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ops9) (the journal side was found while writing this report; U13 has no entry for it)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

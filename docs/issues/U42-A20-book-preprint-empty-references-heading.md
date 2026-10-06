@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13189` (open), the same symptom on OMP, with no cause or fix; `pkp/pkp-lib#12184` (closed), whose fix reached OJS whole but OPS only in its `count()` half
 - **Tracked in** spec U42 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a20)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

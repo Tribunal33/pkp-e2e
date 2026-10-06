@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U53 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a14), spec U06 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U06-user-invitations.md#omp1), spec U56 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U56-emails-management.md#omp1)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

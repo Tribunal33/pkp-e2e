@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10169` (closed), covering the book's page only: its fix left the chapter page as it was
 - **Tracked in** spec U69 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a13)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

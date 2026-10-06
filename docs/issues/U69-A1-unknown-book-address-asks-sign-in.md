@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#772` (closed), "Respond to nonexistent monographs with a 404": its fix reached pkp-lib's submission policy, not the policy behind a press's book address
 - **Tracked in** spec U69 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a1)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

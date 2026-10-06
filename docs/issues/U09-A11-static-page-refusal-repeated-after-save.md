@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U09 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a11) · spec U74 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a15) · spec U73 [A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a23), [A24](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a24)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence); OMP's book-format windows 2026-10-03, OMP's format "Edit" window 2026-10-04
+- **Model** claude-opus-5-5
 
 ## Summary
 

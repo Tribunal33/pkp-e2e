@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U47 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a6), spec U48 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U48-jats-and-body-text.md#a20)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

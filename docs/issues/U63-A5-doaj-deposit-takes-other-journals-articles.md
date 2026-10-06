@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-06)
 - **Tracked in** spec U63 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a5)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 Update 2026-10-06: the report now also covers unpublished content sent
 to DOAJ, which a single-journal installation meets too, and carries the

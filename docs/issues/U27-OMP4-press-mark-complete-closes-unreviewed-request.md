@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10544` (open), covering the reviewer left on step 1 after the older window's "Confirm", on journals and presses; `pkp/pkp-lib#6353` (open), asking that the older window's "Confirm" stay disabled until the reviewer has submitted, on a journal
 - **Tracked in** U27 [OMP4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U27-reviewer-assignment-and-management.md#omp4)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

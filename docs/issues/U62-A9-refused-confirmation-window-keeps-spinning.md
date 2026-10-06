@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U62 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U62-plugins-management.md#a9), spec U58 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a12), spec U74 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a14)
 - **Checked** 2026-10-02 (components, plugins) and 2026-10-03 (OMP representatives), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

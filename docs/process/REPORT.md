@@ -56,6 +56,7 @@ never dropped.
 - **Tracked in** <spec Ux [An](<entry URL>), [Am](<entry URL>) |
   ci-triage row | app-changes row n>[ · Temporary: delete once acted on]
 - **Checked** <date>, each branch's tip (the commits in Evidence)
+- **Model** <model id>[, parts on <model id>…] | not recorded
 
 ## Summary
 
@@ -101,6 +102,18 @@ read; a label changed on GitHub is copied back into the header.
   and **Checked** dates the walks; the branch tips they ran on are
   listed in Evidence. A report under `docs/reports/` ends the bullet
   with "Temporary: delete once acted on"; an issue report does not.
+- **Model** names the Claude model that wrote the report (its walk,
+  trace and text, revisions included), so the team knows an AI agent
+  wrote it and can give one written partly by a fallback model a closer
+  check (maintainer, 2026-10-06). The model that served most of the work
+  comes first, any other after "parts on". It is never written by hand:
+  `npm run report-models -- --write` reads it from the Claude Code
+  transcripts of the machine the work ran on and merges it into the
+  bullet, keeping every model the bullet already names (transcripts
+  expire, and a workstation's are not on the VM). "not recorded" only
+  for a report no transcript remains for. A report outside this header
+  shape (an older regression report, a research write-up) carries the
+  same as a `Model: <model id>.` line under its title.
 
 **Introduced.** The change that brought the fault in, so the team can
 see who knows that code best and ask them first. It is traced from the
@@ -401,7 +414,8 @@ file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
 - The title is the report's title. The labels are read off the header:
   `severity: <word>`, `effort: <word>`, the kind (`regression`,
   `intention gap` or `defect`) and `crash: server` or `crash: script`
-  (both for both) and `security` from their bullets; one of `ojs`, `omp`, `ops` per
+  (both for both) and `security` from their bullets; `model: <model id>`
+  per model the Model bullet names; one of `ojs`, `omp`, `ops` per
   app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
   a sub-item naming it under the Affects bullet; and `tracked upstream`
   when the Upstream bullet names a pkp issue or PR. They are a filter on

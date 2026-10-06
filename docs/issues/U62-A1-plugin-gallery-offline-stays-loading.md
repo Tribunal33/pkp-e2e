@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#10036` (closed). Its fix catches the HTTP client's exception in the gallery's list, which works on 3.3; on 3.4 and later that exception no longer reaches the list, so the fix does nothing there
 - **Tracked in** spec U62 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U62-plugins-management.md#a1)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

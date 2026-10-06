@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-05)
 - **Tracked in** spec U29 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U29-review-setup-and-review-forms.md#a13)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-4-8, parts on claude-opus-5-5
 
 ## Summary
 

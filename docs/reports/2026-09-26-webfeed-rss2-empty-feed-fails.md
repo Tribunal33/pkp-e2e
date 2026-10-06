@@ -1,5 +1,7 @@
 # A journal, press or preprint server with nothing published yet cannot be followed through its RSS 2.0 feed: the link shows a blank page
 
+Model: claude-opus-5-5.
+
 Regression. OJS at `d9b567efec`, OMP at `187f0f40d`, OPS at `61cd158ce3`
 (lib/pkp `76a315591b`; the Web Feed plugin at `7436935`); introduced by
 pkp/webFeed#19 (`8d18563`, 2026-06-27, merged 2026-07-02).

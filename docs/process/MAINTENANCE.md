@@ -265,10 +265,12 @@ spec. A maintainer's own session may work a spec too: it first gives
 the entries it takes a `Report: paused — taken in the maintainer's
 session (<date>)` line and pushes, so the morning's session leaves them
 alone, and replaces the line when it is done. The model
-check for this work (`bin/check-models.mjs --stops-warn`) blocks only
-on work served by another model: an issue is built on the session's
-model, the security probe excepted; a classifier stop on an agent that
-stayed on it is reported, not a pause.
+check for this work (`bin/check-models.mjs --stops-warn`) blocks
+nothing: a report partly served by another model lands like any
+other, and its Model bullet says so (REPORT.md "The header";
+maintainer, 2026-10-06), so the team knows to check it more closely;
+a classifier stop is reported, the attempt is never re-sent (RUNBOOK
+"Model discipline").
 
 1. **Set up.** Start on the right code ("Session hygiene"), the
    stable-3_5_0 checkouts included (`npm run fetch-apps -- --line
@@ -378,8 +380,10 @@ stayed on it is reported, not a pause.
    and folds, tests included. The spec lints zero. From then on the
    report is the source: a later change to its title, Summary or
    severity is copied into the entry in the same commit.
-5. **Push**, so that the reports' links resolve: commit and push to
-   pkp-e2e `main` the reports, kept scripts, register edits, incidentals
+5. **Push**, so that the reports' links resolve: first `npm run
+   report-models -- --write`, which writes each report's Model bullet
+   from the session's transcripts (REPORT.md "The header"), then commit
+   and push to pkp-e2e `main` the reports, kept scripts, register edits, incidentals
    lines.
 6. **File.** Every report in `docs/issues/` that no register footnote
    links to a pkp-e2e issue yet (a filed one reads `Issue report:
@@ -512,7 +516,8 @@ The apps move; the suite follows. The baselines live in
    databases before it is a finding. A confirmed regression, and a
    finding that contradicts the linked issue's stated intention, gets a
    report under `docs/reports/<date>-<repo>-<pr>.md` in the shape of
-   `docs/process/REPORT.md`: the severity and a Summary that carries the
+   `docs/process/REPORT.md` (its Model bullet from `npm run
+   report-models -- --write` before the commit): the severity and a Summary that carries the
    problem, impact in plain words, then steps a person follows through
    the screens on a fresh install with expected and observed verbatim,
    the root cause, a proposed fix that addresses it with its effort,

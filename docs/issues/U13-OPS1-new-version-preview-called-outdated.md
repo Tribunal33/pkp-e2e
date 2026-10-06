@@ -13,6 +13,7 @@
 - **Tracked in** spec U13 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ops1); spec U69 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a4)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence);
   the OJS control on `main` 2026-10-01, at bade233f73
+- **Model** claude-opus-5-5
 
 Update 2026-10-06: the line "This is an outdated version published on
 {date}" now also shows the date saved on the new version, once one is

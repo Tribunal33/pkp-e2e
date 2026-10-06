@@ -12,6 +12,7 @@
 - **Upstream** fix in PR `pkp/ui-library#979` (open), not yet in main, as part of a rewrite of the import (checked in its code, not run)
 - **Tracked in** spec U48 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U48-jats-and-body-text.md#a18)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

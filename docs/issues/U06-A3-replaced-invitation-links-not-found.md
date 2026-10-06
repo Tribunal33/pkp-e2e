@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02); a comment on `pkp/pkp-lib#12608` (closed) reports the 404 for a reviewer's link after a reminder and is answered as a design decision (Evidence)
 - **Tracked in** spec U06 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U06-user-invitations.md#a3) · spec U28 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a9)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -13,6 +13,7 @@
 - **Upstream** `pkp/crossref-ojs#16` (closed, OJS Crossref only). Its fix, `pkp/crossref-ojs#17` (2022), caught the wider `GuzzleException`, and a 2023 formatting commit put the narrow `RequestException` back. Even #17 still failed on `hasResponse()` for a connection failure, so no version ever recorded this case correctly, which is why the Kind is defect, not regression
 - **Tracked in** spec U45 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a18)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

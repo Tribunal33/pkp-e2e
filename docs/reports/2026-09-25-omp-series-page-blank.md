@@ -1,5 +1,7 @@
 # A press's series pages show no series name, description or ISSN, and ignore the series' book order
 
+Model: claude-opus-5-5.
+
 Regression. OMP at `187f0f40d` (lib/pkp `76a315591b`; also the upstream
 `main` tip read on 2026-09-25); introduced by omp `4c2b5d77b`
 ("pkp/pkp-lib#13003 Port batch loading to OMP", 2026-08-26, pushed without

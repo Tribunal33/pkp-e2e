@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#11900` (open; fix in PR `pkp/pkp-lib#12846`, not yet in main), covering the failed delete of a whole submission that the shared file causes; the PR stops a galley delete from removing a file another galley still uses, so "Change File" on either version still changes both
 - **Tracked in** spec U46 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U46-galleys.md#a4), [OJS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U46-galleys.md#ojs1)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

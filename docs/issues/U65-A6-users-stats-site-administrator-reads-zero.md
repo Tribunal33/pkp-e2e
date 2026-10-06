@@ -14,6 +14,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U65 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#a6)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

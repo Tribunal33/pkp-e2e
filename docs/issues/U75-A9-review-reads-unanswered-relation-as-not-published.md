@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11719` (open, milestone 3.6): the issue whose change left this
 - **Tracked in** spec U75 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U75-preprint-relations.md#a9)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

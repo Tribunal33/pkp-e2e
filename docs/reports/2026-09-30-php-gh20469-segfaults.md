@@ -1,5 +1,7 @@
 # On PHP 8.3, a press's category pages and editorial statistics sometimes get no answer from the server
 
+Model: claude-opus-5-5.
+
 Severity: medium · Effort: small · Defect · OMP · crash: server
 
 Introduced: pkp-lib#11635 for pkp-lib#11589, commit d2d2bfa5ef (2025-06-30), by Bozana Bokan

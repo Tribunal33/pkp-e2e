@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U58 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#omp1)
 - **Checked** 2026-10-04, each branch's latest commit (OMP's in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

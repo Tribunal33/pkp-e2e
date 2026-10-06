@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11556`, closed; its fix is the Introduced change, which mends only part of it
 - **Tracked in** spec U12 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a3)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

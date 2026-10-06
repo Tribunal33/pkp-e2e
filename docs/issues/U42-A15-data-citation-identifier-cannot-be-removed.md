@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12658` (closed): the same fault, a cleared setting kept on save, fixed in the shared code for settings stored per language only; a field with one value, like these, is still kept
 - **Tracked in** spec U42 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a15)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

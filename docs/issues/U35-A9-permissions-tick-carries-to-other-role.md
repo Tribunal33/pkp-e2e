@@ -12,6 +12,7 @@
 - **Upstream** none found for this box (2026-10-01); `pkp/pkp-lib#11236` (closed, fixed) covers the same fault on the "Assignment privileges" box only
 - **Tracked in** spec U35 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U35-stage-participants.md#a9)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

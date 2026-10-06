@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12744` (open; fix in PR `pkp/pkp-lib#12745`, not yet in main), covering the ".jpeg" refusal only: the deletion, and the refusal of upper-case extensions, stay
 - **Tracked in** spec U12 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a2)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

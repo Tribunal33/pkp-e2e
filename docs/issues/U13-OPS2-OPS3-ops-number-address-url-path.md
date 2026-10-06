@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#5575`, `pkp/pkp-lib#5954` and `pkp/pkp-lib#7138` (closed, each fixed in OJS only; the fixes never reached OPS)
 - **Tracked in** spec U13 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ops2), [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ops3); spec U20 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U20-search-engine-metadata-and-analytics.md#ops1)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13285` (open), on the Login and Register boxes, which disagree with the invitation wizard; `pkp/pkp-lib#5266` (open; fix in PR `pkp/pkp-lib#7785` targeting `stable-3_3_0`, not merged, which raises the password boxes to 72)
 - **Tracked in** spec U03 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a7), spec U01 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U01-login-and-sessions.md#a1)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

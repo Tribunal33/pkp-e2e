@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#6425` (closed after the fix for its own fault, another one; its comments note this error, which was left)
 - **Tracked in** spec U69 [A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a23)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -16,6 +16,7 @@
 - **Upstream** none found (2026-10-01)
 - **Tracked in** spec U19 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a8)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pflPlugin#41` (open), asking for English labels where a language has no translation; written before the labels moved to files, when such a page showed the panel with raw keys
 - **Tracked in** spec U13 [OJS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#ojs3)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

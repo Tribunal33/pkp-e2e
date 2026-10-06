@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U49 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#a10) (the "Date Posted" label), spec U24 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a11) (a preprint server's codes: the "Preprint" heading, the status line, the "Post" and "Unpost" buttons and the "Production Tasks & Discussions" entry), spec U40 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#ops3) (the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions)
 - **Checked** 2026-10-02, the Author's banner and "Permissions & Disclosure" 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 2026-10-03: widened to two more codes of the same French file: the
 Copyright Holder and Copyright Year descriptions on a preprint's

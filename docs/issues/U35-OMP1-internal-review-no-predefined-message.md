@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12593` (closed 2026-10-05), covering "Discussion (Review)" only
 - **Tracked in** spec U35 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U35-stage-participants.md#omp1)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 Update 2026-10-06: `pkp/omp#2487` (merged 2026-10-05) added "Discussion
 (Review)" to a press's Internal Review, so this report now covers only

@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-06). `pkp/pkp-lib#13252` (open) asks whether peer-review DOIs (and, in its proposals, galley DOIs) can be deposited without article DOIs and names the same refusal in the deposit job, for those setups only
 - **Tracked in** spec U45 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a15)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 **Update 2026-10-06.** "Deposit All" marking a galley DOI "Submitted"
 without queuing any deposit is a separate fault, now in its own report

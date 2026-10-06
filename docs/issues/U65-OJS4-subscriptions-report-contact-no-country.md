@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#8086` (closed; its fix, `pkp/ojs#3459`, guards individual subscriptions only), covering the same fault for individual subscribers
 - **Tracked in** spec U65 [OJS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#ojs4)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

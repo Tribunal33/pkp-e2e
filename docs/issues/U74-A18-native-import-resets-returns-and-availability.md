@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-06)
 - **Tracked in** spec U74 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a18)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 **Update 2026-10-06.** A digital format can hold a returns condition
 through a separate fault, and the import loses it as it does a physical

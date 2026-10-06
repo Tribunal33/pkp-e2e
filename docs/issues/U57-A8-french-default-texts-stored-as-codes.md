@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-01; the components 2026-10-04)
 - **Tracked in** spec U57 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U57-languages-and-locales.md#a8), spec U07 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops3), [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#ops4), spec U53 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#ops1), spec U58 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a9) (the component names)
 - **Checked** 2026-10-01, the components list 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 2026-10-04: added a preprint server's file component names (spec U58
 A9), seen on screen and saved again by the list's "Restore Defaults"

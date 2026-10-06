@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13420` (open, 3.6 milestone, no PR), which reports this misspelling and a missing "the" in the "Reviewer Suggestion at Submission" setting's description; the fix here covers both
 - **Tracked in** spec U31 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U31-reviewer-suggestions.md#a7)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#6515` (open), covering "View Available Subscription Types" only
 - **Tracked in** spec U51 [A24](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a24)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

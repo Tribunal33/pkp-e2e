@@ -13,6 +13,7 @@
 - **Upstream** none open (2026-10-01); `pkp/pkp-lib#5843` (closed 2021) fixed the same symptom for 3.3, before the 3.4 foreign keys brought it back
 - **Tracked in** spec U52 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U52-payments-and-apcs.md#a11)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

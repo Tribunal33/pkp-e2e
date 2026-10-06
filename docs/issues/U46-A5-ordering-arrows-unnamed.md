@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U46 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U46-galleys.md#a5) · spec U42 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a19) · spec U43 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U43-funding.md#a5) (its ordering arrows only)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

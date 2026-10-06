@@ -1,5 +1,7 @@
 # An article page tells indexers its journal lives at an address that answers "404 Not Found"
 
+Model: claude-opus-5-5.
+
 Regression. OJS at `d9b567efec` (lib/pkp `76a315591b`); introduced by
 pkp/ojs#4146 (`2c65b53000`, 2024-04-16, merged 2024-04-25; pkp/pkp-lib#699
 "Show locale in url in multilingual contexts"). stable-3_5_0: shows it

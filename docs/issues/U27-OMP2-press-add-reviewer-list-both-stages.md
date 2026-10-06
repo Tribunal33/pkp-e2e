@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#4656` (closed with a fix in 2019; the change above removed that fix from the list the window opens with, not from its search)
 - **Tracked in** spec U27 [OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U27-reviewer-assignment-and-management.md#omp2)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

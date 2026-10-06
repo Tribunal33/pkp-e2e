@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13047` (open, no PR): the same fault, reported on OJS; this report adds OMP and OPS, steps on the default dataset, the cause and a tried fix
 - **Tracked in** spec U13 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a5); spec U69 Rule 5a ([U69](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md), the book's Author)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

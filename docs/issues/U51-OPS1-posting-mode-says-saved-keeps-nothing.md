@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#8343` (open), covering more: it wants the does-not-post mode to work in OMP and OPS with no setting on screen, so the fix proposed here leaves it open
 - **Tracked in** spec U51 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#ops1), spec U08 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#ops2)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

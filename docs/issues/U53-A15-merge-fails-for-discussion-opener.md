@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-02); `pkp/pkp-lib#4073` (closed 2023) listed discussion participants among the records a merge leaves behind, and its fix covered other tables
 - **Tracked in** spec U53 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U53-users-management.md#a15)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

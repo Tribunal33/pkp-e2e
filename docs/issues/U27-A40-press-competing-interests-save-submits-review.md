@@ -12,6 +12,7 @@
 - **Upstream** no issue on the fault (searched 2026-10-03); the rule it breaks is written in `pkp/pkp-lib#13291` (closed), which asked whether a competing-interests-only change should complete the review, and `pkp/pkp-lib#13337` (closed), which answered that it should not
 - **Tracked in** U27 [A40](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U27-reviewer-assignment-and-management.md#a40)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

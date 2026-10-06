@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11853` (open), which is not a report of this fault. It asks whether earlier versions should be marked "Needs Sync" at all, and its author believes `main` marks them. Recommendation: raise this finding there and fix it with that decision, not ahead of it
 - **Tracked in** spec U45 [A17](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a17)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

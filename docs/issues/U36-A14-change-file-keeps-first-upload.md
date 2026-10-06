@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02); history: `pkp/pkp-lib#2794` reported the same symptom in 2017 and was closed with a fix, which the Introduced change undid
 - **Tracked in** spec U36 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a14)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

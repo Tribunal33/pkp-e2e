@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02; for the inactive series 2026-10-04)
 - **Tracked in** spec U16 [OMP4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#omp4); spec U68 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a11)
 - **Checked** 2026-10-02, each branch's tip; the inactive series 2026-10-04 (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 Update 2026-10-04: a press whose every series is inactive shows an empty "Series" line (spec U68 A11); the same fix covers it.
 

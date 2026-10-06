@@ -1,5 +1,7 @@
 # A journal's sitemap lists its issues but none of their articles or galleys
 
+Model: claude-opus-5-5.
+
 Regression. OJS at `d9b567efec` (lib/pkp `76a315591b`); introduced by
 pkp/ojs `da7c68874e` (pkp/pkp-lib#12245, 2026-02-17, committed to `main`
 without a pull request). stable-3_5_0: does not (by code) at ojs

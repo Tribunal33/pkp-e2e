@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#8814` (closed without a fix): the same empty boxes, reported on OPS 3.4 with no steps that add a language, and closed as not reproduced
 - **Tracked in** spec U57 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U57-languages-and-locales.md#a5)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

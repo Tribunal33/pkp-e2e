@@ -14,6 +14,7 @@
   address, the Dublin Core validation) are other faults
 - **Tracked in** spec U19 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a2)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

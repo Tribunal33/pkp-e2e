@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#4701` (closed without a fix), covering the membership sentence only
 - **Tracked in** spec U52 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U52-payments-and-apcs.md#a1)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

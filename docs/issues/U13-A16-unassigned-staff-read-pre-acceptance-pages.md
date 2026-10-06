@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-05)
 - **Tracked in** spec U13 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U13-article-landing-page-and-reading.md#a16), spec U69 [A27](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a27)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

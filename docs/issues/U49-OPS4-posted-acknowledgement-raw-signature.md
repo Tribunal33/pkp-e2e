@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#8348` (closed with a fix), the same fault in other automatic emails, not these two
 - **Tracked in** spec U49 [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#ops4)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

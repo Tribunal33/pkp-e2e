@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11859` (open), covering a block plugin that was uninstalled rather than turned off; it is a sub-issue of `pkp/pkp-lib#11863`
 - **Tracked in** spec U09 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a15) · spec U10 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a4)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

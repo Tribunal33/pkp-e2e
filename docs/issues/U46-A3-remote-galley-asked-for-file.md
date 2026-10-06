@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12226` (open), covering the upload window after "Save"; not the "Change File" offer
 - **Tracked in** spec U46 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U46-galleys.md#a3)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

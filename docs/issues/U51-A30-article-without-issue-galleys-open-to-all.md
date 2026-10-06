@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-05)
 - **Tracked in** spec U51 [A30](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a30)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

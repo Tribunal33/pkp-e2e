@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03); a comment on `pkp/pkp-lib#7213` (closed, its fix covers adding only) raised the edit case, and no issue followed
 - **Tracked in** spec U12 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a9)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#6798` (closed without a fix for "Edit"): it reported the same 500 after "Remove", which the change for `pkp/pkp-lib#6791` mended by redrawing the whole table before the issue closed; "Edit" kept the row refresh
 - **Tracked in** spec U12 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a13)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

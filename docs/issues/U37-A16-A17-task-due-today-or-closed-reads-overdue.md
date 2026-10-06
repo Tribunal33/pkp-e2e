@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12570` (open), covering the closed task only, not the due date
 - **Tracked in** spec U37 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U37-tasks-and-discussions.md#a16), [A17](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U37-tasks-and-discussions.md#a17)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

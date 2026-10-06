@@ -21,6 +21,7 @@
   change, written for today's template, and replaces the PR
 - **Tracked in** spec U19 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a12)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#4243` (closed), the same request for the code before `pkp/pkp-lib#7075` replaced it
 - **Tracked in** spec U62 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U62-plugins-management.md#a10)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

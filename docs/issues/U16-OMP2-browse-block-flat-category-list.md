@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02); `pkp/pkp-lib#11443` nested the journal's and the server's block after the same change, not the press's
 - **Tracked in** spec U16 [OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#omp2)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

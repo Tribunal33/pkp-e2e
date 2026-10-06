@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U03 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a4) · spec U02 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U02-registration-and-account-validation.md#a4)
 - **Checked** 2026-10-03; the site-wide Register page and steps 11 to 15 on 2026-10-04; each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

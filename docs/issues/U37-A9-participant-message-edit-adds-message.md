@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13345` (closed, fixed by `pkp/pkp-lib#13409`), covering the "Comments for the Editor" and recommendation discussions only
 - **Tracked in** spec U37 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U37-tasks-and-discussions.md#a9)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 **Update 2026-10-06.** Since `pkp/pkp-lib#13385`, which OMP's `main`
 carries and OJS's and OPS's do not yet, a press heads the copy with the

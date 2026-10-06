@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#13192` (open): reopened 2026-10-02, "`SubmissionReviewEventLogGridHandler::viewReviewChange` accepts any log entry ID, whether or not it's associated with the current submission/journal/etc. This only affects `main`"; no fix in main yet
 - **Tracked in** U38 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a11)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-4-8, parts on claude-opus-5-5
 
 ## Summary
 

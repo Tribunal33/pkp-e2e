@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03); `pkp/pkp-lib#6654` (closed, fixed) removed the same dead "Cancel" from the forced "Change Password" page only
 - **Tracked in** spec U03 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a12)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

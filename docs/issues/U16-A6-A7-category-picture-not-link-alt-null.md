@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02; for the series page 2026-10-04)
 - **Tracked in** spec U16 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a6), [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a7); spec U68 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a4)
 - **Checked** 2026-10-02, each branch's tip; the series page 2026-10-04 (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 Update 2026-10-04: a press's series page has the same fault (spec U68
 A4); the sections below now cover it.

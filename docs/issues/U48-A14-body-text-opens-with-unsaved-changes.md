@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U48 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U48-jats-and-body-text.md#a14) (its first symptom; the second is [U48-A14-body-text-import-reads-saved-while-unsaved.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U48-A14-body-text-import-reads-saved-while-unsaved.md))
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

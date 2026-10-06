@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#9441` (open; labelled Bug:1:Minor, assigned to pkp-dev-distribution)
 - **Tracked in** spec U75 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U75-preprint-relations.md#a8)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

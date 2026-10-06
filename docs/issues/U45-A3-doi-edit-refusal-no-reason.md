@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#9714` (open), the same fault reported on OJS 3.4 for a wrongly formatted DOI; this report adds the two other refusals, OMP and OPS, 3.5 and `main`, the cause and a tried fix
 - **Tracked in** spec U45 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a3)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

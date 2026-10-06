@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-05)
 - **Tracked in** spec U42 [A22](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a22)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

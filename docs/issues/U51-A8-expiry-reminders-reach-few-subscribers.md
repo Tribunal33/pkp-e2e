@@ -19,6 +19,7 @@
   monthly schedule; the date arithmetic below is not in it
 - **Tracked in** spec U51 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U51-subscriptions.md#a8)
 - **Checked** 2026-10-01 and 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

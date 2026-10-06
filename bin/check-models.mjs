@@ -6,9 +6,9 @@
 // without holding up the feature. Prints one line per agent that is off-model or
 // was stopped, then a verdict; exit 1 means do not commit, pause for the maintainer.
 // run: node bin/check-models.mjs [--session <id or session.jsonl>] [--stops-warn]
-// --stops-warn (issue reports, MAINTENANCE "Issue reports"): a classifier
-// stop on an agent that stayed on the session's model is reported, not blocked;
-// only work served on another model blocks.
+// --stops-warn (reports, MAINTENANCE "Issue reports"): nothing blocks. A
+// classifier stop is reported; work served on another model is noted, since the
+// report it wrote names that model in its Model bullet (npm run report-models).
 // (default: $CLAUDE_CODE_SESSION_ID, the session running the command)
 import fs from 'node:fs';
 import os from 'node:os';
@@ -64,6 +64,7 @@ for (const a of agents) {
     const what = [a.stops && `${a.stops} classifier stop(s)`, other.length && `served ${other.map(([m, n]) => `${m} ×${n}`).join(', ')}`].filter(Boolean).join('; ');
     if (a.security) console.log(`allowed  ${a.name}: ${what} (security probe: its verified-by line names the model that finished it, or the entry stays unverified)`);
     else if (stopsWarn && !other.length) console.log(`warning  ${a.name}: ${what}, stayed on ${sessionModel}`);
+    else if (stopsWarn) console.log(`noted    ${a.name}: ${what} (its report's Model bullet names it: npm run report-models -- --write)`);
     else { blocked++; console.log(`BLOCKED  ${a.name}: ${what}`); }
 }
 console.log(`${agents.length} agents on ${sessionModel}: ${blocked ? `${blocked} blocked, do not commit; pause for the maintainer (RUNBOOK "Model discipline")` : 'gate passes'}`);

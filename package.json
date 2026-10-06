@@ -24,7 +24,8 @@
     "shard-timings": "node bin/shard-timings.js",
     "lint:suite": "node bin/lint-suite.js",
     "lint:probe-imports": "! git grep -l \"playwright/probe\" -- apps shared/playwright/tests shared/playwright/pages shared/playwright/support",
-    "check-models": "node bin/check-models.mjs"
+    "check-models": "node bin/check-models.mjs",
+    "report-models": "node bin/report-models.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0"

@@ -1,5 +1,7 @@
 # Every keyword, subject and discipline reads "Array" in a journal's, press's or preprint server's web feeds
 
+Model: claude-opus-5-5.
+
 Regression. OJS at `d9b567efec`, OMP at `187f0f40d`, OPS at `61cd158ce3`
 (lib/pkp `76a315591b`; the Web Feed plugin at `7436935`); introduced by
 pkp/pkp-lib#10833 (`90918476a2`, 2025-02-13), which the Web Feed plugin

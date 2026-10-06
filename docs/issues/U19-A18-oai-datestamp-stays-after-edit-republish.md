@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12958` (open), the same symptom stated without steps or an app; this report adds to it the apps, the steps, the cause and a tried fix
 - **Tracked in** spec U19 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a18)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

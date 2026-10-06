@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13245` (open, no fix PR) reports this fault on the article page and names this cause; it also asks about versions published out of order
 - **Tracked in** spec U49 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U49-publish-schedule-and-versions.md#a6)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

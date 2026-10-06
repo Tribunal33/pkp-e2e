@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#1346` (closed without a fix). In 2016 OMP showed the same raw key, because its admin plugins page did not load the OMP locale file that holds the key. OJS and OPS have never had the key.
 - **Tracked in** spec U62 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U62-plugins-management.md#a9)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

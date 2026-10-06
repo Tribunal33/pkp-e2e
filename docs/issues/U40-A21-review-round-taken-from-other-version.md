@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-05)
 - **Tracked in** spec U40 [A21](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#a21)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

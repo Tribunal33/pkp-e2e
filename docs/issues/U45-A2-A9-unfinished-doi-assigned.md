@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#3317` reported the leftover symbol and was closed in 2021, when 3.3 refused such DOIs; the "None" half was never reported. `pkp/pkp-lib#12603` (open, an empty pattern box) is covered on OJS only
 - **Tracked in** spec U45 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a2), [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a9)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

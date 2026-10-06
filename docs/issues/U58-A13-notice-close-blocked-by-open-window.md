@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13188` (open; fix in PR `pkp/ui-library#999` for `stable-3_5_0` only, not yet merged, with no PR for `main`), covering only the second symptom, the workflow closing with the notice
 - **Tracked in** spec U58 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#a13), spec U05 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#a14)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13415` (open), covering more: a list of DOI problems met on 3.5, one of which is this fault ("Export DOIs" closes with no download and no message); this report adds the cause and a tried fix for that one item
 - **Tracked in** spec U45 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a13)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

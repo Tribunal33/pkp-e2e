@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13308` (open; fix in PR `pkp/ui-library#982`, not yet in main), covering the count; that PR counts every reference, which brings back `pkp/pkp-lib#12155` for references no lookup was asked for
 - **Tracked in** spec U42 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a6)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

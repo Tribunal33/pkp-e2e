@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10060` (open); its PR `pkp/pkp-lib#10064`, against `stable-3_4_0`, keeps the announcements like this fix and was never merged; `pkp/pkp-lib#10096` (open) proposes refusing the removal instead (searched 2026-10-03)
 - **Tracked in** spec U12 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U12-announcements.md#a1)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 
