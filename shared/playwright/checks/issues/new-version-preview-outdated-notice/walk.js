@@ -10,6 +10,9 @@
 //   on its unpublished version 1.1; "Title & Abstract", "Preview".
 // Then the reach read: the preview page's first galley / format link (the
 // file viewer's own outdated banner).
+// Then steps 5-6 (OMP, OPS; U69 A4 widened 2026-10-05): the new version's
+// "Catalog Entry" (OPS "Preprint entry") gets "Date Published" ("Date Posted")
+// 2025-01-15, "Save", and "Preview" again: the outdated line now carries that date.
 // Then the neighbour check a fix must leave as it is (OMP, OPS): the new version
 // is published ("Publish"), and, signed out, the older version's page still
 // carries the outdated notice with its own date while the current page carries
@@ -25,6 +28,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const SUBMISSION = {ojs: 1, omp: 14, ops: 2};
 const GROUP = {ojs: 'Publication', omp: 'Publication', ops: 'Preprint'};
+const ENTRY = {omp: 'Catalog Entry', ops: 'Preprint entry'};
+const DATE = '2025-01-15';
 
 /** The two notices and the label/date lines as a reader sees them. */
 async function readNotices(page) {
@@ -70,16 +75,16 @@ async function createNewVersion(page, stable35) {
     return {status: r ? r.status() : null, newPub, windowText: flat(window.text.dialog, 600)};
 }
 
-async function selectTitleAbstract(frame, page, stable35) {
+async function selectTitleAbstract(frame, page, stable35, label = 'Title & Abstract') {
     if (stable35) {
         // 3.5 lists one version's pages, the one "All Versions" picks.
-        await frame.menuLink('Title & Abstract').first().click();
+        await frame.menuLink(label).first().click();
         await idle(page);
         return;
     }
     // The newest version node's pages are the last ones listed; unfold it when
     // none is shown.
-    const pages = frame.menuLink('Title & Abstract');
+    const pages = frame.menuLink(label);
     await expect(frame.latestVersionNode()).toBeVisible({timeout: T});
     if (!(await pages.last().isVisible().catch(() => false))) await frame.latestVersionNode().click();
     await expect(pages.last()).toBeVisible({timeout: T});
@@ -156,6 +161,36 @@ forEachApp(async (app) => {
             facts.reachFileViewer = {href: null};
         }
         console.log(`[fact] ${app.name} reach: ${JSON.stringify(facts.reachFileViewer)}`);
+
+        // 5-6 (OMP, OPS). The new version's entry page: the date saved, then "Preview" again.
+        if (app.name !== 'ojs') {
+            const {setBookDate} = require('../chapter-page-dates-and-preview-notice/lib.js');
+            await frame.gotoEditorial(sid);
+            await frame.expectVersionLoaded().catch(() => {});
+            await idle(page);
+            await selectTitleAbstract(frame, page, stable35, ENTRY[app.name]);
+            const box = page.locator('input[name="datePublished"]').last();
+            await box.waitFor({state: 'visible', timeout: T});
+            await sleep(600);
+            const boxLabel = flat(await page.locator(`label[for="${await box.getAttribute('id')}"]`).first().innerText().catch(() => null), 80);
+            facts.dateSave = {entry: ENTRY[app.name], label: boxLabel, ...(await setBookDate(page, DATE))};
+            record('step5-date-saved', await screen(page));
+            console.log(`[fact] ${app.name} date: ${JSON.stringify(facts.dateSave)}`);
+            const again = stable35
+                ? frame.dialog().getByRole('button', {name: 'Preview', exact: true}).first()
+                : frame.publishingControl('Preview');
+            facts.previewFrom = ENTRY[app.name];
+            if (!(await again.isVisible().catch(() => false))) {
+                facts.previewFrom = 'Title & Abstract';
+                await selectTitleAbstract(frame, page, stable35);
+            }
+            await expect(again).toBeVisible({timeout: T});
+            await Promise.all([page.waitForURL((u) => !/dashboard/.test(u.pathname), {timeout: T}), again.click()]);
+            await idle(page);
+            record('step6-preview-dated', await screen(page));
+            facts.previewDated = await readNotices(page);
+            console.log(`[fact] ${app.name} preview dated: ${JSON.stringify(facts.previewDated)}`);
+        }
 
         // Neighbour (OMP, OPS): publish the new version, then read the older one's page.
         if (app.name !== 'ojs') {

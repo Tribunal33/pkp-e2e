@@ -1395,7 +1395,7 @@ Verdicts are the author's judgment (claude, 2026-09-24; additions
 | [OJS12](#ojs12) | A review marked "Publicly Show Reviewer Comments" never shows on the published article's page | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS14](#ojs14) | An older version's galley linked by its number opens the current version's galley, with no outdated notice, once the galley has a URL Path | 🐞 | user-visible | — |
 | [OJS15](#ojs15) | With "eLife Lens Article Viewer" on, an issue's XML galley downloads instead of opening in the Lens reader | 🐞 | minor · crash: server | — |
-| [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day}." | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OPS1](#ops1) | Previewing a new version adds "This is an outdated version published on {the preview day or its saved date}." | 🐞 | low | issues (claude), 2026-10-06 — re-verified |
 | [OPS2](#ops2) | A preprint with a URL Path loses the galley or version part of its ID address; its HTML and other non-PDF downloads answer "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A galley's ID address answers "404 Not Found" once the galley has a URL Path | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [OPS5](#ops5) | On a preprint server's PDF reader, the return arrow is announced as the code "##article.return##" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1933,14 +1933,16 @@ Basis: probe, 2026-10-05. <sup>[f-ojs15](#fn-f-ojs15)</sup>
 **OPS1 — A preview of a new version also calls itself outdated** · 🐞 · low.
 Previewing a new, unposted version of a posted preprint shows "This is
 a preview and has not been published. View submission" and under it
-"This is an outdated version published on {today's date}. Read the most
-recent version." The version has no publication date, so the line
-prints the day of the preview. The version is not outdated; it is the
-next one, and "most recent version" leads to the posted version's page.
-A journal shows the preview notice alone. The editor or author checking
-the new version is told it is outdated and was published today; readers
+"This is an outdated version published on {date}. Read the most recent
+version." Until a "Date Posted" is saved on the new version, {date} is
+the day of the preview; after that it is the saved date. The version is
+not outdated; it is the next one, and "most recent version" leads to the
+posted version's page. A journal's preview page shows the preview notice
+alone; the PDF viewer opened from a journal's or a preprint server's
+preview still carries an outdated banner. The editor or author checking
+the new version is told it is outdated and already published; readers
 never see the line.
-Basis: probe, 2026-10-01. <sup>[f-ops1](#fn-f-ops1)</sup>
+Basis: probe, 2026-10-06. <sup>[f-ops1](#fn-f-ops1)</sup>
 
 <a id="ops2"></a>
 **OPS2 — A URL Path cuts the rest of an ID address** · 🐞 · high.

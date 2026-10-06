@@ -1298,7 +1298,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-06 — re-verified |
 | [A1](#a1) | On a press, a book address that names no book opens the Login page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A4](#a4) | A new version's preview also calls itself outdated, dated today or with the version's saved date | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A4](#a4) | A new version's preview also calls itself outdated, dated today or with the version's saved date | 🐞 | low | issues (claude), 2026-10-06 — re-verified |
 | [A5](#a5) | An older version's browser tab names the current version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A6](#a6) | A book's table of contents repeats the book's authors under every chapter | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | A priced file's link shows its price twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1372,12 +1372,11 @@ preview notice and, under it, "This is an outdated version published on
 publication date the line prints the day of the preview, and once a
 "Date Published" is saved on the version's "Catalog Entry" it prints
 that date. The version is the newest there is, and "most recent
-version" leads to the published version's page. A journal shows the
-preview notice alone. The editor or author checking the new version is
-told it is outdated and already published; readers never see the
-line.
-Basis: probe, 2026-10-01. <sup>f-a4</sup>
-Report: refresh owed — widened to the saved "Date Published" by the housekeeping claim check; pkp-e2e#209 says less (2026-10-05)
+version" leads to the published version's page. A journal's preview
+page shows the preview notice alone. The editor or author checking the
+new version is told it is outdated and already published; readers never
+see the line.
+Basis: probe, 2026-10-06. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — An older version's browser tab names the current version** · 🐞 · low.
