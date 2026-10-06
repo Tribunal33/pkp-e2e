@@ -370,10 +370,14 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
       too-short sentence; the same-as-current check runs only once the
       current password is right. The new-password sentence is also shown
       under "New password", in place of the hint. The three boxes are
-      emptied and nothing changes.
+      emptied and nothing changes. The notice stays about six seconds,
+      then fades away by itself, whether or not the form is saved again
+      in the meantime.
     - 10b. Saving a valid form changes the password at once and shows "Your
-      changes have been saved." at the top right; an earlier attempt's
-      "Errors occurred processing this form" notice goes. The three boxes
+      changes have been saved." at the top right. The save does not remove
+      an earlier attempt's "Errors occurred processing this form" notice:
+      when the save comes within six seconds of a refusal, the notice
+      stays next to the message until it fades (Rule 10a). The three boxes
       still hold the passwords just typed, and after a refused attempt the
       line under "New password" stays empty instead of showing the hint
       again ⚠ [A11](#a11). The session that made the
@@ -860,10 +864,11 @@ tooling recipe are in the footnote. <sup>s</sup>
      in place of the hint (Rule 10a).
    - **A valid change**: type the right current password and "newpass99"
      into both new-password boxes, and save: "Your changes have been
-     saved." at the top right, and the previous attempt's "Errors occurred
-     processing this form" notice is gone. The three boxes still hold the
-     typed passwords and the line under "New password" is empty
-     [A11](#a11).
+     saved." at the top right. The previous attempt's "Errors occurred
+     processing this form" notice is not removed by the save: it fades
+     away by itself about six seconds after it appeared, and is then gone
+     from the tab (Rule 10a). The three boxes still hold the typed
+     passwords and the line under "New password" is empty [A11](#a11).
    - **The other browser**: in the other browser, load the page afresh (a
      full reload, not a tab press): it lands on the Login page.
    - **The mailbox**: the account's mailbox has received nothing: no email
@@ -1027,14 +1032,11 @@ Left out of the scenarios above, by reason:
     ([A2](#a2); Rule 9a): the guard the issue report
     (`docs/issues/U03-A2-refused-gif-wipes-profile-image.md`)
     proposes, once fixed
-  - after a refused attempt on the Password tab, a valid save clearing
-    the "Errors occurred processing this form" notice beside "Your
-    changes have been saved." (Rule 10b; scenario 8 reads it, no suite
-    asserts it yet)
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
   - the browser's own leave-page question on reloading the page with an unsent "Phone" (Rule 2e; scenario 3 asks the same question of another tab)
+  - the Password tab's "Errors occurred processing this form" notice fading by itself with no further save (Rule 10a; scenario 8 watches the same notice fade after the valid save, which does not remove it)
   - "reject" on a request made on the site-level profile itself (Rule 6d; the same "Decline Invitation" page and button as scenario 5's request made inside a journal)
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
 - **Register carries it**:
@@ -1234,14 +1236,16 @@ Basis: probe, 2026-10-03. <sup>[f-a10](#fn-a10)</sup>
 <a id="a11"></a>
 **A11 — The Password tab is not cleared after a successful change** · 🐞 · minor.
 A successful save on the Password tab shows "Your changes have been
-saved." at the top right, and an earlier attempt's "Errors occurred
-processing this form" notice goes. The three boxes still hold the
+saved." at the top right; an earlier attempt's "Errors occurred
+processing this form" notice is not removed by the save and stays
+until it fades by itself, about six seconds after it appeared
+(Rule 10a). The three boxes still hold the
 passwords just typed, and when an attempt was refused first, the line
 under "New password" stays empty: the hint "The password must be at
 least {N} characters." does not come back. The password did change,
 but the tab looks as if nothing had been done; the Contact and API Key
 tabs are drawn afresh after a save, this one is not.
-Basis: probe, 2026-10-03. <sup>[f-a11](#fn-a11)</sup>
+Basis: probe, 2026-10-03; test run, 2026-10-06 (the earlier notice). <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question** · 🐞 · low.
@@ -1965,9 +1969,9 @@ not match." in one notice with only the second sentence repeated under "New
 password"; every failed save re-renders the panel with the boxes empty;
 `password1234` was accepted (the outside service is unreachable on the test
 fleets). Success: the toast only and the panel not drawn again, the boxes
-still filled (A11; the earlier notice clears once the answer arrives, note
-f-a11); "Cancel" is `a.cancelButton` with `href="#"` and sent
-nothing (A12). The other browser's tab press fetched the tab and was
+still filled (A11; the answer does not clear the earlier notice, which
+fades on its own about 6 s after it appeared, note f-a11); "Cancel" is
+`a.cancelButton` with `href="#"` and sent nothing (A12). The other browser's tab press fetched the tab and was
 answered with a redirect to `login?source=…` (twice nested) that the panel
 never rendered, leaving it empty; its full load reached
 `login?source=%2F…%2Fuser%2Fprofile`. No mail after the change; a reset link
@@ -2419,9 +2423,21 @@ the "Errors occurred processing this form" notice was still up about
 300 ms after "Save", before the answer, and gone by 3 s, beside the toast
 "Your changes have been saved."; the three boxes kept the typed passwords
 and the line under "New password" stayed empty; signing in with the new
-password worked. The 2026-09-03 and 2026-09-04 probes, which recorded the
-notice still above the form, most likely read the screen before the answer.
-An untried fix sits beside the script (`fix.diff`: `initData()` and return
+password worked. The notice is a trivial notification:
+`Form::validate()` creates it with `createTrivialNotification()`, and
+`NotificationHandler.js` `addTimerToNotifications()` fades every trivial
+notice out 6000 ms after it is shown, in lib/pkp for all three apps; the
+save's answer does not touch it. Live-probed and test-run 2026-10-06
+(OPS main, three timed runs; OJS and OMP main, scenario 8 green): after the "np1"
+refusal with no save, the notice stood fully visible to about 5.3 s,
+faded at about 6.3 s and was removed by 7.4 s; with a valid save about
+1 s after the refusal (a too-short and a wrong-current-password refusal
+alike), "Your changes have been saved." and the notice stood side by side
+until the fade at about 6.2 s; the OJS and OMP suites saw the notice
+removed after the saved toast. The 2026-10-03 "gone by 3 s" reading fits
+the same timer when the refusal came about 3 s before the save, and the
+2026-09-03 and 2026-09-04 probes, which recorded the notice still above
+the form, read it inside its six seconds. An untried fix sits beside the script (`fix.diff`: `initData()` and return
 the fetched form on success, as Contact does).
 
 <a id="fn-a12"></a>

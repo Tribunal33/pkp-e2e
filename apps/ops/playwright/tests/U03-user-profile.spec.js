@@ -1040,11 +1040,17 @@ test.describe('user profile', () => {
             await expect(profile.newPasswordSubLabel()).toHaveText(PASSWORD_TOO_SHORT);
             await expect(profile.form('password').getByText(PASSWORD_TOO_SHORT)).toHaveCount(2);
 
-            // A valid new password: saved at the top right (Rule 10b); the
-            // earlier notice is A11's and is not asserted.
+            // A valid new password: saved at the top right, and the "np1"
+            // attempt's notice, visible just above (the positive control), is
+            // gone (Rule 10b). The notice stays up beside the toast for a
+            // while: it is a trivial notification that fades about 6 s after
+            // it appeared (probe 2026-10-06), so the wait covers that. The
+            // boxes left filled and the empty line under "New password" are
+            // A11's and are not asserted.
             await profile.fillPasswords({current, next});
             await profile.save();
             await expect(profile.toast).toContainText(SAVED_MESSAGE);
+            await expect(profile.passwordErrorNotice()).toHaveCount(0, {timeout: 20_000});
 
             // The other browser's full reload lands on the Login page.
             await second.page.goto(other.url('identity'));
