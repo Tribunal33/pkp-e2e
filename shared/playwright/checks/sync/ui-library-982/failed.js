@@ -2,7 +2,7 @@
 // References page's progress box counts every reference and treats a failed lookup (FAILED, -1) as
 // finished; a failed row carries the badge "Metadata lookup failed"; once every reference has
 // finished with at least one failed, the box reads "{processed} of {total} references processed,
-// {failed} incomplete" with its own description, and the page stops refreshing itself.
+// {failed} failed" (until pkp-lib#13318 round 3: "incomplete") with its own description, and the page stops refreshing itself.
 //
 // A real FAILED takes eight retries over about 21 hours (CitationLookupJob), so the SQL stands in for
 // it: it writes what CitationLookupJob::failed() stores (processingStatus -1), and PROCESSED (5) as

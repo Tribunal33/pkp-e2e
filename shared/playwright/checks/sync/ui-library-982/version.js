@@ -55,7 +55,7 @@ forEachApp(async (app) => {
         return pg;
     };
     const box = async () => {
-        const t = page.getByText(/^(Processing references - \d+\/\d+|All \d+ references successfully processed|\d+ of \d+ references processed, \d+ incomplete)$/).first();
+        const t = page.getByText(/^(Processing references - \d+\/\d+|All \d+ references successfully processed|\d+ of \d+ references processed, \d+ failed)$/).first();
         return (await t.isVisible().catch(() => false)) ? L.flat(await t.innerText()) : null;
     };
     const refreshes = async (ms) => {
