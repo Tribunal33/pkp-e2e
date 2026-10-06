@@ -1253,7 +1253,7 @@ otherwise; the team settles them on spec review.
 | [A1](#a1) | A press's and a preprint server's homepage image never carries the "Alternate text" the manager typed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Screen readers misname the masthead's up arrows and every Sidebar box; clicking a role's name moves it | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | "Setup" refuses every save while a placed block's plugin is disabled, though "Sidebar" no longer shows the block | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A5](#a5) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-06 — re-verified |
 | [A6](#a6) | In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | After a settings upload box refuses a file, its "Upload File" and the tab's "Save" stay disabled | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | The "3:05PM" time choice prints most times as "3:05pm", some as "3:05PM" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1358,11 +1358,10 @@ Nothing on screen shows that the file is still there, and no screen can
 delete it. It matters when the file held something the journal or the
 site meant to withdraw.
 
-Besides the style sheets, only a journal's thumbnail is left behind
-([A20](#a20)): a removed "Logo", "Homepage Image" or "Favicon" of a
-journal, and the site's "Logo", are deleted as they should be. Basis:
-probe, 2026-10-04. <sup>f-a5</sup>
-Report: refresh owed — the last Summary sentence of pkp-e2e#780 needs re-syncing: the thumbnail is A20 (2026-10-05)
+The thumbnail of a journal, press or server is left behind too, by a
+separate fault tracked as [A20](#a20) and outside this report. A
+removed "Logo", "Homepage Image" or "Favicon", and the site's "Logo",
+are deleted as they should be. Basis: probe, 2026-10-06. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · 🐞 · low.

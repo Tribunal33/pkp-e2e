@@ -11,7 +11,11 @@
 - **Introduced** `pkp/pkp-lib#3931` for `pkp/pkp-lib#3594` · [5f3be929e6](https://github.com/pkp/pkp-lib/commit/5f3be929e69f428774dfd0237f666c356859e2b3) · 2018-10-23 · Nate Wright (NateWr)
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U10 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a5), spec U60 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U60-site-settings.md#a6)
-- **Checked** 2026-10-03 (the site's style sheet 2026-10-04), each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+
+**Update 2026-10-06.** The Summary no longer says that only style
+sheets are left behind: a removed thumbnail of a journal, press or
+server stays online too, a separate fault tracked as [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a20).
 
 ## Summary
 
@@ -28,9 +32,10 @@ Nothing on screen shows that the file is still there, and no screen can
 delete it. It matters when the file held something the journal or the
 site meant to withdraw.
 
-Only style sheets are left behind: a removed "Logo", "Homepage Image"
-or "Favicon" of a journal, and the site's "Logo", are deleted as they
-should be.
+The thumbnail of a journal, press or server is left behind too, by a
+separate fault tracked as [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a20)
+and outside this report. A removed "Logo", "Homepage Image" or
+"Favicon", and the site's "Logo", are deleted as they should be.
 
 ## Impact
 
@@ -191,6 +196,16 @@ Reach:
 - "Logo", "Homepage Image", "Favicon" and the site's "Logo" pass a
   locale and read `uploadName`: checked in the code, and the favicon
   and the site's "Logo" on screen.
+- The journal's, press's and server's thumbnail is left behind too, by
+  a separate fault this fix does not reach
+  ([A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a20)). `PKPContextService::edit()` calls the
+  `Context::edit` hook before `updateObject()`, so each app's
+  `ContextService::afterEditContext()` gets the new context: not yet
+  saved, but merged with the submitted values, so its thumbnail is
+  already `null` and `_saveFileParam()` finds nothing to delete.
+  Passing `$currentContext` (`$args[1]`) to `_saveFileParam()` there
+  is A20's one-line fix, outside this one. Checked in the code, and on
+  screen.
 - Publication cover images (`publication\Repository::_saveFileParam()`)
   already read `$oldValue['uploadName'] ?? null` and always pass a
   locale: not affected, checked in the code.
@@ -294,11 +309,19 @@ repair.
   [site-walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/removed-style-sheet-stays-public/site-walk.js)
   the site's (`node bin/probe.js all <script>`). Run with `WALK=nb`
   in front, each runs instead the check that the fix deletes nothing it
-  should keep (the two cases under Proposed fix).
+  should keep (the two cases under Proposed fix); `WALK=thumb` in front
+  of walk.js uploads, removes and opens the journal thumbnail instead
+  (the Summary's thumbnail sentence).
 - Walked on OJS, OMP and OPS: on `main`, both groups of Steps without
-  the fix and with it, and the keep check with and without it; on
-  `stable-3_5_0`, both groups of Steps. PostgreSQL, datasets
-  pkp/datasets 566bb1f (2026-10-03). No request failed on the server
+  the fix and with it, and the keep check with and without it
+  (2026-10-03 and 2026-10-04, on the tips then: OJS ff004d0973, lib/pkp
+  987776cd04; OMP 3b0ecf794c and OPS c8af945bb7, lib/pkp 3dc90c81a6;
+  `_saveFileParam()` has not changed since); on `stable-3_5_0`, both
+  groups of Steps. Walked again on 2026-10-06 on today's tips, without
+  the fix: both groups of Steps on `main` and `stable-3_5_0`, with the
+  same result, and the thumbnail on `main` (its address answered 200
+  `image/png` after "Remove" and "Save", the box empty after a reload).
+  PostgreSQL, pkp/datasets 5a53d3d (2026-10-05). No request failed on the server
   and no page script failed. The save request was read once on OJS
   `main`: a form post holding `styleSheet=`. Each site save also logged
   `PHP Warning: Undefined array key "redirectContextId"`, a separate
@@ -307,10 +330,10 @@ repair.
   not affect the style sheet.
 - Not driven: 3.4 and 3.3.
 - Tips:
-  - **`main`:** OJS ff004d0973 (lib/pkp 987776cd04), OMP 3b0ecf794c
-    and OPS c8af945bb7 (lib/pkp 3dc90c81a6). `_saveFileParam()` is the
-    same in both pkp-lib commits.
-  - **`stable-3_5_0`:** OJS c1cee76b95 (lib/pkp 771474347e), OMP
+  - **`main`:** OJS 1f4cef786f and OPS 21e41026b2 (lib/pkp
+    a7f5e3081b), OMP 592914b831 (lib/pkp e39fdee199).
+    `_saveFileParam()` is the same in both pkp-lib commits.
+  - **`stable-3_5_0`:** OJS 4342473090 (lib/pkp 771474347e), OMP
     9c5e24246c, OPS 38b61882d3 (lib/pkp cf3f984335).
   - **`stable-3_4_0`:** OJS d68934d0d1, OMP 0aec65441, OPS acd8ae704b,
     pkp-lib 767353f4fe.
@@ -328,7 +351,9 @@ repair.
   condition); `PKPTemplateManager` (a context's style sheet link) and
   each app's `TemplateManager` (the site's link: OJS line 65, OPS line
   57; OMP's adds none);
-  `publication\Repository::_saveFileParam()`; every caller of
+  `publication\Repository::_saveFileParam()`; each app's
+  `ContextService::afterEditContext()` (the thumbnail, 2026-10-06);
+  every caller of
   `removeContextFile()` and `removeSiteFile()`. On 3.4 and 3.3,
   `PKPContextService` and `PKPSiteService` `_saveFileParam()` (the same
   lines; the non-picture branch stores an object),

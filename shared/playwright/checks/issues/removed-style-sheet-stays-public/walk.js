@@ -7,6 +7,9 @@
 //   WALK=nb               the neighbour (fix in and out): "Upload File" u10c-style.css, "Save"; reloaded, "Save" again
 //                         untouched; signed out, the address opened; signed in, "Remove" and "Upload File"
 //                         u10c-style-2.css in one go, "Save"; signed out, the address opened again (the new file).
+//   WALK=thumb            the Summary's other leftover, the journal thumbnail (A20, its own cause): "Appearance" ›
+//                         "Setup", "Upload File" u10c-favicon.png under the thumbnail box, "Save"; reloaded, its
+//                         address read; "Remove", "Save"; signed out, the address opened.
 // Each step records what it saw and never throws on a state the fix changes.
 //
 // Reset first:  PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH npm run fleet-prep -- --feature issues-u10c --dataset 3 --reset
@@ -88,6 +91,35 @@ forEachApp(async (app) => {
             record(name('stylesheet-address'), await screen(page));
             await shot(page, name('stylesheet-address'));
             await step('7 open the favicon address (control)', async () => L.openAddress(page, stored && stored.favicon && stored.favicon.src));
+        } else if (MODE === 'thumb') {
+            const field = {ojs: 'journalThumbnail', omp: 'pressThumbnail', ops: 'serverThumbnail'}[app.name];
+            const th = L.box(page, 'appearanceSetup', field, 'en');
+            const setup = async () => {
+                await L.openAppearance(page, app, 'setup');
+                await th.field.waitFor({timeout: L.T});
+            };
+            const src = async () => {
+                const img = th.field.locator('img').first();
+                return (await img.count()) ? img.getAttribute('src') : null;
+            };
+            await step('thumb Setup, Upload File u10c-favicon.png under the thumbnail, Save', async () => {
+                await setup();
+                const a = await L.pressUploadFile(page, th, files.png);
+                return {thumbnail: a, ...(await L.save(page, th))};
+            });
+            const stored = await step('thumb reload: the stored address', async () => { await setup(); return {src: await src()}; });
+            await step('thumb Remove, Save', async () => {
+                const from = log.mark();
+                const r = await L.pressRemove(th);
+                const s = await L.save(page, th);
+                await L.sleep(500);
+                return {remove: r, ...s, serverLog: log.since(from)};
+            });
+            await step('thumb reload: what the box shows', async () => { await setup(); return {src: await src(), box: await L.boxState(page, th)}; });
+            await step('thumb sign out, open the thumbnail address', async () => {
+                await signOut(page);
+                return L.openAddress(page, stored && stored.src);
+            });
         } else if (MODE === 'nb') {
             await step('nb Advanced, Upload File u10c-style.css, Save', async () => {
                 await advanced();

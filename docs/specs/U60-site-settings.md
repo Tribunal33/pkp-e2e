@@ -894,7 +894,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | French (Canada) Site Settings: a press's "Information" tab and a press's or preprint server's "Courriels en lot" description show codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Site Settings saves, and 3.5's daily scheduled tasks, log a PHP warning when no journal redirect is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A site save sent outside Site Settings stores an empty contact email, and password resets then fail | 🐞 | low · crash: server | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A6](#a6) | A removed journal or site style sheet stops loading but stays online at its old address | 🐞 | low | issues (claude), 2026-10-06 — re-verified |
 | [A7](#a7) | A reload on an "Appearance", "Announcements" or "Plugins" side tab opens "Site Setup" › "Settings" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | Signing in on the site's Login page lands on the journal's home page, not its Dashboard | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | Site Settings' "Journal redirect" list ignores the Hosted Journals order, and on PostgreSQL reshuffles after a journal save | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1001,10 +1001,11 @@ address.
 Nothing on screen shows that the file is still there, and no screen can
 delete it. It matters when the file held something the journal or the
 site meant to withdraw.
-Only style sheets are left behind: a removed "Logo", "Homepage Image"
-or "Favicon" of a journal, and the site's "Logo", are deleted as they
-should be.
-Basis: probe, 2026-10-04. <sup>f-a6</sup>
+The thumbnail of a journal, press or server is left behind too, by a
+separate fault tracked as *[Appearance & theming](U10-appearance-and-theming.md#a20)*
+A20 and outside this report. A removed "Logo", "Homepage Image" or
+"Favicon", and the site's "Logo", are deleted as they should be.
+Basis: probe, 2026-10-06. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — Some side tabs do not survive a reload** · 🐞 · low.
