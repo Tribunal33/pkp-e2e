@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#8785` (open; the same blank page, reported on OMP 3.4.0rc1)
 - **Tracked in** spec U63 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#omp1)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

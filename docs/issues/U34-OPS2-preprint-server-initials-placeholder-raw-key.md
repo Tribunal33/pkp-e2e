@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U34 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U34-editorial-decision-recording.md#ops2) · spec U56 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U56-emails-management.md#ops1)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

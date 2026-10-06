@@ -14,6 +14,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U08 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#a12)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

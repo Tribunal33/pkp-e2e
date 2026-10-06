@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U17 [OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#omp2) · spec U16 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a9)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

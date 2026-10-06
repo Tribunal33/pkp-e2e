@@ -19,6 +19,7 @@
   keeps the script
 - **Tracked in** spec U28 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a14)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

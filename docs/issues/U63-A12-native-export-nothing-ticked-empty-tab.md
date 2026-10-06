@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-01)
 - **Tracked in** spec U63 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a12) · spec U74 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a16)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

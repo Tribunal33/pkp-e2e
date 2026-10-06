@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12753` (open), which reports this fault and a second one: the press's own style sheet linked twice
 - **Tracked in** spec U60 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U60-site-settings.md#omp1)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

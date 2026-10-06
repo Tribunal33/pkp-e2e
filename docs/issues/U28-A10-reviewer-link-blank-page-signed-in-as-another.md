@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#12807` (open; fix in PR `pkp/pkp-lib#13272` for `stable-3_5_0`, not yet merged, none yet for `main`)
 - **Tracked in** spec U28 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a10)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

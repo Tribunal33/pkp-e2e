@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12597` (open): the same missing label, reported for OPS affiliations. This report widens it to OJS, OMP and funders, and leaves that issue's other requests (a larger click area, the name as the link) to it.
 - **Tracked in** spec U41 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U41-contributors-and-affiliations.md#a9)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

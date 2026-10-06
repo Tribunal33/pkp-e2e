@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#5738` (closed; its fix, `pkp/ops#12`, sent only the new-submission notice to the production stage and left this task's link)
 - **Tracked in** spec U05 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#ops3)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

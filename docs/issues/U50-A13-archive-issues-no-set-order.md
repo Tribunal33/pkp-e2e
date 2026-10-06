@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#4523` and `pkp/pkp-lib#4065` (both closed without a fix in 2022 as outdated, asking for steps on a recent version): the same fault, reported on 3.1.1
 - **Tracked in** spec U50 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a13)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

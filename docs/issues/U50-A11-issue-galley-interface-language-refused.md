@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#3593` (closed, fixed in 2018 by [43bbd2f62e](https://github.com/pkp/ojs/commit/43bbd2f62ef0ca7c32f473c999e1d4145bd1919c); the change under Introduced undid that fix)
 - **Tracked in** spec U50 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a11)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

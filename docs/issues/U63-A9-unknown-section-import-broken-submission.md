@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#5960` (closed with a fix that reports the missing publication but still keeps the submission)
 - **Tracked in** spec U63 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a9)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

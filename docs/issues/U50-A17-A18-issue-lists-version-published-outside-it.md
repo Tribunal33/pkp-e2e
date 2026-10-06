@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10015` (open), covering the "Items" count and the article showing in two issues when a newer version is assigned to another issue. This report adds the "Don't Assign To An Issue" path, "Remove" taking the issue's version offline, the root cause and a tried fix.
 - **Tracked in** spec U50 [A17](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a17), [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a18)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

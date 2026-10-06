@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U64 [OJS6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U64-usage-statistics.md#ojs6)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

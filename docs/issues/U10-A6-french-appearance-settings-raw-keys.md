@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U10 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a6) · spec U11 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U11-highlights.md#a7)
 - **Checked** 2026-10-03, and 2026-10-04 for the home page carousel, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 2026-10-04: the home page carousel's arrows were walked on a press and
 a preprint server (spec U11 A7): a screen reader names them by codes.

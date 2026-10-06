@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10618` (closed without a fix; a comment on it lists this notice staying after an unpublish)
 - **Tracked in** spec U70 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a6), spec U33 [OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U33-production-stage.md#omp2)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

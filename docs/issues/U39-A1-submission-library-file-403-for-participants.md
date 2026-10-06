@@ -15,6 +15,7 @@
   `stable-3_5_0`, live on `stable-3_4_0`
 - **Tracked in** spec U39 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U39-submission-and-publisher-libraries.md#a1)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

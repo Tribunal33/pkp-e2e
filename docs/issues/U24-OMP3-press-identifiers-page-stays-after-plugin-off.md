@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U24 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#omp3) · spec U44 [OMP7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#omp7)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

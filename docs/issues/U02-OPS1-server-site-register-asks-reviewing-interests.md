@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U02 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U02-registration-and-account-validation.md#ops1)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

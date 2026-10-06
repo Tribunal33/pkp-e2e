@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U70 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a10) (its missing "New Releases" list; A10's wrong order of books is [a separate report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U70-A10-category-page-books-featured-elsewhere-first.md)), spec U68 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a7)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

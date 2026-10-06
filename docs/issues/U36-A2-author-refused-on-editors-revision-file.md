@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13048` (open), covering these two refusals and leaving open whether the author should be allowed. This report adds the cause and both ways to settle it. The issue also covers an "Upload" refusal that is not part of this report
 - **Tracked in** spec U36 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a2)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

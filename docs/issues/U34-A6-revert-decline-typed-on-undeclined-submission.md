@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U34 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U34-editorial-decision-recording.md#a6)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

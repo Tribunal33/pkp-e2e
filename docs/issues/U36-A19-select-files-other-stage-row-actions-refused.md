@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11320` (open), covering "More Information" in the "Files for Review" window; this report adds "Edit", "Delete" and the file name, the two Copyediting windows, the cause and a tried fix
 - **Tracked in** spec U36 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a19)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

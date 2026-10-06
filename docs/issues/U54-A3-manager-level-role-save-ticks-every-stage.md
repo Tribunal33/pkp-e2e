@@ -12,6 +12,7 @@
 - **Upstream** none found for this fault (2026-10-02); `pkp/pkp-lib#10387` (closed, deferred; PRs `pkp/pkp-lib#11731` and `pkp/pkp-lib#12040` open on `stable-3_5_0`) discusses whether an assigned Production editor should be held to its stages at all
 - **Tracked in** spec U54 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#a3)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

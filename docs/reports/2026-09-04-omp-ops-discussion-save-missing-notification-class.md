@@ -1,5 +1,7 @@
 # OMP and OPS: saving a discussion or task fails on a missing class
 
+Model: claude-fable-5-1.
+
 Defect. OMP and OPS on pkp `main`; present since pkp-lib `139bde1e65`
 (pkp/pkp-lib#12322, 2026-02-10); still present at omp `14be789b5` and ops
 `9db7bd3d7e` on 2026-09-10. OJS is unaffected. stable-3_5_0: not driven.

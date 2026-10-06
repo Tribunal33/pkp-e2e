@@ -18,6 +18,7 @@
   could not be told from the PR. 3.5 keeps the box
 - **Tracked in** spec U28 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#omp3)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

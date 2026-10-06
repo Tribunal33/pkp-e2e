@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11711` (open): the 3.6.0 release-notes checklist, which will tell administrators that both settings are no longer supported; no issue asks for the lines to be taken out of the configuration file
 - **Tracked in** spec U15 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#a9)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U68 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a9)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

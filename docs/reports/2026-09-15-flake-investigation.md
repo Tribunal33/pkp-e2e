@@ -1,5 +1,7 @@
 # Flaky tests: who flakes, why, and what to fix upstream (2026-09-15)
 
+Model: claude-fable-5-1.
+
 After the performance rounds (`2026-09-14-suite-performance*.md`) the next
 cost is non-determinism. This report ranks the flake classes by how often
 they actually fire, follows the two biggest into the app code with

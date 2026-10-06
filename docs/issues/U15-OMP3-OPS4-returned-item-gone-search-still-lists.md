@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U15 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#omp3), [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ops4) · spec U19 [OMP8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#omp8), [OPS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#ops5)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

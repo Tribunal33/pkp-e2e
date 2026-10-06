@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#8510` (closed without a fix), covering the same refusal on "Issue Data" when an issue's title is deleted
 - **Tracked in** spec U50 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a1)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

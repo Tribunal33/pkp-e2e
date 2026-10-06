@@ -16,6 +16,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U18 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U18-web-feeds.md#a2)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

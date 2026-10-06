@@ -17,6 +17,7 @@
   the router
 - **Tracked in** spec U09 [A12](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a12)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

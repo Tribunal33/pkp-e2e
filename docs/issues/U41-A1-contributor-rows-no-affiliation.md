@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U41 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U41-contributors-and-affiliations.md#a1) (the workflow and wizard half; the press book page half is [its own report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U41-A1-book-page-long-credits-dangling-comma.md))
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

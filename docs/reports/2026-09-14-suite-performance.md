@@ -1,5 +1,7 @@
 # Suite performance research, 2026-09-13/14
 
+Model: claude-fable-5-1.
+
 One night of measured experiments on this Mac (10 cores: 8 performance, 2
 efficiency; Postgres 15; PHP 8.4), every full run on a freshly reset
 install, the OJS suite as the yardstick (the longest, the one CI waits

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13171` (open; fix in PR `pkp/ojs#5740`, not yet in main)
 - **Tracked in** spec U34 [OJS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U34-editorial-decision-recording.md#ojs1)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

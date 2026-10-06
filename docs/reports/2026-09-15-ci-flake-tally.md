@@ -1,5 +1,7 @@
 # CI flake tally, 2026-08-24 .. 2026-09-15
 
+Model: claude-fable-5-1.
+
 Produced for the 2026-09-15 flake investigation
 (`2026-09-15-flake-investigation.md`) from `gh run list` / `gh run view
 --log` over jardakotesovec/pkp-e2e and the pkp/ojs, pkp/omp, pkp/ops thin

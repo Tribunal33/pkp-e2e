@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#5778` (closed with a fix for OJS only, `pkp/ojs#2715`; OMP and OPS never received it)
 - **Tracked in** spec U10 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a1)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

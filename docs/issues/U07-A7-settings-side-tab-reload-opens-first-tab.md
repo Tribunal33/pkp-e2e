@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-03)
 - **Tracked in** spec U07 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U07-journal-identity-and-about-pages.md#a7), spec U60 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U60-site-settings.md#a7)
 - **Checked** 2026-10-03 (Site Settings 2026-10-04), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

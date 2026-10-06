@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12719` (open) is this same fault, reported on OMP 3.5 only; this report widens it to OJS, OMP and OPS on `main` and 3.5
 - **Tracked in** spec U08 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#a1)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -1,5 +1,7 @@
 # Suite performance, round 2, 2026-09-14
 
+Model: claude-fable-5-1.
+
 The first round (`2026-09-14-suite-performance.md`) was measured on the
 Mac. This round was explored and first measured on GitHub's 4-vCPU
 `ubuntu-latest` runners while the Mac was busy, then measured definitively

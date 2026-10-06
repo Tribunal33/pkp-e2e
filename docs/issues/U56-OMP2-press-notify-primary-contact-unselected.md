@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U56 [OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U56-emails-management.md#omp2)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

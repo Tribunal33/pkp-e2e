@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#7732` (open): the same list, reported on 3.3, where it was sorted and only issues sharing a publication date came in the order they were entered; it asks for volume and number order, which the fix here does not give
 - **Tracked in** spec U63 [OJS10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#ojs10)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

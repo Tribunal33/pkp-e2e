@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#13130` (open; fix in PR `pkp/pkp-lib#13150` for `main` and `pkp/pkp-lib#13131` for 3.5, neither merged yet; the fix does nothing for accounts already locked)
 - **Tracked in** spec U02 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U02-registration-and-account-validation.md#a6)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

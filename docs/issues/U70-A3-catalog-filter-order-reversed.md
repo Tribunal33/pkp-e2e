@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11743` (closed with a fix, `pkp/omp#2109` and `pkp/pkp-lib#11746`, covering the readers' catalog, series and category pages; the Catalog page's filters were left out)
 - **Tracked in** spec U70 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a3), together with [U70-A3-catalog-press-order-lost-after-filter.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U70-A3-catalog-press-order-lost-after-filter.md): both faults sit in OMP `CatalogListPanel::getConfig()` and can be fixed in one change, though each has its own cause and diff
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

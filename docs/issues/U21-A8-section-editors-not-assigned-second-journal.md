@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-01)
 - **Tracked in** spec U21 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a8), spec U16 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U16-categories.md#a13)
 - **Checked** 2026-10-01 (sections) and 2026-10-02 (categories), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 2026-10-02: the same fault through a category's "Editorial Assignments"
 (spec U16 A13) was walked on OJS and OMP and joins this report: the

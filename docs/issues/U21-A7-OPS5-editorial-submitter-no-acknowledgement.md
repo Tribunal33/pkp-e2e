@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11723` (open): co-authors' emails show a blank submitter name, another symptom of the same cause
 - **Tracked in** U21 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a7), [OPS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#ops5)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

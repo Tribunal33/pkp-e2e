@@ -12,6 +12,7 @@
 - **Upstream** none open (2026-10-04); `pkp/pkp-lib#12401` (closed) fixed the same symptom for a comment deleted on its own, not for one that goes with its submission or its writer's account
 - **Tracked in** spec U14 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U14-reader-comments-and-moderation.md#a10)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

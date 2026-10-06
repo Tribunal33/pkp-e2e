@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U50 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a4) · spec U72 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U72-chapters-work-type.md#a4)
 - **Checked** 2026-10-02 (OJS) and 2026-10-04 (OMP), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 2026-10-04: widened to the same fault in a press's chapter window (OMP).
 

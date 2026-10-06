@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U01 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U01-login-and-sessions.md#a7)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

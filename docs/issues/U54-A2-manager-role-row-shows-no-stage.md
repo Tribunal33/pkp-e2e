@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#5962` (open), covering the journal manager's row only; `pkp/pkp-lib#10929` (open, milestone 3.6, waiting for a decision), whose third option, every stage for every manager-level role, this fix takes for the manager role alone; `pkp/pkp-lib#2849` (closed) set the rule and asked for an upgrade that was never written
 - **Tracked in** spec U54 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#a2)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

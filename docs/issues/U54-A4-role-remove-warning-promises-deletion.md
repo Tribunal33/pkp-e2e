@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11513` (open), which goes further: it asks for a "Disable" that ends the members' roles; `pkp/pkp-lib#1574` (closed in 2022 as outdated, without a fix)
 - **Tracked in** spec U54 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U54-roles-configuration.md#a4)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

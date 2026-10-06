@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04)
 - **Tracked in** spec U10 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a5), spec U60 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U60-site-settings.md#a6)
 - **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 **Update 2026-10-06.** The Summary no longer says that only style
 sheets are left behind: a removed thumbnail of a journal, press or

@@ -15,6 +15,7 @@
   - `pkp/customBlockManager#17` (open). It proposes generated block names, which would cover this too.
 - **Tracked in** spec U09 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a4), [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a13)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

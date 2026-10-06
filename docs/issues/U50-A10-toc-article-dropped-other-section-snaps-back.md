@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02; OMP's chapter list 2026-10-04)
 - **Tracked in** spec U50 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a10) · spec U72 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U72-chapters-work-type.md#a6)
 - **Checked** 2026-10-02 (OJS), 2026-10-04 (OMP), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 Update 2026-10-04: widened to a press's "Chapters" list (spec U72 A6),
 where the same fault leaves a chapter unable to move; the severity is

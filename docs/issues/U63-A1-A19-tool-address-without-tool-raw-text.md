@@ -13,6 +13,7 @@
 - **Upstream** none found (2026-10-01)
 - **Tracked in** spec U63 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a1), [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a19)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

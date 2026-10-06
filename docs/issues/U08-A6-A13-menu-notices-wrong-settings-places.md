@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11346` (open, an enhancement to when the "Privacy Statement" item shows, which notes in passing that its notice names the wrong place); `pkp/pkp-lib#2949` (closed without a fix, asking that pkp-lib texts stop naming a journal, with the "About" notice as its example)
 - **Tracked in** spec U08 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#a6), [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#a13)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

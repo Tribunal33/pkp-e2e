@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13048` (open), covering this as its part 3, whose reporter wants the upload allowed (its parts 1 and 2 are other refusals, not covered here); `pkp/pkp-lib#8976` (open), covering it on 3.4 as the first of three remarks, whose reporter suggests hiding the button
 - **Tracked in** spec U36 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a7)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-04); `pkp/pkp-lib#10526` (closed, fix in PR `pkp/omp#1754`) fixed the order the list reads the authors in, not this save
 - **Tracked in** spec U72 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U72-chapters-work-type.md#a7)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

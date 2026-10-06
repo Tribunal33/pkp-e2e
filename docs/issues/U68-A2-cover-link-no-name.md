@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12668` (open, OJS's article lists), `pkp/pkp-lib#12665` (open, OMP's book lists, filed as the cover and title being two links to one page; its discussion proposes the hiding fix this report tries); this report adds OPS, journal issue lists, the detail pages' cover links and the default picture that cannot be named
 - **Tracked in** spec U68 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U68-catalog-browse.md#a2)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

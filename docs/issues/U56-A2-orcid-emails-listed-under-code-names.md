@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13207` (open PR, not yet in main), covering the English strings only
 - **Tracked in** spec U56 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U56-emails-management.md#a2)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

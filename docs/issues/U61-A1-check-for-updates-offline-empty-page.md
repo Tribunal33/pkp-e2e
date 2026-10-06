@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#10018` (closed). Its fix, `pkp/pkp-lib#10028`, covers only the newer-release notice, and a comment after the merge names "Check for updates" as still failing on 3.3 and 3.4
 - **Tracked in** spec U61 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U61-system-administration.md#a1)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

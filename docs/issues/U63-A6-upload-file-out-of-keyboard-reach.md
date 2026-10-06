@@ -12,6 +12,7 @@
 - **Upstream** none open (2026-10-01); `pkp/pkp-lib#1411` (closed 2016 with a fix, the same symptom on the submission file upload; the 2018 plupload update undid that fix)
 - **Tracked in** spec U63 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a6) · spec U36 [A26](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a26)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

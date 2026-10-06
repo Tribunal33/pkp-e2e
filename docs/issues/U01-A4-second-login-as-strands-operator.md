@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10731` (closed without a fix for this part, covering the Participants panel only)
 - **Tracked in** spec U01 [A4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U01-login-and-sessions.md#a4)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

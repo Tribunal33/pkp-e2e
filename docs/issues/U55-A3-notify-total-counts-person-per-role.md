@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12548` (open), covering the double count, reported on 3.3; this report adds the left-out copy, steps on today's code and a tried fix
 - **Tracked in** spec U55 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U55-notify-users.md#a3)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

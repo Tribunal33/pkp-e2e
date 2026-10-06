@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#5266` (open), covering the "Volume" box's length only: its open PR `pkp/ojs#3344` narrows that box to 5 characters, which still lets 99999 through, and leaves "Year" as it is
 - **Tracked in** spec U50 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a5), [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a6)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

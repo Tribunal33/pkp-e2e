@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13084` (open; fix in PRs `pkp/pkp-lib#13085` for 3.3 and `pkp/pkp-lib#13087` for 3.5, not yet merged; no PR for `main`). This report adds the walk on today's `main` and 3.5, a fix tried on `main`, and a fault in `pkp/pkp-lib#13087`: its change, tried on `main`, answered status 200
 - **Tracked in** spec U24 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#a9)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

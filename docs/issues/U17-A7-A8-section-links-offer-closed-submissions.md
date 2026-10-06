@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10941` (closed; fixed on 3.3 only, by `pkp/pkp-lib#11440`), covering the inactive section's policy. The issue says 3.4 and `main` are not affected; they are, for the editorial roles its own steps sign in as, from whom the section list does not hide inactive sections.
 - **Tracked in** spec U17 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#a7), [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#a8)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

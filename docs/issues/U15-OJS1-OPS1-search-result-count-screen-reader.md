@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10691` (open), `pkp/pkp-lib#12642` (open, reported on OJS and OPS 3.5); `pkp/pkp-lib#11294` (open) proposes rewriting this text in plural forms
 - **Tracked in** spec U15 [OJS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ojs1), [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ops1)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

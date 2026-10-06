@@ -13,6 +13,7 @@
 - **Upstream** `pkp/pkp-lib#8918` (open), the same fault reported for the Crossref export when PHP's `allow_url_fopen` is off; `pkp/pkp-lib#5682` (closed), whose comments from 2023 and 2024 report the DOAJ message below on 3.3
 - **Tracked in** spec U63 [OJS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#ojs4), [OJS7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#ojs7)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13410` (open, no fix PR found)
 - **Tracked in** spec U21 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#ops3), spec U22 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U22-my-submissions.md#ops2)
 - **Checked** 2026-10-04 (steps 5–7), 2026-10-01 (the rest), each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 **2026-10-04**: deleting the draft from My Submissions shows a
 permission error rather than nothing, and spec U22's OPS2 joins this

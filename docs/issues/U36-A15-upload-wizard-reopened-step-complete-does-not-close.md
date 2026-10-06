@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-10-02)
 - **Tracked in** spec U36 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a15)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

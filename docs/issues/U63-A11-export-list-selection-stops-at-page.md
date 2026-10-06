@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#11716` (open), covering only "Select All" never turning into "Select None", reported on OMP 3.4
 - **Tracked in** spec U63 [A11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a11)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

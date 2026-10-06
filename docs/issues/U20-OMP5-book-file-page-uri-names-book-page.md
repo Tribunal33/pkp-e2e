@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#8406` (closed without a fix for this point), whose PRs changed other tags of the same plugin
 - **Tracked in** spec U20 [OMP5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U20-search-engine-metadata-and-analytics.md#omp5)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

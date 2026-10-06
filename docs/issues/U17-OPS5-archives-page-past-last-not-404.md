@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10596` (closed, fixed for OJS's issue archive only in `pkp/ojs#4514`, `pkp/ojs#4515` and `pkp/ojs#4516`; the preprint archive was not covered)
 - **Tracked in** spec U17 [OPS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#ops5)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

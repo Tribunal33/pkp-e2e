@@ -13,6 +13,7 @@
 - **Upstream** none found for the spinner (2026-10-01). `pkp/pkp-lib#13180` (open) is a review form whose save fails with the same script error; its open PRs `pkp/pkp-lib#13381` (main) and `pkp/pkp-lib#13380` (3.5) make the second of this report's two changes, not the one that removes the spinner
 - **Tracked in** spec U09 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a20)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

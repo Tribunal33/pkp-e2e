@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#7016` (open), reporting the OJS table of contents; its fix PRs `pkp/pkp-lib#7622` and `pkp/ojs#3275` (open since 2022) no longer apply to main, and no PR covers OPS
 - **Tracked in** spec U41 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U41-contributors-and-affiliations.md#a3)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

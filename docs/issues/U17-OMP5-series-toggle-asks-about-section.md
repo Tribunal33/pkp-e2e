@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#12461` (closed, fixed in `pkp/omp#2308`), covering only the box in a series' edit window, not this question in the series list
 - **Tracked in** spec U17 [OMP5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#omp5)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

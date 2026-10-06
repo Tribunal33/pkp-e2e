@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13416` (open; fix in PR `pkp/pkp-lib#13419` with `pkp/omp#2485` for `stable-3_5_0`, open and not yet reviewed; no PR for main)
 - **Tracked in** spec U73 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a3)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

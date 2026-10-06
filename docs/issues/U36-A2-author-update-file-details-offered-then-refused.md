@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#13048` (open), covering the refused "Update File Details" and "Delete" on "Revisions Uploaded" after an editor's upload, and asking whether the author should be allowed. This report adds "Submission Files", the cause in the menu, and a fix that stops offering the entries
 - **Tracked in** spec U36 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a2)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

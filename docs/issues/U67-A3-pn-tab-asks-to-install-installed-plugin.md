@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pln#116` (closed without a fix, in favour of `pkp/pln#117`, which did not change the plugin's name), covering the enabled plugin only
 - **Tracked in** spec U67 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U67-archiving-preservation.md#a3)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

@@ -12,6 +12,7 @@
 - **Upstream** `pkp/pkp-lib#10351` (closed without a fix), about how `validation_timeout` is described. A comment there notes that `main` no longer reads `validation_timeout`.
 - **Tracked in** spec U02 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U02-registration-and-account-validation.md#a1)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 

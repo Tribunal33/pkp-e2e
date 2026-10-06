@@ -17,6 +17,7 @@
 - **Upstream** none found (2026-10-01)
 - **Tracked in** spec U09 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a7)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 
