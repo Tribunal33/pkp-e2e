@@ -459,10 +459,9 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
 30. **The NLM title.** "Save" on the Settings tab stores "NLM Title
     Abbreviation" and shows the notice "Your changes have been saved.".
     The exported file names the journal by that abbreviation, or by the
-    journal's name while it has never been saved; once the box has been
-    saved empty, the file's journal title is empty ⚠ [OJS3](#ojs3). An
-    unsaved change behaves as Rule 35a says. <sup>n</sup>
-    <sup>td16</sup>
+    journal's name while the box holds none, never saved or saved empty.
+    An unsaved change behaves as Rule 35a says. <sup>n</sup>
+    <sup>td16</sup> <sup>f-ojs3</sup>
 31. **Exporting articles.** The list is the one of Rules 14 and 15.
     "Export Articles" checks the file against PubMed's format, which the
     installation fetches from NLM's site at each export. Where that site
@@ -618,8 +617,8 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
    statuses, and the daily deposit takes along the "Needs Sync" items
    of journals with the same choice (Rule 43). <sup>q</sup>
 6. **"NLM Title Abbreviation"** {OJS} (the PubMed Settings tab; empty).
-   Never saved: the PubMed file names the journal by its name; saved:
-   by the abbreviation; saved empty: by nothing (Rule 30). <sup>n</sup>
+   Never saved or saved empty: the PubMed file names the journal by its
+   name; saved: by the abbreviation (Rule 30). <sup>n</sup>
 7. **The press's ONIX details** {OMP} ("Press Publisher Name",
    "Geographical Location", "Publisher Code Type", "Publisher Code" on
    Settings › Press › "Masthead",
@@ -1275,7 +1274,6 @@ Left out of the scenarios above, by reason:
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
-  - OJS3 ("NLM Title Abbreviation" saved empty; Rule 30)
   - OJS4 (PubMed exports where NLM's site cannot be reached; Rules
     31–32; scenario 7 marks it)
   - OJS5 (an unsaved Settings change and the forms' "Cancel"; Rule 35a)
@@ -1292,9 +1290,9 @@ Left out of the scenarios above, by reason:
   - OMP4 (the same tool run from the server's command line; Rule 6)
 - **No seed**:
   - the PubMed file downloading, and the journal title it carries: the
-    journal's name before "NLM Title Abbreviation" is saved, the
-    abbreviation after (Rules 30, 31; Settings bullet 6), since the test
-    installs cannot reach NLM's site
+    journal's name before "NLM Title Abbreviation" is saved and after it
+    is saved empty (retired OJS3), the abbreviation after (Rules 30, 31;
+    Settings bullet 6), since the test installs cannot reach NLM's site
   - a deposit DOAJ answers: "Registered", or "Failed" with DOAJ's
     message (Rule 37), since the test installs cannot reach DOAJ
   - the daily automatic deposit (Rule 43; Settings bullet 4), for the
@@ -1332,7 +1330,6 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | Paging the export list, the dashboard or a preprint server's archive repeats some submissions and skips others | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OJS1](#ojs1) | DOAJ export list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OJS3](#ojs3) | PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS5](#ojs5) | "Cancel" on the PubMed and DOAJ tools' Settings tabs does nothing, and both forms announce required fields | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS6](#ojs6) | DOAJ export list's title and author search finds nothing unless the letter case matches | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1350,6 +1347,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | Retired: a users import keeps each role's start date | ✅ | retired | upstream change + claim check (claude), 2026-09-29 — fixed upstream |
 | [A17](#a17) | Retired: importing a users file again no longer gives a later-dated role again | ✅ | retired | upstream change + claim check (claude), 2026-10-01 — fixed upstream |
 | [A18](#a18) | Retired: an empty or unreadable role date no longer stops a users import part-way | ✅ | retired | upstream change + claim check (claude), 2026-10-01 — fixed upstream |
+| [OJS3](#ojs3) | Retired: PubMed files lost the journal's title once the PubMed tool's Settings were saved with no NLM abbreviation | ✅ | retired | PR review (claude), 2026-10-06 — fixed at pkp/ojs#5897's head |
 
 ### All apps
 
@@ -1662,19 +1660,6 @@ stray row. The switch came with a 2025 change that is not yet in any
 release.
 Basis: probe, 2026-10-01. <sup>f-ojs2</sup>
 
-<a id="ojs3"></a>
-**OJS3 — PubMed files lose the journal's title once the PubMed tool's Settings are saved with no NLM abbreviation** · 🐞 · medium.
-A journal manager who presses "Save" on the PubMed XML Export Plugin's
-"Settings" tab with "NLM Title Abbreviation" empty, whether they cleared
-an abbreviation or never typed one, expects the PubMed file to name the
-journal by its title, as it did before the tab was first saved. Instead,
-every PubMed file from then on has an empty journal title. The file
-still passes the PubMed format check that the export runs, so it
-downloads with no message. NLM lists the journal title as a required
-field of the file. Saving an abbreviation in the box puts a title back
-in the files exported after that.
-Basis: probe, 2026-10-01. <sup>f-ojs3</sup>
-
 <a id="ojs4"></a>
 **OJS4 — PubMed exports depend on NLM's site** · 🐞 · medium · crash: server.
 "Export Articles" and "Export Issues" should download the PubMed file.
@@ -1823,6 +1808,9 @@ Since: 2025-11-20 · Basis: probe, 2026-10-01. <sup>f-omp4</sup>
 
 <a id="a18"></a>
 **A18 — An empty or unreadable role date stops a users import part-way** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13412), 2026-09-30; seen fixed 2026-10-01: an empty date counts as none, and a date that is not a date costs only its role, with a line saying so (Rule 22c). <sup>f-a18</sup>
+
+<a id="ojs3"></a>
+**OJS3 — PubMed files lost the journal's title once the PubMed tool's Settings were saved with no NLM abbreviation** · ✅ · retired. Fixed by pkp/ojs#5897 (for pkp/pkp-lib#13449), verified 2026-10-06 at the PR's head before its merge: a box saved empty, cleared or as it opens, names the journal by its name, and a saved abbreviation still wins (Rule 30). <sup>f-ojs3</sup>
 
 ---
 
@@ -2313,8 +2301,10 @@ feature's build, so that install's header read "Email".
 `pubmed-{date}-articles|issues-{contextId}.xml` directly (form posts, no
 results tab); `exportIssues()` collects each issue's articles by
 section. `ArticlePubMedXmlFilter::createJournalNode()`: `JournalTitle` =
-`$nlmTitle ?? $journal->getName(primaryLocale)` (`??`, so a saved empty
-string is not replaced by the name; OJS3). Each export validates the
+`$nlmTitle ?: $publication->getPrimaryContextName($journal)` (the
+journal name stamped on the publication, else the journal's name; `?:`
+since pkp/ojs#5897, so a saved empty string falls back too; `??` before
+it, OJS3). Each export validates the
 file against the DOCTYPE's `https://dtd.nlm.nih.gov/ncbi/pubmed/in/PubMed.dtd`
 and on errors goes through `displayXMLValidationErrors()` (note r).
 Live-probed 2026-09-27 (Rules 29–32; Fields; Settings bullet 6): every
@@ -3157,7 +3147,16 @@ Issue report: [pkp-e2e#272](https://github.com/jardakotesovec/pkp-e2e/issues/272
 2026-09-27: the file text on the export page read
 `<JournalTitle></JournalTitle>` after the box was saved empty (the box
 empty after a reload).
-Issue report: [pkp-e2e#273](https://github.com/jardakotesovec/pkp-e2e/issues/273) ([docs/issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md](../issues/U63-OJS3-pubmed-empty-nlm-title-empties-journal-title.md)).
+Fixed by pkp/ojs#5897 (`??` to `?:` in `createJournalNode()`, with
+unit tests of the filter and the settings form): walked 2026-10-06 at
+the PR head `727f252080`, before its merge, on the default dataset
+(the issue report's steps and its `as-opened` way in, `.reports/sync-13449/`):
+the box cleared after "J Pub Knowl" and the box saved as it opens each
+gave `<JournalTitle>Journal of Public Knowledge</JournalTitle>`, the
+abbreviation still `J Pub Knowl`; control at the `main` tip
+`d7cf416029` on the same reset dataset: both `<JournalTitle></JournalTitle>`.
+The same at pkp/ojs#5896's head on `stable-3_5_0`.
+Issue report: pkp-e2e#273, closed at the merge (the report and its walk deleted; git keeps them).
 
 <a id="fn-f-ojs4"></a>
 **f-ojs4** — Note n. Live-probed 2026-09-27: `POST

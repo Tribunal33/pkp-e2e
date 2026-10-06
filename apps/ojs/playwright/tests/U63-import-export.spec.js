@@ -23,7 +23,7 @@
  *   says; nothing reads whether the box holds it back.
  * - OJS9: S9 does not await DOAJ's answer; the queued deposit is never
  *   drained here.
- * - A1, A4–A7, A9, A11–A16, A19–A24, OJS1–OJS3, OJS5–OJS7: not on these scenarios'
+ * - A1, A4–A7, A9, A11–A16, A19–A24, OJS1, OJS2, OJS5–OJS7: not on these scenarios'
  *   paths. OMP1–OMP3: the press's.
  *
  * Seeding (footnote sc): S2 reads `publicknowledge` with the roster; every
