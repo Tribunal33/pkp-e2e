@@ -219,8 +219,9 @@ is left, the next morning picks up from the files.
 11. **Quiet mornings.** When the day's steps left nothing open:
    - **Drift sweep of one spec**, the one whose PROGRESS note carries the
      oldest "Swept" date (none counts as oldest). Its kept checks
-     (`shared/playwright/checks/<feature>/`) run on reset databases at the
-     tips; one fresh checker (`briefs/claim-check.md`, `{{rerun}}` naming
+     (`shared/playwright/checks/<feature>/`) run twice, under `PROBE_RUN`
+     r1 and r2 (a fact one run shows is undetermined), on reset
+     databases at the tips; one fresh checker (`briefs/claim-check.md`, `{{rerun}}` naming
      the outputs and the suites) judges the snapshots against the spec
      lines each chunk owns, drives what the checks no longer reach, and
      reads each suite against the scenarios for a bullet no test asserts.

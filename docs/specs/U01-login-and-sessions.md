@@ -74,7 +74,8 @@ title ⚠ [A3](#a3):
 | "Repeat new password" | yes | Must match |
 
 **Change Password form** (forced at sign-in; title "Change Password"). The
-browser tab reads "Change Password | {journal name}", but after a refused
+browser tab reads "Change Password | {journal name}" (from the site-level
+Login, the site's name stands in for the journal's), but after a refused
 "OK" only the journal's name ⚠ [A11](#a11):
 
 | Field (UI label) | Required? | Rules |
@@ -120,16 +121,23 @@ browser tab reads "Change Password | {journal name}", but after a refused
    multi-journal site lands on the site home page whatever the user's roles,
    because the Dashboard landing needs a journal to aim at. <sup>b</sup>
 4. **An interrupted visit resumes.** A signed-out visitor who opens a private
-   screen's address (a bookmark, an emailed link) gets the plain Login page.
-   Nothing on it names the destination being held, though a few screens add
-   an explanatory sentence above the form (a download that requires signing
-   in, for example). Signing in continues to the address they originally
+   screen's address (a bookmark, an emailed link) gets the plain Login page:
+   nothing on it names the destination being held (Rule 4a has the one
+   exception). Signing in continues to the address they originally
    asked for. When that address is a screen their roles do not allow (a
    Reader who had opened a journal's settings, say), the sign-in lands on
    the access-denied page instead (Rule 17). One address misbehaves: the
-   address that ends at the word "dashboard", with nothing after it,
+   address that ends at the word "dashboard", or at "dashboard/",
    answers a blank server-error page instead of the Login page
    ⚠ [A7](#a7). <sup>b</sup>
+4a. **A sentence above the form, for restricted content** {OJS}. A
+   signed-out visitor who presses a galley that needs a subscription gets
+   the Login page with a sentence above the form, such as "Subscription
+   required to access item. To verify subscription, log in to journal."
+   The sentences and when each shows belong to
+   [Subscriptions](U51-subscriptions.md), its Rule 12. No other screen
+   adds a sentence there, and on a press or a preprint server none does.
+   <sup>b</sup>
 5. **Staying signed in.** Closing the browser does not sign a user out.
    Ticked or not, the sign-in survives browser restarts, unless the
    installation is configured to end sessions at browser close. Unticked,
@@ -174,12 +182,15 @@ browser tab reads "Change Password | {journal name}", but after a refused
     lost-password page directly. <sup>f</sup>
 11. **Forced password change.** An account flagged to require a password
     change signs in only through the "Change Password" form. Correct
-    credentials at the Login page divert there instead of landing anywhere.
+    credentials divert there instead of landing anywhere, on a journal's
+    Login page and on the site-level one alike.
     The page explains "You must choose a new password before you can log in
     to this site…". Completing the form signs the user in and lands them
-    where an ordinary sign-in would (Rule 3; a reviewer, for instance, lands
-    on the Dashboard). Their other sessions end at that moment; flagging
-    the account alone leaves them signed in. <sup>g</sup>
+    where an ordinary sign-in from that Login page would (Rule 3): a
+    reviewer, for instance, on the Dashboard's "Action Required by me"
+    view; anyone at the site-level Login of a multi-journal site, on the
+    site home page. Their other sessions end at that moment; flagging the
+    account alone leaves them signed in. <sup>g</sup>
 11a. **Where the flag is set.** Administration › Hosted Journals, a
     journal's row, the arrow at its start, "Settings wizard", then the tab
     "Users" holds an older users list. Its "Add User" and "Edit User"
@@ -200,8 +211,9 @@ browser tab reads "Change Password | {journal name}", but after a refused
 13. **While impersonating, the screen says so.** The top bar shows the
     impersonator's own initials, muted, with the target's initials overlaid
     in a warning color. The user menu adds "You are currently logged in as
-    {username}" with a "Logout as {username}" link. On a submission's
-    workflow screen that shows the Participants panel, the panel's first
+    {username}" with a "Logout as {username}" link, and shows the same
+    link a second time after "Edit Profile", where "Logout" stood. On a
+    submission's workflow screen that shows the Participants panel, the panel's first
     entry is a "Logout as {full name}" button. Both labels name the
     **impersonated** account, the user being worn, not the one who will be
     restored. An impersonated Author's view of a submission has no
@@ -631,6 +643,36 @@ Left out of the scenarios above, by reason:
     flag ([A10](#a10)): the guard the issue report
     (`docs/issues/U01-A10-edit-user-hides-clears-change-password.md`)
     proposes, once fixed
+  - a flagged account signing in at the site-level Login page, diverted
+    to "Change Password", and on completing it landing on the site home
+    page (Rule 11)
+  - while impersonating, the user menu's second "Logout as {username}"
+    after "Edit Profile" (Rule 13): scenario 7's "OK" reads the first one
+    only
+  - scenario 7, "OK": the administrator's initials muted and the
+    Author's overlaid in a warning color (Rule 13); no suite asserts the
+    colors (OJS, OMP, OPS)
+  - scenario 3, "Control": nothing on the Login page naming the held
+    submission (Rule 4); the OMP suite does not assert it
+  - scenario 1, "The Editor's row on Users & Roles": the six column
+    headers, none of them a last-login date ([A9](#a9)); the OMP suite
+    asserts the row only
+  - scenario 5, "The link after the change": the "Reset Password" link
+    followed back to the lost-password form (Rule 10); the OMP suite
+    sees the link but does not press it
+  - scenario 5, "The link after the change", on OPS: the scenario's
+    given (signed in with the new password after scenario 4) and
+    "Logout" before the link is opened again; the OPS suite kills the
+    link by a sign-in alone, with no password change, and opens it in a
+    second, signed-out browser
+  - scenario 6, "Change Password": landing on "Action Required by me"
+    (Rule 11); the OJS suite accepts any Dashboard view
+  - scenario 8, "Journal Manager, a hand-built address to an
+    out-of-reach user": the refusal listing the possible causes
+    (Rule 14); the OMP suite reads only one of them
+  - scenario 8, "The Author's row": "Logout as {author}" bringing back
+    the Editor's own session (Rule 15); the OMP suite checks the address
+    and the workflow only
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -656,6 +698,7 @@ Left out of the scenarios above, by reason:
   - forced https for login or the site (Settings, `force_login_ssl`, `force_ssl`)
   - the idle session lifetime (Settings, `session_lifetime`)
 - **Owned by another feature**:
+  - the sentence above the Login form for a galley that needs a subscription (Rule 4a; *[Subscriptions](U51-subscriptions.md)*, scenario 1)
   - the Site Administrator's "Add User" flagging a new account, whose first sign-in diverts to "Change Password" (Rule 11a; *[Users management](U53-users-management.md)*, scenario 7)
   - the "Expire User Sessions" tool ending every session (Rule 18; *System administration & jobs*)
   - an action taken while impersonating carrying the target's name, and its activity-log line "{impersonator} (acting as {target})" (Side effects): no action of this feature writes a log entry; the actions belong to the workflow stages and the log screen to *Submission activity log & notes*
@@ -811,8 +854,9 @@ Basis: observed on a running site + upstream design record.
 <a id="a7"></a>
 **A7 — Signed out, the Dashboard address the monthly reminder email links to gives an empty error page** · 🐞 · medium · crash: server.
 The server fails when a signed-out visitor opens the Dashboard address
-that ends at the word "dashboard"
-(`…/index.php/publicknowledge/en/dashboard`). The visitor gets an empty
+that ends at the word "dashboard", with or without a final slash
+(`…/index.php/publicknowledge/en/dashboard`,
+`…/index.php/publicknowledge/en/dashboard/`). The visitor gets an empty
 error page instead of the Login page. Longer Dashboard addresses, such as
 `…/dashboard/editorial`, open the Login page and return there after
 signing in.
@@ -821,6 +865,7 @@ That address is the "submission dashboard" link in the monthly
 "Outstanding editorial tasks" email to managers and section editors. A
 bookmark or a typed address cut short at "dashboard" leads there too.
 Since: 2025-01-14 (pkp/pkp-lib#10782) · Basis: probe, 2026-10-04. <sup>[f-a7](#fn-a7)</sup>
+Report: refresh owed — [pkp-e2e#825](https://github.com/jardakotesovec/pkp-e2e/issues/825) omits the address with a final slash (`…/en/dashboard/`), which gives the same empty page (2026-10-06)
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞. Ruling: signed
 > out, the bare dashboard address must behave like every other private
@@ -1006,6 +1051,24 @@ the site's `index`. A private address typed signed out
 on OJS and OPS) gives the plain Login page with `source`, and the Reader's
 sign-in then lands on `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`
 (Rule 4's held address meeting Rule 17).
+Corrected 2026-10-06 (Rules 4, 4a): the earlier wording ("a few screens
+add an explanatory sentence above the form (a download that requires
+signing in, for example)") read as shared; the only callers of
+`Validation::redirectLogin()` that pass a `loginMessage` are OJS
+`ArticleHandler` and `IssueHandler` (`reader.subscriptionRequiredLoginText`,
+`payment.loginRequired.forArticle`, `payment.loginRequired.forIssue`);
+OMP's `CatalogBookHandler` calls it without one, and OPS has no caller
+with one (code read, OMP and OPS not driven). Live-probed 2026-10-06 (OJS;
+two runs; a scratch journal requiring subscriptions with a published
+issue and article, signed out): the article page's link "Requires
+Subscription PDF" led to
+`login?source=…/article/view/{id}/{galleyId}&loginMessage=reader.subscriptionRequiredLoginText`,
+the Login page carrying "Subscription required to access item. To verify
+subscription, log in to journal." above the form. The same day (OJS, OMP,
+OPS; two runs each): `dashboard/editorial`, a submission's workflow
+address and `management/settings/context` typed signed out each gave the
+plain Login page with `source`, and the scratch manager's sign-in landed
+on each.
 
 <a id="fn-c"></a>
 **c** — Remember: `Validation::login(..., $remember)` → Laravel
@@ -1134,6 +1197,18 @@ access-denied page. Every wizard load also answered a server error on the
 Plugin Gallery's list (`plugin-gallery-grid/fetch-grid`, 500), which is
 [Plugins management's A1](U62-plugins-management.md#a1); the users flow
 itself was unaffected.
+Live-probed 2026-10-06 (Rule 11; OJS, OMP, OPS; two runs each; scratch
+accounts flagged by `admin`): at the site-level Login (`index/login`) a
+flagged account's correct credentials diverted to
+`index/login/changePassword/{username}`, headed "Change Password" with
+the same explanation, the tab reading "Change Password | Open Journal
+Systems" ("… | Open Monograph Press", "… | Open Preprint Systems");
+completing it landed on the site's `index`, the public header naming the
+account. At a journal's Login the divert left the browser signed out
+(the journal's `dashboard/editorial` typed next gave the Login page with
+`source`); completing it landed a reviewer {OJS OMP} on
+`dashboard/reviewAssignments` ("Action Required by me") and a Moderator
+(OPS) on `dashboard/editorial` ("Assigned to me").
 
 <a id="fn-h"></a>
 **h** — Ops `signInAsUser/{userId}` and `signOutAsUser`
@@ -1223,6 +1298,10 @@ Abstract entry) with no Participants panel, the menu reading "You are
 currently logged in as {username}", "Logout as {username}", "Edit
 Profile", "Logout as {username}". Both exits return to the impersonator's
 view of the same submission, with a plain "Logout" in the menu again.
+Re-probed 2026-10-06 (Rule 13; OJS, OMP, OPS; two runs each; `admin`
+wearing `author.alex` and a scratch Journal Manager): the menu's two
+"Logout as {username}" entries, before and after "Edit Profile", both
+lead to `login/signOutAsUser`.
 
 <a id="fn-k"></a>
 **k** — Gate: `[security] password_timeout` (minutes; commented out/0 =
@@ -1459,6 +1538,12 @@ home" via `PKPPageRouter::getHomeUrl()`, which starts from
 anonymous-reachable caller; every other caller runs just after sign-in.
 Fix per ruling: guard `getHomeUrl()` (no user → the login redirect), so
 variant resolution stays post-login.
+Live-probed 2026-10-06 (Rule 4; OJS, OMP, OPS; two runs each; scratch
+journals, signed out): `{journal}/dashboard` answered 500 with an empty
+page; `{journal}/en/dashboard` 302 to `{journal}/dashboard`, then 500;
+with a final slash, `{journal}/en/dashboard/` 302 to `{journal}/dashboard/`,
+then 500 (`GET /index.php/{journal}/dashboard/` in the run's server
+errors). `dashboard/editorial` gave the Login page as before.
 Issue report: [pkp-e2e#825](https://github.com/jardakotesovec/pkp-e2e/issues/825) ([docs/issues/U01-A7-dashboard-address-signed-out-server-error.md](../issues/U01-A7-dashboard-address-signed-out-server-error.md)).
 
 <a id="fn-a8"></a>
