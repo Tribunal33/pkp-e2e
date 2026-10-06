@@ -365,13 +365,11 @@ items" on an empty list). No text can be typed anywhere in the panel.
      for screen readers). With no window open over the page, a press on
      the "×" removes the toast, and a toast left alone disappears by
      itself after a few seconds, staying while the pointer rests on it.
-     Over an open window (the "Notify" side panel showing 9a's warning,
-     or the "Add a Component" window of
-     *[Submission intake configuration](U58-submission-intake-configuration.md#a13)*
-     after saving "Key" -survey), a press on the toast's "×" does nothing
-     and the pointer resting on it does not keep it: it leaves by itself
-     about five seconds after it showed, and the window stays open
-     ⚠ [A14](#a14).
+     The same holds over an open window (the "Notify" side panel showing
+     9a's warning, or the "Add a Component" window of
+     *[Submission intake configuration](U58-submission-intake-configuration.md)*
+     after saving "Key" -survey): the "×" removes the toast and the pointer
+     resting on it keeps it, and the window stays open.
    - 9c. **Messages that are not toasts.** A form the server rejected
      shows no toast: its errors appear inside the form under the heading
      "Errors occurred processing this form" (the Profile page's
@@ -794,6 +792,7 @@ footnote says how) and judge both mailboxes only once they have run.
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - a toast over an open window staying while the pointer rests on it, the window open (Rule 9b; the "Notify" warning over its side panel)
   - a Section Editor's task count in the menu under their name on the public pages (Rule 4; the guard [A3](#a3)'s issue report proposes, shared with Navigation menus & site chrome A2)
   - the "needs an editor" email staying away for a manager who unticked "Enable…" on its row (Rule 5a; scenario 3 reads the mailbox; the guard [A10](#a10)'s issue report proposes)
   - a preprint server's "needs a moderator" task opening the preprint's workflow (Rule 2c; scenario 1 presses a task; the guard [OPS3](#ops3)'s issue report proposes)
@@ -821,7 +820,6 @@ Left out of the scenarios above, by reason:
   - A9 (the Unsubscribe page keeping the statistics box with the email off; *Settings*)
   - A12 (two tasks raised within one second listed in either order; Rule 2b; scenario 2's second submission comes a second after the first)
   - A13 (the Site Administrator's unread count hidden on the site's home page at a desktop width, and the narrow window meant to display it; Rule 4; scenario 7 marks it)
-  - A14 (a toast shown over an open window that its "×" cannot close and the pointer cannot hold; Rule 9b)
 - **No seed**:
   - the journal initials on the rows of an account with roles in several journals (Rules 2b, 2d)
   - each journal keeping its own set of choices (Rule 5d)
@@ -832,6 +830,7 @@ Left out of the scenarios above, by reason:
 - **Owned by another feature**:
   - the site-level address forwarding a user with a role in one journal to that journal's "Identity" tab (Rule 5d; *User profile*, scenario 2)
   - the warning toast for a refused action (Rule 9a; *Stage participants*, scenario 6, after "Notify" with "Message" empty)
+  - a toast's "×" over an open window removing the toast, the window left open (Rule 9b; *[Submission intake configuration](U58-submission-intake-configuration.md)*, scenario 6, the refused "Key")
   - a form the server rejected: errors inside the form, no toast, gone after about seven seconds (Rule 9c; *User profile*, scenario 8)
   - the success message shown inside the form instead of as a toast (Rule 9c; *User profile*, scenario 2)
   - the reviewer's "Review assignment updated." notice (Rule 6; *Reviewer assignment & management*)
@@ -855,7 +854,6 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
 | [A5](#a5) | A mail program's own "Unsubscribe" button, offered because of the emails' headers, is probably refused | ❓ | latent | — |
@@ -867,6 +865,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | Two tasks raised within the same second are listed in either order in the Tasks window | ❓ | minor | — |
 | [A13](#a13) | On the site's own home page the Site Administrator's unread count is never displayed at a desktop width: the "Dashboard" entry carries it hidden and the name carries none | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server lists "A reviewer has commented on "Title"." and "Weekly email of outstanding tasks", two events it never raises | ❓ | minor | — |
+| [A14](#a14) | Retired: over an open window a toast's "×" did nothing, or closed the submission's workflow along with the toast; it now removes the toast alone, and the pointer keeps it (Rule 9b) | ✅ | retired | PR review merge (claude), 2026-10-06 — fixed upstream (pkp/pkp-lib#13188) |
 
 ### All apps
 
@@ -1099,21 +1098,6 @@ name there could carry the count as it does on a journal's home page.
 Basis: test run (the desktop-width read), code (the narrow layout).
 <sup>[f-a13](#fn-a13)</sup>
 
-<a id="a14"></a>
-**A14 — Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice** · 🐞 · low.
-While a window or side panel is open, a notice at the top right of the
-page cannot be closed with its "×". A manager who types a "Key" the "Add
-a Component" window does not accept, or an editor who presses "Notify"
-with an empty message, gets a notice saying so. Pressing its "×" does
-nothing, and resting the pointer on it does not keep it. It leaves by
-itself about five seconds after it showed.
-In a submission's workflow, once a window opened there has closed, a
-press on a notice's "×" reaches it, but the press also closes the window
-on top. With no other window open, that is the whole workflow: the
-editor is put back on the submissions list.
-The same fault: [Submission intake configuration](U58-submission-intake-configuration.md#a13).
-Basis: probe, 2026-10-04. <sup>[f-a14](#fn-a14)</sup>
-
 ### OPS
 
 <a id="ops1"></a>
@@ -1166,6 +1150,11 @@ assigned to automatically. A new server's section names no moderator, so
 on such a server that is every preprint.
 Basis: probe, 2026-10-04. <sup>[f-ops3](#fn-ops3)</sup>
 
+
+### Retired
+
+<a id="a14"></a>
+**A14 — Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13188: ui-library#999 on `stable-3_5_0`, cherry-picked to `main` as `a36dc7fe78`, 2026-10-06), verified 2026-10-06 on OJS, OMP and OPS `main`: over the open "Notify" panel the warning toast goes at a press on its "×" and stays while the pointer rests on it, the panel open (Rule 9b). The same fault was [Submission intake configuration](U58-submission-intake-configuration.md#a13)'s A13. <sup>[f-a14](#fn-a14)</sup>
 ---
 
 <a id="footnotes"></a>
@@ -1951,7 +1940,8 @@ users." after a sent "Notify" (OJS, OMP; on OPS that notice can land in
 the Production entry's own "Notification" box instead, *Stage
 participants* OPS4) within 0.11–0.14 s. The "Add a Component" window's
 refused key shows the same (*Submission intake configuration* A13).
-Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826) ([docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md)).
+Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826), closed 2026-10-06 with the fix.
+Retired 2026-10-06: at ui-library `a36dc7fe78` (ojs `d7cf416029`, omp `a0e6d0a8bc`, ops `7e34fdd57e`) `.app__notifications` computes `pointer-events: auto` over an open window, so the press and the container's `:hover` reach the toast, and the side window ignores a press inside `.pkpNotification`; the report's kept walk on the dataset fleet, all three apps: the "Notify" warning gone 0.16–0.19 s after a press on its "×", the panel open; the refused key's notice kept for 8 s under a resting pointer.
 
 <a id="fn-ops1"></a>
 **f-ops1** — OPS's `NotificationSettingsForm` and `NotificationManager` do not

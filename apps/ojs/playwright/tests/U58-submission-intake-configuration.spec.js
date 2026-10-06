@@ -591,10 +591,11 @@ test.describe('submission intake configuration', () => {
         const malformed = pageNotices(page, KEY_MALFORMED);
         await expect(malformed).toBeVisible({timeout: T});
         await expect(win.form()).toBeVisible();
-        // The spec's "Close the notice with its ×" is not driven: while the
-        // window is open the × takes no press (T-ojs-1); the notice goes by
-        // itself, and the next refusal is read by its own words.
-        await expect(malformed).toHaveCount(0, {timeout: T});
+        // Its "×" removes it at once (well inside its five seconds), the window
+        // still open (A13 retired, pkp/pkp-lib#13188).
+        await malformed.getByRole('button', {name: 'Close'}).click();
+        await expect(malformed).toHaveCount(0, {timeout: 2_000});
+        await expect(win.form()).toBeVisible();
 
         // Added: the list gains "Survey Forms" [A1] (Rule 14).
         await win.typeKey('SURVEY');

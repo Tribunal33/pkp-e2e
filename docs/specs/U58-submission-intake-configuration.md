@@ -300,8 +300,8 @@ shows only while its text is not empty. <sup>j</sup>
     already taken are refused with the messages in Fields, the window
     staying open. Only the empty "Name" is flagged under its box; the two
     "Key" refusals show as a notice with a "×" at the top right of the
-    window. While the window is open, a press on the "×" does nothing
-    ⚠ [A13](#a13); the notice leaves by itself after about five seconds.
+    window. A press on the "×" removes the notice and leaves the window
+    open; left alone, the notice leaves by itself after about five seconds.
     A key counts as taken while any component of the journal carries it,
     a deleted one included [A3](#a3). <sup>f</sup> <sup>td5</sup>
 17. **Deleting.** A row's "Delete" asks, in a window titled "Delete",
@@ -752,8 +752,8 @@ recipe are in the footnote. <sup>s</sup>
      "Key", and press "Save": a notice at the window's top right reads
      "The key can contain only alphanumeric characters, underscores, and
      hyphens, and must begin and end with an alphanumeric character.",
-     and the window stays open. The notice leaves by itself after about
-     five seconds [A13](#a13) (Rule 16).
+     and the window stays open. Press the notice's "×": the notice goes,
+     and the window stays open (Rule 16).
    - **Added**: replace the "Key" with SURVEY and press "Save": the window
      closes, and the list gains the row "Survey Forms" [A1](#a1) (Rule
      14).
@@ -870,8 +870,6 @@ Left out of the scenarios above, by reason:
   - A10 (a component "Name" of only spaces; Fields, "Name")
   - A12 (the "Delete" window left spinning after a refused delete; Rule
     17a; scenario 7 passes it)
-  - A13 (a refused key's notice that cannot be closed with its "×"; Rule
-    16; scenario 6 passes it)
   - A2 (a deleted dependent component still offered on the "Media" page;
     Rule 17b)
   - A3 (a deleted component's key still taken; Rules 16, 17c)
@@ -951,7 +949,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A press's or preprint server's "Components" settings tab and list show internal text codes in French (Canada) | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | In French (Canada), a press's "Disable Submissions" help reads a raw code | 🐞 | minor | — |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its "Author Guidance" labels the copyright box "Copyright notice" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -965,6 +962,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A press has its own component list and ships "Type" metadata switched on | ✅ | — | — |
 | [OPS1](#ops1) | A preprint server's guidance has a "For Readers" box and no "For Reviewer Suggestion" box | ✅ | — | — |
 | [OPS2](#ops2) | "Author Screening" appears only with a screening plugin, and none is installed | ✅ | — | — |
+| [A13](#a13) | Retired: over an open window a notice's "×" did nothing, or closed the submission's workflow along with the notice; it now removes the notice alone (Rule 16) | ✅ | retired | PR review merge (claude), 2026-10-06 — fixed upstream (pkp/pkp-lib#13188) |
 
 ### All apps
 
@@ -1117,21 +1115,6 @@ with "OK" and "Cancel" disabled). Escape closes it, and on main so
 does "Cancel". The row stays, as it should.
 Basis: probe, 2026-10-02. <sup>f-a12</sup>
 
-<a id="a13"></a>
-**A13 — Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice** · 🐞 · low.
-While a window or side panel is open, a notice at the top right of the
-page cannot be closed with its "×". A manager who types a "Key" the "Add
-a Component" window does not accept, or an editor who presses "Notify"
-with an empty message, gets a notice saying so. Pressing its "×" does
-nothing, and resting the pointer on it does not keep it. It leaves by
-itself about five seconds after it showed.
-In a submission's workflow, once a window opened there has closed, a
-press on a notice's "×" reaches it, but the press also closes the window
-on top. With no other window open, that is the whole workflow: the
-editor is put back on the submissions list.
-The same fault: [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md#a14).
-Basis: test run, 2026-10-04. <sup>f-a13</sup>
-
 <a id="a14"></a>
 **A14 — In French (Canada), a press's "Disable Submissions" help reads a raw code** · 🐞 · minor.
 A press manager working in French (Canada) opens Settings › Workflow,
@@ -1240,9 +1223,15 @@ shows the tab; the default that authors cannot post their own preprints
 anywhere.
 Basis: code. <sup>f-ops2</sup>
 
+### Retired
+
+<a id="a13"></a>
+**A13 — Over an open window, a notice's "×" does nothing, or closes the submission's workflow along with the notice** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13188: ui-library#999 on `stable-3_5_0`, cherry-picked to `main` as `a36dc7fe78`, 2026-10-06), verified 2026-10-06 on OJS, OMP and OPS `main`: the refused key's notice goes at a press on its "×" and the "Add a Component" window stays open (Rule 16); in a submission's workflow the notice's "×" no longer closes the workflow. <sup>[f-a13](#fn-f-a13)</sup>
+
 ---
 
 <a id="footnotes"></a>
+
 ## Footnotes — mechanism & evidence
 
 <a id="fn-a"></a>
@@ -1868,7 +1857,8 @@ the window is open, though the notification layer (`z-index` 1001) is
 painted above the window's (10); a real mouse press there left the notice
 standing and the window open, and the notice left 5.4 s after it showed
 (OJS, OMP, OPS alike).
-Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826) ([docs/issues/U58-A13-notice-close-blocked-by-open-window.md](../issues/U58-A13-notice-close-blocked-by-open-window.md)).
+Issue report: [pkp-e2e#826](https://github.com/jardakotesovec/pkp-e2e/issues/826), closed 2026-10-06 with the fix.
+Retired 2026-10-06: at ui-library `a36dc7fe78` (ojs `d7cf416029`, omp `a0e6d0a8bc`, ops `7e34fdd57e`) the notification area computes `pointer-events: auto` and the side window and Dialog ignore a press inside `.pkpNotification` (`@interact-outside`); the report's kept walk on the dataset fleet and `checks/sync/ui-library-999/toast-modal.js`, all three apps.
 
 <a id="fn-f-a14"></a>
 **f-a14** — Note c: OMP `locale/fr_CA/manager.po` holds

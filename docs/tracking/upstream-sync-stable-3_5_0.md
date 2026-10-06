@@ -13,7 +13,7 @@ and no CI follows this branch. `main`'s baselines are in
 | ojs | `c1cee76b95` | 2026-10-05 | claude (daily maintenance session) |
 | omp | `9c5e24246c` | 2026-10-02 | claude (daily maintenance session) |
 | ops | `38b61882d3` | 2026-10-02 | claude (daily maintenance session) |
-| pkp-lib | `771474347e` (ojs; omp, ops at `cf3f984335`) | 2026-10-05 | claude (daily maintenance session); ui-library `d4e01883` (ojs, omp, ops); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
+| pkp-lib | `771474347e` (ojs; omp, ops at `cf3f984335`) | 2026-10-05 | claude (daily maintenance session); ui-library `98ac898651` (ojs, omp, ops; 2026-10-06, the pkp/pkp-lib#13188 PR review merge); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
 
 ## Read log
 
@@ -28,6 +28,7 @@ regression verdict; what was filed)._
   - `main` has the bug too and no PR: OJS `main` (ui-library `64d67363`) gives the same results as the base above; the three commits cherry-pick cleanly onto it and give the PR head's results. A forward port is needed (named in the thread).
   - ojs#5880 shows no check runs (a first-time contributor's workflows, not yet approved).
   - Kept `checks/sync/ui-library-999/toast-modal.js` (works on `main` without `PKP_E2E_LINE`); `.reports/pr13188/{before,before-ops,before-x,after}/`, `.reports/pr13188-main/{main,main-pr}/`. The line checkouts are back on their pointers, rebuilt.
+  - **Merged 2026-10-06**: ui-library `98ac898651` (squash of #999 on `d4e0188353`, 08:12 UTC; `git diff 3968825d 98ac898651` empty, the reviewed tree); the line pointers moved by "Update submodules" commits, not by ojs#5880 (still open): ojs `500d9a936e` (ui-library alone), omp `fd3cdebc4d` and ops `08540bf2e5` (ui-library, and lib/pkp `cf3f984335..771474347e`). The ui-library baseline moves to `98ac898651`; the app baselines stay for the daily session (ojs `0e3bc9133e` + `4342473090` and the omp/ops lib/pkp move are unread on the line).
 - **2026-10-05 (daily session, VM s2) — ojs `091fb65453..c1cee76b95` (1, a pointer bump), pkp-lib `cf3f984335..771474347e` (OJS's pointer; omp and ops stay at `cf3f984335`): the branch was rewritten under the line (`cf3f984335` is no longer an ancestor); the five ORCID commits read 2026-10-02 were re-applied as `0afbf72eb3`, `42df172dd7`, `e8354598fe`, `60abed9db6`, `29b76297a3`, each with the same patch-id as its old twin, and the tree at `29b76297a3` equals `cf3f984335` (`git diff` empty), so 6 new commits; omp, ops, ui-library and the plugins unchanged. `main` first: synced today (U69, U20, U64, U47 accommodated, `main` green), then the line's range read in full.**
   - pkp-lib `758a61313b` (`=main 66bafd91d2`, #13376 via #13428, same patch-id as the PR's head) → PR-reviewed 2026-10-01/02 (the entry below: the head `a49059461f` `=` `main`'s `0717df15fe`); no regression.
   - pkp-lib `3f26cd7b1e` + `5af94e3ff6` (`=main c530748391` + `bf20528ed1`, #13432 and its revert the same day) → nothing of their own (`git diff 3f26cd7b1e^ 5af94e3ff6` empty).

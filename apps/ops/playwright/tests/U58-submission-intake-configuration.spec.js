@@ -724,9 +724,9 @@ test.describe('submission intake configuration (U58) — OPS', () => {
         await expect(win.nameError()).toHaveText(whole(REQUIRED));
         await expect(win.form()).toBeVisible();
 
-        // A malformed "Key": the notice at the top right, the window open
-        // (Rule 16). Its "×" lies under the window's layer (finding T-ops-1),
-        // so the test waits for the notice to go by itself.
+        // A malformed "Key": the notice at the top right, the window open; its
+        // "×" removes it at once, the window still open (Rule 16; A13 retired,
+        // pkp/pkp-lib#13188).
         await win.typeName('Survey Forms');
         await win.typeKey('-survey');
         await markNotices(page);
@@ -734,7 +734,9 @@ test.describe('submission intake configuration (U58) — OPS', () => {
         const refused = notices(page, KEY_REFUSED, {fresh: true}).first();
         await expect(refused).toBeVisible({timeout: T});
         await expect(win.form()).toBeVisible();
-        await expect(refused).toHaveCount(0, {timeout: T});
+        await refused.getByRole('button', {name: 'Close'}).click();
+        await expect(refused).toHaveCount(0, {timeout: 2_000});
+        await expect(win.form()).toBeVisible();
 
         // Added (Rule 14; where the row stands is A1's).
         await win.typeKey('SURVEY');

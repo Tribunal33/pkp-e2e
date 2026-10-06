@@ -716,9 +716,11 @@ test.describe('submission intake configuration', () => {
         const malformed = notices(page, KEY_MALFORMED, {fresh: true}).first();
         await expect(malformed).toBeVisible({timeout: T});
         await expect(win.form()).toBeVisible();
-        // The notice's "×" lies under the window and cannot be pressed
-        // (T-omp-1): the notice is waited out instead.
-        await expect(malformed).toBeHidden({timeout: T});
+        // Its "×" removes it at once (well inside its five seconds), the window
+        // still open (A13 retired, pkp/pkp-lib#13188).
+        await malformed.getByRole('button', {name: 'Close'}).click();
+        await expect(malformed).toBeHidden({timeout: 2_000});
+        await expect(win.form()).toBeVisible();
 
         // Added: the list gains "Survey Forms".
         await win.typeKey('SURVEY');
