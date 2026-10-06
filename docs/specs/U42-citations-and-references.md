@@ -253,8 +253,8 @@ typed. Nothing asks first. The one exception is an author row added in
       has finished without structuring it, the row carries the badge **"No
       structured information found"**.
     - A reference whose lookup failed for good carries the badge
-      **"Metadata lookup failed"** under its text or its title; an
-      unstructured one still offers "Reprocess".
+      **"Metadata lookup failed"** under its text or its title, and its
+      menu offers "Reprocess", structured or not.
 13. **The progress box.** While the list holds a reference a lookup was
     asked for, a box under the "Add" box reads "Processing references - {finished}/{total}"
     with "We're retrieving metadata for each reference. This may take a few
@@ -266,10 +266,10 @@ typed. Nothing asks first. The one exception is an author row added in
     finished it reads "All {total} references successfully processed" with
     "All references have been processed and added below. You can review,
     edit or remove them at any time.", or, when a lookup failed,
-    "{processed} of {total} references processed, {failed} incomplete"
+    "{processed} of {total} references processed, {failed} failed"
     ({processed} those whose lookup finished without failing, {failed}
     the failed ones; five with one failed read "4 of 5 references
-    processed, 1 incomplete") with "The metadata lookup could not be
+    processed, 1 failed") with "The metadata lookup could not be
     completed for some references, usually because an external service
     was temporarily unavailable. They are marked below - you can edit
     them by hand, or use Reprocess to try again." A reference no lookup was
@@ -300,7 +300,9 @@ typed. Nothing asks first. The one exception is an author row added in
     references, the "Details" step shows the References box
     ([Fields & validation](#fields)) after the title, keywords and abstract. The box holds the
     whole list as text: whenever the step saves, the list is rebuilt from
-    the box, one reference per line, in line order. Here, unlike Rule 5, a
+    the box, one reference per line, in line order; a line of spaces only
+    counts as an empty one and is skipped. Saving a box whose text has not
+    changed keeps the references as they are. Here, unlike Rule 5, a
     line repeated in the box stays a repeated reference.
     <sup>b</sup> <sup>k</sup> <sup>q14</sup>
     - **When the step saves.** Moving to another step saves the step at
@@ -329,7 +331,8 @@ typed. Nothing asks first. The one exception is an author row added in
     reference added through the workflow's "Add" keeps the DOI written in
     its text as its DOI, which shows as a link, and in the "DOI" box of
     "Edit", once lookup is switched on (Rule 12). A reference typed into
-    the wizard's box does not keep it ⚠ [A7](#a7). <sup>k</sup>
+    the wizard's box keeps it the same way: "Alpha study 2020.
+    https://doi.org/10.1234/abcd" keeps "10.1234/abcd". <sup>k</sup>
     <sup>q15</sup>
 
 ### Data citations
@@ -409,9 +412,12 @@ typed. Nothing asks first. The one exception is an author row added in
     copies the current version's references, with their structured details
     and lookup state, and its data citations into the new version. From
     then on each version's lists change independently. A reference copied
-    while its lookup is still under way is never looked up, and holds the
-    new version's progress box (Rule 13) below its total for good ⚠
-    [A23](#a23). <sup>o</sup>
+    while its lookup is still under way (the current version's progress
+    box below its total) gets a lookup of its own in the new version,
+    which the new version's box counts (Rule 13). A lookup ends within a
+    minute or two when the services answer, and is retried for about a
+    day when they do not (Rule 11); on a test install none answers, so the
+    copies' lookups stay under way. <sup>o</sup>
     <sup>q22</sup>
 27. **What readers see.** On a published item's landing page, a
     **"References"** block lists the version's references, one paragraph
@@ -905,6 +911,15 @@ Left out of the scenarios above, by reason:
     it finished, and "{processed} of {total} references processed,
     {failed} incomplete" once the others finish (no retry runs out on a
     test install, so the stored status stands in for it)
+  - a reference typed with its DOI into the wizard's box with lookup off
+    (Rule 17; A7 retired): the DOI kept as the reference's DOI, a link and
+    the "DOI" box of "Edit" once lookup is switched on
+  - a new version taken while its references are being looked up (Rule
+    26; A23 retired): the copies get lookups of their own, and the new
+    version's box counts them
+  - a wizard box saved again unchanged, one of its lines spaces only
+    (Rule 16): the references kept as they are, not deleted and added
+    again
   - the guard for A6 (retired; issue report `docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md`): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
@@ -936,10 +951,6 @@ Left out of the scenarios above, by reason:
   - A3 (the search keeping rows whose text lacks the typed word; Rule 8)
   - A4 (the lookup text saying "this Journal" on a press or a preprint
     server; Rule 10; scenario 5 passes it)
-  - A23 (references copied into a new version mid-lookup never looked
-    up, the box below its total for good; Rule 26)
-  - A7 (a DOI in a reference typed while submitting not kept with lookup
-    off; Rule 17)
   - A8 (a new data citation with no place in the order: none before
     an order is saved, first after one; Rule 23; scenario 6 passes it)
   - A9 (data citations at "Require…" warning on "Review" without
@@ -1003,7 +1014,6 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Pasting a reference already in the list drops it silently, and the References page still says "Saved" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | "Search references here" keeps references whose text does not contain the typed word | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | A data citation added after the Data Citations table was ordered appears first, not last | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | On a press or preprint server, the submission wizard's data citations and funders still read empty after a save | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1016,11 +1026,12 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A22](#a22) | A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
-| [A23](#a23) | A new version taken while its references are being looked up shows "Processing references - 0/n" for good | 🐞 | low | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ✅ | retired | — |
 | [A6](#a6) | References page: the lookup's progress box counts only structured references and says "All 2 done" over five | ✅ | retired | — |
+| [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | ✅ | retired | — |
+| [A23](#a23) | A new version taken while its references are being looked up shows "Processing references - 0/n" for good | ✅ | retired | — |
 | [A1](#a1) | A Site Administrator with no role in the journal is offered the References controls, but every change is refused | ✅ | retired | — |
 | [A18](#a18) | A References change carried to "Review" by the step rail is lost on "Submit" | ✅ | retired | — |
 | [OMP1](#omp1) | A book with no references shows an empty "References" heading | ✅ | retired | — |
@@ -1069,21 +1080,6 @@ affected, and lookup itself works the same. It shows only once a manager
 has ticked "Enable references structuring and metadata lookup" (Settings
 › Workflow › "Metadata"), which is off in a new press or server.
 Basis: probe, 2026-10-04. <sup>f-a4</sup>
-
-<a id="a7"></a>
-**A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · 🐞 · medium.
-With "References Metadata Lookup" off, an author who types a reference
-with its DOI into the "References" box while submitting gets the
-reference saved with the DOI in its text only, not recorded as the
-reference's DOI. The same reference added later through "Add" on the
-References page gets its DOI recorded. Nothing on screen differs until a
-manager switches the lookup on. Then only the added reference shows its
-DOI as a link and in the "DOI" box of "Edit". A journal's Crossref
-deposit sends the typed reference as plain text instead of as its DOI,
-and nobody is told. Lookup is off and references are requested by
-default, so this reaches every reference an author types with a DOI
-while submitting.
-Basis: probe, 2026-10-04. <sup>f-a7</sup>
 
 <a id="a8"></a>
 **A8 — A data citation added after the Data Citations table was ordered appears first, not last** · 🐞 · low.
@@ -1302,19 +1298,6 @@ publication. The editors, managers and assistants who press the icon
 are the ones sent to the author's page.
 Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
-<a id="a23"></a>
-**A23 — A new version taken while its references are being looked up shows "Processing references - 0/n" for good** · 🐞 · low.
-With metadata lookup on, an editor who creates a new version while the
-current version's references are still being looked up gets copies of
-those references in the new version, marked as still being looked up.
-The lookups under way work on the originals only, so the copies are
-never looked up: they never gain the found details or the "No
-structured information found" badge. The new version's box reads
-"Processing references - 0/n" for good, and the page fetches the
-submission and the publication every 7 seconds while it stays open.
-"Reprocess" on each copy, or "Reprocess all references", brings it back.
-Basis: probe, 2026-10-06, at the PR heads of `pkp/pkp-lib#13308` before their merge (OJS). <sup>f-a23</sup>
-
 ### Retired
 
 <a id="a1"></a>
@@ -1325,6 +1308,12 @@ Basis: probe, 2026-10-06, at the PR heads of `pkp/pkp-lib#13308` before their me
 
 <a id="a6"></a>
 **A6 — References page: the lookup's progress box counts only structured references and says "All 2 done" over five** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `0dc8d84fc7`, `pkp/ui-library#982` `0185ab12`), at the PR heads before their merge: the box counts every reference a lookup was asked for, and leaves out those it was not, also once filled in by hand (Rule 13). <sup>f-a6</sup>
+
+<a id="a7"></a>
+**A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `8653c678b7`), at the PR heads before their merge: `importCitations()` stores the DOI found in a wizard reference's text with lookup off, as "Add" does (Rule 17). <sup>f-a7</sup>
+
+<a id="a23"></a>
+**A23 — A new version taken while its references are being looked up shows "Processing references - 0/n" for good** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `8653c678b7`), at the PR heads before their merge, the day it was found there: `copyCitations()` queues a lookup of its own for a copy taken mid-lookup (Rule 26). <sup>f-a23</sup>
 
 <a id="a18"></a>
 **A18 — A References change carried to "Review" by the step rail is lost on "Submit"** · ✅ · retired. Overturned 2026-09-29: re-checked on all three apps, the step rail saves the step on the move, so the change is listed on "Review" and submitted with "Submit" › "Submit" (Rule 16). <sup>f-a18</sup>
@@ -1707,7 +1696,16 @@ version's citations and inserts every non-empty line (sequence = line
 position, no duplicate check). With lookup on each is chained (fn h); with
 lookup off the DOI found in the text is set on the object after
 `dao->insert()` and never written. `importAdditionalCitations()` (the "Add"
-path) writes it with `Repo::citation()->edit()`. The OJS Crossref deposit
+path) writes it with `Repo::citation()->edit()`. At the PR heads of
+`pkp/pkp-lib#13308`, round 3 (`8653c678b7`): the DOI is set before the
+insert, and `CitationListTokenizerFilter` drops lines left empty by the
+trim. Before, a line of spaces only became an empty string no stored
+citation matches, so every save of the box deleted and re-inserted the
+whole list: two PUTs of the same `citationsRaw` ("…one…" / spaces /
+"…two…") gave citation ids 1, 2 and then 3, 4 at the OJS tip, and 1, 2
+both times at the PR heads on all three apps (kept
+`shared/playwright/checks/sync/ui-library-982/whitespace.js`, facts
+`whitespace-facts-{tip,pr-r4}-<app>.json`, 2026-10-06). The OJS Crossref deposit
 (`ArticleCrossrefXmlFilter`, `citation_list`) sends `<doi>` for an
 unstructured citation that has one. Required references: `citationsRaw`
 reads as the stored lines joined, so an empty list fails
@@ -2140,8 +2138,8 @@ not count it. At the PR heads of `pkp/pkp-lib#13308` before their merge
 to -1 by SQL for one reference of five, two set to 5): the failed row read
 "Metadata lookup failed" with "Edit", "Delete" and "Reprocess" in its
 menu, the box "Processing references - 3/5" with two still waiting, then
-"4 of 5 references processed, 1 incomplete" with its description once the
-others were set to 5, and the page fetched nothing more in 22 s. The
+"4 of 5 references processed, 1 incomplete" ("… 1 failed" from round 3,
+pkp-lib `8653c678b7`) with its description once the others were set to 5, and the page fetched nothing more in 22 s. The
 badge's `<div>` follows both the structured and the unstructured branch of
 `CitationManagerCellCitation.vue` (code; a structured failed row not
 driven). Kept check `shared/playwright/checks/sync/ui-library-982/failed.js`.
@@ -2180,6 +2178,14 @@ Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883
 **f-a7 — A7 evidence.** Note k. Live-probed 2026-09-24: the screen half,
 note k (Rule 17). The deposit half is not yet seen: it would take the OJS
 Crossref XML of an article whose references came both ways.
+At the PR heads of `pkp/pkp-lib#13308`, round 3 (pkp-lib `8653c678b7`,
+ui-library `3f6a3e8d`, ojs `b966547ff7`, omp `4d30880ed`, ops
+`02ff6ad581`; 2026-10-06, all three apps, the issue report's kept
+`walk.js` and its `nb` mode): the wizard's "Alpha study 2020.
+https://doi.org/10.1234/abcd" stored with DOI `10.1234/abcd` as the
+"Add"ed one was, both rows a DOI link and the "DOI" box of "Edit" filled
+once lookup was on; OJS's Crossref `citation_list` sent `<doi>` for both
+(facts `.reports/issues-u42r7/u42a7/u42r8-walk-pr13308r4-<app>.json`).
 Issue report: [pkp-e2e#872](https://github.com/jardakotesovec/pkp-e2e/issues/872) ([docs/issues/U42-A7-wizard-reference-doi-not-kept.md](../issues/U42-A7-wizard-reference-doi-not-kept.md)).
 
 <a id="fn-f-a8"></a>
@@ -2399,6 +2405,12 @@ the publication three times each in 22 s. Before, at the tips (pkp-lib
 fetches, the copies at status 1 just the same (never looked up, nothing
 on screen says so). OMP and OPS share `copyCitations()` (code; not
 walked).
+Round 3 (pkp-lib `8653c678b7`; the same walk, OJS): the queued jobs
+carried the copies' ids 4, 5 and 6 beside 1, 2 and 3; with the originals
+set to 5 the new version read "Processing references - 0/3" (its copies'
+own lookups under way), and with the copies set to 5 too, "All 3
+references successfully processed" and no fetch in 22 s (facts
+`version-facts-pr-r4-ojs`).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where

@@ -7,7 +7,8 @@
 // publication 18). Lookup on; the publication unpublished, three references added, published again
 // (REST, as the workflow's buttons do), "Create New Version" (REST). Then the SQL stands in for the
 // original references' lookups finishing (processingStatus 5, what IsProcessedJob::handle() writes)
-// and the new version's References page is read. Every other database call is a read.
+// and the new version's References page is read; then the same for the copies (v7). Every other
+// database call is a read.
 //
 // Reset first:  npm run fleet-prep -- --feature sync --dataset 7 --reset --apps ojs
 // Run:          PROBE_FEATURE=sync PROBE_AGENT=pr982 node bin/probe.js ojs shared/playwright/checks/sync/ui-library-982/version.js
@@ -87,6 +88,11 @@ forEachApp(async (app) => {
         fact('v6 box on the new version', await box());
         await shot(page, `pr982-v6${run}`);
         fact('v6 refresh in 22 s', await refreshes(22000));
+        // The copies' own lookups finish, when the copies have any (round 3 of the PR queues them).
+        sql(app, `UPDATE citation_settings SET setting_value = '5' WHERE setting_name = 'processingStatus' AND citation_id IN (SELECT citation_id FROM citations WHERE publication_id = ${v.id} AND raw_citation LIKE 'u42r9%')`);
+        refs = await openRefs();
+        fact('v7 box on the new version, the copies finished too', await box());
+        fact('v7 refresh in 22 s', await refreshes(22000));
     } catch (e) {
         fact('error', L.flat(e.message, 400));
         await shot(page, `pr982-version-error${run}`).catch(() => {});

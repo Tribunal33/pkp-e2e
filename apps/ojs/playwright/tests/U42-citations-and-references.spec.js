@@ -12,9 +12,11 @@
  * - A2 🐞, A17 ❓: no line typed into "Add" repeats one already listed, and
  *   no "Edit" saves another row's text.
  * - A3 🐞: every search word is one the matching row's own text carries.
- * - A6 🐞: S5 reads the progress box only as "Processing references -
- *   0/1" over a one-row list, where both counts agree.
- * - A7 🐞: no wizard reference carries a DOI.
+ * - A6 ✅ (retired 2026-10-06 at the PR heads of pkp/pkp-lib#13308: the
+ *   box counts the references a lookup was asked for): S5 reads
+ *   "Processing references - 0/1" over its one reference.
+ * - A7 ✅ (retired 2026-10-06 at the PR heads of pkp/pkp-lib#13308): no
+ *   wizard reference carries a DOI; the kept DOI is a Planned item.
  * - A9 🐞: no scenario here sets data citations to "Require".
  * - A13 🐞: every author row added in "Edit citation" is filled and saved.
  * - A14 🐞, A19 🐞: the author boxes and the ordering arrows are reached
@@ -24,7 +26,7 @@
  *   and only with the mouse; the zero-size ones are never touched.
  * - A18 ✅ (retired 2026-09-29: every step change saves): every References
  *   change is still carried by "Continue"; the step rail only goes back.
- * - A4, A10, A20 (press / preprint server), A5, A8, A11, A12, A15: not on
+ * - A4, A10, A20 (press / preprint server), A8, A11, A12, A15: not on
  *   these scenarios' OJS paths.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster
@@ -39,13 +41,13 @@
  * Settings screen because that screen is what the scenarios test.
  *
  * Lookup on (S5): no job runner and no outbound connection, so a
- * reference structured by hand stays unprocessed and the References page
- * refetches every 7 s while the progress box shows; every read after that
+ * reference's lookup never finishes and the References page refetches
+ * every 7 s while the progress box shows; every read after that
  * is a web-first assertion (it rides out a refetch), and row menus are
  * retried once when a refetch detaches their items (CitationsPages).
  * Every absence is read settled and paired with a positive control taken
  * the same way (M4, M6). Waits are web-first or bounded by the screen's
- * own API answer (A5). Everything runs in the parallel `ojs` project.
+ * own API answer. Everything runs in the parallel `ojs` project.
  */
 const {test, expect} = require('../support/fixtures.js');
 const {unordered} = require('../../../../shared/playwright/support/order.js');
