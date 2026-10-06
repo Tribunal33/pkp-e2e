@@ -16,7 +16,7 @@
 
 **Update 2026-10-06.** "Deposit All" marking a galley DOI "Submitted"
 without queuing any deposit is a separate fault, now in its own report
-([U45 OJS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md)).
+(pkp-e2e#931, [U45 OJS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md)).
 
 ## Summary
 

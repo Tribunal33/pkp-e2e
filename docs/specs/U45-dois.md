@@ -4132,7 +4132,7 @@ registered; both read "Submitted" with nothing queued, and a second
 "Deposit All" changed nothing. Kept script:
 `shared/playwright/checks/issues/deposit-without-doi-reports-success/walk.js`
 (`WALK=galleyall`, `WALK=galleylater`). Issue report:
-[docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md](../issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md).
+[pkp-e2e#931](https://github.com/jardakotesovec/pkp-e2e/issues/931) ([docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md](../issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
