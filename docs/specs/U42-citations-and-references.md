@@ -252,20 +252,28 @@ typed. Nothing asks first. The one exception is an author row added in
     - An **unstructured** row shows the reference's text. Once its chain
       has finished without structuring it, the row carries the badge **"No
       structured information found"**.
-    - A reference whose lookup failed for good shows neither details nor
-      badge; nothing tells it apart from one still waiting ⚠ [A5](#a5).
-13. **The progress box.** While at least one reference is structured, a
+    - A reference whose lookup failed for good carries the badge
+      **"Metadata lookup failed"** under its text or its title; an
+      unstructured one still offers "Reprocess".
+13. **The progress box.** While the list holds at least one reference, a
     box under the "Add" box reads "Processing references - {finished}/{total}"
     with "We're retrieving metadata for each reference. This may take a few
     moments. While we aim to match as many references as possible, some
     entries may not return metadata. Feel free to continue working in the
-    meantime.", or, once every counted reference has finished, "All {total}
-    references successfully processed" with "All references have been
-    processed and added below. You can review, edit or remove them at any
-    time." Both numbers count structured references only: references still
-    waiting, unstructured ones and failed ones are left out, so the box is
-    absent until the first reference is structured, and "All 2 references
-    successfully processed" can stand over a list of five ⚠ [A6](#a6).
+    meantime." {total} counts every reference, and {finished} those whose
+    lookup has finished, found or failed. Once every reference has
+    finished it reads "All {total} references successfully processed" with
+    "All references have been processed and added below. You can review,
+    edit or remove them at any time.", or, when a lookup failed,
+    "{processed} of {total} references processed, {failed} incomplete"
+    ({processed} those whose lookup finished without failing, {failed}
+    the failed ones; five with one failed read "4 of 5 references
+    processed, 1 incomplete") with "The metadata lookup could not be
+    completed for some references, usually because an external service
+    was temporarily unavailable. They are marked below - you can edit
+    them by hand, or use Reprocess to try again." A reference no lookup was asked for (added while lookup was
+    off, or upgraded from 3.5) never finishes, so over one the box stays
+    below its total for good ⚠ [A6](#a6).
     While the box shows a count below its total, the page refreshes the
     list by itself every few seconds; otherwise the list changes only on a
     reload. <sup>i</sup> <sup>q11</sup>
@@ -688,7 +696,10 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      that it opens "Structuring and Metadata Lookup is enabled";
      [A4](#a4) records the rest); "Reprocess all references" stands
      beside "Delete all references", and "Expand All" heads the table's
-     second column (Rule 10).
+     second column (Rule 10). A box under the "Add" box reads "Processing
+     references - 0/1": the reference came in with lookup on, so its
+     lookup is under way, and on a test install no lookup service answers
+     and the retries outlast the scenario by hours (Rules 11, 13).
    - **"Expand All" with nothing structured**: press "Expand All": it
      reads "Collapse All"; press it again: "Expand All"; nothing else on
      the page changes (Rule 10).
@@ -885,6 +896,11 @@ Left out of the scenarios above, by reason:
   - the guard for A2 (issue report `docs/issues/U42-A2-pasted-repeat-reference-dropped-saved.md`): "Add" with a paste that repeats a listed reference keeps the repeated line in the box and says it was skipped, while the new lines are added
   - the guard for A3 (issue report `docs/issues/U42-A3-reference-search-keeps-rows-without-word.md`): "Search references here" with a word no row shows (such as "http" or "citations") keeps no row, and a word a row shows keeps that row
   - the guard for A15 (issue report `docs/issues/U42-A15-data-citation-identifier-cannot-be-removed.md`): on "Edit Data Citation", choosing the empty "Identifier type" and clearing "Identifier" removes the identifier, and a cleared "Repository", "Year" or "URL" is gone on the next "Edit"
+  - a reference whose lookup failed for good (Rules 12, 13; A5
+    retired): its row's "Metadata lookup failed" badge, the box counting
+    it finished, and "{processed} of {total} references processed,
+    {failed} incomplete" once the others finish (no retry runs out on a
+    test install, so the stored status stands in for it)
   - the guard for A6 (issue report `docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md`): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
@@ -916,9 +932,8 @@ Left out of the scenarios above, by reason:
   - A3 (the search keeping rows whose text lacks the typed word; Rule 8)
   - A4 (the lookup text saying "this Journal" on a press or a preprint
     server; Rule 10; scenario 5 passes it)
-  - A5 (a lookup failed for good looking like one still waiting;
-    Rule 12)
-  - A6 (the progress box counting structured references only; Rule 13)
+  - A6 (the progress box below its total for good over references no
+    lookup was asked for; Rule 13)
   - A7 (a DOI in a reference typed while submitting not kept with lookup
     off; Rule 17)
   - A8 (a new data citation with no place in the order: none before
@@ -984,7 +999,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Pasting a reference already in the list drops it silently, and the References page still says "Saved" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | "Search references here" keeps references whose text does not contain the typed word | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | References page: the lookup's progress box counts only structured references and says "All 2 done" over five | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A6](#a6) | References page: over references no lookup was asked for, the progress box stays at "Processing references - 0/n" and the page refreshes for good | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | A data citation added after the Data Citations table was ordered appears first, not last | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -998,9 +1013,9 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A22](#a22) | A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
-| [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ❓ | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
+| [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ✅ | retired | — |
 | [A1](#a1) | A Site Administrator with no role in the journal is offered the References controls, but every change is refused | ✅ | retired | — |
 | [A18](#a18) | A References change carried to "Review" by the step rail is lost on "Submit" | ✅ | retired | — |
 | [OMP1](#omp1) | A book with no references shows an empty "References" heading | ✅ | retired | — |
@@ -1050,35 +1065,18 @@ has ticked "Enable references structuring and metadata lookup" (Settings
 › Workflow › "Metadata"), which is off in a new press or server.
 Basis: probe, 2026-10-04. <sup>f-a4</sup>
 
-<a id="a5"></a>
-**A5 — A reference whose lookup failed for good looks like one still waiting** · ❓ · minor.
-When a service stays unreachable through every retry, the reference is
-recorded as failed. Its row shows the plain text with no badge and no
-details, exactly as while its lookup is still queued, and the progress box
-does not count it. An editor cannot tell "give it time" from "press
-Reprocess".
-Question: should the row say that the lookup failed? Lean: yes, a badge of
-its own beside the "Reprocess" offer; the app already records the failure,
-and upstream has an open issue about showing it.
-Since: 2026-09-14 (the failed state was added then) · Basis: probe for the
-waiting row, 2026-09-24; code for the failed one. <sup>f-a5</sup>
-
 <a id="a6"></a>
-**A6 — References page: the lookup's progress box counts only structured references and says "All 2 done" over five** · 🐞 · low.
-With metadata lookup on, an editor who adds references expects the box
-under "Add" to report on the whole list while the lookup runs. The box
-counts only structured references: those whose details (identifier,
-title and authors) are filled in, by the lookup or by hand. It is absent
-while none is. With two of five structured it reads "Processing
-references - 0/2". Once those two are done it reads "All 2 references
-successfully processed" while the other three are still waiting. While
-the box is absent or says "All … processed", the page stops refreshing
-itself, so the rows still being looked up change only on a reload. On
-`main` today the box also shows when no lookup is running. A reference
-added while lookup was off, then filled in by hand after it was switched
-on, shows "Processing references - 0/1" for good. That is the symptom
-`pkp/pkp-lib#12155` set out to remove.
-Basis: probe, 2026-10-04. <sup>f-a6</sup>
+**A6 — References page: over references no lookup was asked for, the progress box stays at "Processing references - 0/n" and the page refreshes for good** · 🐞 · low.
+With metadata lookup on, the box under "Add" counts every reference and
+waits for each one's lookup to finish. A reference no lookup was asked
+for never finishes: one added while lookup was off, before it was
+switched on, or one upgraded from 3.5. Over such references the box
+reads "Processing references - 0/n" for good, and the page fetches the
+submission and the publication every 7 seconds while it stays open.
+Filling one in by hand changes nothing. That is the symptom
+`pkp/pkp-lib#12155` set out to remove. A fresh "Add" is counted right:
+"0/5", then "2/5", then "All 5 references successfully processed".
+Basis: probe, 2026-10-06, at the PR heads of `pkp/pkp-lib#13308` before their merge. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · 🐞 · medium.
@@ -1316,6 +1314,9 @@ Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
 <a id="a1"></a>
 **A1 — A Site Administrator with no journal role cannot change references** · ✅ · retired. Withdrawn 2026-09-24: a Site Administrator's last role in a journal cannot be removed ([User invitations](U06-user-invitations.md)), so the state has no way in, and the reachable neighbour, an administrator left with an unassigned assistant role, gets the read-only page (Actors row 2). <sup>f-a1</sup>
+
+<a id="a5"></a>
+**A5 — A reference whose lookup failed for good looks like one still waiting** · ✅ · retired. Answered 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/ui-library#982`, `pkp/pkp-lib#13318`), at the PR heads before their merge: a failed row carries "Metadata lookup failed", and the progress box counts it finished (Rules 12, 13). <sup>f-a5</sup>
 
 <a id="a18"></a>
 **A18 — A References change carried to "Review" by the step rail is lost on "Submit"** · ✅ · retired. Overturned 2026-09-29: re-checked on all three apps, the step rail saves the step on the move, so the change is listed on "Review" and submitted with "Submit" › "Submit" (Rule 16). <sup>f-a18</sup>
@@ -1637,7 +1638,13 @@ Unstructured: the raw text, and the badge
 `…structured.noStructuredInformationFound` only when `processingStatus ==
 PROCESSED`; FAILED (-1) matches no branch. Lookup off: the raw text only.
 Progress box: `CitationManagerStatusProcessed.vue`, shown when `total > 0`,
-`total` = structured citations, `processed` = structured and PROCESSED;
+`total` = structured citations, `processed` = structured and PROCESSED
+(at the PR heads of `pkp/pkp-lib#13308`: `total` = every citation,
+`finished` = PROCESSED or FAILED, the refresh while lookup is on and
+`finished < total`, the title and description from the store, the
+`…structured.processedWithFailures.title|description` pair when a lookup
+failed, and the badge `…structured.lookupFailed` on a FAILED row; note
+f-a6);
 texts `…structured.processing.title|description` and
 `…structured.processed.title|description`. Refresh: `citationManagerStore.js`
 `setInterval(…, 7000)` calls the data refresh only while lookup is on and
@@ -2117,13 +2124,35 @@ pkp/pkp-lib#13308. The failed row is not reachable on a test install
 within a run (eight retries span about 21 hours). Live-probed 2026-09-24
 (the waiting half), all three apps: a reference freshly added or just
 reprocessed showed its text with no badge and no details, and the box did
-not count it.
+not count it. At the PR heads of `pkp/pkp-lib#13308` before their merge
+(ui-library `2e330ff4`, pkp-lib `14c8d75c50`, ojs `1f7aa2eca5`;
+2026-10-06, all three apps, PKP's default dataset, the stored status set
+to -1 by SQL for one reference of five, two set to 5): the failed row read
+"Metadata lookup failed" with "Edit", "Delete" and "Reprocess" in its
+menu, the box "Processing references - 3/5" with two still waiting, then
+"4 of 5 references processed, 1 incomplete" with its description once the
+others were set to 5, and the page fetched nothing more in 22 s. The
+badge's `<div>` follows both the structured and the unstructured branch of
+`CitationManagerCellCitation.vue` (code; a structured failed row not
+driven). Kept check `shared/playwright/checks/sync/ui-library-982/failed.js`.
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** Note i. Live-probed 2026-09-24: the box absent over
 five unstructured references and "Processing references - 0/2" with two of
 the five structured (note i). The "All {total}" wording is unreachable on a
 test install.
+At the PR heads of `pkp/pkp-lib#13308` before their merge (2026-10-06,
+all three apps, the A6 report's kept `walk.js`, its three modes): "Add"
+of five read "Processing references - 0/5" at once and the page fetched
+the submission and the publication every 7 s; "0/5" with two filled in by
+hand, "2/5" with two set to 5, "All 5 references successfully processed"
+with all five. Two references added while lookup was off, then lookup
+switched on: "Processing references - 0/2" and the 7-second fetches
+(three pairs in 22 s), the same after one was filled in by hand and after
+"Reprocess" on the other; two with their stored status removed (the API
+gave `null`, as after an upgrade from 3.5): the same. Before, at the
+tips, the same two showed no box and no fetches (the issue report's
+Control, 2026-10-04).
 Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883) ([docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md)).
 
 <a id="fn-f-a7"></a>

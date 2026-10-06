@@ -300,9 +300,9 @@ exports.ReferencesPage = class ReferencesPage extends BasePage {
         return this.page.getByText(TEXT.lookupTextStart);
     }
 
-    /** The progress box's title ("Processing references - {n}/{total}", "All {n} references successfully processed"). */
+    /** The progress box's title ("Processing references - {n}/{total}", "All {n} references successfully processed", "{n} of {total} references processed, {failed} incomplete"). */
     progressTitle() {
-        return this.page.getByText(/^(Processing references - \d+\/\d+|All \d+ references successfully processed)$/);
+        return this.page.getByText(/^(Processing references - \d+\/\d+|All \d+ references successfully processed|\d+ of \d+ references processed, \d+ incomplete)$/);
     }
 
     /** The "Expand All" / "Collapse All" header button (lookup on). */

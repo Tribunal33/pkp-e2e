@@ -640,8 +640,9 @@ test.describe('citations and references', () => {
         await expect(refs.reprocessAllButton()).toBeVisible();
         await expect(refs.deleteAllButton()).toBeVisible();
         await expect(refs.secondColumnHeader().getByRole('button', {name: 'Expand All', exact: true})).toBeVisible();
-        // Nothing is structured yet, so no progress box.
-        await expect(refs.progressTitle()).toHaveCount(0);
+        // The progress box counts every reference, the plain one whose
+        // lookup waits included (Rule 13).
+        await expect(refs.progressTitle()).toHaveText('Processing references - 0/1', {timeout: 30_000});
 
         // "Expand All" with nothing structured toggles its label only
         // (Rule 10).
