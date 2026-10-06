@@ -12,6 +12,7 @@
 - **Upstream** none found (2026-09-30)
 - **Tracked in** spec U66 [A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U66-institutions.md#a1)
 - **Checked** 2026-09-30, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
 
 ## Summary
 
