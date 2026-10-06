@@ -10,9 +10,12 @@
   - 3.4: none (code)
   - 3.3: none (code)
 - **Introduced** `pkp/ops#1365` for `pkp/pkp-lib#12593` · [cc258a164c](https://github.com/pkp/ops/commit/cc258a164c44d401d4d6c8011ca6216c9b744d36) · merged 2026-08-21 · Vitaliy Bezsheiko (Vitaliy-1)
-- **Upstream** none found (2026-10-02)
+- **Upstream** none found (2026-10-06)
 - **Tracked in** spec U35 [OPS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U35-stage-participants.md#ops2), spec U37 [OPS1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U37-tasks-and-discussions.md#ops1)
-- **Checked** 2026-10-01 (steps 1 to 11) and 2026-10-02 (the rest), each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-06 (OPS; the journal and press comparison walks 2026-10-02), each branch's tip (the commits in Evidence)
+
+Update 2026-10-06: `pkp/pkp-lib#13385` is merged, though not yet in the
+pkp-lib commit OPS uses, and its code does not change this fault.
 
 ## Summary
 
@@ -50,6 +53,9 @@ A server that existed before the upgrade keeps its letter.
   under Settings › Workflow › "Tasks and Discussions", type a text and
   save. This way round was walked in the "Add" window, which then fills
   the saved text; for "Notify" and "Assign" it was read in the code.
+  It works on preprint servers today: the fault of templates added in
+  Settings ([pkp-e2e#315](https://github.com/jardakotesovec/pkp-e2e/issues/315)),
+  still present there, does not reach an edited "Assign Editor".
 
 Low: the empty "Message" is in plain view and the letter can be typed
 by hand; only the prepared text is missing.
@@ -142,7 +148,9 @@ Uncaught TypeError: PKP\mail\Mailer::compileParams(): Argument #1 ($view) must b
 
 Step 10: the window closes with "User added as a stage participant."
 only. After step 11 "Minoti Inoue, Moderator" is in "Participants", no
-discussion is listed and no email reached her.
+discussion is listed and no email about the assignment reached her.
+The only mail in her mailbox was the unrelated monthly report
+"Preprint Server activity for September, 2026".
 
 Step 13: "Name" reads "Assign Editor" and "Message" stays empty. Step
 14: "This field is required." under "Message"; nothing is sent and the
@@ -199,7 +207,9 @@ registry key with a missing-key handler that returns an empty string, so
 an install stores "Assign Editor" with an empty description in every
 language and reports nothing.
 
-`StageParticipantGridHandler::fetchTemplateBody()` (line 614) then
+`StageParticipantGridHandler::fetchTemplateBody()` (line 614 in pkp-lib
+a7f5e3081b, the commit OPS's `lib/pkp` points to; line 622 on pkp-lib
+`main`) then
 passes the template's description to `Mail::compileParams()` (the Mail
 facade, so `PKP\mail\Mailer::compileParams()`). For a
 description empty in every language `getLocalizedData('description')`
@@ -244,19 +254,24 @@ Reach:
   English locale (checked by a search of each key).
 - A template can also have no text on any app: the API's rules allow a
   null description (`AddTaskTemplate::rules()`), although the Settings
-  form requires one. Such a template takes the same two paths. Read in
-  the code only. On a journal or a press, only such a template sends a
-  null to line 614. Every template added in Settings already fails one
-  line later, at line 615 (`getEmailVariableNames()`), which
-  [U35-A10-added-message-template-not-sent.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U35-A10-added-message-template-not-sent.md)
-  reports.
+  form requires one. Such a template fails the same way in
+  `fetchTemplateBody()` ("Notify", "Assign") and through `promote()`
+  ("Add", auto-add). Read in the code only. On a journal or a press,
+  only such a template sends a null to `compileParams()`.
+- A template added in Settings has no `key`. On OPS and OJS, whose
+  pkp-lib (a7f5e3081b) has `getEmailVariableNames(string $emailKey)`,
+  it still fails one line after `compileParams()`
+  ([pkp-e2e#315](https://github.com/jardakotesovec/pkp-e2e/issues/315)).
+  `pkp/pkp-lib#13385` fixed that on pkp-lib `main`, which OMP uses.
 - A text saved for "Assign Editor" in Settings fills "Message"
   afterwards. The Settings form sends `description` as a string,
   `PKPEditTaskTemplateController::update()` passes it to the model, and
   `MultilingualSettingAttribute::set()` stores a string under the
-  manager's current language. The template keeps its `key`, and
-  `getLocalizedData('description')` then returns the saved text, for a
-  reader in another language too.
+  manager's current language. The template keeps its `key`
+  (`UpdateTaskTemplate::rules()` has none), so `EDITOR_ASSIGN_PRODUCTION`
+  still reaches `getEmailVariableNames()` as a string and the fault
+  above does not apply, and `getLocalizedData('description')` returns
+  the saved text, for a reader in another language too.
 - `PKPStageParticipantNotifyForm::sendMessage()` sends the text typed in
   "Message" under the template's title and does not read the
   description, so a message typed by hand goes out as typed. Code.
@@ -380,7 +395,8 @@ and ui-library) and their tests, with no data repair.
   `PROBE_FEATURE=issues-u37r6 PROBE_AGENT=u37r6 node bin/probe.js all shared/playwright/checks/issues/preprint-assign-editor-template-empty/walk.js`.
   `STEPS=` names its steps; `notifyempty` and `neighbour` (a fresh "Add"
   window: "Discussion (Production)", then "Assign Editor") run only when
-  named. Each group of steps was walked on a freshly loaded dataset.
+  named; `TAG=` names the preprint and the text it creates. Each group
+  of steps was walked on a freshly loaded dataset.
 - The fix, tried on 2026-10-02, one app at a time:
   1. `node bin/try-fix.js apply` with `fix-ops.diff` on OPS, `fix.diff`
      on OJS and on OMP (each rebuilds ui-library's JavaScript).
@@ -396,12 +412,25 @@ and ui-library) and their tests, with no data repair.
      both scripts as the control.
   5. `node bin/try-fix.js revert` for the same diff.
   The registry alternative was tried on 2026-10-01 the same way, with
-  the pkp-lib line beside it.
+  the pkp-lib line beside it. Neither the recommended fix nor the
+  registry alternative was tried again on 2026-10-06: the OPS files they
+  patch are unchanged since, and the pkp-lib hunk of `fix.diff` applies
+  8 lines lower to pkp-lib with `pkp/pkp-lib#13385` (OMP's lib/pkp
+  e39fdee199; `patch --dry-run`).
 - Walked on `main` and on `stable-3_5_0`, each app on PKP's default
   dataset (pkp/datasets c657990, 2026-10-01), PostgreSQL, as `dbarnes`
-  only, step 20 apart (`ccorino`). Mail was read in the test install's
-  mail catcher (Mailpit), and the error in the web server's output.
-- Tips, `main`: OJS 4408b94def (lib/pkp f5bd392a69), OMP 3b0ecf794c and
+  only, step 20 apart (`ccorino`). Walked again on 2026-10-06 on OPS
+  only (pkp/datasets 5a53d3d, 2026-10-05): both scripts on `main`
+  (the second with `STEPS=add,notifyempty,settings,autoadd,wayround`)
+  and on 3.5, each on a freshly loaded dataset, with the same results.
+  Mail was read in the test install's mail catcher (Mailpit), and the error in the web server's output.
+- Tips on 2026-10-06, `main`: OPS 21e41026b2 (lib/pkp a7f5e3081b,
+  which does not hold `pkp/pkp-lib#13385`; lib/ui-library 280f98c5);
+  pkp-lib with #13385 read in OMP's lib/pkp e39fdee199.
+  `stable-3_5_0`: OPS 38b61882d3 (lib/pkp cf3f984335). `stable-3_4_0`:
+  OPS acd8ae704b (lib/pkp 767353f4fe). `stable-3_3_0`: OPS c5532e2161
+  (lib/pkp ac3fa73402).
+- Tips on 2026-10-01 and 2026-10-02, `main`: OJS 4408b94def (lib/pkp f5bd392a69), OMP 3b0ecf794c and
   OPS c8af945bb7 (lib/pkp 3dc90c81a6, lib/ui-library 280f98c5).
   `stable-3_5_0`: OJS 4fca1027f4, OMP c7b45f88ea, OPS 8eaf899468
   (lib/pkp 1fb843f491). `stable-3_4_0`: OPS acd8ae704b (lib/pkp
@@ -431,11 +460,14 @@ and ui-library) and their tests, with no data repair.
   row's `emailKey` attribute to `key`; the row with its description key
   was added by cc258a164c, both in `pkp/ops#1365` (merged 2026-08-21).
 - Upstream: pkp/pkp-lib, pkp/ops and pkp/ui-library searched on
-  2026-10-01 and 2026-10-02. Read and not this fault: `pkp/pkp-lib#10288`
+  2026-10-01, 2026-10-02 and 2026-10-06. Read and not this fault: `pkp/pkp-lib#10288`
   (the same request failing in 2024 for another reason, fixed),
   `pkp/pkp-lib#8911` (missing email texts in OMP, closed),
-  `pkp/pkp-lib#13385` (open PR, no registry change), `pkp/pkp-lib#12700`
-  (the wording of task assignment emails, open).
+  `pkp/pkp-lib#13385` (merged; read in OMP's lib/pkp: it changes
+  neither the registry nor the line that fails here), `pkp/pkp-lib#12700` (the wording of task assignment emails,
+  open), `pkp/pkp-lib#13287` (a null email template name passed to
+  `compileParams()` in `PKPStageParticipantNotifyForm::fetch()` on 3.5,
+  open).
 - Not driven: the upgraded server's screens; a server added to an
   upgraded site; "Assign Editor" edited in Settings and then used on
   "Notify" or "Assign"; a message typed by hand with "Assign Editor"

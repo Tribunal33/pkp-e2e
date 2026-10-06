@@ -18,7 +18,7 @@
 //
 //   PROBE_FEATURE=issues-u37r6 PROBE_AGENT=u37r6 node bin/probe.js all shared/playwright/checks/issues/preprint-assign-editor-template-empty/walk.js
 //   (3.5: PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-u37r6-3_5 in front, ONLY=ops.)
-//   STEPS=add,settings narrows a walk to the named steps.
+//   STEPS=add,settings narrows a walk to the named steps; TAG= names what the walk creates (default u37r6).
 const {forEachApp, launch, signIn, signOut, record} = require('../../../probe');
 const H = require('./lib.js');
 
@@ -29,6 +29,7 @@ const WORDS = {
 };
 const ENTRY = 'Assign Editor';
 const DISCUSSION = 'Discussion (Production)';
+const TAG = process.env.TAG || 'u37r6';
 
 forEachApp(async (app) => {
     const w = WORDS[app.name];
@@ -103,7 +104,7 @@ forEachApp(async (app) => {
         await step('autoadd', async () => {
             const box = await H.autoAdd(page, app, ENTRY);
             const {submitAs} = require('../editorial-submitter-no-acknowledgement/lib.js');
-            const sub = await submitAs(page, app, 'ccorino', 'u37r6 auto-add');
+            const sub = await submitAs(page, app, 'ccorino', `${TAG} auto-add`);
             await signIn(page, 'dbarnes');
             const panel = await H.openPanel(page, app, sub.id);
             const item = await H.readItem(page, panel, ENTRY, 'autoadd-item');
@@ -111,7 +112,7 @@ forEachApp(async (app) => {
         });
 
         await step('wayround', async () => {
-            const saved = await H.editTemplate(page, app, ENTRY, 'wayround-save', {text: 'u37r6 letter'});
+            const saved = await H.editTemplate(page, app, ENTRY, 'wayround-save', {text: `${TAG} letter`});
             const panel = await H.openPanel(page, app, w.id);
             const win = await panel.openAdd();
             const filled = await H.pressTemplate(page, win, ENTRY);
