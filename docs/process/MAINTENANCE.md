@@ -312,7 +312,9 @@ stayed on it is reported, not a pause.
    (1–9) per agent running at the same time; the agent resets its own
    fleets before each walk. The fix trial (the brief's step 4a) patches
    the slot's shared checkouts, so two reporters take turns there: the
-   second waits until `node bin/try-fix.js status` says clean. The turn
+   second waits until `node bin/try-fix.js status <apps>`, naming the
+   apps of its own walk, says clean (with no app named it exits 1 while
+   any other app holds a fix). The turn
    covers every walk on `main`, an unpatched one too, since a status read
    is a point check and an apply lands mid-walk: the session keeps one
    lock per app checkout, queued first come first served, which a
