@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `c1cee76b95` | 2026-10-05 | claude (daily maintenance session) |
-| omp | `9c5e24246c` | 2026-10-02 | claude (daily maintenance session) |
-| ops | `38b61882d3` | 2026-10-02 | claude (daily maintenance session) |
-| pkp-lib | `771474347e` (ojs; omp, ops at `cf3f984335`) | 2026-10-05 | claude (daily maintenance session); ui-library `98ac898651` (ojs, omp, ops; 2026-10-06, the pkp/pkp-lib#13188 PR review merge); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
+| ojs | `500d9a936e` | 2026-10-06 | claude (daily maintenance session) |
+| omp | `fd3cdebc4d` | 2026-10-06 | claude (daily maintenance session) |
+| ops | `08540bf2e5` | 2026-10-06 | claude (daily maintenance session) |
+| pkp-lib | `771474347e` (ojs, omp, ops) | 2026-10-06 | claude (daily maintenance session); ui-library `98ac898651` (ojs, omp, ops; 2026-10-06, the pkp/pkp-lib#13188 PR review merge); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
 
 ## Read log
 
@@ -22,6 +22,11 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-06 (daily session, VM s1) — ojs `c1cee76b95..500d9a936e` (3: one backport, its merge, a pointer bump), omp `9c5e24246c..fd3cdebc4d` (1, a pointer bump), ops `38b61882d3..08540bf2e5` (1, a pointer bump), pkp-lib `cf3f984335..771474347e` at OMP's and OPS's pointers (OJS's since 2026-10-05); ui-library `98ac898651` everywhere (read at the PR review above); the plugins unchanged. `main` first: synced today with nothing left unread, green.**
+  - ojs `0e3bc9133e` (`~main 43729a9952`, #12939 via #5893) → `git range-diff`: the same strings under 3.5's `plugins/importexport/doaj/` (`main`: `plugins/generic/doaj/`); English `.description` and `.registrationIntro` reworded, the other languages marked `#, fuzzy`; `main`'s third key (`.settings.form.automaticRegistration.description`) left as it was. Strings only: no regression.
+  - ojs `4342473090` (merge of #5893), `500d9a936e`, omp `fd3cdebc4d`, ops `08540bf2e5` (pointer bumps) → nothing of their own; omp's and ops' lib/pkp `cf3f984335..771474347e` is the range read 2026-10-05 at OJS's pointer (the five rewritten ORCID commits, patch-id twins of those read 2026-10-02, and five `=main` commits whose `main` reads carry over); 3.5's callers are lib/pkp's own, so the OJS read stands for OMP and OPS.
+  - Carried over from `main`: no regression confirmed on `main` today.
+  - Open stable rows (#13414, #13370, #13181, ojs#5813 titles) not re-run: on OJS, where they are driven, today's range adds only DOAJ strings and the toast fix (its lib/pkp has been at `771474347e` since 2026-10-05); OMP's and OPS's move is that same lib/pkp range.
 - **2026-10-06 — PR review, pkp/pkp-lib#13188 (toast notifications close the open side modal; both PRs on `stable-3_5_0`, none for `main` yet): ui-library#999 (kfc35 `i13188_toast_modal_fix`, head `3968825ddd`, three commits straight on the line pointer `d4e0188353`) + submodule-only ojs#5880 (head `df893e8311` on the line tip `4342473090`, `lib/ui-library` → `3968825ddd`). Driven on the line's fleet (OJS, OMP, OPS), the PR head checked out in each app's `lib/ui-library` and built, which is the merge result. Not merged; baselines not advanced. No companion: no spec, suite or CI follows the line.**
   - The fix works, on all three apps. At the base a toast clicked over a Dialog closes the Dialog (the pointer lands on its overlay); a toast over a side modal cannot be clicked (`body` takes `pointer-events: none`), so its × does nothing and the code review's Components "-survey" error toast stays until it expires; and once a nested side modal has been open and closed (the issue's Add Reviewer, or Participants › Assign and back), the toast becomes clickable and its × closes the whole workflow (the issue, reproduced on OJS and OMP through Add Reviewer, on all three through Assign). At the PR head the × closes the toast in every one of these, the side modals and the Dialog stay open, and a click on the toast's text keeps everything.
   - No regression found: a click on the overlay beside the workflow and on a Dialog's overlay still closes it; TinyMCE's Insert/Edit Link dialog inside the Assign Participant window is typed into and cancelled with both windows staying (the `.tox-tinymce-aux`, `.ui-widget` selectors the PR moved into a list); the empty toast area is 0 px high, so `pointer-events: auto` on it covers nothing on the header; no crash in the run records.

@@ -3,7 +3,8 @@
 // userRoleAssignment` and `invitation/edit/<id>`, typed by one account per
 // permission level, and an invitation of journal B typed under journal A's
 // path. Spec lines 26-27, 32, 673, 740, 748-757 and notes a, b, f-a1.
-// OJS only: OMP's and OPS's lib/pkp sit before the change (the brief).
+// Written for OJS; run on OMP and OPS 2026-10-06 once their lib/pkp carried
+// the change (OPS seeds the four levels it has).
 //
 // Per run, on scratch journals of its own:
 //   A (tag T): manager mgr, editor edn (a manager-level role whose group has
@@ -117,7 +118,7 @@ forEachApp(async (app) => {
         await page.getByLabel(/^Given Name/).first().fill('Nova');
         await page.getByLabel(/^Family Name/).first().fill('Quill');
         const row = page.getByRole('row').filter({has: page.getByLabel(/^Select a new role/)}).last();
-        await row.getByLabel(/^Select a new role/).selectOption({label: 'Copyeditor'});
+        await row.getByLabel(/^Select a new role/).selectOption({label: app.name === 'ops' ? 'Moderator' : 'Copyeditor'});
         await row.getByRole('textbox').fill(today());
         const mast = row.getByRole('combobox').last();
         if (await mast.count() && await mast.isEnabled()) await mast.selectOption({label: 'Appear on the masthead'}).catch(() => {});
@@ -228,19 +229,23 @@ forEachApp(async (app) => {
     }
 
     // ── Seed ─────────────────────────────────────────────────────────────
+    // OPS has no Editor, Production editor, Funding coordinator or Reviewer
+    // role: its run seeds the levels it has (manager, moderator, author,
+    // reader) and the matrix skips the others.
+    const usersA = [
+        {username: u('mgr'), roles: ['manager']},
+        {username: u('edn'), roles: ['editor']},
+        {username: u('pe'), roles: ['productionEditor']},
+        {username: u('se'), roles: ['sectionEditor']},
+        {username: u('as'), roles: ['funding']},
+        {username: u('au'), roles: ['author']},
+        {username: u('rv'), roles: ['externalReviewer']},
+        {username: u('rd'), roles: ['reader']},
+        {username: u('mab'), roles: ['manager']},
+    ].filter((x) => app.name !== 'ops' || ['manager', 'sectionEditor', 'author', 'reader'].includes(x.roles[0]));
     const seedA = await app.api.createContext({tag: A, context: {name: `U06 S02 A ${A}`, acronym: 'S2A'},
-        roles: {editor: {permitSettings: false}},
-        users: [
-            {username: u('mgr'), roles: ['manager']},
-            {username: u('edn'), roles: ['editor']},
-            {username: u('pe'), roles: ['productionEditor']},
-            {username: u('se'), roles: ['sectionEditor']},
-            {username: u('as'), roles: ['funding']},
-            {username: u('au'), roles: ['author']},
-            {username: u('rv'), roles: ['externalReviewer']},
-            {username: u('rd'), roles: ['reader']},
-            {username: u('mab'), roles: ['manager']},
-        ]});
+        ...(app.name === 'ops' ? {} : {roles: {editor: {permitSettings: false}}}),
+        users: usersA});
     const seedB = await app.api.createContext({tag: B, context: {name: `U06 S02 B ${B}`, acronym: 'S2B'},
         users: [
             {username: `mgr${B}`, roles: ['manager']},
@@ -329,7 +334,7 @@ forEachApp(async (app) => {
         const levels = [
             ['admin', 'admin'], ['mgr', u('mgr')], ['edn', u('edn')], ['pe', u('pe')], ['se', u('se')],
             ['as', u('as')], ['au', u('au')], ['rv', u('rv')], ['rd', u('rd')],
-        ];
+        ].filter(([, user]) => user === 'admin' || usersA.some((x) => x.username === user));
         facts.matrix = {};
         for (const [k, user] of levels) {
             await step(`matrix-${k}`, async () => {

@@ -987,7 +987,7 @@ Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops1](#fn-ops1)</sup>
 ### Retired
 
 <a id="a1"></a>
-**A1 — Wizard address wider than its screen** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13299, 2026-09-19), verified 2026-10-02 on OJS: typing the send wizard's address opens it for exactly those who open Users & Roles, and anyone else signed in gets the access-denied page (Actors row 2). <sup>[f-a1](#fn-a1)</sup>
+**A1 — Wizard address wider than its screen** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13299, 2026-09-19), verified 2026-10-02 on OJS and 2026-10-06 on OMP and OPS: typing the send wizard's address opens it for exactly those who open Users & Roles, and anyone else signed in gets the access-denied page (Actors row 2). <sup>[f-a1](#fn-a1)</sup>
 
 <a id="a6"></a>
 **A6 — Edit on a disabled member opens a broken wizard** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13313, 2026-09-15), verified 2026-09-18 on OJS, OMP and OPS: Edit on a disabled user's row opens their details and current roles under "The user is currently disabled.", with no error (Rule 14); the email its role controls send is [A9](#a9)'s. <sup>[f-a6](#fn-a6)</sup>
@@ -1516,9 +1516,18 @@ Both addresses redirected to
 ("The current role does not have access to this operation.") for a scratch
 Journal editor with `permitSettings` off, a Section editor, a Funding
 coordinator, an Author, a Reviewer and a Reader, and the create address for
-`copyeditor.carla`. OMP and OPS were not driven: their lib/pkp pointers sit
-at `3dc90c81a6`, before the change, and take it with their next lib/pkp
-bump. Retired 2026-10-02.
+`copyeditor.carla`. Retired 2026-10-02. OMP and OPS, whose lib/pkp
+pointers took the change later, live-probed 2026-10-06 (lib/pkp
+`5a5ab2d6c7`, the same check, one run each; on OPS the levels it has):
+the create and edit addresses opened the wizard for `admin`, a scratch
+manager and, on OMP, a scratch Production editor, and the create address
+for OMP's `editor.diana`; they redirected to the same access-denied page
+for OMP's Press editor with `permitSettings` off, every Section editor or
+Moderator, Funding coordinator, Author, Reviewer and Reader, and both
+rosters' `sectioneditor.ana`, `assistant.rita`, `author.alex` and
+`reader.rosa` (OMP's `copyeditor.carla`, `reviewer.julia` too); another
+context's invitation id answered "404 Not Found" under the first context's
+path.
 
 <a id="fn-a2"></a>
 **f-a2** — `scopeExpired()` includes `orWhereNull('expiry_date')` (note e);

@@ -697,21 +697,18 @@ exports.resultLines = resultLines;
  *
  * `otherLines` are lines the file also earns, such as a role the account
  * already holds in the context (pkp/pkp-lib#13412): with them the panel
- * always takes the second form, the password lines present or not. With
- * `otherLinesOptional` the panel may also leave them out, for an app whose
- * lib/pkp does not write them yet.
+ * always takes the second form, the password lines present or not.
  *
  * @param {import('@playwright/test').Locator} panel
- * @param {{usernames: string[], successText: string, newPasswordLine: (username: string) => string, otherLines?: string[], otherLinesOptional?: boolean}} expected
+ * @param {{usernames: string[], successText: string, newPasswordLine: (username: string) => string, otherLines?: string[]}} expected
  */
-async function expectEveryUserImported(panel, {usernames, successText, newPasswordLine, otherLines = [], otherLinesOptional = false}) {
+async function expectEveryUserImported(panel, {usernames, successText, newPasswordLine, otherLines = []}) {
     const flat = (t) => (t || '').replace(/\s+/g, ' ').trim();
     const passwordLines = usernames.map((u) => flat(newPasswordLine(u)));
     const others = otherLines.map(flat);
     const sets = [[...others], [...passwordLines, ...others]];
-    if (others.length && otherLinesOptional) sets.push([], passwordLines);
     const accepted = sets.filter((set) => set.length).map((set) => JSON.stringify([...set].sort()));
-    const successAllowed = !others.length || otherLinesOptional;
+    const successAllowed = !others.length;
     await expect
         .poll(
             async () => {

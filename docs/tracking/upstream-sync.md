@@ -9,10 +9,10 @@ The `stable-3_5_0` branch, read for regressions only, has its own file:
 
 | Repo | Last-reviewed commit | Date | Reviewed by |
 |------|----------------------|------|-------------|
-| ojs | `6c66754788` | 2026-10-05 | claude (PR review merge, pkp/pkp-lib#7527) |
-| omp | `592914b83` | 2026-10-05 | claude (PR review merges, pkp/pkp-lib#12593 and #13445) |
-| ops | `21e41026b2` | 2026-10-05 | claude (PR review merge, pkp/pkp-lib#13445) |
-| pkp-lib | `5a5ab2d6c7` (`main`; omp at `e39fdee199`, ojs and ops at `a7f5e3081b`) | 2026-10-05 | claude (PR review merge, pkp/pkp-lib#12593); ui-library `a36dc7fe78` (`main` and ojs, 2026-10-06, the pkp/pkp-lib#13188 cherry-pick; omp, ops at `280f98c5`); ojs `plugins/generic/crossref` `b7b3e7392f` (2026-10-05), ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `12326c0e25` (2026-10-05), ojs `plugins/generic/googleScholar` `58aea176ea` (2026-10-05), ojs, omp and ops `plugins/generic/citationStyleLanguage` `e181beaf8c` (2026-10-05), ojs and ops `plugins/generic/pdfJsViewer` `1d992590f0` (2026-10-05) |
+| ojs | `d7cf416029` | 2026-10-06 | claude (daily maintenance session) |
+| omp | `a0e6d0a8b` | 2026-10-06 | claude (daily maintenance session) |
+| ops | `7e34fdd57e` | 2026-10-06 | claude (daily maintenance session) |
+| pkp-lib | `5a5ab2d6c7` (`main`; ojs, omp and ops) | 2026-10-06 | claude (daily maintenance session); ui-library `a36dc7fe78` (`main`, ojs, omp and ops, 2026-10-06); ojs `plugins/generic/crossref` `b7b3e7392f` (2026-10-05), ops `plugins/generic/crossref` `b6b94dd5de`, ojs `plugins/generic/jatsTemplate` `12326c0e25` (2026-10-05), ojs `plugins/generic/googleScholar` `58aea176ea` (2026-10-05), ojs, omp and ops `plugins/generic/citationStyleLanguage` `e181beaf8c` (2026-10-05), ojs and ops `plugins/generic/pdfJsViewer` `1d992590f0` (2026-10-05) |
 
 ## Leads
 
@@ -20,22 +20,18 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
-- 2026-10-01 (upstream session): when OMP's `lib/pkp` pointer carries
-  pkp/pkp-lib#13412 (`2e377d27fc`), OMP U63 S6's overlap line becomes
-  required as on OJS (`otherLinesOptional` out of
-  `apps/omp/playwright/tests/U63-import-export.spec.js`): the spec's
-  scenario 6 already requires it on both apps.
-- 2026-10-02 (upstream session): when OMP's and OPS's `lib/pkp` pointers carry
-  pkp/pkp-lib#13299 (`ddd8ab243a`), re-run `checks/U06/S02/s02.js` on them
-  (U06 A1 was retired on the OJS drive; f-a1 says OMP and OPS were not
-  driven).
-
 ## Sync log
 
 _Newest first; one entry per sync: the date and the range per repo, then
 one line per change reviewed (commit → no impact / spec and tests touched /
 finding filed, with a link)._
 
+- **2026-10-06 (daily session, VM s1) — ojs `6c66754788..d7cf416029` (3), omp `592914b83..a0e6d0a8b` (1), ops `21e41026b2..7e34fdd57e` (1), pkp-lib `main` unchanged at `5a5ab2d6c7` (OJS's and OPS's pointers `a7f5e3081b..5a5ab2d6c7`, OMP's `e39fdee199..5a5ab2d6c7`), ui-library `main` unchanged at `a36dc7fe78` (omp and ops `280f98c5..a36dc7fe78`); the plugins unchanged. Every commit in the range was read before its merge; nothing new to triage. `main` green: the apps' own e2e at the tips, ojs 37435682933, omp 37435914525, ops 37435812019.**
+  - ojs `43729a9952` + `1f4cef786f` (#5894, pkp/pkp-lib#12939, DOAJ strings) → PR review 2026-10-05 (companion `12939-main`, merged): U63 touched then; no regression.
+  - ojs `d7cf416029`, omp `a0e6d0a8b`, ops `7e34fdd57e` ("Update submodules") → lib/pkp to `5a5ab2d6c7` (pkp/pkp-lib#13385 for #12593: PR review round 4, its merge tree equal to the reviewed head `e39fdee199` (`git diff` empty), driven on all three apps then; U35 A3, A5, A10 and U32 A9 now fixed on OJS and OPS too, as the 2026-10-05 entry foresaw) and ui-library to `a36dc7fe78` (the 2026-10-06 entry above) → nothing of their own.
+  - Lead (2026-10-01): OMP's lib/pkp carries pkp/pkp-lib#13412 (`2e377d27fc` is an ancestor of `e39fdee199`) → OMP U63 S6 now requires the overlap line as OJS does (`otherLinesOptional` gone from the suite and from `expectEveryUserImported()`, its only user). The OMP U63 spec file on a reset fleet: 7/7 green (`.reports/sync/u63-omp.log`). Line deleted.
+  - Lead (2026-10-02): OMP's and OPS's lib/pkp carry pkp/pkp-lib#13299 (`ddd8ab243a`) → `checks/U06/S02/s02.js` both phases on OMP and OPS (`.reports/sync/u06s02/`; the check now seeds OPS's four levels and picks "Moderator" there): the wizard's addresses open for exactly those who open Users & Roles, as on OJS; U06 A1's fix confirmed on both, f-a1 and the A1 line updated. The only server error is the known `invitation/create/nosuchtype` 500 (U06 A12) on both. Line deleted.
+  - Open ci-triage rows: not re-run; the range moves only the discussion-template code (`PKPStageParticipantNotifyForm`, `StageParticipantGridHandler`, the editorial-task repository) and the toasts, none of the rows' code; pkp-lib `main` holds no fix past yesterday's checks.
 - **2026-10-06 — pkp/pkp-lib#13188 on `main` (the 3.5 PR review's forward port; the review's drives in `upstream-sync-stable-3_5_0.md`, 2026-10-06): ui-library `a36dc7fe78`, @jardakotesovec's cherry-pick of ui-library#999 (squash `98ac898651` on `stable-3_5_0`) onto `64d67363`, 08:17 UTC; its changed lines equal the PR's (only the hunks' context differs: `main`'s Dialog `z-20` and class order). Pointers: ojs `d7cf416029`, omp `a0e6d0a8bc`, ops `7e34fdd57e` ("Update submodules", 08:22–08:24 UTC), each moving ui-library to `a36dc7fe78` and lib/pkp to `5a5ab2d6c7`. Driven on the checkouts at those tips.**
   - ui-library `a36dc7fe78` (toasts take presses over an open window, and the side window and Dialog ignore a press inside one) → spec touched, two entries retired: U58 A13 and U05 A14 (one fault, issue report pkp-e2e#826, closed with the fix; report and its kept script deleted). U58 Rule 16 and scenario 6 (the refused key's notice now goes at its "×", the window open; the three suites press it instead of waiting it out), U05 Rule 9b (the "×" and the resting pointer work over an open window; coverage: the press owned by U58 scenario 6, the resting pointer a **Planned** item). Walks: the report's kept walk on the dataset fleet (A and B steps and `WALK=neighbour`, all three apps: the notice gone 0.16–0.22 s after a press on its "×" with the window or panel open, kept 8 s under a resting pointer; a press beside a window still closes it; the workflow stays open after a closed "Notify" panel's notice is closed) and `checks/sync/ui-library-999/toast-modal.js` (`.reports/pr13188-main/merged/`, all three apps, the same results as the 3.5 PR head). No regression found.
   - The U58 incidental from the A13 report (a press beside the changed "Add a Component" window closes it without the leave question) still shows on all three apps; its incidentals row gains OMP and OPS.

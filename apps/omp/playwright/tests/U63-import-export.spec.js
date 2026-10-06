@@ -736,14 +736,12 @@ test.describe('Import & export', () => {
         // the server's PHP decides (T-ojs-3): the success sentence, or the
         // "…could not be imported as is. … The user has been imported." line
         // for each account; with the line for the manager's role, which the
-        // manager already holds in B (pkp/pkp-lib#13412; optional until
-        // OMP's lib/pkp carries it, then required as on OJS).
+        // manager already holds in B (pkp/pkp-lib#13412).
         await expectEveryUserImported(results, {
             usernames: inFile.map((u) => /** @type {string} */ (u.username)),
             successText: USERS_IMPORTED,
             newPasswordLine: NEW_PASSWORD_SENT,
             otherLines: [ROLE_HELD(manager, 'Press manager')],
-            otherLinesOptional: true,
         });
 
         // B's users: moss Copyeditor, fern Author (Rules 23, 28); their
