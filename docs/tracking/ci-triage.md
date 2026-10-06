@@ -23,6 +23,7 @@ the log only says where to look.
 
 | ID | Signature (what CI shows) | Apps | Canonical entry | Status | First seen / last confirmed |
 |----|---------------------------|------|-----------------|--------|-----------------------------|
+| K-12780 | U03 S4 "change the email address by confirming the emailed link": `form#identityForm` not visible within 30 s in `ProfilePage.open()` after the link is confirmed, on both attempts | OJS, OMP, OPS (OJS at its tip; OMP and OPS once their pointers reach pkp-lib `3407fc5bc0`) | U03 S4 | Open: red with pkp-lib `3407fc5bc0` (pkp/pkp-lib#12780, the user read from the session guard in `PKPRequest::getUser()` and `PKPUserProvider::retrieveById()`), green with `5a5ab2d6c7`, locally on OJS at the tip `4fc0ccc6d7` (`.reports/sync/pr13308-u03-local.log`, slot s3); diagnosis owed to the daily sync, which reads `3407fc5bc0` | 2026-10-06 (pkp-e2e 37529187890, the PR review of pkp/pkp-lib#13308) |
 
 ## Open regressions — confirmed upstream regressions awaiting a fix
 
