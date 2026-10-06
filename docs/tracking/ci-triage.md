@@ -1245,6 +1245,17 @@ trips.
   page error; `.reports/U27/cc-I05.md` I05-5). **Watch condition**: a
   second sighting; then read the error's stack from that run.
 
+- **OMP U36 S6's "Notes" tab press not taking** (OMP, once, pkp/omp
+  hook run 37283929268 on `main` 8c807c919, 2026-10-05, green on its
+  retry). `InformationCenter.selectTab('Notes')`
+  (`U36-submission-files.spec.js:611`): the "Information Center:
+  article.pdf" window was open and its tabs built (`ui-tabs-tab`), the
+  "Notes" tab took the hover (`ui-state-hover`) but stayed
+  `aria-selected="false"` for 30 s, so the press was lost, not slow
+  (`SubmissionFilesPages.js:771`). **Watch condition**: a second
+  sighting at a `selectTab` read; then read its trace for what the
+  press met.
+
 ## Companion branches — pkp-e2e branches waiting on app PRs
 
 One row per branch prepared for a developer's open OJS, OMP or OPS pull

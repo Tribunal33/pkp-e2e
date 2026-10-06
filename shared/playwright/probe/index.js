@@ -1067,13 +1067,15 @@ function sql(app, query) {
  * the probe server's `server-<port>-probe.log`. The log is the fleet's,
  * written for every agent driving it. `mark()` is its size now;
  * `since(mark)` the lines written after it that match `match` (by default
- * an error, exception, fatal, warning or a 5xx request line).
+ * an error, exception, fatal, warning or a 5xx request line, and the
+ * "Plugin … failed to handle the hook …" line that names a plugin whose
+ * failure the page swallowed, answering 200 with its part left out).
  *
  * @param {object} app the bag from withApp
  * @param {{match?: RegExp}} [options]
  * @returns {{file: string, mark: () => number, since: (from?: number) => string[]}}
  */
-function serverLog(app, {match = /error|exception|fatal|warning|\[5\d\d\]/i} = {}) {
+function serverLog(app, {match = /error|exception|fatal|warning|failed to handle the hook|\[5\d\d\]/i} = {}) {
     const kind = app.dataset ? `ds${app.dataset}` : 'probe';
     const file = path.join(app.suiteDir, '.server-logs', `server-${app.port}-${kind}.log`);
     const mark = () => (fs.existsSync(file) ? fs.statSync(file).size : 0);
@@ -1082,6 +1084,42 @@ function serverLog(app, {match = /error|exception|fatal|warning|\[5\d\d\]/i} = {
             ? fs.readFileSync(file).subarray(from).toString('utf8').split('\n').filter((line) => line && match.test(line))
             : [];
     return {file, mark, since};
+}
+
+/**
+ * The fleet's usage event log (`<files_dir>/usageStats/usageEventLogs/
+ * usage_events_<YYYYMMDD>.log`), one JSON line per visit the app logged
+ * (`LogUsageEvent`: time, canonicalUrl, assocType, contextId, submissionId,
+ * representationId, submissionFileId, …). Every agent on the fleet writes
+ * there, so read your own context's lines: `const log = usageLog(app,
+ * {contextId}), from = log.mark();` before the visits, `log.since(from)`
+ * after them for the parsed lines written since (by byte offset per day's
+ * file, never by line count). No routine task loads the log on a fleet
+ * (seed-facts.md); `usage[]` seeds figures (scenarios.md).
+ *
+ * @param {object} app the bag from withApp
+ * @param {{contextId?: number}} [options] keep only this context's lines
+ * @returns {{dir: string, mark: () => object, since: (from?: object) => object[]}}
+ */
+function usageLog(app, {contextId = null} = {}) {
+    const config = fs.readFileSync(path.isAbsolute(app.configFile) ? app.configFile : path.join(REPO_ROOT, app.configFile), 'utf8');
+    const filesDir = (config.match(/^files_dir\s*=\s*"?([^"\n]+?)"?\s*$/m) || [])[1];
+    const dir = path.join(filesDir || '', 'usageStats', 'usageEventLogs');
+    const files = () => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => /^usage_events_\d{8}\.log$/.test(f)).sort() : []);
+    const mark = () => Object.fromEntries(files().map((f) => [f, fs.statSync(path.join(dir, f)).size]));
+    const since = (from = {}) =>
+        files()
+            .flatMap((f) => fs.readFileSync(path.join(dir, f)).subarray(from[f] || 0).toString('utf8').split('\n'))
+            .filter(Boolean)
+            .map((line) => {
+                try {
+                    return JSON.parse(line);
+                } catch {
+                    return null;
+                }
+            })
+            .filter((e) => e && (contextId === null || Number(e.contextId) === Number(contextId)));
+    return {dir, mark, since};
 }
 
 /**
@@ -1322,6 +1360,7 @@ module.exports = {
     drainJobs,
     sql,
     serverLog,
+    usageLog,
     tag,
     lineUser,
     lineScratchContext,

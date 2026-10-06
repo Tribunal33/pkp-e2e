@@ -2719,7 +2719,10 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   `completed` is the reviewer's submit, U34); the remaining `files[].list`
   words, "Draft Files" and "Copyedited Files" (Copyediting; `list`
   seeds "Submission Files" and "Production Ready Files" only, U36, U73);
-  `commentsForEditor`.
+  `commentsForEditor`; `reviewRounds[].reviewers[].responseDue` and
+  `reviewDue` (`YYYY-MM-DD`, past allowed, the "Edit" window's order
+  rule), for the due-yesterday, today and tomorrow axis that the stamped
+  weeks settings cannot reach (U28 claim check I05).
 - Submission: OJS `issue` without `published` (the Publication Settings
   issue assignment of an unpublished article; the key applies only with
   `published: true`, so an unpublished article in an issue, or one whose

@@ -151,7 +151,11 @@ No suite is meant to run on any of the three lines.
   all three apps); two seed steps for `main`-only features are skipped
   there behind `method_exists` / `class_exists` (the task templates in
   `ContextFactory`, the contributor type and roles in
-  `PKPSubmissionScenarioBuilder`). A scenario key that reaches another
+  `PKPSubmissionScenarioBuilder`), and the seeded contributor gets no user
+  group either (`authors.user_group_id` empty, where the 3.5 wizard sets
+  the Author group), so a Native XML export and an ORCID work deposit of a
+  seeded submission fail on it until its role is set in the Contributors
+  window (U63, U04 claim checks). A scenario key that reaches another
   `main`-only class answers 500 naming it. The suites' page objects follow
   `main`'s screens, and those the issue walks keep meeting differ on 3.5:
   the submission wizard opens on "Details", then "Upload Files"; "Create

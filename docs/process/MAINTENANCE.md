@@ -164,7 +164,9 @@ is left, the next morning picks up from the files.
    spec author (RUNBOOK step 3). First grep the spec for each row: a
    sighting the spec already states is deleted without a drive. The rest
    are driven, grouped by feature, by fresh checkers rendered from
-   `briefs/claim-check.md` (the rows are the chunk; one or two checkers
+   `briefs/claim-check.md` (the rows are the chunk, each named by the
+   register IDs and rule numbers it bears on, never spec line numbers,
+   which the morning's folds move; one or two checkers
    at a time on the fleets). A row that reproduces goes into its spec
    through a fold agent (`briefs/fold.md`): a register entry, or a
    corrected claim with a dated footnote, the reader on the rewritten

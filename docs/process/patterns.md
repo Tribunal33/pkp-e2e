@@ -619,14 +619,21 @@ name this fleet's own host (a dataset user's address is mailed by every
 fleet of the slot, both lines', within the same minute), `baseURL` the probe server (base port + 50),
 `variant('validation')` the +90 server with email validation and ALTCHA on,
 `db` the fleet's database, which `sql(app, query)` queries through psql
-(rows as lines, columns joined by `|`), and `contextTables` the per-app
+(rows as lines, columns joined by `|`; a `plugin_settings` row written
+this way is not read until the fleet's Laravel cache, `cache/opcache` or
+`cache/opcache-ds<n>`, is cleared, as `PluginSettingsDAO` caches each
+plugin's settings: U44, U52 issue walks, sync rr7527), and `contextTables` the per-app
 context table names (`{table, id, settings}`: `journals`, `journal_id`,
 `journal_settings` on OJS; presses and servers). `serverLog(app)` is the
 fleet's server log (harness.md "Server output"): `const log =
 serverLog(app), from = log.mark();` before a request, `log.since(from)`
 after it for the error, exception and 5xx lines written since, the
-crash line REPORT.md's Observed asks for; the log is the fleet's, so a
-line is pinned on a request by its time and address.
+crash line REPORT.md's Observed asks for, and the "Plugin … failed to
+handle the hook" line of a plugin failure the page swallowed; the log is
+the fleet's, so a line is pinned on a request by its time and address.
+`usageLog(app, {contextId})` reads the fleet's usage event log the same
+way (`mark()`, then `since(from)` for the parsed visit lines of that
+context), since every agent on the fleet writes there (U47, U64, U69).
 `line` names the line the process drives (`PKP_E2E_LINE`); on 3.4 and 3.3
 `testApi` is false and `api` answers 404, and `lineScratchContext(app,
 page)` / `lineUser(app, {…})` build a scratch context with its manager
@@ -765,6 +772,12 @@ makes a scratch tag that follows the tag conventions above. `signIn` uses
 the roster password rule, so it works for scratch users too; `signIn(page,
 user, {contextPath})` goes through that journal's own login page (which
 decides where the user lands), and any open session is signed out first.
+A request replayed in a role's session (an API the Frame has checked
+directly) takes `pkp.context.apiBaseUrl` and `pkp.currentUser.csrfToken`
+(sent as `X-Csrf-Token`, as `lineScratchContext` does) from a page of
+that context the role may open, read once it is idle: the authorization
+denied page a barred address lands on carries no context, so every
+request built there answers 404 (U29, U47 issue walks).
 `switchLanguage(page, locale)` presses the user menu's link to that
 locale, found by its address (French (Canada) reads "français" there),
 from a back-office page with no window open.
@@ -804,7 +817,12 @@ An XML answer that names an XSL stylesheet (OAI-PMH) reaches
 it: read the raw XML with `page.request.get(page.url())` in the same
 context, beside the `goto()` that records the status (U19, U57, U66
 issue walks).
-A probe run that outlasts the Bash tool's 600 s cap runs detached, `nohup
+A probe run that outlasts the Bash tool's 600 s cap runs as the command
+of the tool's own `run_in_background`, which reports when it ends: a
+`nohup … &` started from a foreground call, or an `&` inside a
+background command, lost its browser or was killed when that shell
+returned (U20 claim check S05, U53 issue walks). Outside the agent tool
+it runs detached, `nohup
 node bin/probe.js omp k3.js > k3-omp.log 2>&1 & echo $! > k3-omp.pid`, and
 the wait polls that pid (`while kill -0 $(cat k3-omp.pid) 2>/dev/null; do
 sleep 30; done`), never `pgrep -f "<script>"`: the waiting shell's own
