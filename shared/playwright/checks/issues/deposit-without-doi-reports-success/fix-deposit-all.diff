@@ -1,0 +1,61 @@
+--- a/lib/pkp/classes/doi/Repository.php
++++ b/lib/pkp/classes/doi/Repository.php
+@@ -297,23 +297,23 @@
+                 return;
+             }
+ 
+-            $submissionsCollection = $this->dao->getAllDepositableSubmissionIds($context);
+-            $submissionData = $submissionsCollection->reduce(function ($carry, $item) {
+-                if ($item->submission_id) {
+-                    $carry['submissionIds'][] = $item->submission_id;
+-                }
+-                $carry['doiIds'][] = $item->doi_id;
++            // A DOI is marked submitted only when a deposit that carries it is queued: keep the DOIs of works
++            // the deposit job accepts (DepositSubmission::handle()), and of the peer reviews it goes on to deposit
++            $doiVersioning = (bool) $context->getData(Context::SETTING_DOI_VERSIONING);
++            $exportableIds = array_flip(Repo::publication()->getExportableDOIsSubmissionIds($context->getId(), $doiVersioning));
++            $exportablePeerReviewIds = array_flip(Repo::reviewAssignment()->getExportableDOIsPeerReviewIds($context->getId(), $doiVersioning));
++            $submissionsCollection = $this->dao->getAllDepositableSubmissionIds($context)
++                ->filter(fn ($item) => $item->submission_id !== null
++                    && isset($exportableIds[$item->submission_id])
++                    && (empty($item->review_id) || isset($exportablePeerReviewIds[$item->review_id])));
+ 
+-                return $carry;
+-            }, ['submissionIds' => [], 'doiIds' => []]);
+-
+-            // Schedule/queue jobs for submissions
+-            foreach ($submissionData['submissionIds'] as $submissionId) {
++            // Schedule/queue one job per submission (a galley DOI shared by several versions lists its work more than once)
++            foreach ($submissionsCollection->pluck('submission_id')->unique() as $submissionId) {
+                 dispatch(new DepositSubmission($submissionId, $context, $agency));
+             }
+ 
+             // Mark submission DOIs as submitted
+-            Repo::doi()->markSubmitted($submissionData['doiIds']);
++            Repo::doi()->markSubmitted($submissionsCollection->pluck('doi_id')->all());
+         }
+     }
+ 
+--- a/classes/doi/DAO.php
++++ b/classes/doi/DAO.php
+@@ -41,6 +41,11 @@
+         $q = DB::table($this->table, 'd')
+             ->leftJoin('publications as p', 'd.doi_id', '=', 'p.doi_id')
+             ->leftJoin('submissions as s', 'p.publication_id', '=', 's.current_publication_id')
++            // The work a galley or peer review DOI belongs to, so that its deposit can be queued
++            // (author response DOIs are not depositable yet: see getValidSubmissionDoiTypes())
++            ->leftJoin('publication_galleys as g', 'd.doi_id', '=', 'g.doi_id')
++            ->leftJoin('publications as gp', 'g.publication_id', '=', 'gp.publication_id')
++            ->leftJoin('review_assignments as ra', 'd.doi_id', '=', 'ra.doi_id')
+             ->where('d.context_id', '=', $context->getId())
+             ->where(function (Builder $q) use ($enabledDoiTypes) {
+                 // Publication DOIs
+@@ -115,7 +120,7 @@
+                     });
+             });
+         $q->whereIn('d.status', [Doi::STATUS_UNREGISTERED, Doi::STATUS_ERROR, Doi::STATUS_STALE]);
+-        return $q->get(['s.submission_id', 'd.doi_id']);
++        return $q->get([DB::raw('COALESCE(s.submission_id, gp.submission_id, ra.submission_id) AS submission_id'), 'd.doi_id', 'ra.review_id']);
+     }
+ 
+     /**

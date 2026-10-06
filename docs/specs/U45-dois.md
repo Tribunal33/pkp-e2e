@@ -479,7 +479,7 @@ links under the list. <sup>g</sup>
       journal the published issues too), sets those to "Submitted" and
       shows the same success notice. With DataCite (Crossref untried),
       a work whose only DOI is its galley's is not sent, yet that DOI
-      turns "Submitted" [A15](#a15). With nothing left to deposit it
+      turns "Submitted" ⚠ [OJS5](#ojs5). With nothing left to deposit it
       still shows "Items successfully submitted for deposit" and changes
       nothing.
 30. **The agency panel.** With an agency configured, an item's expanded
@@ -1888,7 +1888,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
+| [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-06 — re-verified |
 | [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -1899,6 +1899,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab reports success but leaves the issues' DOIs "Unregistered" | 🐞 | minor · crash: server | — |
+| [OJS5](#ojs5) | "Deposit All" marks a galley DOI "Submitted" without sending it when the article DOI is registered or missing | 🐞 | high | issues (claude), 2026-10-06 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | With "DOI Versioning" "Yes", the "Mark DOIs …" actions on a press change only the current version's DOIs | 🐞 | user-visible | — |
@@ -2108,25 +2109,21 @@ Basis: probe, 2026-10-01. <sup>f-a14</sup>
 <a id="a15"></a>
 **A15 — "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited** · 🐞 · medium · crash: server.
 A manager ticks a published work that has no DOI on the DOIs page and
-presses "Deposit DOIs". The page reports "Items successfully submitted
-for deposit", but the work stays "Needs DOI", nothing reaches the
-registration agency, and the background deposit fails on the server.
-Only the site administrator's "Failed Jobs" page shows the failure. The
-way round is to give the work a DOI first ("Assign DOIs") and deposit
-again. With DataCite, a work whose article DOI was cleared while its
-galley kept one fares worse: "Deposit DOIs" turns the galley's DOI
-"Submitted" and it stays so; "Failed Jobs" lists the same failure.
-"Deposit All" leaves the same state and notice but starts no deposit for
-that work, so "Failed Jobs" lists none for it; later "Deposit All"
-presses skip it. It needs a registration agency
-(Crossref, or DataCite on a journal) and a published work without an
-article or preprint DOI. Every work published before the journal or
-server set its DOI prefix is in that state, as are works whose DOI was
-cleared. On 3.5 the same notice shows, and the work is sent to Crossref
-with an empty DOI, which cannot register anything; the work stays "Needs
-DOI" and no error is recorded.
-Basis: probe, 2026-10-01. <sup>f-a15</sup>
-Report: refresh owed — extended to "Deposit All" by the housekeeping claim check; the report and issue say less (2026-10-05)
+presses "Deposit DOIs". The page reports "Items successfully submitted for
+deposit", but the work stays "Needs DOI", nothing reaches the registration
+agency, and the background deposit fails on the server. Only the site
+administrator's "Failed Jobs" page shows the failure.
+The way round is to give the work a DOI first ("Assign DOIs") and deposit
+again. With DataCite, pressing "Deposit DOIs" on a work whose article DOI
+was cleared while its galley kept one is worse: the galley's DOI turns
+"Submitted" and stays so, though nothing was sent.
+It needs a registration agency (Crossref, or DataCite on a journal) and a
+published work without an article or preprint DOI. Every work published
+before the journal or server set its DOI prefix is in that state, as are
+works whose DOI was cleared. On 3.5 the same notice shows, and the work's
+record is sent to the agency with an empty DOI, which cannot register
+anything; the work stays "Needs DOI".
+Basis: probe, 2026-10-06. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A "Needs Sync" item's agency panel says its metadata "has not been submitted"** · ❓ · minor.
@@ -2337,6 +2334,25 @@ the same action, so the page shows no sign that the issues were sent.
 deposit itself then fails on the server, as every DataCite issue
 deposit does ([OJS2](#ojs2)).
 Basis: probe, 2026-10-05. <sup>f-ojs4</sup>
+
+<a id="ojs5"></a>
+**OJS5 — "Deposit All" marks a galley DOI "Submitted" without sending it when the article DOI is registered or missing** · 🐞 · high.
+A journal deposits its DOIs with DataCite, galley DOIs included. A
+manager presses "Deposit All" on the DOIs page and sees "Items
+successfully submitted for deposit". A galley DOI reading "Unregistered",
+"Error" or "Needs Sync" is marked "Submitted", but it is sent only when
+the article's own DOI is sent in the same deposit. When the article DOI
+is already "Registered", or the article has none, nothing is sent,
+nothing records a failure, and later presses skip the galley DOI.
+The galley DOI therefore never resolves, while the page shows it as on
+its way.
+Three kinds of journal meet it: one that turns galley DOIs on after its
+articles were registered, whose first press leaves every new galley DOI
+unsent; one that cleared an article's DOI and kept its galley's; and one
+that assigns galley DOIs but no article DOIs, none of whose galley DOIs
+is ever sent. With "Automatic Deposit" on, the scheduled deposit does
+the same without anyone pressing.
+Basis: probe, 2026-10-06. <sup>f-ojs5</sup>
 
 ### OMP
 
@@ -4101,6 +4117,22 @@ at connection ([A18](#a18)); with DataCite each `DepositIssue` failed on
 the server with `DataciteXmlFilter::createFundingReferencesNode():
 Argument #2 ($publication) must be of type APP\publication\Publication,
 null given` (the [OJS2](#ojs2) error).
+
+<a id="fn-f-ojs5"></a>
+**f-ojs5** — Split from [A15](#a15) on 2026-10-06, when the issue
+report found a cause of its own: lib/pkp `Repository::depositAll()`
+marks every DOI its query lists "Submitted", and OJS
+`DAO::getAllDepositableSubmissionIds()` names a work only for an article
+DOI, so a galley DOI is marked and no `DepositSubmission` is queued for
+it (the 2026-10-05 probe under [f-a15](#fn-f-a15) is its first
+evidence). Walked 2026-10-06 on OJS `main` 1f4cef786f and
+`stable-3_5_0`, DataCite, on the default dataset: a work without an
+article DOI, and galley DOIs turned on after the articles were marked
+registered; both read "Submitted" with nothing queued, and a second
+"Deposit All" changed nothing. Kept script:
+`shared/playwright/checks/issues/deposit-without-doi-reports-success/walk.js`
+(`WALK=galleyall`, `WALK=galleylater`). Issue report:
+[docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md](../issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
