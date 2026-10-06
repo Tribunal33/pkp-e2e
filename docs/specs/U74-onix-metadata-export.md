@@ -1100,7 +1100,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | A refused representative delete answers with a browser pop-up and leaves the "Delete" dialog open | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A second "Rest of World?" entry, or a market date or price of spaces, is refused without a message | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | "Export Submissions" with no book ticked opens an empty results tab | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-06 — re-verified |
 | [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A20](#a20) | On an install with no representative yet, the first one added is not listed until the page is reloaded | 🐞 | minor · crash: server | — |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
@@ -1351,8 +1351,7 @@ on such a tab then stores "Y", wrong for a book that was not
 returnable. Expected:
 the tab shows what the product will carry, and an import brings both
 back as exported.
-Basis: probe, 2026-10-03. <sup>f-a18</sup>
-Report: refresh owed — the report and its issue say "Returnable Indicator" is offered on physical formats only, but every format's "Metadata" tab shows the physical groups today (Publication formats A6, pkp-e2e#796), so those sentences hold only once A6 is fixed (2026-10-05)
+Basis: probe, 2026-10-06. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — A Native XML import rewrites the suppliers** · 🐞 · medium.

@@ -9,9 +9,13 @@
   - 3.4: OMP (code)
   - 3.3: OMP (code)
 - **Introduced** not traced to a PR; present since the import of a format's ONIX data was written, [2c06909](https://github.com/pkp/omp/commit/2c06909d05067deadcd289386a58604bfebd83fa) · 2013-12-03 · Jason Nugent (jnugent)
-- **Upstream** none found (2026-10-03)
+- **Upstream** none found (2026-10-06)
 - **Tracked in** spec U74 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a18)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+
+**Update 2026-10-06.** A digital format can hold a returns condition
+through a separate fault, and the import loses it as it does a physical
+format's.
 
 ## Summary
 
@@ -20,14 +24,17 @@ imports the file again, into the same press or another one. The file
 carries each format's availability and returns condition, but the
 import stores neither, and says "The import completed successfully.".
 
-The imported format's "Metadata" tab then shows "Available (20)" and,
-on a physical format, "Yes, returnable, full copies only (Y)", whatever
-the original had (such as "In stock (21)" and "No, not returnable
-(N)"). These are only the form's defaults: nothing is stored, and the
-book's ONIX product calls the format available and states no returns
-condition. An editor who opens the tab and presses "Save" stores those
+The imported format's "Metadata" tab then shows "Available (20)" and
+"Yes, returnable, full copies only (Y)", whatever the original had
+(such as "In stock (21)" and "No, not returnable (N)"). These are only
+the form's defaults: nothing is stored, and the book's ONIX product
+calls the format available and states no returns condition. An editor who opens the tab and presses "Save" stores those
 defaults, so a book that was not returnable is then recorded as
 returnable.
+
+A digital format loses its availability the same way. It loses a
+returns condition only while a separate fault lets an e-book's tab
+store one, a value an e-book should not carry.
 
 The editor can choose both again on each imported format's tab, if the
 original values are still known.
@@ -54,8 +61,9 @@ Preconditions:
 
 - PKP's default test dataset for OMP `main`, press `publicknowledge`.
 - Sign in as `dbarnes`.
-- The dataset's formats are all digital, and "Returnable Indicator" is
-  offered on a physical format only, so step 2 adds one.
+- The dataset's formats are all digital, so step 2 adds a physical
+  one, the kind whose tab is meant to offer "Returnable Indicator". The
+  Steps need it; they are not taken on the dataset's own "PDF".
 - A Native XML file carries a format's ONIX product only when the
   press's contact name and email (the dataset has them) and its four
   "Publisher Identity" details (the dataset leaves them blank) are set.
@@ -117,7 +125,7 @@ $representation->setProductAvailabilityCode($this->_extractTextFromNode($supplie
 ```
 
 In ONIX 3.0, and in what `MonographONIX30XmlFilter::createProductNode()`
-writes (lines 878–892), `ReturnsConditions` and `ProductAvailability`
+writes (lines 883–897), `ReturnsConditions` and `ProductAvailability`
 are children of `SupplyDetail`, beside the `Supplier`, never inside it.
 Both lookups return null and the format is stored without either
 value. The import's sample file, `plugins/importexport/native/sample.xml`
@@ -131,9 +139,18 @@ Reach:
 
 - Every imported format with at least one market, walked into the same
   press; the import into another press runs the same code (read).
-- A digital format loses its availability the same way and shows
-  "Available (20)"; it has no "Returnable Indicator" on screen, and its
-  product states none before or after.
+- A digital format loses its availability the same way. Its tab also
+  offers "Returnable Indicator", by a separate fault
+  ([pkp-e2e#796](https://github.com/jardakotesovec/pkp-e2e/issues/796), every format's tab is built as a
+  physical format's): both `PublicationFormatGridHandler` callers
+  (lines 662 and 680) have built the form without `$isPhysicalFormat`,
+  which defaults to `true`, since ce205d583 (3.2), on every branch.
+  An e-book saved with "No, not returnable (N)" and "In stock (21)"
+  exports both, and its imported copy's tab shows "Available (20)" and
+  "Yes, returnable, full copies only (Y)". Once #796 is fixed, the fix
+  below should still import an e-book's returns code: the file then
+  carries one only for an e-book saved before that fix, and importing
+  it keeps the copy the same as the original.
 - The other lookups of the method: the sales-rights lookup and the
   supplier lookups go wrong in other ways (the sibling reports below);
   the price lookup searches the `ProductSupply` element and is right.
@@ -210,11 +227,15 @@ The sibling reports, same round trip, other causes:
 - Kept script: [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/native-import-loses-trade-details/walk.js),
   run as
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js omp shared/playwright/checks/issues/native-import-loses-trade-details/walk.js`.
-  It takes these Steps and those of the four sibling reports in one run.
-- Walked on `main` and 3.5 on PostgreSQL, with pkp/datasets e8dafbc
-  (2026-10-02); both gave the same results. Tips: OMP `main` 3b0ecf794
-  (2026-09-29), its pkp-lib 3dc90c81a6; OMP `stable-3_5_0` 9c5e24246
-  (2026-10-01), its pkp-lib cf3f984335.
+  It takes these Steps and those of the four sibling reports in one run;
+  with `MODE=digital` in front it takes them on a digital format,
+  "E-book u74hk9" (the Cause's digital reach).
+- Walked on `main` and 3.5 on PostgreSQL, with pkp/datasets 5a53d3d
+  (2026-10-05), both modes; both versions gave the same results. Tips:
+  OMP `main` 592914b83 (2026-10-05), its pkp-lib e39fdee199; OMP
+  `stable-3_5_0` 9c5e24246 (2026-10-01), its pkp-lib cf3f984335.
+- Fix: `fix-a18-import.diff` applies to today's `main` as it stands
+  (`git apply --check`); tried 2026-10-03, not again.
 - 3.4 and 3.3 (code): `upstream/stable-3_4_0` 0aec65441 (2026-09-25)
   and `upstream/stable-3_3_0` 8e72fc883 (2026-09-18) of pkp/omp; the
   two lookups read at the lines the Backport bullet names, with the
@@ -226,6 +247,6 @@ The sibling reports, same round trip, other causes:
   da Silva, "Replaced getter by setter") fixed the availability call
   but kept the lookup.
 - Upstream: pkp/pkp-lib, pkp/omp and pkp/ui-library searched 2026-10-03
-  by native import returnable, `ProductAvailability` import, product
-  availability, ONIX returns and `NativeXmlPublicationFormatFilter`:
-  nothing about this fault.
+  and 2026-10-06 by native import returnable, `ProductAvailability`
+  import, product availability, ONIX returns, ONIX import and
+  `NativeXmlPublicationFormatFilter`: nothing about this fault.

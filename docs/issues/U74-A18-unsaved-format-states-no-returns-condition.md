@@ -9,9 +9,16 @@
   - 3.4: OMP (code)
   - 3.3: OMP (code)
 - **Introduced** not traced to a PR; present since the returnable indicator was added, [80bc049](https://github.com/pkp/omp/commit/80bc049b23620a3c31337b8a965f4acb61ee5552) · 2012-01-25 · Jason Nugent (jnugent)
-- **Upstream** none found (2026-10-03)
+- **Upstream** none found (2026-10-06)
 - **Tracked in** spec U74 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a18)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+
+**Update 2026-10-06.** On `main` and 3.5 an e-book's "Metadata" tab
+also offers "Returnable Indicator", preset to "Yes", while its product
+rightly states no returns condition: there the tab is wrong, by a
+separate fault ([pkp-e2e#796](https://github.com/jardakotesovec/pkp-e2e/issues/796), every format's tab is
+built as a physical format's). This report stays with physical formats,
+and its way round is not for e-books.
 
 ## Summary
 
@@ -51,8 +58,9 @@ Preconditions:
 
 - PKP's default test dataset for OMP `main`, press `publicknowledge`.
 - Sign in as `dbarnes`.
-- The dataset's formats are all digital, and "Returnable Indicator" is
-  offered on a physical format only, so step 2 adds one.
+- The dataset's formats are all digital, so step 2 adds a physical
+  one, the kind whose tab is meant to offer "Returnable Indicator" (the
+  Cause's reach says what a digital format's tab shows).
 - A Native XML file carries a format's ONIX product only when the
   press's contact name and email (the dataset has them) and its four
   "Publisher Identity" details (the dataset leaves them blank) are set.
@@ -106,8 +114,8 @@ no stored value: `'20'` for `productAvailabilityCode` and `'Y'` for
 `plugins/importexport/onix30/filter/MonographONIX30XmlFilter.php`)
 writes one `ProductSupply` per market, and in it the format's returns
 condition and availability. For the availability it applies the same
-fallback as the form (lines 888–892, "assume 'available' if not
-specified"), but lines 878–886 write `ReturnsConditions` only when a
+fallback as the form (lines 893–897, "assume 'available' if not
+specified"), but lines 883–891 write `ReturnsConditions` only when a
 code is stored. So the screen shows a returns condition the product
 does not carry.
 
@@ -123,14 +131,27 @@ Reach:
   (read in the code) and the Native XML Plugin (walked). The ONIX 3.0
   tool exports on a fresh `main` install too since pkp/omp#2372
   (2026-10-05; [U74 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a1), retired), with this gap.
-- A digital format is not reached: its tab offers no "Returnable
-  Indicator" and its product states none.
+- A digital format is not reached. Its tab shows "Returnable
+  Indicator" preset to "Yes" (walked), but an e-book should state no
+  returns condition, so its product is right and the tab is wrong.
+  Both `PublicationFormatGridHandler` callers, `editFormatMetadata()`
+  and `updateFormatMetadata()` (lines 662 and 680), build the form
+  without the format's `getPhysicalFormat()`, and the constructor's
+  `$isPhysicalFormat` defaults to `true`.
+- Saving an e-book's tab therefore stores `'Y'` and `'CA'` and empties
+  its technical protection, because `execute()` stores what was
+  posted; the way round above is not for e-books.
+- This fix and [pkp-e2e#796](https://github.com/jardakotesovec/pkp-e2e/issues/796) do not depend on each other:
+  this one covers physical formats, #796 takes the choice off e-books,
+  and after #796 an e-book's tab and product agree only if its tab was
+  never saved.
 - Two other fallbacks of `initData()` disagree the same way, read in
-  the code: "Country of Manufacture" falls back to `'CA'` on a physical
-  format and "Technical Protection" to `'00'` on a digital one, while
-  the export (lines 274–280) writes `CountryOfManufacture` and
-  `EpubTechnicalProtection` only from stored values. The walked file
-  had no `CountryOfManufacture` for the never-saved paperback. The
+  the code: "Country of Manufacture" falls back to `'CA'` and
+  "Technical Protection" to `'00'`, while the export (lines 280 and
+  284) writes `CountryOfManufacture` and `EpubTechnicalProtection` only
+  from stored values. The walked file had no `CountryOfManufacture` for
+  the never-saved paperback. "Technical Protection" belongs to the
+  digital group, which no tab shows while #796 stands. The
   measurement units' fallbacks are harmless: a unit is written only
   with a typed measurement.
 
@@ -161,6 +182,9 @@ not returnable (N)" still exported `N`.
 
 **Alternatives**:
 
+- The `'Y'` fallback for every format, digital ones included: every
+  never-saved e-book would then be stated returnable, which an e-book
+  should not be.
 - One shared default instead of `'Y'` in two places: a constant (or a
   physical-format fallback in a `PublicationFormat` getter) read by the
   form and the export alike. It is the better shape if the team expects
@@ -207,23 +231,36 @@ The sibling reports, same round trip, other causes:
 - Kept script: [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/native-import-loses-trade-details/walk.js),
   run as
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js omp shared/playwright/checks/issues/native-import-loses-trade-details/walk.js`.
-  It takes these Steps and those of the four sibling reports in one run.
-- Walked on `main` and 3.5 on PostgreSQL, with pkp/datasets e8dafbc
-  (2026-10-02); both gave the same results. Tips: OMP `main` 3b0ecf794
-  (2026-09-29), its pkp-lib 3dc90c81a6; OMP `stable-3_5_0` 9c5e24246
-  (2026-10-01), its pkp-lib cf3f984335.
+  It takes these Steps and those of the four sibling reports in one run;
+  with `MODE=digital` in front it takes them on a digital format,
+  "E-book u74hk9" (the Cause's digital reach).
+- Walked on `main` and 3.5 on PostgreSQL, with pkp/datasets 5a53d3d
+  (2026-10-05), both modes; both versions gave the same results. Tips:
+  OMP `main` 592914b83 (2026-10-05), its pkp-lib e39fdee199; OMP
+  `stable-3_5_0` 9c5e24246 (2026-10-01), its pkp-lib cf3f984335.
+- The digital reach (code): `PublicationFormatGridHandler`'s
+  `editFormatMetadata()` and `updateFormatMetadata()` build the form
+  without the format's `getPhysicalFormat()` on `main` (lines 662,
+  680), `stable-3_5_0` (658, 676), `stable-3_4_0` (659, 677) and
+  `stable-3_3_0` (584, 600), since ce205d583 (2019, 3.2); the form's
+  `execute()` (lines 271–275 on `main`) stores the posted codes. The
+  digital walk saved "No, not returnable (N)", so the stored `'Y'` of
+  an unchanged save is read from the code.
 - 3.4 and 3.3 (code): `upstream/stable-3_4_0` 0aec65441 (2026-09-25)
   and `upstream/stable-3_3_0` 8e72fc883 (2026-09-18) of pkp/omp; the
   form's fallback and the export's condition read at the lines the
   Backport bullet names.
 - Introduced: blame on the form's line 190 and the export's lines
-  878–883 gives 01088072a8 (the 2021 PSR-12 reformat) and dca0635
+  883–888 gives 01088072a8 (the 2021 PSR-12 reformat) and dca0635
   (2024, the ONIX schema update, which only re-indented them).
   `git log -S": 'Y',"` and `-S"getReturnableIndicatorCode() != ''"`
   lead to 80bc049 (`*6975*`, the old bug tracker); 4a1a31f (2012) and
   d349f61 (2013) carried both over. `git show 5e0d3c7` adds the
   export's `'20'` fallback.
 - Not driven: the ONIX 3.0 tool's own file.
+- Fix: `fix-a18-tab.diff` applies to today's `main` at an offset of five
+  lines (`git apply --check`); tried 2026-10-03, not again.
 - Upstream: pkp/pkp-lib, pkp/omp and pkp/ui-library searched 2026-10-03
-  by returnable indicator, ONIX returns, `ReturnsConditions` and
-  product availability: nothing about this fault.
+  and 2026-10-06 by returnable indicator, ONIX returns,
+  `ReturnsConditions`, product availability and ONIX import: nothing
+  about this fault.

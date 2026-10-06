@@ -19,7 +19,8 @@
 // MODE=neighbour runs the control cases the fixes must leave alone (see the end of this file);
 // MODE=reach imports the book into a second press made on screen, as `admin`; MODE=overlap adds a
 // Canada entry beside the "Rest of World?" one (A11); MODE=pressname chooses a role-09 supplier
-// named as the press (A19 press). Records the screens and
+// named as the press (A19 press); MODE=digital takes A18's two halves on a digital format
+// "E-book u74hk9" (its tab offers "Returnable Indicator" too, U73 A6). Records the screens and
 // the files' parts, asserts nothing.
 const fs = require('fs');
 const {forEachApp, launch, signIn, record, outFile, screen} = require('../../../probe');
@@ -57,9 +58,31 @@ forEachApp(async (app) => {
         // Steps 1-3.
         await signIn(page, 'dbarnes');
         fact('s2-identity', await S('s2', () => L.publisherIdentity(app, page)));
-        fact('s3-add-format', await S('s3', () => L.addFormat(app, page, {name: L.PAPERBACK})));
+        if (MODE !== 'digital') fact('s3-add-format', await S('s3', () => L.addFormat(app, page, {name: L.PAPERBACK})));
 
-        if (MODE === 'walk') {
+        if (MODE === 'digital') {
+            // A18 on a digital format held by the press: the never-saved tab against the product,
+            // then a saved tab through the import.
+            const EBOOK = 'E-book u74hk9';
+            fact('d2-add-ebook', await S('d2', () => L.addFormat(app, page, {name: EBOOK, kind: /\(DA\)/, physical: false})));
+            let meta = await L.openMeta(app, page, L.BOOK.id, EBOOK, L.BOOK.publicationId);
+            fact('d3-tab', await S('d3', () => L.tabChoices(meta)));
+            fact('d4-market', await S('d4', () => L.addMarket(page, meta, {country: 'Canada (CA)', date: '20261001', price: '25'})));
+            await L.cancelMeta(page, meta);
+            fact('d5-export-unsaved', saveFile('digital-export-1.xml', await S('d5', () => L.exportBook(app, page, L.BOOK.title))));
+            meta = await L.openMeta(app, page, L.BOOK.id, EBOOK, L.BOOK.publicationId);
+            fact('d6-save-tab', await S('d6', () => L.saveChoices(meta, {composition: COMPOSITION, availability: 'In stock (21)', returnable: 'No, not returnable (N)'})));
+            const e = saveFile('digital-export-2.xml', await S('d7', () => L.exportBook(app, page, L.BOOK.title)));
+            fact('d7-export-saved', e);
+            const imp = await S('d8', () => L.importBook(app, page, e.saved));
+            fact('d8-import', imp);
+            if (imp.copy) {
+                meta = await L.openMeta(app, page, imp.copy, EBOOK, null);
+                fact('d8-copy-tab', await S('d8b', () => L.tabChoices(meta)));
+                await L.cancelMeta(page, meta).catch(() => {});
+                fact('d9-copy-export', saveFile('digital-export-copy.xml', await S('d9', () => L.exportBook(app, page, L.BOOK.title, imp.copy))));
+            }
+        } else if (MODE === 'walk') {
             // Part A, steps 4-7.
             let meta = await L.openMeta(app, page, L.BOOK.id, L.PAPERBACK, L.BOOK.publicationId);
             fact('s4-tab', await S('s4', () => L.tabChoices(meta)));
