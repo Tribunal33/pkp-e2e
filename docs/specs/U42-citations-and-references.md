@@ -2151,8 +2151,10 @@ switched on: "Processing references - 0/2" and the 7-second fetches
 (three pairs in 22 s), the same after one was filled in by hand and after
 "Reprocess" on the other; two with their stored status removed (the API
 gave `null`, as after an upgrade from 3.5): the same. Before, at the
-tips, the same two showed no box and no fetches (the issue report's
-Control, 2026-10-04).
+tips the PRs are based on (the same day, `nb` mode), the same two showed
+no box and no fetches in 22 s; "Processing references - 0/1" and the
+fetches came only once one was filled in by hand. Facts:
+`.reports/issues-u42r7/u42r7/a6-facts-{pr13308,tip13308}-<mode>-<app>.json`.
 Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883) ([docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md)).
 
 <a id="fn-f-a7"></a>

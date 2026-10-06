@@ -1290,3 +1290,4 @@ verdict yet) · `ready` (pushed, green at the PR ref, developer told) ·
 
 | App PR | Branch | State | Since | Note (one line) |
 |--------|--------|-------|-------|-----------------|
+| pkp/ojs#5812 (+ pkp-lib#13318, ui-library#982; issue pkp/pkp-lib#13308) | `13308` | ready | 2026-10-06 | U42 S5 asserts "Processing references - 0/1" over the plain reference in all three suites (red at `main`, green at the PR heads); Rules 12/13, A5 retired, A6 rewritten to the PR's form. On the merge: carry A6's change to `docs/issues/U42-A6-…` and pkp-e2e#883 ("Keeping a report in step"), and the regression report `docs/reports/2026-10-06-ui-library-982.md` to an Open regressions row if the PR merges unchanged. OMP and OPS have no PR, and their S5 reds at a ui-library pointer before #982: fast-forward `main` only once all three pointers carry #982, or split the OMP and OPS S5 edits out until their bumps |
