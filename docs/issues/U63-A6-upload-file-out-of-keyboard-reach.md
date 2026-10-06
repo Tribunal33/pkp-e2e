@@ -10,7 +10,7 @@
   - 3.3: OJS, OMP, OPS (code)
 - **Introduced** [3342372300](https://github.com/pkp/pkp-lib/commit/334237230016e84e8a5bf99d4d65cbccb721a717) · 2018-10-22 · Alec Smecher (asmecher): the update from plupload 2.1.9 to 2.3.6, which made the button's earlier `tabindex="-1"` (below) leave nothing reachable
 - **Upstream** none open (2026-10-01); `pkp/pkp-lib#1411` (closed 2016 with a fix, the same symptom on the submission file upload; the 2018 plupload update undid that fix)
-- **Tracked in** spec U63 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a6)
+- **Tracked in** spec U63 [A6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a6) · spec U36 [A26](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a26)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary

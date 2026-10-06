@@ -1311,7 +1311,6 @@ stored URN on its book page, and keeps listing an "Identifiers" page
 with no "URN" box; a journal hides both. The full entry is the workflow screen's
 ([→ Workflow screen & stage access, OMP3](U24-workflow-screen-and-stage-access.md#omp3)).
 Basis: probe, 2026-10-02. <sup>f-omp7</sup>
-Report: refresh owed — joins pkp-e2e#576: add it to that report's "Tracked in" (2026-10-05)
 
 ### Retired
 

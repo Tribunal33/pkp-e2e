@@ -10,7 +10,7 @@
   - 3.3: OMP (code; as on 3.4, through the 2023 backport `pkp/pkp-lib#8440`)
 - **Introduced** `pkp/pkp-lib#8554` for `pkp/pkp-lib#7369` · [7f4ef28995](https://github.com/pkp/pkp-lib/commit/7f4ef289950b6fd435b2d57d0b201c79cf8ab5d0) · 2023-01-20 · Touhidur Rahman (touhidurabir)
 - **Upstream** none found (2026-10-04)
-- **Tracked in** spec U73 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a15)
+- **Tracked in** spec U73 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U73-publication-formats-proof-terms.md#a15) · spec U72 [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U72-chapters-work-type.md#a10)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary

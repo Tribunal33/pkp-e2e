@@ -3859,7 +3859,7 @@ Thank Reviewer runs on `AjaxFormHandler`, Unassign on
 Reminder", "Resend Review Request", "Cancel Reviewer", "Reinstate
 Reviewer" and a participant's "Notify". Kept script:
 `shared/playwright/checks/issues/static-page-content-change-lost-on-close/review.js`.
-Issue report: [docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md).
+Issue report: [pkp-e2e#375](https://github.com/jardakotesovec/pkp-e2e/issues/375) ([docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md)).
 
 <a id="fn-a44"></a>
 **f-a44** — Walked 2026-10-03 (OJS `main`, `dbarnes`, the dataset's

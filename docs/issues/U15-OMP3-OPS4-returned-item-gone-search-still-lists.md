@@ -10,7 +10,7 @@
   - 3.3: none (code; no "Return to Workflow")
 - **Introduced** `pkp/pkp-lib#12881` for `pkp/pkp-lib#12799` · [d52aa4c84b](https://github.com/pkp/pkp-lib/commit/d52aa4c84b740ec537b13141f88401e8d2e4cdc4) · 2026-06-09 · Erik Hanson (ewhanson)
 - **Upstream** none found (2026-10-03)
-- **Tracked in** spec U15 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#omp3), [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ops4)
+- **Tracked in** spec U15 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#omp3), [OPS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ops4) · spec U19 [OMP8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#omp8), [OPS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#ops5)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
 
 ## Summary

@@ -11,7 +11,7 @@
   - 3.3: none (code; 3.3 has no strict mode)
 - **Introduced** [9ca884fc29](https://github.com/pkp/pkp-lib/commit/9ca884fc29aaac656f8e35c4b7e59d2e1a97b3fd) for `pkp/pkp-lib#13294`, no pull request (a forward-port of the 3.3 pull request `pkp/pkp-lib#13295`) · 2026-09-11 · Alec Smecher (asmecher)
 - **Upstream** none found (2026-10-03)
-- **Tracked in** U39 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U39-submission-and-publisher-libraries.md#a5)
+- **Tracked in** U39 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U39-submission-and-publisher-libraries.md#a5) · spec U28 [A17](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a17)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
 
 ## Summary

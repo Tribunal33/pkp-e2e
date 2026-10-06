@@ -11,7 +11,7 @@
   - 3.3: OMP (code)
 - **Introduced** commit for `pkp/pkp-lib#4749` · [02393cf8bf](https://github.com/pkp/omp/commit/02393cf8bff54d166d9447492601986ee0fc3eb0) · 2019-05-13 · Alec Smecher (asmecher)
 - **Upstream** `pkp/pkp-lib#6425` (closed after the fix for its own fault, another one; its comments note this error, which was left)
-- **Tracked in** spec U69 [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a9)
+- **Tracked in** spec U69 [A23](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a23)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 
 ## Summary

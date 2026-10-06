@@ -10,7 +10,7 @@
   - 3.3: OJS (code; "New Review Round" and "Revert Decline" only)
 - **Introduced** older gaps: not traced; present since at least OJS [f3925a3d23](https://github.com/pkp/ojs/commit/f3925a3d234cae8f89d5f157e3bc2a4ef2f865f9) (2020-03-27). Publishing's decisions on `main`: `pkp/pkp-lib#12881` for `pkp/pkp-lib#12799` · [d52aa4c84b](https://github.com/pkp/pkp-lib/commit/d52aa4c84b740ec537b13141f88401e8d2e4cdc4) · 2026-06-09 · Erik Hanson (ewhanson)
 - **Upstream** none found (2026-10-03)
-- **Tracked in** spec U65 [OJS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#ojs3)
+- **Tracked in** spec U65 [OJS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#ojs3), [OMP6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U65-editorial-statistics.md#omp6)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
 
 ## Summary

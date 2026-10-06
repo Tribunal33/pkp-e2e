@@ -10,7 +10,7 @@
   - 3.3: OMP (code)
 - **Introduced** `pkp/omp#306` for `pkp/pkp-lib#1527` · [825986f471](https://github.com/pkp/omp/commit/825986f471eeb933c5dd3a3dfec0f773efcdecd9) · 2016-07-12 · Bozana Bokan (bozana)
 - **Upstream** none found (2026-10-02)
-- **Tracked in** spec U24 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#omp3)
+- **Tracked in** spec U24 [OMP3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U24-workflow-screen-and-stage-access.md#omp3) · spec U44 [OMP7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#omp7)
 - **Checked** 2026-10-02, each branch's tip (the commits in Evidence)
 
 ## Summary

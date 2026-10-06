@@ -13,7 +13,7 @@
   - OpenSearch driver: `pkp/ojs#5267`, `pkp/omp#2208`, `pkp/ops#1179` for `pkp/pkp-lib#8920` · [13bd3b2eaa](https://github.com/pkp/ojs/commit/13bd3b2eaa5a942c05f9f0a57b1cdeab4636ce24), [40eb4dcd6d](https://github.com/pkp/omp/commit/40eb4dcd6dcd428d90c56d1e81c55c16abbc7309), [9f920948da](https://github.com/pkp/ops/commit/9f920948da7d3df26012733f7a25d576d51bfdc6) · 2026-01-22 · Alec Smecher (asmecher)
   - OPS on 3.4 and 3.5: `pkp/ops#146` for `pkp/pkp-lib#6091` · [5a4d5f4a61](https://github.com/pkp/ops/commit/5a4d5f4a61ec2b739155872f7e42b295a88b3891) · 2021-04-16 · Alec Smecher (asmecher)
 - **Upstream** none found (2026-10-03)
-- **Tracked in** spec U15 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#omp1), [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ops3)
+- **Tracked in** spec U15 [OMP1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#omp1), [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ops3), [OJS4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#ojs4)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
 
 ## Summary

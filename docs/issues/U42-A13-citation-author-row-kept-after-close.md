@@ -10,7 +10,7 @@
   - 3.3: none (code; the same free-text box)
 - **Introduced** PR `pkp/ui-library#629`, with the companion PR `pkp/pkp-lib#11427` (no issue linked) · [01208ab2](https://github.com/pkp/ui-library/commit/01208ab2d902a5275913f4f527e33017a174e661) · 2025-06-25 · GaziYucel (GaziYucel); the grant rows from `pkp/ui-library#813` for `pkp/pkp-lib#12392` · [32636ed8c](https://github.com/pkp/ui-library/commit/32636ed8c21c4a8e066579e9dda6185b3ff960bc) · 2026-05-09 · Antti-Jussi Nygård (ajnyga)
 - **Upstream** none found (2026-10-04)
-- **Tracked in** spec U42 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a13)
+- **Tracked in** spec U42 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U42-citations-and-references.md#a13) · spec U43 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U43-funding.md#a15)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary

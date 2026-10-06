@@ -10,7 +10,7 @@
   - 3.3: OJS, OMP, OPS (code)
 - **Introduced** `pkp/pkp-lib#2399` for `pkp/pkp-lib#2163` · [1d7faabe79](https://github.com/pkp/pkp-lib/commit/1d7faabe79a23cd2dd4ef8ef61e83a1f15848e30) · 2017-04-26 (merged 2017-07-26) · Nate Wright (NateWr)
 - **Upstream** none found (2026-10-04)
-- **Tracked in** spec U63 [A24](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a24)
+- **Tracked in** spec U63 [A24](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U63-import-export.md#a24) · spec U17 [OPS7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U17-sections.md#ops7) · spec U23 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U23-submissions-dashboard.md#a16)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
 
 ## Summary
