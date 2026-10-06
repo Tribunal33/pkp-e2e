@@ -255,13 +255,14 @@ typed. Nothing asks first. The one exception is an author row added in
     - A reference whose lookup failed for good carries the badge
       **"Metadata lookup failed"** under its text or its title; an
       unstructured one still offers "Reprocess".
-13. **The progress box.** While the list holds at least one reference, a
-    box under the "Add" box reads "Processing references - {finished}/{total}"
+13. **The progress box.** While the list holds a reference a lookup was
+    asked for, a box under the "Add" box reads "Processing references - {finished}/{total}"
     with "We're retrieving metadata for each reference. This may take a few
     moments. While we aim to match as many references as possible, some
     entries may not return metadata. Feel free to continue working in the
-    meantime." {total} counts every reference, and {finished} those whose
-    lookup has finished, found or failed. Once every reference has
+    meantime." {total} counts the references a lookup was asked for (added
+    or reprocessed while lookup is on), and {finished} those whose lookup
+    has finished, found or failed. Once every reference has
     finished it reads "All {total} references successfully processed" with
     "All references have been processed and added below. You can review,
     edit or remove them at any time.", or, when a lookup failed,
@@ -271,9 +272,9 @@ typed. Nothing asks first. The one exception is an author row added in
     processed, 1 incomplete") with "The metadata lookup could not be
     completed for some references, usually because an external service
     was temporarily unavailable. They are marked below - you can edit
-    them by hand, or use Reprocess to try again." A reference no lookup was asked for (added while lookup was
-    off, or upgraded from 3.5) never finishes, so over one the box stays
-    below its total for good ⚠ [A6](#a6).
+    them by hand, or use Reprocess to try again." A reference no lookup was
+    asked for (added while lookup was off, or upgraded from 3.5) is left
+    out, also once filled in by hand; "Reprocess" on it brings it in.
     While the box shows a count below its total, the page refreshes the
     list by itself every few seconds; otherwise the list changes only on a
     reload. <sup>i</sup> <sup>q11</sup>
@@ -407,7 +408,10 @@ typed. Nothing asks first. The one exception is an author row added in
     *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*)
     copies the current version's references, with their structured details
     and lookup state, and its data citations into the new version. From
-    then on each version's lists change independently. <sup>o</sup>
+    then on each version's lists change independently. A reference copied
+    while its lookup is still under way is never looked up, and holds the
+    new version's progress box (Rule 13) below its total for good ⚠
+    [A23](#a23). <sup>o</sup>
     <sup>q22</sup>
 27. **What readers see.** On a published item's landing page, a
     **"References"** block lists the version's references, one paragraph
@@ -901,7 +905,7 @@ Left out of the scenarios above, by reason:
     it finished, and "{processed} of {total} references processed,
     {failed} incomplete" once the others finish (no retry runs out on a
     test install, so the stored status stands in for it)
-  - the guard for A6 (issue report `docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md`): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
+  - the guard for A6 (retired; issue report `docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md`): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -932,8 +936,8 @@ Left out of the scenarios above, by reason:
   - A3 (the search keeping rows whose text lacks the typed word; Rule 8)
   - A4 (the lookup text saying "this Journal" on a press or a preprint
     server; Rule 10; scenario 5 passes it)
-  - A6 (the progress box below its total for good over references no
-    lookup was asked for; Rule 13)
+  - A23 (references copied into a new version mid-lookup never looked
+    up, the box below its total for good; Rule 26)
   - A7 (a DOI in a reference typed while submitting not kept with lookup
     off; Rule 17)
   - A8 (a new data citation with no place in the order: none before
@@ -999,7 +1003,6 @@ entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Pasting a reference already in the list drops it silently, and the References page still says "Saved" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | "Search references here" keeps references whose text does not contain the typed word | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | On a press or a preprint server, the References page says metadata lookup "is enabled for this Journal" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A6](#a6) | References page: over references no lookup was asked for, the progress box stays at "Processing references - 0/n" and the page refreshes for good | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A8](#a8) | A data citation added after the Data Citations table was ordered appears first, not last | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | An author can submit with no data citations when the journal requires them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1013,9 +1016,11 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A21](#a21) | In French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A22](#a22) | A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
+| [A23](#a23) | A new version taken while its references are being looked up shows "Processing references - 0/n" for good | 🐞 | low | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
 | [A5](#a5) | A reference whose lookup failed for good looks exactly like one still waiting | ✅ | retired | — |
+| [A6](#a6) | References page: the lookup's progress box counts only structured references and says "All 2 done" over five | ✅ | retired | — |
 | [A1](#a1) | A Site Administrator with no role in the journal is offered the References controls, but every change is refused | ✅ | retired | — |
 | [A18](#a18) | A References change carried to "Review" by the step rail is lost on "Submit" | ✅ | retired | — |
 | [OMP1](#omp1) | A book with no references shows an empty "References" heading | ✅ | retired | — |
@@ -1064,19 +1069,6 @@ affected, and lookup itself works the same. It shows only once a manager
 has ticked "Enable references structuring and metadata lookup" (Settings
 › Workflow › "Metadata"), which is off in a new press or server.
 Basis: probe, 2026-10-04. <sup>f-a4</sup>
-
-<a id="a6"></a>
-**A6 — References page: over references no lookup was asked for, the progress box stays at "Processing references - 0/n" and the page refreshes for good** · 🐞 · low.
-With metadata lookup on, the box under "Add" counts every reference and
-waits for each one's lookup to finish. A reference no lookup was asked
-for never finishes: one added while lookup was off, before it was
-switched on, or one upgraded from 3.5. Over such references the box
-reads "Processing references - 0/n" for good, and the page fetches the
-submission and the publication every 7 seconds while it stays open.
-Filling one in by hand changes nothing. That is the symptom
-`pkp/pkp-lib#12155` set out to remove. A fresh "Add" is counted right:
-"0/5", then "2/5", then "All 5 references successfully processed".
-Basis: probe, 2026-10-06, at the PR heads of `pkp/pkp-lib#13308` before their merge. <sup>f-a6</sup>
 
 <a id="a7"></a>
 **A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · 🐞 · medium.
@@ -1310,6 +1302,19 @@ publication. The editors, managers and assistants who press the icon
 are the ones sent to the author's page.
 Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
+<a id="a23"></a>
+**A23 — A new version taken while its references are being looked up shows "Processing references - 0/n" for good** · 🐞 · low.
+With metadata lookup on, an editor who creates a new version while the
+current version's references are still being looked up gets copies of
+those references in the new version, marked as still being looked up.
+The lookups under way work on the originals only, so the copies are
+never looked up: they never gain the found details or the "No
+structured information found" badge. The new version's box reads
+"Processing references - 0/n" for good, and the page fetches the
+submission and the publication every 7 seconds while it stays open.
+"Reprocess" on each copy, or "Reprocess all references", brings it back.
+Basis: probe, 2026-10-06, at the PR heads of `pkp/pkp-lib#13308` before their merge (OJS). <sup>f-a23</sup>
+
 ### Retired
 
 <a id="a1"></a>
@@ -1317,6 +1322,9 @@ Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
 <a id="a5"></a>
 **A5 — A reference whose lookup failed for good looks like one still waiting** · ✅ · retired. Answered 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/ui-library#982`, `pkp/pkp-lib#13318`), at the PR heads before their merge: a failed row carries "Metadata lookup failed", and the progress box counts it finished (Rules 12, 13). <sup>f-a5</sup>
+
+<a id="a6"></a>
+**A6 — References page: the lookup's progress box counts only structured references and says "All 2 done" over five** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `0dc8d84fc7`, `pkp/ui-library#982` `0185ab12`), at the PR heads before their merge: the box counts every reference a lookup was asked for, and leaves out those it was not, also once filled in by hand (Rule 13). <sup>f-a6</sup>
 
 <a id="a18"></a>
 **A18 — A References change carried to "Review" by the step rail is lost on "Submit"** · ✅ · retired. Overturned 2026-09-29: re-checked on all three apps, the step rail saves the step on the move, so the change is listed on "Review" and submitted with "Submit" › "Submit" (Rule 16). <sup>f-a18</sup>
@@ -1639,7 +1647,9 @@ Unstructured: the raw text, and the badge
 PROCESSED`; FAILED (-1) matches no branch. Lookup off: the raw text only.
 Progress box: `CitationManagerStatusProcessed.vue`, shown when `total > 0`,
 `total` = structured citations, `processed` = structured and PROCESSED
-(at the PR heads of `pkp/pkp-lib#13308`: `total` = every citation,
+(at the PR heads of `pkp/pkp-lib#13308`, round 2: `total` = every
+citation whose `processingStatus` is neither null nor NOT_PROCESSED,
+`Repository::reprocessCitation()` storing QUEUED (-2) before the chain,
 `finished` = PROCESSED or FAILED, the refresh while lookup is on and
 `finished < total`, the title and description from the store, the
 `…structured.processedWithFailures.title|description` pair when a lookup
@@ -2155,6 +2165,15 @@ tips the PRs are based on (the same day, `nb` mode), the same two showed
 no box and no fetches in 22 s; "Processing references - 0/1" and the
 fetches came only once one was filled in by hand. Facts:
 `.reports/issues-u42r7/u42r7/a6-facts-{pr13308,tip13308}-<mode>-<app>.json`.
+Round 2 (pkp-lib `097ba6b943`, the same source as `0dc8d84fc7`, which
+only reworks the unit test; ui-library `0185ab12`; ojs `14538bcaf3`;
+2026-10-06, all three apps, the same three modes): "0/5", "2/5", "All 5
+references successfully processed" as before; the two references added
+while lookup was off showed no box and no fetches in 22 s, also after one
+was filled in by hand; "Reprocess" on the other gave "Processing
+references - 0/1" (stored status 1 against the hand-filled one's 0); the
+two with no stored status: no box and no fetches, also after one was
+filled in. Facts `a6-facts-pr13308r2-<mode>-<app>.json`.
 Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883) ([docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md)).
 
 <a id="fn-f-a7"></a>
@@ -2359,6 +2378,27 @@ have no structured references (no `citation.json`, citations API or
 CitationManager).
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
 Issue report: [pkp-e2e#927](https://github.com/jardakotesovec/pkp-e2e/issues/927) ([docs/issues/U42-A22-reference-author-orcid-any-link.md](../issues/U42-A22-reference-author-orcid-any-link.md)).
+
+<a id="fn-f-a23"></a>
+**f-a23 — A23 evidence.** `PKP\citation\Repository::copyCitations()`
+(called by `publication\Repository::version()`) inserts each citation
+with its data, `processingStatus` included; the queued chain's jobs carry
+the original's `citationId`. At the PR heads of `pkp/pkp-lib#13308`
+(pkp-lib `0dc8d84fc7`, ui-library `0185ab12`, the ojs#5812 app commit;
+2026-10-06, OJS, PKP's default dataset, submission 17 and its one
+publication 18, kept check
+`shared/playwright/checks/sync/ui-library-982/version.js`): lookup on,
+publication 18 unpublished, three references added (stored status 1, the
+box "Processing references - 0/3"), published, a new version (22) made
+by REST; the copies 4, 5 and 6 at status 1, the queued jobs carrying
+citation ids 1, 2 and 3; the originals then set to 5 by SQL (what
+`IsProcessedJob::handle()` writes): the new version's box read
+"Processing references - 0/3" and the page fetched the submission and
+the publication three times each in 22 s. Before, at the tips (pkp-lib
+`5a5ab2d6c7`, ui-library `a36dc7fe`), the same walk showed no box and no
+fetches, the copies at status 1 just the same (never looked up, nothing
+on screen says so). OMP and OPS share `copyCitations()` (code; not
+walked).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where
