@@ -1048,8 +1048,8 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | The Submission stage's "Assign Editor" message ends "This is an automated message from…" instead of the editor's signature | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | A message sent with "Notify" is emailed to a participant who opted out of emails for new discussions | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS1](#ojs1) | A journal's "Editor Assigned" email tells the editor to select "Send to Review"; the button reads "Send for Review" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OMP1](#omp1) | A press's Internal Review offers no "Assign Editor" message in "Assign" and "Notify" | 🐞 | low | PR review (claude), 2026-10-02 — narrowed before merge |
-| [OPS2](#ops2) | On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
+| [OMP1](#omp1) | A press's Internal Review offers no "Assign Editor" message in "Assign Participant" and "Notify" | 🐞 | low | issues (claude), 2026-10-06 — re-verified |
+| [OPS2](#ops2) | On a preprint server, choosing the predefined message "Assign Editor" leaves "Message" unfilled | 🐞 | low · crash: server | issues (claude), 2026-10-06 — re-verified |
 | [OPS3](#ops3) | A preprint server never emails its moderators that a new preprint was assigned to them | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | On a preprint server, "Notification sent to users." shows in a box in the Production stage instead of at the top right | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A Section Editor may "Remove" rows they may not "Edit": their own, manager-level ones, and a recommending editor another editor's | ❓ | minor | — |
@@ -1301,17 +1301,14 @@ Basis: probe, 2026-10-01. <sup>[f-ojs1](#fn-ojs1)</sup>
 ### OMP
 
 <a id="omp1"></a>
-**OMP1 — A press's Internal Review offers no "Assign Editor" message in "Assign" and "Notify"** · 🐞 · low.
-On a press's Internal Review the list "Choose a predefined message to
-use, or fill out the form below." of "Assign Participant" and "Notify"
-offers "Discussion (Review)" alone. On 3.5 it also offers "Assign
-Editor" there, as External Review still does, with its letter to a
-newly assigned editor.
-An editor assigning someone on Internal Review can still pick
-"Discussion (Review)" and type the letter, or type it with the list
-left blank.
-Basis: probe, 2026-10-02, before the merge. <sup>[f-omp1](#fn-omp1)</sup>
-Report: refresh owed — narrow pkp-e2e#308 (docs/issues/U35-OMP1-internal-review-no-predefined-message.md) to the missing "Assign Editor": "Discussion (Review)" is offered since pkp/omp#2487, and its link to the deleted A3 report goes (2026-10-05)
+**OMP1 — A press's Internal Review offers no "Assign Editor" message in "Assign Participant" and "Notify"** · 🐞 · low.
+On a press's Internal Review, the predefined-message list in the
+"Assign Participant" and "Notify" windows offers only "Discussion
+(Review)". "Assign Editor", the ready-made letter to a newly assigned
+editor, is missing.
+On External Review the same list still offers "Assign Editor". On 3.5
+the Internal Review list offered it too.
+Basis: probe, 2026-10-06. <sup>[f-omp1](#fn-omp1)</sup>
 
 ### OPS
 
@@ -1343,8 +1340,7 @@ Editor" discussion with no message. Every preprint server created on
 `main` is affected: the server of a new install, and a server added to a
 site that was upgraded from 3.5. A server that existed before the
 upgrade keeps its letter.
-Basis: probe, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
-Report: refresh owed — docs/issues/U35-OPS2-preprint-assign-editor-message-not-filled.md links the A10 report, deleted at the merge of pkp/pkp-lib#13385 (A10 fixed, so "every template added in Settings already fails one line later" no longer holds): point it at pkp-e2e#315 (closed) and drop that clause (2026-10-05)
+Basis: probe, 2026-10-06. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
 **OPS3 — A preprint server never emails its moderators that a new preprint was assigned to them** · 🐞 · medium.

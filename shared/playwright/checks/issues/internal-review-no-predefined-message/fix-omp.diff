@@ -1,6 +1,6 @@
 --- a/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
 +++ b/lib/pkp/controllers/grid/users/stageParticipant/form/PKPStageParticipantNotifyForm.php
-@@ -329,6 +329,7 @@
+@@ -354,6 +354,7 @@
                  'recipientName' => __('user.role.editor'),
              ];
              case 'EDITOR_ASSIGN_SUBMISSION':
@@ -8,19 +8,97 @@
              case 'EDITOR_ASSIGN_REVIEW':
              case 'EDITOR_ASSIGN_PRODUCTION':
              case 'EDITOR_ASSIGN': return [
+--- a/classes/migration/upgrade/v3_6_0/I12593_DiscussionInternalReviewTemplate.php
++++ b/classes/migration/upgrade/v3_6_0/I12593_DiscussionInternalReviewTemplate.php
+@@ -9,7 +9,7 @@
+  *
+  * @class I12593_DiscussionInternalReviewTemplate
+  *
+- * @brief Migration to install the discussion template for the Internal Review stage
++ * @brief Migration to install the default discussion templates for the Internal Review stage
+  */
+ 
+ namespace APP\migration\upgrade\v3_6_0;
+@@ -21,8 +21,11 @@
+ 
+ class I12593_DiscussionInternalReviewTemplate extends Migration
+ {
+-    /** The unique key identifying the discussion template for the Internal Review stage */
+-    protected string $templateKey = 'DISCUSSION_NOTIFICATION_INTERNAL_REVIEW';
++    /** The Internal Review stage's default templates: key => [title, description], as in registry/taskTemplates.xml */
++    protected array $templates = [
++        'DISCUSSION_NOTIFICATION_INTERNAL_REVIEW' => ['mailable.discussionReview.name', 'emails.discussion.body'],
++        'EDITOR_ASSIGN_INTERNAL_REVIEW' => ['mailable.editorAssignedManual.name', 'emails.editorAssignReview.body'],
++    ];
+ 
+     /**
+      * @see \PKP\editorialTask\Repository::installTaskTemplates()
+@@ -37,34 +40,36 @@
+             ->pluck($contextDao->primaryKeyColumn);
+ 
+         foreach ($contextIds as $contextId) {
+-            $templateId = DB::table('edit_task_templates')->insertGetId([
+-                'key' => $this->templateKey,
+-                'stage_id' => WORKFLOW_STAGE_ID_INTERNAL_REVIEW,
+-                'context_id' => $contextId,
+-                'type' => EditorialTaskType::DISCUSSION->value,
+-            ], 'edit_task_template_id');
+-
+-            foreach ($locales as $locale) {
+-                DB::table('edit_task_template_settings')->insert([
+-                    'edit_task_template_id' => $templateId,
+-                    'locale' => $locale,
+-                    'setting_name' => 'title',
+-                    'setting_value' => __('mailable.discussionReview.name', [], $locale),
+-                ]);
+-
+-                DB::table('edit_task_template_settings')->insert([
+-                    'edit_task_template_id' => $templateId,
+-                    'locale' => $locale,
+-                    'setting_name' => 'description',
+-                    'setting_value' => __('emails.discussion.body', [], $locale),
+-                ]);
++            foreach ($this->templates as $key => [$title, $description]) {
++                $templateId = DB::table('edit_task_templates')->insertGetId([
++                    'key' => $key,
++                    'stage_id' => WORKFLOW_STAGE_ID_INTERNAL_REVIEW,
++                    'context_id' => $contextId,
++                    'type' => EditorialTaskType::DISCUSSION->value,
++                ], 'edit_task_template_id');
++
++                foreach ($locales as $locale) {
++                    DB::table('edit_task_template_settings')->insert([
++                        'edit_task_template_id' => $templateId,
++                        'locale' => $locale,
++                        'setting_name' => 'title',
++                        'setting_value' => __($title, [], $locale),
++                    ]);
++
++                    DB::table('edit_task_template_settings')->insert([
++                        'edit_task_template_id' => $templateId,
++                        'locale' => $locale,
++                        'setting_name' => 'description',
++                        'setting_value' => __($description, [], $locale),
++                    ]);
++                }
+             }
+         }
+     }
+ 
+     public function down(): void
+     {
+-        $templateIds = DB::table('edit_task_templates')->where('key', $this->templateKey)
++        $templateIds = DB::table('edit_task_templates')->whereIn('key', array_keys($this->templates))
+             ->pluck('edit_task_template_id')
+             ->toArray();
+         DB::table('edit_task_template_settings')->whereIn('edit_task_template_id', $templateIds)->delete();
 --- a/registry/taskTemplates.xml
 +++ b/registry/taskTemplates.xml
-@@ -11,11 +11,13 @@
-   -->
- <templates>
- 	<template title="mailable.discussionSubmission.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_SUBMISSION" stageId="WORKFLOW_STAGE_ID_SUBMISSION"/>
-+	<template title="mailable.discussionReview.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_INTERNAL_REVIEW" stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"/>
- 	<template title="mailable.discussionReview.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_REVIEW" stageId="WORKFLOW_STAGE_ID_EXTERNAL_REVIEW"/>
- 	<template title="mailable.discussionCopyediting.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_COPYEDITING" stageId="WORKFLOW_STAGE_ID_EDITING"/>
- 	<template title="mailable.discussionProduction.name" description="emails.discussion.body" key="DISCUSSION_NOTIFICATION_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
+@@ -18,6 +18,7 @@
  	<template title="mailable.copyeditRequest.name" description="emails.copyeditRequest.body" key="COPYEDIT_REQUEST" stageId="WORKFLOW_STAGE_ID_EDITING"/>
  	<template title="mailable.editorAssignedManual.name" description="emails.editorAssign.body" key="EDITOR_ASSIGN_SUBMISSION" stageId="WORKFLOW_STAGE_ID_SUBMISSION"/>
-+	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignReview.body" key="EDITOR_ASSIGN_INTERNAL_REVIEW" stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"/>
  	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignReview.body" key="EDITOR_ASSIGN_REVIEW" stageId="WORKFLOW_STAGE_ID_EXTERNAL_REVIEW"/>
++	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignReview.body" key="EDITOR_ASSIGN_INTERNAL_REVIEW" stageId="WORKFLOW_STAGE_ID_INTERNAL_REVIEW"/>
  	<template title="mailable.editorAssignedManual.name" description="emails.editorAssignProduction.body" key="EDITOR_ASSIGN_PRODUCTION" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
  	<template title="mailable.layoutRequest.name" description="emails.layoutRequest.body" key="LAYOUT_REQUEST" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
+ 	<template title="mailable.layoutComplete.name" description="emails.layoutComplete.body" key="LAYOUT_COMPLETE" stageId="WORKFLOW_STAGE_ID_PRODUCTION"/>
