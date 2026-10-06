@@ -39,6 +39,9 @@ record changes still in effect.
 - `docs/tracking/friction.md`: what made an agent's task harder than it
   needed to be, appended by the agents that drive screens; rows are
   deleted once acted on.
+- `docs/tracking/assignments.md`: who on the team takes each open
+  GitHub issue, by who introduced it or who knows that code best; a
+  first version to iterate on.
 - `docs/tracking/UNASSIGNED.md` and `docs/tracking/atlas/`: the inventory
   of every screen and action in the apps, and the leftovers no spec claims.
 - `docs/reports/`: regression and defect write-ups handed to the team,
