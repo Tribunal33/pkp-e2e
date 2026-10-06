@@ -1314,7 +1314,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | An address naming a tool the installation lacks prints the Import/Export list as raw code text | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A users import says a user with a short or empty password "has not been imported", yet creates the account | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A5](#a5) | One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
+| [A5](#a5) | The daily DOAJ deposit sends other journals' "Needs Sync" articles and unpublished versions to DOAJ | 🐞 | high | issues (claude), 2026-10-06 — re-verified |
 | [A6](#a6) | "Upload File" cannot be reached with the keyboard: no revision, galley or import upload without a mouse | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Going back to a Native XML "Import Results" tab imports the file again, duplicating every item | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | Importing a file the app itself exported lists "Errors occured:" under the success text | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1371,26 +1371,31 @@ opposite of what happened. {OJS OMP}
 Basis: probe, 2026-10-01. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — One journal's daily DOAJ deposit sends other journals' "Needs Sync" articles to DOAJ as its own** · 🐞 · high.
+**A5 — The daily DOAJ deposit sends other journals' "Needs Sync" articles and unpublished versions to DOAJ** · 🐞 · high.
 On an installation that hosts several journals, the daily automatic DOAJ
 deposit of one journal also takes the articles of other journals whose
 DOAJ status reads "Needs Sync". It sends them to DOAJ with its own API
-key and as its own articles: under its own journal name and ISSNs, with
-a link built on its own address, where the site shows "not found". The
-article's own journal sent nothing, yet its DOAJ list now reads
-"Submitted". Nobody is told, and the article's journal has no setting
-that prevents it. Even when that journal deposits automatically itself,
-a journal listed before it on "Hosted Journals" takes the article first.
-A journal without "DOI Versioning" takes the articles of other journals
-without it; a journal with "DOI Versioning" takes the versions of other
-journals with it. A journal with "DOI Versioning" also sends its own
-versions that a later minor version replaced, on a single-journal
-installation too. An article reads "Needs Sync" once it has been
-deposited to DOAJ (or marked as deposited) and its current version is
-then unpublished, published again or replaced by a newly published
-version. {OJS}
-Since: 2025-10-07 · Basis: probe, 2026-10-01. <sup>f-a5</sup>
-Report: refresh owed — security side, unreleased (`main` only; @jarda.kotesovec on Mattermost 2026-10-05: security label on the report and issue): the daily deposit also sends content that is not published, on a single-journal installation too: `getExportable()` selects `stale` items without `p.status = STATUS_PUBLISHED`, so an unpublished article and a never-published new version go to DOAJ. Walked 2026-09-30 as `rvaca` (one journal, OJS main): "Mark Registered" on submission 17, "Create New Version" (publication 22, a marker title, not published), "Unpublish" of publication 18; `doaj::status` read `stale` and the article left the tool's "Articles" list; `php lib/pkp/tools/scheduler.php test --name='APP\plugins\generic\doaj\DOAJInfoSender'` set it to `submitted` and queued a `DOAJRegister` job carrying the draft's marker title and `index.php/publicknowledge/article/view/17` (302 for a reader). The report's grouping fix closes it too (2026-10-05).
+key and with a link built on its own address, where the site shows "not
+found". The article's own journal sent nothing, yet its DOAJ list now
+reads "Submitted".
+The deposit also sends what is not published, on a single-journal
+installation too. An article that was deposited and then unpublished
+goes to DOAJ, its link showing readers "not found" (with "DOI
+Versioning" on, only when it already read "Needs Sync"). When it has a
+new version that nobody published, the deposit carries that draft's
+title and metadata.
+Nobody is told, and the article's journal has no setting that stops
+another journal from taking it. Even when the article's journal
+deposits automatically itself, a journal listed before it on "Hosted
+Journals" takes the article first. Journals take each other's items
+only when "DOI Versioning" is set the same way in both: articles
+between journals that have it off, versions between journals that have
+it on. A journal that has it on also sends its own versions that a
+later minor version replaced. An article reads "Needs Sync" once it has
+been deposited to DOAJ (or marked as deposited) and its current version
+is then published again or replaced by a newly published version; with
+"DOI Versioning" off, unpublishing it does so too. {OJS}
+Since: 2025-10-07 · Basis: probe, 2026-10-06. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — "Upload File" cannot be reached with the keyboard: no revision, galley or import upload without a mouse** · 🐞 · high.

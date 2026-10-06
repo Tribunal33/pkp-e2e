@@ -221,4 +221,121 @@ function dbJobs(app) {
     return {jobs: read('jobs'), failedJobs: read('failed_jobs')};
 }
 
-module.exports = {T, sleep, flat, rel, createJournal, openDoaj, readSettings, saveSettings, readList, markRegistered, unpublish, publish, versioningYes, runTask, readJobsPage, readJobDetails, dbJobs};
+/** Evidence only: the stored DOAJ statuses of a submission and of its publications. */
+function storedStatus(app, sid) {
+    return {
+        submission: sql(app, `select setting_value from submission_settings where submission_id = ${sid} and setting_name = 'doaj::status'`).trim() || null,
+        publications: sql(app, `select p.publication_id || ':' || p.status || ':' || coalesce(ps.setting_value, '-') from publications p left join publication_settings ps on ps.publication_id = p.publication_id and ps.setting_name = 'doaj::status' where p.submission_id = ${sid} order by p.publication_id`).split('\n').filter(Boolean),
+        current: sql(app, `select current_publication_id from submissions where submission_id = ${sid}`).trim(),
+    };
+}
+
+/** "Unpublish" in the header of the version page the workflow shows, confirmed. */
+async function unpublishShown(page) {
+    await controls(page).getByRole('button', {name: 'Unpublish', exact: true}).click({timeout: T});
+    const win = page.getByRole('dialog').filter({hasText: /Are you sure you don't want this to be/}).last();
+    await win.waitFor({timeout: T});
+    const w = page.waitForResponse((x) => /\/unpublish/.test(x.url()) && x.request().method() !== 'GET', {timeout: T}).catch(() => null);
+    await win.getByRole('button', {name: 'Unpublish', exact: true}).click();
+    const r = await w;
+    await idle(page).catch(() => {});
+    await sleep(800);
+    return r ? r.status() : null;
+}
+
+/**
+ * Steps "Content that is not published" (one journal), main and 3.5: publicknowledge deposits
+ * automatically; submission 17 marked registered, a new version retitled and left unpublished,
+ * version 1 unpublished; then the daily task. Each step records what it met rather than throwing.
+ */
+async function walkUnpublished({app, page, t, fact, snap, statusOf, SID}) {
+    const {signIn, signOut} = require('../../../probe');
+    const V = require('../older-version-tab-current-title/lib');
+    const {openVersionPage} = require('../jats-body-html-markup-as-text/lib');
+    const marker = `Draft title ${t}, not published`;
+    const step = async (name, fn) => {
+        try {
+            fact(name, await fn());
+        } catch (e) {
+            fact(name, {error: flat(e.message, 400), snap: await snap(page, 'error').catch(() => null)});
+        }
+    };
+    await signIn(page, 'dbarnes');
+    await step('1 publicknowledge DOAJ settings', async () => {
+        await openDoaj(page, app, 'publicknowledge');
+        const before = await readSettings(page);
+        const save = await saveSettings(page, {key: 'publicknowledge-test-key', auto: true});
+        await openDoaj(page, app, 'publicknowledge');
+        return {before, save, after: await readSettings(page), snap: await snap(page, 'settings-saved')};
+    });
+    await step('2 mark registered', async () => {
+        await openDoaj(page, app, 'publicknowledge', 'Articles');
+        const list = await readList(page);
+        const mr = await markRegistered(page, SID);
+        await openDoaj(page, app, 'publicknowledge', 'Articles');
+        return {before: list, status: mr, row: statusOf(await readList(page)), stored: storedStatus(app, SID), snap: await snap(page, 'marked')};
+    });
+    let created = null;
+    await step('3 create new version', async () => {
+        await openWorkflow(page, app, 'publicknowledge', SID);
+        created = await V.createNewVersion(page, app);
+        return {...created, snap: await snap(page, 'new-version')};
+    });
+    await step('4 retitle the new version', async () => {
+        const r = await V.retitleVersion(page, app, SID, created && created.id, marker);
+        return {...r, snap: await snap(page, 'draft-retitled')};
+    });
+    await step('5 unpublish version 1', async () => {
+        await openWorkflow(page, app, 'publicknowledge', SID);
+        const frame = V.workflowFrame(page, app);
+        const at = await openVersionPage(page, app, frame, 'first', 'Title & Abstract');
+        await sleep(1000);
+        const status = await unpublishShown(page);
+        return {at, status, stored: storedStatus(app, SID), snap: await snap(page, 'unpublished')};
+    });
+    await step('6 list before the task', async () => {
+        await openDoaj(page, app, 'publicknowledge', 'Articles');
+        const list = await readList(page);
+        return {row17: statusOf(list), list, snap: await snap(page, 'before-task')};
+    });
+    fact('queue before the task', dbJobs(app));
+    fact('7 task', runTask(app));
+    fact('queue after the task', dbJobs(app));
+    fact('stored after the task', storedStatus(app, SID));
+    await step('8 jobs pages', async () => {
+        await signIn(page, 'admin');
+        const jobs = await readJobsPage(page, app, 'jobs');
+        const jobsSnap = await snap(page, 'view-jobs');
+        let failed = await readJobsPage(page, app, 'failedJobs');
+        for (let i = 0; i < 5 && !failed.details.length; i++) failed = await readJobsPage(page, app, 'failedJobs');
+        const failedSnap = await snap(page, 'view-failed-jobs');
+        const details = [];
+        for (const href of failed.details.slice(0, 4)) {
+            const rows = await readJobDetails(page, href);
+            details.push({href: rel(href), rows: rows.map(([a, v]) => [a, /payload/i.test(a || '') ? flat(v, 6000) : flat(v, 300)])});
+        }
+        if (details.length) await snap(page, 'failed-job-details');
+        const payload = details.flatMap((d) => d.rows.map(([, v]) => v || '')).join(' ').replace(/\\/g, '');
+        return {
+            jobs: {...jobs, snap: jobsSnap},
+            failed: {...failed, snap: failedSnap},
+            details,
+            markerInPayload: payload.includes(marker),
+            links: [...new Set(payload.match(/https?:\/\/[^"\s]*?\/article\/view\/\d+(\/version\/\d+)?/g) || [])],
+        };
+    });
+    await step('9 the deposited links, signed out', async () => {
+        const q = dbJobs(app);
+        const links = [...new Set([...q.jobs, ...q.failedJobs].map((j) => j.link).filter(Boolean).map((u) => u.replace(/\\/g, '')))];
+        await signOut(page).catch(() => {});
+        const visits = [];
+        for (const u of links) {
+            const r = await page.goto(u).catch(() => null);
+            visits.push({link: rel(u), status: r ? r.status() : null, landed: rel(page.url()), h1: flat(await page.locator('h1').first().innerText().catch(() => null), 120), snap: await snap(page, 'deposited-link')});
+        }
+        return visits;
+    });
+    fact('queue at the end', dbJobs(app));
+}
+
+module.exports = {T, sleep, flat, rel, storedStatus, unpublishShown, walkUnpublished, createJournal, openDoaj, readSettings, saveSettings, readList, markRegistered, unpublish, publish, versioningYes, runTask, readJobsPage, readJobDetails, dbJobs};

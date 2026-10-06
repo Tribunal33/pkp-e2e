@@ -11,15 +11,21 @@
 //   10 (as dbarnes) the DOAJ list again; 11 (as admin) Administration › "View Jobs", "View Failed Jobs", "Details";
 //   12 the article link the deposit carried
 //
+// `unpublished` as the argument (Steps "Content that is not published", one journal): as dbarnes, publicknowledge's
+// DOAJ Settings take an API key and the automatic-deposit box; submission 17 "Mark registered"; its workflow:
+// "Create New Version", the new version's "Title & Abstract" retitled with a marker, then version 1.0 "Unpublish";
+// the DOAJ list; the daily task; the jobs pages as admin; the payload's link signed out. Submission 1 (published,
+// "Not Deposited") is the in-walk control: it must go, fix in or out.
+//
 // `neighbour` as the argument: before the task, dbarnes also saves an API key and ticks automatic deposit on
 // publicknowledge, so publicknowledge's own "Needs Sync" and "Not Deposited" articles must still go, in its own
 // name (the path a fix must leave alone).
 // The kit builds nothing; besides the screens the script reads the queue tables (Evidence only).
 //
-// Reset first:  npm run fleet-prep -- --feature issues-ir1 --dataset 1 --reset
-// Run (main):   PROBE_FEATURE=issues-ir1 PROBE_AGENT=ir1 node bin/probe.js ojs shared/playwright/checks/issues/doaj-deposit-takes-other-journals-articles/walk.js [neighbour] [versioning]
-// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-ir1-3_5 --dataset 1 --reset
-//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-ir1-3_5 PROBE_AGENT=ir1 node bin/probe.js ojs shared/playwright/checks/issues/doaj-deposit-takes-other-journals-articles/walk.js
+// Reset first:  npm run fleet-prep -- --feature issues-hk6 --dataset 2 --reset
+// Run (main):   PROBE_FEATURE=issues-hk6 PROBE_AGENT=hk6 node bin/probe.js ojs shared/playwright/checks/issues/doaj-deposit-takes-other-journals-articles/walk.js [neighbour | versioning | unpublished]
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-hk6-3_5 --dataset 2 --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-hk6-3_5 PROBE_AGENT=hk6 node bin/probe.js ojs shared/playwright/checks/issues/doaj-deposit-takes-other-journals-articles/walk.js [unpublished]
 const {forEachApp, launch, signIn, screen, shot, record, tag} = require('../../../probe');
 const L = require('./lib');
 
@@ -27,21 +33,22 @@ const neighbour = process.argv.slice(2).includes('neighbour');
 // `versioning`: both journals set "DOI Versioning" "Yes" first (the list is then "Publications"), the
 // path through the publications' query.
 const versioning = process.argv.slice(2).includes('versioning');
+const unpublished = process.argv.slice(2).includes('unpublished');
 const TAB = versioning ? 'Publications' : 'Articles';
 const SID = 17;
 
 forEachApp(async (app) => {
     if (app.name !== 'ojs') return; // DOAJ is OJS's alone
     if (!app.dataset) throw new Error('walk.js runs on a dataset fleet only (fleet-prep --dataset)');
-    const t = tag('u63ir1');
-    const facts = {app: app.name, line: app.line || 'main', dataset: app.dataset, tag: t, neighbour, versioning};
+    const t = tag('u63');
+    const facts = {app: app.name, line: app.line || 'main', dataset: app.dataset, tag: t, neighbour, versioning, unpublished};
     const fact = (k, v) => {
         facts[k] = v;
         console.log(`[fact] ${k}: ${L.flat(JSON.stringify(v), 1200)}`);
     };
     let n = 0;
     const snap = async (page, name) => {
-        const label = `${neighbour ? 'nb' : 'w'}${versioning ? 'v' : ''}-${String(++n).padStart(2, '0')}-${name}`;
+        const label = `${neighbour ? 'nb' : 'w'}${versioning ? 'v' : ''}${unpublished ? 'u' : ''}-${String(++n).padStart(2, '0')}-${name}`;
         record(label, await screen(page));
         await shot(page, label).catch(() => {});
         return label;
@@ -50,6 +57,10 @@ forEachApp(async (app) => {
 
     const {page, close} = await launch(app);
     try {
+        if (unpublished) {
+            await L.walkUnpublished({app, page, t, fact, snap, statusOf, SID});
+            return;
+        }
         // 1-3: the second journal, as admin
         await signIn(page, 'admin');
         fact('1 create journal', {status: await L.createJournal(page, app, {name: `Second Journal ${t}`, initials: 'SJ', path: t, email: `${t}@mailinator.com`})});
@@ -124,7 +135,7 @@ forEachApp(async (app) => {
         fact('12 deposited links', visits);
         fact('queue at the end', L.dbJobs(app));
     } finally {
-        record(`facts${neighbour ? '-neighbour' : ''}${versioning ? '-versioning' : ''}`, facts);
+        record(`facts${neighbour ? '-neighbour' : ''}${versioning ? '-versioning' : ''}${unpublished ? '-unpublished' : ''}`, facts);
         await close();
     }
 });
