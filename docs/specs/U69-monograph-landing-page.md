@@ -1295,7 +1295,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | In a format with several files, a file for sale shows no price | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | In French (Canada), a press's catalog, book and chapter pages and Roles list show codes, even for editors' names | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A book's earlier URL Path shows a server error page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
+| [A19](#a19) | An older version's chapter page of a book shows a blank server error page to every reader | 🐞 | medium · crash: server | issues (claude), 2026-10-06 — re-verified |
 | [A1](#a1) | On a press, a book address that names no book opens the Login page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A version address that names no version fails with a server error | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | A new version's preview also calls itself outdated, dated today or with the version's saved date | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1577,22 +1577,25 @@ version" notice, the reader gets a blank server error page. All three
 ways in fail: the address typed, the chapter's link in the older
 version's table of contents, and the older version's link in the chapter
 page's "Versions" list.
-The same blank server error page opens from the preview of a new,
-unpublished version: each chapter's link in its table of contents
-fails, tried only as below ("Yes" and a chapter with a DOI untried).
-The older version's book page and the current version's chapter pages
-still open.
-It needs three things, and the first is the default:
+Editors meet the same page in the preview of a book's second or later
+version before it is published: each chapter's link in the preview's
+table of contents fails. The preview of a book's first version, and
+every book page, still open, and so do the current version's chapter
+pages.
+It needs three things, for both pages, and the first is the default:
 - the press's "DOI Versioning" reads "No", as it does until someone
   changes it;
 - the chapter has its own page ("Chapter Page" is a tick on each
   chapter);
-- the chapter has no DOI in the older version, which is every chapter
-  of a press that assigns no chapter DOIs.
-A DOI assigned after the second version is published does not help: it
-goes to the current version's chapter only.
-Basis: probe, 2026-10-01. <sup>f-a19</sup>
-Report: refresh owed — widened to a new version's preview by the housekeeping claim check; pkp-e2e#286 says less (2026-10-05)
+- the chapter has no DOI in the version shown, which is every chapter
+  of a press that assigns no chapter DOIs. A new version's chapter
+  carries the DOI its chapter had when the version was made.
+A chapter DOI assigned later saves only one of the two pages. Assigned
+between "Create New Version" and "Publish", it goes to the published
+version's chapter: that version's page opens once it is the older one,
+but the preview still fails. Assigned after "Publish", it goes to the
+new version's chapter, and the older version's page still fails.
+Basis: probe, 2026-10-06. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version** · 🐞 · low.

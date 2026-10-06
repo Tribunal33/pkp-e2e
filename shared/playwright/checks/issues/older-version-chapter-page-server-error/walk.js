@@ -1,13 +1,16 @@
 // Issue report docs/issues/U69-A19-older-version-chapter-page-server-error.md
 // (U69 A19): on a press whose "DOI Versioning" reads "No", an older
-// version's chapter page answers a server error. Takes the report's Steps on
-// PKP's default test dataset (OMP):
-//   1-4. dbarnes opens submission 14's workflow, "Create New Version" ›
-//        "Confirm", "Publish" › "Publish"
-//   5-7. a visitor opens …/catalog/book/14, presses the older version under
-//        "Versions", then "Chapter 1: Mind Control—Internal or External?" in
-//        its table of contents
-//   8.   the visitor opens the book's page again, presses the chapter in its
+// version's chapter page, and a new version's in its preview, answer a server
+// error. Takes the report's Steps on PKP's default test dataset (OMP):
+//   1-3. dbarnes opens submission 14's workflow, "Create New Version" ›
+//        "Confirm"
+//   4-5. the new version's "Title & Abstract" › "Preview", then "Chapter 1:
+//        Mind Control—Internal or External?" in the preview's table of contents
+//   6.   the workflow again, the new version's "Title & Abstract", "Publish" ›
+//        "Publish"
+//   7-9. a visitor opens …/catalog/book/14, presses the older version under
+//        "Versions", then the chapter in its table of contents
+//   10.  the visitor opens the book's page again, presses the chapter in its
 //        table of contents and, on the chapter page, the older version under
 //        "Versions"
 // Then the controls and the neighbour checks a fix must leave as they are:
@@ -26,6 +29,7 @@
 const {forEachApp, launch, signIn, signOut, screen, record, idle, sql, note} = require('../../../probe');
 const {T, workflowFrame, createNewVersion, publishShownVersion} = require('../older-version-tab-current-title/lib');
 const {arrive} = require('./lib');
+const {openPreview, openNewestPage} = require('../new-version-preview-reader-outdated/lib');
 
 const SID = 14;
 const CHAPTER = /Chapter 1: Mind Control/;
@@ -74,26 +78,36 @@ forEachApp(async (app) => {
         await idle(e);
         record(name('step2-workflow'), await screen(e));
 
-        // 3-4
+        // 3
         fact('3 new version', await createNewVersion(e, app));
-        fact('4 publish', await publishShownVersion(e));
-        fact('4 chapters', chapters());
-
-        // 5
-        facts.s5 = await arrive(r, app, name('step5-book'), () => r.goto(app.url(book(SID))));
+        // 4-5: the new version's preview and its chapter page
+        fact('4 preview', await openPreview(e, frame, stable35));
+        record(name('step4-preview'), await screen(e));
+        const pv = e.getByRole('link', {name: CHAPTER}).first();
+        fact('5 link', await pv.getAttribute('href').catch(() => null));
+        facts.s5 = await arrive(e, app, name('step5-preview-chapter'), () => Promise.all([e.waitForNavigation(), pv.click()]));
         // 6
-        await expect(olderLink()).toBeVisible({timeout: T});
-        facts.s6 = await arrive(r, app, name('step6-older-version'), () => Promise.all([r.waitForNavigation(), olderLink().click()]));
+        await frame.gotoEditorial(SID);
+        await frame.expectVersionLoaded().catch(() => {});
+        await openNewestPage(e, frame, 'Title & Abstract', stable35);
+        fact('6 publish', await publishShownVersion(e));
+        fact('6 chapters', chapters());
+
         // 7
-        const toc = r.getByRole('link', {name: CHAPTER}).first();
-        fact('7 link', await toc.getAttribute('href').catch(() => null));
-        facts.s7 = await arrive(r, app, name('step7-older-chapter-from-contents'), () => Promise.all([r.waitForNavigation(), toc.click()]));
+        facts.s7 = await arrive(r, app, name('step7-book'), () => r.goto(app.url(book(SID))));
         // 8
-        await arrive(r, app, name('step8-book'), () => r.goto(app.url(book(SID))));
-        const current = r.getByRole('link', {name: CHAPTER}).first();
-        facts.s8a = await arrive(r, app, name('step8-current-chapter'), () => Promise.all([r.waitForNavigation(), current.click()]));
         await expect(olderLink()).toBeVisible({timeout: T});
-        facts.s8 = await arrive(r, app, name('step8-older-chapter-from-versions'), () => Promise.all([r.waitForNavigation(), olderLink().click()]));
+        facts.s8 = await arrive(r, app, name('step8-older-version'), () => Promise.all([r.waitForNavigation(), olderLink().click()]));
+        // 9
+        const toc = r.getByRole('link', {name: CHAPTER}).first();
+        fact('9 link', await toc.getAttribute('href').catch(() => null));
+        facts.s9 = await arrive(r, app, name('step9-older-chapter-from-contents'), () => Promise.all([r.waitForNavigation(), toc.click()]));
+        // 10
+        await arrive(r, app, name('step10-book'), () => r.goto(app.url(book(SID))));
+        const current = r.getByRole('link', {name: CHAPTER}).first();
+        facts.s10a = await arrive(r, app, name('step10-current-chapter'), () => Promise.all([r.waitForNavigation(), current.click()]));
+        await expect(olderLink()).toBeVisible({timeout: T});
+        facts.s10 = await arrive(r, app, name('step10-older-chapter-from-versions'), () => Promise.all([r.waitForNavigation(), olderLink().click()]));
         // typed
         facts.typed = await arrive(r, app, name('typed-older-chapter'), () => r.goto(app.url(olderChapter)));
 
