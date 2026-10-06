@@ -1453,7 +1453,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | A press or preprint server refuses a discussion edit with a raw key, not the reason | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | An Author cannot save an edit of their discussion once its first message has an uploaded file | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it | 🐞 | medium | issues (claude), 2026-10-06 — re-verified |
 | [A10](#a10) | A task's "Due Date" before today is refused with a message about a start date | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | A closed task past its due date still reads "This task is overdue. Remind the task owner…" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1593,20 +1593,21 @@ the discussion saves the same edit and keeps the file.
 Basis: probe, 2026-10-02. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
-**A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message under the recipient's name** · 🐞 · medium.
-An editor who uses "Edit" on a discussion opened by a message from the
+**A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it** · 🐞 · medium.
+A user with a manager role (such as Journal Manager or Journal Editor)
+who uses "Edit" on a discussion opened by a message from the
 Participants panel ("Notify", or the "Message" box of "Assign
 Participant") does not change that message. The first "Save", even one
-that only renames the discussion or adds a participant, adds a copy of
-the message box's text as a second message, headed with the name of the
-person the message was sent to. Later saves rewrite that copy, and the
-original message stays as it was. The copy cannot be removed afterwards,
-since a single message cannot be deleted. The person the message was
-sent to is offered "Edit" too, and their "Save" adds a message under
-their own name. Every discussion such a message opens is affected, in
-every stage.
-Basis: probe, 2026-10-02. <sup>[f-a9](#fn-a9)</sup>
-Report: refresh owed — pkp-e2e#422 (docs/issues/U37-A9-participant-message-edit-adds-message.md) links the report of *Stage participants*' A5, deleted at the merge of pkp/pkp-lib#13385: point it at pkp-e2e#343 (closed) and re-read the recipient's name now that the discussion is created by the sender (2026-10-05)
+that only renames the discussion or adds a participant, adds the
+window's message text as a second message. Later saves rewrite that
+copy, and the original message stays as it was.
+The copy is headed with the name the discussion's row shows under
+"Created by". On a journal or a preprint server that is the person the
+message was sent to, who is also offered "Edit" and whose "Save" adds a
+message of their own. On a press it is the sender.
+Nobody can remove the copy. Every discussion such a message opens is
+affected, in every stage.
+Basis: probe, 2026-10-06. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — A task's "Due Date" before today is refused with a message about a start date** · 🐞 · low.

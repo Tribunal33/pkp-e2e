@@ -5,6 +5,7 @@
 //           "u37r4 edited text" › "Save"; the window read
 //   author  dbarnes "Notify"s the author again ("u37r4 second message"); the author signs in, opens
 //           the discussion's "Edit", types "u37r4 author text", "Save"; the window read
+//           (where the row offers no menu, as on OMP since pkp/pkp-lib#13385, the window is read instead)
 //   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/participant-message-edit-adds-message/walk.js
 //   (3.5: PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 in front, PROBE_FEATURE the line fleet's feature; there the
 //   stage's "Production Discussions" grid takes the panel's place, and its "Edit" the window's.)
@@ -47,6 +48,12 @@ forEachApp(async (app) => {
                 if (w.byMenu) await ap.gotoAuthorByMenu(w.id);
                 else await ap.gotoAuthor(w.id, w.stage);
                 record('author-panel', await screen(page));
+                // Where the recipient is not the discussion's creator (pkp/pkp-lib#13385) the row offers no menu.
+                await ap.row(w.template).first().waitFor({timeout: 30000});
+                if (!(await ap.menuButton(w.template).count())) {
+                    return {offered: false, row: L.flat(await ap.row(w.template).first().innerText(), 200),
+                        messages: await L.readMessages(page, ap, w.template, 'author-window')};
+                }
                 const saved = await L.editAndSave(page, ap, w.template, {message: 'u37r4 author text'}, 'author');
                 return {...saved, messages: await L.readMessages(page, ap, w.template, 'author-window')};
             });
