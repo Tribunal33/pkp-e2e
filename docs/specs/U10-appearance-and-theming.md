@@ -1261,7 +1261,7 @@ otherwise; the team settles them on spec review.
 | [A11](#a11) | In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | After a refused file, its hidden "Remove file" frees "Upload File" but leaves "Save" disabled | 🐞 | minor | — |
-| [A16](#a16) | A "Logo" the server fails on leaves a warning sign with no message under the box | 🐞 | minor · crash: server | — |
+| [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A17](#a17) | Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&" | 🐞 | minor | — |
 | [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
 | [A20](#a20) | A removed journal thumbnail stays online at its old address | 🐞 | minor | — |
@@ -1535,18 +1535,27 @@ to Logo: undefined Jump to next error", naming no error the box shows.
 Basis: probe, 2026-10-03. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A "Logo" the server fails on leaves a warning sign with no message** · 🐞 · minor · crash: server.
-On a server whose file and request limits are both 8 MiB, a picture of
-exactly 8388608 bytes passes the "Logo" box's size check, is sent in
-full, and the application fails on the server
-([Submission files](U36-submission-files.md#a21) describes why it is
-sent at all). The manager expects a message saying why the picture was
-not taken. The picture stays in the upload frame with its "Remove
-file" link and a red warning sign under it, no message; the form's
-foot reads "Please correct one error." and "Go to Logo:" with nothing
-after it. As after a refused type ([A7](#a7)), the frame's "Upload
-File" and the tab's "Save" stay disabled. Nothing is stored, and
-nothing says the picture was too large. Basis: probe, 2026-10-02. <sup>f-a16</sup>
+**A16 — A logo or image the server refuses leaves its upload box with a warning sign and no message** · 🐞 · low · crash: server.
+A manager uploads a picture as the "Logo" in the website settings, and
+the upload's request answers with a server error that carries a message.
+The box shows none of it: the picture stays in the box with a red
+warning sign under it and no text, and the form's foot reads "Please
+correct one error." without saying what the error is.
+
+Every upload box built the same way drops the message of every refusal
+the server sends back: the context's logo, thumbnail, homepage image,
+favicon and style sheet, the site's logo and style sheet, the images of
+announcements, categories and highlights, and a publication's cover
+image. A file of the wrong type is refused in the browser before it is
+sent, and its message shows.
+
+The refusal walked here takes a server whose PHP limits
+`upload_max_filesize` and `post_max_size` are equal, and a picture of
+exactly that size: the box's own size check lets it through and PHP
+refuses the request.
+([Submission files](U36-submission-files.md#a21) describes why such a
+picture is sent at all; the disabled controls are [A7](#a7)'s.)
+Basis: probe, 2026-10-07. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&"** · 🐞 · minor.
@@ -2441,6 +2450,7 @@ the message is empty; any server refusal of a settings upload that
 carries `error` would show the same (not driven). Why the file is sent
 and the server error itself belong to Submission files' A21 and Custom
 pages & blocks' A18 (pkp-e2e#373).
+Issue report: [docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `FieldOptions.vue` prints `option.label` as HTML

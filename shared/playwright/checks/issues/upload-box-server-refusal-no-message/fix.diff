@@ -1,0 +1,33 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldUpload.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldUpload.vue
+@@ -118,6 +118,7 @@
+ import MultilingualProgress from '@/components/MultilingualProgress/MultilingualProgress.vue';
+ import FieldError from '@/components/Form/FieldError.vue';
+ import FormFieldLabel from '@/components/Form/FormFieldLabel.vue';
++import {parseDropzoneError} from '@/composables/useDropzoneDragDrop';
+ 
+ export default {
+ 	name: 'FieldUpload',
+@@ -347,20 +348,14 @@
+ 		 * Respond to upload errors
+ 		 *
+ 		 * If the message comes from dropzone.js, it will be a string. If it comes from our API,
+-		 * it will be an object.
++		 * it will be an object: `{error}` from the REST API, `{errorMessage}` from older handlers.
+ 		 *
+ 		 * @param {Object} file Details about the file
+ 		 * @param {String|Object} message The error message
+ 		 * @see https://www.dropzonejs.com/#event-error
+ 		 */
+ 		onError: function (file, message) {
+-			let errors = this.errors.slice();
+-			if (typeof message === 'string') {
+-				errors.push(message);
+-			} else if (typeof message === 'object') {
+-				errors.push(message.errorMessage);
+-			}
+-			this.setErrors(errors);
++			this.setErrors([...this.errors, ...parseDropzoneError(message)]);
+ 		},
+ 
+ 		/**
