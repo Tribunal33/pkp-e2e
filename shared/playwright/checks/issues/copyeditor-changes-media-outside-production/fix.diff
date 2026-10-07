@@ -1,6 +1,6 @@
 --- a/lib/pkp/api/v1/submissions/MediaFilesController.php
 +++ b/lib/pkp/api/v1/submissions/MediaFilesController.php
-@@ -24,6 +24,7 @@ use PKP\security\authorization\ContextAccessPolicy;
+@@ -39,6 +39,7 @@
  use PKP\security\authorization\internal\SubmissionFileMatchesSubmissionPolicy;
  use PKP\security\authorization\PublicationAccessPolicy;
  use PKP\security\authorization\PublicationWritePolicy;
@@ -8,18 +8,15 @@
  use PKP\security\authorization\UserRolesRequiredPolicy;
  use PKP\security\Role;
  use PKP\submission\Genre;
-@@ -132,6 +133,14 @@ class MediaFilesController extends PKPBaseController
+@@ -133,6 +134,11 @@
          $writeActions = ['add', 'edit', 'delete', 'link', 'linkMany'];
          if (in_array($actionName, $writeActions)) {
              $this->addPolicy(new PublicationWritePolicy($request, $args, $roleAssignments));
-+            // Media files are a Production artifact. A non-managerial role may change them only when
-+            // assigned on the Production stage, whatever stage the submission is in now; without this
-+            // PublicationWritePolicy's StageRolePolicy checks the submission's current stage, so a
-+            // participant assigned in (say) Copyediting could change media the "Media" page never
-+            // offers them. Managers and site admins pass as elsewhere; a recommend-only assignment is
-+            // refused (the false), mirroring PKPSubmissionController::$productionStageAccessRoles /
-+            // requiresProductionStageAccess.
-+            $this->addPolicy(new StageRolePolicy([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT], WORKFLOW_STAGE_ID_PRODUCTION, false));
++            // Media files are production material: changing them requires a role on the
++            // Production stage, as the "Media" page's offer and PKPSubmissionController's
++            // requiresProductionStageAccess actions do. PublicationWritePolicy alone checks
++            // the submission's current stage only.
++            $this->addPolicy(new StageRolePolicy([Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT], WORKFLOW_STAGE_ID_PRODUCTION));
          } else {
              $this->addPolicy(new PublicationAccessPolicy($request, $args, $roleAssignments));
          }

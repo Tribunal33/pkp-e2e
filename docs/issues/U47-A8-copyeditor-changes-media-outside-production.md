@@ -5,113 +5,124 @@
 - **Kind** defect
 - **Security** unreleased
 - **Affects**
-  - main: OJS, OMP (OPS has the API but a preprint is always in Production, so the mismatch cannot arise)
-  - 3.5: none (code; no media files API or "Media" page)
-  - 3.4: none (code; no media files API or "Media" page)
-  - 3.3: none (code; no media files API or "Media" page)
-- **Introduced** `pkp/pkp-lib#12251` (the media API, with no Production-stage check on `add`); the other four writes lost their file-stage guard in `pkp/pkp-lib#13054` for `pkp/pkp-lib#12702` · [2b13599365](https://github.com/pkp/pkp-lib/commit/2b135993650663320cc924dd426660a4ab16d6b2) · 2026-09-17 · Touhidur Rahman (touhidurabir)
-- **Upstream** none found (2026-10-05)
+  - main: OJS, OMP (OPS has no stage before Production)
+  - 3.5: none (code; no "Media" page or media files API)
+  - 3.4: none (code; no "Media" page or media files API)
+  - 3.3: none (code; no "Media" page or media files API)
+- **Introduced** `pkp/pkp-lib#12306` for `pkp/pkp-lib#12251` (`add`, from the start) · [f4eccf8b9f](https://github.com/pkp/pkp-lib/commit/f4eccf8b9f18ac68efa44fd7971fedd644c3d001) · 2026-02-13 · Erik Hanson (ewhanson); widened to edit, delete and link by `pkp/pkp-lib#13054` for `pkp/pkp-lib#12702` · [2b13599365](https://github.com/pkp/pkp-lib/commit/2b135993650663320cc924dd426660a4ab16d6b2) · 2026-07-29 · Touhidur Rahman (touhidurabir)
+- **Upstream** none found (2026-10-07)
 - **Tracked in** spec U47 [A8](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a8)
-- **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
-- **Model** claude-opus-4-8, parts on claude-opus-5-5
+- **Checked** 2026-10-07, each branch's tip (the commits in Evidence)
+- **Model** claude-opus-5-5
+
+Update 2026-10-07: re-verified end to end. The fault and its severity
+stand; the Proposed fix no longer refuses "recommend only" assignments,
+which would have refused managers and admins assigned on the
+submission in another role.
 
 ## Summary
 
 A version's media files (the images and style sheets its HTML galley
-shows) are managed on the "Media" page, which is production material: the
-page offers its changes only to a role assigned on the submission's
-Production stage. A journal does not list "Media" in the side menu for a
-copyeditor, and a press lists the files with no buttons.
+shows) are production material. The "Media" page offers to add, rename,
+relink and delete them only to a role assigned on the submission's
+Production stage: a journal does not list "Media" in a copyeditor's
+side menu, and a press shows them the files with no buttons.
 
-The server, though, accepts those changes from anyone who holds a role on
-the stage the submission is in now and whose assignment carries the
-"Permit submission metadata edit" permission. So a copyeditor given that
-permission, working while the submission is in Copyediting, can add,
-rename, delete and relink the version's media files (relink pairs a
-figure's web-resolution copy with its high-resolution original), other
-people's included, even though no screen offers them the actions. Once the
-submission reaches Production the same request is refused.
+The server checks something else: a section editor or assistant role on
+the stage the submission is in now, and an assignment whose box "Allow
+this person to make changes to the publication, …" is ticked. So a
+copyeditor with that box, while the submission is in Copyediting, can
+add, rename, relink and delete the version's media files, the
+production team's included, by sending the page's requests. Once the
+submission is in Production the same requests are refused.
 
-The copyeditor already may edit the version's metadata at that stage, so
-this opens no new kind of right; it is the page and the server disagreeing
-about who manages media, and one of the two should change. Each change is
-written to the submission's activity log under the copyeditor's name.
+The copyeditor may already change the version's metadata at that
+stage; what they gain is write access to another stage's files, which
+the file rules otherwise keep from them, and nobody is told of a change
+beyond the activity log. The proposed fix adds the Production check to
+the server and leaves the page as it is.
 
 ## Impact
 
-- **Lost**: nothing, in the ordinary case. A copyeditor could alter or
-  delete a version's media files that the "Media" page offers them
-  nothing to touch, but every add, rename and delete is recorded in the
-  submission's activity log under their name, and the files are shown on
-  the "Media" page the production team works in Production, so the team
-  can see and undo a change before the version is published.
-- **Who**: a copyeditor assigned to a submission in Copyediting, whose
-  "Permit submission metadata edit" box an editor has ticked (off by
-  default for the role); the same reaches any assistant-level participant
-  assigned only to stages before Production who is given that permission.
-  The changes are made by sending the "Media" page's own API requests by
-  hand, not through any screen, so no one does it by accident.
-- **Way round**: leave "Permit submission metadata edit" unticked on the
-  assignment (its default for the role); the writes are then refused.
+- **Lost**: nothing in the ordinary case. A copyeditor could rename,
+  relink or delete files the production team uploaded; each change is
+  in the submission's activity log under their name, and the files are
+  on the "Media" page the production team works on before publishing.
+- **Who**: a participant whose role reaches only stages before
+  Production, assigned with the box ticked, while the submission is in
+  one of those stages: the Copyeditor (walked) and the Marketing and
+  Sales Coordinator in Copyediting, the Funding Coordinator in
+  Submission or Review. An author reaches it only if they also hold a
+  section editor or assistant role in the journal or press and their
+  author assignment has the box ticked. The box is off by default for
+  these roles; turning on a role's "Permit submission metadata edit."
+  setting (Settings › Users & Roles › Roles) ticks it on every
+  assignment of that role, existing ones included.
+- **Way round**: leave the box unticked on such assignments (and the
+  role setting off); the writes are then refused.
 
-Low: a trusted participant who already edits the publication at that stage
-can also change its media over the API, in the uncommon state of holding
-that permission before Production, and the change is logged and reviewable
-before anything is published. It would be medium if such a change reached
-the published galley unseen, but the activity log and the Production
-"Media" page record it.
+Low: it takes a trusted, assigned participant sending requests no
+screen offers, and the change is attributable and reviewable before
+publication. It would be medium if a change could reach a published
+galley unseen.
 
 ## Steps to reproduce
 
-Preconditions: the default dataset, OJS `main` and OMP `main`. A
-submission in Copyediting with a copyeditor assigned (OJS submission 3,
-"The Facets Of Job Satisfaction …", copyeditor Maria Fritz `mfritz`; OMP
-submission 1, "The ABCs of Human Survival …", copyeditor Sarah Vogt
-`svogt`). The "Media" page sends its changes over the REST API under
-`.../api/v1/submissions/{id}/publications/{pubId}/mediaFiles`; no screen
-offers them to the copyeditor, so they are sent directly, in the
-copyeditor's signed-in session, the way the page sends them for a role it
-does offer.
+Preconditions: the default dataset, OJS `main` and OMP `main`, and two
+PNG images (the dataset ships none). The Copyediting submission and its
+copyeditor: OJS submission 3, "The Facets Of Job Satisfaction …",
+Maria Fritz `mfritz`; OMP submission 1, "The ABCs of Human Survival …",
+Sarah Vogt `svogt`. The Production control: OJS submission 5, "Genetic
+transformation of forest trees", and OMP submission 4, "How Canadians
+Communicate …", both with copyeditor `mfritz`.
 
-Setup, as the editor:
+As the editor:
 
 1. Sign in as `dbarnes`.
-2. Open the Copyediting submission's "Participants", open the copyeditor's
-   assignment ("Edit"), tick "Permit submission metadata edit", press
-   "OK". (This is the normal way to let a copyeditor correct metadata
-   during copyediting.)
-3. Open the submission's "Publication" › the version › "Media", press
-   "Add Media File", choose an image file as "Image", press "Upload
-   Files"; then add a second image as a "High resolution" file. (Any PNG
-   serves; the dataset ships none. The editor's own changes hold.)
+2. Open the Copyediting submission. In "Participants", open the
+   copyeditor's menu › "Edit"; in the "Edit Assignment" window, under
+   "Permissions", tick "Allow this person to make changes to the
+   publication, …" and press "OK".
+3. Open "Publication" › the version › "Media", press "Add Media File",
+   choose both images, set the first to "Image" and "Web resolution" and
+   the second to "Image" and "High resolution", press "Upload Files".
+   Both are listed. Note from this step's requests the "Image"
+   component's `genreId` (in the add request) and the publication and
+   two file ids (in the list request, `GET .../mediaFiles`).
 4. Sign out.
 
 As the copyeditor:
 
-5. Sign in as the copyeditor (`mfritz` on OJS, `svogt` on OMP).
-6. The actions are not offered: on OJS the side menu has no "Media"; on
-   OMP the "Media" list shows the files with no "Add Media File", no
-   "Batch Link Media" and no row menu.
-7. In this signed-in session, send the requests the "Media" page sends,
-   against the submission's own publication:
-   - add: upload a file to `.../temporaryFiles`, then
-     `POST .../mediaFiles` with `{files:[{temporaryFileId, genreId, variantType:"web", name:{en:"…"}}]}`
-     (`genreId` is the "Image" component's; the walk read it from the
-     editor's own upload).
-   - rename the editor's file: `PUT .../mediaFiles/{id}` with
-     `{name:{en:"…"}}`.
-   - relink the editor's files: `PUT .../mediaFiles/{webId}/link` with
-     `{targetSubmissionFileId: {highResId}}` (pairs the two).
-   - delete a file: `DELETE .../mediaFiles/{id}`.
+5. Sign in as the copyeditor (`mfritz` on OJS, `svogt` on OMP) and open
+   the same submission.
+6. No action is offered: on OJS the side menu has no "Media"; on OMP
+   "Media" lists the files with no "Add Media File", no "Batch Link
+   Media" and no row menu.
+7. In this session, send the requests the "Media" page sends, under
+   `.../api/v1/submissions/{submissionId}/publications/{publicationId}/mediaFiles`
+   (the ids below are OJS's from the walk; on OMP they were 145, 146
+   and 147):
+   - add: upload an image to `.../api/v1/temporaryFiles`, then `POST
+     .../mediaFiles` with
+     `{"files": [{"temporaryFileId": 1, "genreId": 10, "variantType": "web", "name": {"en": "added.png"}}]}`
+     (the upload's id, and step 3's `genreId`: 10 on OJS, 14 on OMP);
+     the answer holds the new file's id.
+   - rename the editor's web file: `PUT .../mediaFiles/46` with
+     `{"name": {"en": "renamed.png"}}` (46: the web file's id).
+   - relink: `PUT .../mediaFiles/46/link` with
+     `{"targetSubmissionFileId": 47}` (47: the high-resolution file's
+     id).
+   - delete: `DELETE .../mediaFiles/48` (48: the file added above).
 
-Control, as the same copyeditor on a submission that has reached
-Production (OJS submission 5, `mfritz`; OMP submission 4, `mfritz`):
+Control:
 
-8. Send the add request against that publication. (The box need not be
-   ticked here: the stage check refuses first, as the response shows.)
+8. Sign in as `mfritz`, open the Production submission and send the
+   same add against its publication. Her box is unticked there and
+   need not be: the stage check that refuses runs before the box is
+   read, as the error names.
 
-**Expected.** Because the "Media" page offers the copyeditor nothing at
-Copyediting, the server should refuse the same changes, as it does in
+**Expected.** Since the "Media" page offers the copyeditor nothing at
+Copyediting, the server refuses the same changes, as it does in
 Production (step 8).
 
 **Observed.** Each write at step 7 is accepted and takes effect:
@@ -120,12 +131,10 @@ Production (step 8).
 add    POST   .../mediaFiles             200   (a new media file is created)
 edit   PUT    .../mediaFiles/{id}        200   (the editor's file is renamed)
 link   PUT    .../mediaFiles/{id}/link   200   (the editor's two files are paired)
-delete DELETE .../mediaFiles/{id}        200   (the copyeditor's added file is removed)
+delete DELETE .../mediaFiles/{id}        200   (the added file is removed)
 ```
 
-Afterwards the list shows the editor's file renamed and paired and the
-copyeditor's added file gone. In Production (step 8) the same add request
-is refused:
+In Production (step 8) the same add is refused:
 
 ```
 POST .../mediaFiles  401  {"error":"user.authorization.accessibleWorkflowStage"}
@@ -133,152 +142,181 @@ POST .../mediaFiles  401  {"error":"user.authorization.accessibleWorkflowStage"}
 
 ## Cause
 
-Every media write (`add`, `edit`, `delete`, `link`, `linkMany`) in
-`lib/pkp/api/v1/submissions/MediaFilesController.php::authorize()` is
-guarded by `PublicationWritePolicy` (plus, for edit/delete/link, a
-`SubmissionFileMatchesSubmissionPolicy` ownership check, not a role one).
-`PublicationWritePolicy` builds
-`StageRolePolicy([ROLE_ID_SUB_EDITOR, ROLE_ID_ASSISTANT, ROLE_ID_AUTHOR])`
-with no stage id, and `StageRolePolicy::effect()` then falls back to the
-submission's *current* stage
-(`$this->getAuthorizedContextObject(ASSOC_TYPE_SUBMISSION)->getData('stageId')`).
-So the check passes for any non-managerial participant who has one of
-those roles on the stage the submission is in now and whose assignment
-grants publication edit (`PublicationCanBeEditedPolicy`). The "Media"
-page, by contrast, is offered only to roles that reach the Production
-stage. In Production the copyeditor has no role on the current stage, so
-the same policy denies.
+`lib/pkp/api/v1/submissions/MediaFilesController.php::authorize()`
+(lines 133–138) guards the five media writes (`add`, `edit`, `delete`,
+`link`, `linkMany`) with `PublicationWritePolicy` alone; edit, delete
+and link also get `SubmissionFileMatchesSubmissionPolicy`, which checks
+that the file belongs to the submission, not who may change it. The
+routes' `roleAuthorizer` asks only for a site admin, manager,
+sub-editor or assistant role in the context.
 
-For `add` there has never been a Production-stage check: the route carried
-only `PublicationWritePolicy` from the media API's creation
-(`pkp/pkp-lib#12251`, [f4eccf8b9f](https://github.com/pkp/pkp-lib/commit/f4eccf8b9f18ac68efa44fd7971fedd644c3d001), 2026-04-30, Erik Hanson). The edit,
-delete, link and linkMany routes used to carry `SubmissionFileStageAccessPolicy`
-on the media file stage (`SUBMISSION_FILE_MEDIA`), which only a
-Production-stage assignment may modify, so it refused a copyeditor;
-`pkp/pkp-lib#13054` (for issue `pkp/pkp-lib#12702`, a JATS-upload
-authorization fix) removed it from these routes, leaving only the
-current-stage `PublicationWritePolicy`.
+`PublicationWritePolicy` (`classes/security/authorization/PublicationWritePolicy.php:42`)
+adds `new StageRolePolicy([ROLE_ID_SUB_EDITOR, ROLE_ID_ASSISTANT, ROLE_ID_AUTHOR])`
+with no stage, and `StageRolePolicy::effect()` (lines 63–66) then uses
+the submission's current stage. Its last check,
+`PublicationCanBeEditedPolicy`, passes when any of the user's
+assignments on the submission has `canChangeMetadata` (the box,
+`Repo::submission()->canEditPublication()`). A copyeditor, whose user
+group reaches only Copyediting, therefore passes while the submission
+is in Copyediting and is refused in Production, by `StageRolePolicy`
+before the box is read.
+
+The rule this breaks: media is production material. The "Media" page
+offers its actions only to a role on the Production stage
+(`lib/ui-library/src/managers/MediaFileManager/useMediaFileManagerConfig.js`,
+`getManagerConfig()`); OJS shows "Media" in the side menu only with
+Production access (`useWorkflowNavigationConfigOJS.js`,
+`canAccessProduction`); the Galleys grid, which media is meant to match,
+requires Production-stage access (`ArticleGalleyGridHandler::authorize()`).
+
+How it came about:
+
+- `add` never had a Production-stage check: the controller was created
+  with only `PublicationWritePolicy` on it (`pkp/pkp-lib#12306`).
+- Edit, delete, link and linkMany carried
+  `SubmissionFileStageAccessPolicy` for the media file stage. That
+  policy allows writing media files only to a non-author assignment on
+  Production (`Repo::submissionFile()->getAssignedFileStages()`).
+  `pkp/pkp-lib#13054` removed it, because it refused admins and Section
+  Editors uploading JATS (`pkp/pkp-lib#12702`). In that pull request's
+  review the author held that media changes need not be tied to a stage
+  for editorial users, and the product reply was that media should
+  follow the Galleys' policy; nothing replaced the stage check.
 
 Reach of the same cause:
 
-- All five media write actions, on both OJS and OMP (add, edit, link and
-  delete walked over the API from a copyeditor in Copyediting; linkMany
-  shares the same `authorize()` path).
-- Any assistant-level role assigned only to pre-Production stages with the
-  permission, for example a Marketing and Sales Coordinator in copyediting
-  or a Funding Coordinator in submission or review (both user groups exist
-  on OJS and OMP; read in the code — the copyeditor is the case walked).
-- The body-text write routes
-  (`lib/pkp/api/v1/bodyText/PKPBodyTextController.php`) use the same
-  stageless `PublicationWritePolicy` and OJS hides "Body Text" from a
-  copyeditor the same way, so the same gap applies there; that surface is
-  [JATS XML & body text](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U48-jats-and-body-text.md)'s
-  (read in the code). The separate JATS controller
-  (`api/v1/jats/PKPJatsController.php`) shares the policy but OJS does not
-  hide "JATS" behind Production access, so the "no screen offers it" half
-  does not hold there.
+- The other roles and the author named under Impact's **Who** (code;
+  the copyeditor is the case walked). `linkMany` goes through the same
+  `authorize()` (code).
+- The body text write routes
+  (`lib/pkp/api/v1/bodyText/PKPBodyTextController.php::authorize()`)
+  use the same stageless `PublicationWritePolicy`, and OJS shows "Body
+  Text" only with Production access, so the same gap applies there
+  (code). `PKPJatsController` shares the policy, but "JATS XML" is
+  offered outside Production, so page and server agree there.
 
 ## Proposed fix
 
-The rule that broke is "media is production material, editable only by a
-role on the Production stage" — the rule the "Media" page's offer already
-follows. Add a Production-stage requirement to the media controller's
-write actions, after `PublicationWritePolicy`, in
-`MediaFilesController::authorize()`:
+Require a role on the Production stage for the media writes, in
+`MediaFilesController::authorize()`, after `PublicationWritePolicy`:
 
 ```php
 if (in_array($actionName, $writeActions)) {
     $this->addPolicy(new PublicationWritePolicy($request, $args, $roleAssignments));
     $this->addPolicy(new StageRolePolicy(
         [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SUB_EDITOR, Role::ROLE_ID_ASSISTANT],
-        WORKFLOW_STAGE_ID_PRODUCTION,
-        false
+        WORKFLOW_STAGE_ID_PRODUCTION
     ));
 }
 ```
 
-This mirrors `PKPSubmissionController`, which already pairs
-`PublicationWritePolicy` with
-`new StageRolePolicy($this->productionStageAccessRoles, WORKFLOW_STAGE_ID_PRODUCTION, false)`
-for its `requiresProductionStageAccess` actions
-(`$productionStageAccessRoles` is `[MANAGER, SUB_EDITOR, ASSISTANT]`). The
-third argument `false` refuses a recommend-only assignment, as the sibling
-does. Managers and site administrators still pass through
-`StageRolePolicy`'s manager clause, and a Section Editor, Layout Editor or
-other assistant assigned on the Production stage with the permission still
-passes. The diff is
+This follows `PKPSubmissionController`, which pairs
+`PublicationWritePolicy` with a `StageRolePolicy` on
+`WORKFLOW_STAGE_ID_PRODUCTION` for its `requiresProductionStageAccess`
+actions, with the same roles (`$productionStageAccessRoles`). Unlike
+that sibling it keeps the default `allowRecommendOnly = true`:
+
+- With `true`, a manager or site admin passes `StageRolePolicy`'s
+  manager clause whatever their assignments, so an admin assigned on
+  the submission as its author can still upload, which is what
+  `pkp/pkp-lib#12702` fixed. With `false` that clause looks for a
+  manager-role assignment on Production and refuses them.
+- The "Media" page offers its actions to a "recommend only" Section
+  Editor, and the media policy before `pkp/pkp-lib#13054` did not
+  refuse one either.
+
+The diff is
 [fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/copyeditor-changes-media-outside-production/fix.diff).
 
-**Tried.** With the fix in, every copyeditor media write at Copyediting
-(add, rename, relink, delete) is refused (401
-`user.authorization.accessibleWorkflowStage`) on OJS and OMP and the media
-list is unchanged — the Steps' Expected — while a manager still adds media
-to a submission in Production, a Section Editor assigned on Production does
-too, and the copyeditor still edits the publication's metadata at
-Copyediting (all 200), so the guard is scoped to media writes and does not
-block the roles that should keep them.
+**Tried.** On OJS and OMP `main`, with the fix in, the copyeditor's
+add, rename and relink at step 7 are refused (401
+`user.authorization.accessibleWorkflowStage`) and the list is
+unchanged, the Expected; the delete was not sent, as the refused add
+left nothing to delete, and goes through the same check. With the fix
+in and out alike, on the Production submission the manager adds media
+through the "Media" page, the Layout Editor `gcox` (box ticked) and, on
+OJS, the Section Editor `dbuskins` made "recommend only" add media with
+the page's request, and the copyeditor saves the version's title at
+Copyediting, all 200.
 
-This fix follows the "Media" page's rule (Production-stage access). It
-does not close the opposite half of the mismatch the report names: the
-page offers media management to a role assigned on Production whatever the
-current stage, but `PublicationWritePolicy` requires a role on the current
-stage, so a Layout Editor assigned on Production would still see the
-buttons and be refused while the submission is before Production. That is
-the "Media" page's offer to reconcile, outside this controller.
+The opposite mismatch stays: a Layout Editor assigned on Production
+without the box is offered the actions and refused
+([U47 A1](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U47-media-files.md#a1)).
 
 **Alternatives.**
 
-- Make the "Media" page and side menu offer media only where the server
-  accepts it (a role on the current stage): this narrows the page to match
-  the server rather than the server to match the page, a product decision,
-  and still leaves the API open to roles the page would not offer; not
-  recommended.
-- Guard only the four routes `pkp/pkp-lib#13054` changed and leave `add`:
-  that misses `add`, open since the API was created; the single policy
-  covers all five.
+- Widen the "Media" page to whoever the server accepts (a role on the
+  current stage): a product decision against the page's and the
+  Galleys' rule, and copyeditors keep write access to production files.
+- Restore `SubmissionFileStageAccessPolicy` on the four routes: brings
+  back the `pkp/pkp-lib#12702` refusal for admins assigned in another
+  role, uses an internal policy that `pkp/pkp-lib#13060` wants out of
+  controllers, and still misses `add`.
 
 **What goes with it.**
 
-- The body-text write routes share the cause and want the same guard (the
-  U48 surface); this diff does not touch them.
-- A unit test on `MediaFilesController` that a participant assigned only at
-  a pre-Production stage is refused a media write, and the e2e guard
-  planned in the spec.
+- The same guard on the body text write routes, which share the cause;
+  this diff does not touch them.
+- A unit test on `MediaFilesController`: a participant assigned only
+  before Production is refused a media write, and a manager assigned as
+  the author is not; and an e2e test of the copyeditor's refusal.
 
-Small: one policy line and an import in one shared controller, following
-an existing pattern, with no data repair and no change to an API contract.
+Small: one policy and an import in one controller, following an
+existing pattern, with no data repair.
 
 ## Evidence
 
-- Kept script and how to run it:
-  `shared/playwright/checks/issues/copyeditor-changes-media-outside-production/walk.js`
-  (helpers in `lib.js`), after
-  `npm run fleet-prep -- --feature issues-x8 --dataset 6 --reset --apps ojs,omp`:
-  `ONLY=ojs,omp PROBE_FEATURE=issues-x8 PROBE_AGENT=x8 node bin/probe.js all shared/playwright/checks/issues/copyeditor-changes-media-outside-production/walk.js`.
-  It signs in as the dataset's users, takes the Steps, and sends the
-  "Media" page's own requests in the copyeditor's session because no screen
-  offers them (the API-not-on-any-screen exception, REPORT.md "Steps").
-  `WALK=neighbour` runs the neighbour checks; the fix trial applies
-  `fix.diff` with `bin/try-fix.js`, reset-walks it in and out, and reverts.
-- Walked on main, OJS (app `1f4cef786f`, lib/pkp `a7f5e3081b`) and OMP
-  (app `a989fdc37`, lib/pkp `a7f5e3081b`), PostgreSQL (MySQL not checked):
-  the copyeditor was offered no media controls, yet add, rename, relink and
-  delete all answered 200 and took effect; the same copyeditor on a
-  Production submission was refused (401). The `genreId` was read from the
-  editor's own upload (OJS 10, OMP 14).
-- Media add, rename and delete each write a
-  `SubmissionFileEventLogEntry` (upload/edit/delete) under the acting
-  user, so the change shows in the submission's activity log
-  (`checkouts/ojs/lib/pkp/classes/submissionFile/Repository.php`).
-- Introduced: `git log`/blame on `MediaFilesController::authorize()` in
-  `checkouts/ojs/lib/pkp`: `2b13599365` removed both
-  `SubmissionFileStageAccessPolicy` blocks (edit/delete/link and linkMany);
-  `f4eccf8b9f` created the controller with none on `add`. The naming issue
-  `pkp/pkp-lib#12702` is a JATS-upload authorization fix, not this fault.
-- 3.5 (ojs `4342473090`, lib/pkp `771474347e`), 3.4 (lib/pkp `767353f4fe`)
-  and 3.3 (lib/pkp `ac3fa73402`): read in the code — `MediaFilesController`
-  is absent on all three, so the Steps cannot be walked there.
-- Upstream search (2026-10-05) of pkp/pkp-lib, pkp/ojs and pkp/ui-library,
-  open and closed: nothing about media writes accepted outside Production.
-- Run folders under `.reports/issues/x8/`. Unverified: the body-text
-  parallel is read in the code only.
+- Kept script: `shared/playwright/checks/issues/copyeditor-changes-media-outside-production/walk.js`
+  (helpers in `lib.js`). Reset, then run per app:
+  `npm run fleet-prep -- --feature issues-rc --dataset 3 --reset --apps ojs,omp`;
+  `ONLY=ojs PROBE_FEATURE=issues-rc PROBE_AGENT=rc node bin/probe.js ojs shared/playwright/checks/issues/copyeditor-changes-media-outside-production/walk.js`
+  (`omp` the same). It takes the Steps through the screens up to step
+  6 and sends step 7's requests in the copyeditor's session (the
+  API-not-on-any-screen exception, REPORT.md "Steps"). `WALK=neighbour`
+  runs the neighbour checks alone.
+- Fix trial: `node bin/try-fix.js apply shared/playwright/checks/issues/copyeditor-changes-media-outside-production/fix.diff ojs`
+  (then `omp`), a reset, the walk, a reset, `WALK=neighbour`, then
+  `revert`, a reset and `WALK=neighbour` again without the fix.
+- Walked 2026-10-07 on `main`, PostgreSQL: OJS `92bc2bb467` (lib/pkp
+  `e60013c77f`), OMP `a0e6d0a8b` (lib/pkp `5a5ab2d6c7`). Both showed
+  the Observed; the activity log held upload, edit and delete entries
+  under the copyeditor. OPS (`7e34fdd57e`) not walked:
+  `Application::getApplicationStages()` is Production alone.
+- Step 8's box: `PublicationWritePolicy` adds `StageRolePolicy` before
+  `PublicationCanBeEditedPolicy`, and `AuthorizationDecisionManager`
+  stops at the first deny, so the box on the Production assignment is
+  never read (code).
+- The role setting: `UserGroupForm::execute()` copies a changed
+  "Permit submission metadata edit." onto every stage assignment of the
+  group in the context, and `StageAssignment\Repository::build()` takes
+  it as a new assignment's default (code).
+- 3.5 (OJS `b8f5e9a951`, OMP `7d6b00060`, lib/pkp `6d7f1540b6`): the
+  Steps cannot be taken, so 3.5 rests on the code: no
+  `MediaFilesController`, no `SUBMISSION_FILE_MEDIA` and no "Media"
+  page in ui-library; an HTML galley's dependent files are uploaded
+  through `FileUploadWizardHandler`, which requires modify access to the
+  galley's own file (`SubmissionFileAccessPolicy`).
+- 3.4 (OJS `d68934d0d1`, OMP `0aec65441`, lib/pkp `767353f4fe`) and
+  3.3 (OJS `ac77c9fb35`, OMP `8e72fc883`, lib/pkp `ac3fa73402`): code
+  only, the same: no media files API, dependent files guarded as on
+  3.5.
+- Introduced: `git blame` on `authorize()` in lib/pkp gives
+  `f4eccf8b9f` for every line of the write branch; `git log` on the file
+  shows `2b13599365` removing both `SubmissionFileStageAccessPolicy`
+  blocks. `commits/<sha>/pulls` names `#12306` (merged 2026-04-30) and
+  `#13054` (merged 2026-09-17). The review discussion is
+  `pkp/pkp-lib#13054`'s `MediaFilesController` thread (2026-08-13 to
+  2026-08-21); `#13060` as the issue on internal policies in
+  controllers is named in comments on `#12702` (2026-07-30) and
+  `#13054` (2026-09-17).
+- Upstream search 2026-10-07 of pkp/pkp-lib, pkp/ojs, pkp/omp and
+  pkp/ui-library, issues and PRs, open and closed (media files with
+  copyeditor, production stage, authorization; `MediaFilesController`;
+  `PublicationWritePolicy` stage; `StageRolePolicy` current stage;
+  `SubmissionFileStageAccessPolicy` media): only `#12251`, `#12702` and
+  `#13054`, none about this fault.
+- The body text routes are the JATS XML & body text spec's (U48)
+  surface.
+- Unverified: the body text parallel, the other assistant roles, the
+  author holding an editorial role and the role setting are read in the
+  code only; MySQL not checked (the fault is in the authorization).
