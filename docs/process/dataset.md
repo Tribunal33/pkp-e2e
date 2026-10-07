@@ -45,6 +45,11 @@ what the team's installs hold (harness.md "Dataset fleets").
   changes it for the next walk too: steps start from a freshly loaded
   dataset, and a walk resets its fleet first (harness.md "Dataset
   fleets").
+- A form with fields in two languages shows the English ones alone; the
+  French fields appear once the button reading "French" above the form
+  is pressed (`.pkpFormLocales__locale`), so a step names that press and
+  the button as the screen words it, "French", not "Français" (U10 issue
+  walk).
 - Mail: every dataset user's address is `<username>@mailinator.com`
   (`pkpadmin@mailinator.com` for `admin`), the same in all three apps, so
   a mailbox read on a slot's Mailpit is scoped by recipient and time, not

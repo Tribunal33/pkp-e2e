@@ -561,12 +561,12 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - "OK" in "Add a file" before a file has uploaded, with none chosen and with one still uploading, keeps the window open, adds nothing and shows "A library file is required. Please ensure that you have chosen and uploaded a file." at the top right (Fields "File"; Rule 3a)
-  - the close button of "Add a file" after an "OK" refused for a missing file asks "The data on this form has changed. Do you wish to continue without saving?" (Rule 3b; A11, docs/issues/U08-A18-item-window-refused-save-closes-unasked.md)
-  - an assigned Copyeditor and, on a preprint server, the Moderator and the Author download a Submission Library file from the "Submission Library" window (Actors row 3; Rule 8b; A1)
-  - a row's strip opened within two seconds of a download stays open three seconds later, and two names pressed in a row raise no page error (Rule 8a; A9, A12)
-  - "Description" in both libraries' "Add a file" and "Edit" carries the required star only if an empty one is refused (Fields; A3)
-  - a file whose uploaded name holds its extension earlier on ("notes-pdf-draft.pdf"), and one of 127 characters or more, downloads as its name with the type code before one extension (Rule 8a; A4)
-  - "Delete" › "OK" in the Submission Library removes the file on an install running in strict mode (Settings bullet 3; A5)
+  - the guard for A11 (issue report `docs/issues/U08-A18-item-window-refused-save-closes-unasked.md`), once fixed: the close button of "Add a file" after an "OK" refused for a missing file asks "The data on this form has changed. Do you wish to continue without saving?" (Rule 3b)
+  - the guard for A1 (issue report `docs/issues/U39-A1-submission-library-file-403-for-participants.md`), once fixed: an assigned Copyeditor and, on a preprint server, the Moderator and the Author press a Submission Library file's name in the "Submission Library" window and the file downloads, the page staying on the workflow screen (Actors row 3; Rule 8b)
+  - the guard for A9 and A12 (issue report `docs/issues/U39-A9-A12-library-download-redraws-list.md`), once fixed: a row's strip with "Edit" and "Delete", opened within two seconds of a download, is still open three seconds later, and two files' names pressed one after the other do not make the page's script fail (Rule 8a)
+  - the guard for A3 (issue report `docs/issues/U39-A3-library-description-starred-not-required.md`), once fixed: "Description" in both libraries' "Add a file" and "Edit" carries no required-field star, or keeps the star and refuses an empty description, whichever the team chooses (Fields "Description")
+  - the guard for A4 (issue report `docs/issues/U39-A4-library-download-name-cut.md`), once fixed: a file whose uploaded name holds its extension earlier on, and one of 127 characters or more, downloads under its name with the type code before one extension ("notes-pdf-draft.pdf" added as "Marketing" as "notes-pdf-draft-MAR.pdf") (Rule 8a)
+  - the guard for A5 (issue report `docs/issues/U39-A5-library-delete-strict-mode-error.md`), once fixed: "Delete" › "OK" in the Submission Library removes the file on an install running in strict mode (Rule 5a; Settings bullet 3)
   - after "Delete" › "OK", the address a Submission Library file's name downloaded from, opened again, shows a bare page reading "403 Forbidden", and so does a deleted Publisher Library file's (Rule 5; A8 retired)
 - **Nothing new to test**:
   - a recommending editor's "Notify Editors" page {OJS OMP}: its "Library Files", and the attached file's copy listed in the discussion the recommendation opens (Actors row 8; Rule 11c)

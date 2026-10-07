@@ -226,6 +226,15 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
    "Nothing has been published in this category yet." ("No titles have
    been published yet." on a press) never shows ⚠ [A1](#a1).
    <sup>g</sup> <sup>td7</sup> <sup>td8</sup>
+   - 9a. **A page number past the last one.** A page the category does
+     not have, opened by typing its address (a one-page category's
+     address followed by "?categoryPage=2"), should answer the not-found
+     page of Rule 13. Instead the category's page opens with no article
+     listed ⚠ [A23](#a23). For a category holding one article, a
+     journal's and a preprint server's page reads "1 Items" and, where
+     the list would be, "26 - 1 of 1 items", a range that starts after
+     its end, with no page numbers; {OMP}: "1 Titles", the visible
+     heading "All Books", nothing under it. <sup>td16</sup>
 10. **The order of the list.** The category's "Order of articles" is meant
     to set the order of this page. It does not: whatever it is set to, the
     page lists the articles in the same order ⚠ [A2](#a2). A press lists
@@ -446,7 +455,8 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
   books on its category pages, and the "Browse" block's "New Releases"
   and "Series".
 - [Sections](U17-sections.md): a preprint server's top-level category links
-  on its home page and "Archives" page.
+  on its home page and "Archives" page; its OPS5 is the "Archives" page
+  typed past its last one, the same fault as [A23](#a23) here.
 - [Monograph landing page](U69-monograph-landing-page.md): the category links on a book's
   page.
 
@@ -897,6 +907,7 @@ Left out of the scenarios above, by reason:
     Fields, "Path"; scenario 1 reads it in "Add Category")
   - A22 (the small copy's address typed for a category with no picture;
     Rule 12a)
+  - A23 (a page number typed past a category's last page; Rule 9a)
   - OMP1 ("Cover Image Max Width" and "Cover Image Max Height" changed,
     with no picture shown to size; Settings bullet 6)
   - OMP3 (the press's "Browse" for a screen reader; Fields, the "Browse"
@@ -957,6 +968,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With the "Browse" block in a journal's sidebar, every page's breadcrumb gets a grey bar | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A22](#a22) | The picture address of a category with no picture never finishes loading on a journal or preprint server | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
+| [A23](#a23) | A category page number typed past the last page opens a page with no articles, reading "26 - 1 of 1 items", instead of "404 Not Found" | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1241,6 +1253,22 @@ or by keeping the address of a picture the manager has since removed. A
 press is not affected, because its own handler checks for a picture
 first and answers an empty page. (Rule 12a)
 Basis: probe, 2026-10-07. <sup>f-a22</sup>
+
+<a id="a23"></a>
+**A23 — A category page number typed past the last page opens a page with no articles instead of "404 Not Found"** · 🐞 · minor.
+A visitor who opens a category's page at a page number past its last one
+should get the bare "404 Not Found" page, as a journal's "Archives" and
+a preprint server's section page give for a page they do not have.
+Instead the category's page opens with its heading and its count and
+lists no article. On a journal and a preprint server a category with one
+article then reads "26 - 1 of 1 items", a range that starts after the
+last article; on a press it reads "1 Titles" and "All Books" with
+nothing under it.
+No link leads to such an address: it is typed, bookmarked, or left
+behind when the category lost articles or "Items per page" grew. It is
+the same fault as a preprint server's "Archives" page past its last one
+([Sections](U17-sections.md#ops5), its OPS5). (Rule 9a)
+Basis: probe, 2026-10-02. <sup>f-a23</sup>
 
 ### OMP
 
@@ -2000,6 +2028,27 @@ the browser never finished loading. `fullSize()` reads the same array
 not walked for this: its picture addresses answer an empty page today
 (OMP1), and the OMP1 report's fix would hand them to the same code.
 
+<a id="fn-td16"></a>
+**td16** — Walked 2026-10-02 (Rule 9a; A23), OJS, OMP and OPS on `main`,
+the default dataset, signed out, in passing by the A1 issue report's
+walk (`shared/playwright/checks/issues/empty-category-no-message/walk.js`,
+`WALK=neighbour`, its step "n9 its page 2, past the last one"), with
+that report's fix applied and without, the same both times:
+"Anthropology" (under "Social Sciences") held one published item, placed
+there through the screens by `dbarnes`, with "Items per page" at 25. Its
+page listed the item under "1 Items" and "1 - 1 of 1 items" (OMP "1
+Titles", "All Books", the book and no paging line).
+`…/publicknowledge/en/catalog/category/anthropology?categoryPage=2` (OPS
+`…/preprints/category/anthropology?categoryPage=2`) answered 200, titled
+"Anthropology | Journal of Public Knowledge" ("… | Public Knowledge
+Preprint Server", "… | Public Knowledge Press"), and read "Home / Social
+Sciences / Anthropology", the heading "Anthropology", "1 Items", the
+heading "All Items" over an empty list and "26 - 1 of 1 items", with no
+page links; OMP "1 Titles" and "All Books", nothing under it. No request
+failed and the server logs stayed empty. A category of several pages was
+not typed past its end, the walk was not repeated at the 2026-10-07
+tips, and stable-3_5_0 was not driven.
+
 <a id="fn-f-a1"></a>
 **f-a1** — `catalogCategory.tpl` (all three apps) tests `{if
 empty($results)}`, and `$results` is the `LengthAwarePaginator`
@@ -2182,6 +2231,32 @@ response the browser never completes. A guard that answers
 "What goes with it", 2026-10-02).
 Issue report: [pkp-e2e#934](https://github.com/jardakotesovec/pkp-e2e/issues/934) ([docs/issues/U16-A22-category-no-picture-address-never-loads.md](../issues/U16-A22-category-no-picture-address-never-loads.md)).
 
+<a id="fn-f-a23"></a>
+**f-a23** — Note td16. `PKPCatalogHandler::category()` (note g) takes the
+page from `getRangeInfo($request, 'category')`, the `categoryPage` query
+variable the page links carry (`smartyPageLinks()`, `name="category"`),
+and hands it to `paginate()` without comparing it with the paginator's
+`lastPage()`: no `NotFoundHttpException` for a page past the end, on any
+of the three apps. OJS's and OPS's `catalogCategory.tpl` then print
+`{page_info iterator=$results}`: `PKPTemplateManager::smartyPageInfo()`
+computes `from` as (page − 1) × `itemsPerPage` + 1 (26) and `to` as the
+smaller of the total and page × `itemsPerPage` (1), and prints
+`navigation.items` whenever the paginator has at least one page;
+`smartyPageLinks()` prints nothing for a single page. OMP's template
+prints no paging line (note g, U10 OMP2). Code read 2026-10-07 at ojs
+`3265fdc673`, omp `0c6a3ebed1`, ops `8ae6c68e04`, each with lib/pkp
+`f8285b0b8f`. Before, by the code alone: stable-3_5_0's `category()`
+reads the page from the address's second part (`…/category/{path}/2`)
+and has no past-the-end check either; it hands the template an empty
+array, so its page would read "Nothing has been published in this
+category yet." under the count, with no range line. The range line came
+with pkp/pkp-lib#8920 (note f-a1). The pages that answer 404 past their
+end: OJS `IssueHandler::archive()` (pkp/pkp-lib#10596) and OPS
+`SectionsHandler::section()` (U17 note q); OPS `PreprintsHandler::index()`
+does not (U17 OPS5), nor OMP's catalog and series pages (U68 A10, an open
+question there). No issue report covers the category page: U17 OPS5's
+report names it as not read.
+
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read
 `ContextFileManager(press)->getBasePath() . '/categories/' .
@@ -2279,7 +2354,7 @@ records in `.reports/issues-r5/r5/`.
 | "Add Category" / "Edit Category" window | same tab | VUE-054 |
 | Categories API (list, add, edit, delete; its `categoryFormComponent` route has no method, see UNASSIGNED) | `api/v1/categories` | API-010 |
 | The category record (name, path, description, order, picture, parent) | — | SET-004 |
-| A category's page, its picture and small copy | `catalog/category/{path}` (OPS `preprints/category/{path}`), `…/fullSize`, `…/thumbnail` | ROUTE-006, AFFR-072 |
+| A category's page, its picture and small copy | `catalog/category/{path}` (OPS `preprints/category/{path}`), later pages `?categoryPage={n}`, `…/fullSize`, `…/thumbnail` | ROUTE-006, AFFR-072 |
 | The home page's row of categories {OJS} | journal home (owned by *Appearance & theming*, its Rule 15) | AFFR-024 |
 | "Browse" block {OJS OPS}, press's "Browse" block categories part {OMP} | the sidebar | AFFR-086, PLUG-001 |
 | A press's "New Releases" on its category page | category page {OMP} (*Catalog browse*) | AFFR-072 (OMP rows, handed on) |

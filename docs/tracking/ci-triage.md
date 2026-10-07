@@ -1280,6 +1280,18 @@ trips.
   sighting at a `selectTab` read; then read its trace for what the
   press met.
 
+- **OMP U55 S3's settings-wizard first tab press not taking after a
+  reload** (OMP, once, pkp-e2e push run 37639539599 on `main` 3fbc42be,
+  2026-10-07, shard 3/3, green on its retry). `RestrictBulkEmailsTab.open()`
+  after `reload()` (`NotifyUsersPages.js:364`, from
+  `U55-notify-users.spec.js:110`): the wizard's first tab was visible with
+  its label and took the click, and the side tab "Restrict Bulk Emails"
+  never showed in 30 s, so the press landed before the reloaded page's
+  tabs were bound; found by the CI tally, no earlier sighting on any app.
+  **Watch condition**: a second sighting at that line; then gate the
+  first-tab press on the tab's own panel being shown, as `selectTab`
+  reads do.
+
 ## Companion branches — pkp-e2e branches waiting on app PRs
 
 One row per branch prepared for a developer's open OJS, OMP or OPS pull

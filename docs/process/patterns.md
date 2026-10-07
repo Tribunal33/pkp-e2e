@@ -705,7 +705,9 @@ kept three times only counted in `consoleRepeats`: TinyMCE's deprecation
 warning at every editor mount filled one shared cap, U29 I30), every browser dialog
 (`dialogs`: type and message) and every page notice as it appears
 (`notices`, pitfall 14); a browser `fn` leaves open when it ends or
-throws is closed by `forEachApp`; `launch(app, {record: false})`
+throws is closed by `forEachApp`, and one killed under the run (a session
+pause stops the slot's browsers) prints one `BROWSER CLOSED under the run`
+line and exits 1, so re-run that app; `launch(app, {record: false})`
 keeps the record empty for a check that must leave nothing behind. `screen(page)` is the screen as data: the aria snapshot of
 the main region (the body when the page has no `main`) and of every open
 dialog, plus the verbatim `innerText` of header and main, because aria

@@ -94,7 +94,7 @@ except the two password boxes, which come back empty and must be retyped.
 |------------------|-----------|-------|
 | "Which journals on this site would you like to register with?" | no | One block per enabled journal, headed by its name, then "Request the following roles." with a checkbox per self-registering Reader and Reviewer role of that journal (Rule 8). A journal that requires sign-in to view its pages is listed as usual; a disabled journal is left out. Journals that closed registration still appear, with no roles under them ⚠ [A4](#a4) <sup>c</sup> |
 | "Yes, I agree to have my data collected and stored according to this journal's privacy statement." (per journal) | yes, when a role of that journal is ticked | Appears under a journal the moment one of its roles is ticked, when that journal has a Privacy Statement and the site is not in single-statement mode (see *Settings* below); on a press site the line is on screen from the start under every press with a statement ⚠ [OMP2](#omp2). A ticked role whose journal's line is left unticked is refused with one line, however many journals are affected: "You must consent to the privacy statement for any journal with which you are registering." (Rule 5) ⚠ [OMP1](#omp1) <sup>d</sup> |
-| "If you requested to be a reviewer on any journal, please enter your subject interests." | no | Plain text box, commas separating interests (a press asks "…to be a reviewer for any press…"). Shown on every site-level page; a preprint server's asks "If you requested to be a reviewer, please enter your subject interests." though it offers no reviewer role, and what is typed there has no home on the profile ⚠ [OPS1](#ops1) <sup>k</sup> |
+| "If you requested to be a reviewer on any journal, please enter your subject interests." | no | Plain text box, commas separating interests (a press asks "…to be a reviewer for any press…"). An interest typed after a comma and a space that another visitor has typed too is kept a second time (Rule 8). Shown on every site-level page; a preprint server's asks "If you requested to be a reviewer, please enter your subject interests." though it offers no reviewer role, and what is typed there has no home on the profile ⚠ [OPS1](#ops1) <sup>k</sup> |
 | "Yes, I agree to have my data collected and stored according to the privacy statement." (site) | yes, when shown | Shown only when the site itself has a Privacy Statement. Missing: "You must consent to this site's privacy statement." ⚠ [OMP1](#omp1) <sup>d</sup> |
 | "Yes, I would like to be notified of new publications and announcements." | no | Offered, but the choice is not recorded anywhere ⚠ [A3](#a3) <sup>e</sup> |
 
@@ -195,7 +195,16 @@ except the two password boxes, which come back empty and must be retyped.
    self-registering Reader and Reviewer roles of journals with open
    registration are offered; a press offers "Reader" and "External
    Reviewer", a preprint server "Reader" alone. With nothing ticked the
-   account exists with no role in any journal. <sup>c</sup>
+   account exists with no role in any journal. When two visitors each type
+   the same interests into the page's interests box as a person does, with
+   a space after the comma ("glacier, ethics"), the site keeps "ethics"
+   twice, one copy for each visitor. On a journal or press each visitor's
+   Roles tab still lists "glacier" and "ethics" once; once either of them
+   presses "Save" on that tab, a Journal Manager reading that account's
+   "View more details" under Users & Roles › "Edit" sees "glacier, ethics,
+   ethics" (the *User profile* finding
+   [an interest listed twice](U03-user-profile.md#a20)).
+   <sup>c</sup> <sup>k</sup>
 9. **Signed in on success.** When email validation is not required, a
    successful registration signs the new account in at once. The browser
    then lands on the "Registration complete" page (Rule 10), unless the
@@ -736,6 +745,9 @@ Left out of the scenarios above, by reason:
     ([A1](#a1); Rule 14): the guard the issue report
     (`docs/issues/U02-A1-activation-link-expires-before-validation-timeout.md`)
     proposes, once fixed
+  - on a journal or press, two interests typed with a comma and a space
+    into the site-level page's interests box, each then listed once on the
+    new account's Roles tab (Rule 8)
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -757,6 +769,7 @@ Left out of the scenarios above, by reason:
   - a signed-in user adding roles on the profile's Roles tab (Actors row 7; *User profile*)
   - a Section Editor refused on Users & Roles (Actors row 8; *Roles configuration*)
   - OPS: opening "Make a New Submission" enrolling the Reader as Author (Rule 7; *Submission wizard*)
+  - an interest two visitors typed on the site-level page listed twice for the account after a Roles "Save" (Rule 8; *User profile*)
   - an altered key answering a bare "404 Not Found" (Rule 14; *User invitations*)
   - a dead-link account staying disabled until "Enable User" (Rule 14; *Users management*)
   - the last-login date set on the first sign-in (Side effects; *Login & sessions*)
@@ -1495,6 +1508,26 @@ typed at journal level became two chips "ethics" and "statistics" under
 "Reviewing interests" on the OJS and OMP Roles tab; two comma-separated
 interests typed on the site-level page became two chips on OJS and OMP,
 while the OPS Roles tab has no "Reviewing interests" field (OPS1).
+The split does not trim (Rule 8): `setInterestsForUser()`
+(`classes/user/interest/Repository.php`) splits the typed string on "," as
+it stands, looks each part up by exact name and creates, trimmed, every
+part it does not find, so " ethics" typed after a comma and a space never
+matches a stored "ethics" and a second entry of that name is created.
+Live-probed 2026-10-07 (Rule 8; OJS and OMP `main`, two runs each with
+fresh words, kept script `shared/playwright/checks/U03/I07/i07.js`, phase
+`int`): two visitors registered on the site-level page with "Reader" and
+the reviewer box ticked under a scratch context and "glacier…, ethics…"
+typed into the interests box, a comma and a space between the two; the
+vocabulary then held one "glacier…" entry and two "ethics…" entries, each
+visitor linked to one of the two (the script's `int-b-stored` read); the
+first visitor's Roles tab showed two chips, and the manager's Users &
+Roles › "Edit" › "View more details" read "Reviewing interests glacier…,
+ethics…" before that visitor's Roles "Save" and "glacier…, ethics…,
+ethics…" after it (*User profile*'s finding A20, whose note holds the
+save). Two earlier runs that reused fixed words across runs held three
+copies. OPS registers the copies the same way. The journal-level
+"Reviewing interests" box was not driven with an interest another account
+already held.
 Multilingual copy: `execute()` writes
 `givenName`, `familyName`, `affiliation` in `Locale::getLocale()` and again
 in the site primary locale when different (Rule 16). Live-probed

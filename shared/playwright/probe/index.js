@@ -629,11 +629,22 @@ async function launch(app, {storageState, headless = true, record: keepRecord = 
         (dialog.type() === 'beforeunload' ? dialog.accept() : dialog.dismiss()).catch(() => {});
     });
     console.log(`[probe] ${app.name}: ${app.baseURL} (key from ${app.keySource})`);
+    let closing = false;
     const close = async () => {
+        closing = true;
         openBrowsers.delete(close);
         await context.close().catch(() => {});
         await browser.close().catch(() => {});
     };
+    // A browser that goes without close() was killed under the run (a
+    // session pause stops the slot's browsers): say so once, since the
+    // script's own catches would log every later step as its own failure.
+    browser.on('disconnected', () => {
+        if (!closing) {
+            console.error(`[probe] ${app.name}: BROWSER CLOSED under the run at ${new Date().toISOString()}; every record after this line is void, re-run ${app.name}`);
+            process.exitCode = 1;
+        }
+    });
     openBrowsers.add(close);
     return {browser, context, page, close};
 }

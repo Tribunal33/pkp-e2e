@@ -36,7 +36,7 @@ account.
 | Action | Who may, and when |
 |--------|--------------------|
 | **Open Settings › Website › "Setup" › "Navigation" and add, edit or delete the journal's menus and items** (Rules 1, 3–14) | • whoever opens the Settings pages; nobody else: every other role has no "Settings" in the side menu and gets the access-denied page at the Settings address <sup>b</sup><br>• a manager-level role without "Permit changes to Settings" is refused the tab, yet can still add, rename and rearrange the journal's menus through the requests the menu window sends ⚠ [A26](#a26) |
-| **Add, edit or delete the site's menus and items** (Administration › "Site Settings" › "Site Setup" › "Navigation", Rule 1b) | • the Site Administrator, while the site hosts two or more journals; with exactly one journal the side tab is not offered<br>• there, the menus can be removed and the items added, edited and removed, but "Add Menu" and a menu's "Edit" open no window, so a site menu cannot be added or edited (Rule 1b, [A4](#a4)) <sup>c</sup> |
+| **Add, edit or delete the site's menus and items** (Administration › "Site Settings" › "Site Setup" › "Navigation", Rule 1b) | • the Site Administrator, except while the site hosts exactly one journal: the side tab is then not offered<br>• there, the menus can be removed and the items added, edited and removed, but "Add Menu" and a menu's "Edit" open no window, so a site menu cannot be added or edited (Rule 1b, [A4](#a4)) <sup>c</sup> |
 | **See the public header, the footer, breadcrumbs, page links and skip links** (Rules 15–24) | • any visitor, signed in or not, on any public page of a journal or of the site but the bare "404 Not Found" (Rule 26b); a journal closed to signed-out visitors sends them to Login first ([Journal identity & about pages](U07-journal-identity-and-about-pages.md), Rule 22) <sup>d</sup> |
 | **Use the public user menu** (Rules 18–19) | • signed out: "Login", and "Register" while the journal accepts registrations<br>• signed in: the username, "Dashboard", "View Profile", "Logout"<br>• "Administration": the Site Administrator only<br>• where "Dashboard" leads depends on the role, Rule 19; a Section Editor is sent to the Profile page [A2](#a2) <sup>e</sup> |
 | **See and follow the "Edit" shortcut on a public page** (Rule 25) | • a signed-in user holding a manager-level role in that journal<br>• nobody else, a Site Administrator without a manager-level role in the journal included <sup>f</sup> |
@@ -139,9 +139,11 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
    - 1b. **The site's own.** The site has a separate set for its own
      pages (the site's home page and its site-level Login and Register
      pages), on Administration › "Site Settings" › "Site Setup" ›
-     "Navigation", with the same tables. The side tab is offered only
-     while the site hosts two or more journals (a test install gains it
-     with its first scratch journal). <sup>c</sup>
+     "Navigation", with the same tables. The side tab is not offered
+     while the site hosts exactly one journal (a test install gains it
+     with its first scratch journal). A site with no journal offers it
+     too (not seen on the test installs: each always hosts the seeded
+     journal). <sup>c</sup>
      - There, "Add Menu", a menu's title and its "Edit" dim the page and
        open no window; nothing on the page can be pressed until it is
        reloaded. A site menu can be removed, but not added or edited
@@ -1260,6 +1262,7 @@ Left out of the scenarios above, by reason:
   - OPS4 ("No server in context!" on a settings address opened at the site's level {OPS}; Rule 26c)
 - **No seed**:
   - the site's only menu removed with "OK" (Rule 1b): no screen can give the site a menu back (A4), so the test install would stay without one
+  - a site with no journal offering the site's "Navigation" tab (Rule 1b; Actors row 2): every test install hosts the seeded journal
   - "Series" and "Category" items {OMP}: no key seeds a series or category on a scratch press (item types table)
   - the principal contact's "Name" and "Mailing Address" both empty: the "Contact" tab refuses an empty "Name" (Settings bullet 3)
   - a deeper menu depth limit: only the installation's configuration file sets it (Settings bullet 14; Rule 16a; A9)
@@ -1821,8 +1824,14 @@ Settings › Website answered with the access-denied page (note f-a26).
 
 <a id="fn-c"></a>
 **c** — `AdminHandler::siteSettingsAvailability()`: `'navigationMenus' =>
-$isMultiContextSite`, where `$isMultiContextSite = context count !== 1`.
-Install defaults (seed-facts, 2026-09-16): the Site Settings
+$isMultiContextSite`, where `$isMultiContextSite =
+app()->get('context')->getCount() !== 1`: the tab is withheld at a count
+of exactly one and offered at any other, zero included (the method's own
+comment: "The multi context UI is also displayed when the journal has no
+contexts"). The no-journal site is by the code, not seen (read
+2026-10-03, with A4's issue report, all three apps sharing the handler):
+the test installs always host the seeded journal, so the state cannot be
+built there. Install defaults (seed-facts, 2026-09-16): the Site Settings
 "Navigation" side tab appears once a second context exists. At site level
 the grids load `context_id` 0 (`SITE_CONTEXT_ID`) menus and items, and
 `load_menu` on a page without a context reads the same. Live-probed
