@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `500d9a936e` | 2026-10-06 | claude (daily maintenance session) |
-| omp | `fd3cdebc4d` | 2026-10-06 | claude (daily maintenance session) |
-| ops | `08540bf2e5` | 2026-10-06 | claude (daily maintenance session) |
-| pkp-lib | `771474347e` (ojs, omp, ops) | 2026-10-06 | claude (daily maintenance session); ui-library `98ac898651` (ojs, omp, ops; 2026-10-06, the pkp/pkp-lib#13188 PR review merge); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
+| ojs | `b8f5e9a951` | 2026-10-07 | claude (daily maintenance session) |
+| omp | `7d6b00060a` | 2026-10-07 | claude (daily maintenance session) |
+| ops | `acc0de0586` | 2026-10-07 | claude (daily maintenance session) |
+| pkp-lib | `6d7f1540b6` (ojs, omp, ops) | 2026-10-07 | claude (daily maintenance session); ui-library `98ac898651` (ojs, omp, ops; 2026-10-06, the pkp/pkp-lib#13188 PR review merge); ojs `plugins/generic/jatsTemplate` `5d4ea3db73` (2026-09-30); `plugins/generic/citationStyleLanguage` `41ddd1b265` (ojs, omp, ops, 2026-10-01) |
 
 ## Read log
 
@@ -22,6 +22,13 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-07 (daily session, VM s0) — ojs `500d9a936e..b8f5e9a951` (6), omp `fd3cdebc4d..7d6b00060a` (1), ops `08540bf2e5..acc0de0586` (1), pkp-lib `771474347e..6d7f1540b6` (3, all three pointers); ui-library and the plugins unchanged. `main` first: synced today. Read in full; baselines advanced.**
+  - pkp-lib `edc3d36c74` (`=main 3407fc5bc0`, #12780) → **3.5 shows `main`'s regression**: "Keep me logged in" not read once the session ends; driven on OJS before (lib/pkp `771474347e`: profile and dashboard signed in) and after (pointer `6d7f1540b6`: Login page), `.reports/sync-3_5/k12780-{before,after}/`; the report and the ci-triage row name stable-3_5_0. No 3.5.0 release read the cookie (`3_5_0-3`..`-5`).
+  - pkp-lib `0ed26dd8a7` (`=main e60013c77f`, #13432) → `git range-diff` `=` the PR head `936313b76f` reviewed 2026-10-06 (entry below): no regression.
+  - pkp-lib `6d7f1540b6` (stable-only, #13440) → `=` the PR head `3bc32d0413` reviewed 2026-10-06 (entry below): no regression.
+  - ojs `7f945548a4`, `fc996aede6` (`~main a73f9ac6e1`, `727f252080`, #13449, #11565) → PR review of ojs#5896 2026-10-06 (entry below); the merge `68ca8a2d13` equals the reviewed head `fc996aede6` but for the lib/pkp pointer.
+  - ojs `4c9a355be8`, `56e1a2ff56`, `b8f5e9a951`, omp `7d6b00060a`, ops `acc0de0586` (pointer bumps) → nothing of their own.
+  - Open stable rows: #13414, #13370, #13181, ojs#5813 not re-run on the line: its range moves sign-in, library downloads, the users API and PubMed; #13181's `main` re-run today still reproduces.
 - **2026-10-06 — PR review, pkp/pkp-lib#13440 (users API: the sub-editor role and the masthead/role-end routes; PRs on `stable-3_5_0` only, the issue's `main` list "TODO"): pkp-lib#13441 (ewhanson `i13440`, head `3bc32d0413`, one commit straight on the line tip `edc3d36c74`; GitHub's `pull/13441/head` still served the pre-rebase `50b2ae34af`, same patch) + submodule-only ojs#5892, omp#2493, ops#1433 (`lib/pkp` → `3bc32d0413`). Driven on the line's dataset fleets (OJS, OMP, OPS), before at the pointers (OJS `edc3d36c74`, OMP/OPS `771474347e`), after with `3bc32d0413` checked out in each `lib/pkp`, which is the merge result; for OMP and OPS it carries the line's unread `edc3d36c74` (#12780) along, left to the daily session. Not merged; baselines not advanced. No companion: no spec, suite or CI follows the line.**
   - The change does what the issue says on all three apps; the access results are recorded privately and in the thread.
   - No regression found: the manager's Edit user page (Settings › Users & Roles › Edit) still changes a role's masthead entry and removes a role at the head (`rvaca` on a user with Author and Reader roles: both API answers 200, the page after a reload shows the Reader role "Appear on the masthead" and the Author role "User Removed From Role"); the site admin's and managers' own role and masthead changes through the API answer as before; the sub-editor's user list, reviewer list and user reads answer as before.

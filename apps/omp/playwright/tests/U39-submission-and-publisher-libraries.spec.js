@@ -22,7 +22,7 @@
  *   status they are sent with.
  * - A11 🐞: S1 closes "Add a file" only after an "OK" the browser's own
  *   checks refused, never after an "OK" with no file.
- * - A3–A5, A7, A8: not on these scenarios' paths. OMP1 ✅ is asserted
+ * - A3–A5, A7: not on these scenarios' paths. A8 retired 2026-10-07 (pkp/pkp-lib#13432). OMP1 ✅ is asserted
  *   through the "Contracts" group every list read shows first.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster

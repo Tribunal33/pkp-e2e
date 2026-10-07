@@ -51,7 +51,7 @@ feature (see *Cross-feature interactions*).
 |------------------|-----------|-------|
 | "Username or Email" | yes | Either the account's username or its email address |
 | "Password" | yes | The typing box stops accepting input at 32 characters, even though passwords may be longer ⚠ [A1](#a1). A "Forgot your password?" link sits under it <sup>a</sup> |
-| "Keep me logged in" | no | Keeps the sign-in alive for a fixed window from login, beyond the idle lifetime that otherwise ends it (Rule 5). The box is ticked every time the form shows ⚠ [A2](#a2) |
+| "Keep me logged in" | no | Offers to keep the sign-in alive for a fixed window from login, beyond the idle lifetime that otherwise ends it, but keeps it no longer than an unticked box does (Rules 5, 5a) [A14](#a14). The box is ticked every time the form shows ⚠ [A2](#a2) <sup>c</sup> |
 | Spam check | when configured | Appears only when the installation's configuration turns a check on for the login form. reCAPTCHA shows its widget. The ALTCHA check is invisible: nothing extra appears and signing in works as usual, but a browser without JavaScript is refused with "You must complete the validation check used to prevent spam submissions." (see *Settings*) <sup>a</sup> |
 | "Register" link | — | Shown beside the "Login" button while the journal accepts registrations. Disabling registration removes it (see *Settings*) <sup>a</sup> |
 
@@ -143,18 +143,19 @@ Login, the site's name stands in for the journal's), but after a refused
    Ticked or not, the sign-in survives browser restarts, unless the
    installation is configured to end sessions at browser close. Unticked,
    the session ends when its idle lifetime runs out (a config default of
-   7 days without a visit). Ticked, "Keep me logged in" keeps the sign-in
-   past that idle limit, for a fixed window from login (config default
-   30 days), but only in part (Rule 5a). <sup>c</sup>
-5a. **Back after the idle limit, half signed in.** A user who signed in
-   with "Keep me logged in" ticked and comes back after the idle limit
-   still opens the Dashboard and the other editorial pages signed in.
-   But the journal's public pages offer "Register" and "Login" as if
-   they were signed out, the Login page shows its form instead of
-   sending them home (Rule 1), and "Login As" fails (Rule 14)
-   ⚠ [A8](#a8). Signing in again, on that Login page or after signing
-   out, puts all three right: their name back in the public header, the
-   Login page sending them home, "Login As" impersonating. <sup>c</sup>
+   7 days without a visit). Ticked, "Keep me logged in" is meant to keep
+   the sign-in past that idle limit, for a fixed window from login
+   (config default 30 days); in fact a ticked sign-in ends just as an
+   unticked one does (Rule 5a). <sup>c</sup>
+5a. **Back after the session ended, signed out.** A user who signed in
+   with "Keep me logged in" ticked and comes back after the idle limit,
+   or reopens the browser on an installation that ends sessions at
+   browser close, is signed out on every page: "Edit Profile" and the
+   Dashboard both open the Login page ⚠ [A14](#a14). Signing in again
+   works. Before that fault, the same return left the user half signed
+   in: the Dashboard still opened signed in, but the public pages
+   offered "Register" and "Login", the Login page showed its form
+   (Rule 1), and "Login As" failed (Rule 14) ⚠ [A8](#a8). <sup>c</sup>
 6. **Signing out.** The user menu (top-right initials) offers "Logout".
    Signing out returns the browser to the Login page and ends only this
    browser's session. The same account signed in elsewhere stays signed in.
@@ -233,8 +234,8 @@ Login, the site's name stands in for the journal's), but after a refused
     address with the number changed. Opened for an out-of-reach user, it
     shows an error page, "Sorry, you do not have administrative rights over
     this user…", listing the possible causes, with a link back to the users
-    list. In a sign-in "Keep me logged in" has kept past the idle limit
-    (Rule 5a), "Login As" fails on the server and the browser shows a
+    list. In the half-signed-in state Rule 5a describes, "Login As"
+    fails on the server and the browser shows a
     blank page, instead of impersonating or turning the user away, both
     when pressed on a row and at a hand-built address [A8](#a8).
     <sup>h</sup>
@@ -326,7 +327,8 @@ Login, the site's name stands in for the journal's), but after a refused
   intended [A6](#a6). Disabled by default. <sup>n</sup>
 - **Configuration file, security section.** For the system administrator,
   with no screen: the reset-link lifetime (`reset_seconds`, default 2 hours);
-  the "Keep me logged in" window (`remember_me_lifetime`, default 30 days);
+  the "Keep me logged in" window (`remember_me_lifetime`, default 30
+  days; it changes nothing while [A14](#a14) stands);
   end-session-on-browser-close (`session_expire_on_close`);
   end-session-on-address-change (`session_check_ip`, default on); forcing
   https for login or the whole site (`force_login_ssl`, `force_ssl`); the
@@ -642,6 +644,10 @@ Left out of the scenarios above, by reason:
     impersonating (Rules 5a, 14; [A8](#a8)): the guard the issue report
     (`docs/issues/U01-A8-login-as-after-idle-limit-server-error.md`)
     proposes, once fixed
+  - "Keep me logged in" keeping a user signed in once the session ends:
+    signed in with the box ticked, back after the session ended, "Edit
+    Profile" and the Dashboard opening signed in, not the Login page
+    (Rules 5, 5a; [A14](#a14)): the guard owed once fixed
   - the Site Administrator's "Edit User" on a flagged account opening
     with "Change Password" ticked, and an unchanged "OK" keeping the
     flag ([A10](#a10)): the guard the issue report
@@ -692,7 +698,6 @@ Left out of the scenarios above, by reason:
   - the Site Administrator passing Confirm Access (Actors row "Pass the Confirm Access gate"): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
   - Confirm Access's window lapse, no replay, and the direct address going home (Rule 16): the same missing window setting
   - other Site Administrators never offered Login As (Rule 14): what is missing is a second site administrator
-  - "Keep me logged in" extending past the idle limit (Rule 5, `remember_me_lifetime`)
   - the reset link expiring on the clock (Rule 8, `reset_seconds`)
   - a link whose username no longer exists landing on the lost-password page (Rule 10)
   - a session ending on a network-address change (Rule 18, `session_check_ip`)
@@ -727,6 +732,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
+| [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
@@ -769,6 +775,7 @@ visited or not; 30 is the default of a setting in the installation's
 configuration. On a shared computer the account stays open to the next
 person who uses that browser.
 Since: 2015-08-07 (pkp/pkp-lib#658) · Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
+Report: refresh owed — while A14 stands (pkp/pkp-lib `3407fc5bc0`, #12780, `main` 2026-10-06), a ticked box no longer keeps the browser signed in past the session, so the report's account of what the always-ticked box costs (30 days signed in) does not hold on `main` (2026-10-07)
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞 — unintended
 > behaviour (the malformed attribute), and persistent sessions should be
@@ -881,7 +888,12 @@ out, or why "Login As" shows nothing.
 who signs in the default way and is away a week meets this. The public
 pages and "Login As" fail for one reason, so this report covers and
 rates both, and its fix clears both.
+
+While [A14](#a14) stands, the same user comes back signed out on every
+page, so this half-signed-in state does not show. A repair of A14 that
+signs the user back in on the editorial pages alone brings it back.
 Since: 2024-04-17 (pkp/pkp-lib#9596) · Basis: probe, 2026-10-04. <sup>[f-a8](#fn-a8)</sup>
+Report: refresh owed — pkp/pkp-lib `3407fc5bc0` (#12780, on `main` 2026-10-06; on 3.5 as `edc3d36c74`) stopped reading the "Keep me logged in" cookie, so past the idle limit the user is signed out on every page, all three apps (A14): the half-signed-in state does not show on `main` while A14 stands; the report's steps and its "Login As" part are owed a walk on `main` (2026-10-07)
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞 (filed on
 > review). Ruling: a session whose user cannot be resolved is treated like
@@ -971,6 +983,22 @@ knowing the password. Nothing on screen or in the logs says the
 password was skipped.
 The setting, `password_timeout`, is off by default.
 Since: 2026-04-09 (pkp/pkp-lib#12338) · Basis: probe, 2026-10-05. <sup>[f-a13](#fn-a13)</sup>
+
+<a id="a14"></a>
+**A14 — "Keep me logged in" no longer keeps anyone signed in once the session ends** · 🐞 · minor.
+A user who signs in with "Keep me logged in" ticked, as the Login page
+offers it, expects to stay signed in for 30 days from the sign-in (the
+default). Once the session ends, after a week without a visit (the
+default idle limit), or at browser close on an installation configured
+to end sessions there, they are signed out
+instead, exactly as if the box had been unticked: "Edit Profile" and the
+Dashboard open the Login page. Signing in again works and nothing is
+lost; the box and the configuration's "Keep me logged in" window simply
+do nothing. Installations that end sessions at browser close, or keep
+sessions short and rely on that window, feel it most. From July 2026
+until this change the box did keep them signed in, if only in part
+([A8](#a8)); regression, not choice.
+Since: 2026-10-06 (pkp/pkp-lib#12780) · Basis: probe, 2026-10-07. <sup>[f-a14](#fn-a14)</sup>
 
 ### Retired
 
@@ -1093,9 +1121,25 @@ eight days, Settings › Users & Roles still opened signed in, the journal's
 home page header ended "Search Register Login" and the Login page showed
 its "Username or Email" and "Password" form; after signing out and in
 again, both were back to normal. With the box unticked, the same lapse
-signs the user out entirely (Users & Roles → the Login page). Cause: the
-remember cookie restores the user without the session's own user id
-(finding A8, note f-a8).
+signs the user out entirely (Users & Roles → the Login page). Cause, up
+to pkp-lib `3407fc5bc0`: the remember cookie restored the user without
+the session's own user id (finding A8, note f-a8).
+Live-probed 2026-10-07 (Rules 5, 5a; OJS, OMP, OPS on `main`, fleets
+freshly reset; a scratch Author signed in through the Login page with
+the box left ticked; kept check
+`shared/playwright/checks/sync/pkp-lib-12780/remember-me.js`, its `s2`
+read): the browser held the session cookie and `remember_web_…` (30
+days); with the session cookie removed and the remember cookie kept,
+which is what a browser close does under `session_expire_on_close`, the
+profile (`…/user/profile`) and the submissions dashboard (`…/submissions`)
+both landed on `login?source=…`, the header offering "Register Login",
+the remember cookie still in the browser; no server-log line. The idle
+limit ends the session the same way, so the same holds after it (code
+read, with the 2026-10-04 unticked control above). Before/after on
+`stable-3_5_0` OJS the same day: with lib/pkp at `771474347e` (before
+the 3.5 twin `edc3d36c74`) the profile and `…/dashboard/mySubmissions`
+loaded signed in after the same drop; at the pointer with the twin, the
+Login page. Finding A14, note f-a14.
 
 <a id="fn-d"></a>
 **d** — `LoginHandler::signOut()` → `Validation::logout()`: invalidates the
@@ -1584,6 +1628,10 @@ the user, but `setUserDataToSession()` never runs on that path, so PKP's
 own `userId` session key is null and `Validation::isLoggedIn()` reads the
 user as signed out (the public header and the Login page, Rule 5a).
 Control: signed out and in again, the same "Login As" impersonates.
+Since pkp-lib `3407fc5bc0` (2026-10-06; 3.5 `edc3d36c74`) nothing reads
+the remember cookie, so the lapsed sign-in is signed out on every page
+(live-probed 2026-10-07, notes c and f-a14) and the half-signed-in state
+does not arise on either line; the "Login As" walk above was not re-run.
 Issue report: [pkp-e2e#828](https://github.com/jardakotesovec/pkp-e2e/issues/828) ([docs/issues/U01-A8-login-as-after-idle-limit-server-error.md](../issues/U01-A8-login-as-after-idle-limit-server-error.md)).
 
 <a id="fn-a9"></a>
@@ -1694,6 +1742,33 @@ live, then reverted). Gated requests would then also extend the window.
 Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
 Issue report: [pkp-e2e#928](https://github.com/jardakotesovec/pkp-e2e/issues/928) ([docs/issues/U01-A13-admin-changes-skip-confirm-access.md](../issues/U01-A13-admin-changes-skip-confirm-access.md)).
+
+<a id="fn-a14"></a>
+**f-a14** — pkp-lib `3407fc5bc0` ("Fix an issue with disabled accounts
+attempting to log in", pkp/pkp-lib#12780, 2026-10-06; on `stable-3_5_0`
+as `edc3d36c74`) returned `PKPRequest::getUser()` from `Auth::user()` to
+`if (Validation::isLoggedIn()) { … getSessionGuard()->getUserId() … }`.
+`Auth::user()` was the only call that reached Laravel's
+`SessionGuard::user()` recaller branch (the `remember_web_…` cookie,
+through `PKPUserProvider::retrieveByToken()`); the remaining
+`Auth::user()` calls sit behind `Validation::isLoggedIn()` or in sign-in
+and sign-out, so the cookie is still set at sign-in
+(`Auth::login($user, $remember)`) and never read. The `Auth::user()` line
+came on 2026-07-21 with `a6d68f9547` (pkp/pkp-lib#12790; 3.5
+`6d0d04f41a`); no 3.5.0 release carries it (`3_5_0-3` to `3_5_0-5` read
+the session alone), and 3.4 and 3.3 lengthen the session cookie instead
+(`SessionManager`, code read). The issue intends the disabled-account
+fix only; its own cases (a disabled account's sign-in, a signed-in
+account disabled, "Login As" a disabled account and back) hold on
+`main` (live-probed 2026-10-07, OJS). Live-probed 2026-10-07 on OJS,
+OMP and OPS `main`, with the before/after on `stable-3_5_0` OJS: note c.
+A fix that reads the cookie again must also set the session's own user
+id (`PKPSessionGuard`), or the half-signed-in state of finding A8
+returns, and must refuse a disabled account on the cookie path. Kept
+checks `shared/playwright/checks/sync/pkp-lib-12780/remember-me.js` and
+`disabled.js`. Tracked in ci-triage "Open regressions". Written up for
+the team in `docs/reports/2026-10-07-pkp-lib-12780.md` (a temporary
+report, deleted once acted on; git history keeps it).
 
 ## Reference — entry points & surfaces
 
