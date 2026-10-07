@@ -19,13 +19,13 @@
  * spec's Coverage section is the record of everything else left out):
  * - A1 🐞: S2 presses the help icon by its `target=_blank` link, never by
  *   its name, and asserts the guide's address only.
- * - A11 🐞, A12 🐞: S5 asserts each refused save by the window staying
+ * - A11 ✅ (retired 2026-10-07: the refusal notices are a Planned assertion), A12 🐞: S5 asserts each refused save by the window staying
  *   open and nothing stored, never by the absence of a message or by the
  *   line under the type list.
  * - A13 🐞: S3 reads the warning's notice up to its first sentence; the
  *   rest speaks of a journal on a preprint server.
  * - A15 🐞: S4 and S7 read the "Navigation" cells after a reload only.
- * - A17 🐞, A18 🐞: every browser question is accepted by a handler; S5
+ * - A17 ✅ (retired 2026-10-07), A18 🐞: every browser question is accepted by a handler; S5
  *   reads the item window's question after a change was typed only.
  * - OPS1 ✅: S2 reads the manager's side menu without "Content", as the
  *   scenario states.
@@ -94,7 +94,7 @@ async function stubOutside(context, pattern) {
     );
 }
 
-/** Accept every browser question on a page (A17, A18) and keep their messages. */
+/** Accept every browser question on a page (A18; A17 retired) and keep their messages. */
 function acceptDialogs(page) {
     const seen = [];
     page.on('dialog', async (dialog) => {

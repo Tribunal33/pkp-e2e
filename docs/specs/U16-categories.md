@@ -2180,7 +2180,7 @@ response the browser never completes. A guard that answers
 `NotFoundHttpException` when the category has no picture, in
 `thumbnail()` and `fullSize()`, would give the 404 (the OMP1 report's
 "What goes with it", 2026-10-02).
-Issue report: [docs/issues/U16-A22-category-no-picture-address-never-loads.md](../issues/U16-A22-category-no-picture-address-never-loads.md).
+Issue report: [pkp-e2e#934](https://github.com/jardakotesovec/pkp-e2e/issues/934) ([docs/issues/U16-A22-category-no-picture-address-never-loads.md](../issues/U16-A22-category-no-picture-address-never-loads.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read

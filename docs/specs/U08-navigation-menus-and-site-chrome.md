@@ -81,18 +81,20 @@ it is left by the back arrow at its top (Rule 11). The boxes after
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Title" | yes, in the journal's primary language | Plain text, one box per form language; the box stops accepting characters after 255. Empty in the primary language: refused in the window with "This field is required." under the box. How titles follow languages: Rule 12 <sup>l</sup> |
-| "Navigation Menu Type" | yes | A list starting with "Choose a type..." and then the types of the table below. The line under the list reads "Select a Navigation Menu Type or Custom to make your own" and, once a type is chosen, that type's one-line description ("Link to the page displaying your announcements." for "Announcements"). Set back to "Choose a type...", the line keeps the last type's description ⚠ [A12](#a12). Left at "Choose a type...": not saved, with no message (below the table) <sup>l</sup> <sup>td2</sup> |
-| "Path" (type "Custom Page") | yes | Letters, digits and ".", "/", "-", "_" only. A path with other characters ("my page") or the path of another item of the journal: not saved, with no message (below the table). Under it: "This page will be accessible at: {address}… where %PATH% is the path entered above. Note: No two pages can have the same path. Using paths that are built into the system may cause you to lose access to important functions." <sup>l</sup> |
+| "Navigation Menu Type" | yes | A list starting with "Choose a type..." and then the types of the table below. The line under the list reads "Select a Navigation Menu Type or Custom to make your own" and, once a type is chosen, that type's one-line description ("Link to the page displaying your announcements." for "Announcements"). Set back to "Choose a type...", the line keeps the last type's description ⚠ [A12](#a12). Left at "Choose a type...": not saved, with "Please select a navigation menu type." at the top right (below the table) <sup>l</sup> <sup>td2</sup> |
+| "Path" (type "Custom Page") | yes | Letters, digits and ".", "/", "-", "_" only. A path with other characters ("my page"): not saved, with "The path field must contain only alphanumeric characters plus '.', '/', '-', and '_'." at the top right; the path of another item of the journal: not saved, with "This path already exists for another navigation menu item." at the top right (below the table). Under it: "This page will be accessible at: {address}… where %PATH% is the path entered above. Note: No two pages can have the same path. Using paths that are built into the system may cause you to lose access to important functions." <sup>l</sup> |
 | "Content" and "Preview" (type "Custom Page") | no | The page's formatted text, per language, and a button that opens the unsaved page in a new browser tab. The page itself is *Custom pages & blocks*'s <sup>l</sup> |
-| "URL" (type "Remote URL") | yes, in the primary language | One box per form language, up to 255 characters. A box that does not hold a full web address ("https://…"; "pkp.sfu.ca" is not one): not saved, with no message (below the table); a box of another language may stay empty <sup>l</sup> |
+| "URL" (type "Remote URL") | yes, in the primary language | One box per form language, up to 255 characters. A box that does not hold a full web address ("https://…"; "pkp.sfu.ca" is not one): not saved, with "A URL must be provided" at the top right (below the table); a box of another language may stay empty <sup>l</sup> |
 | "Select Series" / "Select Category" {OMP} (types "Series" and "Category") | yes | A list of the press's series, or of its top-level categories, under "Please select the series to which you would like this menu item to link." ("…the category…") <sup>l</sup> |
 | "Query Parameters" (every type but "Custom Page" and "Remote URL") | no | One box per form language under "Optional query string to append to the URL (e.g., tab=metrics). Do not include the leading '?' character."; each stops accepting characters after 1000. The item's link gets the text after a "?". In the French interface the label and that line are raw codes ⚠ [A24](#a24) <sup>l</sup> <sup>td3</sup> |
 
-Only an empty "Title" is refused with a message. Every other refusal
-above (no type, a "Path" with other characters or already used, a "URL"
-that is not a full web address) shows nothing: "Save" leaves the window
-open, no message appears anywhere, and nothing is stored ⚠ [A11](#a11).
-<sup>l</sup> <sup>td2</sup>
+An empty "Title" is refused in the window before anything is sent, with
+"This field is required." under the box. Every other refusal above (no
+type, a "Path" with other characters or already used, a "URL" that is
+not a full web address) leaves the window open and stores nothing, and
+shows its reason at once at the top right, over the window, as a notice
+that goes after about five seconds. Nothing shows inside the window and
+no box is marked. <sup>l</sup> <sup>td2</sup>
 
 **The item types**, as "Navigation Menu Type" lists them; the last column
 is the text the menu window's eye icon opens (Rule 7), "—" where the
@@ -220,11 +222,9 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
    saving?", where "Yes" closes the window and stores nothing and "No"
    returns to it. Leaving the page while the window holds a change
    raises the browser's own leave question. <sup>j</sup> <sup>td7</sup>
-   - 6a. **After "Yes".** Once a changed area (on a journal or press, a
-     typed title too) is discarded with "Yes", the next move off
-     Settings › Website still raises the browser's leave question,
-     though nothing is left unsaved ⚠ [A17](#a17); after a discarded
-     drag it does not.
+   - 6a. **After "Yes".** A change (a changed area, a typed title or a
+     drag) discarded with "Yes" leaves nothing unsaved: a second later,
+     Settings › "Workflow" in the side menu opens with no leave question.
 7. **The two icons on items.** Both panels mark items with icons, and
    pressing an icon opens a window headed "Notice" with an "OK" button.
    <sup>k</sup> <sup>td8</sup>
@@ -670,8 +670,9 @@ Journal" and "Settings > Journal" included ⚠ [A13](#a13). <sup>m</sup>
     (Actors row 1) and keeps the "Edit" shortcut (Rule 25), which opens
     the access-denied page
     ([Journal identity & about pages](U07-journal-identity-and-about-pages.md#a2)).
-    On a preprint server the manager role is the only manager-level one,
-    so no role there can lose the Settings pages this way. <sup>b</sup>
+    A preprint server's only installed manager-level role is the manager
+    role, but a manager-level role created there with "Create New Role"
+    and the box unticked is refused the Settings pages too. <sup>b</sup>
 12. **"UI"** languages (Settings › Website › "Setup" › "Languages"; the
     primary language alone on a scratch journal, English and French on
     the seeded one). More than one: "Change Language" in the initials menu
@@ -966,23 +967,27 @@ are in the footnote. <sup>y</sup>
      window stays open (Fields).
    - **No type**: type "Our page" in "Title", set "Navigation Menu Type"
      back to "Choose a type..." and press "Save": the window stays open
-     and no message shows anywhere [A11](#a11); the line under the list
-     still describes "Remote URL" [A12](#a12) (Fields).
+     and "Please select a navigation menu type." shows at the top right;
+     the line under the list still describes "Remote URL" [A12](#a12)
+     (Fields).
    - **Not a web address**: choose "Remote URL" again, replace the
      address in "URL" with "pkp.sfu.ca" and press "Save": the window
-     stays open, with no message (Fields).
+     stays open and "A URL must be provided" shows at the top right
+     (Fields).
    - **A path with other characters**: choose "Custom Page", type "my
-     page" in "Path" and press "Save": the window stays open, with no
-     message (Fields).
+     page" in "Path" and press "Save": the window stays open and "The
+     path field must contain only alphanumeric characters plus '.', '/',
+     '-', and '_'." shows at the top right (Fields).
    - **A path accepted**: replace the path with "our-page" and press
      "Save": the window closes, "Navigation menu item was successfully
      added" shows at the top right, and "Navigation Menu Items" lists "Our
      page" (Fields; Rule 11).
    - **A path already used**: press "Add item", type "Second page" in
      "Title", choose "Custom Page", type "our-page" in "Path" and press
-     "Save": the window stays open, with no message (Fields). Press the
-     back arrow at the window's top: the window closes at once, with no
-     question [A18](#a18) (Rule 11a).
+     "Save": the window stays open and "This path already exists for
+     another navigation menu item." shows at the top right (Fields).
+     Press the back arrow at the window's top: the window closes at
+     once, with no question [A18](#a18) (Rule 11a).
    - **Control**: "Navigation Menu Items" lists "Our page" once, and no
      "Second page": no refused save stored anything (Fields).
 
@@ -1199,6 +1204,8 @@ Left out of the scenarios above, by reason:
   - the menu window with no items at all: neither panel claims items are assigned or sends the manager to drag (the guard [A16](#a16)'s issue report proposes)
   - the item window opened and closed with nothing typed: no "The data on this form has changed" box and no leave question (the guard of [A18](#a18)'s first issue report)
   - the item window after a refused "Save": the back arrow asks before closing and the entries stay until the manager answers (the guard of [A18](#a18)'s second issue report)
+  - the top-right notices scenario 5 states for "No type", "Not a web address", "A path with other characters" and "A path already used": the suite does not assert them yet (Fields)
+  - the menu window after a change discarded with "Yes": Settings › "Workflow" in the side menu, pressed a second later, asks nothing (Rule 6a)
   - the journals switcher on a site with two journals of one name: each offers the other (Rule 29; the guard [A21](#a21)'s issue report proposes)
   - the side menu's "DOIs" entry and the DOIs page in French (Canada) on a press and a preprint server: French labels, no raw key (the guard [A23](#a23)'s issue report proposes)
   - on a journal, the menu's "Edit" window: "Subscriptions" and "My Subscriptions" carry the crossed-out eye and open their notices (Rule 7a; the guard [OJS1](#ojs1)'s issue report proposes)
@@ -1236,13 +1243,11 @@ Left out of the scenarios above, by reason:
   - A7 ("Open Menu" in English in every language; Rule 15b)
   - A8 (a menu arranged only with a mouse; Rule 5c)
   - A10 (a menu title in other letter case saved as a second menu; Fields)
-  - A11 (the item window's refusals without a message; Fields; scenario 5 marks it)
   - A12 (the type's description kept after "Choose a type..."; Fields; scenario 5 marks it)
   - A13 (a press's and a preprint server's notices speaking of a journal; item types table; Rule 7b; scenario 3 marks it)
   - A14 (the site's item window offering types with no site page; Rule 1b; scenario 8 marks it)
   - A15 (the "Navigation" cells kept stale until a reload; Rule 3b; scenarios 4 and 7 mark it)
   - A16 (both panel texts in the menu window of a journal with no item; Rule 4)
-  - A17 (the browser's leave question after a discarded change; Rule 6a)
   - A18 (the item window asking on a close with nothing typed, holding the page while open, and closing without asking after a refused "Save"; Rule 11a; scenario 5 marks it)
   - A21 (two journals of the same name hiding each other in the switcher; Rule 29)
   - A22 (the Site Administrator holding Reader alone: the manager's side menu and an "Error" window; Rule 30a)
@@ -1290,12 +1295,10 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A7](#a7) | In a narrow window the public header's menu button is named "Open Menu" in every language | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | The item window refuses a missing type, a bad path or a bad URL with no message | 🐞 | user-visible | — |
 | [A12](#a12) | In the menu item window, a chosen type's description replaces the "Navigation Menu Type" heading and stays after "Choose a type..." | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | On a press and a preprint server the notices still say "About the Journal" and "Settings > Journal" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | Website › "Navigation": after an item is renamed or removed, each menu's item list keeps the old items until a reload | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A16](#a16) | With every navigation menu item removed, "Add Menu" says to drag items and that all items are assigned | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A17](#a17) | After a change is discarded with "Yes", leaving the page still asks about unsaved changes | 🐞 | minor | — |
 | [A18](#a18) | The item window asks before closing even when nothing was typed, and so does leaving the page; right after a refused "Save" it closes without asking | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | The journals switcher in the editorial header leaves out every journal with exactly the current journal's name | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A Site Administrator holding only Reader in a journal gets an "Error" window on every editorial page | 🐞 | low · crash: script | issues (claude), 2026-10-03 — re-verified |
@@ -1313,6 +1316,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | The site's "Add item" offers types the site has no page for | ❓ | minor | — |
 | [A25](#a25) | The editorial header's initials menu stays open when Escape is pressed | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server's side menu has no "Content" group while public comments are off {OPS} | ✅ | minor | — |
+| [A11](#a11) | Retired: the item window's refused saves (no type, a bad path, a bad URL) were thought to say nothing; each shows its reason at the top right (Fields) | ✅ | retired | claim check (claude), 2026-10-07 — overturned |
+| [A17](#a17) | Retired: leaving the page after "Yes" discarded a menu change was thought to still ask about unsaved changes; it asks nothing (Rule 6a) | ✅ | retired | claim check (claude), 2026-10-07 — overturned |
 | [A19](#a19) | Retired: on French pages the installed "Editorial Masthead" item read "##common.editorialMasthead##"; it now reads "Entête" (Rule 12) | ✅ | retired | upstream change + claim check (claude), 2026-09-24 — fixed upstream |
 | [A20](#a20) | Retired: in French the initials menu's language heading read "##common.changeLanguage##"; it now reads "Changer la langue" (Rule 28) | ✅ | retired | upstream change + claim check (claude), 2026-09-24 — fixed upstream |
 
@@ -1459,19 +1464,6 @@ yes; the refusal exists so that two menus cannot be mistaken for each
 other, and letter case alone does not tell them apart.
 Basis: probe. <sup>f-a10</sup>
 
-<a id="a11"></a>
-**A11 — The item window refuses most saves without saying why** · 🐞 · user-visible.
-In "Add item" or an item's "Edit", "Save" with "Navigation Menu Type"
-left at "Choose a type...", a "URL" that is not a full web address
-("pkp.sfu.ca"), a "Path" with other characters ("my page") or a path
-another item holds should say what is wrong: "Please select a navigation
-menu type.", "A URL must be provided", "The path field must contain only
-alphanumeric characters plus '.', '/', '-', and '_'.", "This path
-already exists for another navigation menu item.". Instead the window
-stays open with no message anywhere and nothing is stored, so "Save"
-looks broken and the manager cannot tell which box to fix.
-Basis: probe. <sup>f-a11</sup>
-
 <a id="a12"></a>
 **A12 — In the menu item window, a chosen type's description replaces the "Navigation Menu Type" heading and stays after "Choose a type..."** · 🐞 · low.
 In the "Add item" or "Edit" window of Settings › Website › "Navigation",
@@ -1542,15 +1534,6 @@ beside "All items have been assigned.". The first sends the manager to
 a panel with nothing to drag; the second says items were assigned when
 none exist.
 Basis: probe, 2026-10-03. <sup>f-a16</sup>
-
-<a id="a17"></a>
-**A17 — Discarded changes still hold the page** · 🐞 · minor.
-In the menu window, after a changed area (on a journal or press, a
-typed title too) is discarded with "Cancel" and "Yes", the window closes
-and nothing is stored, yet the next move off Settings › Website raises
-the browser's leave question, as though a change were still waiting.
-After a discarded drag it does not.
-Basis: probe. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — The item window's question on closing does not follow what changed** · 🐞 · low.
@@ -1762,6 +1745,12 @@ Basis: probe, 2026-10-03. <sup>f-ops4</sup>
 
 ### Retired
 
+<a id="a11"></a>
+**A11 — The item window refuses most saves without saying why** · ✅ · retired. Overturned 2026-10-07: re-checked on OJS, OMP and OPS, from "Add item" and an item's "Edit", each refused "Save" (no type, a "URL" that is not a full web address, a "Path" with other characters or already used) shows its reason at the top right while the window stays open (Fields); the earlier check did not recognise the notices. <sup>f-a11</sup>
+
+<a id="a17"></a>
+**A17 — Discarded changes still hold the page** · ✅ · retired. Overturned 2026-10-07: re-checked on OJS, OMP and OPS, after "Yes" discards a change in the menu window, moving off Settings › Website asks nothing (Rule 6a); the earlier check left within half a second of "Yes". <sup>f-a17</sup>
+
 <a id="a19"></a>
 **A19 — The French "Editorial Masthead" item reads a raw code** · ✅ · retired. Fixed upstream by the French translations merge, verified 2026-09-24 on OJS, OMP and OPS: on French pages of a journal with French under "Forms", the installed item reads "Entête" in the header's "About" list, in the Navigation tab's tables and in the item window, and the page it opens is headed "Entête" (Rule 12). <sup>f-a19</sup>
 
@@ -1825,7 +1814,10 @@ Editor whose box was unticked (OJS, OMP) had no "Settings" group and got
 `…/management/settings/website#setup/navigationMenus`; signed out, the
 Login page. The unticked Editor's About page still offered "Edit"
 ("Edit About the Journal"; OMP "Open a new page to edit this
-information"), which landed on that access-denied page.
+information"), which landed on that access-denied page. Live-probed
+2026-09-30 (Settings bullet 11; all three apps, OPS included), as a user
+holding only a custom manager-level role with the box unticked:
+Settings › Website answered with the access-denied page (note f-a26).
 
 <a id="fn-c"></a>
 **c** — `AdminHandler::siteSettingsAvailability()`: `'navigationMenus' =>
@@ -2113,9 +2105,17 @@ Please correct these errors and try again." at the top right. Unchanged,
 "Cancel", the back arrow and Escape closed at once; after a drag, a
 typed title or a changed area each opened "Warning"; "No" returned with
 the change, "Yes" closed and nothing was stored. Leaving the page with
-the window changed raised the browser's leave prompt; after "Yes" on a
-changed area (OJS, OMP also a typed title) the next move off the page
-raised it again, after a discarded drag it did not (A17). "Add Menu":
+the window changed raised the browser's leave prompt. Re-driven
+2026-10-07 (Rules 6, 6a; all three apps, twice, on "Add Menu" and the
+"Primary Navigation Menu"'s "Edit", on scratch contexts and as
+`manager.maya` on `publicknowledge`): after "Yes" (a changed area, a
+typed title or a drag; "Cancel", the back arrow or Escape) a move off
+the page to Settings › "Workflow" 1 s or 3 s later raised nothing, the
+page's `beforeunload` listeners back from 3 to 2; one within half a
+second did, because `modalStore.closeSideModalById()` keeps the closed
+window mounted about 450 ms with its `useFormChanged()` handler. The
+2026-09-23 read left at once, which is why it saw the prompt (the
+retired A17). With the window open, the side menu was covered. "Add Menu":
 "None" preselected; a menu at "None" appeared nowhere; "Primary
 Navigation Menu" set to "None" left the top row with the header's own
 "Search" alone; "User Navigation Menu" set to "None" emptied the top
@@ -2200,7 +2200,9 @@ default, and stores null for an emptied box. Save →
 holding the item. `NavigationMenuItemsGridHandler::updateNavigationMenuItem()`
 answers a failed `validate()` with `new JSONMessage(false)` and no form,
 so the save answers 200 `{"status":false,"content":""}` and the window
-gets nothing to show; the handler has been so since 2021 (A11). An
+is left as it was; `Form::validate()` has recorded the errors as a
+form-error notification (`NOTIFICATION_TYPE_FORM_ERROR`), which the page
+shows at the top right (the same in `stable-3_5_0`). An
 empty title is caught by the page's own required check before any
 request, with "This field is required.". Live-probed 2026-09-23 (Fields,
 the item window; Rules 11–13; A18; all three apps): "Add item" and
@@ -2231,10 +2233,16 @@ in the primary menu's "Unassigned Menu Items".
 all three apps): as Journal Manager on a scratch journal, "Add item"
 with "Test" and no type, then "Remote URL" with "pkp.sfu.ca", then
 "Custom Page" with "my page", then a path another item held: each
-"Save" left the window open with no message anywhere and stored
-nothing. "Title" emptied in English (French filled): "This field is
-required." under it, before any request; "The menu item title is
-required." never showed. A type chosen and "Choose a type..." chosen
+"Save" left the window open and stored nothing. Re-driven 2026-10-07
+(Fields, the item window; scenario 5; all three apps, twice, "Add item"
+and an item's "Edit", as Journal Manager on scratch contexts): each
+refusal showed its notice at the top right as Fields quotes, over the
+open window, 0.12–0.44 s after "Save" and gone about 5 s later, with
+nothing inside the window, no box marked, and nothing stored after a
+fresh load; the 2026-09-23 read missed the notices, its notice pattern
+matching none of the texts. "Title" emptied in English (French filled):
+"This field is required." under it, before any request; "The menu item
+title is required." never showed. A type chosen and "Choose a type..." chosen
 again: the line kept the type's description. Typing 260 characters in
 "Title" kept 255.
 
@@ -2891,10 +2899,15 @@ template draws two levels). No theme in the checkouts overrides
 listed "primary navigation menu" and "Primary Navigation Menu".
 
 <a id="fn-f-a11"></a>
-**f-a11** — Note l (the handler's answer, since 2021) and td2. The
-messages exist as `manager.navigationMenus.form.typeMissing`,
-`…pathRegEx`, `…duplicatePath`, `…customUrlError`; the unused
-`…items.form.title.required` reads "The menu item title is required.".
+**f-a11** — Note l (the refusal recorded as a form-error notification,
+which the page shows) and td2. The messages are
+`manager.navigationMenus.form.typeMissing`, `…customUrlError`,
+`…pathRegEx`, `…duplicatePath`; the unused `…items.form.title.required`
+reads "The menu item title is required.". Entered on the live probe of
+2026-09-23, whose notice pattern (successfully / not saved / error)
+matched none of these texts; overturned by the re-drive of 2026-10-07
+(td2), all three apps, twice, 12 of 12 refusals per case showing their
+notice.
 
 <a id="fn-f-a12"></a>
 **f-a12** — `NavigationMenuItemsFormHandler.js::setType()` replaces the
@@ -2923,9 +2936,11 @@ three apps, on a scratch journal after every item was removed.
 Issue report: [docs/issues/U08-A16-menu-window-without-items-says-all-assigned.md](../issues/U08-A16-menu-window-without-items-says-all-assigned.md), filed as [pkp-e2e#645](https://github.com/jardakotesovec/pkp-e2e/issues/645).
 
 <a id="fn-f-a17"></a>
-**f-a17** — `useFormChanged()`'s `beforeunload` prompt (note j).
-Live-probed 2026-09-23 (note j): after a changed area on all three apps,
-after a typed title on OJS and OMP; after a discarded drag on none.
+**f-a17** — `useFormChanged()`'s `beforeunload` prompt (note j). Entered
+on the live probe of 2026-09-23 (note j), which left the page at once
+after "Yes" and so met the closed window's handler in the 450 ms it
+stays mounted; overturned by the re-drive of 2026-10-07 (note j), all
+three apps, twice: 1 s or 3 s after "Yes", no prompt after any change.
 
 <a id="fn-f-a18"></a>
 **f-a18** — The item window is the legacy form in a legacy side window

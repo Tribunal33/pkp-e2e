@@ -21,10 +21,10 @@
  *   where it leads; nothing reads its accessible name.
  * - A2 🐞: no test presses a Section Editor's "Dashboard" in the public
  *   header (S2 reads the Section Editor's landing on the Dashboard only).
- * - A3, A4, A7, A8, A10, A16, A17, A21, A22, A23, A24 🐞: no test reaches
+ * - A3, A4, A7, A8, A10, A16, A21, A22, A23, A24 🐞: no test reaches
  *   those states (the site's menu window is S8's, which opens none).
  * - A5, A9 ❓: not driven.
- * - A11 🐞, A12 🐞: S5 reads each refused save through the window staying
+ * - A11 ✅ (retired 2026-10-07: the refusal notices are a Planned assertion), A12 🐞: S5 reads each refused save through the window staying
  *   open, the save's own `status: false` answer and nothing stored; it
  *   never asserts that no message shows, nor the type's description line.
  * - A13 🐞: a press's and a preprint server's; S3 reads the journal's
