@@ -1,6 +1,6 @@
 # Issue assignments (draft)
 
-A working table for trying assignment strategies on the 724 open issues in [jardakotesovec/pkp-e2e](https://github.com/jardakotesovec/pkp-e2e/issues). On GitHub only the issues Jarda Kotěšovec introduced (his Own) carry an assignee so far: the inherited ones wait for the balancing to settle, and the other developers are not collaborators on the repository, so they cannot be assigned there yet. Generated 2026-10-06 from the issue bodies and the app checkouts' git history.
+A working table for trying assignment strategies on the 724 open issues in [jardakotesovec/pkp-e2e](https://github.com/jardakotesovec/pkp-e2e/issues). On GitHub only the issues Jarda Kotěšovec and Kaitlin Newson introduced (their Own) carry an assignee so far (Kaitlin's since 2026-10-07): the inherited ones wait for the balancing to settle, and the other developers cannot be assigned there until they are collaborators on the repository. Generated 2026-10-06 from the issue bodies and the app checkouts' git history.
 
 **Step 1: own bugs.** The issue's **Introduced** bullet names the author of the change (REPORT.md "Introduced"). When it names a team developer, they take the issue ("Own"); when it names more than one, the first named.
 
