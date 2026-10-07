@@ -1,0 +1,153 @@
+--- a/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
++++ b/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
+@@ -425,8 +425,8 @@
+             return $json;
+         }
+ 
+-        // There was an error, redisplay the form
+-        return new JSONMessage(false);
++        // There was an error: say what it was; the window stays open
++        return new JSONMessage(false, implode("\n", $reviewerForm->getErrorsArray()));
+     }
+ 
+     /**
+@@ -1343,8 +1343,10 @@
+                 throw new Exception('Given reviewer suggestion ID is invalid');
+             }
+ 
++            // Already taken up (a window opened before another add): never approve it twice;
++            // go on without it, and the form's own checks answer for the reviewer
+             if ($reviewerSuggestion->isApproved()) {
+-                throw new Exception('Not allowed to add reviewer suggestion as reviewer that has already been approved');
++                return new $formClassName($this->getSubmission(), $this->getReviewRound());
+             }
+ 
+             return new $formClassName(
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
+@@ -31,6 +31,7 @@
+ use PKP\form\Form;
+ use PKP\form\validation\FormValidator;
+ use PKP\form\validation\FormValidatorCSRF;
++use PKP\form\validation\FormValidatorCustom;
+ use PKP\form\validation\FormValidatorDateCompare;
+ use PKP\form\validation\FormValidatorPost;
+ use PKP\linkAction\LinkAction;
+@@ -93,6 +94,18 @@
+             )
+         );
+ 
++        // A reviewer already on this round cannot be added to it again: say so
++        // instead of failing in execute()
++        $this->addCheck(
++            new FormValidatorCustom(
++                $this,
++                'reviewerId',
++                FormValidator::FORM_VALIDATOR_OPTIONAL_VALUE,
++                'reviewer.list.currentlyAssigned',
++                fn ($reviewerId) => !$this->isAssignedToReviewRound((int) $reviewerId)
++            )
++        );
++
+         $this->addCheck(new FormValidatorPost($this));
+         $this->addCheck(new FormValidatorCSRF($this));
+     }
+@@ -467,15 +480,8 @@
+     public function _isValidReviewer($context, $submission, $reviewRound, $reviewerId)
+     {
+         // Ensure the user isn't already assigned to the current submission
+-        $reviewAssignments = Repo::reviewAssignment()->getCollector()
+-            ->filterBySubmissionIds([$submission->getId()])
+-            ->filterByReviewRoundIds([$reviewRound->getId()])
+-            ->getMany();
+-
+-        foreach ($reviewAssignments as $reviewAssignment) {
+-            if ($reviewerId == $reviewAssignment->getReviewerId()) {
+-                return false;
+-            }
++        if ($this->isAssignedToReviewRound((int) $reviewerId, $submission, $reviewRound)) {
++            return false;
+         }
+ 
+         // Ensure that they are a reviewer
+@@ -484,6 +490,19 @@
+     }
+ 
+     /**
++     * Whether the user already has a review assignment in the review round
++     * (this form's own submission and round unless others are given)
++     */
++    protected function isAssignedToReviewRound(int $reviewerId, ?Submission $submission = null, ?ReviewRound $reviewRound = null): bool
++    {
++        return Repo::reviewAssignment()->getCollector()
++            ->filterBySubmissionIds([($submission ?? $this->getSubmission())->getId()])
++            ->filterByReviewRoundIds([($reviewRound ?? $this->getReviewRound())->getId()])
++            ->filterByReviewerIds([$reviewerId])
++            ->getCount() > 0;
++    }
++
++    /**
+      * Get the Mailable and populate with data
+      */
+     protected function getMailable(): ReviewRequest
+--- a/lib/ui-library/src/managers/ReviewerSuggestionManager/ReviewerSuggestionManager.vue
++++ b/lib/ui-library/src/managers/ReviewerSuggestionManager/ReviewerSuggestionManager.vue
+@@ -36,7 +36,16 @@
+ 							></div>
+ 						</div>
+ 					</div>
+-					<div v-if="reviewerSuggestionManagerStore.atActiveReviewStage()">
++					<div
++						v-if="
++							reviewerSuggestionManagerStore.atActiveReviewStage() &&
++							reviewerSuggestion.isCurrentlyAssigned
++						"
++						class="text-sm-normal text-secondary"
++					>
++						{{ t('reviewer.list.currentlyAssigned') }}
++					</div>
++					<div v-else-if="reviewerSuggestionManagerStore.atActiveReviewStage()">
+ 						<DropdownActions
+ 							:actions="reviewerSuggestionManagerStore.itemActions"
+ 							:label="`${reviewerSuggestion.fullName} ${t('common.moreActions')}`"
+--- a/lib/ui-library/src/managers/ReviewerSuggestionManager/reviewerSuggestionManagerStore.js
++++ b/lib/ui-library/src/managers/ReviewerSuggestionManager/reviewerSuggestionManagerStore.js
+@@ -8,6 +8,7 @@
+ import {useLocalize} from '@/composables/useLocalize';
+ import {useReviewerSuggestionManagerActions} from './useReviewerSuggestionManagerActions';
+ import {useDataChanged} from '@/composables/useDataChanged';
++import {useSubmission} from '@/composables/useSubmission';
+ 
+ export const useReviewerSuggestionManagerStore = defineComponentStore(
+ 	'reviewerSuggestionManager',
+@@ -37,6 +38,18 @@
+ 
+ 		const {triggerDataChange} = useDataChanged(() => fetchReviewerSuggestion());
+ 
++		const {getReviewAssignmentsForRound} = useSubmission();
++
++		// people already reviewing in this round, as the Add Reviewer window's own list reads them
++		const currentlyAssigned = computed(() =>
++			props.reviewRoundId
++				? getReviewAssignmentsForRound(
++						props.submission.reviewAssignments || [],
++						props.reviewRoundId,
++					).map((reviewAssignment) => reviewAssignment.reviewerId)
++				: [],
++		);
++
+ 		const reviewerSuggestionsList = computed(() => {
+ 			if (!reviewerSuggestions.value) {
+ 				return [];
+@@ -57,6 +70,11 @@
+ 						suggestionReason: localize(reviewerSuggestion.suggestionReason),
+ 						hasExistingReviewerRole: reviewerSuggestion.hasExistingReviewerRole,
+ 						existingUserId: reviewerSuggestion.existingUserId,
++						isCurrentlyAssigned:
++							!!reviewerSuggestion.existingUserId &&
++							currentlyAssigned.value.includes(
++								reviewerSuggestion.existingUserId,
++							),
+ 					});
+ 				});
+ 

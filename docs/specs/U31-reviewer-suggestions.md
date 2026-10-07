@@ -601,7 +601,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | After an editor adds a suggested reviewer in the Add Reviewer window, the suggestions list keeps an empty row | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | "Back to Search" in a suggested reviewer's window nests a second search whose "Add Reviewer" shows raw code | 🐞 | medium · crash: script | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | Authors suggesting a reviewer read "mention is there are any potential conflict of interest" for "if there are any potential conflicts" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A12](#a12) | The panel offers "Add Reviewer" on a suggested person already on the round, and the request fails with no message | 🐞 | user-visible · crash: server | — |
+| [A12](#a12) | Editors get a silent server error from "Add Reviewer" on a suggested person already reviewing the round | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A2](#a2) | An ORCID iD typed on a suggestion is seen again only in the author's "Edit" window | ❓ | minor | — |
 | [A3](#a3) | A matched suggestion is offered nowhere again, even after the reviewer is unassigned or cancelled | ❓ | minor | — |
 | [A4](#a4) | The author loses sight of their suggestions the moment they submit | ❓ | minor | — |
@@ -758,17 +758,25 @@ Slovenian translations carry slips of their own. Basis: probe,
 2026-10-04. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — The panel offers "Add Reviewer" on a suggested person already on the round, and the request fails with no message** · 🐞 · user-visible · crash: server.
-On the Review stage, "Reviewers Suggested by Author" can keep a pending
-suggestion whose person is already a reviewer on the round (both ways
-seen come from [A6](#a6): the second entry for a person added from the
-first, and an address differing only in capitals from the reviewer's
-account). The Add Reviewer window's list shows such an entry as "This
-reviewer has already been assigned to this review round." with no button
-(Rule 10), but the panel row still offers "…" › "Add Reviewer", opening
-on "Selected Reviewer" for that person. Its "Add Reviewer" fails on the
-server: no message shows, the window stays open and the suggestion stays.
-Basis: probe, 2026-10-04. <sup>f-a12</sup>
+**A12 — Editors get a silent server error from "Add Reviewer" on a suggested person already reviewing the round** · 🐞 · low · crash: server.
+On the Review stage, an editor presses "Add Reviewer" on a row of
+"Reviewers Suggested by Author" for a person who is already a reviewer
+on the round. The Add Reviewer window opens with that person already
+picked, and its "Add Reviewer" button fails with a server error (HTTP
+500). No message shows, the window stays open, and the suggestion stays
+in the panel. There are two ways in. On any database, two editors (or
+one editor in two browser tabs) open the same suggestion's "Add
+Reviewer", and the second one to press it after the first has added the
+person gets the error. On PostgreSQL only, the row itself is left behind
+for good when the suggested address differs in letter case from the
+reviewer's account
+([pkp-e2e#856](https://github.com/jardakotesovec/pkp-e2e/issues/856)):
+the panel keeps offering "Add Reviewer" on a person already reviewing,
+and every press fails. No screen lets the editor remove the row. Fixing
+pkp-e2e#856 stops new rows of that second kind; the two-editors path,
+and the server answering with a 500 rather than a refusal, remain
+(Rule 10; [A6](#a6) is the letter-case fault).
+Basis: probe, 2026-10-07. <sup>f-a12</sup>
 
 ### OMP
 
@@ -940,6 +948,7 @@ Issue report: [pkp-e2e#853](https://github.com/jardakotesovec/pkp-e2e/issues/853
 
 <a id="fn-f-a12"></a>
 **f-a12** — `useReviewerSuggestionManagerActions.js::getItemActions()` gives every pending row "Add Reviewer" with no look at the round's reviewers, while `SelectReviewerSuggestionListItem.vue` hides its button when `currentlyAssigned` holds the person (note h). `reviewerSuggestionApprove()` opens `showReviewerForm` on the existing account in `REVIEWER_SELECT_ADVANCED_SEARCH` (note g); on save `ReviewerForm::execute()` finds `_isValidReviewer()` false for a reviewer already on the round and throws `Exception('Invalid reviewer id.')` instead of returning a form error. Walked 2026-10-04 (Rule 9, first mode), OJS and OMP, `main` and `stable-3_5_0`, PostgreSQL, PKP's default dataset, in the A6 report's walk ([pkp-e2e#856](https://github.com/jardakotesovec/pkp-e2e/issues/856)), which names this fault separate from A6 and out of its scope: through A6's second entry after the person was added from the first, and through a single suggestion "AGallego@Mailinator.com" after the dataset reviewer holding agallego@mailinator.com was added through the window's list (note f-a6). The row's window opened on "Selected Reviewer" with the person's name; its "Add Reviewer" posted `reviewer-grid/update-reviewer`, answered 500, with the log line `PHP Fatal error:  Uncaught Exception: Invalid reviewer id. in lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php`; no message showed, the window stayed open, the row stayed in the panel, and the window's list showed the entry with the assigned notice and no "Select Reviewer".
+Issue report: [docs/issues/U31-A12-suggestion-panel-add-reviewer-already-on-round.md](../issues/U31-A12-suggestion-panel-add-reviewer-already-on-round.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note t10 (live-probed 2026-09-06, OMP: both halves hold, the internal add retires the suggestion for the External Review panel and list, that round's Reviewers table "No Items"). Note f (panel absent on `WORKFLOW_STAGE_ID_INTERNAL_REVIEW`; `atActiveReviewStage()` requires stage 3) against note h (`PKPSelectReviewerListPanel` adds the list on any stage); `ReviewerForm::execute()` matches by email whatever the stage (note i).
