@@ -1,6 +1,14 @@
 --- a/lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php
 +++ b/lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php
-@@ -43,7 +43,21 @@
+@@ -14,7 +14,6 @@
+ 
+ namespace PKP\controllers\grid\eventLog;
+ 
+-use APP\facades\Repo;
+ use Exception;
+ use PKP\core\JSONMessage;
+ use PKP\core\PKPString;
+@@ -43,7 +42,21 @@
       */
      public function viewReviewChange($args): JSONMessage
      {
@@ -10,11 +18,11 @@
 +            return new JSONMessage(false, __('api.403.unauthorized'));
 +        }
 +
-+        // Serve only an entry that belongs to this submission's own review history. The log entry
-+        // id is otherwise a primary key that names any review change on the site.
++        // Serve only an entry from this submission's own review history, the list the grid shows.
++        // The log entry id alone names any review change on the site.
 +        $logEntryId = (int) $args['logEntryId'];
 +        $logEntry = collect($this->getReviewChangeEntries($this->getSubmission()))
-+            ->first(fn (EventLogEntry $entry): bool => $entry->getId() === $logEntryId);
++            ->first(fn (EventLogEntry $entry): bool => (int) $entry->getId() === $logEntryId);
 +
 +        if (!$logEntry) {
 +            return new JSONMessage(false, __('api.404.resourceNotFound'));

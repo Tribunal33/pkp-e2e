@@ -559,7 +559,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Activity Log file lines show an empty file name when read in a language other than the submission's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A11](#a11) | A submission's activity log "View changes" opens any edited review on the site by its number, not only the submission's own | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
+| [A11](#a11) | A submission's activity log "View changes" opens any edited review on the site by its number, not only the submission's own | 🐞 | medium | issues (claude), 2026-10-07 — re-verified |
 | [OMP1](#omp1) | A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
@@ -693,22 +693,22 @@ Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
 **A11 — A submission's activity log "View changes" opens any edited review on the site by its number, not only the submission's own** {OJS OMP} · 🐞 · medium.
-When an editor edits a submitted review in the "Modify Review" window, the
-submission's "Activity Log" records the change, and its "View changes"
-link opens a "View Review" window with the review's old and new values.
-That window serves whatever change entry it is asked for by its number: a
-Section Editor assigned only to other submissions reads the old and new
-comments, recommendation, review-form answers and competing interests of
-any review an editor has edited in the journal, the content of
-double-anonymous reviews included. A manager, who may open every
-submission in the journal, reaches every edited review there, and by the
-same missing check reads other journals' edited reviews too.
-The window shows the review's content but names neither the reviewer nor
-the submission; the reader works the submission out from the text. The
-change-entry numbers run in a short sequence that anyone can step through.
-The confidentiality of review content, which is meant to hold against an
-editor who is not on the submission, does not.
-Since: 2026-08-20 · Basis: probe, 2026-10-05. <sup>[f-a11](#fn-a11)</sup>
+When an editor edits a submitted review in the "Modify Review" window,
+the submission's "Activity Log" records the change. Its "View changes"
+link opens a window with the review's old and new values. The link's
+address names the submission and the change by number, and only the
+submission is checked. A Section Editor who pastes that address into the
+browser with one of their own submissions and another change's number is
+shown that change, from any submission. The reply shows as raw text in
+the browser tab.
+The reader sees the old and new comments, recommendation, review-form
+answers and competing interests. The window names neither the reviewer
+nor the submission; the reader tells the submission from what the review
+discusses. The change numbers run in one sequence across the site, so a
+reader can step through them. On a site hosting several journals, a
+manager or Section Editor of one journal reads the other journals' edited
+reviews the same way.
+Since: 2026-08-20 · Basis: probe, 2026-10-07. <sup>[f-a11](#fn-a11)</sup>
 
 ### OMP
 
@@ -1398,6 +1398,10 @@ on 6 only) read entry 641 of submission 16. Seen again 2026-10-02 on OJS
 entry). Code only: review form and competing-interest entries, the
 author-editor case, OPS (no reviews).
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
+Re-verified end to end 2026-10-07 on OJS and OMP `main` (maintainer's
+request): a plain address-bar edit of the "View changes" address shows
+another change as raw text; the recommendation entry (OJS) leaks the same
+way; an unknown entry number answers 500, closed by the same fix.
 Issue report: [pkp-e2e#925](https://github.com/jardakotesovec/pkp-e2e/issues/925) ([docs/issues/U38-A11-activity-log-view-changes-reads-any-review.md](../issues/U38-A11-activity-log-view-changes-reads-any-review.md)).
 
 <a id="fn-omp1"></a>
