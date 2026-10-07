@@ -15,6 +15,11 @@
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
 
+**Update 2026-10-07.** The book file download that failed on `main`
+beside this error was fixed by `pkp/pkp-lib#13444` (2026-10-05); this
+error is not touched by it. Observed, the fix's trial and Evidence now
+say so, and the kept walk is the one of that fault's closed report.
+
 ## Summary
 
 The page's own script fails each time a reader opens a book's PDF on a
@@ -69,12 +74,10 @@ Uncaught ReferenceError: PDFJS is not defined
 ```
 
 On 3.5 this is the only error: the viewer below shows the PDF ("of 1")
-and "Download" saves `epilogue.pdf`. On `main` the console also shows
-the file request answering 500 and an uncaught
-`UnexpectedResponseException`, and the viewer is empty. Those belong to
-[U69-A9-book-file-open-download-fails.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md);
-with that report's fix in, `main` behaves as 3.5 does and the console
-error stays.
+and "Download" saves `epilogue.pdf`. On `main` the walk also saw the
+file request answer 500 and the viewer stay empty, a separate fault
+since fixed by `pkp/pkp-lib#13444`. With that one-line fix in, `main`
+behaved as 3.5 does and the console error stayed.
 
 ## Cause
 
@@ -143,8 +146,8 @@ Tried alone on OMP `stable-3_5_0`: the view page logged no script
 error, the viewer showed the PDF ("of 1"), and the page's "Download",
 the viewer's own download button and the link with the viewer off each
 saved `epilogue.pdf`. On OMP `main` it was tried together with the
-other report's one-line fix, so that the file request answers, and
-showed the same.
+one-line download fix that `pkp/pkp-lib#13444` has since made, so that
+the file request answers, and showed the same.
 
 - **Alternatives.** Rewriting the inline script for the library's
   current name (`pdfjsLib`) would draw a page nobody sees: there is no
@@ -162,18 +165,20 @@ Small: one block removed from one template.
 
 ## Evidence
 
-- The kept script is the other report's,
-  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/book-file-open-download-fails/walk.js):
-  its steps 1 to 3 are the steps here, and it records the page's
-  script errors after them. Run it on an install freshly loaded from
-  the default dataset:
-  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js omp shared/playwright/checks/issues/book-file-open-download-fails/walk.js`.
+- The kept script is
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/pdf-view-page-script-error/walk.js),
+  the walk of the download fault's closed report
+  ([pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282))
+  kept here: its steps 1 to 3 are the steps here, and it records the
+  page's script errors after them. Run it on an install freshly loaded
+  from the default dataset:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js omp shared/playwright/checks/issues/pdf-view-page-script-error/walk.js`.
 - The fix was tried with
   `PKP_E2E_LINE=stable-3_5_0 node bin/try-fix.js apply shared/playwright/checks/issues/pdf-view-page-script-error/fix.diff omp`
-  and the walk, then reverted. On `main` the two reports' diffs were
-  applied joined in one file. With the
-  [other report's fix](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/book-file-open-download-fails/fix.diff)
-  alone, the walk on `main` still recorded "PDFJS is not defined".
+  and the walk, then reverted. On `main` it was applied joined in one
+  file with the one-line download fix (the change `pkp/pkp-lib#13444`
+  has since made). With that fix alone, the walk on `main` still
+  recorded "PDFJS is not defined".
 - Walked on OMP `main` and `stable-3_5_0`, on PostgreSQL; nothing here
   depends on the database. Datasets: pkp/datasets 92050d9 (2026-10-01).
 - Tips: OMP `main` 3b0ecf794, `stable-3_5_0` b24879c3d, `stable-3_4_0`
