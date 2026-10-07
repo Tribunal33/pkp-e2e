@@ -865,6 +865,7 @@ Left out of the scenarios above, by reason:
   - a category's "Path" refused with a message that names the characters
     a saved path may hold ([A9](#a9)): the guard the issue report
     proposes
+   - the guard for A22 (issue report `docs/issues/U16-A22-category-no-picture-address-never-loads.md`): once fixed, the small picture's address of a category with no picture answers "404 Not Found" on a journal and a preprint server.
 - **Register carries it**:
   - A2 ("Order of articles" set to another choice, with no effect on the
     page; Rule 10; Settings bullet 3)
@@ -955,7 +956,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | The box where a manager types a category's name to delete it has no name for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | A category with one item reads "1 Items" ("1 Titles" on a press) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | With the "Browse" block in a journal's sidebar, every page's breadcrumb gets a grey bar | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A22](#a22) | The picture address of a category with no picture never finishes loading on a journal or preprint server | 🐞 | minor · crash: server | — |
+| [A22](#a22) | The picture address of a category with no picture never finishes loading on a journal or preprint server | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1226,14 +1227,20 @@ the "Edit Category" case read from the code.
 Basis: probe, 2026-09-25; the edited category, code reading. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — The picture address of a category with no picture never finishes loading on a journal or preprint server** · 🐞 · minor · crash: server.
-On a journal or a preprint server, the address of a picture's small
-copy (Rule 12a), typed for a category with no "Cover Image", is expected
-to answer the bare "404 Not Found" page of an unknown address. Instead
-the server fails and the page never finishes loading. Nothing on the
-site links to that address, so only a typed or bookmarked address
-reaches it.
-Basis: probe, 2026-10-02. <sup>f-a22</sup>
+**A22 — The picture address of a category with no picture never finishes loading on a journal or preprint server** · 🐞 · low · crash: server.
+On a journal or a preprint server, a category's picture address
+(`…/catalog/thumbnail?type=category&id=2` for its small copy,
+`…/fullSize?…` for the full size; `…/preprints/…` on a preprint server),
+opened for a category that has no "Cover Image", should answer the bare
+"404 Not Found" page. Instead the browser never finishes loading it: the
+server answers "200 OK" with headers promising 4096 bytes, fails to read
+the file, and closes the connection without sending any of them. The
+server is not kept busy; only the visitor's browser waits. No page links
+to these addresses: they are reached only by typing or bookmarking one,
+or by keeping the address of a picture the manager has since removed. A
+press is not affected, because its own handler checks for a picture
+first and answers an empty page. (Rule 12a)
+Basis: probe, 2026-10-07. <sup>f-a22</sup>
 
 ### OMP
 
@@ -2173,6 +2180,7 @@ response the browser never completes. A guard that answers
 `NotFoundHttpException` when the category has no picture, in
 `thumbnail()` and `fullSize()`, would give the 404 (the OMP1 report's
 "What goes with it", 2026-10-02).
+Issue report: [docs/issues/U16-A22-category-no-picture-address-never-loads.md](../issues/U16-A22-category-no-picture-address-never-loads.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read

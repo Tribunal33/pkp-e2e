@@ -1,0 +1,34 @@
+--- a/lib/pkp/pages/catalog/PKPCatalogHandler.php
++++ b/lib/pkp/pages/catalog/PKPCatalogHandler.php
+@@ -117,8 +117,14 @@
+                     throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+                 }
+                 $imageInfo = $category->getImage();
++                if (empty($imageInfo['uploadName'])) {
++                    // No picture: there is nothing to serve at this address.
++                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++                }
+                 $publicFileManager = new PublicFileManager();
+-                $publicFileManager->downloadByPath($publicFileManager->getContextFilesPath($category->getContextId()) . '/' . $imageInfo['uploadName'], null, true);
++                if (!$publicFileManager->downloadByPath($publicFileManager->getContextFilesPath($category->getContextId()) . '/' . $imageInfo['uploadName'], null, true)) {
++                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++                }
+                 break;
+             default:
+                 throw new \Exception('invalid type specified');
+@@ -141,8 +147,14 @@
+                     throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+                 }
+                 $imageInfo = $category->getImage();
++                if (empty($imageInfo['thumbnailName'])) {
++                    // No picture: there is nothing to serve at this address.
++                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++                }
+                 $publicFileManager = new PublicFileManager();
+-                $publicFileManager->downloadByPath($publicFileManager->getContextFilesPath($category->getContextId()) . '/' . $imageInfo['thumbnailName'], null, true);
++                if (!$publicFileManager->downloadByPath($publicFileManager->getContextFilesPath($category->getContextId()) . '/' . $imageInfo['thumbnailName'], null, true)) {
++                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++                }
+                 break;
+             default:
+                 throw new \Exception('invalid type specified');

@@ -195,7 +195,9 @@ Each of these has bitten at least once.
     modal form refused by its own validation shows its page notice late,
     with the next action or when the window closes, never while the
     redrawn form is open: read the refusal in the form (a field's error,
-    the in-form `.notifyFormError`) (U35, U44 issue walks). One exception: Settings › Website
+    the in-form `.notifyFormError`) (U35, U44 issue walks); a handler
+    that answers a refusal with no redrawn form shows the notice at once,
+    over the open window (Navigation's item window, U08 I07). One exception: Settings › Website
     › Content › "Comments" shows "Saving" and then reloads the whole
     Website Settings page onto Appearance › Theme, and "Saved" never
     appears; wait for the reload, not the status (U14 claim check K1,
