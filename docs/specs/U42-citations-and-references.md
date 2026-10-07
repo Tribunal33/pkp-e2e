@@ -920,7 +920,7 @@ Left out of the scenarios above, by reason:
   - a wizard box saved again unchanged, one of its lines spaces only
     (Rule 16): the references kept as they are, not deleted and added
     again
-  - the guard for A6 (retired; issue report `docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md`): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
+  - the guard for A6 (retired; pkp-e2e#883): with "References Metadata Lookup" on, "Add" of new references shows "Processing references - 0/n" counting every reference added, and switching the lookup on over existing references shows no box
 - **Rarely met**:
   - "Data Citations" at "Do not request data citation metadata from the
     author during submission.": the "Data" page without the wizard's
@@ -1304,16 +1304,16 @@ Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 **A1 — A Site Administrator with no journal role cannot change references** · ✅ · retired. Withdrawn 2026-09-24: a Site Administrator's last role in a journal cannot be removed ([User invitations](U06-user-invitations.md)), so the state has no way in, and the reachable neighbour, an administrator left with an unassigned assistant role, gets the read-only page (Actors row 2). <sup>f-a1</sup>
 
 <a id="a5"></a>
-**A5 — A reference whose lookup failed for good looks like one still waiting** · ✅ · retired. Answered 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/ui-library#982`, `pkp/pkp-lib#13318`), at the PR heads before their merge: a failed row carries "Metadata lookup failed", and the progress box counts it finished (Rules 12, 13). <sup>f-a5</sup>
+**A5 — A reference whose lookup failed for good looks like one still waiting** · ✅ · retired. Answered 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/ui-library#982`, `pkp/pkp-lib#13318`), merged 2026-10-07 (pkp-lib `6aa31ac645`, ui-library `cd58d426`, ojs `1b0f84edae`, omp `866d8d3dd`, ops `1f5f67b289`): a failed row carries "Metadata lookup failed", and the progress box counts it finished (Rules 12, 13). <sup>f-a5</sup>
 
 <a id="a6"></a>
-**A6 — References page: the lookup's progress box counts only structured references and says "All 2 done" over five** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `0dc8d84fc7`, `pkp/ui-library#982` `0185ab12`), at the PR heads before their merge: the box counts every reference a lookup was asked for, and leaves out those it was not, also once filled in by hand (Rule 13). <sup>f-a6</sup>
+**A6 — References page: the lookup's progress box counts only structured references and says "All 2 done" over five** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318`, `pkp/ui-library#982`), merged 2026-10-07 (pkp-lib `6aa31ac645`, ui-library `cd58d426`, ojs `1b0f84edae`, omp `866d8d3dd`, ops `1f5f67b289`), walked on the apps' `main` the same day: the box counts every reference a lookup was asked for, and leaves out those it was not, also once filled in by hand (Rule 13). <sup>f-a6</sup>
 
 <a id="a7"></a>
-**A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `8653c678b7`), at the PR heads before their merge: `importCitations()` stores the DOI found in a wizard reference's text with lookup off, as "Add" does (Rule 17). <sup>f-a7</sup>
+**A7 — A DOI in a reference typed while submitting is not recorded as its DOI when metadata lookup is off** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318`), merged 2026-10-07 (pkp-lib `6aa31ac645`, ui-library `cd58d426`, ojs `1b0f84edae`, omp `866d8d3dd`, ops `1f5f67b289`), walked on the apps' `main` the same day: `importCitations()` stores the DOI found in a wizard reference's text with lookup off, as "Add" does (Rule 17). <sup>f-a7</sup>
 
 <a id="a23"></a>
-**A23 — A new version taken while its references are being looked up shows "Processing references - 0/n" for good** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318` `8653c678b7`), at the PR heads before their merge, the day it was found there: `copyCitations()` queues a lookup of its own for a copy taken mid-lookup (Rule 26). <sup>f-a23</sup>
+**A23 — A new version taken while its references are being looked up shows "Processing references - 0/n" for good** · ✅ · retired. Fixed 2026-10-06 by `pkp/pkp-lib#13308` (`pkp/pkp-lib#13318`), found at the PR heads and fixed before the merge, merged 2026-10-07 (pkp-lib `6aa31ac645`, ui-library `cd58d426`, ojs `1b0f84edae`, omp `866d8d3dd`, ops `1f5f67b289`): `copyCitations()` queues a lookup of its own for a copy taken mid-lookup (Rule 26). <sup>f-a23</sup>
 
 <a id="a18"></a>
 **A18 — A References change carried to "Review" by the step rail is lost on "Submit"** · ✅ · retired. Overturned 2026-09-29: re-checked on all three apps, the step rail saves the step on the move, so the change is listed on "Review" and submitted with "Submit" › "Submit" (Rule 16). <sup>f-a18</sup>
@@ -2172,7 +2172,8 @@ was filled in by hand; "Reprocess" on the other gave "Processing
 references - 0/1" (stored status 1 against the hand-filled one's 0); the
 two with no stored status: no box and no fetches, also after one was
 filled in. Facts `a6-facts-pr13308r2-<mode>-<app>.json`.
-Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883) ([docs/issues/U42-A6-reference-lookup-progress-counts-structured-only.md](../issues/U42-A6-reference-lookup-progress-counts-structured-only.md)).
+On the apps' `main` after the merge (2026-10-07, all three apps, the same `walk.js`, modes `steps` and `nb`): "0/5", "2/5", "All 5 references successfully processed"; the two references added while lookup was off showed no box and no fetches in 22 s, also after one was filled in by hand; "Reprocess" on the other gave "Processing references - 0/1" (facts `a6-facts-main13308-<mode>-<app>.json`).
+Issue report: [pkp-e2e#883](https://github.com/jardakotesovec/pkp-e2e/issues/883), closed 2026-10-07 with the fix; the report and its kept script deleted (git keeps them).
 
 <a id="fn-f-a7"></a>
 **f-a7 — A7 evidence.** Note k. Live-probed 2026-09-24: the screen half,
@@ -2186,7 +2187,8 @@ https://doi.org/10.1234/abcd" stored with DOI `10.1234/abcd` as the
 "Add"ed one was, both rows a DOI link and the "DOI" box of "Edit" filled
 once lookup was on; OJS's Crossref `citation_list` sent `<doi>` for both
 (facts `.reports/issues-u42r7/u42a7/u42r8-walk-pr13308r4-<app>.json`).
-Issue report: [pkp-e2e#872](https://github.com/jardakotesovec/pkp-e2e/issues/872) ([docs/issues/U42-A7-wizard-reference-doi-not-kept.md](../issues/U42-A7-wizard-reference-doi-not-kept.md)).
+On the apps' `main` after the merge (2026-10-07, all three apps, the same `walk.js`): the wizard's reference stored with DOI `10.1234/abcd`, shown in the "DOI" box of "Edit" once lookup was on; OJS's Crossref `citation_list` sent `<doi>10.1234/abcd</doi>` (facts `u42r8-walk-main13308-<app>.json`).
+Issue report: [pkp-e2e#872](https://github.com/jardakotesovec/pkp-e2e/issues/872), closed 2026-10-07 with the fix; the report and its kept script deleted (git keeps them).
 
 <a id="fn-f-a8"></a>
 **f-a8 — A8 evidence.** Note m. The funders list shows the same behavior
