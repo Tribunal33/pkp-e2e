@@ -10,8 +10,6 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - A2 🐞: S4 opens the "Copyedited Files" window and asserts nothing about
- *   its title (it is anchored by its "Upload File" link).
  * - A7 🐞: S4 deletes the last copyedited file and asserts nothing about the
  *   Editor's notice afterwards.
  * - A6 🐞, A8 ❓, A10 ❓, A1 ❓: no scenario reaches them here.
@@ -362,10 +360,11 @@ test.describe('copyediting stage', () => {
         await expect(stage.uploadSelectButtons()).toHaveCount(2);
         await stage.expectDecisionButtons([]);
 
-        // "Upload/Select Files" on "Copyedited Files": the window opens (its
-        // title is register A2's); "Upload File" opens the wizard "Upload
-        // Copyedited File" with its three steps and "Complete".
+        // "Upload/Select Files" on "Copyedited Files": the window opens
+        // titled "Upload/Select Files" (Rule 5); "Upload File" opens the
+        // wizard "Upload Copyedited File" with its three steps and "Complete".
         const win = await new SelectFilesWindow(copyeditorPage).openFrom(stage, COPYEDITED_FILES);
+        await expect(win.title()).toHaveText('Upload/Select Files');
         const wizard = await win.openUploadWizard();
         await expect(wizard.getByRole('heading', {level: 1})).toHaveText('Upload Copyedited File');
         await expect(uploadWizardSteps(wizard)).toHaveText(WIZARD_STEPS);

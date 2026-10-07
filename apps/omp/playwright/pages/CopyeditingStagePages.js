@@ -59,10 +59,10 @@ const LIST_DESCRIPTIONS = {
     [LISTS.copyedited]: 'These are edited files that will be taken to the production stage',
 };
 
-/** The select window's titles per list (Rule 5; the Copyedited one is A2). */
+/** The select window's titles per list (Rule 5). */
 const SELECT_WINDOW_TITLES = {
     [LISTS.draft]: 'Upload/Select Files',
-    [LISTS.copyedited]: 'Upload Review File',
+    [LISTS.copyedited]: 'Upload/Select Files',
 };
 
 /** The upload wizard's titles per list (Rule 5b). */

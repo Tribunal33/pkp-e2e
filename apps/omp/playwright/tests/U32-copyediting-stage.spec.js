@@ -11,7 +11,6 @@
  *
  * Not covered, by register ID (the spec's Coverage section is the record
  * of everything else left out): A1, A6, A8, A10 (no scenario reaches them);
- * A2 (S4 opens the "Copyedited Files" window without reading its title),
  * A7 (S4 deletes the copyedited file and reads the row gone, not the
  * notice after), A4 (S3 deletes the task through the panel's own "Delete",
  * the working path; nothing is asserted about copyedits clearing it), A5
@@ -374,9 +373,10 @@ test.describe('Copyediting stage (U32)', () => {
 
         // "Upload/Select Files" on "Copyedited Files" › "Upload File": the
         // wizard "Upload Copyedited File" with its three steps; the file is
-        // listed with the four columns after the window's "OK". (The
-        // window's own title is A2, not read.)
+        // listed with the four columns after the window's "OK". The window
+        // itself is titled "Upload/Select Files" (Rule 5).
         const window = await openSelectWindow(cePage, ceModal, LISTS.copyedited);
+        await expect(selectWindowTitled(cePage, SELECT_WINDOW_TITLES[LISTS.copyedited])).toBeVisible();
         await uploadInSelectWindow(cePage, window, fileName, {expectTitle: UPLOAD_WIZARD_TITLES[LISTS.copyedited]});
         await saveSelectWindow(window);
         await expect(fileRow(ceModal, LISTS.copyedited, fileName).first()).toBeVisible({timeout: 20_000});
