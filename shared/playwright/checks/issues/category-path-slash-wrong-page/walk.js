@@ -170,7 +170,8 @@ forEachApp(async (app) => {
         subcategories: (await page.locator('nav.subcategories a').allInnerTexts().catch(() => [])).map(tidy),
     });
     // The PHP 8.3 built-in server can die on a process's first category page (php-src GH-20469, the harness
-    // restarts it): a navigation that meets the dead server is retried once, a few seconds later.
+    // restarts it) on a checkout without pkp/pkp-lib#12915 (`main` before 2026-10-05; the stable lines):
+    // a navigation that meets the dead server is retried once, a few seconds later.
     const gotoRetry = async (url) => {
         try {
             return await page.goto(url);

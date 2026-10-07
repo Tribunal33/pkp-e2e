@@ -178,7 +178,8 @@ forEachApp(async (app) => {
             R.run = await app.api.runTask({task: 'statisticsReport', context: t}).catch((e) => ({error: e.message.slice(0, 200)}));
             R.run.ms = Date.now() - t0;
             if (R.run.error && /socket hang up|ECONNRESET/.test(R.run.error)) {
-                // app-changes row 18: PHP 8.3's php -S dies (exit 139) inside the
+                // PHP 8.3's php -S could die (exit 139, php-src GH-20469; fixed on main by
+                // pkp/pkp-lib#12915, the stable lines still have it) inside the
                 // request after the Tasks job ran; the email job stays reserved.
                 // Finish it the command line's way (what the scheduler's own
                 // run does), so the mailboxes read below are the run's.

@@ -265,9 +265,10 @@ unit test.
   step 5 (`api/v1/stats/editorial?dateStart=2026-10-02&dateEnd=2026-10-02`)
   answered 200 on OJS and OPS.
 - OMP `main`: steps 4–5 and the control were not observed, with the fix
-  in or out: the request they send got no answer, the PHP crash of the
-  open pkp-e2e report
-  [2026-09-30-php-gh20469-segfaults.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/reports/2026-09-30-php-gh20469-segfaults.md).
+  in or out: the request they send got no answer, the PHP 8.3 crash
+  php-src GH-20469, worked around in pkp-lib since
+  [pkp/pkp-lib#12915](https://github.com/pkp/pkp-lib/pull/12915)
+  (merged 2026-10-05, after this walk).
 - Code reads: `PKPStatsEditorialQueryBuilder::countSubmissionsReceived()`,
   `countImported()`, `countInProgress()` and `countByDecisions()` on
   the four branches: the same `<=` against the bare `dateEnd` on all

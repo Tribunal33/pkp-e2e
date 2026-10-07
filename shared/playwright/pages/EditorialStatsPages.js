@@ -233,9 +233,8 @@ class EditorialActivityPage extends StatsPage {
             this.page.waitForResponse(isEditorialFetch('averages'), {timeout: T}),
         ]);
         // A GET the server drops without an answer (its `php -S` process
-        // died: OMP's exit-139 segfault, app-changes row 18) never fires
-        // "response": fail at once, naming the drop, instead of waiting out
-        // the 30 s.
+        // died, a segfault's exit 139 among them) never fires "response":
+        // fail at once, naming the drop, instead of waiting out the 30 s.
         let onFailed = null;
         const dropped = new Promise((resolve, reject) => {
             onFailed = (request) => {

@@ -51,15 +51,10 @@
  * absence is read settled and paired with a positive control taken the
  * same way (M4, M6). Everything here runs in the parallel `omp` project.
  *
- * Every category-page navigation (open, reload, the not-found reads) goes
- * through CategoryPage with `testInfo`, which opens the page again when the
- * worker server drops the answer: on PHP 8.3, OPcache's inheritance cache
- * (php-src GH-20469, fixed only in 8.4.23+) ends the first category page a
- * `php -S` process renders once an earlier request of that process loaded
- * the press's publication classes in the unlucky order (the catalog,
- * search, scenario seeding, a settings save), and the harness respawns
- * the server within a second (app-changes row 18; test finding T-omp-2).
- * Each drop is kept as an `app-crash` annotation and a log line.
+ * A category page the server answers with nothing fails the test like any
+ * other crash: the PHP 8.3 OPcache crash (php-src GH-20469) these pages
+ * met is worked around in pkp-lib since pkp/pkp-lib#12915 (2026-10-05),
+ * so the re-open of a dropped answer is gone (test finding T-omp-2).
  */
 const path = require('path');
 const {test: base, expect} = require('../support/fixtures.js');
@@ -325,7 +320,7 @@ test.describe('Categories', () => {
         // The visitor's page: breadcrumb, heading, the description,
         // "Subcategories" with "Physics" alone (Rules 11, 12; the picture is
         // OMP1's and not read).
-        const cat = new CategoryPage(visitor, tag, {testInfo});
+        const cat = new CategoryPage(visitor, tag);
         await cat.goto('natural-science');
         expect(await cat.crumbs()).toEqual(['Home', 'Science']);
         await expect(cat.crumbLinks()).toHaveText(['Home']);
@@ -584,7 +579,7 @@ test.describe('Categories', () => {
                 {path: 'science', title: 'Science', children: [{path: 'physics', title: 'Physics'}]},
             ],
         });
-        const cat = new CategoryPage(visitor, tag, {testInfo});
+        const cat = new CategoryPage(visitor, tag);
         const block = new BrowseBlock(visitor);
         const names = async () => (await block.flatEntries()).map((e) => e.name).sort();
 

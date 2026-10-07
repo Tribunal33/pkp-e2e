@@ -699,54 +699,15 @@ class CategoryPage extends BasePage {
     /**
      * @param {import('@playwright/test').Page} page
      * @param {string} contextPath
-     * @param {{word?: string, locale?: string, testInfo?: import('@playwright/test').TestInfo}} [options]
+     * @param {{word?: string, locale?: string}} [options]
      *   `word` the address word before "category" ("catalog"; "preprints" on
-     *   a preprint server), `locale` a language segment for every address,
-     *   `testInfo` (OMP only) switches on the re-open of a dropped answer
-     *   (`navigate()`); without it every navigation is a single attempt
+     *   a preprint server), `locale` a language segment for every address
      */
-    constructor(page, contextPath, {word = 'catalog', locale = '', testInfo = null} = {}) {
+    constructor(page, contextPath, {word = 'catalog', locale = ''} = {}) {
         super(page);
         this.contextPath = contextPath;
         this.word = word;
         this.locale = locale;
-        this.testInfo = testInfo;
-    }
-
-    /**
-     * Run one navigation of this page (`goto`, `reload`) and return its
-     * response. With `testInfo` set, a navigation the server drops without
-     * an answer is run again until it answers, each drop kept as an
-     * `app-crash` test annotation and a log line. Why (OMP only): PHP 8.3's
-     * OPcache inheritance cache (php-src GH-20469, fixed in 8.4.23+) ends
-     * the first category page a `php -S` process renders once an earlier
-     * request of that process loaded the press's publication classes in
-     * the unlucky order (the catalog, search, scenario seeding, a settings
-     * save); the harness respawns the server within a second and the
-     * respawned process renders the page (app-changes row 18, U16 T-omp-2).
-     *
-     * @param {() => Promise<import('@playwright/test').Response|null>} navigation
-     * @param {string} what the address, for the annotation
-     */
-    async navigate(navigation, what) {
-        if (!this.testInfo) {
-            return navigation();
-        }
-        const testInfo = this.testInfo;
-        let response = null;
-        await expect(async () => {
-            try {
-                response = await navigation();
-            } catch (error) {
-                const message = String((error && error.message) || error).split('\n')[0];
-                if (/ERR_EMPTY_RESPONSE|ERR_CONNECTION_REFUSED|ERR_CONNECTION_RESET/.test(message)) {
-                    testInfo.annotations.push({type: 'app-crash', description: `no answer for ${what}: ${message}`});
-                    console.log(`[U16 ${testInfo.title.split(':')[0]}] no answer for ${what} (GH-20469, app-changes row 18); opened again`);
-                }
-                throw error;
-            }
-        }).toPass({timeout: 60_000, intervals: [1_000, 2_000]});
-        return response;
     }
 
     /** A category's address by its path. */
@@ -757,19 +718,14 @@ class CategoryPage extends BasePage {
 
     /** Open a category's page and wait for its heading; returns the response. */
     async goto(path, options = {}) {
-        const address = this.url(path, options);
-        const response = await this.navigate(() => this.page.goto(address), address);
+        const response = await this.page.goto(this.url(path, options));
         await expect(this.heading()).toBeVisible({timeout: T});
         return response;
     }
 
     /** Reload and wait for the heading. */
     async reload() {
-        // A dropped answer leaves the browser's error page, so a retry opens
-        // the address instead of reloading.
-        const address = this.page.url();
-        let attempts = 0;
-        await this.navigate(() => (attempts++ ? this.page.goto(address) : this.page.reload()), address);
+        await this.page.reload();
         await expect(this.heading()).toBeVisible({timeout: T});
     }
 
@@ -864,8 +820,7 @@ class CategoryPage extends BasePage {
      * site header and no link at all.
      */
     async expectBareNotFound(path, options = {}) {
-        const address = this.url(path, options);
-        const response = await this.navigate(() => this.page.goto(address), address);
+        const response = await this.page.goto(this.url(path, options));
         expect(response && response.status(), `${this.url(path, options)} answers 404`).toBe(404);
         await expect(this.page.getByRole('heading', {level: 1})).toHaveText('404 Not Found');
         await expect(this.page.locator('header, .pkp_structure_head')).toHaveCount(0);

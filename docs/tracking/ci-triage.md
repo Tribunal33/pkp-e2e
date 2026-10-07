@@ -704,7 +704,20 @@ trips.
   `relations.doiBox()` was not found where it should read the
   "elsewhere" DOI (`U75-preprint-relations.spec.js:287`); green alone in
   10.5 s (`.reports/U72/final-run-ops.log`, `alone-reds.log`).
-  **Watch condition**: a second red at the same read.
+  Second sighting 2026-10-06 (pkp-e2e CI 37407424820 on `main`, OPS
+  shard 3, green on its retry): `RelationsControl.open()` read the legend,
+  then found no radios for 30 s, the button shown closed. **Diagnosed and
+  fixed 2026-10-07** (housekeeping, `.reports/flake-2026-10-07/u75s2-relations-panel/`):
+  "Relations" is a ui-library Dropdown that closes itself up to a second
+  after the focus leaves it (the side-menu press to "Contributors"), and
+  `open()` took the still-visible panel for open; a lever holding the close
+  until after that read reds S2 10 of 10, 0 of 10 with the fix. The page
+  objects now decide on `settleDropdown()` (`support/dropdown.js`):
+  Relations, the workflow "Payments" menu and the DOIs page's "Bulk
+  Actions" (patterns.md pitfall 3); U75 `--repeat-each 5` at 8 workers
+  30/30, U45 and U52 green on the three apps. **Watch condition**: a red
+  in a Dropdown's `open()` or `close()`; delete the entry after two weeks
+  without one.
 - **OJS U20 S8's Google Analytics "Settings" window answering "Error"**
   (OJS, once on CI, 2026-09-28). On push run 36371844559 at `f8e211f`
   (OJS shard 3/3) the plugin's "Settings" opened the "An unexpected error
@@ -832,7 +845,8 @@ trips.
   databases, auto workers): S5 red on all three apps, green alone on each
   (`.reports/U52/alone-status.log`). `TasksPanel.openTask()` now fails in 10 s on a
   missing row instead of the 8-minute test timeout. Harness alternative,
-  not applied (maintainer's call, like app-changes row 18): at cold
+  not applied (maintainer's call, like the OPcache file cache once offered
+  for GH-20469): at cold
   bootstrap, insert and delete a block of placeholder reports through the
   query builder so report numbers start above any comment number a run
   reaches. Also from the code only: `deleteReports()` passes a list
@@ -864,12 +878,12 @@ trips.
   (harness.md "Runtime model"), so a recurrence now costs one test. It was
   never pinned; if it recurs, add core-dump capture to CI before
   diagnosing.
-  Pinned on OMP 2026-09-25 (app-changes row 18): PHP 8.3's OPcache
+  Pinned on OMP 2026-09-25 (app-changes row 18, deleted 2026-10-07): PHP 8.3's OPcache
   inheritance-cache bug php-src GH-20469 (fixed in 8.4.23+), the first
   category page in a process that loaded `APP\publication\Publication`
   first; this OJS case may be the same bug, unproven.
   **Diagnosed 2026-09-30** (housekeeping, `.reports/flake-0930/segv/`;
-  report `docs/reports/2026-09-30-php-gh20469-segfaults.md`): GH-20469 is
+  its report, deleted 2026-10-07 once acted on by pkp/pkp-lib#12915): GH-20469 is
   confirmed for two class families on all three apps
   (`APP\submission\Submission`, `APP\publication\Publication`): a process
   dies on the first request that reaches the PKP parent first once an
@@ -919,6 +933,15 @@ trips.
   `--php-ini-values opcache.jit=1235` still runs with it). The GH-20469
   deaths stay until the pkp-lib workaround lands. **Watch condition**: a
   death whose backtrace is not GH-20469; then read it.
+  **2026-10-07** (housekeeping): the GH-20469 deaths' cause is fixed
+  upstream by pkp-lib `d1c90fe604` (pkp/pkp-lib#12915, merged
+  2026-10-05: the two `class_exists()` preloads in
+  `lib/pkp/includes/bootstrap.php`, carried by the three apps' `main`; the
+  stable lines do not carry it), and the suites' workarounds were removed
+  today (OMP U16's category-page re-opens in `CategoriesPages.js`, OMP
+  U65's `crashReplay()`), so a dropped answer now fails its test. A
+  GH-20469 death on `main` from now on is a regression, not this flake.
+  The watch condition stands for deaths of another kind.
 - **Manage Emails template window gone before its "Saved" read** (U34 S7,
   OJS and OMP, CI). The nightly pkp-e2e run 35558115088 (2026-09-21, `main`
   at `735bb76`, the same tree and the same app tips as the green push run

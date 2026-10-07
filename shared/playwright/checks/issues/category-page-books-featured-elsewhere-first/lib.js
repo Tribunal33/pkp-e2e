@@ -91,7 +91,8 @@ async function catalogRows(c) {
  * A public page as a reader sees it: the answer, each list on it (its heading and its books, each
  * with whether it is drawn as featured, `.is_featured`, a row of its own), the count line.
  * A press's first category page after the Catalog page can end with no answer at all on these
- * PHP servers (spec U16 OMP5, its own report); opened again, it loads, so a dropped answer is retried.
+ * PHP servers without pkp/pkp-lib#12915 (`main` before 2026-10-05; the stable lines; spec U16 OMP5,
+ * php-src GH-20469); opened again, it loads, so a dropped answer is retried.
  */
 async function readPublic(page, app, address, label) {
     const lang = app.line && /3_[34]/.test(app.line) ? '' : '/en';

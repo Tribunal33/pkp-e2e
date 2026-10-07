@@ -94,7 +94,8 @@ async function blockLinks(page) {
 /**
  * page.goto with one more try after a net:: error: on the test servers the first
  * category page a `php -S` process serves can end it (php-src GH-20469, a PHP
- * engine segfault; ci-triage "A `php -S` worker segfault"), and the harness
+ * engine segfault; ci-triage "A `php -S` worker segfault") on a checkout without
+ * pkp/pkp-lib#12915 (`main` before 2026-10-05; the stable lines), and the harness
  * restarts it within seconds. Returns how many tries it took.
  */
 async function gotoRetry(page, address) {

@@ -1436,7 +1436,7 @@ handler and the job are the same on `stable-3_5_0`. A reviewer's
 re-authorization (OJS `DepositOrcidReview` dispatches the same email
 with `itemType=review`; `getReviewerToVerify()` looks the user up by
 `userId` and token, without `state`) was not driven.
-Issue report: [docs/issues/U04-A14-orcid-reauthorization-link-blank-page.md](../issues/U04-A14-orcid-reauthorization-link-blank-page.md).
+Issue report: [pkp-e2e#932](https://github.com/jardakotesovec/pkp-e2e/issues/932) ([docs/issues/U04-A14-orcid-reauthorization-link-blank-page.md](../issues/U04-A14-orcid-reauthorization-link-blank-page.md)).
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-10-05 (OJS, OMP, OPS on `main`, two runs,
@@ -1448,7 +1448,7 @@ the Server") and "Login" pages read "About the Journal | {context name}"
 and "Login | {context name}". Cause: `orcidAbout.tpl` and
 `orcidVerify.tpl` include `frontend/components/header.tpl` without a
 `pageTitle` (contrast `userLogin.tpl`, `pageTitle="user.login"`).
-Issue report: [docs/issues/U04-A15-orcid-pages-tab-no-page-name.md](../issues/U04-A15-orcid-pages-tab-no-page-name.md).
+Issue report: [pkp-e2e#933](https://github.com/jardakotesovec/pkp-e2e/issues/933) ([docs/issues/U04-A15-orcid-pages-tab-no-page-name.md](../issues/U04-A15-orcid-pages-tab-no-page-name.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:

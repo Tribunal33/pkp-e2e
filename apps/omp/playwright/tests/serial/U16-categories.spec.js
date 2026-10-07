@@ -34,13 +34,10 @@
  * a "Reset Password" mail the visitor asks for, to the manager's own
  * throwaway address (A8).
  *
- * Every category-page navigation goes through CategoryPage with
- * `testInfo`, which opens the page again when the worker server drops the
- * answer (PHP 8.3's OPcache inheritance-cache bug, php-src GH-20469, fixed
- * only in 8.4.23+: the first category page of a `php -S` process whose
- * earlier requests, the scenario seeding among them, loaded the press's
- * publication classes in the unlucky order; app-changes row 18, test
- * finding T-omp-2). Each drop is kept as an `app-crash` annotation.
+ * A category page the server answers with nothing fails the test like any
+ * other crash: the PHP 8.3 OPcache crash (php-src GH-20469) these pages
+ * met is worked around in pkp-lib since pkp/pkp-lib#12915 (2026-10-05),
+ * so the re-open of a dropped answer is gone (test finding T-omp-2).
  */
 const {test: base, expect} = require('../../support/fixtures.js');
 const {runJobs} = require('../../../../../shared/playwright/support/jobs.js');
@@ -231,7 +228,7 @@ test.describe('Categories (queue-drained category pages)', () => {
         await book.goto(posters.submissionId);
         await expect(book.title()).toHaveText('Wall Posters');
         await expect(book.categoryLinks()).toHaveText(['Arts']);
-        const cat = new CategoryPage(visitor, tag, {testInfo});
+        const cat = new CategoryPage(visitor, tag);
         for (const path of ['history', 'modern-history', 'cold-war']) {
             await cat.expectBareNotFound(path);
         }
@@ -287,7 +284,7 @@ test.describe('Categories (queue-drained category pages)', () => {
         await seedBook(ompApi, tag, 5, 'Gamma Result', ['physics']);
         await seedBook(ompApi, tag, 6, 'Draft Theory', ['physics'], {published: false});
         runJobs();
-        const cat = new CategoryPage(visitor, tag, {testInfo});
+        const cat = new CategoryPage(visitor, tag);
         const results = ['Alpha Result', 'Beta Result', 'Gamma Result'];
         const allBooks = () => cat.root().getByRole('heading', {name: 'All Books', exact: true});
 
@@ -335,7 +332,7 @@ test.describe('Categories (queue-drained category pages)', () => {
         // The seeded press's pages {OMP}: "Applied Science" headed, its
         // breadcrumb, a count ending in "Titles", "Subcategories" with
         // "Computer Science" and "Engineering" (Rule 9; no count is read).
-        const seeded = new CategoryPage(visitor, 'publicknowledge', {testInfo});
+        const seeded = new CategoryPage(visitor, 'publicknowledge');
         await seeded.goto('applied-science', {locale: 'en'});
         await expect(seeded.heading()).toHaveText('Applied Science');
         expect(await seeded.crumbs()).toEqual(['Home', 'Applied Science']);
@@ -351,7 +348,7 @@ test.describe('Categories (queue-drained category pages)', () => {
         const moon = await seedBook(ompApi, tag, 2, 'Moon Study', ['science']);
         runJobs();
         const late = await seedBook(ompApi, tag, 3, 'Late Study', ['science']);
-        const cat = new CategoryPage(visitor, tag, {testInfo});
+        const cat = new CategoryPage(visitor, tag);
         const book = new BookPage(visitor, tag);
         const titles = async () => (await cat.itemTitles().allInnerTexts()).map((t) => t.trim()).sort();
 

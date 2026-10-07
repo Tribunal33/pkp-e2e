@@ -222,14 +222,10 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
    ([Appearance & theming](U10-appearance-and-theming.md#omp2) records
    it). An empty category still shows "0 Items", then "0 - 0 of 0 items"
    (a screen reader also hears the heading "All Items"); {OMP}: "0
-   Titles", the heading "All Books" and nothing under it. The message
+   Titles", the visible heading "All Books", nothing under it. The message
    "Nothing has been published in this category yet." ("No titles have
-   been published yet." on a press) never shows ⚠ [A1](#a1). On a
-   press, the first category page opened after the press's catalog
-   page, its search results or a manager's save of its settings fails to
-   load, whether or not the "Browse" block is placed: the browser shows
-   its own error page saying the site sent no data. Opened again, the
-   page shows ⚠ [OMP5](#omp5). <sup>g</sup> <sup>td7</sup> <sup>td8</sup>
+   been published yet." on a press) never shows ⚠ [A1](#a1).
+   <sup>g</sup> <sup>td7</sup> <sup>td8</sup>
 10. **The order of the list.** The category's "Order of articles" is meant
     to set the order of this page. It does not: whatever it is set to, the
     page lists the articles in the same order ⚠ [A2](#a2). A press lists
@@ -804,8 +800,7 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
      "Sidebar" holds the box "Browse Block", unticked. Tick it and press
      "Save" (Settings bullet 7).
    - **The block**: the visitor opens the press's address followed by
-     "catalog/category/arts" (if the browser shows its error page saying
-     the site sent no data, open it again [OMP5](#omp5)): the sidebar's
+     "catalog/category/arts": the sidebar's
      "Browse" block holds the line "Categories" and the links "Arts", "Physics" and "Science",
      "Physics" indented one step and not under "Science" [OMP2](#omp2);
      the "Arts" link is grayed, with a grey bar at its left (Rule 15).
@@ -815,8 +810,7 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
      press "Settings" on the "Browse Block" row: a window holds the group
      "Browse Possibilities" with the boxes "New releases", "Categories"
      and "Series", all three ticked. Untick "Categories" and save the
-     window. The visitor reloads the page, twice if the first reload
-     brings the browser's error page [OMP5](#omp5): the block has no line
+     window. The visitor reloads the page: the block has no line
      "Categories" and no category link (Settings bullet 8; Rule 15).
    - **Control**: "Arts"'s own page still opens, headed "Arts": only the
      block lost its list (Settings bullet 8). <sup>s</sup>
@@ -908,9 +902,6 @@ Left out of the scenarios above, by reason:
     block)
   - OMP4 (the press's "Browse" block with all three "Settings" boxes
     unticked; Settings bullet 8)
-  - OMP5 (a press's first category page after its catalog page, its
-    search results or a settings save, which fails to load; Rule 9;
-    scenario 8 passes it)
   - OPS1 ("Editorial Assignments" on a preprint server, with nothing to
     tick; Fields; scenario 1 passes it)
 - **No seed**:
@@ -969,13 +960,13 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP4](#omp4) | A press's "Browse" block with nothing to list still shows as an empty box | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OMP5](#omp5) | A press's first category page opened after its catalog page, its search results or a settings save fails to load | 🐞 | user-visible · crash: server | — |
 | [OPS1](#ops1) | A preprint server's category offers no moderator to assign automatically, only an empty "Editorial Assignments" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A category's page leaves out the articles of its sub-categories | ❓ | minor | — |
 | [A4](#a4) | A category cannot be moved to another parent or to the top level | ❓ | minor | — |
 | [A5](#a5) | The breadcrumb names only the nearest parent | ❓ | minor | — |
 | [A14](#a14) | A category added after a submission arrives brings no editors | ❓ | minor | — |
 | [A21](#a21) | The "Path" help ends in the word "path", never in a saved category's own path | ❓ | minor | — |
+| [OMP5](#omp5) | A press's first category page opened after its catalog page, its search results or a settings save failed to load | ✅ | retired | housekeeping (claude), 2026-10-07 — fixed upstream (pkp/pkp-lib#12915), walked on main |
 
 ### All apps
 
@@ -1296,20 +1287,6 @@ with nothing under it; a press with no series leaves that line out
 ([Catalog browse](U68-catalog-browse.md#a11), its A11).
 Basis: probe, 2026-10-04. <sup>f-omp4</sup>
 
-<a id="omp5"></a>
-**OMP5 — A press's category page fails after its catalog or a settings save** · 🐞 · user-visible · crash: server.
-A visitor expects a press's category page to open. On the test install,
-which runs PHP 8.3, the first category page opened after the press's
-catalog page, its search results or a manager's save of the press's
-settings fails on the server: nothing comes back, and the browser shows
-its own error page saying the site sent no data. The "Browse" block
-plays no part. The test install's server restarts by itself after the
-failure, and the same page opened again shows as usual. A journal's and
-a preprint server's category pages were not seen to fail. The fault lies
-in PHP 8.3 itself, with its code cache (OPcache) switched on as on the
-test install, not in the press's pages; later PHP releases fix it.
-Basis: test run, 2026-09-25; the cause, probe. <sup>f-omp5</sup>
-
 ### OPS
 
 <a id="ops1"></a>
@@ -1325,6 +1302,11 @@ saved there, and they are still assigned, until a manager saves that
 category's window on 3.5, which removes them without a word; on `main`
 such a save keeps them, and with the fix below they show ticked.
 Basis: probe, 2026-10-02. <sup>f-ops1</sup>
+
+### Retired
+
+<a id="omp5"></a>
+**OMP5 — A press's category page fails after its catalog or a settings save** · ✅ · retired. Fixed upstream (pkp/pkp-lib#12915, merged 2026-10-05), verified 2026-10-07 on OMP: a press's first category page opened after its catalog page or its search results now opens at once (Rule 9). <sup>f-omp5</sup>
 
 ---
 
@@ -2222,6 +2204,10 @@ Issue report: [pkp-e2e#606](https://github.com/jardakotesovec/pkp-e2e/issues/606
 "Browse" and no link, in two runs).
 Issue report: [pkp-e2e#607](https://github.com/jardakotesovec/pkp-e2e/issues/607) ([docs/issues/U16-OMP4-press-browse-block-empty-box.md](../issues/U16-OMP4-press-browse-block-empty-box.md)).
 
+<a id="fn-f-ops1"></a>
+**f-ops1** — Note k. Live-probed 2026-09-25: note k.
+Issue report: [pkp-e2e#594](https://github.com/jardakotesovec/pkp-e2e/issues/594) ([docs/issues/U16-OPS1-preprint-category-offers-no-moderator.md](../issues/U16-OPS1-preprint-category-offers-no-moderator.md)).
+
 <a id="fn-f-omp5"></a>
 **f-omp5** — Test run 2026-09-25 (Rule 9; scenario 8), the OMP suite,
 every run: right after the sidebar's save (`POST …/api/v1/contexts/{id}`,
@@ -2254,12 +2240,24 @@ cache has no effect. OJS and OPS load `APP\publication\DAO` during
 request setup, so the crashing order never occurs there: every OJS and
 OPS page tried (home, archive or preprints list, an article, search,
 then the category page) answered 200. Only the built-in server was run;
-no other server setup was tried. The OMP suite re-opens every category
-page until it answers (`docs/tracking/app-changes.md` row 18).
-
-<a id="fn-f-ops1"></a>
-**f-ops1** — Note k. Live-probed 2026-09-25: note k.
-Issue report: [pkp-e2e#594](https://github.com/jardakotesovec/pkp-e2e/issues/594) ([docs/issues/U16-OPS1-preprint-category-offers-no-moderator.md](../issues/U16-OPS1-preprint-category-offers-no-moderator.md)).
+no other server setup was tried. Until the fix the OMP suite opened
+every category page again when it got no answer.
+Retired 2026-10-07 (housekeeping, the issue reporter's verdict "fixed
+upstream"): pkp-lib `a7f5e3081b` (merged as `d1c90fe604` on 2026-10-05,
+pkp/pkp-lib#12915 for pkp/pkp-lib#7527) preloads
+`\APP\submission\Submission` and `\APP\publication\Publication` with
+`class_exists()` in `lib/pkp/includes/bootstrap.php`, the workaround
+the 2026-09-30 housekeeping diagnosis proposed; the PHP bug
+itself remains in 8.3. Walked on main at ojs `92bc2bb467`, omp
+`a0e6d0a8b`, ops `7e34fdd57e` (lib/pkp `e60013c77f` on OJS, `5a5ab2d6c7`
+on OMP and OPS), a freshly reset dataset fleet, PHP 8.3.33 with OPcache
+on: in a fresh OMP server process the first catalog page and then the
+first category page both answered 200 (that order had crashed 10 of 10),
+search results then a category page also 200, and the server log shows
+no process death and no segmentation fault; the OJS and OPS category
+pages all answered 200. The settings-save order was not walked again.
+Kept script: `shared/playwright/checks/issues/press-category-page-no-answer-after-catalog/walk.js`;
+records in `.reports/issues-r5/r5/`.
 
 ## Reference — entry points & surfaces
 

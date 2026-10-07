@@ -16,9 +16,10 @@
 // Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-ir4-3_5 --dataset 2 --reset
 //               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-ir4-3_5 PROBE_AGENT=ir4 node bin/probe.js all shared/playwright/checks/issues/range-last-day-left-out-of-received/walk.js
 // Facts: .reports/<feature>/ir4/facts[-neighbour][-<run>]-<app>.json
-// OMP `main` on PHP 8.3's built-in server: every `api/v1/stats/editorial` call the range change sends
-// crashes the server (php-src GH-20469, docs/reports/2026-09-30-php-gh20469-segfaults.md), so the
-// table keeps the previous range's rows; only the "Last 90 days" read (server-rendered) holds there.
+// OMP on PHP 8.3's built-in server without pkp/pkp-lib#12915 (`main` before 2026-10-05; the stable
+// lines do not carry it): every `api/v1/stats/editorial` call the range change sends crashes the server
+// (php-src GH-20469), so the table keeps the previous range's rows; only the "Last 90 days" read
+// (server-rendered) holds there.
 const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
 const {readTrends, customRange} = require('./lib');
 

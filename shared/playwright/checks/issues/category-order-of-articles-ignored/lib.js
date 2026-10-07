@@ -255,7 +255,8 @@ async function readCategoryPage(page, app, label) {
     const w = words(app);
     const address = `/index.php/${app.contextPath}/${w.pageWord}/category/${CATEGORY.path}`;
     // A press's first category page after its catalog, search or a settings save can end with no
-    // answer at all on these PHP 8.3 servers (U16 OMP5, a separate report); opened again, it loads.
+    // answer at all on these PHP 8.3 servers without pkp/pkp-lib#12915 (`main` before 2026-10-05; the
+    // stable lines; U16 OMP5, php-src GH-20469); opened again, it loads.
     let response = null;
     const dropped = [];
     for (let attempt = 0; attempt < 4; attempt++) {
