@@ -8,19 +8,15 @@
  use PKP\security\authorization\ContextAccessPolicy;
  use PKP\security\authorization\UserRolesRequiredPolicy;
  use PKP\security\Role;
-@@ -53,7 +54,6 @@
-             self::roleAuthorizer([
-                 Role::ROLE_ID_SITE_ADMIN,
-                 Role::ROLE_ID_MANAGER,
--                Role::ROLE_ID_SUB_EDITOR,
-             ]),
-         ];
-     }
-@@ -68,6 +68,7 @@
- 
+@@ -69,6 +70,11 @@
          $this->addPolicy(new UserRolesRequiredPolicy($request), true);
          $this->addPolicy(new ContextAccessPolicy($request, $roleAssignments));
-+        $this->addPolicy(new CanAccessSettingsPolicy());
  
++        if (in_array($actionName, ['add', 'edit', 'updateStatus', 'delete'])) {
++            // Changing the list is a settings operation
++            $this->addPolicy(new CanAccessSettingsPolicy());
++        }
++
          if (in_array($actionName, ['get', 'edit', 'updateStatus', 'delete'])) {
              $this->addPolicy(
+                 new RecommendationAccessPolicy(

@@ -975,7 +975,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | Saving a reviewer's "Edit" window silently takes a deactivated review form off the review | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A12](#a12) | On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name | 🐞 | minor | — |
-| [A13](#a13) | A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
+| [A13](#a13) | A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations | 🐞 | medium | issues (claude), 2026-10-07 — re-verified |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1150,13 +1150,12 @@ delete one no review has chosen, and deactivate or reactivate any of them.
 A deactivated recommendation disappears from every reviewer's
 "Recommendation" list. With all of them deactivated, the list is empty and
 no reviewer who has not yet chosen can submit a review: "Submit Review"
-answers "This field is required.". Nobody is told. A manager sees the
-change only by opening the tab, and can reactivate the entries there.
-A review that already carries a deactivated recommendation keeps it, and
-the editor's "Read Review" window still shows it at the top; only the
-window's "Reviewer Recommendation" section reads "-" until it is
-reactivated.
-Since: 2025-04-29 (a year and a half) · Basis: probe, 2026-10-05. <sup>f-a13</sup>
+answers "This field is required.". Nobody is told.
+A review that already chose a deactivated recommendation keeps that
+choice. The editor's "Read Review" window still names it at the top,
+but the window's "Reviewer Recommendation" section shows "-" until
+the recommendation is reactivated.
+Since: 2025-04-29 (a year and a half) · Basis: probe, 2026-10-07. <sup>f-a13</sup>
 
 ### OMP
 
@@ -2085,7 +2084,10 @@ loading. OMP and OPS `main` have no such API
 (`hasCustomizableReviewerRecommendation()` false; the route 404s), and
 OJS 3.5, 3.4 and 3.3 have no recommendations API at all, so no release
 carries it. Security-shaped and unreleased: its issue report carries
-"- **Security** unreleased" (REPORT.md).
+"- **Security** unreleased" (REPORT.md). Re-verified end to end on
+OJS main 2026-10-07 (maintainer's request): the report now recommends
+`CanAccessSettingsPolicy` on the four writes only, leaving the reads to
+`pkp/pkp-lib#13298`, which plans to open them to reviewers.
 Issue report: [pkp-e2e#922](https://github.com/jardakotesovec/pkp-e2e/issues/922) ([docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md](../issues/U29-A13-section-editor-changes-reviewer-recommendations.md)).
 
 <a id="fn-f-omp1"></a>

@@ -20,16 +20,18 @@
 //      his review request on submission 12 and reads step 3's "Recommendation" list;
 //      dbuskins deactivates every other entry; phudson reloads step 3, writes a review and
 //      presses "Submit Review"; the stored value and the managers' mailboxes are read
-// MODE=nb: the neighbour check (rvaca, then admin: the same five requests and the list),
-//      which the fix must leave working.
+// MODE=nb: the neighbour check, which the fix must leave working: rvaca, then admin (the same
+//      five requests and the list), then dbuskins's read of the list (the fix gates the writes
+//      only; the reads stay open to Section Editors).
 //
-// Reset first:  npm run fleet-prep -- --feature issues-x9 --dataset 2 --reset --apps ojs
-// Run (main):   PROBE_FEATURE=issues-x9 PROBE_AGENT=x9 node bin/probe.js ojs <this file>
+// Reset first:  npm run fleet-prep -- --feature <feature> --dataset <n> --reset --apps ojs
+// Run (main):   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js ojs <this file>
 // Neighbour:    MODE=nb PROBE_RUN=nb-out … (and PROBE_RUN=nb-in with fix.diff applied)
-// Fix trial:    PROBE_RUN=fix … with fix.diff applied (node bin/try-fix.js apply fix.diff ojs)
-// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-x9-3_5 … (the
+// Fix trial:    PROBE_RUN=fix … with fix.diff applied (node bin/try-fix.js apply fix.diff ojs);
+//               fix-trial.sh beside this file runs nb-out, apply, fix, nb-in and the revert
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=<feature>-3_5 … (the
 //               surface probe records the API's absence and stops)
-// Facts: .reports/<feature>/x9/a13-<mode>[-<run>]-ojs.json
+// Facts: .reports/<feature>/<id>/a13-<mode>[-<run>]-ojs.json
 const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
 const R = require('../empty-review-can-be-submitted/lib.js'); // reviewer step 3 and "Read Review" helpers
 
@@ -109,9 +111,12 @@ forEachApp(async (app) => {
                 await as(user);
                 await step(`${user}Settings`, () => settingsScreen(user));
                 await as(user);
-                await step(`${user}Requests`, () => fiveRequests(page, `Minor Revisions sxx9 ${user}`));
+                await step(`${user}Requests`, () => fiveRequests(page, `Minor Revisions r07ra ${user}`));
                 await step(`${user}List`, async () => { const l = await api(page, 'GET'); return {status: l.status, itemMax: l.json && l.json.itemMax}; });
             }
+            await as('dbuskins');
+            await step('dbuskinsList', async () => { const l = await api(page, 'GET'); return {status: l.status, itemMax: l.json && l.json.itemMax}; });
+            await step('dbuskinsGetOne', async () => (await api(page, 'GET', `/${IN_USE.id}`)).status);
             return;
         }
 
@@ -142,7 +147,7 @@ forEachApp(async (app) => {
             await as(user);
             await step(`${user}Settings`, () => settingsScreen(user));
             await as(user);
-            await step(`${user}Requests`, () => fiveRequests(page, `Minor Revisions sxx9 ${user}`));
+            await step(`${user}Requests`, () => fiveRequests(page, `Minor Revisions r07ra ${user}`));
         }
 
         // An entry in use: rename and delete.
@@ -150,7 +155,7 @@ forEachApp(async (app) => {
         await step('inUse', async () => ({
             id: IN_USE.id,
             usedBy: sql(app, `SELECT review_id || ':' || submission_id FROM review_assignments WHERE reviewer_recommendation_id = ${IN_USE.id} ORDER BY 1`).split('\n'),
-            rename: (await api(page, 'PUT', `/${IN_USE.id}`, {title: {en: 'Revisions Required sxx9'}, type: 3, status: 1})).status,
+            rename: (await api(page, 'PUT', `/${IN_USE.id}`, {title: {en: 'Revisions Required r07ra'}, type: 3, status: 1})).status,
             del: (await api(page, 'DELETE', `/${IN_USE.id}`)).status,
         }));
 
@@ -179,7 +184,7 @@ forEachApp(async (app) => {
         await step('reviewerReopens', () => R.openStep3(page, app, PENDING.submission));
         await step('reviewerListAllOff', options);
         await step('reviewerSubmits', async () => {
-            await R.typeBoxes(page, app, {author: 'sxx9 review for the author'});
+            await R.typeBoxes(page, app, {author: 'r07ra review for the author'});
             return R.submitAndRead(page, app);
         });
         record(name(`${MODE}-reviewer-after-submit`), await screen(page));

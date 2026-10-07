@@ -89,7 +89,9 @@ for (const [name, rel] of [...reports].sort()) {
     const had = text.match(BULLET)?.[1] ?? text.match(LINE)?.[1];
     const old = had ? parse(had) : [];
     const turns = [...(found.get(name) || new Map())].sort((a, b) => b[1] - a[1]).map(([m]) => m);
-    const ms = old.length ? [...old, ...turns.filter((m) => !old.includes(m))] : turns;
+    // Every named model counted here (a report reworked on this machine): order by the counts, so the
+    // model that served most of the work leads; otherwise keep the bullet's order and append.
+    const ms = old.length && !old.every((m) => turns.includes(m)) ? [...old, ...turns.filter((m) => !old.includes(m))] : turns;
     const value = render(ms);
     if (!ms.length) unknown++;
     const shown = found.has(name) ? [...found.get(name)].map(([m, n]) => `${m} ×${n}`).join(', ') : 'no transcript here';
