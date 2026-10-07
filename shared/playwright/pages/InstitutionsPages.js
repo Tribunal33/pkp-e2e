@@ -281,7 +281,7 @@ class InstitutionPanel extends BasePage {
      * label also holds the screen reader's words ("Name in French").
      */
     localeLabel(boxName) {
-        return this.fieldLabel(boxName).locator('span.aria-hidden').first();
+        return this.fieldLabel(boxName).locator('span[aria-hidden="true"], span.aria-hidden').first();
     }
 
     /** A field's description under its label. */
