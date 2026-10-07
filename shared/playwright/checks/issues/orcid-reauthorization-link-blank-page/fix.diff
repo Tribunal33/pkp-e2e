@@ -1,0 +1,64 @@
+--- a/lib/pkp/pages/orcid/OrcidHandler.php
++++ b/lib/pkp/pages/orcid/OrcidHandler.php
+@@ -169,10 +169,9 @@
+         } elseif ($request->getUserVar('error') === 'access_denied') {
+             // Handle access denied
+             $this->handleUserDeniedAccess($identity, $templateMgr, $request->getUserVar('error_description'));
+-        }
+-
+-        $depositType = OrcidDepositType::tryFrom($request->getUserVar('itemType'));
+-        if ($depositType !== null) {
++        } else {
++            // An identity is only found for a known item type
++            $depositType = OrcidDepositType::from($request->getUserVar('itemType'));
+             (new VerifyIdentityWithOrcid($identity, $request, $depositType))
+                 ->execute()
+                 ->updateTemplateMgrVars($templateMgr);
+@@ -248,12 +247,32 @@
+     private function getIdentityToVerify(Request $request): ?Identity
+     {
+         return match (OrcidDepositType::tryFrom($request->getUserVar('itemType'))) {
+-            OrcidDepositType::WORK => $this->getAuthorToVerify($request),
++            OrcidDepositType::WORK => $this->getAuthorToUpdateScope($request),
+             OrcidDepositType::REVIEW => $this->getReviewerToVerify($request),
+             default => null,
+         };
+     }
+ 
++    /**
++     * Find the author a scope update link was sent to: the link names the author (`userId`)
++     * and their publication (`itemId`), and carries the token stored on that author.
++     */
++    private function getAuthorToUpdateScope(Request $request): ?Author
++    {
++        $authorId = (int) $request->getUserVar('userId');
++        $publicationId = (int) $request->getUserVar('itemId');
++        $author = $authorId && $publicationId ? Repo::author()->get($authorId, $publicationId) : null;
++        if (
++            $author === null ||
++            empty($request->getUserVar('token')) ||
++            $author->getData('orcidEmailToken') != $request->getUserVar('token')
++        ) {
++            return null;
++        }
++
++        return $author;
++    }
++
+     private function getReviewerToVerify(Request $request): ?User
+     {
+         $user = null;
+--- a/lib/pkp/classes/orcid/actions/VerifyIdentityWithOrcid.php
++++ b/lib/pkp/classes/orcid/actions/VerifyIdentityWithOrcid.php
+@@ -200,8 +200,9 @@
+         }
+ 
+         if ($this->depositType === OrcidDepositType::WORK) {
+-            $publicationId = $this->request->getUserVar('state');
+-            $publication = Repo::publication()->get($publicationId);
++            // The author's own publication: the verification link names it as `state`, the
++            // scope update link as `itemId`
++            $publication = Repo::publication()->get($this->identity->getData('publicationId'));
+ 
+             if ($publication->getData('status') == PKPPublication::STATUS_PUBLISHED) {
+                 (new SendSubmissionToOrcid($publication, $this->context))->execute();

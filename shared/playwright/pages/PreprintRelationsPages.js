@@ -37,6 +37,7 @@
  */
 const {expect} = require('@playwright/test');
 const {BasePage} = require('./BasePage.js');
+const {settleDropdown} = require('../support/dropdown.js');
 
 const T = 30_000;
 
@@ -113,6 +114,11 @@ class RelationsControl extends BasePage {
     /** The down arrow inside the button (the dropdown icon). */
     buttonArrow() {
         return this.button().locator('svg');
+    }
+
+    /** The control's ui-library Dropdown (the button and, while open, the panel). */
+    root() {
+        return this.frame.dialog().locator('.pkpWorkflow__publicationRelation');
     }
 
     /** The panel under the button (mounted only while open). */
@@ -192,19 +198,27 @@ class RelationsControl extends BasePage {
         return this.page.locator('.app__notifications').getByText(RELATIONS_TEXT.notSaved);
     }
 
-    /** Press "Relations" when the panel is closed; returns once its legend shows. */
+    /**
+     * Press "Relations" when the panel is closed; returns once its legend
+     * and choices show. A panel still on screen after the focus went
+     * elsewhere (a side-menu page chosen with the panel open) closes itself
+     * within a second (support/dropdown.js), so it is waited out and the
+     * button pressed, as a person does once it has gone.
+     */
     async open() {
         await expect(this.button()).toBeVisible({timeout: T});
-        if (!(await this.panel().isVisible())) {
+        if (!(await settleDropdown(this.root(), {timeout: T}))) {
             await this.button().click();
         }
         await expect(this.legend()).toHaveText(RELATIONS_TEXT.legend, {timeout: T});
         await expect(this.radios()).toHaveCount(3, {timeout: T});
     }
 
-    /** Press "Relations" again to close the panel. */
+    /** Press "Relations" again to close the panel (a panel already closing is waited out instead). */
     async close() {
-        await this.button().click();
+        if (await settleDropdown(this.root(), {timeout: T})) {
+            await this.button().click();
+        }
         await expect(this.panel()).toHaveCount(0, {timeout: T});
     }
 

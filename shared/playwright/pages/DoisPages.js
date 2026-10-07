@@ -63,6 +63,7 @@
 const {expect} = require('@playwright/test');
 const {BasePage} = require('./BasePage.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
+const {settleDropdown} = require('../support/dropdown.js');
 
 const T = 30_000;
 
@@ -573,17 +574,27 @@ class DoisPage extends BasePage {
         return this.page.locator('.pkpDropdown__content:visible').getByText(/^Take action on \d+ selected item\(s\)\.$/);
     }
 
-    /** Open "Bulk Actions" (a no-op while open) and wait for its items. */
+    /** The "Bulk Actions" ui-library Dropdown (its button and, while open, its menu). */
+    bulkActionsDropdown() {
+        return this.panel().locator('.doiListPanel__bulkActions');
+    }
+
+    /**
+     * Open "Bulk Actions" (a no-op while open) and wait for its items. A
+     * menu still on screen after the focus went elsewhere (a row's tick
+     * box) closes itself within a second (support/dropdown.js): it is
+     * waited out and pressed, never taken as open.
+     */
     async openBulkActions() {
-        if ((await this.bulkItems().count()) === 0) {
+        if (!(await settleDropdown(this.bulkActionsDropdown(), {timeout: T}))) {
             await this.bulkActionsButton().click();
         }
         await expect(this.bulkItems().first()).toBeVisible({timeout: T});
     }
 
-    /** Close the open menu by pressing "Bulk Actions" again (Escape leaves it open). */
+    /** Close the open menu by pressing "Bulk Actions" again (Escape leaves it open; one already closing is waited out). */
     async closeBulkActions() {
-        if ((await this.bulkItems().count()) > 0) {
+        if (await settleDropdown(this.bulkActionsDropdown(), {timeout: T})) {
             await this.bulkActionsButton().click();
         }
         await expect(this.bulkItems()).toHaveCount(0, {timeout: T});

@@ -510,6 +510,8 @@ Left out of the scenarios above, by reason:
   - the guard for A11 (issue report `docs/issues/U04-A11-orcid-tabs-named-after-old-plugin.md`): in French (Canada), both ORCID tabs (the site's and the journal's) read "ORCID".
   - the guard for A12 (issue report `docs/issues/U04-A11-A12-french-orcid-switch-and-field-raw-keys.md`): in French (Canada), the site's ORCID switch and every state of the contributor's ORCID iD field show no untranslated text key (A11's switch too).
   - the guard for A5's refusal (issue report `docs/issues/U04-A5-assistant-orcid-controls-refused.md`): an Assistant whose assignment has the "Permissions" box presses "Request verification" (the email arrives) and "Delete" (the iD is gone), and one without the box is offered no "Edit".
+  - the guard for A14 (issue report `docs/issues/U04-A14-orcid-reauthorization-link-blank-page.md`): once fixed, a contributor verified under the public API follows "Requesting updated ORCID record access" after the journal moved to the member API and lands on the "ORCID Authorization" page, not a blank page.
+  - the guard for A15 (issue report `docs/issues/U04-A15-orcid-pages-tab-no-page-name.md`): once fixed, the "What is ORCID?" and "ORCID Authorization" pages' browser tab reads "What is ORCID? | {journal name}" and "ORCID Authorization | {journal name}".
   - the profile's "Delete" window titled "Confirm", with "OK" and "Cancel" (Rule 6c; scenario 3's "Delete" bullet).
   - a contributor verified under the public API receiving "Requesting updated ORCID record access" from the journal's principal contact, with the personal authorization link and the What-is-ORCID link, when their article is published after the journal switched to the member API (Rules 11, 14; journals and preprint servers, a press deposits nothing, OMP1).
 - **Nothing new to test**:
@@ -578,8 +580,8 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A8](#a8) | A press's or preprint server's ORCID verification failure page says to contact "the journal manager" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, the site's ORCID switch shows raw codes, and both ORCID tabs are named "Plugiciel de profil ORCID" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | The "Requesting updated ORCID record access" link fails with a server error, so a contributor verified under the public API can never grant the deposit permission | 🐞 | user-visible · crash: server | — |
-| [A15](#a15) | The public ORCID pages' browser tab reads only "\| {journal name}", with no page name | 🐞 | minor | — |
+| [A14](#a14) | A contributor following the "Requesting updated ORCID record access" link gets a blank page and can never allow deposits | 🐞 | medium · crash: server | issues (claude), 2026-10-07 — re-verified |
+| [A15](#a15) | The "What is ORCID?" and "ORCID Authorization" pages' browser tab shows only "\| {journal name}" | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
@@ -753,30 +755,35 @@ contributor field already allows the same removal.
 Basis: probe, 2026-10-01. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — The re-authorization link fails with a server error, so a contributor verified under the public API can never grant the deposit permission** · 🐞 · user-visible · crash: server.
-A contributor who verified their iD while the journal used the public
-API, and whose article is published after the journal switched to the
-member API, receives "Requesting updated ORCID record access" (Rule 11).
-Its link leads to ORCID's sign-in, and ORCID sends the browser back to
-the journal, where the "ORCID Authorization" page should answer. Instead
-the app fails: the browser shows a blank page with no heading, no text and no
-message, whether the contributor pressed "Authorize" or "Deny" at ORCID.
-Nothing is stored for the contributor, so the deposit never resumes.
-The verification request's link (Rule 9), answered either way at
-ORCID, lands on the "ORCID Authorization" page. A press sends no such
-email, since it deposits nothing ([OMP1](#omp1)).
-Basis: probe, 2026-10-05. <sup>[f-a14](#fn-a14)</sup>
+**A14 — A contributor following the "Requesting updated ORCID record access" link gets a blank page and can never allow deposits** · 🐞 · medium · crash: server.
+A journal that moves from ORCID's public API to its member API needs
+wider permission from contributors who verified their iD before the
+move. When such a contributor's article is published, the journal emails
+them "Requesting updated ORCID record access", with a link to ORCID's
+sign-in. When ORCID sends them back to the journal, the app fails on the
+server and the browser shows a blank page, whether they pressed
+"Authorize" or "Deny". Nothing is stored, so the article never reaches
+their ORCID record, and every later click fails the same way. The fix
+touches two shared classes, and its success path can only be tested
+against ORCID's member sandbox. (Rule 11)
+Basis: probe, 2026-10-07. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — The public ORCID pages' browser tab shows no page name** · 🐞 · minor.
-A journal's public pages such as About and Login name themselves in the
-browser tab before the journal's name ("About the Journal | {journal name}",
-"Login | {journal name}"). The "What is ORCID?" page and the "ORCID
-Authorization" page show only "| {journal name}", signed in or out,
-though their heading and the "Home / What is ORCID?" trail carry the
-name. A visitor with several tabs open, or a bookmark saved from the
-page, cannot tell which page it is (Rules 9, 10).
-Basis: probe, 2026-10-05. <sup>[f-a15](#fn-a15)</sup>
+**A15 — The "What is ORCID?" and "ORCID Authorization" pages' browser tab shows only "| {journal name}"** · 🐞 · low.
+A journal's public pages name themselves in the browser tab before the
+journal's name: "About the Journal | Journal of Public Knowledge". Two
+ORCID pages do not, signed in or out. On the "What is ORCID?" page and
+the "ORCID Authorization" page the tab reads "| Journal of Public
+Knowledge" ("| Public Knowledge Press" on a press, "| Public Knowledge
+Preprint Server" on a preprint server), though each page's heading shows
+its name. Contributors reach these pages through ORCID. Every ORCID
+email links to "What is ORCID?". ORCID sends the contributor back to
+"ORCID Authorization" after they answer an authorization request. Both
+pages open by their address on every install, whether or not ORCID is
+turned on, but nothing links to them until it is. The fix is one
+attribute in each of the two page templates, the way the other public
+pages already pass their title. (Rules 9, 10)
+Basis: probe, 2026-10-07. <sup>[f-a15](#fn-a15)</sup>
 
 ### OMP
 
@@ -1429,6 +1436,7 @@ handler and the job are the same on `stable-3_5_0`. A reviewer's
 re-authorization (OJS `DepositOrcidReview` dispatches the same email
 with `itemType=review`; `getReviewerToVerify()` looks the user up by
 `userId` and token, without `state`) was not driven.
+Issue report: [docs/issues/U04-A14-orcid-reauthorization-link-blank-page.md](../issues/U04-A14-orcid-reauthorization-link-blank-page.md).
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-10-05 (OJS, OMP, OPS on `main`, two runs,
@@ -1440,6 +1448,7 @@ the Server") and "Login" pages read "About the Journal | {context name}"
 and "Login | {context name}". Cause: `orcidAbout.tpl` and
 `orcidVerify.tpl` include `frontend/components/header.tpl` without a
 `pageTitle` (contrast `userLogin.tpl`, `pageTitle="user.login"`).
+Issue report: [docs/issues/U04-A15-orcid-pages-tab-no-page-name.md](../issues/U04-A15-orcid-pages-tab-no-page-name.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:

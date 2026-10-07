@@ -52,6 +52,7 @@
 const {expect} = require('@playwright/test');
 const {BasePage} = require('./BasePage.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
+const {settleDropdown} = require('../support/dropdown.js');
 const {PaymentsPage, PaymentTypesForm, ManualPaymentPage, EditorialSideMenu} = require('./SubscriptionsPages.js');
 
 const T = 30_000;
@@ -473,17 +474,24 @@ class WorkflowPaymentsMenu extends BasePage {
         return this.content().locator('[role="status"]').filter({hasText: TEXT.saved}).first();
     }
 
-    /** Press the button and wait for the panel's options. */
+    /**
+     * Press the button and wait for the panel's options. A panel left on
+     * screen after the focus went elsewhere closes itself within a second
+     * (a ui-library Dropdown, support/dropdown.js): it is waited out and
+     * pressed again, never taken as open.
+     */
     async open() {
-        if (!(await this.content().isVisible())) {
+        if (!(await settleDropdown(this.root(), {timeout: T}))) {
             await this.button().click();
         }
         await expect(this.radio('Unpaid')).toBeVisible({timeout: T});
     }
 
-    /** Press the button again: the panel closes. */
+    /** Press the button again: the panel closes (one already closing is waited out instead). */
     async close() {
-        await this.button().click();
+        if (await settleDropdown(this.root(), {timeout: T})) {
+            await this.button().click();
+        }
         await expect(this.content()).toBeHidden({timeout: T});
     }
 

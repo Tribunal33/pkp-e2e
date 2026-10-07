@@ -63,6 +63,12 @@ Each of these has bitten at least once.
    object that chooses such an item waits for the menu's items to be gone
    once the window is visible, before anything answers it
    (`DoisPage.chooseBulkAction`; U45 S6/S8, 2026-09-28, app-changes row 21).
+   Pressed elsewhere (a side-menu page, a row's tick box), its panel stays
+   on screen up to that second with nothing marking it as closing, so
+   "visible, so already open" is no state to act on: a page object opens or
+   closes one through `settleDropdown(root)` (`support/dropdown.js`), which
+   waits out a panel whose focus is outside, never a bare `isVisible()` or
+   `count()` of the panel (OPS U75 S2, 2026-10-07).
 4. **Side modals.** Scope via `[data-cy="active-modal"]`. When modals stack,
    filter by a distinctive inner element, never `.first()` or `.last()`.
    A legacy side window's content loads by AJAX after the dialog opens and
