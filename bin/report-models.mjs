@@ -9,6 +9,10 @@
 // filing link) counts with the models of those edits alone. The models found are
 // merged into the report's `- **Model**` bullet, never dropping one it names,
 // since transcripts expire (cleanupPeriodDays) and another machine's are not here.
+// One exception: a report re-verified end to end (its dated update paragraph
+// opens "Update <date>: re-verified end to end", REPORT.md "Model") counts only
+// the work from that date, and the bullet is replaced, not merged (maintainer,
+// 2026-10-07): the walk, trace and text are all from then on.
 // run: npm run report-models [-- --write] [--projects <dir>]… [<report file>…]
 //   no --write: prints each report's models and what --write would change
 //   --projects: transcript folders to read (default: every ~/.claude/projects
@@ -27,8 +31,14 @@ const only = args.filter((a, i) => a.endsWith('.md') && args[i - 1] !== '--proje
 
 const dirs = ['docs/issues', 'docs/reports'];
 const reports = new Map(); // basename -> repo path
+const since = new Map(); // basename -> date of the latest end-to-end re-verification
+const REVERIFIED = /^Update (\d{4}-\d{2}-\d{2}):\s+re-verified\s+end\s+to\s+end/gm;
 for (const d of dirs) for (const f of fs.readdirSync(path.join(root, d)))
-    if (f.endsWith('.md') && (!only.length || only.includes(f))) reports.set(f, `${d}/${f}`);
+    if (f.endsWith('.md') && (!only.length || only.includes(f))) {
+        reports.set(f, `${d}/${f}`);
+        const dates = [...fs.readFileSync(path.join(root, d, f), 'utf8').matchAll(REVERIFIED)].map((x) => x[1]).sort();
+        if (dates.length) since.set(f, dates.at(-1));
+    }
 
 const base = path.join(os.homedir(), '.claude', 'projects');
 const folders = projects.length ? projects
@@ -37,23 +47,25 @@ const jsonls = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e)
     e.isDirectory() ? jsonls(path.join(dir, e.name)) : e.name.endsWith('.jsonl') ? [path.join(dir, e.name)] : []);
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const add = (into, from) => { for (const [m, n] of from) into.set(m, (into.get(m) || 0) + n); };
+// turns are [model, day] pairs, so a re-verified report can drop the ones before its date
+const add = (into, from, name) => { for (const [m, day] of from) if (!since.has(name) || day >= since.get(name)) into.set(m, (into.get(m) || 0) + 1); };
 const found = new Map(); // basename -> Map(model -> turns)
 
 for (const file of folders.flatMap(jsonls)) {
-    const models = new Map(); const created = new Set(); const edits = new Map();
+    const models = []; const created = new Set(); const edits = new Map();
     const rl = readline.createInterface({ input: fs.createReadStream(file), crlfDelay: Infinity });
     for await (const line of rl) {
         if (!line.includes('"type":"assistant"')) continue;
         let row; try { row = JSON.parse(line); } catch { continue; }
         const m = row.message?.model;
         if (row.type !== 'assistant' || !m || m === '<synthetic>') continue;
-        models.set(m, (models.get(m) || 0) + 1);
+        const day = (row.timestamp || '').slice(0, 10);
+        models.push([m, day]);
         for (const c of Array.isArray(row.message.content) ? row.message.content : []) {
             if (c?.type !== 'tool_use') continue;
             const touch = (name, whole) => {
                 if (whole) created.add(name);
-                else { const e = edits.get(name) || new Map(); e.set(m, (e.get(m) || 0) + 1); edits.set(name, e); }
+                else { const e = edits.get(name) || []; e.push([m, day]); edits.set(name, e); }
             };
             if (['Write', 'Edit', 'MultiEdit'].includes(c.name)) {
                 const name = path.basename(c.input?.file_path || '');
@@ -69,8 +81,8 @@ for (const file of folders.flatMap(jsonls)) {
             }
         }
     }
-    for (const name of created) { const f = found.get(name) || new Map(); add(f, models); found.set(name, f); }
-    for (const [name, e] of edits) if (!created.has(name)) { const f = found.get(name) || new Map(); add(f, e); found.set(name, f); }
+    for (const name of created) { const f = found.get(name) || new Map(); add(f, models, name); found.set(name, f); }
+    for (const [name, e] of edits) if (!created.has(name)) { const f = found.get(name) || new Map(); add(f, e, name); found.set(name, f); }
 }
 
 // `- **Model** claude-opus-5-5[, parts on claude-opus-4-8[, …]]`: the model that
@@ -89,9 +101,9 @@ for (const [name, rel] of [...reports].sort()) {
     const had = text.match(BULLET)?.[1] ?? text.match(LINE)?.[1];
     const old = had ? parse(had) : [];
     const turns = [...(found.get(name) || new Map())].sort((a, b) => b[1] - a[1]).map(([m]) => m);
-    // Every named model counted here (a report reworked on this machine): order by the counts, so the
-    // model that served most of the work leads; otherwise keep the bullet's order and append.
-    const ms = old.length && !old.every((m) => turns.includes(m)) ? [...old, ...turns.filter((m) => !old.includes(m))] : turns;
+    // A re-verified report found here takes the counted models alone; otherwise keep the bullet's
+    // models, in order, and append the new ones.
+    const ms = since.has(name) && turns.length ? turns : old.length ? [...old, ...turns.filter((m) => !old.includes(m))] : turns;
     const value = render(ms);
     if (!ms.length) unknown++;
     const shown = found.has(name) ? [...found.get(name)].map(([m, n]) => `${m} ×${n}`).join(', ') : 'no transcript here';

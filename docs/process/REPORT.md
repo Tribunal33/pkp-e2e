@@ -110,7 +110,12 @@ read; a label changed on GitHub is copied back into the header.
   `npm run report-models -- --write` reads it from the Claude Code
   transcripts of the machine the work ran on and merges it into the
   bullet, keeping every model the bullet already names (transcripts
-  expire, and a workstation's are not on the VM). "not recorded" only
+  expire, and a workstation's are not on the VM). A report re-verified
+  end to end (every claim walked and traced again, then the role reads
+  and a revision) opens its dated update paragraph with "Update <date>:
+  re-verified end to end", and from then on names only the models of
+  the work from that date (maintainer, 2026-10-07); its issue drops the
+  other `model:` labels. "not recorded" only
   for a report no transcript remains for. A report outside this header
   shape (an older regression report, a research write-up) carries the
   same as a `Model: <model id>.` line under its title.

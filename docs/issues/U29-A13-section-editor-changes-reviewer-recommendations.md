@@ -13,10 +13,11 @@
 - **Upstream** none found (2026-10-07)
 - **Tracked in** spec U29 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U29-review-setup-and-review-forms.md#a13)
 - **Checked** 2026-10-07, each branch's tip (the commits in Evidence)
-- **Model** claude-opus-5-5, parts on claude-opus-4-8
+- **Model** claude-opus-5-5
 
-Update 2026-10-07: the recommended fix now gates only the four writes,
-and Introduced names the pkp-lib change that wrote the role list.
+Update 2026-10-07: re-verified end to end on today's code. The
+recommended fix now gates only the four writes, and Introduced names the
+pkp-lib change that wrote the role list.
 
 ## Summary
 
