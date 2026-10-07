@@ -1180,6 +1180,7 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A16 (issue report `docs/issues/U10-A16-upload-box-server-refusal-no-message.md`): once fixed, a "Logo" the server refuses shows the server's message under the box.
   - the "Homepage Image" description typed in scenario 3 read on a press's and a preprint server's home page, as on a journal's (A1; the guard its issue report names)
   - the names a screen reader hears for the "Editorial Masthead" arrows ("Increase position of {role}" for an up arrow) and for each "Sidebar" box (the block's name alone) (A3; the guard its issue report names)
   - a placed block's plugin turned off, then a "Page Footer" saved on "Setup" without a refusal (A4; the guard its issue report names)
@@ -1260,7 +1261,7 @@ otherwise; the team settles them on spec review.
 | [A9](#a9) | After a manager saves an empty "Custom" short date, editorial dates show only the time | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A15](#a15) | After a refused file, its hidden "Remove file" frees "Upload File" but leaves "Save" disabled | 🐞 | minor | — |
+| [A15](#a15) | After a refused logo, removing it with the hidden "Remove file" still leaves the tab's "Save" disabled | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
 | [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A17](#a17) | Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&" | 🐞 | minor | — |
 | [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
@@ -1524,15 +1525,26 @@ defect; a list that reorders itself between visits reads as a change
 nobody made. Basis: probe. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — After a refused file, its hidden "Remove file" frees "Upload File" but leaves "Save" disabled** · 🐞 · minor.
-After "Logo" refuses a ".pdf" picked with "Upload File" ([A7](#a7)),
-the box's empty frame holds a "Remove file" link written white on
-white: it shows only while the pointer is over the frame. A manager who
+**A15 — After a refused logo, removing it with the hidden "Remove file" still leaves the tab's "Save" disabled** · 🐞 · low.
+On Settings › Website › "Appearance" › "Setup", "Logo" refuses a ".pdf"
+picked with "Upload File" and leaves the refused file's preview in its
+drop area. That preview holds a "Remove file" link written white on
+white, which shows only while the pointer is over it. A manager who
 finds it and presses it expects the box and the tab back as they were.
-The box empties and "Upload File" works again, but the tab's "Save"
-stays disabled, and the form's foot reads "Please correct one error. Go
-to Logo: undefined Jump to next error", naming no error the box shows.
-Basis: probe, 2026-10-03. <sup>f-a15</sup>
+The drop area empties and "Upload File" works again, but the tab's
+"Save" stays disabled, and the form's foot reads "Please correct one
+error. Go to Logo: undefined Jump to next error", naming no error the
+box shows. "Save" comes back once a picture is chosen for the box, or
+after a reload. This is a second fault beside
+[pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772)
+([A7](#a7)), where the refusal itself disables "Upload File" and "Save". Fixing that
+one removes the refused preview and its link, so this exact path goes,
+but not the cause: the same "Go to Logo: undefined" then shows while the
+next file uploads. Every upload box that takes a separate file per
+language behaves the same, and on a form showing two languages the fault
+also works the other way: removing one language's refused file clears
+the other language's message too and enables "Save".
+Basis: probe, 2026-10-07. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A logo or image the server refuses leaves its upload box with a warning sign and no message** · 🐞 · low · crash: server.
@@ -2432,6 +2444,7 @@ counts as an error. The fix proposed for A7 removes the refused file
 and its link, but by the code the empty entry still shows while the
 next file uploads. Issue report for A7, which records this walk:
 [pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772).
+Issue report: [docs/issues/U10-A15-refused-file-remove-keeps-save-disabled.md](../issues/U10-A15-refused-file-remove-keeps-save-disabled.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Walked 2026-10-02 on `main` and 3.5, all three apps, on a
@@ -2450,7 +2463,7 @@ the message is empty; any server refusal of a settings upload that
 carries `error` would show the same (not driven). Why the file is sent
 and the server error itself belong to Submission files' A21 and Custom
 pages & blocks' A18 (pkp-e2e#373).
-Issue report: [docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md).
+Issue report: [pkp-e2e#937](https://github.com/jardakotesovec/pkp-e2e/issues/937) ([docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `FieldOptions.vue` prints `option.label` as HTML

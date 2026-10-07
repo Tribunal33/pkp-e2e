@@ -1,0 +1,21 @@
+--- a/lib/ui-library/src/components/Form/FormGroup.vue
++++ b/lib/ui-library/src/components/Form/FormGroup.vue
+@@ -322,8 +322,17 @@
+ 
+ 			let newErrors = this.errors;
+ 			if (!errors || !errors.length) {
+-				if (localeKey && newErrors[name] && newErrors[name][localeKey]) {
++				if (
++					localeKey &&
++					newErrors[name] &&
++					typeof newErrors[name] === 'object' &&
++					!Array.isArray(newErrors[name])
++				) {
++					// Clear this language only, and the field once no language is left
+ 					delete newErrors[name][localeKey];
++					if (!Object.keys(newErrors[name]).length) {
++						delete newErrors[name];
++					}
+ 				} else if (newErrors[name]) {
+ 					delete newErrors[name];
+ 				}
