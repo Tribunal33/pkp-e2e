@@ -895,6 +895,11 @@ behind a line; that scratch is deleted after review.
   `decisions: ['sendInternalReview']` lands its editor on Internal Review;
   `status: 'completed'` works on a press round (no recommendation cell).
   Live-probed 2026-09-06 (`.reports/U30/pE` P26).
+- `decisions: [..., 'resubmit']` seeds a "Resubmit for review." task for
+  every author on the stage, as the on-screen decision does;
+  `review.defaultReviewMode: 'open'` makes every seeded and on-screen
+  request "Open". Live-driven 2026-10-07, OJS and OMP (U26 claim check
+  I07).
 - "Notify All Authors" (Settings › Workflow › Emails) arrives at "Send an
   email notification to all authors of the submission." on a scratch
   journal; there is no passthrough key, so a probe flips it on the screen

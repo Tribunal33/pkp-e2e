@@ -232,9 +232,10 @@ and the reviewer forms to *Reviewer assignment & management*.
     which opens a window with three parts. First, the reviewer's name,
     completion date and recommendation; on a press no recommendation exists
     to show ⚠ [OMP2](#omp2). Second, the review text the author is meant to
-    see: for form-based reviews, only the parts marked for authors; for
-    free-text reviews, only remarks shared with the author. On a journal the
-    window currently shows no review text at all ⚠ [OJS1](#ojs1). Third, a
+    see: for form-based reviews, only the questions marked for authors,
+    each with its answer; for free-text reviews, only the remarks the
+    reviewer shared "For author and editor", under "Reviewer Comments".
+    Remarks meant for the editor alone never show. Third, a
     section for files the reviewer attached ⚠ [A3](#a3). <sup>j</sup>
 16. <a id="author-emails"></a> **The "Notifications" list** on the author's
     review stage holds the emails editors sent the author about this
@@ -264,17 +265,25 @@ and the reviewer forms to *Reviewer assignment & management*.
   for further uploads within a day unless they have signed in since the
   last notice. <sup>l</sup>
 - **Request Revisions decision.** Each author assigned to the stage gets a
-  task naming the submission in the header's Tasks panel. On a journal it reads "Revision required.", on a
-  press "Revisions to consider in External Review." ⚠ [OMP3](#omp3). Their
-  row on My Submissions reads "Revision requested" with a "Submit revisions"
-  button in both apps (the list itself belongs to *My Submissions*). The
-  task disappears when a revised file is uploaded. It does not return if the
-  only revised file is deleted: the status and the My Submissions row revert
-  to their requested state (Rule 7) while the task list stays silent
-  ⚠ [A9](#a9). The new-round variant's task reads "Resubmit for review." in
-  both apps, and it stays in the author's Tasks panel after they upload a
-  revised file ⚠ [A13](#a13). The decision's own notifications and emails belong to
-  *Editorial decision recording*. <sup>m</sup>
+  task naming the submission in the header's Tasks panel. On a journal the
+  task reads "Revision required." for every author. On a press it reads
+  "Revisions to consider in External Review." for a sole author; with two
+  authors on the stage, one author's task reads that and the other's
+  "Revision required." ⚠ [OMP3](#omp3). Each author's row on My Submissions reads
+  "Revision requested" with a "Submit revisions" button in both apps (the
+  list itself belongs to *My Submissions*). The new-round variant's task
+  reads "Resubmit for review." in both apps.
+  The decision's own notifications and emails belong to *Editorial
+  decision recording*. <sup>m</sup>
+- **The revisions task once revised files arrive.** The task disappears
+  when a revised file is uploaded. With two authors on the stage, only one
+  author's task disappears; the other author's "Revision required." stays
+  in their Tasks panel ⚠ [A14](#a14). The task does not return if the only
+  revised file is deleted: the status and the My Submissions row revert to
+  their requested state (Rule 7), but no revisions task comes back
+  ⚠ [A9](#a9). The new-round variant's "Resubmit for review." stays in the
+  author's Tasks panel after they upload a revised file ⚠ [A13](#a13).
+  <sup>m</sup>
 - **Round created.** An internal round-status notice record is created. It
   currently surfaces nowhere (footnote only). <sup>n</sup>
 - **Round cancelled.** The round's reviewer invitations are withdrawn. The
@@ -586,10 +595,10 @@ are in the footnote. <sup>s</sup>
     - **"Read Review"**: Author: the first submission's review stage now
       lists the reviewer with "Read Review". Open it: the window shows the
       reviewer's name, completion date and recommendation (none on a press
-      [OMP2](#omp2)); on a press the typed remark follows; on a journal no
-      review text shows at all [OJS1](#ojs1). The window's attachments
-      section is outside this scenario's pass or fail and is asserted by
-      no test [A3](#a3).
+      [OMP2](#omp2)), then the typed remark "Shared remarks for the author."
+      under "Reviewer Comments" › "For author and editor". The window's
+      attachments section is outside this scenario's pass or fail and is
+      asserted by no test [A3](#a3).
     - **"Notifications"**: on the same screen the "Notifications" list
       holds the decision letter as a subject line and a date. Click it: the
       full letter opens read-only in a side panel.
@@ -659,6 +668,7 @@ Left out of the scenarios above, by reason:
   - on a round with no revision request, the "Revisions Uploaded" description makes no claim about a request ([A10](#a10)): the guard the issue report proposes
   - scenario 4's first bullet read with no reload: the "Revisions Uploaded" panel listing the file as the closed upload window goes (Side effects, "Author uploads a revised file"): the OJS suite reloads the page before it reads the panel
   - after "Resubmit for Review" and the Author's first uploaded file: "Upload revisions" still offered ([A1](#a1)): the guard the issue report proposes
+  - on a journal, scenario 12's "Read Review" remark (Rule 15; [OJS1](#ojs1) retired): the scenario states it, so a missing remark fails it there too; the OJS suite does not assert it yet
 - **Rarely met**:
   - "Returned back to review." once every review is confirmed, and the reviewer sentences until then (Rules 5–6, Cross-feature): sending a submission back from Copyediting is not an ordinary week's action, and the sentence needs every review confirmed after the return
   - deleting the only revised file flipping the status back to "requested" (Rule 7): an author seldom deletes their only revised file; the task half of the path is A9
@@ -676,14 +686,14 @@ Left out of the scenarios above, by reason:
   - A13 (the "Resubmit for review." task staying after the upload; Side effects)
   - A8 (a past round's panels still act: a reviewer or file lands there; Rules 1, 10)
   - OMP2 (no recommendation line on a press; Rule 15)
-  - OJS1 (the journal's window showing no review text; Rule 15)
   - A3 (the window's attachments section; Rule 15)
   - A4 (a round whose only reviewers declined reading "All reviews are confirmed and a decision is needed."; Rule 6)
   - A9 (the author's revisions task never returning after the only revised file is deleted; Rule 7, Side effects)
+  - A14 (with two authors on the stage, one author's "Revision required." staying after the revised files arrive; Side effects)
   - A10 (the "Revisions Uploaded" description on a round with no revision request; Rule 9)
   - A6 (the restored round's box no longer recalling its revision request; Rule 12)
   - A11 (the upload window's "Cancel" link removing the attached file while the "Revised Version Uploaded" email stands; Side effects)
-  - OMP3 (the press's task wording "Revisions to consider in External Review."; Side effects)
+  - OMP3 (the press's task wording "Revisions to consider in External Review.", and with two authors on the stage the two wordings side by side; Side effects)
 - **No seed**:
   - "A review is overdue." winning over an unread review and reviews still underway (Rules 5–6): no seed backdates a request or a review deadline
 - **Owned by another feature**:
@@ -709,10 +719,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | After "Resubmit for Review", the Author's "Upload revisions" button disappears with their first file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OJS1](#ojs1) | On a journal, the author's "Read Review" window shows no review text; remarks shared with the author are missing (a press shows them) | 🐞 | user-visible | — |
 | [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | After "Resubmit for Review", the Author's "Resubmit for review." task stays in their Tasks panel once they have uploaded a revised file | 🐞 | minor | — |
+| [A14](#a14) | With two authors on the review stage, a revised file clears only one author's revisions task; the other keeps "Revision required." | 🐞 | minor | — |
 | [A2](#a2) | The author sees the editor's status wording; the author-tailored wording exists but is never shown | ❓ | user-visible | — |
 | [A3](#a3) | What the read-review window's attachments section lists: observation recorded privately with the maintainer pending a fix | ❓ | latent | — |
 | [A4](#a4) | A round whose only reviewers declined reports "All reviews are confirmed and a decision is needed." | ❓ | user-visible | — |
@@ -722,9 +732,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | A past round's panels still act: a reviewer added or a file uploaded there lands in the closed round | ❓ | user-visible | — |
 | [A11](#a11) | The upload window's "Cancel" link removes the attached file, but the "Revised Version Uploaded" email already sent to the editors stands | ❓ | minor | — |
 | [OMP2](#omp2) | A press collects no reviewer recommendation (intended, confirmed upstream 2026-08-25), and the decision letter still prints "Recommendation:" with nothing after it | ❓ | user-visible | rebase check (claude), 2026-08-25 — form-field half intended |
-| [OMP3](#omp3) | On a press the fresh revisions task reads "Revisions to consider in External Review.", not the journal's "Revision required." | ❓ | minor | — |
+| [OMP3](#omp3) | On a press the fresh revisions task reads "Revisions to consider in External Review.", not the journal's "Revision required."; with two authors on the stage, each author gets a different wording | ❓ | minor | — |
 | [OMP1](#omp1) | Presses run an additional Internal Review stage before External Review | ✅ | — | — |
 | [A12](#a12) | Retired: an author who closed "Upload revisions" after the file step saw an empty "Revisions Uploaded" panel until a page reload; fixed in pkp/ui-library#853 before its merge, never on `main` | ✅ | retired | re-probe at the PR head (claude), 2026-09-23 — fixed before merge |
+| [OJS1](#ojs1) | Retired: the author's "Read Review" window on a journal was recorded showing no review text; it shows the remarks shared "For author and editor", as on a press (Rule 15) | ✅ | retired | claim check (claude), 2026-10-07 — not reproduced |
 
 ### All apps
 
@@ -848,12 +859,14 @@ When the only revised file on a round is deleted, by the editor or by the
 author, the round's status and the author's My Submissions row correctly
 return to their revisions-requested state. The revisions task, however,
 never comes back: the Tasks panel shows no task where the decision had put
-"Revision required." The author's row still reads "Revision requested"
+one ("Revision required." on a journal, "Revisions to consider in External
+Review." on a press). The author's row still reads "Revision requested"
 with "Submit revisions", so what is missing is the prompt, not the path.
 The same fault keeps the editors' copyediting notice from coming back
 (*Copyediting stage* [A7](U32-copyediting-stage.md#a7)).
-Basis: probe, 2026-10-04 (OJS and OMP, both deleter
-roles; the claim check 2026-07-31). <sup>[f-a9](#fn-a9)</sup>
+Basis: probe, 2026-10-07 (OJS and OMP, one and two authors on the stage;
+both deleter roles 2026-10-04; the claim check 2026-07-31). <sup>[f-a9](#fn-a9)</sup>
+Report: refresh owed — the claim check of 2026-10-07 found that on a press the task the decision put, and the delete leaves missing, is "Revisions to consider in External Review."; the report's Summary names only the journal's "Revision required." (2026-10-07)
 
 <a id="a10"></a>
 **A10 — The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were** · 🐞 · low.
@@ -895,19 +908,16 @@ the first upload (see *Side effects*). The Author keeps being asked to
 resubmit work they have already sent.
 Basis: probe, 2026-10-02. <sup>[f-a13](#fn-a13)</sup>
 
-### OJS
-
-<a id="ojs1"></a>
-**OJS1 — Author's read-review window shows no review text** · 🐞 · user-visible.
-On a journal, the "Read Review" window an author opens on a completed open
-review gives the reviewer's name, completion date and recommendation, and
-then no review text at all. Even a remark the reviewer explicitly shared
-with the author is missing. The decision letter's reviewer appendix stops at
-the recommendation the same way (that letter belongs to *Editorial decision
-recording*). On a press the same window shows the shared remarks.
-Editor-only remarks are correctly absent in both apps. The author is the
-reader this window exists for, and on a journal they get none of the text.
-Basis: probe (2026-07-31, OJS with OMP contrast). <sup>[f-ojs1](#fn-ojs1)</sup>
+<a id="a14"></a>
+**A14 — With two authors on the review stage, a revised file clears only one author's revisions task** · 🐞 · minor.
+When two authors are assigned to the review stage, "Request Revisions"
+gives each of them a revisions task. Uploading a revised file, whoever
+uploads it, clears only one author's task. The other author's "Revision
+required." stays in their Tasks panel, while their My Submissions row
+already reads "Review update". It stays through further uploads, through
+the deletion of every revised file, and through a later upload. That
+author keeps being asked for revisions that are already in.
+Basis: probe, 2026-10-07 (OJS and OMP, two runs each). <sup>[f-a14](#fn-a14)</sup>
 
 ### OMP
 
@@ -950,17 +960,23 @@ reads "Revisions to consider in External Review." where a journal's reads
 "Revision requested" row on My Submissions, the "Submit revisions" button,
 the task clearing on upload, and the new-round variant's "Resubmit for
 review." task.
+With two authors on the stage, only one author's task is refiled: the
+other keeps the journal's "Revision required.", so co-authors see the same
+request worded two ways.
 Question: is the press's different task wording intended? Lean: unintended.
 The press's internal-review bookkeeping deletes the task the decision just
 created, and a second mechanism refiles it under its own wording. The effect
 is wording-level only.
 Basis: probe (2026-07-31, the same flow driven on both
-apps). <sup>[f-omp3](#fn-omp3)</sup>
+apps; two authors 2026-10-07). <sup>[f-omp3](#fn-omp3)</sup>
 
 ### Retired
 
 <a id="a12"></a>
 **A12 — An upload window closed at the file step leaves the author's panel empty** · ✅ · retired. Fixed in pkp/ui-library#853 at `51f0c727` before its merge, 2026-09-23; never on `main`. <sup>[f-a12](#fn-a12)</sup>
+
+<a id="ojs1"></a>
+**OJS1 — Author's read-review window shows no review text** · ✅ · retired. Withdrawn 2026-10-07, not reproduced on a journal: the window shows the remarks the reviewer shared "For author and editor" and, for a form-based review, the questions marked for authors with their answers, as on a press (Rule 15). No change to the window since the 2026-07-31 reading is known, and what that reading saw is not recorded. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 ---
 
@@ -1229,9 +1245,24 @@ or reviewer comments filtered to viewable-by-author (AFFW-667), plus the
 attachments grid `AuthorOpenReviewAttachmentsGridHandler` (GRID-010) — its
 listing is finding A3's subject (sibling `AuthorReviewAttachmentsGridHandler`,
 GRID-011, is unreachable — note o). Author window live-probed 2026-07-31 on
-OJS and OMP (findings OJS1, A3); the
+OJS and OMP (finding A3); the
 anonymous-only control the same day — no reviewers
 panel mounts in the author view, matching the mount guard above.
+Re-driven 2026-10-07 on OJS and OMP `main`, two runs each, on a scratch
+context whose default review mode is "Open" (Rule 15, Actors row "Read a
+completed review"): before any review completed, no reviewers list and no
+"Read Review"; once completed, the submitter and a second author assigned
+to the stage both saw only the three open completed reviews (columns
+REVIEWER / TYPE / ACTIONS), not the two set to "Anonymous
+Reviewer/Anonymous Author" and "Anonymous Reviewer/Disclosed Author", a
+declined or an invited one. The OJS window read e.g. "Completed: 2026-10-07
+05:23 AM" and "Recommendation: Accept Submission" (no recommendation line
+on OMP), then "Reviewer Comments" › "For author and editor" with the
+shared remark, the editor-only remark absent; a form review showed
+"u26i07 shown question" with its answer in a read-only text box and not
+the question not included for authors, although both answers were
+stored; every window carried a "Reviewer Files" section (its listing not
+read, A3).
 API-side control: review assignments serialized to
 authors/reviewers are anonymized unless the review method is open. The modal
 form posts nothing (no submit button). The grid's second operation,
@@ -1300,11 +1331,16 @@ row still exists (`Repo::submissionFile()->delete()`), so
 `revisionsUploadedSinceDecision()` still counts it and the removal branch
 holds; nothing re-evaluates after the row is gone — finding A9, claim check
 2026-07-31 (both apps, editor- and author-side
-deletion). A later file added to the review stage while the decision stands
-does re-create a task, as the pendingRevisions type in both apps
-(`PKP\submissionFile\Repository::add()` pass; observed live on OMP,
-code-traced on OJS) — so "Revision required." is the fresh-decision wording
-on a journal, not a task-list invariant. Observed 2026-07-31 (live probe +
+deletion). A later revised file does not re-create the task either: added
+after the only one was deleted, or beside others, it counts as a revision
+uploaded since the decision, so the delegate takes its removal branch
+(`PKP\submissionFile\Repository::add()` pass; driven 2026-10-07 on OJS and
+OMP, one author and two, two runs each: "No Items" and no stored row after
+the later upload). With two authors on the stage the delegate builds or
+removes the task for one author only — finding A14 (note f-a14) — and on
+OMP the internal-review delegate's removal branch deletes the shared
+decision row for that one author only, so the other keeps "Revision
+required." — finding OMP3. Observed 2026-07-31 (live probe +
 claim check): the OJS Tasks panel entry reads
 "Revision required." plus the submission title, the My Submissions row shows
 "Revision requested" with a "Submit revisions" button in both apps, and the
@@ -1573,10 +1609,15 @@ deep-merge); no current-round gate on these panel operations was observed.
 **f-a9** — Mechanism and evidence in note m (the delete-time notification
 pass runs while the file row still counts). Claim check
 2026-07-31: flip-back plus silent task list observed on OJS
-and OMP, for editor-side and author-side deletion of the only revised file;
-the later file add that re-creates a task observed live on the press and
-code-traced on the journal. The spec's prior revival claim was corrected by
-the same check.
+and OMP, for editor-side and author-side deletion of the only revised file.
+The spec's prior revival claim was corrected by the same check. Re-driven
+2026-10-07 on OJS and OMP `main`, two runs each, with one author on the
+stage and with two: after the deletes the round read "Revisions have been
+requested." and the row "Revision requested" / "Submit revisions", while the
+Tasks panel read "No Items" for the author whose task had cleared and no
+task row was stored; on OMP the task the decision had put was "Revisions
+to consider in External Review.", stored as the pending-external-revisions
+type. A later upload re-created no task (note m).
 Issue report: [pkp-e2e#862](https://github.com/jardakotesovec/pkp-e2e/issues/862) ([docs/issues/U26-A9-deleted-revision-no-task-back.md](../issues/U26-A9-deleted-revision-no-task-back.md)).
 
 <a id="fn-a11"></a>
@@ -1611,6 +1652,27 @@ the revisions task on a revision upload
 (`PendingRevisionsNotificationManager`, `PKPManageFileApiHandler`) names
 `NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS` only.
 
+<a id="fn-a14"></a>
+**f-a14** — Driven 2026-10-07 on OJS and OMP `main`, two runs each, on a
+scratch context with the submitter and a second author assigned to the
+stage through `participants[]`: after "Request Revisions" both held a task
+(OJS: both `NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS`, 0x1000010,
+"Revision required."; OMP: the second author 0x1000016 "Revisions to
+consider in External Review.", the submitter 0x1000010, finding OMP3). From
+the first author upload on, the second author's Tasks panel read "No Items"
+with no stored row, while the submitter kept the 0x1000010 "Revision
+required." through a second author upload, an editor's upload through the
+"Revisions Uploaded" panel's "Upload", the deletion of every revised file
+and a later upload; the submitter's My Submissions row read "Review update
+…" after each upload. In every run the author whose task cleared was the
+one added in Participants and the submitter kept the task. Mechanism, read
+and not traced: `PendingRevisionsNotificationManager::updateNotification()`
+takes `$userId = current($userIds)` and builds or removes the task for
+that one user, while `PKP\submissionFile\Repository::add()` and `delete()`
+pass every stage author. The same code is in `stable-3_5_0`,
+`stable-3_4_0` and `stable-3_3_0` (`.inc.php`), read through git in the
+lib/pkp checkout.
+
 <a id="fn-a10"></a>
 **f-a10** — Probed 2026-08-02, editorial view (Journal/Press Manager), on
 rounds whose status box read "Awaiting responses from reviewers." and where
@@ -1623,13 +1685,23 @@ revisions `FileManager`, ungated by round status).
 Issue report: [pkp-e2e#858](https://github.com/jardakotesovec/pkp-e2e/issues/858) ([docs/issues/U26-A10-revisions-panel-says-revisions-requested.md](../issues/U26-A10-revisions-panel-says-revisions-requested.md)).
 
 <a id="fn-ojs1"></a>
-**f-ojs1** — Probed 2026-07-31: on OJS, a free-text review
-with a comment shared for author and editor and an editor-only comment — the
-author's window rendered neither, and the decision letter's reviewer
-appendix listed the recommendation only; on OMP, the
-shared comment rendered (the editor-only comment absent in both apps). The
+**f-ojs1** — The 2026-07-31 probe recorded, on OJS, a free-text review with
+a comment shared for author and editor and an editor-only comment whose
+author window rendered neither, and a decision letter whose reviewer
+appendix listed the recommendation only; the state it ran on is not
+recorded. Re-driven 2026-10-07 on OJS and OMP `main`, two runs each (Rule
+15): the window showed seeded and typed shared remarks; the editor-only
+remark was absent; a form review showed only its questions included for
+authors, with their answers in read-only boxes. The decision letter's "The
+following comments were received from reviewers." listed each review's
+name, "Recommendation: …" (empty on a press, OMP2) and its shared remark,
+not the editor-only one. Also walked 2026-10-04 on PKP's default test
+dataset (OJS submissions 10 and 12, OMP submission 16):
+`shared/playwright/checks/issues/author-read-review-no-text/walk.js`. The
 window is `authorReadReview.tpl` via `AuthorReviewerGridHandler::readReview`
-(note j); the OJS-side mechanism was not traced.
+(note j), shared by OJS and OMP and changed since 2026-07-31 only by
+`f80f5b9483` (an operation the window does not use); no fixing commit is
+known.
 
 <a id="fn-a12"></a>
 **f-a12** — pkp/ui-library#853 (issue pkp/pkp-lib#13359, which keeps
@@ -1695,8 +1767,12 @@ internal-revisions delegate, whose removal branch — finding no
 internal-stage pending decision — deletes both its own type and the shared
 decision row (`PendingRevisionsNotificationManager`); the external delegate
 then refiles the task under `notification.type.pendingRevisions`
-("Revisions to consider in {$stage}."). Wording chain and the re-created
-task per note m.
+("Revisions to consider in {$stage}."). Wording chain per note m.
+Driven 2026-10-07 on OMP `main`, two runs per case: with one author on the
+stage, one 0x1000016 row and no decision row; with two, one 0x1000016 row
+for the author added in Participants and one 0x1000010 row ("Revision
+required.") for the submitter — the delegates act on one author only
+(note f-a14).
 
 ## Reference — entry points & surfaces
 

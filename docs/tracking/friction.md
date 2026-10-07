@@ -13,3 +13,6 @@ Facts only, the same quarantine as everywhere else (nothing
 security-shaped, no credentials).
 
 ## Entries
+2026-10-07 · issues · issue reporter r9 (U10 A15) · a neighbour walk showing a form's second language guessed the language button's label ("Français") and had to be re-walked on all three apps: on the default dataset the form's button reads "French" and the French fields are hidden until it is pressed · a line in dataset.md "Writing steps against it" naming the form language buttons ("French", class pkpFormLocales__locale) and that a multilingual field's other languages stay hidden until pressed
+2026-10-07 · issues · issue reporter r8 (U31 A12) · the app lock for the fix trial waited about 75 minutes behind one holder (two 30-minute acquire timeouts) before a single 25-minute trial · a lock holder's expected release time in locks.json, or a separate fix-trial slot, so a reporter can plan its code reads around the wait
+2026-10-07 · housekeeping · claim checker ccU26 (U26 I07) · a drive on scratch contexts that changes no code waited about 70 minutes for the slot's app-checkout lock (two 30-minute acquire timeouts behind fix trials) before a 15-minute run · a read-only share of applock.py (granted while no fix diff is applied), or a marker in locks.json that a diff is actually in the checkouts, so checkers wait only while code is changed

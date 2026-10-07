@@ -10,8 +10,8 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as contract, a ❓ is parked, not a gap; the spec's
  * Coverage section is the record of everything else left out):
- * - A1 🐞, A9 🐞, A10 🐞, OJS1 🐞 (S12 asserts nothing about review text,
- *   present or absent).
+ * - A1 🐞, A9 🐞, A10 🐞, A14 🐞; OJS1 ✅ retired 2026-10-07 (the window
+ *   shows the shared remark; S12 asserting it is a Planned item).
  * - A2 ❓, A3 ❓ (spec instruction: no assertion touches the read-review
  *   window's attachments section), A4 ❓, A5 ❓, A6 ❓, A7 ❓, A8 ❓.
  * - U27-register A21 🐞 / A22 🐞 / A23 ❓ / A24 ❓ (the Vue "Review Details"
@@ -952,17 +952,17 @@ test.describe('review stage & rounds', () => {
         await expect(reviewersTable).toHaveCount(0);
         await expect(readReview).toHaveCount(0);
 
-        // The open reviewer shares a remark with the author and submits (what
-        // the journal's window then shows is register OJS1, asserted neither
-        // way).
+        // The open reviewer shares a remark with the author and submits (the
+        // journal's window shows it since OJS1 retired; asserting it is a
+        // Planned item).
         await performReview(juliaPage, JOURNAL, submissionId, {
             recommendation: 'Accept Submission',
             comments: 'Shared remarks for the author.',
         });
 
         // The author reads the open review: reviewer's name, completion date
-        // and recommendation. (Review text: register OJS1; attachments
-        // section: register A3 — neither asserted.)
+        // and recommendation. (Review text: a Planned assertion since OJS1
+        // retired; attachments section: register A3, not asserted.)
         await authorWorkflow.gotoAuthor(submissionId);
         const reviewerRow = authorWorkflow.panelRow('Reviewers', 'Julia Reviewer');
         await expect(reviewerRow).toBeVisible();

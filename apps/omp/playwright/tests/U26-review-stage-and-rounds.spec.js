@@ -15,8 +15,8 @@
  *
  * Not covered, by register ID (the spec's Coverage section is the record
  * of everything else left out): A1, A2, A3, A4, A5, A6, A7, A8, A9, A10,
- * OMP2, OMP3; OJS1 is journal-only (the press's read-review window shows
- * the shared remark, which S12 asserts as the working path); U27's A21/A22
+ * A14, OMP2, OMP3 (the press's read-review window shows the shared remark,
+ * which S12 asserts as the working path); U27's A21/A22
  * (the "Review Details" window's rating race and guidance paragraph).
  *
  * Seeding: scenario endpoints only; scratch submissions ride the read-only
@@ -928,7 +928,7 @@ test.describe('Review stage & rounds (U26)', () => {
         await authorModal.getByRole('button', {name: 'Read Review'}).click();
         const readModal = topModal(authorPage);
         // Reviewer name, completion date, and the shared remarks (the press
-        // shows the text — OJS1 is journal-only). No recommendation-line
+        // shows the text). No recommendation-line
         // claim (OMP2 ❓) and nothing about attachments (A3 ❓).
         await expect(readModal.getByText('Julia Reviewer').first()).toBeVisible({
             timeout: 20_000,
