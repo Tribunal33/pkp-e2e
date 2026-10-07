@@ -1999,7 +1999,7 @@ supported in 1!", the engine's app-name check assigning the comparison's
 result. Recorded beside the date-sort report,
 [docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md)
 (Cause, Reach), which leaves it out of its fix.
-Issue report: [docs/issues/U15-A17-search-unknown-sort-error-page.md](../issues/U15-A17-search-unknown-sort-error-page.md).
+Issue report: [pkp-e2e#935](https://github.com/jardakotesovec/pkp-e2e/issues/935) ([docs/issues/U15-A17-search-unknown-sort-error-page.md](../issues/U15-A17-search-unknown-sort-error-page.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-g: `templates/frontend/pages/search.tpl` passes `count`

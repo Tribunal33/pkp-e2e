@@ -12,7 +12,7 @@
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap):
  * A2 🐞, A18 🐞, A4 🐞, A5 ❓, A6 ❓, A7 🐞, A8 ❓, A9 ❓, A10 🐞, A11 🐞,
  * A12 🐞, A14 🐞. Where a test passes through one (S3 presses a tab after
- * the refused Contact save, A17; S7 saves the corrected homepage, A15; S4
+ * the refused Contact save, A17; S7 saves the corrected homepage (A15 retired); S4
  * reads the confirmation where the app delivers it, A8; S8 saves after the
  * refusals, A11) it asserts the effect the spec states and leaves the
  * finding's own claim unasserted either way. S12 reads the first
@@ -954,8 +954,8 @@ test.describe('user profile', () => {
             expect(saves.count).toBe(0);
             await expect(profile.bioEditorBody()).toContainText(bio);
 
-            // Corrected: saved at the top right (the stale sentence is A15's
-            // own claim and is not asserted).
+            // Corrected: saved at the top right (that the refusal sentence is
+            // gone is a Planned assertion; A15 retired 2026-10-07).
             await profile.homepage().fill('https://example.org/home');
             await profile.save();
             expect(saves.count).toBe(1);

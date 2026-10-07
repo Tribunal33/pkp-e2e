@@ -101,7 +101,7 @@ never reach the screen. <sup>j</sup>
 |------------------|-----------|-------|
 | "Profile Image" | no | An upload area ("Drag and drop a file here to begin upload", button "Upload File"); the file picker offers .jpg, .jpeg, .png and .gif, and nothing on screen names the accepted types. A .jpg or .png is shrunk and cropped to 150 × 150 pixels by the browser before sending. A file whose name ends in anything else is refused by the upload area itself, with "File extension error." and nothing sent; a file the server refuses is announced in the upload area and in a browser alert (Rule 9a). Once an image exists, a "Delete" button sits under it (Rule 9b) <sup>f</sup> |
 | "Bio Statement (e.g., department and rank)" (multilingual, rich text) | no | Free text; shown to readers on a published item's page (Rule 9d). Text typed here with no other box changed is lost without a question when another tab is pressed (Rule 2c) [A19](#a19) <sup>f</sup> |
-| "Homepage URL" | no | Must be a full web address including "http://" or "https://", else "Please enter a valid URL." under the box and nothing is sent; that sentence stays after the corrected address is saved [A15](#a15). Up to 255 characters <sup>f</sup> |
+| "Homepage URL" | no | Must be a full web address including "http://" or "https://", else "Please enter a valid URL." under the box and nothing is sent; the sentence goes once the address is corrected (Rule 9c). The box takes at most 255 characters <sup>f</sup> |
 
 **Password tab** (instructions: "Enter your current and new passwords below to
 change the password for your account."):
@@ -308,7 +308,8 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      unticking and saving ends the role at once, whoever had granted it and
      whatever work the user has in progress, without a warning ⚠ [A6](#a6).
      Roles the tab does not show are untouched by Save, and a Save with
-     nothing changed changes nothing.
+     nothing changed leaves every role as it was. What the same Save does
+     to the account's reviewing interests is Rule 8d.
    - 8c. **Other journals.** On a journal-level profile the journal opened
      comes first, and every other journal sits by name in a list that a link
      opens and closes (the fold of Fields above), closed on arrival: with its
@@ -322,11 +323,17 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
    - 8d. **Reviewing interests** {OJS OMP}. The tag box under the roles is
      offered to every user, whether or not they hold a reviewer role, and
      saves with the tab; an interest is suggested while typing only once
-     someone has saved it, and then to every user on the site. The Add
+     someone has saved it, and then to every user on the site. When the
+     site holds two copies of the same interest, a Save gives the account
+     both: the tab still shows the interest once, but the account's
+     "View more details" under Users & Roles › "Edit" lists it twice
+     ⚠ [A20](#a20). The Add
      Reviewer search matches on these interests (see *Cross-feature
      interactions*); the registration page's own interests box belongs to
      *Registration & account validation*. A preprint server has no reviewer
-     role and shows no interests box [OPS1](#ops1).
+     role and shows no interests box [OPS1](#ops1), yet the tab's "Save",
+     even with nothing changed, empties the interests stored for the
+     account ⚠ [OPS3](#ops3).
 9. **The Public tab.** <sup>f</sup>
    - 9a. **Uploading an image.** Choosing a file starts the upload straight
      away, with no Save. A .jpg or .png is first shrunk and cropped by the
@@ -348,10 +355,9 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      button; the bio statement and homepage stay.
    - 9c. **Bio statement and homepage** save with the tab's "Save" (the image
      needs no Save); the feedback is the top-right saved message. A homepage
-     refused with "Please enter a valid URL." keeps that sentence under the
-     box after it is corrected and saved: the saved message shows at the top
-     right while the refusal still stands under the accepted address, until
-     the page is reloaded ⚠ [A15](#a15).
+     refused with "Please enter a valid URL." loses that sentence as soon as
+     a valid address is typed into the box; "Save" then shows the top-right
+     saved message alone.
    - 9d. **Where "public" shows.** A published item's page shows the
      contributor's bio statement under "Author Biography". No reader-facing
      page of a default install shows the profile image or the homepage: the
@@ -831,9 +837,8 @@ tooling recipe are in the footnote. <sup>s</sup>
      "Please enter a valid URL." appears under "Homepage URL" and the bio
      stays in its box.
    - **The homepage corrected**: correct it to "https://example.org/home"
-     and save: "Your changes have been saved." at the top right, while
-     "Please enter a valid URL." is still under the box [A15](#a15) (a
-     reload clears it).
+     and save: "Your changes have been saved." at the top right, and
+     "Please enter a valid URL." is no longer under the box (Rule 9c).
    - **"Delete"**: press "Delete": the page reloads on the "Public" tab
      with no "Delete" button.
    - **Control**: after that reload "Profile bio." and
@@ -1032,6 +1037,9 @@ Left out of the scenarios above, by reason:
     ([A2](#a2); Rule 9a): the guard the issue report
     (`docs/issues/U03-A2-refused-gif-wipes-profile-image.md`)
     proposes, once fixed
+  - "Please enter a valid URL." gone from under "Homepage URL" once the
+    corrected address is typed, and still gone after "Save" (Rule 9c;
+    scenario 7, "The homepage corrected")
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1042,10 +1050,11 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
   - A11 (the typed passwords kept, and the hint not shown again after a refused attempt, once a password change is saved; Rule 10b; scenario 8 marks it)
-  - A15 (the refused homepage's sentence outliving the corrected save; Rule 9c; scenario 7 marks it)
   - A18 ("confirm" and "reject" landing an account with roles in more than one journal on the site-level profile; Rules 6c and 6d)
   - A19 (text typed only into "Signature", "Mailing Address" or "Bio Statement" lost unasked on the next tab or a reload; Rules 2c and 2e)
+  - A20 (an interest stored twice on the site listed twice for the account after a Roles "Save"; Rule 8d)
   - OPS2 (the "Change Email Address Invitation" template missing from a preprint server's list; *Side effects*)
+  - OPS3 (a preprint server's Roles "Save" emptying the account's stored reviewing interests; Rule 8d)
   - A5 (the "role scheduled to begin" banner shown wherever the user has no role; Rule 13)
   - A6 (unticking a box ending a role a manager granted, without warning; Rule 8b)
   - A8 (the confirmation message going to the current address, not the new one; Rule 6b; scenario 4 marks it)
@@ -1090,11 +1099,12 @@ unless its Basis line says otherwise.
 | [A11](#a11) | After a successful password change the Password tab keeps the typed passwords, and after a refused attempt the hint under "New password" does not come back | 🐞 | minor | issues (claude), 2026-10-03 — rescoped |
 | [A12](#a12) | "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A15](#a15) | "Please enter a valid URL." stays under "Homepage URL" after the corrected address is saved, beside the saved message | 🐞 | minor | — |
 | [A17](#a17) | After a refused "Save" on the Profile page's Contact tab, another tab drops the typed values unasked | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A20](#a20) | An interest the site holds twice is listed twice for the account once its Roles tab is saved, though the tab shows it once | 🐞 | minor | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [OPS3](#ops3) | On a preprint server, "Save" on the Roles tab, which has no interests box, empties the account's stored reviewing interests | 🐞 | minor | — |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere | ❓ | minor | — |
 | [A6](#a6) | A user can drop a Reader, Author or Reviewer role a manager gave them by unticking it; an Author is then locked out of My Submissions without warning | ❓ | user-visible | — |
 | [A8](#a8) | The email-change confirmation goes to the old address; the new address is never checked to exist | ❓ | user-visible | — |
@@ -1103,6 +1113,7 @@ unless its Basis line says otherwise.
 | [A16](#a16) | A verified ORCID on the profile does not reach a new submission's first contributor, which is offered "Request verification" instead | ❓ | minor | — |
 | [A1](#a1) | Retired: for a user with a role in exactly one journal, a site-level profile address naming a tab landed on the Identity tab with a stray "?0=…" in the address; it now opens the named tab of the journal's profile (Rule 3) | ✅ | retired | upstream change + claim check (claude), 2026-09-18 — fixed upstream |
 | [A3](#a3) | Retired: the emailed "reject" link of an email change requested from the site-level profile answered a blank server error; it now shows the "Decline Invitation" page and the request can be discarded (Rule 6d) | ✅ | retired | upstream change + claim check (claude), 2026-09-18 — fixed upstream |
+| [A15](#a15) | Retired: "Please enter a valid URL." was recorded staying under "Homepage URL" after the corrected address was saved; it goes as soon as a valid address is typed, or with the save (Rule 9c) | ✅ | retired | claim check (claude), 2026-10-07 — withdrawn |
 | [OMP1](#omp1) | A press offers "Chapter Author" and "External Reviewer" as self-service roles; "Internal Reviewer" is never offered | ✅ | invisible | — |
 | [OPS1](#ops1) | A preprint server offers "Reader" and "Author" only and has no "Reviewing interests" box | ✅ | invisible | — |
 
@@ -1286,16 +1297,6 @@ until the Site Administrator writes one under Site Settings, so the
 page promises a statement it cannot show.
 Basis: probe, 2026-10-03. <sup>[f-a14](#fn-a14)</sup>
 
-<a id="a15"></a>
-**A15 — A refused homepage's sentence outlives the corrected save** · 🐞 · minor.
-On the Public tab a homepage without "http://" or "https://" is refused
-before anything is sent, with "Please enter a valid URL." under the box.
-Correcting the address and saving shows "Your changes have been saved." at
-the top right, but the refusal stays under the accepted address (typing does
-not clear it either) until the page is reloaded, so the user reads a refusal
-and a success at once.
-Basis: probe, 2026-09-04. <sup>[f-a15](#fn-a15)</sup>
-
 <a id="a16"></a>
 **A16 — A verified ORCID does not reach a new submission's first contributor** · ❓ · minor.
 An account whose Identity tab holds a verified ORCID (the public "Editorial
@@ -1373,6 +1374,21 @@ static page, custom block, reviewer email and issue windows is reported with it
 ([Custom pages & blocks A19](U09-custom-pages-and-blocks.md#a19)).
 Basis: probe, 2026-10-02. <sup>[f-a19](#fn-a19)</sup>
 
+<a id="a20"></a>
+**A20 — An interest stored twice is listed twice once the Roles tab is saved** · 🐞 · minor.
+The site can hold two copies of one reviewing interest: two visitors who
+type the same interests into the site-wide Register page's box the way a
+person does ("glacier, ethics", a space after the comma) leave a second
+"ethics" on the site
+([Registration & account validation](U02-registration-and-account-validation.md)
+owns that page). On a journal or press, a later "Save" on either
+account's Roles tab, with nothing changed, gives that account both
+copies. The tab itself still shows "glacier" and "ethics" once each, but
+the account's "View more details" under Users & Roles › "Edit" reads
+"glacier, ethics, ethics", and an interest is listed once more for every
+further copy. Expected: each interest listed once.
+Basis: probe, 2026-10-07. <sup>[f-a20](#fn-a20)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1389,7 +1405,8 @@ Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-omp1](#fn-omp1)</sup>
 **OPS1 — A preprint server has no reviewer role and no interests box** · ✅ · invisible.
 A preprint server's default roles include no reviewer role, so the Roles tab
 offers "Reader" and "Author" only, and the "Reviewing interests" box is left
-out on purpose (there is no review to have interests for). The registration
+out on purpose (there is no review to have interests for); what the
+tab's "Save" then does to interests already stored is [OPS3](#ops3). The registration
 page's stray interests question on a preprint server is
 [that spec's finding](U02-registration-and-account-validation.md#ops1).
 Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-ops1](#fn-ops1)</sup>
@@ -1408,6 +1425,21 @@ preprint server keeps its own list of emails, and the shared emails added
 since 3.4 never joined it.
 Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
 
+<a id="ops3"></a>
+**OPS3 — Saving the Roles tab on a preprint server erases the account's reviewing interests** · 🐞 · minor.
+A preprint server's Roles tab has no "Reviewing interests" box
+([OPS1](#ops1)), yet its "Save", even with nothing changed, empties the
+interests stored for the account. Interests typed on the site-wide
+Register page, which still asks for them on a preprint server
+([Registration & account validation OPS1](U02-registration-and-account-validation.md#ops1)),
+or kept from an install upgraded from 3.5, are gone after the first
+save: the account's "View more details" under Users & Roles › "Edit"
+lists them under "Reviewing interests" before the save and reads
+"Reviewing interests --" after it. Expected: a tab without the box
+leaves the interests as they are. 3.5 shows the box on a preprint server
+and keeps them, so this came with the box's removal, not by choice.
+Since: 2025-11-27 · Basis: probe, 2026-10-07. <sup>[f-ops3](#fn-ops3)</sup>
+
 ### Retired
 
 <a id="a1"></a>
@@ -1415,6 +1447,9 @@ Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="a3"></a>
 **A3 — The "reject" link of a site-level email change crashes** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13181, 2026-09-16), verified 2026-09-17 on OJS and 2026-09-18 on OJS, OMP and OPS: the "reject" link of a request made on the site-level profile shows the "Decline Invitation" page, signed in or not, and "Confirm Decline Invitation" discards the request (Rule 6d); where a multi-journal account then lands is [A18](#a18). <sup>[f-a3](#fn-a3)</sup>
+
+<a id="a15"></a>
+**A15 — A refused homepage's sentence outlives the corrected save** · ✅ · retired. Withdrawn 2026-10-07, not reproduced on OJS, OMP and OPS: "Please enter a valid URL." leaves the box as soon as a valid address is typed, and an address put in without typing loses it with the "Save"; the code behind the Public tab is older than the 2026-09-04 reading, which caught the instant between the saved message and the sentence's removal (Rule 9c). <sup>[f-a15](#fn-a15)</sup>
 
 ---
 
@@ -1783,7 +1818,10 @@ enabled, registration-enabled contexts and, for each self-registrable group,
 and unticked (date_end = now; clears the masthead cache when the person was
 listed) — no check on who granted the role (finding A6). Interests:
 `RolesForm::initData()` from `Repo::userInterest()`, saved by
-`setInterestsForUser()`; widget `form/interestsInput.tpl` (tag-it,
+`RolesForm::execute()` through
+`Repo::userInterest()->setInterestsForUser($user, $this->getData('interests'))`
+in every app, OPS included (finding OPS3), which links the account to
+every stored entry carrying a posted name (finding A20); widget `form/interestsInput.tpl` (tag-it,
 autocomplete from the `vocabs/interests` API); hidden when
 `disableInterestsSection` = `Application::get()->getName() === 'ops'`
 (finding OPS1). Default rosters: `registry/userGroups.xml` in each app —
@@ -1905,8 +1943,9 @@ element (`#publicProfileForm img`) and "Delete" were present after each
 upload, but the picture again did not render on the test installs, so
 whether it displays is settled only on an install where the image address
 answers; after `example.org` was refused and `https://example.org` saved,
-`label.error` "Please enter a valid URL." stayed visible under the box
-beside the toast, through further typing, until a reload (A15). Seen in the
+`label.error` "Please enter a valid URL." was read under the box beside
+the toast (the reading that it stayed until a reload is withdrawn: A15,
+retired, f-a15). Seen in the
 2026-09-13 suite runs, all three apps (Rule 9a, scenario 7): the plupload
 filter (`extensions: "jpg,jpeg,png,gif"`, the same list as the input's
 `accept`) refused a text fixture under its `.txt` name inside the browser,
@@ -2474,13 +2513,28 @@ Issue report: [pkp-e2e#791](https://github.com/jardakotesovec/pkp-e2e/issues/791
 <a id="fn-a15"></a>
 **f-a15** — `PublicProfileForm` adds `FormValidatorUrl` on `userUrl`, which
 registers the client-side `url` check that writes `label.error` "Please
-enter a valid URL." under the box; the `AjaxFormHandler` success path (a
-content-less `JSONMessage(true)`) leaves the rendered form as it is, so the
-label is never removed — the same mechanism as A11. Live-probed 2026-09-04,
-all three apps: `example.org` sent no request and put the sentence under the
-box; `https://example.org` then saved (`save-public-profile` 200) with the
-toast while the label stayed visible, through further typing, and a full
-reload cleared it.
+enter a valid URL." under the box. The form's own check re-runs on every
+key press in the box, on leaving it and on "Save", and hides the label
+once the value is valid. Live-probed 2026-09-04, all three apps: after
+`example.org` was refused, `https://example.org` saved
+(`save-public-profile` 200) with the toast while the label was read
+visible, through further typing, until a full reload; that reading is
+withdrawn. Live-probed 2026-10-07 (claim check), OJS, OMP and OPS `main`,
+three runs each, kept script `shared/playwright/checks/U03/I07/i07.js`
+(Rule 9c; Fields Public; scenario 7): "pkp.sfu.ca" › "Save" sent no
+request and put the label under the box; the corrected address typed key
+by key hid it before "Save", and the save (200, toast at 0.13–0.20 s)
+never showed it again; a value filled in without key presses kept the
+label until "Save", where it stood beside the toast for 0.05–0.17 s and
+was then hidden, or until the box was left; a key pressed after either
+save showed nothing; scenario 7's "example.org/home" corrected to
+"https://example.org/home" ended with no label, the bio and the address
+kept after a reload. No request failed and no script error was logged. On
+`main`, lib/pkp's legacy form scripts (`js/controllers/form`, last changed
+2025-05-14), `PublicProfileForm` and its template (2026-04-09) and
+`ProfileTabHandler` are older than the 2026-09-04 probe, so that probe
+read the instant between the toast and the check's clearing; an issues
+session walk of 2026-10-03 saw the same on `stable-3_5_0`.
 
 <a id="fn-a16"></a>
 **f-a16** — `Repo::author()->newAuthorFromUser()` copies given and family
@@ -2601,6 +2655,30 @@ unsent "Phone" raised one (note b). First sighted 2026-09-28 on the
 Contact tab from the editorial-decision claim check, three runs per app.
 Issue report: [pkp-e2e#375](https://github.com/jardakotesovec/pkp-e2e/issues/375) ([docs/issues/U09-A19-static-page-content-change-lost-on-close.md](../issues/U09-A19-static-page-content-change-lost-on-close.md)).
 
+<a id="fn-a20"></a>
+**f-a20** — `Repo::userInterest()->setInterestsForUser()`
+(`classes/user/interest/Repository.php`) takes the posted interests, or a
+typed string split on "," without trimming; it looks each part up by exact
+name, creates the parts it does not find (trimmed, so " ethics" is stored
+as a second "ethics" entry), deletes the account's links and links every
+entry whose name was posted, so an account posting "ethics" is linked to
+every "ethics" entry. The site-wide Register page passes its plain text
+box through the same method, which is how the second copy arises there;
+`stable-3_5_0` has the same method (code read). Live-probed 2026-10-07
+(claim check), OJS and OMP `main`, two runs each with fresh words, kept
+script `shared/playwright/checks/U03/I07/i07.js` (Rule 8d): two visitors
+registered on the site-wide Register page with "glacier…, ethics…" each;
+the vocabulary then held one "glacier…" entry and two "ethics…" entries,
+each visitor linked to one. The first visitor's Roles tab showed the two
+chips; "Save" with nothing changed posted `interests[]=glacier…&interests[]=ethics…`
+(200, "Your changes have been saved."), after which the account was linked
+to all three entries, the tab still showed two chips, and the manager's
+Users & Roles › "Edit" › "View more details" read "Reviewing interests
+glacier…, ethics…, ethics…" (before the save: "glacier…, ethics…"). Two
+earlier runs that reused fixed words across runs showed the growth: three
+copies, and "ethics" three times on OJS. OPS registers the copies the
+same way; its save erases instead (OPS3).
+
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
 on `default.groups.name.author` ("Author"), `chapterAuthor` ("Chapter
@@ -2617,7 +2695,8 @@ reviewer, manager, administrator).
 `author` and `reader` only; no group carries the reviewer role, so
 `UserFormHelper` finds no reviewer group and `RolesForm::fetch()` sets
 `disableInterestsSection` true for OPS, which drops the interests block from
-`user/userGroups.tpl`. Live-probed 2026-09-03: the OPS Roles tab offered
+`user/userGroups.tpl`. `RolesForm::execute()` still saves interests on
+OPS, with nothing posted (finding OPS3). Live-probed 2026-09-03: the OPS Roles tab offered
 "Reader" and "Author" for every level and ended after the fold with the
 privacy sentence, the legend and "Save"; OMP offered "Reader", "Author",
 "Chapter Author", "External Reviewer" (the OMP1 order). Live-probed 2026-09-04 (claim check): holds; the OPS journal-level Register page showed no reviewer
@@ -2639,6 +2718,27 @@ the string "Change Email" occurs nowhere on the page, while the OPS scratch
 user's request delivered the same mail. Live-probed 2026-09-04 (claim check): holds (66 /
 56 / 17 templates again).
 Issue report: [pkp-e2e#519](https://github.com/jardakotesovec/pkp-e2e/issues/519) ([docs/issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md](../issues/U06-OPS1-preprint-emails-list-misses-sent-emails.md)).
+
+<a id="fn-ops3"></a>
+**f-ops3** — Since pkp/pkp-lib#12013 (093e000b86, 2025-11-27)
+`RolesForm::fetch()` sets `disableInterestsSection` on OPS, so
+`user/userGroups.tpl` prints no interests field, while
+`RolesForm::execute()` still calls
+`Repo::userInterest()->setInterestsForUser($user, $this->getData('interests'))`;
+with no value that deletes the account's links
+(`UserInterest::query()->withUserId()->delete()`) and adds none. On
+`stable-3_5_0` the OPS tab prints the interests box (`templates/user/userGroups.tpl`,
+no condition) and posts it (code read). Live-probed 2026-10-07 (claim
+check), OPS `main`, four runs, kept script
+`shared/playwright/checks/U03/I07/i07.js` (Rule 8d): a visitor registered
+on the site-wide Register page with two interests; the Preprint Server
+Manager's Users & Roles › "Edit" › "View more details" read "Reviewing
+interests glacier…, ethics…"; the visitor's Roles tab held no interests
+field; "Save" with nothing changed posted `readerGroup[…]=on&submitFormButton=`
+(no `interests`), answered 200 with "Your changes have been saved."; the
+visitor's links were gone (another visitor's kept), and the manager's
+view read "Reviewing interests --". Control: OJS and OMP posted
+`interests[]` with the same save and kept them.
 
 ## Reference — entry points & surfaces
 
