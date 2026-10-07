@@ -27,7 +27,7 @@
  *   status they are sent with.
  * - A11 🐞: S1 closes "Add a file" only after an "OK" the browser's own
  *   checks refused, never after an "OK" with no file.
- * - A2–A5, A7, A8, OMP1: not on these scenarios' paths.
+ * - A3–A5, A7, A8, OMP1: not on these scenarios' paths.
  *
  * Seeding: scenario endpoints only; publicknowledge and the seeded roster
  * are read-only (A1, A7). S1 runs on publicknowledge on its own preprint

@@ -1017,7 +1017,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS1](#ojs1) | "DC.Source.URI" points to an address that does not exist instead of the journal's home page | 🐞 | minor | — |
 | [OJS2](#ojs2) | A journal's sitemap lists no article at all, only the issues' pages | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A book page tells Google Scholar its EPUB, or any file that is not a PDF, is HTML full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [OMP2](#omp2) | A book with two PDF files for the whole book announces only one of them to Google Scholar | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [OMP2](#omp2) | A book with two PDF files for the whole book announces only one of them to Google Scholar | 🐞 | medium | issues (claude), 2026-10-07 — re-verified |
 | [OMP3](#omp3) | A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists the book's chapter pages at addresses that answer "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP5](#omp5) | A press's book file view page names the book's page as its address in Dublin Core tags | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1182,24 +1182,22 @@ default.
 Basis: probe, 2026-10-03. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
-**OMP2 — A book with two PDF files for the whole book announces only one of them to Google Scholar** · 🐞 · low.
+**OMP2 — A book with two PDF files for the whole book announces only one of them to Google Scholar** · 🐞 · medium.
 A book that offers two PDF files for the whole book, in one publication
-format or in two, announces only one of them to Google Scholar. The
-book page carries a single "citation_pdf_url" tag, for the file
-uploaded first; between files with the same upload time, the database
-decides which. The same holds for two HTML files, and for two files of
-one kind on a chapter's page.
+format or in two, announces only one of them to Google Scholar. The book
+page carries a single "citation_pdf_url" tag, for the file uploaded
+first; between files with the same upload time, the database decides
+which. The same holds for two HTML files, and for two files of one kind
+on a chapter's page.
 
 The page itself offers both files to readers, so only the search index
-misses one. The press is not told. When one of the PDF files is for
-sale ("Direct Sales"), the one tag can name that file while the free
-PDF files get none: a search engine following the tag lands on the
-Login page, and no tag points it to a free copy.
+misses one. The press is not told. When the file the tag names is for
+sale ("Direct Sales"), a search engine following the tag lands on the
+Login page, and no tag points it to the book's free file.
 
 It happens when the formats carry no ISBN, as in PKP's own test data.
 When every such format carries an ISBN, both files are announced.
-Basis: probe, 2026-10-05. <sup>f-omp2</sup>
-Report: refresh owed — omp `8c807c919` (pkp/pkp-lib#13444) made the file addresses answer their files, so the one announced PDF can be a file for sale that sends a signed-out search engine to the Login page while the free PDF files have no tag (2026-10-05)
+Basis: probe, 2026-10-07. <sup>f-omp2</sup>
 
 <a id="omp3"></a>
 **OMP3 — A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters** · 🐞 · low.
