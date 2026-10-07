@@ -323,7 +323,10 @@ a classifier stop is reported, the attempt is never re-sent (RUNBOOK
    lock per app checkout, queued first come first served, which a
    reporter takes before its status read and holds to the walk's end or
    the revert, and the brief names that lock and every reporter of the
-   slot (U35, U45, U50, U51, U54 issues sessions, 2026-10-01). A refresh
+   slot (U35, U45, U50, U51, U54 issues sessions, 2026-10-01). A claim
+   checker driving the slot's own fleets beside reporters takes the same
+   lock for each run on `main`, since a fix applied mid-run serves its
+   pages too (U03, U39 claim checks, 2026-10-07). A refresh
    goes to its reporter with the brief's `{{refresh}}` slot naming the
    report and what changed; it is accepted like a written report, and
    the role reads look at the parts it changed. The agent returns an
