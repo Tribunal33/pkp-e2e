@@ -785,7 +785,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
-| [A17](#a17) | A Search address carrying a sort the page does not know shows an empty error page | 🐞 | user-visible · crash: server | — |
+| [A17](#a17) | A Search link naming a sort that main does not know, such as a typo or 3.5's "publicationDate", shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [OJS1](#ojs1) | Screen readers hear a raw code, or "Found one item.", when a search finds several items | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS4](#ojs4) | Rebuilding one journal's search index by its path leaves Search empty on every other journal until a full rebuild | 🐞 | medium | — |
@@ -1031,15 +1031,21 @@ content is listed.
 Basis: judgment. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — A Search address carrying a sort the page does not know shows an empty error page** · 🐞 · user-visible · crash: server.
-A reader who opens a Search results address whose sort the page does not
-know gets an empty page instead of the results: the server fails. Such
-an address is a mistyped one, or one made on 3.5, which named the date
-sort `orderBy=publicationDate`. On 3.5 the page ignored an unknown sort
-and listed the results in its usual order. No control on the page offers
-a sort, so only a typed, bookmarked or shared address reaches it. The
-cause is its own: a fix for [A12](#a12) alone does not cure it.
-Basis: probe, 2026-10-03. <sup>f-a17</sup>
+**A17 — A Search link naming a sort that main does not know, such as a typo or 3.5's "publicationDate", shows an empty error page** · 🐞 · low · crash: server.
+A reader who opens a Search results link whose `orderBy` names a sort
+the page does not know gets an empty page instead of the results: the
+server fails and answers HTTP 500. `main` knows `title`, `datePublished`
+and, on a press only, `featured`. Any other value fails: a typo
+(`orderBy=titel`), the name 3.5 gave its date sort (`publicationDate`),
+or `featured` on a journal or a preprint server. 3.5 ignored a sort it
+did not know and listed the results. Neither 3.5 nor `main` offers a
+sort: no Search page, bundled theme or plugin of either builds a link
+with one (the paging links on `main` only carry on a sort already in the
+address). So only an address someone typed, or a bookmark or shared copy
+of it, reaches the error, and an upgrade from 3.5 breaks no link the app
+made. Searching again lists the results. Its cause is its own: a fix for
+[A12](#a12) alone does not cure it.
+Basis: probe, 2026-10-07. <sup>f-a17</sup>
 
 ### OJS
 
@@ -1993,6 +1999,7 @@ supported in 1!", the engine's app-name check assigning the comparison's
 result. Recorded beside the date-sort report,
 [docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md)
 (Cause, Reach), which leaves it out of its fix.
+Issue report: [docs/issues/U15-A17-search-unknown-sort-error-page.md](../issues/U15-A17-search-unknown-sort-error-page.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-g: `templates/frontend/pages/search.tpl` passes `count`

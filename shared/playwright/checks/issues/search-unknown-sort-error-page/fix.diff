@@ -1,0 +1,13 @@
+--- a/lib/pkp/classes/search/SubmissionSearchResult.php
++++ b/lib/pkp/classes/search/SubmissionSearchResult.php
+@@ -55,7 +55,9 @@
+             ->whereIn('subjects', $request->getUserVar('subjects'))
+             ->whereIn('funders', $request->getUserVar('funders'));
+ 
+-        if ($orderBy = $request->getUserVar('orderBy')) {
++        // Pass on only a sort the search engines support; ignore any other (a typo, a 3.5 name)
++        $orderBy = $request->getUserVar('orderBy');
++        if (in_array($orderBy, ['datePublished', 'title'], true)) {
+             $builder->orderBy($orderBy, $request->getUserVar('orderDir') == 'asc' ? 'asc' : 'desc');
+         }
+ 
