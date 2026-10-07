@@ -655,10 +655,14 @@ class PluginGrid extends BasePage {
         return this.grid.locator('tr.gridRow').filter({has: this.page.locator('.label', {hasText: whole(label)})});
     }
 
-    /** The heading of the category a plugin's row sits under. */
+    /**
+     * The heading of the category a plugin's row sits under: its label,
+     * without the plugin count that follows it on the row (U62 Rule 4).
+     */
     async categoryOf(name) {
         const heading = this.row(name)
             .locator('xpath=ancestor::tbody[1]/tr[1]')
+            .locator('.label')
             .first();
         return (await heading.innerText()).replace(/\s+/g, ' ').trim();
     }
