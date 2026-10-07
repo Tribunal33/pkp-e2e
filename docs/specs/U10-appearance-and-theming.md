@@ -2444,7 +2444,7 @@ counts as an error. The fix proposed for A7 removes the refused file
 and its link, but by the code the empty entry still shows while the
 next file uploads. Issue report for A7, which records this walk:
 [pkp-e2e#772](https://github.com/jardakotesovec/pkp-e2e/issues/772).
-Issue report: [docs/issues/U10-A15-refused-file-remove-keeps-save-disabled.md](../issues/U10-A15-refused-file-remove-keeps-save-disabled.md).
+Issue report: [pkp-e2e#938](https://github.com/jardakotesovec/pkp-e2e/issues/938) ([docs/issues/U10-A15-refused-file-remove-keeps-save-disabled.md](../issues/U10-A15-refused-file-remove-keeps-save-disabled.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — Walked 2026-10-02 on `main` and 3.5, all three apps, on a
