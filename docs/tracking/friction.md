@@ -13,3 +13,4 @@ Facts only, the same quarantine as everywhere else (nothing
 security-shaped, no credentials).
 
 ## Entries
+2026-10-07 · issues · issue reporter r2 (U04 A14) · no kit helper publishes a production submission through the screens on both lines and apps (OJS main panel, OJS 3.5 "Select an issue …" then "Publish", OPS "Post the preprint"); wrote one in the walk's lib.js from three page objects and two other issue libs · a shared `publishOnScreen(page, app, sid, {issue})` in the probe kit or a page object covering OJS/OPS on main and stable-3_5_0

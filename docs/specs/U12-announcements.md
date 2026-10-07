@@ -282,9 +282,12 @@ discards the changes. <sup>g</sup>
     11) and the site's own Announcements page's (`index/announcement`),
     open while the site's box is ticked; the site's header has no
     "Announcements" item, so that page is reached by its address, by the
-    home page block's links and by the "Skip to announcements" link. A site announcement never
-    sends the email of Side effects; its notification is not recorded
-    either, which no screen shows (Actors row 6). A site with one journal
+    home page block's links and by the "Skip to announcements" link.
+    The site's "Add Announcement" and "Edit Announcement" offer "Send an
+    email about this to all registered users." as the journal's do, but
+    a site announcement never sends the email of Side effects, ticked or
+    not ⚠ [A18](#a18); its notification is not recorded either, which no
+    screen shows (Actors row 6). A site with one journal
     has no site-level announcements screen, a state that cannot be seen
     on the test installs; the rule that hides the tab is *Site settings*'
     (*[Highlights](U11-highlights.md)* Rule 12 states it). <sup>d</sup>
@@ -776,9 +779,9 @@ footnote.
      Sunday"; the scratch journal's Announcements page and home page show
      none of it (on a press the home page carries the site's block,
      [OMP2](#omp2)) (Rules 1, 9–11, 16).
-   - **No email**: run the site's background jobs: the mail catcher holds
-     no email titled "Site maintenance" for the Site Administrator (Actors
-     row 6; Rule 16).
+   - **No email**: run the background jobs <sup>s6</sup>: the mail catcher holds
+     no email titled "Site maintenance" for the Site Administrator
+     ([A18](#a18)) (Actors row 6; Rule 16).
    - **A site type**: on "Announcement Types" press "Add Announcement
      Type", type "Site news" in "Name" and press "Save": "Announcement
      type added." shows and "Site news" is a row of the table (Rule 16).
@@ -904,6 +907,8 @@ Left out of the scenarios above, by reason:
     scenario 1 marks it)
   - A17 (a short description entered in French alone printed on the
     English page; Rule 14; scenario 5 marks it)
+  - A18 ("Send an email about this to all registered users." offered on
+    the site's panel and sending nothing; Rule 16; scenario 6 marks it)
   - OMP2 (a press's home page carrying the site's announcements while
     the press has no "Display on Homepage" count; Rule 11; scenario 6
     marks it)
@@ -955,6 +960,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | The public Announcements page with nothing to list shows the heading alone, no "No announcements have been published." | ❓ | minor | — |
 | [A16](#a16) | With no "Display feed links…" choice saved, the browser is told about the feeds on every page while the box shows on the home page alone {OJS} | ❓ | minor | — |
 | [A17](#a17) | A short description entered in French alone printed under its English title on the English Announcements page, seen once | ❓ | minor | — |
+| [A18](#a18) | The site's "Add Announcement" and "Edit Announcement" offer "Send an email about this to all registered users.", which never sends anything there | ❓ | minor | — |
 | [OMP1](#omp1) | The settings tab labels the introduction "Additional Information" on a press, "Introduction" elsewhere | ✅ | minor | — |
 | [A4](#a4) | The site's Announcements panel cannot save, edit, delete or search | ✅ | retired | claim check (claude), 2026-09-17 — did not reproduce on any app |
 
@@ -1174,6 +1180,17 @@ it in whichever language holds one, or leave it out? Lean: intended; the
 page falls back to whichever language holds a text rather than leaving a
 gap, and a second look on any app would confirm it. Basis: test run.
 <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — The site's announcement panel offers an email box that sends nothing** · ❓ · minor.
+A Site Administrator adding or editing a site announcement
+(Administration › Site Settings › Announcements) is offered "Send an
+email about this to all registered users." as a journal's manager is,
+unticked. Ticked and saved, it sends no email to anyone, on an add as
+on an edit (Rule 16). The administrator sees "Save" succeed and
+believes the users were emailed. Question: should the site's panel
+offer the box at all? Lean: no, hide it there; a box that can never do
+anything misleads. Basis: probe, 2026-09-17. <sup>f-a18</sup>
 
 ### OMP
 
@@ -2134,6 +2151,20 @@ assert neither way: their English control reads "Call for papers" alone,
 and OMP and OPS were not driven on this. The one observation that settles
 it: the same announcement read on the English page on any app a second
 time.
+
+<a id="fn-f-a18"></a>
+**f-a18 — A18 evidence.** Note d: the site's tab builds the same
+`PKPAnnouncementForm`, whose `sendEmail` field (`common.sendEmail` "Send
+Email", option `notification.sendNotificationConfirmation`) is added for
+every use of the form with no value, so the box starts unticked; ui-library's
+`AnnouncementsListPanel::openEditModal()` opens "Edit Announcement" from a
+copy of that form. `PKPAnnouncementController::add()` calls
+`notifyUsers()` only `if ($context)` ("There is no way to determine users
+who have subscribed to site-level announcements."), and `edit()` never
+calls it (A9). Code read 2026-10-03, all apps `main`. Live-probed
+2026-09-17 (A18), OJS, OMP and OPS: a site announcement added with the
+box ticked mailed nobody (note d); the site's "Edit Announcement" with the
+box ticked was not walked (code alone).
 
 <a id="fn-f-omp2"></a>
 **f-omp2 — OMP2 evidence.** OMP's `pages/index/IndexHandler.php` calls

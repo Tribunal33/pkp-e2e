@@ -107,9 +107,7 @@ saved, and the link still reads "Open Access".
   empty and greyed out.
 
 At step 5 chapter 1's link reads "PDF", as a free file's does. At step 6
-a signed-out visitor gets "PDF view of the file chapter1.pdf". On
-`main` the viewer then stays empty, which is a separate fault
-([U69-A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md)).
+a signed-out visitor gets "PDF view of the file chapter1.pdf".
 
 At "0.00" the save is accepted too:
 

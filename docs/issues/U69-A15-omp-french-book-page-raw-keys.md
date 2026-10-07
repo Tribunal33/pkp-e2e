@@ -1048,9 +1048,10 @@ Small: 78 texts entered on Weblate and no code, tried as a diff.
   empty in `locale/fr_CA/submission.po`.
 - In step 13 the role under each name read "Volume editor" in French
   too; not looked into.
-- Failures the walk recorded, each reported apart: on `main` the file
-  view page of step 4 threw "PDFJS is not defined" and its file request
-  answered 500 (spec U69 A9); on 3.5 only the script error.
+- Failures the walk recorded: on `main` the file view page of step 4
+  threw "PDFJS is not defined" (spec U69 A23, reported apart) and its
+  file request answered 500 (since fixed by `pkp/pkp-lib#13444`); on
+  3.5 only the script error.
 - Tips: OMP `main` 3b0ecf794c (`lib/pkp` 3dc90c81a6, `lib/ui-library`
   280f98c5) for every walk. `stable-3_5_0` moved between the walks:
   b24879c3d (`lib/pkp` 1fb843f491) for steps 1 to 13, c7b45f88e

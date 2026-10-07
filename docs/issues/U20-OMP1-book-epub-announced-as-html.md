@@ -140,9 +140,6 @@ Reach:
   `application/pdf` and `text/html` one at a time, so they are not
   affected. No other `case 'a' or 'b':` exists in OJS, OMP, OPS or
   pkp-lib (both checked in the code).
-- On `main`, the download addresses these tags name fail on the server
-  for another reason:
-  [U69-A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md).
 
 ## Proposed fix
 

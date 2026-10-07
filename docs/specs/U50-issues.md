@@ -439,10 +439,14 @@ page reads "View {issue name}" ⚠ [A7](#a7). <sup>v</sup>
     bar across the top holds a return arrow (read to a screen reader as
     "Return to Issue Details") and the issue's name, both leading back to
     the issue's page, and "Download"; the browser tab reads "View of
-    {issue name}". Any other file downloads. A galley address that names
-    no galley of the issue (a wrong number, a word, another issue's
-    galley) fails with an empty page ⚠ [A14](#a14). <sup>x</sup>
-    <sup>td14</sup>
+    {issue name}". Any other file downloads, an XML file included: with
+    "eLife Lens Article Viewer" on (Settings › Website › "Plugins"; on
+    for a new journal), an article's XML galley opens in the Lens reader,
+    but an issue's XML galley still downloads
+    ⚠ [→ Article landing page & reading OJS15](U13-article-landing-page-and-reading.md#ojs15).
+    A galley address that names no galley of the issue (a wrong number, a
+    word, another issue's galley) fails with an empty page ⚠ [A14](#a14).
+    <sup>x</sup> <sup>td14</sup>
 27. **The site's home page.** On an install whose home page lists its
     journals, each journal's entry carries "View Journal" and "Current
     Issue"; "Current Issue" opens that journal's "Current" (Rule 24),
@@ -1155,6 +1159,9 @@ Left out of the scenarios above, by reason:
     bullet 7; *[Notifications center & email
     preferences](U05-notifications-center-and-email-preferences.md)*,
     scenario 9)
+  - an issue's XML galley with "eLife Lens Article Viewer" on (Rule 26;
+    *[Article landing page & reading](U13-article-landing-page-and-reading.md)*,
+    its register entry OJS15)
 
 ## Findings register
 
@@ -1523,7 +1530,7 @@ where it is made.
 **w** — `IssueHandler::setupIssueTemplate()` fetches with `filterByIssueIds()` (any publication carrying the issue's id, whatever its status; note m) and keeps a submission only when its current publication has a section and is `STATUS_PUBLISHED` (published issue) or scheduled/published (unpublished issue); sections from `Repo::section()->getByIssueId()` (`COALESCE(custom_section_orders.seq, sections.seq)`), a section's title null when `hideTitle`. `frontend/objects/issue_toc.tpl`: `editor.issues.preview` "Preview" warning when unpublished; cover with alt `getLocalizedCoverImageAltText()` or `issue.viewIssueIdentification` "View {$identification}"; description; pub-id plugins' lines; DOI line; `submissions.published` "Published" with `date_format:$dateFormatShort` (`includeIssuePublishDate` true); `issue.fullIssue` "Full Issue" with `galley_link.tpl` per galley; sections with `article_summary.tpl`. Live-probed 2026-09-25 (Rule 23), OJS: an article unpublished from its workflow left the page and the tab; one with a newer version left unpublished stayed, as its published version. Live-probed 2026-09-28 (Rules 23, 23a): the control of f-a17 held (a new version saved and unpublished left the issue's page, the article's page and the feeds on the first version); the newer version published outside the issue: f-a17.
 
 <a id="fn-x"></a>
-**x** — `galley_link.tpl` builds `issue/view/{issueBestId}/{galleyBestId}`; `IssueHandler::initialize()` redirects an unknown galley to `issue/view/{id}`; `view()` with a galley calls hook `IssueHandler::view::galley` and otherwise redirects to `issue/download/…`. `plugins/generic/pdfJsViewer/PdfJsViewerPlugin::issueCallback()` takes `application/pdf` galleys: `templates/display.tpl` header with the return link (`issue.return` "Return to Issue Details", screen-reader text), the title link (`getIssueIdentification()`), `common.download` "Download"; page title `article.pageTitle` "View of {$title}". Seed facts (2026-09-25): "PDF.JS PDF Viewer" arrives ticked on a new journal. `lensGalley` also hooks issue galleys (not ticked by default for issue use; not read further).
+**x** — `galley_link.tpl` builds `issue/view/{issueBestId}/{galleyBestId}`; `IssueHandler::initialize()` redirects an unknown galley to `issue/view/{id}`; `view()` with a galley calls hook `IssueHandler::view::galley` and otherwise redirects to `issue/download/…`. `plugins/generic/pdfJsViewer/PdfJsViewerPlugin::issueCallback()` takes `application/pdf` galleys: `templates/display.tpl` header with the return link (`issue.return` "Return to Issue Details", screen-reader text), the title link (`getIssueIdentification()`), `common.download` "Download"; page title `article.pageTitle` "View of {$title}". Seed facts (2026-09-25): "PDF.JS PDF Viewer" arrives ticked on a new journal. `lensGalley` also hooks issue galleys (`issueCallback()`); with it on, walked 2026-10-05 on OJS, an issue's XML galley still downloaded and the server log recorded the plugin's failure ([Article landing page & reading](U13-article-landing-page-and-reading.md) note f-ojs15).
 
 <a id="fn-y"></a>
 **y** — OJS `templates/frontend/pages/indexSite.tpl`: per journal `site.journalView` "View Journal" and `site.journalCurrent` "Current Issue" (`issue/current`), unconditionally. `pages/index/IndexHandler::index()` shows the list only when no journal is requested and `getTargetContext()` resolves none (two or more enabled journals, no site redirect).

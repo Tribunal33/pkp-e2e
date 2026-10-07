@@ -344,9 +344,9 @@ books that already have versions need the upgrade migration.
   assigned to chapter 55, the first version's "Chapter 2"; the new
   version's "Chapter 2" is chapter 73. Opened by its address
   (`/catalog/view/14/4/151`), the proof's own page answers 200; the
-  download behind it answers 500, as every press file download does
-  today ([U69 A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md)),
-  a separate fault.
+  download behind it answered 500 at the walk, as every press file
+  download did then, a separate fault since fixed by
+  `pkp/pkp-lib#13444`.
 - 3.4 (code), `upstream/stable-3_4_0` 0aec65441f (lib/pkp
   767353f4fe): `classes/publication/Repository.php` `version()` lines
   218–226 move only the format copies; `ChapterForm.php` lines 260–272

@@ -219,12 +219,10 @@ pattern, and one Cypress test widened.
   metadata for chapters", `pkp/omp#1061`), which made `monographView()`
   chapter-aware and left its "Text.Book" line as it was.
 - Both walks' view pages also recorded a script error ("PDFJS is not
-  defined") and, on `main`, a server error on the file download; those
-  are reported apart, in
-  [U69-A9-book-file-open-download-fails.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md)
-  and
-  [U69-A9-pdf-view-page-script-error.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-pdf-view-page-script-error.md),
-  and do not touch the tags.
+  defined") and, on `main`, a server error on the file download (since
+  fixed by `pkp/pkp-lib#13444`). The script error is reported apart, in
+  [U69-A9-pdf-view-page-script-error.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-pdf-view-page-script-error.md);
+  neither touches the tags.
 - Readers of the tag, read 2026-10-03: Google Scholar's inclusion
   guidelines (https://scholar.google.com/intl/en/scholar/inclusion.html)
   name Dublin Core tags such as "DC.title", "DC.creator", "DC.issued"

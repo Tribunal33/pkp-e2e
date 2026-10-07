@@ -11,8 +11,8 @@
  * of everything else left out): A1 (the sign-in helper lifts the 32-char
  * maxlength; the cap itself is unasserted), A2 (the pre-ticked "Keep me
  * logged in" box: S1 unticks it without asserting its arrival state), A3
- * (the reset form's browser-tab title; the page heading is asserted
- * instead), A4, A5 (S6 drives a screen-driven path that sets the
+ * (retired: the reset form's browser-tab title, fixed upstream, a Planned
+ * item; the page heading is asserted), A4, A5 (S6 drives a screen-driven path that sets the
  * forced-change flag, Create New Reviewer), A6, A7 (S2's control reads a
  * dashboard address that is not the bare "dashboard" one), A8.
  *
@@ -300,7 +300,7 @@ async function requestResetLink(page, pkpMail, {contextPath, email}) {
 /** Complete the set-a-new-password form the emailed link opens. */
 async function completeReset(page, link, newPassword) {
     await page.goto(link);
-    // Page heading (the browser-tab title is register finding A3 — unasserted).
+    // Page heading (the browser-tab title, fixed upstream since A3, is a Planned item, unasserted yet).
     await expect(
         page.getByRole('heading', {name: 'Reset Password'})
     ).toBeVisible();

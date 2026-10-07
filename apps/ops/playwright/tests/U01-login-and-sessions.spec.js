@@ -13,7 +13,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
- * A2 🐞, A3 🐞, A4 🐞, A5 ❓, A6 ✅, A7 🐞, A8 🐞. Where a test passes
+ * A2 🐞, A3 ✅ (retired), A4 🐞, A5 ❓, A6 ✅, A7 🐞, A8 🐞. Where a test passes
  * through one (S1 unticks the pre-ticked box, S4/S5 open the reset page,
  * S2 opens a dashboard address signed out) it asserts the effect the spec
  * states and leaves the finding's own claim unasserted either way. The
@@ -347,7 +347,7 @@ test.describe('login & sessions (U1) — OPS', () => {
             expect(await pkpMail.count({to: NOBODY})).toBe(0);
 
             // The link opens the set-a-new-password form ("Reset Password" page
-            // heading; the raw-key tab title is A3's record, not asserted).
+            // heading; the tab title, fixed upstream since A3, is a Planned item, not asserted yet).
             // Saved: the success sentence with a "Login" link — NOT signed in
             // (Rule 9; the login form below rendering at all proves it: a
             // signed-in visitor is bounced off the Login page, Rule 1).

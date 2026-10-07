@@ -8,7 +8,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
- * A2 🐞, A3 🐞, A4 🐞, A5 ❓, A6 ❓, A7 🐞, A8 🐞. Where a test passes
+ * A2 🐞, A3 ✅ (retired), A4 🐞, A5 ❓, A6 ❓, A7 🐞, A8 🐞. Where a test passes
  * through one (S1 unticks the pre-ticked box, S6 walks a screen that sets
  * the forced-change flag, S4/S5 open the reset page, S2 opens a
  * dashboard address signed out) it asserts the effect the spec states and

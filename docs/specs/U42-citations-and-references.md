@@ -50,6 +50,7 @@ the submitting author's own draft and are always editable there. <sup>a</sup>
 | **See references on the published page** | • any reader, on a published item's landing page, when the version has references (Rule 27) <sup>p</sup> <sup>q23</sup> |
 | **Configure references, lookup and data citations** | • Journal Manager, and a Site Administrator who holds a manager role in the journal, on Settings › Workflow › Submission › "Metadata" (Settings that modify behavior)<br>• a Section Editor or an Author who types the page's address gets the access-denied page <sup>c</sup> <sup>q1</sup> |
 
+<a id="fields"></a>
 ## Fields & validation
 
 **The References box** (the wizard's "Details" step) is one multi-line box
@@ -140,7 +141,7 @@ typed. Nothing asks first. The one exception is an author row added in
    opens a page headed "Publication: References" ("Preprint: References" on
    a preprint server). With metadata lookup off it shows, top to bottom:
    <sup>d</sup>
-   - the "Add" box and its **Add** button (Fields & validation);
+   - the "Add" box and its **Add** button ([Fields & validation](#fields));
    - a **"Delete all references"** link;
    - a table titled **"Structured References"**, with the line "The above
      references have been organised here in a structured format." and a
@@ -168,7 +169,7 @@ typed. Nothing asks first. The one exception is an author row added in
    appeared earlier in the same paste, is dropped without any message
    ⚠ [A2](#a2). <sup>q5</sup>
 6. **Editing a reference.** "Edit" opens the "Edit citation" side panel
-   prefilled with the reference (Fields & validation). Saving closes the
+   prefilled with the reference ([Fields & validation](#fields)). Saving closes the
    panel and the row shows the change. With lookup off only the text can
    be changed. Saving the same text as another reference is accepted, so
    the list then shows two identical rows that "Add" would have dropped
@@ -268,8 +269,8 @@ typed. Nothing asks first. The one exception is an author row added in
     While the box shows a count below its total, the page refreshes the
     list by itself every few seconds; otherwise the list changes only on a
     reload. <sup>i</sup> <sup>q11</sup>
-14. **Editing with lookup on.** "Edit" opens the structured form of
-    Fields & validation. Filling an identifier, a title and an author by
+14. **Editing with lookup on.** "Edit" opens the structured form
+    described in [Fields & validation](#fields). Filling an identifier, a title and an author by
     hand makes the reference structured at once (Rule 11), whether or not
     any lookup ran. Saving does not start a lookup, and editing only the
     "Edit Raw Citation" text leaves the structured details as they were.
@@ -287,8 +288,8 @@ typed. Nothing asks first. The one exception is an author row added in
 ### References while submitting
 
 16. **The wizard's References box.** While the journal asks for or requires
-    references, the "Details" step shows the References box (Fields &
-    validation) after the title, keywords and abstract. The box holds the
+    references, the "Details" step shows the References box
+    ([Fields & validation](#fields)) after the title, keywords and abstract. The box holds the
     whole list as text: whenever the step saves, the list is rebuilt from
     the box, one reference per line, in line order. Here, unlike Rule 5, a
     line repeated in the box stays a repeated reference.
@@ -352,7 +353,7 @@ typed. Nothing asks first. The one exception is an author row added in
     read-only "View Data Citation" panel. <sup>l</sup> <sup>q2</sup>
 21. **Add and edit.** "Add Data Citation" opens the "Add Data Citation" side
     panel; "Edit" opens the same form titled "Edit Data Citation", prefilled
-    (Fields & validation). Saving closes the panel and the table updates in
+    ([Fields & validation](#fields)). Saving closes the panel and the table updates in
     place. An identifier is stored without its type's address or prefix, so
     a DOI typed as "https://doi.org/10.1234/abcd" shows as "10.1234/abcd".
     <sup>l</sup> <sup>q17</sup>
@@ -535,7 +536,7 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      and the search box "Search references here" above it (Rule 3).
    - **An empty Add**: press **Add** with the box empty: "This field is
      required." appears, nothing is added, and **Add** stays grayed out
-     until something is typed in the box (Fields & validation).
+     until something is typed in the box ([Fields & validation](#fields)).
    - **Several lines at once**: type four lines into the box: "Alpha
      study 2020" with two spaces between each pair of words, an empty
      line, "Beta trial 2021" with two spaces before and after it, and
@@ -551,7 +552,7 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      error." at the foot, the panel stays open and the row keeps its
      text. Type "Alpha study 2020, revised" and press "Save": the panel
      closes and the row reads "Alpha study 2020, revised" (Rules 4, 6;
-     Fields & validation).
+     [Fields & validation](#fields)).
    - **Search**: type "BETA" in "Search references here": the table does
      not change until you press Enter; then it lists "Beta trial 2021"
      alone. Press the box's "Clear search phrase" (×): all three rows are
@@ -589,7 +590,7 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      its "Details" step: after the title, keywords and abstract comes the
      "References" box, with the help text "Enter each reference on a new
      line so that they can be extracted and recorded separately." and no
-     required mark (Rule 16; Fields & validation).
+     required mark (Rule 16; [Fields & validation](#fields)).
    - **An empty box on "Review"**: leave the box empty and press
      "Continue" on each step until "Review": its "Details" section shows
      "None provided" under "References" (Rule 16).
@@ -697,8 +698,8 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      panel shows the structured form, its "Edit Raw Citation" box marked
      "* Required"; clear that box and press "Save": "This field is
      required." shows under it and the panel stays open; press the
-     panel's "Close": the row still reads "Alpha study 2020" (Fields &
-     validation).
+     panel's "Close": the row still reads "Alpha study 2020"
+     ([Fields & validation](#fields)).
    - **Structured by hand**: press "Edit" again; type "10.1234/abcd" in
      "DOI", "Alpha study" in "Title", "Journal of Tests" in "Source Name"
      and "12" in "Volume"; under "Author Information" press "Add" and
@@ -741,7 +742,7 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
    - **An empty save**: press "Add Data Citation": the "Add Data
      Citation" panel opens; press "Save" with nothing filled: the panel
      stays open with "This field is required." under "Title" and an error
-     under "Relationship type" (Fields & validation).
+     under "Relationship type" ([Fields & validation](#fields)).
    - **Refused values**: type "Ocean temperature records" in "Title",
      choose "Supporting data that were generated for the study
      (generated)." as "Relationship type" and "DOI" as "Identifier type",
@@ -753,7 +754,7 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      Name, "Lovelace" as Family Name and "0000-0002-1825-0097" as ORCID
      iD, and press "Save": "The ORCID iD you specified is invalid. Please
      include the full URI (e.g. "https://orcid.org/0000-0002-1825-0097")."
-     (Fields & validation).
+     ([Fields & validation](#fields)).
    - **The saved data citation**: replace the ORCID iD with
      "https://orcid.org/0000-0002-1825-0097" and press "Save": the panel
      closes and the table's row shows "10.1234/abcd" above "Ocean
@@ -763,8 +764,8 @@ The accounts, passwords and tooling recipe are in the footnote. <sup>s</sup>
      and the panel's "Close" as its only button; close it. "Edit" opens
      "Edit Data Citation" with "Identifier" holding "10.1234/abcd";
      change "Title" to "Ocean temperature records, revised" and press
-     "Save": the row shows the new title (Rules 20, 21; Fields &
-     validation).
+     "Save": the row shows the new title (Rules 20, 21;
+     [Fields & validation](#fields)).
    - **Ordering**: add two more data citations the same way, "Dataset B"
      and then "Dataset C", each with "Supporting data without specifying
      whether they were generated or analyzed (supporting)." as
@@ -898,9 +899,9 @@ Left out of the scenarios above, by reason:
   - a reference structured by hand keeping its DOI link, title and
     expander in a new version (Rule 26)
   - typing dropped without a question on "Close" or on leaving the page
-    (Fields & validation, last paragraph)
+    ([Fields & validation](#fields), last paragraph)
   - "Source Type" and "Type" in "Edit citation", which arrive with
-    nothing chosen and have no empty entry (Fields & validation)
+    nothing chosen and have no empty entry ([Fields & validation](#fields))
   - an assigned Section Editor whose assignment may edit the
     publication (Actors row 2): the page scenario 1's Journal Manager
     edits
@@ -927,13 +928,13 @@ Left out of the scenarios above, by reason:
   - A10 (the wizard's Data Citations table unchanged after a save on a
     press or a preprint server; Rule 24; scenario 7 passes it)
   - A11 (no data citations on the landing page; Rule 27)
-  - A12 (an arXiv ID losing its version; Fields & validation)
+  - A12 (an arXiv ID losing its version; [Fields & validation](#fields))
   - A13 (a blank author row saved and making a reference structured;
     Rule 11)
-  - A14 (the author boxes with no names for a screen reader; Fields &
-    validation)
-  - A15 (a data citation's identifier that cannot be removed; Fields &
-    validation)
+  - A14 (the author boxes with no names for a screen reader;
+    [Fields & validation](#fields))
+  - A15 (a data citation's identifier that cannot be removed;
+    [Fields & validation](#fields))
   - A16 (the expander's name and keyboard, and the invisible "Collapse"
     buttons; Rules 4, 12)
   - A17 ("Edit" saving the text of another reference; Rule 6)

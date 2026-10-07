@@ -152,9 +152,6 @@ Reach:
 - **Not this fault:**
   - OPS: `PreprintHandler::$publication` is still untyped, so the same
     test answers "404 Not Found" (code).
-  - `CatalogBookHandler::download()` reads the same unset property at
-    line 533, on every request; that is its own fault and report
-    ([U69-A9-book-file-open-download-fails.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md)).
   - The other typed properties without a default found in the page
     handlers (`ArticleHandler::$context` and `$article`, pkp-lib
     `DecisionHandler::$decisionType` and `$submission`, pkp-lib
@@ -207,12 +204,7 @@ and out.
   - Declaring the property `public ?Publication $publication = null;`,
     as its neighbours `$chapter` and `$galley` are, also makes the test
     work. It changes the type that plugins and the handlers' other
-    methods read. In OMP it would also make
-    `CatalogBookHandler::download()` send the file with a null
-    publication in its usage event, which lib/pkp's
-    `LogUsageEvent::canHandle()` refuses, so the file view would
-    silently never be logged
-    ([U69-A9-book-file-open-download-fails.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md)).
+    methods read.
   - Collecting the match in a local variable and assigning the property
     after the test works too, with more lines changed for the same
     result.

@@ -313,7 +313,11 @@ in. <sup>i</sup> <sup>q14</sup>
     Each plugin writes its tags whether or not the other is enabled. On
     a press, each file address the book's and the chapters' pages name
     in "citation_pdf_url" and "citation_fulltext_html_url" answers the
-    file itself: a browser opening it saves the file.
+    file itself: a browser opening it saves the file. The one exception
+    is a file for sale ("Direct Sales"): its address sends a signed-out
+    visitor or search engine to the Login page, as the file's own link
+    on the book's page does ([Monograph landing
+    page](U69-monograph-landing-page.md), its Rule 14) [OMP2](#omp2).
     <sup>h</sup> <sup>i</sup> <sup>q14</sup>
 13. **Earlier versions and galleys.** The page of an earlier version
     (its link in the item page's "Versions" list) carries neither
@@ -336,13 +340,15 @@ in. <sup>i</sup> <sup>q14</sup>
     "Metadata" page appear in no tag ("DC.Rights" carries the copyright
     and the license instead).
     <sup>h</sup> <sup>i</sup> <sup>q16</sup>
-15. **A plugin disabled.** Unticking any of the three plugins first
-    asks, in a window headed "Disable", "Are you sure you want to disable
-    this plugin?"; "OK" shows "The plugin "{plugin name}" has been
-    disabled.". Ticking asks nothing and shows "The plugin "{plugin
-    name}" has been enabled.". With either indexing plugin disabled, its
-    tags leave every page at the next load and the other plugin's stay;
-    enabled again, they return. <sup>a</sup> <sup>q17</sup>
+15. **A plugin disabled.** Unticking "Dublin Core Indexing Plugin"
+    {OJS OMP}, "Google Scholar Indexing Plugin" or "Google Analytics
+    Plugin" (Fields, "The three plugins"; a preprint server has the last
+    two) first asks, in a window headed "Disable", "Are you sure you want
+    to disable this plugin?"; "OK" shows "The plugin "{plugin name}" has
+    been disabled.". Ticking any of them asks nothing and shows "The
+    plugin "{plugin name}" has been enabled.". With either indexing
+    plugin disabled, its tags leave every page at the next load and the
+    other plugin's stay; enabled again, they return. <sup>a</sup> <sup>q17</sup>
 16. **A chapter's page** {OMP}. A chapter page's tags name the chapter:
     its title, its contributors, its abstract, and its publication date
     while the book gives chapters dates of their own (a chapter with no
@@ -917,6 +923,7 @@ Left out of the scenarios above, by reason:
   - OMP5 {OMP} (a book file's view page: "DC.Identifier.URI" names that view page; Rule 17)
   - {OMP} a chapter with "Show this chapter on its own page…" ticked: its entry in the sitemap, and its page's own tags, the chapter's title, contributors and abstract beside the book's identifiers (Fields, "What the sitemap lists"; Rule 16; Settings bullet 15)
   - {OMP} a series' page in the sitemap (Fields, "What the sitemap lists")
+  - {OMP} a book whose only PDF file is for sale ("Direct Sales"): the address its "citation_pdf_url" gives sends a signed-out visitor to the Login page (Rule 12)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -962,7 +969,8 @@ Left out of the scenarios above, by reason:
   - OJS2 {OJS} (published articles, in an issue or without one, missing
     from the sitemap; Rule 2a; scenario 2 passes it)
   - OMP1, OMP2 {OMP} (a book's files that are not PDFs, and a second
-    PDF; Fields, "citation_fulltext_html_url", "citation_pdf_url")
+    PDF, which may be a file for sale; Fields,
+    "citation_fulltext_html_url", "citation_pdf_url"; Rule 12)
   - OMP4 {OMP} (a new version of a published book: the chapter entries;
     Rule 2c)
   - OPS1 {OPS} (a preprint with a "URL Path": the HTML full-text tag;
@@ -1162,7 +1170,8 @@ the EPUB's download address. A chapter's page does the same with the
 chapter's files.
 
 When the book also has a real HTML file, only one of the two gets the
-tag: the file uploaded first. If the press uploaded the EPUB first, its
+tag: the file uploaded first (between files with the same upload time,
+the database decides which). If the press uploaded the EPUB first, its
 HTML full text is left out. Nothing on screen shows this. The only way
 round is to make the EPUB format "Not Available", which also takes the
 EPUB away from readers.
@@ -1177,15 +1186,20 @@ Basis: probe, 2026-10-03. <sup>f-omp1</sup>
 A book that offers two PDF files for the whole book, in one publication
 format or in two, announces only one of them to Google Scholar. The
 book page carries a single "citation_pdf_url" tag, for the file
-uploaded first. The same holds for two HTML files, and for two files of
+uploaded first; between files with the same upload time, the database
+decides which. The same holds for two HTML files, and for two files of
 one kind on a chapter's page.
 
 The page itself offers both files to readers, so only the search index
-misses one. The press is not told.
+misses one. The press is not told. When one of the PDF files is for
+sale ("Direct Sales"), the one tag can name that file while the free
+PDF files get none: a search engine following the tag lands on the
+Login page, and no tag points it to a free copy.
 
 It happens when the formats carry no ISBN, as in PKP's own test data.
 When every such format carries an ISBN, both files are announced.
-Basis: probe, 2026-10-03. <sup>f-omp2</sup>
+Basis: probe, 2026-10-05. <sup>f-omp2</sup>
+Report: refresh owed — omp `8c807c919` (pkp/pkp-lib#13444) made the file addresses answer their files, so the one announced PDF can be a file for sale that sends a signed-out search engine to the Login page while the free PDF files have no tag (2026-10-05)
 
 <a id="omp3"></a>
 **OMP3 — A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters** · 🐞 · low.
@@ -1288,7 +1302,7 @@ OMP's own code.
 **g** — `PKPTemplateManager::initialize()` (`Application::isInstalled()`): `addHeader('searchDescription', '<meta name="description" content="' . $currentContext->getLocalizedData('searchDescription') . '" />')` when the requested page is `''` or `index` and the text is not empty, with no escaping (A1); `addHeader('generator', …)` with contexts `frontend` and `backend`, `__($application->getNameKey())` ("Open Journal Systems", "Open Monograph Press", "Open Preprint Systems") and `getCurrentVersion()->getVersionString(false)` (3.6.0.0 at these tips); `addHeader('customHeaders', $currentContext->getLocalizedData('customHeaders'))` when a context is set; with more than one of the context's (else the site's) supported locales, `language-{locale}` `<link rel='alternate' hreflang='…'>` per locale and `language-xdefault` (`urlLocaleForPage: ''`); with a context that is not enabled, `noindex` `<meta name="robots" content="noindex,nofollow" />` for `frontend` and `backend`. `addHeader()` defaults to the `frontend` context; `frontend/components/headerHead.tpl` prints `{load_header context="frontend"}`, `layouts/backend.tpl` `{load_header context="backend"}`. `getLocalizedData()` falls back through `getBestLocalizedData()` (the requested locale, then the primary one, then the first). Live-probed 2026-09-26 (Rules 7–11): notes q9–q13.
 
 <a id="fn-h"></a>
-**h** — Google Scholar: OJS and OPS `GoogleScholarPlugin::submissionView()` on `ArticleHandler::view` and `PreprintHandler::view` (the landing page only, with no galley), returning early when the second request argument is `version`; tags as the Fields table, from `$submission->getCurrentPublication()` and its `locale`: `citation_journal_title`, `citation_journal_abbrev` (`abbreviation`, else `acronym`, primary locale), `citation_issn` (`onlineIssn`, `printIssn`, `issn`) for `ojs2`; `citation_publisher` for `ops`; `citation_author` / `citation_author_institution` per `getAffiliations()` name; `citation_title` `getLocalizedFullTitle($publicationLocale)`; `citation_language`; OJS `citation_date` (`Y/m/d` of `datePublished` unless the issue's year differs, else the issue year, else the issue's date), `citation_volume` / `citation_issue` by `getShowVolume()` / `getShowNumber()`, `citation_firstpage` / `citation_lastpage` from `getStartingPage()` / `getEndingPage()` when `pages`, else `articleNumber` as first page (OJS only); OPS `citation_online_date`; `citation_doi`; `citation_{pubIdType}` per `pubIdPlugins`; `citation_abstract_html_url` (`urlPath ?? id`, `urlLocaleForPage: ''`); `citation_abstract`; `citation_keywords` for `subjects` then `keywords` of the publication locale; per galley file `citation_pdf_url` (`application/pdf`, `…/download/{id}/{galley}`) or `citation_fulltext_html_url` (`text/html`, `…/view/{id}/{galley}`); `citation_reference` per `citations` (hook `GoogleScholarPlugin::references`). OMP `GoogleScholarPlugin::monographView()` on `CatalogBookHandler::book` (book and chapter pages), skipping any request whose arguments contain `version`: `citation_title` (chapter's on a chapter page), `citation_language`, `citation_publication_date` (`Y-m-d`; the chapter's date when `getEnableChapterPublicationDates()`), authors (`chapterAuthors` on a chapter page) with institutions, `citation_abstract`, `citation_doi` (the publication's), keywords, then for each of `availableFiles` matched to its format: on the book page files with no chapter, `citation_isbn` per identification code `02`/`15`, and `_setFileUrl()`; on a chapter page that chapter's files; then `citation_publisher`, `citation_issn` (series online ISSN), `citation_reference`. `_setFileUrl()` switches on the mimetype with `case 'application/pdf'` and `case 'text/xml' or 'text/html'`, which PHP reads as `case true`, so every other mimetype takes the second branch (OMP1); it receives `$i` by value, so the header names `googleScholarPdfUrl{$i}` / `googleScholarHtmlUrl{$i}` repeat when no ISBN moved `$i`, and `addHeader()` keeps the last (OMP2). OMP writes no `citation_{pubIdType}` tag (the Identifiers spec, "citation_urn" absent on a book page). Live-probed 2026-09-26 (Rules 12, 14, 16; the Google Scholar table): notes q14, q16, q18.
+**h** — Google Scholar: OJS and OPS `GoogleScholarPlugin::submissionView()` on `ArticleHandler::view` and `PreprintHandler::view` (the landing page only, with no galley), returning early when the second request argument is `version`; tags as the Fields table, from `$submission->getCurrentPublication()` and its `locale`: `citation_journal_title`, `citation_journal_abbrev` (`abbreviation`, else `acronym`, primary locale), `citation_issn` (`onlineIssn`, `printIssn`, `issn`) for `ojs2`; `citation_publisher` for `ops`; `citation_author` / `citation_author_institution` per `getAffiliations()` name; `citation_title` `getLocalizedFullTitle($publicationLocale)`; `citation_language`; OJS `citation_date` (`Y/m/d` of `datePublished` unless the issue's year differs, else the issue year, else the issue's date), `citation_volume` / `citation_issue` by `getShowVolume()` / `getShowNumber()`, `citation_firstpage` / `citation_lastpage` from `getStartingPage()` / `getEndingPage()` when `pages`, else `articleNumber` as first page (OJS only); OPS `citation_online_date`; `citation_doi`; `citation_{pubIdType}` per `pubIdPlugins`; `citation_abstract_html_url` (`urlPath ?? id`, `urlLocaleForPage: ''`); `citation_abstract`; `citation_keywords` for `subjects` then `keywords` of the publication locale; per galley file `citation_pdf_url` (`application/pdf`, `…/download/{id}/{galley}`) or `citation_fulltext_html_url` (`text/html`, `…/view/{id}/{galley}`); `citation_reference` per `citations` (hook `GoogleScholarPlugin::references`). OMP `GoogleScholarPlugin::monographView()` on `CatalogBookHandler::book` (book and chapter pages), skipping any request whose arguments contain `version`: `citation_title` (chapter's on a chapter page), `citation_language`, `citation_publication_date` (`Y-m-d`; the chapter's date when `getEnableChapterPublicationDates()`), authors (`chapterAuthors` on a chapter page) with institutions, `citation_abstract`, `citation_doi` (the publication's), keywords, then for each of `availableFiles` matched to its format: on the book page files with no chapter, `citation_isbn` per identification code `02`/`15`, and `_setFileUrl()`; on a chapter page that chapter's files; then `citation_publisher`, `citation_issn` (series online ISSN), `citation_reference`. `_setFileUrl()` switches on the mimetype with `case 'application/pdf'` and `case 'text/xml' or 'text/html'`, which PHP reads as `case true`, so every other mimetype takes the second branch (OMP1); it receives `$i` by value, so the header names `googleScholarPdfUrl{$i}` / `googleScholarHtmlUrl{$i}` repeat when no ISBN moved `$i`, and `addHeader()` keeps the last written (OMP2). `availableFiles` comes from the submission file `Collector`, ordered by `created_at` descending, so the last written is the file uploaded first; files sharing a `created_at` come in the database's order. `CatalogBookHandler::book()` puts every format file with a direct-sales price set ("Open Access" or "Direct Sales") in `availableFiles`, so a priced file takes part like a free one. OMP writes no `citation_{pubIdType}` tag (the Identifiers spec, "citation_urn" absent on a book page). Live-probed 2026-09-26 (Rules 12, 14, 16; the Google Scholar table): notes q14, q16, q18.
 
 <a id="fn-i"></a>
 **i** — Dublin Core: OJS `DublinCoreMetaPlugin::articleView()` on `ArticleHandler::view` (skipping `version` requests): `schema.DC` link; `DC.Contributor.Sponsor` (`supportingAgencies` per locale), `DC.Coverage`, `DC.Creator.PersonalName` (`getFullName(false, false, $publicationLocale)`), `DC.Date.created` (`datePublished`), `DC.Date.dateSubmitted`, `DC.Date.issued` (issue's `getDatePublished()`), `DC.Date.modified` (`lastModified`), `DC.Description` (abstract per locale, `strip_tags`), `DC.Format` (galley file mimetype), `DC.Identifier` (`urlPath` else id), `DC.Identifier.pageNumber`, `DC.Identifier.articleNumber`, `DC.Identifier.DOI`, `DC.Identifier.{pubIdType}`, `DC.Identifier.URI`, `DC.Language` (`rfc5646`), `DC.Rights` (`submission.copyrightStatement` "Copyright (c) {$copyrightYear} {$copyrightHolder}" when both, and `licenseUrl`), `DC.Source` (name, primary locale), `DC.Source.ISSN`, `DC.Source.Issue` / `DC.Source.Volume`, `DC.Source.URI` (OJS1), `DC.Subject` (subjects, keywords per locale), `DC.Title`, `DC.Title.Alternative`, `DC.Type` `Text.Serial.Journal` and `type` per locale, `DC.Type.articleType` (section title, primary locale). No tag reads `disciplines`, `rights` or `source`. OMP `monographView()` on `CatalogBookHandler::book` (book and chapter pages): the same set without the issue, format, pages, article number, ISSN and article-type tags, chapter values on a chapter page (`chapterAuthors`, chapter abstract, chapter DOI and pub IDs, chapter title), `DC.Source.URI` `url(…, ROUTE_PAGE, $press->getPath())`, `DC.Type` `Text.Book`. OMP `monographFileView()` on `CatalogBookHandler::view` (the inline viewer path of `CatalogBookHandler::download(…, true)`, reached before `PdfJsViewerPlugin`, which registers `Hook::SEQUENCE_LATE`): skips a format of another publication; `DC.Identifier` `{bestId}/{formatId}/{fileId}`, `DC.Identifier.pageNumber` (chapter's or publication's `pages`), `DC.Identifier.DOI` (file, chapter, publication), `DC.Identifier.ISBN` per format code `02`/`15`, `DC.Identifier.URI` `catalog/book/{bestId}/{formatId}/{fileId}`, `DC.Language` scheme `ISO639-1`, `DC.Source.ISSN` (series online ISSN), `DC.Type` `Text.Chapter` always (OMP3). Live-probed 2026-09-26 (Rules 12, 14, 16, 17; the Dublin Core table): notes q14, q16, q18, q19.
@@ -1410,11 +1424,11 @@ Issue report: [docs/issues/U20-A7-abstract-symbols-reach-search-tags-as-codes.md
 **f-ojs2** — Note e: OJS `SitemapHandler::_createContextSitemap()` reaches articles only through the published issues, with `filterByIssueIds([$issue->getId()])` and, since ojs `da7c68874e` "pkp/pkp-lib#12245 Review and fix use of PKPSubmission::STATUS_..." (2026-02-17), `filterByLatestPublished(true)` in place of `filterByStatus([Submission::STATUS_PUBLISHED])`; the two filters together keep no article of a published issue. `stable-3_5_0`'s `SitemapHandler` still filters by status (code read, not driven). The "Don't Assign To An Issue" publish (the Publish, schedule & versions spec, Rule 15 and its issue table) leaves the article outside every issue, so the sitemap never reached it, before the change or after. Live-probed 2026-09-26: note q3. Written up for the team in `docs/reports/2026-09-26-ojs-sitemap-lists-no-article.md`.
 
 <a id="fn-f-omp1"></a>
-**f-omp1** — Note h: `case 'text/xml' or 'text/html':` evaluates to `case true:`, which `switch` matches for any mimetype that is not `application/pdf`; the header name `googleScholarHtmlUrl{$i}` repeats as for OMP2, so the last such file wins. Live-probed 2026-09-26: the "HTML" file (`text/html`) got no tag and the "Notes" file (`text/markdown`) the one "citation_fulltext_html_url" (note q14).
+**f-omp1** — Note h: `case 'text/xml' or 'text/html':` evaluates to `case true:`, which `switch` matches for any mimetype that is not `application/pdf`; the header name `googleScholarHtmlUrl{$i}` repeats as for OMP2, so the last such file written wins: the file uploaded first, or between files sharing an upload time the database's order (note h). Live-probed 2026-09-26: the "HTML" file (`text/html`) got no tag and the "Notes" file (`text/markdown`) the one "citation_fulltext_html_url" (note q14). Live-probed 2026-10-05 on OMP `main` at omp `8c807c919`, two runs, signed out, on a book with "PDF", "HTML", "Other", "Supp" (notes.md), "SuppPdf" and a priced "Sale" PDF: the one "citation_fulltext_html_url" named the notes.md file, whose address downloaded notes.md (98 bytes); the "HTML" file had no tag, nor had an "EPUB" file added later through the workflow screens.
 Issue report: [docs/issues/U20-OMP1-book-epub-announced-as-html.md](../issues/U20-OMP1-book-epub-announced-as-html.md), filed as [pkp-e2e#664](https://github.com/jardakotesovec/pkp-e2e/issues/664).
 
 <a id="fn-f-omp2"></a>
-**f-omp2** — Note h: `_setFileUrl()` takes `$i` by value; with no identification code between two files, both write the header `googleScholarPdfUrl0`, and `addHeader()` keeps the second; an ISBN on the first format moves `$i` only after that format's file. Live-probed 2026-09-26: one "citation_pdf_url", the "PDF Two" file's, with no ISBN and with an ISBN-13 on "PDF" alone (note q14).
+**f-omp2** — Note h: `_setFileUrl()` takes `$i` by value; with no identification code between two files, both write the header `googleScholarPdfUrl0`, and `addHeader()` keeps the second; an ISBN on the first format moves `$i` only after that format's file. The files reach the loop newest first, so the second written, which `addHeader()` keeps, is the file uploaded first; files sharing an upload time come in the database's order (note h). Live-probed 2026-09-26: one "citation_pdf_url", the "PDF Two" file's, with no ISBN and with an ISBN-13 on "PDF" alone (note q14). Live-probed 2026-10-05 on OMP `main` at omp `8c807c919`, two runs, signed out, on a book whose PDF files were "PDF", "SuppPdf" and "Sale" on "Direct Sales" at 25 USD ("25 Purchase Sale (25 USD)" on the book's page): the one "citation_pdf_url" named the "Sale" file (`…/catalog/download/98/187/475`, the highest-numbered of the files a script had created), and opening it answered 302 to `login?source=…catalog%2Fdownload%2F98%2F187%2F475`, the Login page; "PDF" and "SuppPdf" had no tag. Whether the script's files shared an upload time was not read.
 Issue report: [docs/issues/U20-OMP2-book-page-announces-one-pdf.md](../issues/U20-OMP2-book-page-announces-one-pdf.md), filed as [pkp-e2e#665](https://github.com/jardakotesovec/pkp-e2e/issues/665).
 
 <a id="fn-f-omp3"></a>

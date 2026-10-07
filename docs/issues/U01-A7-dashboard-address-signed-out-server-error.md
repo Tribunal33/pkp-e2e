@@ -10,23 +10,30 @@
   - 3.4: none (code; the old "Submissions" page)
   - 3.3: none (code; the old "Submissions" page)
 - **Introduced** `pkp/pkp-lib#10782` (with `pkp/ojs#4583`, `pkp/omp#1804`, OPS [5f7424f9e7](https://github.com/pkp/ops/commit/5f7424f9e7bece64fe22c3301592064fb62fb022)) for `pkp/pkp-lib#10670` · [9113dec](https://github.com/pkp/pkp-lib/commit/9113dec7eda44fdf62eb130c5153b6ede0b07085), in `PKPDashboardHandlerNext.php` (now `PKPDashboardHandler.php`) · 2025-01-14 · Jarda Kotěšovec (jardakotesovec)
-- **Upstream** none found (2026-10-04)
+- **Upstream** none found (2026-10-07)
 - **Tracked in** spec U01 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U01-login-and-sessions.md#a7)
-- **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-07, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+**Update 2026-10-07.** The address with a final slash
+(`…/en/dashboard/`) gives the same empty error page; the Summary,
+Observed and Cause name it. The Proposed fix was tried on it and opens
+the Login page.
 
 ## Summary
 
 The server fails when a signed-out visitor opens the Dashboard address
-that ends at the word "dashboard"
-(`…/index.php/publicknowledge/en/dashboard`). The visitor gets an empty
+that ends at the word "dashboard", with or without a final slash
+(`…/index.php/publicknowledge/en/dashboard`,
+`…/index.php/publicknowledge/en/dashboard/`). The visitor gets an empty
 error page instead of the Login page. Longer Dashboard addresses, such as
 `…/dashboard/editorial`, open the Login page and return there after
 signing in.
 
-That address is the "submission dashboard" link in the monthly
-"Outstanding editorial tasks" email to managers and section editors. A
-bookmark or a typed address cut short at "dashboard" leads there too.
+The address without the slash is the "submission dashboard" link in
+the monthly "Outstanding editorial tasks" email to managers and section
+editors. A bookmark or a typed address cut short at "dashboard" leads
+there too.
 
 ## Impact
 
@@ -76,9 +83,10 @@ PHP Fatal error:  Uncaught Error: Call to a member function getId() on null in �
 [500]: GET /index.php/publicknowledge/en/dashboard
 ```
 
-`/index.php/publicknowledge/en/dashboard/index` and the address without a
-language (`/index.php/publicknowledge/dashboard`, which redirects to the
-first) answer the same. In steps 3 and 4 the Login page opens at
+The address with a final slash
+(`/index.php/publicknowledge/en/dashboard/`), `/en/dashboard/index` and
+the address without a language (`/index.php/publicknowledge/dashboard`,
+which redirects to the one in step 1) answer the same. In steps 3 and 4 the Login page opens at
 `login?source=%2Findex.php%2Fpublicknowledge%2Fen%2Fdashboard%2Feditorial`,
 and signing in leads to "Assigned to me (17)" (OMP "Assigned to me (4)",
 OPS "Assigned to me (0)").
@@ -87,7 +95,9 @@ OPS "Assigned to me (0)").
 
 `PKPDashboardHandler::authorize()`
 (`lib/pkp/pages/dashboard/PKPDashboardHandler.php`, line 117) handles the
-bare address before any authorization runs. The apps'
+bare address before any authorization runs. `Core::getOp()` trims the
+slashes at the path's ends before splitting it, so neither address has
+an operation, and it falls back to `index`. The apps'
 `pages/dashboard/index.php` send the operation `index` to the app's
 `APP\pages\dashboard\DashboardHandler` (a `PKPDashboardHandler`
 subclass) with no `DashboardPage`. For that handler, `authorize()` calls
@@ -149,10 +159,10 @@ Send a signed-out visitor to Login before choosing the dashboard by role, the wa
 ```diff
 --- a/lib/pkp/pages/dashboard/PKPDashboardHandler.php
 +++ b/lib/pkp/pages/dashboard/PKPDashboardHandler.php
-@@ -45,3 +45,4 @@
+@@ -45,1 +45,2 @@
  use PKP\security\Role;
 +use PKP\security\Validation;
-@@ -117,4 +118,8 @@
+@@ -117,2 +118,6 @@
          if (!$this->dashboardPage) {
 +            // Which dashboard is home depends on the user's roles: a signed-out visitor signs in first
 +            if (!$request->getUser()) {
@@ -161,7 +171,7 @@ Send a signed-out visitor to Login before choosing the dashboard by role, the wa
              $pkpPageRouter = $request->getRouter();  /** @var \PKP\core\PKPPageRouter $pkpPageRouter */
 ```
 
-The diff is shortened here; the linked file has the full context.
+This is an excerpt of the diff; the linked fix.diff has the full context.
 
 The Login page then carries the bare address as `source`. After signing
 in, that address chooses the dashboard by role, so `pkp/pkp-lib#10670`'s
@@ -169,8 +179,9 @@ rule holds and the email link needs no change.
 
 Tried on `main` in the three apps. Step 1 opened the Login page at
 `login?source=%2Findex.php%2Fpublicknowledge%2Fen%2Fdashboard`, and step 2
-led `dbarnes` to "Assigned to me". `/dashboard/index` and the address
-without a language opened Login too.
+led `dbarnes` to "Assigned to me". The address with a final slash
+(Login at `login?source=%2Findex.php%2Fpublicknowledge%2Fen%2Fdashboard%2F`),
+`/dashboard/index` and the address without a language opened Login too.
 
 Signed in, the bare address led `dbarnes` to `dashboard/editorial` and
 the author (`amwandenga`, OMP `aclark`, OPS `ccorino`) to
@@ -211,14 +222,17 @@ one shared handler, following the router's own pattern, and one check.
   with its
   [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/dashboard-address-signed-out-server-error/lib.js).
   It takes the Steps on an install freshly loaded from the default
-  dataset (pkp/datasets 566bb1f, 2026-10-03, PostgreSQL). From a pkp-e2e
+  dataset (pkp/datasets 401a013, 2026-10-06, PostgreSQL). From a pkp-e2e
   checkout:
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/dashboard-address-signed-out-server-error/walk.js`
   (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5). With `neighbour` as its
   argument it walks the fix's neighbour paths instead. The fix was tried
   with `node bin/try-fix.js apply shared/playwright/checks/issues/dashboard-address-signed-out-server-error/fix.diff ojs omp ops`.
-- 3.5 answered the same 500 at line 412 on each app, and steps 3 and 4
-  behaved as on `main`. Nothing here depends on the database.
+- 3.5 answered the same 500 at line 412 on each app, the address with
+  a final slash included, and steps 3 and 4 behaved as on `main`.
+  Nothing here depends on the database.
+- The fix's neighbour paths (signed in, and the old `/submissions`
+  address) were walked on 2026-10-04.
 - The email: on the OJS `main` install, the editorial reminder task was
   run by hand (`php lib/pkp/tools/scheduler.php test
   --name='PKP\task\EditorialReminders'`, then `php lib/pkp/tools/jobs.php
@@ -228,10 +242,10 @@ one shared handler, following the router's own pattern, and one check.
   to `dashboard/editorial?workflowSubmissionId=<id>`. OMP and OPS send
   the same text from the shared pkp-lib (read in the code, not sent).
 - Tips:
-  - `main`: OJS ff004d0973 (pkp-lib 987776cd04), OMP 3b0ecf794c and OPS
-    c8af945bb7 (pkp-lib 3dc90c81a6).
-  - `stable-3_5_0`: OJS c1cee76b95 (pkp-lib 771474347e), OMP 9c5e24246c
-    and OPS 38b61882d3 (pkp-lib cf3f984335).
+  - `main`: OJS 92bc2bb467 (pkp-lib e60013c77f), OMP a0e6d0a8b and OPS
+    7e34fdd57e (pkp-lib 5a5ab2d6c7).
+  - `stable-3_5_0`: OJS b8f5e9a951, OMP 7d6b00060 and OPS acc0de0586
+    (pkp-lib 6d7f1540b6).
   - `stable-3_4_0`: OJS d68934d0d1, OMP 0aec65441f, OPS acd8ae704b
     (pkp-lib 767353f4fe).
   - `stable-3_3_0`: OJS ac77c9fb35, OMP 8e72fc8836, OPS c5532e2161
@@ -263,15 +277,19 @@ one shared handler, following the router's own pattern, and one check.
   them, 0608d6e204 (OJS), 98e9fbdba (OMP) and 6d23162966 (OPS) sent
   `index` to the editorial dashboard.
 - Not driven: a reviewer's or an assistant's landing through the fixed
-  Login page, and 3.4 and 3.3.
+  Login page; with the fix in, signing in after opening the address
+  with a final slash; and 3.4 and 3.3.
 - Unverified: whether `LoginHandler::savePassword()` (the forced
   password change) can reach `getHomeUrl()` with no user. It sends the
   user home after `Validation::login()` whatever the result, and
   `Validation::registerUserSession()` refuses a disabled account, but
   whether `Auth::user()` is then empty was not settled. The getHomeUrl()
   hardening under Alternatives would cover it.
-- Tracker search (2026-10-04): pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and
+- Tracker search (2026-10-04, repeated in pkp/pkp-lib and pkp/ojs on
+  2026-10-07): pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and
   pkp/ui-library, for the dashboard address signed out, an empty error
   page or 500, "getId() on null", `getHomeUrl`, `redirectHome` and
-  `PKPDashboardHandler`. None is this fault. `pkp/pkp-lib#10670` is the
+  `PKPDashboardHandler`. None is this fault (`pkp/pkp-lib#13443`, open,
+  is a 500 on the public pages for a disabled user's session, another
+  fault). `pkp/pkp-lib#10670` is the
   closed issue that set the redirect rules.

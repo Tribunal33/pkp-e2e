@@ -11,12 +11,12 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap):
- * - A1 🐞: S4 walks the Funding Coordinator onto the Submission and External
- *   Review stages and presses "OK" on the "Error" dialog when it is there;
- *   that the dialog opens, and that no panel shows for the role, is the
- *   bug's record, asserted neither way. The suite asserts what the role IS
- *   offered next: the suggestions list inside Add Reviewer and the
- *   "Selected Reviewer" path that succeeds.
+ * - A1 ✅ (retired 2026-10-07, fixed upstream by pkp/pkp-lib#13191): S4
+ *   walks the Funding Coordinator onto the Submission and External stages and
+ *   still presses "OK" on an "Error" dialog if one comes; the panel the
+ *   role now sees is a Planned assertion (the spec's Coverage). The suite
+ *   asserts what the role IS offered next: the suggestions list inside Add
+ *   Reviewer and the "Selected Reviewer" path that succeeds.
  * - A5 🐞: S4 presses the inner "Create New Reviewer" form's "Add Reviewer"
  *   as the Funding Coordinator, bounded by the grid's own answer, then closes
  *   the windows; the unresponsive form, and whether Nova stays pending for the
@@ -927,7 +927,7 @@ test.describe('reviewer-suggestions', () => {
         await expect(new SuggestionList(page, controlModal).heading()).toHaveCount(0);
     });
 
-    test('S4: the Funding Coordinator meets the error dialog', async ({asUser, ompApi}, testInfo) => {
+    test('S4: the Funding Coordinator on a submission with suggestions', async ({asUser, ompApi}, testInfo) => {
         test.slow();
         test.setTimeout(300_000);
         const tag = makeTag('s4', testInfo);

@@ -8,7 +8,8 @@
 //   2. on the page that opens, sign in as dbarnes (recorded as impossible when no Login form shows)
 //   3. sign out; control: open …/en/dashboard/editorial: the Login page
 //   4. sign in there as dbarnes
-//   reach reads, signed out: …/en/dashboard/index and the locale-less …/publicknowledge/dashboard
+//   reach reads, signed out: …/en/dashboard/ (a final slash, U01 A7 since 2026-10-06), …/en/dashboard/index
+//   and the locale-less …/publicknowledge/dashboard
 //   neighbour  (the fix's, run alone): signed in as dbarnes, then as the dataset's author
 //              (amwandenga, aclark, ccorino), the bare dashboard address: where it leads; signed
 //              out, the old "submissions" address: the Login page, then dbarnes signing in there.
@@ -88,6 +89,7 @@ forEachApp(async (app) => {
         // 4: sign in on that Login page.
         await signInIfLogin('4');
         // Reach reads, signed out.
+        await open('r-final-slash', `${ctx}/en/dashboard/`);
         await open('r-dashboard-index', `${ctx}/en/dashboard/index`);
         await open('r-no-locale', `${ctx}/dashboard`);
     } finally {

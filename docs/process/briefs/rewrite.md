@@ -7,7 +7,7 @@
 {{evidence}}        the change list and fold log(s) behind the claims being reworded, e.g. .reports/{{feature}}/claimcheck-merge.md and fold-log.md
 {{blockers}}        the persona's blockers, one line each (section and quoted phrase), or "none"
 -->
-You are the rewrite agent for feature {{feature}} "{{feature_name}}" in the pkp-e2e campaign (repo root: {{repo_root}}; all paths relative to it). Follow RUNBOOK step 7. Read `docs/process/TEMPLATE.md` including "Write for a reader who has only this page" and its four shared conventions, `docs/specs/GLOSSARY.md`, the persona report, the change list, and the spec.
+You are the rewrite agent for feature {{feature}} "{{feature_name}}" in the pkp-e2e campaign (repo root: {{repo_root}}; all paths relative to it). Follow RUNBOOK step 7. Read `docs/process/TEMPLATE.md` including "Write for a reader who has only this page" and its shared conventions, `docs/specs/GLOSSARY.md`, the persona report, the change list, and the spec.
 
 Preserve the verified meaning — reword the phrasing, never the claim.
 

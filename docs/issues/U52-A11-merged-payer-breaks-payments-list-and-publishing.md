@@ -125,11 +125,7 @@ On a press, PKP's default test dataset, OMP `main`:
     writes for the request step 15 queued (109 is the file's number, the
     last part of the link's address).
 17. As `aclark`, the file's link again. The file's view page opens, not
-    "Manual Fee Payment": the purchase counts. (The PDF in that page
-    stays empty, since its download answers 500 for every reader:
-    [U69 A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md),
-    a separate fault. The check here is only whether "Manual Fee
-    Payment" appears.)
+    "Manual Fee Payment": the purchase counts.
 18. As `admin`, merge Arthur Clark into Alvin Finkel (`afinkel`) as in
     step 8.
 19. As `afinkel`, the file's link.

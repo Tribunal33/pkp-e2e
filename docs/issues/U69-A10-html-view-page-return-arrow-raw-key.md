@@ -220,8 +220,9 @@ Small: one line in one template, tried, with an e2e check.
   were the same on both. A database plays no part (a template and
   locale files).
 - The HTML view page made no failed request and no script error. On
-  `main` the control's PDF view page did (its file request answers
-  500, and "PDFJS is not defined"; on 3.5 the script error alone):
+  `main` the control's PDF view page did (its file request answered
+  500, since fixed by `pkp/pkp-lib#13444`, and "PDFJS is not defined";
+  on 3.5 the script error alone):
   these are `jardakotesovec/pkp-e2e#282` and
   `jardakotesovec/pkp-e2e#283`, not this fault.
 - Step 4 sets the file's terms only. The file's own "Awaiting

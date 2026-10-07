@@ -221,11 +221,10 @@ Cypress check.
   `{url page="catalog" op="book" path=…}` while the book page linked
   files with `op="view"`. `commits/<sha>/pulls` names no PR for it.
 - The walks' file pages also recorded the PDF viewer's script error
-  and, on `main`, a server error on the file download; those are
-  reported apart
-  ([U69-A9-pdf-view-page-script-error.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-pdf-view-page-script-error.md),
-  [U69-A9-book-file-open-download-fails.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md))
-  and do not touch the tags.
+  and, on `main`, a server error on the file download (since fixed by
+  `pkp/pkp-lib#13444`). The script error is reported apart
+  ([U69-A9-pdf-view-page-script-error.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-pdf-view-page-script-error.md));
+  neither touches the tags.
 - Who reads the tag, checked 2026-10-03 in public sources: Google
   Scholar's inclusion guidelines name Dublin Core tags as a last resort
   and read "DC.identifier" for a full-text file's address, with no

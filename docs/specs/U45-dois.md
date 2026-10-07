@@ -477,9 +477,15 @@ links under the list. <sup>g</sup>
       with "Deposit all DOIs" and "Cancel". It sends every published
       item whose DOI reads "Unregistered", "Error" or "Needs Sync" (on a
       journal the published issues too), sets those to "Submitted" and
-      shows the same success notice. With DataCite (Crossref untried),
-      a work whose only DOI is its galley's is not sent, yet that DOI
-      turns "Submitted" ⚠ [OJS5](#ojs5). With nothing left to deposit it
+      shows the same success notice. With DataCite, the agency that
+      takes galley DOIs (Rule 35), a galley DOI is sent only with its
+      article's DOI. When that DOI reads "Registered" (as when galley
+      DOIs are turned on after the articles were registered) or is
+      missing, the galley DOI still turns "Submitted", yet
+      Administration › "Failed Jobs", where test-install deposits land
+      [A18](#a18), gains nothing for its work. "Automatic Deposit"
+      (Rule 41), never run on test installs, does the same
+      ⚠ [OJS5](#ojs5). With nothing left to deposit it
       still shows "Items successfully submitted for deposit" and changes
       nothing.
 30. **The agency panel.** With an agency configured, an item's expanded
@@ -1850,7 +1856,8 @@ Left out of the scenarios above, by reason:
   - OJS3 (the ISSN publish warning listed twice; Rule 39; scenario 14 passes it)
   - OJS1 ("Never" not stopping an issue's DOI at "Publish Issue"; Rule 8)
   - OJS2 (a DataCite issue export or deposit; Rule 29)
-  - A15 ("Deposit DOIs" on a published work without a DOI, and "Deposit All" on one whose galley carries a DOI; Rule 29)
+  - A15 ("Deposit DOIs" on a published work without a DOI, and on one whose article DOI was cleared while its galley kept one; Rule 29)
+  - OJS5 ("Deposit All" marking "Submitted" a galley DOI whose article DOI is "Registered" or missing, and "Automatic Deposit" alike; Rules 29, 41)
   - A24 (a formatted title's codes in a row's name; Rule 16)
   - OJS4 ("Deposit DOIs" on the "Issues" tab leaving the issues' status; Rules 29, 32)
   - OMP4 (the Mark actions on a press under "DOI Versioning" "Yes" leaving an earlier version's DOIs; Rule 52)

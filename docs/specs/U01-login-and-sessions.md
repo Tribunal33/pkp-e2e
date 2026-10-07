@@ -64,9 +64,10 @@ password?"):
 | Spam check | when configured | The Login page's invisible ALTCHA check, per configuration <sup>e</sup> |
 | "Register" link | — | Same as the Login page's. Gone when registration is disabled |
 
-**Set-a-new-password form** (opened by the emailed link). The page is headed
-"Reset Password", but the browser tab shows a raw internal code in place of a
-title ⚠ [A3](#a3):
+**Set-a-new-password form** (opened by the emailed link; title "Reset
+Password"). The browser tab reads "Reset Password | {journal name}", but
+after a refused "Save" only the journal's name, and the "Reset Password"
+heading is gone ⚠ [A11](#a11) <sup>f</sup>:
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
@@ -622,6 +623,9 @@ Left out of the scenarios above, by reason:
     guard the issue report
     (`docs/issues/U01-A11-refused-password-form-tab-loses-name.md`)
     proposes, once fixed
+  - scenario 4, "Reset Password": the browser tab of the
+    set-a-new-password form reading "Reset Password | {journal name}"
+    (Fields; [A3](#a3) retired); no suite asserts the tab
   - after a "Login As", no row of Users & Roles, the Participants panel
     or the Reviewers table offering "Login As", and "Logout as" bringing
     back the operator's own account ([A4](#a4)): the guard the issue
@@ -716,9 +720,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | The password boxes stop accepting input at 32 characters, so longer passwords cannot be typed | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A2](#a2) | "Keep me logged in" is ticked every time the Login page shows, even after the user unticked it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | The set-a-new-password page's browser tab shows a raw internal code instead of a title | 🐞 | minor | Jarda 2026-08-25 |
 | [A4](#a4) | While signed in as another user, "Login As" is still offered, and using it strands the operator in that account | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | Signed out, the Dashboard address the monthly reminder email links to gives an empty error page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
+| [A7](#a7) | Signed out, the Dashboard address the monthly reminder email links to gives an empty error page | 🐞 | medium · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A8](#a8) | Kept logged in past the idle limit, users look signed out on the public site and "Login As" gives a blank page | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | The Site Administrator's "Edit User" never shows "Change Password" ticked, and saving it removes the flag | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -726,6 +729,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
+| [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
 | [A6](#a6) | With rate limiting on, even the correct password is refused as "Invalid username/email or password" during the cool-down; the concealment is intended | ✅ | latent | Jarda 2026-08-25 |
 
 ### All apps
@@ -770,20 +774,6 @@ Since: 2015-08-07 (pkp/pkp-lib#658) · Basis: probe, 2026-10-04. <sup>[f-a2](#fn
 > behaviour (the malformed attribute), and persistent sessions should be
 > opt-in per OWASP session-management guidance, not opt-out. Fix: the box
 > arrives unticked.
-
-<a id="a3"></a>
-**A3 — Raw code in the reset page's browser tab** · 🐞 · minor.
-The set-a-new-password page (the emailed reset link's destination) is headed
-"Reset Password", but the browser tab reads "user.login.resetPassword", an
-internal code shown where the page title belongs.
-Basis: observed on a running site. <sup>[f-a3](#fn-a3)</sup>
-Tracked as
-[pkp/pkp-lib#13132](https://github.com/pkp/pkp-lib/issues/13132) (open as of
-2026-08-25; also notes the same symptom on Administration → Jobs).
-
-> **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞. Fix: resolve the
-> tab title to the translated "Reset Password" string. Already reported as
-> pkp/pkp-lib#13132.
 
 <a id="a4"></a>
 **A4 — While signed in as another user, "Login As" is still offered, and using it strands the operator in that account** · 🐞 · low.
@@ -861,11 +851,11 @@ error page instead of the Login page. Longer Dashboard addresses, such as
 `…/dashboard/editorial`, open the Login page and return there after
 signing in.
 
-That address is the "submission dashboard" link in the monthly
-"Outstanding editorial tasks" email to managers and section editors. A
-bookmark or a typed address cut short at "dashboard" leads there too.
-Since: 2025-01-14 (pkp/pkp-lib#10782) · Basis: probe, 2026-10-04. <sup>[f-a7](#fn-a7)</sup>
-Report: refresh owed — [pkp-e2e#825](https://github.com/jardakotesovec/pkp-e2e/issues/825) omits the address with a final slash (`…/en/dashboard/`), which gives the same empty page (2026-10-06)
+The address without the slash is the "submission dashboard" link in
+the monthly "Outstanding editorial tasks" email to managers and section
+editors. A bookmark or a typed address cut short at "dashboard" leads
+there too.
+Since: 2025-01-14 (pkp/pkp-lib#10782) · Basis: probe, 2026-10-07. <sup>[f-a7](#fn-a7)</sup>
 
 > **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞. Ruling: signed
 > out, the bare dashboard address must behave like every other private
@@ -981,6 +971,15 @@ knowing the password. Nothing on screen or in the logs says the
 password was skipped.
 The setting, `password_timeout`, is off by default.
 Since: 2026-04-09 (pkp/pkp-lib#12338) · Basis: probe, 2026-10-05. <sup>[f-a13](#fn-a13)</sup>
+
+### Retired
+
+<a id="a3"></a>
+**A3 — Raw code in the reset page's browser tab** · ✅ · retired. Fixed upstream ([pkp/pkp-lib#13132](https://github.com/pkp/pkp-lib/issues/13132), 2026-08-27), verified 2026-10-04 on OJS, OMP and OPS: the set-a-new-password page's tab reads "Reset Password | {journal name}" instead of the internal code "user.login.resetPassword" (Fields). <sup>[f-a3](#fn-a3)</sup>
+
+> **Reviewed — Jarda Kotěšovec, 2026-08-25**: confirmed 🐞. Fix: resolve the
+> tab title to the translated "Reset Password" string. Already reported as
+> pkp/pkp-lib#13132.
 
 ---
 
@@ -1145,7 +1144,11 @@ Live-probed 2026-07-31: tampered, expired and already-used links all answer
 the invalid-link page; an unknown-username link lands on the lost-password
 form; saving leaves the user signed out and the new password works
 (default-install hint under the field: "The password must be at least 6
-characters."). Browser-tab title defect on this form: finding A3.
+characters."). The form's tab title: live-probed 2026-10-04 (OJS, OMP,
+OPS; the issues session's walk), the first display's tab reads "Reset
+Password | {context name}"; the raw key it once showed is finding A3
+(retired, note f-a3); the title and heading lost after a refused "Save"
+are finding A11.
 
 <a id="fn-g"></a>
 **g** — Flag: `user.mustChangePassword`. Set on screen by the Site
@@ -1470,6 +1473,16 @@ browser tab on the set-a-new-password form shows the raw locale key
 `user.login.resetPassword` while the page heading renders "Reset Password"
 — the page-title string reaches the tab untranslated
 (`user/userPasswordReset.tpl`).
+Retired: fixed by pkp/pkp-lib#13132 (lib/pkp `10c7bf9fcb` "Fix
+untranslated pageTitles" on `main`, `4008527d5d` on `stable-3_5_0`, both
+committed 2026-08-27). Walked 2026-10-04 on OJS, OMP and OPS, `main` and
+3.5, the default dataset: the reset page's first display has the tab
+"Reset Password | Journal of Public Knowledge" (the press's and the
+server's names on OMP and OPS) and the heading "Reset Password" (the
+issues session's kept walk,
+`shared/playwright/checks/issues/refused-password-form-tab-loses-name/walk.js`,
+its `resetShown` read; finding A11's report). 3.4 and 3.3 still assign
+the raw key (code read; the fix is not backported).
 
 <a id="fn-a4"></a>
 **f-a4** — The Vue Users & Roles config (`useUserAccessManagerConfig`)

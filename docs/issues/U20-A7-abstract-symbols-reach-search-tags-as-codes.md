@@ -96,8 +96,7 @@ a press) shows it:
 **Observed**: on all three apps, each tag escapes the text twice, so a
 reader of the tag gets "Soil &amp; water quality improved
 (P&lt;0.01).". OMP's book file page (step 6) carries the same
-`DC.Description`. (Its PDF viewer stays empty, the separate fault in
-[U69-A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md).)
+`DC.Description`.
 
 ```html
 <meta name="citation_abstract" xml:lang="en" content="Soil &amp;amp; water quality improved (P&amp;lt;0.01)."/>

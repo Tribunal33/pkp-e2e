@@ -277,9 +277,8 @@ adding a REST API property, plus the test.
   "Typed property APP\pages\catalog\CatalogBookHandler::$publication
   must not be accessed before initialization". With the fix out the
   file's own address (`…/download/5/2/41?inline=1`) answered the same
-  500: every book file download on OMP `main` fails, reported as U69 A9
-  ([U69-A9-book-file-open-download-fails.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U69-A9-book-file-open-download-fails.md)),
-  not this fix.
+  500: every book file download on OMP `main` failed then, a separate
+  fault since fixed by `pkp/pkp-lib#13444`, not this fix.
 - Not driven: Native XML import and export, URN and DOI "%x" patterns,
   the REST API, and an install upgraded from 3.3 or 3.2 (code only).
   MySQL not checked (the fault is in the schema, not the database).

@@ -828,7 +828,7 @@ Left out of the scenarios above, by reason:
   - the guard for A3 (issue report `docs/issues/U47-A3-media-upload-window-hidden-drop-button.md`): on the empty "Upload Media File" window, check that the buttons in the accessibility tree are the side window's top bar, "Close" and "Click to upload files", and that Tab from "Click to upload files" lands on a control on screen.
   - the guard for OMP2 (issue report `docs/issues/U47-OMP2-press-copyeditor-media-download-refused.md`): on a press, a Copyeditor assigned to a monograph in Copyediting is not offered "Media" in the side menu, while a Layout Editor in Production keeps the page and the download.
   - the guard for A1 (issue report `docs/issues/U47-A1-media-actions-offered-then-refused.md`): an assigned Layout Editor without "Permissions" sees the "Media" list alone (no "Add Media File", "Batch Link Media" or write actions in the row menu), while an editor whose assignment allows changes keeps every action.
-  - the guard for A6 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): add a media file and check the server log holds no PHP warning for the request.
+  - the guard for A6 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): on a version's "Media" page, add a media file through "Add Media File" and "Upload Files" (Rule 2), and check that the web server's error log, which no screen shows, holds no PHP warning for that upload (A6 quotes the warning; where the log is and how to read it is in the footnote). <sup>f-a6</sup>
   - {OMP} "HTML Monograph File" off, the book page's link to an HTML file: the browser downloads the file and stays on the book page, so no media file is shown (Settings bullet 6; OMP1 retired).
 - **Rarely met**:
   - no component marked as a dependent file, where "Upload Media File"
@@ -1817,6 +1817,13 @@ each card's temporary-file answer as it came back
 multilingual property as a locale map, before
 `MediaFilesController::add()` wraps a string name into the
 submission's locale. The added file's name is right.
+Where the log is: on the test install each worker server writes its
+request lines and PHP warnings to
+`apps/<app>/playwright/.server-logs/server-<port>.log`, one per worker
+port (`docs/process/harness.md` "Server output"); a check reads the
+lines written since a mark with the kit's `serverLog(app)`, and the
+upload's request is the `POST …/publications/{id}/mediaFiles` line,
+the warning the "PHP Warning: foreach() …" line right before it.
 Issue report: [pkp-e2e#494](https://github.com/jardakotesovec/pkp-e2e/issues/494) ([docs/issues/U47-A6-media-jats-upload-server-log-warning.md](../issues/U47-A6-media-jats-upload-server-log-warning.md)).
 
 <a id="fn-f-a7"></a>

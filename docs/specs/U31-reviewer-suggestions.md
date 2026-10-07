@@ -49,8 +49,8 @@ is named where it differs. <sup>a</sup>
 | Action | Who may, and when |
 |--------|--------------------|
 | **Suggest reviewers** ("Add Reviewer Suggestion", "Edit", "Delete" on the wizard step) | • Author: on their own draft, while "Reviewer Suggestion at Submission" is on (Rules 2–5); after the final "Submit" no screen offers a change (Rule 7)<br>• Journal Manager: on any author's draft, the same wizard step; the Editor Dashboard's "All in submission stage" view lists the draft as "Incomplete" with one button, "Complete submission", which opens it<br>• Section Editor, another Author, Reviewer, Reader: no screen offers another's draft, and typing its address lands on the access-denied page <sup>a</sup> <sup>t1</sup> |
-| **See the "Reviewers Suggested by Author" panel** (workflow screen, Submission and Review stages) | • Editorial roles: whenever the submission carries at least one suggestion to list (Rule 8)<br>• Funding Coordinator: the panel never shows; instead a dialog titled "Error", reading "The current role does not have access to this operation." with one button, "OK", opens on the stage, with or without a suggestion ⚠ [A1](#a1)<br>• Author: never; the author view carries no such panel <sup>a</sup> |
-| **"Add Reviewer" from a suggestion** (the row's "…" menu on the Review stage) | • Editorial roles: while the Review stage is the submission's current stage (Rule 9); the request itself follows the Add Reviewer window's own rules (*Reviewer assignment & management*) <sup>a</sup> |
+| **See the "Reviewers Suggested by Author" panel** (workflow screen, Submission and Review stages) | • Journal Manager, Editor, Site Administrator, assigned Section or Guest Editor, Funding Coordinator: whenever the submission carries a suggestion to list (Rule 8)<br>• Author: never; the author view carries no such panel <sup>a</sup> |
+| **"Add Reviewer" from a suggestion** (the row's "…" menu on the Review stage) | • Journal Manager, Editor, Site Administrator, assigned Section or Guest Editor: while the Review stage is the submission's current stage (Rule 9); the request follows the Add Reviewer window's own rules (*Reviewer assignment & management*)<br>• Funding Coordinator: offered the same menu on every pending row; on a person with no account its "Add Reviewer" opens "Create New Reviewer", which refuses the role as the next row says [A5](#a5) <sup>a</sup> |
 | **"Select Reviewer" on a suggestion inside the Add Reviewer window** | • Whoever opened the Add Reviewer window, while the suggestion is pending and the person is not yet on the round (Rule 10)<br>• Funding Coordinator: offered on every entry, but on a person with no account it opens the "Create New Reviewer" form, whose "Add Reviewer" is refused with a browser alert, "The current role does not have access to this operation.", and the form stays open ⚠ [A5](#a5) <sup>a</sup> |
 
 ## Fields & validation
@@ -459,17 +459,17 @@ footnote. <sup>s</sup>
      "Add Reviewer" opens with no "Select a Reviewer from Reviewer
      Suggestions" list. <sup>s3</sup>
 
-4. **The Funding Coordinator meets the error dialog**
+4. **The Funding Coordinator on a submission with suggestions**
 
    Given: Funding Coordinator assigned to a submission in review round 1
    whose two suggestions are Kay Suggested (an account holding the Reviewer
    role) and Nova Newcomer (no account).
 
-   - **Review stage**: open it: no "Reviewers Suggested by Author" panel
-     shows; instead a dialog titled "Error" opens, reading "The current
-     role does not have access to this operation.", with one button, "OK"
-     [A1](#a1); press "OK".
-   - **Submission stage**: open it: the same dialog; press "OK".
+   - **Review stage**: open it: under the Participants panel, "Reviewers
+     Suggested by Author" lists Kay and Nova, each row ending in a "…"
+     menu holding "Add Reviewer".
+   - **Submission stage**: open it: the same panel lists both, with no
+     action on either row.
    - **The list inside Add Reviewer**: back on the Review stage, press the
      Reviewers panel's "Add Reviewer": the window opens with "Select a
      Reviewer from Reviewer Suggestions" listing both, each with "Select
@@ -485,8 +485,8 @@ footnote. <sup>s</sup>
      panel does not gain Nova [A5](#a5); press the "Close" arrow of each
      window.
    - **Control**: Journal Manager, on the same submission's Review stage:
-     no dialog opens, and "Reviewers Suggested by Author" lists Nova and
-     not Kay. <sup>s4</sup>
+     "Reviewers Suggested by Author" lists Nova and not Kay; on the
+     Submission stage it lists both. <sup>s4</sup>
 
 5. **Internal Review offers the list without the panel** {OMP}
 
@@ -567,6 +567,9 @@ Left out of the scenarios above, by reason:
     the wizard, add a suggestion and then the same address in other
     capitals, and assert the second is refused with "The email has already
     been taken."
+  - scenario 4's first two bullets, the Funding Coordinator's panel on
+    both stages (Actors rows 2–3; A1 retired): the scenario states them,
+    the suite does not assert them yet
 - **Nothing new to test**:
   - assigned Section Editor, Guest Editor and Site Administrator (the Journal Manager's offer, scenarios 2 and 3)
   - Reviewer and Reader (no screen offers them anything)
@@ -591,7 +594,6 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
-| [A1](#a1) | The Funding Coordinator gets an error dialog on the stage instead of the panel | 🐞 | user-visible | — |
 | [A5](#a5) | A Funding coordinator is offered "Add Reviewer" on a suggested person without an account, then refused | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A6](#a6) | A reviewer suggested twice in other capitals stays pending after being added, and adding them again fails | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | The default reviewer-suggestion guidance authors read on submission misspells "valuable" as "valueable" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -604,20 +606,9 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | A matched suggestion is offered nowhere again, even after the reviewer is unassigned or cancelled | ❓ | minor | — |
 | [A4](#a4) | The author loses sight of their suggestions the moment they submit | ❓ | minor | — |
 | [OMP1](#omp1) | Internal Review shows no panel, yet its Add Reviewer window offers the suggestions | ❓ | minor | — |
+| [A1](#a1) | The Funding Coordinator gets an error dialog on the stage instead of the panel | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream |
 
 ### All apps
-
-<a id="a1"></a>
-**A1 — The Funding Coordinator gets an error dialog instead of the panel** · 🐞 · user-visible.
-A Funding Coordinator assigned to a submission opens its Submission or
-Review stage on a journal with "Reviewer Suggestion at Submission" on and
-expects the stage as usual, with or without the "Reviewers Suggested by
-Author" panel. Instead a dialog titled "Error" opens, reading "The current
-role does not have access to this operation.", with one button, "OK"; no
-panel shows, and the dialog opens even when the submission carries no
-suggestion. On a journal with the setting off no dialog opens. The rest of
-the stage is usable once the dialog is dismissed.
-Basis: probe. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — An ORCID iD typed on a suggestion is seen again only in the author's "Edit" window** · ❓ · minor.
@@ -795,13 +786,18 @@ panel's absence is the intent (suggestions target external review) and the
 list inside Internal Review's Add Reviewer is the leak.
 Basis: probe. <sup>f-omp1</sup>
 
+### Retired
+
+<a id="a1"></a>
+**A1 — The Funding Coordinator gets an error dialog instead of the panel** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13191, 2026-09-03), verified 2026-10-04 on OJS and OMP: the Funding Coordinator opens the Submission and Review stages with no "Error" dialog and reads "Reviewers Suggested by Author" there (Actors row 2). <sup>f-a1</sup>
+
 ---
 
 <a id="footnotes"></a>
 ## Footnotes — mechanism & evidence
 
 <a id="fn-a"></a>
-**a** — Roles. The service behind every screen here is `PKP\API\v1\reviewers\suggestions\ReviewerSuggestionController` (`submissions/{submissionId}/reviewers/suggestions`: `GET`, `GET {suggestionId}`, `POST`, `PUT {suggestionId}`, `DELETE {suggestionId}`); `getRouteGroupMiddleware()` gates the whole group on `ROLE_ID_SITE_ADMIN`, `ROLE_ID_MANAGER`, `ROLE_ID_SUB_EDITOR`, `ROLE_ID_AUTHOR` (no `ROLE_ID_ASSISTANT`, hence A1), and `authorize()` adds `SubmissionAccessPolicy` plus, for `add`/`edit`/`delete`, `SubmissionIncompletePolicy` with the message `user.authorization.submission.complete.reviewerSuggestionRestrict` ("Add, update or delete of reviewer suggestion for completed submission is restricted."), so writes work only on a draft. The wizard is `PKP\pages\submission\PKPSubmissionHandler` (roles Author, Section Editor, Manager, Site Admin). The editors' panel is pushed by `workflowConfigEditorialOJS.js` only (`getSecondaryItems` of `WORKFLOW_STAGE_ID_SUBMISSION` and `WORKFLOW_STAGE_ID_EXTERNAL_REVIEW`, guarded by `pageInitConfig.publicationSettings.isReviewerSuggestionEnabled`, which `PKPDashboardHandler` sets from the context's `reviewerSuggestionEnabled`); `workflowConfigAuthorOJS.js` and `workflowConfigAuthorOMP.js` never push `ReviewerSuggestionManager`, so the author view has none. The row action opens `ReviewerGridHandler::showReviewerForm`, whose `PKPReviewerGridHandler::__construct()` grants review-round operations to Manager, Site Admin and Sub-editor, and to Assistant minus `createReviewer`, `enrollReviewer` and `gossip`. OPS: `ops/schemas/context.json` has no `reviewerSuggestionEnabled`, `ops/schemas/submission.json` no `reviewerSuggestions`, `ops/api/v1/submissions/index.php` does not mount the controller (OJS and OMP do), and `PKPReviewSetupForm::addReviewSuggestionControl()` adds the checkbox only when the context schema carries the property. Read 2026-09-06; the OJS and OMP copies of every file named in this tail are byte-identical. Live-probed 2026-09-06 (Purpose; the OPS absence; Actors terms and rows 1–4), OJS and OMP scratch journals with the setting switched on through Settings › Workflow › Review, OPS scratch server and `publicknowledge` read-only on all three: the seeded `admin`, holding no role on the scratch journal, saw the panel on both stages and the row's "Add Reviewer" menu; OMP's `registry/userGroups.xml` defines no guest-editor group (OJS's does); the panel and menu showed for manager, editor, section editor and (OJS) guest editor, never for the author's view; the Funding Coordinator's dialog is note f-a1. Row 1: the manager opened a draft's wizard with the step by its address and from the Editor Dashboard ("All in submission stage", the row "Incomplete" › "Complete submission"; the dashboard's views are Assigned to me, Active submissions, Needs editor, All in submission stage, Needs reviews, All in review stage, All in copyediting stage, All in production stage, no "Incomplete" view); a section editor, another author, a reviewer and a reader typing the address landed on `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied` (the unassigned sub-editor fails `SubmissionAccessPolicy` on a draft). OPS: no Review tab under Settings › Workflow on the scratch server or `publicknowledge`, `settings/workflow#review` changes nothing, the wizard's steps are Upload Files, Details, Contributors, For Readers, Review, and the manager's workflow screen of a posted preprint shows Production Tasks & Discussions and Participants only.
+**a** — Roles. The service behind every screen here is `PKP\API\v1\reviewers\suggestions\ReviewerSuggestionController` (`submissions/{submissionId}/reviewers/suggestions`: `GET`, `GET {suggestionId}`, `POST`, `PUT {suggestionId}`, `DELETE {suggestionId}`); `getRouteGroupMiddleware()` gates the whole group on `ROLE_ID_SITE_ADMIN`, `ROLE_ID_MANAGER`, `ROLE_ID_SUB_EDITOR`, `ROLE_ID_AUTHOR` and, since pkp/pkp-lib#13191 (`44ef66eb90`, 2026-09-03), `ROLE_ID_ASSISTANT` (its absence before was A1's dialog; `stable-3_5_0` still lacks it), and `authorize()` adds `SubmissionAccessPolicy` plus, for `add`/`edit`/`delete`, `SubmissionIncompletePolicy` with the message `user.authorization.submission.complete.reviewerSuggestionRestrict` ("Add, update or delete of reviewer suggestion for completed submission is restricted."), so writes work only on a draft. The wizard is `PKP\pages\submission\PKPSubmissionHandler` (roles Author, Section Editor, Manager, Site Admin). The editors' panel is pushed by `workflowConfigEditorialOJS.js` only (`getSecondaryItems` of `WORKFLOW_STAGE_ID_SUBMISSION` and `WORKFLOW_STAGE_ID_EXTERNAL_REVIEW`, guarded by `pageInitConfig.publicationSettings.isReviewerSuggestionEnabled`, which `PKPDashboardHandler` sets from the context's `reviewerSuggestionEnabled`); `workflowConfigAuthorOJS.js` and `workflowConfigAuthorOMP.js` never push `ReviewerSuggestionManager`, so the author view has none. The row action opens `ReviewerGridHandler::showReviewerForm`, whose `PKPReviewerGridHandler::__construct()` grants review-round operations to Manager, Site Admin and Sub-editor, and to Assistant minus `createReviewer`, `enrollReviewer` and `gossip`. OPS: `ops/schemas/context.json` has no `reviewerSuggestionEnabled`, `ops/schemas/submission.json` no `reviewerSuggestions`, `ops/api/v1/submissions/index.php` does not mount the controller (OJS and OMP do), and `PKPReviewSetupForm::addReviewSuggestionControl()` adds the checkbox only when the context schema carries the property. Read 2026-09-06; the OJS and OMP copies of every file named in this tail are byte-identical. Live-probed 2026-09-06 (Purpose; the OPS absence; Actors terms and rows 1–4), OJS and OMP scratch journals with the setting switched on through Settings › Workflow › Review, OPS scratch server and `publicknowledge` read-only on all three: the seeded `admin`, holding no role on the scratch journal, saw the panel on both stages and the row's "Add Reviewer" menu; OMP's `registry/userGroups.xml` defines no guest-editor group (OJS's does); the panel and menu showed for manager, editor, section editor and (OJS) guest editor, never for the author's view; the Funding Coordinator's former dialog is note f-a1. Walked 2026-10-04 (Actors rows 2–3, the Funding Coordinator), OJS and OMP `main`, PKP's default dataset with `svogt` given "Funding coordinator" and assigned on a submission in review round 1 with two suggestions: the panel listed both on the Review stage, each row with one "…" menu holding "Add Reviewer", and on the Submission stage with no menu; no "Error" dialog; the menu's "Add Reviewer" on the no-account suggestion opened "Create New Reviewer" and met A5's refusal (note f-a5). Row 1: the manager opened a draft's wizard with the step by its address and from the Editor Dashboard ("All in submission stage", the row "Incomplete" › "Complete submission"; the dashboard's views are Assigned to me, Active submissions, Needs editor, All in submission stage, Needs reviews, All in review stage, All in copyediting stage, All in production stage, no "Incomplete" view); a section editor, another author, a reviewer and a reader typing the address landed on `user/authorizationDenied?message=user.authorization.roleBasedAccessDenied` (the unassigned sub-editor fails `SubmissionAccessPolicy` on a draft). OPS: no Review tab under Settings › Workflow on the scratch server or `publicknowledge`, `settings/workflow#review` changes nothing, the wizard's steps are Upload Files, Details, Contributors, For Readers, Review, and the manager's workflow screen of a posted preprint shows Production Tasks & Discussions and Participants only.
 
 <a id="fn-p"></a>
 **p** — Pointers and definitions. These sentences say where another spec's rules live, or define a term whose claims are Rules 2–5 and 11; they claim no screen of this spec's own and were declared, not driven, at the 2026-09-06 claim check. The screen facts they carry in passing were seen that day on the chunk snapshots: the panel sits under "PARTICIPANTS" on both stages; the setting's box reads "Allow authors to suggest potential reviewers at submission process"; the Add Reviewer window's "Locate a Reviewer", "Create New Reviewer" and "Enroll Existing User" modes exist as *Reviewer assignment & management* describes them.
@@ -846,7 +842,7 @@ Basis: probe. <sup>f-omp1</sup>
 **s3** — Scenario 3: Rule 10 (both bullets, the assigned notice, the inner window's close with a username typed: note h) and Rule 11, as the scratch `editor`; `reviewRounds[].reviewers[]` seeds the first `externalReviewer` on round 1 while `reviewerSuggestions[]` carries their address (the seeded assignment leaves the suggestion pending: note h), a second `externalReviewer` for the in-window select, and a fresh address for the inner "Create New Reviewer"; that address and the typed username are scenario 3's own (note s), so the account it creates is not scenario 2's. The suite finds Nova under "Locate a Reviewer" by searching her name before reading the notice. The control reuses scenario 2's no-suggestion submission.
 
 <a id="fn-s4"></a>
-**s4** — Scenario 4: Actors rows 2 and 4, A1 and A5, as a scratch `funding` participant on the submission (note s); `reviewerSuggestions[]` with the `externalReviewer`'s address and a fresh address. The "Enroll an Existing User as Reviewer" path was not driven for this role (note f-a5).
+**s4** — Scenario 4: Actors rows 2 and 4, row 3's menu, and A5, as a scratch `funding` participant on the submission (note s); `reviewerSuggestions[]` with the `externalReviewer`'s address and a fresh address. The "Enroll an Existing User as Reviewer" path was not driven for this role (note f-a5). The first two bullets were walked 2026-10-04 on OJS and OMP `main` (note f-a1).
 
 <a id="fn-s5"></a>
 **s5** — Scenario 5 (OMP): Rule 8's press sentence, Rule 10's third bullet, OMP1 and Rule 11, as the scratch `editor`; `POST scenarios/submission` with `reviewRounds` for the internal round and `reviewerSuggestions[]` holding a fresh address and one more; "Send to External Review" is the Review stage's decision wizard (note t10).
@@ -903,7 +899,7 @@ Basis: probe. <sup>f-omp1</sup>
 **t17** — Settled, live-probed 2026-09-06 (Rule 6), OJS and OMP: the block's heading, entry lines, "Edit" target, the empty warning and the completed "Submit" are as note e records.
 
 <a id="fn-f-a1"></a>
-**f-a1** — `ReviewerSuggestionManager` is pushed for every editorial-view visitor of the stage and its store fetches the list on mount; `useFetch` then calls `modalStore.openDialogNetworkError()`, which shows the response's error text under the title `common.error` "Error". Live-probed 2026-09-06, OJS and OMP, as a scratch `funding` participant: `GET …/api/v1/submissions/{id}/reviewers/suggestions[?approved=false]` is answered 401 with "The current role does not have access to this operation." (not the 403 `api.403.unauthorized` the middleware `HasRoles` would give) and the dialog shows that text with one "OK"; the same on the Submission stage and Review round 1, with suggestions and without; none on a journal with the setting off; after "OK" the stage was usable and the coordinator went on to open "Add Reviewer".
+**f-a1** — `ReviewerSuggestionManager` is pushed for every editorial-view visitor of the stage and its store fetches the list on mount; `useFetch` then calls `modalStore.openDialogNetworkError()`, which shows the response's error text under the title `common.error` "Error". Live-probed 2026-09-06, OJS and OMP, as a scratch `funding` participant: `GET …/api/v1/submissions/{id}/reviewers/suggestions[?approved=false]` is answered 401 with "The current role does not have access to this operation." (not the 403 `api.403.unauthorized` the middleware `HasRoles` would give) and the dialog shows that text with one "OK"; the same on the Submission stage and Review round 1, with suggestions and without; none on a journal with the setting off; after "OK" the stage was usable and the coordinator went on to open "Add Reviewer". Retired: pkp/pkp-lib#13191 (`44ef66eb90`, "Allow assistants to see reviewer suggestions", 2026-09-03) adds `ROLE_ID_ASSISTANT` to the controller's `getRouteGroupMiddleware()` on `main` (note a). Walked 2026-10-04, OJS and OMP `main` (the walk of note a): no "Error" dialog on landing on either stage or on opening it, and "Reviewers Suggested by Author" listed both suggestions on the Review stage with a "…" menu each and on the Submission stage with none. The same walk on `stable-3_5_0`, OJS and OMP, still opened the dialog "Error" / "The current role does not have access to this operation." / "OK" on both stages with no panel: the fix has no backport there.
 
 <a id="fn-f-a5"></a>
 **f-a5** — `PKPReviewerGridHandler::__construct()` grants `ROLE_ID_ASSISTANT` the review-round operations minus `createReviewer`, `enrollReviewer` and `gossip` (note a), and `AdvancedSearchReviewerForm::fetch()` adds the "Create New Reviewer" / "Enroll Existing User" link actions only for `ROLE_ID_MANAGER` and `ROLE_ID_SUB_EDITOR`, but `SelectReviewerSuggestionListItem.vue::select()` opens `showReviewerForm` with `selectionType` `REVIEWER_SELECT_CREATE` for any role that reached the window. Live-probed 2026-09-06, OJS (two runs) and OMP (one run): the Funding Coordinator's "Select Reviewer" on a no-account suggestion opened "Create New Reviewer" prefilled; its "Add Reviewer" posted `reviewer-grid/create-reviewer`, answered 200, and the form stayed open, the Reviewers table still "No Items" (that probe dismissed a browser alert without recording it). Walked 2026-10-04 (Actors row 4; scenario 4), OJS and OMP, `main` and `stable-3_5_0`, PKP's default dataset as a Funding coordinator: the answer is `{"status": false, "content": "The current role does not have access to this operation."}`, which `$.pkp.classes.Handler.prototype.handleJson()` shows with `alert()`; after "OK" the form still held the typed username and the Reviewers table read "No Items"; no server or script error. The role's "Select Reviewer" on an enrolled reviewer gave the "Selected Reviewer … Change" request form. The Enroll path was not driven for this role.
