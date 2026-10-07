@@ -45,7 +45,7 @@ is not restated here. <sup>a</sup> <sup>b</sup>
 | **See the Title & Abstract, Metadata and Data pages** | • Journal Manager, Editor, Site Administrator: on any submission, assigned or not<br>• Section Editor, Guest Editor, assistant roles: while assigned to the submission's current stage. An assistant assigned to another stage sees the "Publication" entry with no pages beneath it (Rule 1)<br>• the submission's Author: on their own submission, in the author view <sup>a</sup> |
 | **See the Permissions & Disclosure page** | • the editorial roles above, when they have access to the Production stage (managers always). The page is absent from the author view in every app (Rule 1) <sup>a</sup> |
 | **Save changes on any of these pages** | • Journal Manager, Editor: always, published versions included (Rule 8)<br>• Site Administrator: only through their journal roles; holding the manager role, they save as a Journal Manager. One whose manager role was ended (Users & Roles › Edit, "Remove Role"), left with an assistant role and not a participant, finds Save disabled on Title & Abstract, Metadata and Data (Rule 10) ⚠ [A18](#a18)<br>• Section Editor, Guest Editor, assistant roles: while their participant assignment carries the metadata-edit permission (Rule 2)<br>• Author: while their assignment carries the permission AND the version they are on is neither published nor scheduled (Rule 9). While another version is published, the Author saves on the unpublished one. A journal or press does not grant the permission by default; a preprint server does [OPS1](#ops1) <sup>b</sup> |
-| **Change the submission language** | • any editorial role who may edit the publication or publish it, while the submission has exactly one version and is not published (Rule 13). A journal article published into a not-yet-published issue is the exception ⚠ [OJS1](#ojs1). An assistant assigned to the current stage without the metadata-edit permission sees the pages read-only (Rule 10) with no "Change" button; the button appears once their assignment carries the permission (their Confirm is untried [A19](#a19)). The Site Administrator left with an assistant role (the row above) is offered it; Confirm fails (Rule 13c) [A19](#a19). The Author is never offered it, in any app <sup>i</sup> |
+| **Change the submission language** | • any editorial role who may edit the publication or publish it, while the submission has exactly one version and is not published (Rule 13). A journal article whose only version was published as "Author Original" or "Published Manuscript Under Review" is the exception ⚠ [OJS1](#ojs1). An assistant assigned to the current stage without the metadata-edit permission sees the pages read-only (Rule 10) with no "Change" button; the button appears once their assignment carries the permission (their Confirm is untried [A19](#a19)). The Site Administrator left with an assistant role (the row above) is offered it; Confirm fails (Rule 13c) [A19](#a19). The Author is never offered it, in any app <sup>i</sup> |
 | **Set the journal's default copyright and license** | • Journal Manager (and a Site Administrator working in the journal): Settings › Distribution › License <sup>m</sup> |
 | **Reset every submission's permissions to the defaults** | • Journal Manager, Site Administrator: Tools › Permissions (Rule 14) <sup>k</sup> |
 | **Read the license, data availability and funding statement blocks** | • any reader: on a published item's landing page (Rule 15) <sup>l</sup> |
@@ -285,10 +285,17 @@ descriptions as raw codes ⚠ [OPS3](#ops3). <sup>g</sup>
       publish (Actors). Once a second version exists or the item is
       published, the button AND the readout leave the Publication pages
       together, while the stage screens keep the readout ⚠ [A6](#a6). A
-      journal article published into an issue that is not yet published
-      keeps the readout and the button beside "Status: Published", and
-      every Confirm on it is refused (13c) ⚠ [OJS1](#ojs1). Whether a
-      merely scheduled article offers the button is open ⚠ [A5](#a5).
+      journal's publish step offers three "Publication Stage" values
+      (*[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*).
+      Published as "Version of Record" ("Status: Published"), into a
+      published issue, with "Assign To Future Issue and Publish
+      Immediately" or with "Don't Assign To An Issue", an article counts
+      as published. Published as "Author Original" or "Published
+      Manuscript Under Review", its only version keeps the readout and
+      button beside "Status: Published", and every Confirm is refused
+      (13c) ⚠ [OJS1](#ojs1). Scheduled with "Assign To Future Issue and
+      Schedule Only" ("Status: Scheduled"), it keeps both and a change is
+      accepted ⚠ [A5](#a5).
       The Author's pages never show the button, and their Publication
       pages show no readout (their stage screens do). On a preprint
       server the Author has no stage screen and sees no readout anywhere.
@@ -313,7 +320,9 @@ descriptions as raw codes ⚠ [OPS3](#ops3). <sup>g</sup>
       for the title only. Each box is pre-filled with any text already
       stored in the chosen language, and Confirm refuses an empty
       required box. Both are dependable only once the freshly opened
-      panel has finished its background loading ⚠ [A15](#a15).
+      panel has finished its background loading ⚠ [A15](#a15), and a
+      typed title is kept only once the Title box has loaded: clicked
+      into, it shows a "Formatting" button ⚠ [A22](#a22).
     - **13c — Confirm and Cancel.** **Confirm** stores the title (and
       abstract) in the new language and makes it the submission language.
       It copies each file's name and each contributor's names and
@@ -722,7 +731,8 @@ catcher's address are in its footnote.
    the first language, its section requiring abstracts on a journal or
    preprint server; the submission's Author; for the controls, a
    published submission and one with two versions; on a journal, an
-   article published into a future issue that is not yet published.
+   article whose only version was published as "Author Original",
+   assigned to no issue.
 
    - **The readout and the button**: any Publication page reads "Current
      Submission Language: {first language}" with a "Change" button; every
@@ -751,11 +761,12 @@ catcher's address are in its footnote.
      two versions, there is neither readout nor "Change" on any
      Publication page, while the stage screens keep the readout
      ([A6](#a6)) (Rule 13a).
-   - **An article in an unpublished issue** (journal only): the article
-     published into the future issue that is not yet published still
-     shows "Change", and confirming a change there ends in the toast "You
-     can not change language of this submission…" with the panel still
-     open ([OJS1](#ojs1)) (Rules 13a, 13c).
+   - **An article published as Author Original** (journal only): the
+     article whose only version was published as "Author Original"
+     still shows "Change" beside "Status: Published", and confirming a
+     change there ends in the toast "You can not change language of this
+     submission…" with the panel still open ([OJS1](#ojs1)) (Rules 13a,
+     13c).
    - **Control**: the Author's Publication pages show no readout and never
      the button, while their stage screens show the readout; on a preprint
      server the Author sees no readout anywhere (Rule 13a).
@@ -930,6 +941,11 @@ Left out of the scenarios above, by reason:
     the address itself for a non-Creative Commons one (Fields "Default
     Chapter License URL"): likely a bullet in scenario 10, on a second
     scratch press left unlicensed
+  - on a journal, an article published as "Version of Record" with
+    "Assign To Future Issue and Publish Immediately" showing neither the
+    readout nor "Change" on its Publication pages (Rule 13a): likely a
+    case in scenario 6's "Without the button", with such an article
+    added to its given
 - **Nothing new to test**:
   - a term added twice showing two chips until Save and one on the
     reopened page (Rule 7a)
@@ -943,7 +959,8 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A1 (every other Publication page refused while the plain language
     summary is required; Rule 5; Settings)
-  - A5 (a merely scheduled article still offering "Change"; Rule 13a)
+  - A5 (a merely scheduled article still offering "Change" and
+    accepting the change; Rule 13a)
   - A12 ("Custom copyright statement" accepted with an empty statement;
     Rule 12; Settings)
   - A15 (the freshly opened panel acting before its loading settles;
@@ -956,6 +973,8 @@ Left out of the scenarios above, by reason:
     Actors row 4; Rule 13c)
   - A20 (the license sentence beside an editor's override, License URL
     and Default Chapter License URL; Fields)
+  - A22 (a title typed into the language panel's Title box before the
+    box has finished loading, lost on a slow link; Rule 13b)
   - OMP5 (the press's "License" link that leads nowhere with terms and no
     license; Rule 15; scenario 5 marks it)
   - OPS3 (a preprint server in French: the Author's "posted" banner and
@@ -992,7 +1011,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-08-28; A16, A17 and the
-retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28; OPS3 and the correction of A15's press face 2026-09-30; A21 2026-10-05), unreviewed unless an entry notes otherwise;
+retirement of A4 2026-09-09; the retirement of A16 2026-09-14; A10 settled 2026-09-18; OJS2 and the retirement of A10 2026-09-21; A18–A20 2026-09-28; OPS3 and the correction of A15's press face 2026-09-30; A21 2026-10-05; A22 and the rewriting of OJS1 and A5 2026-10-07), unreviewed unless an entry notes otherwise;
 the team settles them on spec review. The summary
 is sorted 🐞 → ❓ → ✅ and the entries below are the source; badges, Impact
 and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
@@ -1005,12 +1024,13 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | Through a new version of a published item, the permitted Author changes the published version's funders and can take its review round | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
-| [OJS1](#ojs1) | An article published into a not-yet-published issue keeps "Change", and every language change on it is refused | 🐞 | minor | — |
+| [A22](#a22) | Change Submission Language: on a slow link, a title typed before the Title box has finished loading is lost | 🐞 | minor | — |
+| [OJS1](#ojs1) | An article published as "Author Original" or "Published Manuscript Under Review" keeps "Change", and every language change on it is refused | 🐞 | minor | claim check (claude), 2026-10-07 — trigger corrected |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Reset permissions rewrites every submission, unpublished and declined included, and logs one "metadata updated" line per version | ❓ | user-visible | — |
 | [A17](#a17) | The Author's Contributors page offers "Add Contributor", "Edit", "Delete" and "Order" on a new version of a published item; whether a save there is kept is untried | ❓ | user-visible | — |
-| [A5](#a5) | A scheduled article may still offer and allow Change Submission Language (code reading; the state was not reached live) | ❓ | minor | — |
+| [A5](#a5) | A scheduled article keeps "Change", and a language change on it is accepted | ❓ | minor | claim check (claude), 2026-10-07 — seen live |
 | [A6](#a6) | The "Current Submission Language" readout leaves the Publication pages once a second version exists or the item is published | ❓ | minor | — |
 | [A8](#a8) | Read-only pages keep their fields typeable with Save unavailable | ❓ | minor | — |
 | [A11](#a11) | The automatic copyright holder carries the contributor's role: "Copyright (c) 2026 Alice Probe (Author)" on the reader's page | ❓ | minor | — |
@@ -1088,20 +1108,16 @@ Since: live-probed 2026-08-28 · Basis: probe. <sup>f-a3</sup>
 
 <a id="a5"></a>
 **A5 — A scheduled article can still change language** · ❓ · minor.
-By the code, an article scheduled to a future issue keeps its "Change"
-button beside "Current Submission Language", and confirming the change
-is accepted. Elsewhere, "scheduled" is treated like "published" (the
+An article scheduled to a future issue keeps its "Change" button beside
+"Current Submission Language" and "Status: Scheduled", and confirming
+the change is accepted: the screen reloads in the new language, still
+scheduled. Elsewhere, "scheduled" is treated like "published" (the
 Author's lock, Rule 9) and the refusal text speaks of published items.
-The live drive did not reach that state from this side: the
-pre-publishing panel's "Schedule Only" choice published the article at
-once (a *Publish, schedule & versions* finding). The closest reachable
-state is OJS1, where the button is offered but the change refused.
 Question: should scheduling close the language change as publishing
 does? Lean: yes. A scheduled item is already frozen for its issue.
-Settled by: the "Change" button on a Publication page whose header reads
-"Status: Scheduled", reached through the Publication Settings route
-(scenario 6 seeding), and what Confirm does there.
-Basis: code. <sup>f-a5</sup>
+Re-checked: claim check (claude), 2026-10-07 — the state reached live;
+the change is accepted.
+Basis: probe, 2026-10-07. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — The language readout vanishes with the second version** · ❓ · minor.
@@ -1287,20 +1303,37 @@ version can by a request no screen sends. Expected: both stay as
 published, like the title.
 Since: 2026-09-08 · Basis: probe, 2026-10-05. <sup>f-a21</sup>
 
+<a id="a22"></a>
+**A22 — Change Submission Language: a title typed before the Title box has finished loading is lost** · 🐞 · minor.
+With "Change Submission Language For" loaded (the submission's title
+under its heading), a Journal Manager picks the new language and
+types the title at once. On a slow link (8 kbit/s down) the Title box
+is still loading, showing no "Formatting" button when clicked into: the
+typed text shows in grey, then disappears once the box has loaded.
+Confirm is then refused with "This field is required." under Title,
+and nothing is stored. On an ordinary link the box loads within a
+fraction of a second and nothing typed is lost.
+Basis: probe, 2026-10-07. <sup>f-a22</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — "Change" stays on an article published into an unpublished issue** · 🐞 · minor.
-An article published into a future issue that is not yet published
-keeps "Current Submission Language: {language}" with its "Change"
-button on every Publication page, beside "Status: Published". Picking a
-language and confirming is refused with the toast "You can not change
-language of this submission because it already has more than one
-publication version or a published publication." A published article
-assigned to no issue hides readout and button as Rule 13a says. The
-button is offered for a change that always fails: the screen and the
-refusal disagree about whether the item counts as published.
-Since: live-probed 2026-08-28 · Basis: probe. <sup>f-ojs1</sup>
+**OJS1 — "Change" stays on an article published as a version other than the Version of Record** · 🐞 · minor.
+A journal article whose only version was published as "Author
+Original" or "Published Manuscript Under Review" (the "Publication
+Stage" list's other two values) keeps "Current Submission Language:
+{language}" with its "Change" button on every Publication page, beside
+"Status: Published" and "Unpublish". Picking a language and confirming
+is refused with the toast "You can not change language of this
+submission because it already has more than one publication version or
+a published publication.", and the panel stays open. Published as
+"Version of Record", the article hides both as Rule 13a says.
+The button is offered for a change that always fails: the screen and
+the refusal disagree about whether the item counts as published.
+Re-checked: claim check (claude), 2026-10-07 — an article published
+into an issue not yet published (the case seen on 2026-08-28) no longer
+keeps the button.
+Basis: probe, 2026-10-07. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — A scheduled article's terms** · ❓ · minor.
@@ -2267,16 +2300,18 @@ For the abstract leg the submission's section must require abstracts
 (a section with "Do not require abstracts" shows the Title box only, as
 does any press). The Author of the control is the submission's
 throwaway submitter. Live-probed 2026-08-28 on all three apps (fn-i). The
-OJS-only leg: an article published with "Assign To Future Issue and
-Publish Immediately" into an unpublished future issue (Issues › Future
-Issues › "Create Issue"); a seeded published item with no issue is the
-hiding control. A5's scheduled case (OJS-only; a preprint server has no
+OJS-only leg: an article published with the "Publication Stage"
+"Author Original" and "Don't Assign To An Issue" in the "Schedule For
+Publication" panel (live 2026-10-07, f-ojs1; until then the leg was an
+article published into an unpublished future issue, which no longer
+keeps the button); a seeded published item with no issue is the hiding
+control. A5's scheduled case (OJS-only; a preprint server has no
 scheduling): reach "Status: Scheduled" by saving "Assign To Future
 Issue and Schedule Only" on the Publication Settings page first, then
 re-picking it in the "Schedule For Publication" panel — opened without
 that saved choice the panel published the article instead (*Publish,
-schedule & versions*); the language-change probe did not reach the
-state, so the leg is unverified.
+schedule & versions*, 2026-08-28); reached that way 2026-10-07, the
+change was accepted (f-a5).
 
 <a id="fn-s7"></a>
 **s7 — scenario 7 seeding.** Scratch journal (every submission in it is
@@ -2447,9 +2482,20 @@ articles the "Review Publishing Details" panel, opened with no
 assignment preselected, produced the "… published immediately as
 continuous publication …" confirmation with a "Publish" button although
 "Assign To Future Issue and Schedule Only" was checked, and published
-(the Publication-Settings-first route schedules correctly — fn-s6); the
-Change button was observed instead on the published-into-future-issue
-article (f-ojs1).
+(the Publication-Settings-first route schedules correctly — fn-s6).
+Live 2026-10-07, two runs (OJS `main`, scratch journal with English and
+French (Canada), Journal Manager): "Assign To Future Issue and Schedule
+Only" saved on Publication Settings first, then the panel (window "This
+will be published when Vol. 2 No. 1 (2015) is published. Are you sure
+you want to schedule this for publication?"); the header read "Status:
+Scheduled" with "Current Submission Language: English" and "Change";
+Change › French (Canada) › Title and Abstract › Confirm → `PUT
+…/changeLocale` 200, the screen reloaded reading "Current Submission
+Language: French (Canada) Change" and "Status: Scheduled"; stored
+publication status 5 (`STATUS_SCHEDULED`), locale `fr_CA`, `title.fr_CA`
+the typed title.
+Whether the panel alone still publishes at once was not driven. Kept
+script `shared/playwright/checks/U40/I07/i07.js` (`PHASES=ojs1`).
 
 <a id="fn-f-a6"></a>
 **f-a6 — A6 evidence.** fn-i: the readout and the link are one component
@@ -2608,10 +2654,9 @@ also renders the subtitle) later; a pick before it lands finds
 keeps the form's initial value, the current language's title
 (`ChangeSubmissionLanguageMetadataForm`). In 5 of 5 unheld runs the
 pick came 50–110 ms before the publication fetch landed, and the Title
-held the English title in 4 of them. The Title's TinyMCE editor,
-mounted by the pick, loads its content style sheets before it is
-initialized; keys pressed before that were lost and the box showed
-empty over the English title. The accepted Confirm's `changeLocale`
+held the English title in 4 of them. Keys typed into the Title before
+its TinyMCE editor is initialized are lost too, a separate cause
+(A22, f-a22). The accepted Confirm's `changeLocale`
 request carried `locale=fr_CA&title=Submission …` (the English title),
 the publication read afterwards held it as `title.fr_CA`, and the page
 behind read "Current Submission Language: French (Canada)". With the
@@ -2807,22 +2852,71 @@ Security-shaped and unreleased: its issue report carries "- **Security** unrelea
 Issue report (the funders): [pkp-e2e#929](https://github.com/jardakotesovec/pkp-e2e/issues/929) ([docs/issues/U40-A21-author-new-version-changes-published-funders.md](../issues/U40-A21-author-new-version-changes-published-funders.md)).
 Issue report (the review round): [pkp-e2e#930](https://github.com/jardakotesovec/pkp-e2e/issues/930) ([docs/issues/U40-A21-review-round-taken-from-other-version.md](../issues/U40-A21-review-round-taken-from-other-version.md)).
 
+<a id="fn-f-a22"></a>
+**f-a22 — A22 evidence.** The Title's TinyMCE editor, mounted by the
+pick, loads its content style sheets before it is initialized; keys
+pressed before that reach the plain box under it and are dropped when
+the editor takes over. Live 2026-10-07 on OJS, OMP and OPS `main`, two
+runs each (scratch context with English and French (Canada), Journal,
+Press or Preprint Server Manager, Publication › Title & Abstract ›
+"Change"): with the network throttled to 8 kbit/s down from the press
+of "Change", "French (Canada)" picked only once the subtitle showed the
+title, and the title typed at once with the keyboard while the editor
+was not yet initialized (at the start and the end of the typing), the
+typed text showed in the box, then the box held nothing once the
+editor had started; Confirm sent no request and the panel showed "This
+field is required." under Title and "Please correct one error."; the
+stored titles stayed English only. Unthrottled, typing that started
+before the editor was initialized kept the text every time (OJS three
+runs, OPS two, OMP one), and with the editor started first the typed
+title was sent as the new language's title and stored. A pick before
+the panel's loading ends loses the keys the same way, the box then
+holding the English title (A15). First seen in a test run 2026-09-30
+(OMP, the publication fetch and the editor's style sheets held back):
+keys pressed before the editor was initialized were lost. Kept script
+`shared/playwright/checks/U40/I07/i07.js` (`PHASES=type`).
+
 <a id="fn-f-ojs1"></a>
-**f-ojs1 — OJS1 evidence.** An OJS submission whose publication is
-published into an unpublished issue carries the SUBMISSION status
-`STATUS_SCHEDULED` (OJS `Repository::updateStatus()` derives it from the
-issue), so the client guard `submission.status !== STATUS_PUBLISHED`
-(fn-i) keeps the readout and button, while the server refuses on the
-PUBLICATION's `STATUS_PUBLISHED`. Live-probed 2026-08-28 (scratch
-manager, future issue "Vol. 9 No. 9 (2099): P4 Future Issue" created
-via Issues › Future Issues › "Create Issue"): the article published into
-it showed "Current Submission Language: English Change" beside "Status:
-Published" and the editorial banner on Title & Abstract, and its
-article page rendered under "Home / Archives / Vol. 9 No. 9 (2099) …";
-Change › French (Canada) › Title + Abstract › Confirm → `PUT
-…/changeLocale` 403 with the body quoted in fn-i, shown as the toast,
-panel unchanged. The seeded published item without an issue showed no
-readout (f-a6).
+**f-ojs1 — OJS1 evidence.** The submission's status comes from lib/pkp
+`Repository::getStatusByPublications()`, which counts a submission
+published (or scheduled) only through a publication of the final
+version stage (`VersionStage::finalVersionStage()`: Version of Record
+on a journal or press, Author Original on a preprint server). The
+client guard `submission.status !== STATUS_PUBLISHED &&
+publications.length < 2` (`workflowConfigEditorialOJS.js`
+`getPrimaryControlsLeft`, fn-i) therefore keeps the readout and button
+for an article published under another stage, while
+`PKPSubmissionController::changeLocale()` refuses on the publication's
+own `STATUS_PUBLISHED`. Live 2026-10-07, two runs and more (OJS `main`,
+scratch journal with English and French (Canada), Journal Manager):
+"Author Original 1.0" or "Published Manuscript Under Review 1.0"
+published alone ("This will be published immediately without any issue
+association. …") stored publication status 3 and submission status 1,
+and Title & Abstract, Contributors and Metadata showed "Current
+Submission Language: English Change" beside "Status: Published" and
+"Unpublish" (the stage screen the readout alone); Change › French
+(Canada) › Title and Abstract › Confirm → `PUT …/changeLocale` 403 with
+the body quoted in fn-i, shown as the toast, the panel still open with
+its boxes, the language unchanged after a reload. Controls the same
+day: "Version of Record 1.0" with "Assign To Future Issue and Publish
+Immediately" into an unpublished issue (the seeded "Vol. 2 No. 1
+(2015)", and "Vol. 9 No. 9 (2099)" made with Issues › Future Issues ›
+"Create Issue"; window "… published immediately as continuous
+publication even though it is assigned to … which is not published
+yet …") and with "Don't Assign To An Issue" stored submission status 3
+and showed neither readout nor "Change", the article page live. OMP
+offers no stage choice at the first publish (the window reads "The
+publication must have a version stage assigned before it can be
+published. The stage version that will be assigned to the publication
+is "Version of Record 1.0"") and the published book shows neither; on
+OPS Author Original is the final stage, and after "Post" neither
+shows. History: live-probed 2026-08-28, an article published into an
+unpublished future issue kept the button and was refused the same way;
+then OJS `Repository::updateStatus()` derived the submission status
+from the issue. That override is no longer in OJS
+`classes/submission/Repository.php` (last touched by ojs `4ea46f5f35`,
+pkp/pkp-lib#12922; not traced further). Kept script
+`shared/playwright/checks/U40/I07/i07.js` (`PHASES=ojs1,stage`).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2 — OJS2 evidence.** Lean: not offered. The suggestions lookup

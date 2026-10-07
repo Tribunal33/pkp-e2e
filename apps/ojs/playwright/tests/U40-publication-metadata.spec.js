@@ -29,8 +29,8 @@
  * asserted as the scenario writes it, not the "recommended" wording),
  * A15 🐞 (S6 gates the language panel on its own loading before picking),
  * A17 ❓ (the Author's Contributors page on the new version is not
- * opened), OJS1 🐞 (scenario 6's leg on an article published into a
- * not-yet-published issue is skipped), OJS2 ❓ (no scheduled article's
+ * opened), OJS1 🐞 (scenario 6's leg on an article published as Author
+ * Original is skipped), OJS2 ❓ (no scheduled article's
  * terms are read as suggestions), OMP1–OMP5 and OPS1–OPS2 (press- and
  * preprint-only, in those trees). The spec's Coverage section records
  * everything else left out.

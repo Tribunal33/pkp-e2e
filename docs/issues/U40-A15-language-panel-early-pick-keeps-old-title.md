@@ -291,9 +291,10 @@ spinner, with a unit test.
   the window reaches seconds only on very slow links (1.5 to 11 s at
   8 kbit/s) or when the server is slow to answer the publication
   request.
-- Not walked: keys typed into the Title box right after a pick are lost
-  while its rich-text editor starts; that is the editor's own start-up,
-  not this cause.
+- Keys typed into the Title box right after a pick are lost while its
+  rich-text editor starts: the editor's own start-up, not this cause;
+  walked on 2026-10-07 on a slow link and registered as its own entry,
+  spec U40 [A22](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U40-publication-metadata.md#a22).
 - Tips: `main` OJS ff004d0973 (lib/pkp 987776cd04, lib/ui-library
   64d67363), OMP 3b0ecf794 and OPS c8af945bb7 (lib/pkp 3dc90c81a6,
   lib/ui-library 280f98c5); `stable-3_5_0` OJS c1cee76b95 (lib/pkp
