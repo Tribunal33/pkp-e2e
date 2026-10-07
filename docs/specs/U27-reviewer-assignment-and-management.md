@@ -211,10 +211,11 @@ under the prompt "Record the response on behalf of the reviewer". Submit
 
    | Status reads | When | Second line |
    |---|---|---|
-   | "Request Sent" | Invitation out, no response, response not yet due | none. The "Response due: {date}" line is missing here, though the date is set ⚠ [A7](#a7) |
-   | "Request Accepted" | Reviewer accepted, review not yet due | "Review due: {date}" |
-   | "Overdue" (red) | No response to a first request and the response date passed | "Response due: {date}" |
-   | "Overdue" (red) | Accepted and the review date passed | "Review due: {date}" |
+   | "Request Sent" | Invitation out, no response, the response date today or later and the review date after today | none. The "Response due: {date}" line is missing here, though the date is set ⚠ [A7](#a7) |
+   | "Request Accepted" | Reviewer accepted, the review date after today | "Review due: {date}" |
+   | "Overdue" (red) | No response to a first request, and the response date has passed (a response date is in time all day) | "Response due: {date}" |
+   | "Overdue" (red) | Accepted, and the review date is today or earlier: the row is already overdue on its review date ⚠ [→ Reviewer's review A18](U28-reviewers-review.md#a18) | "Review due: {date}" |
+   | "Overdue" (red) | No response yet, the response date not passed, and the review date is today. This happens only when both dates fall on today, since the review date cannot come before the response date ⚠ [→ Reviewer's review A18](U28-reviewers-review.md#a18) | "Review due: {date}" |
    | "Request Declined" | Reviewer declined (hover: "The reviewer declined this review request.") | — |
    | "Request Resent" | Request re-sent after a decline, no response yet, even once its response date has passed ⚠ [A47](#a47) | "Response due: {date}", but the date shown is the review deadline ⚠ [A2](#a2) |
    | "Review Submitted" | Review in, no editor has opened it yet ([A10](#a10), retired: opening now marks it viewed); also after "Revert Decision" on a "Complete" row (Rule 16) | reviewer's recommendation {OJS} |
@@ -230,7 +231,7 @@ under the prompt "Record the response on behalf of the reviewer". Submit
    On a press, no recommendation line ever shows, because a press's review
    collects none [OMP1](#omp1). <sup>b</sup>
 3. **What each status admits.** The row's offered actions follow the status.
-   "Send Reminder" is the "Actions" button only in the two "Overdue" states.
+   "Send Reminder" is the "Actions" button only in the "Overdue" states.
    "Read Review" is the button in "Review Submitted" and "Review Viewed".
    "Thank Reviewer" and "Revert Decision" are the buttons in "Complete", and
    "Revert Decision" alone in "Reviewer Thanked". The other states get no
@@ -404,7 +405,10 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     the opportunity to thank the reviewer in the next step.". When the
     assignment's "Publicly Show Reviewer Comments" box is ticked (Edit
     window), that text opens with "This review will be made publicly
-    visible alongside the article.". "Cancel" in the dialog changes
+    visible alongside the article.". {OMP} A press shows the same words,
+    though the published book's page never shows the review
+    ⚠ [→ Monograph landing page A26](U69-monograph-landing-page.md#a26).
+    "Cancel" in the dialog changes
     nothing. Confirming shows "The review has been marked as complete.".
     The row turns "Complete" (with the recommendation
     under the status {OJS}) and offers "Thank Reviewer" and "Revert
@@ -971,7 +975,7 @@ are in the footnote. <sup>s</sup>
 
    Given: Editor, on a round with three reviewers: one whose response date
    has passed without an answer, one who accepted and whose review date
-   has passed, and one still on schedule.
+   has passed, and one still on schedule, its review date after today.
 
    - **The overdue row**: reads "Overdue" in red with "Response due:
      {date}", and its button reads "Send Reminder".
@@ -1418,6 +1422,8 @@ Left out of the scenarios above, by reason:
   - the "Same institution as author" badge (Rule 6): seeded accounts and contributors carry no affiliation
 - **Owned by another feature**:
   - a review manager who is also a reviewer of the submission opening its review stage: the no-access box on every stage, so their own row's menu is never reached (Actors preamble and row 6; *Workflow screen & stage access*, its finding A4)
+  - a row already reading "Overdue" with "Send Reminder" on its review due date, accepted or, with both dates today, unanswered (Rules 2, 3; *Reviewer's review*, its finding A18)
+  - {OMP} "Mark this review as complete?" promising the review "alongside the article" on a press whose book page never shows it (Rule 14a; *Monograph landing page*, its finding A26)
   - "Login As" on a reviewer row (Actors row 7; *Sign-in & sessions*)
   - the ORCID deposit itself, from the menu entry and on completion (Rule 23, Side effects; *ORCID integration*)
   - the round status box, adds on a past round and the review type gating the author's access (Rules 4, 10, Actors row 3; *Review stage & rounds*)
@@ -2339,10 +2345,14 @@ from `editor.review.requestSent` "Request Sent", `.requestAccepted`,
 `editor.review.ReviewerResendRequest` "Request Resent"; sub-lines
 `editor.review.responseDue` "Response due: {$date}" / `.reviewDue` "Review
 due: {$date}" (the Request Sent cell renders no sub-line live — finding
-A7); badge `reviewer.competingInterests`. Overdue math: response
-overdue once the response date-time passes; review overdue from the day
-before the review date ends (both dates fall back to end-of-day when no time
-is stored). Recommendation line: `getRecommendationString()` resolves
+A7); badge `reviewer.competingInterests`. Overdue math
+(`ReviewAssignment::getStatus()`): a response is overdue once its date has
+ended, from the next day on; a review is overdue from the start of its due
+date (`$reviewDueTime < strtotime('tomorrow')`, the date's 23:59:59 against
+tomorrow's midnight), and an unanswered request whose review date is today
+reads "Overdue" / "Review due: {date}" by the same test; both dates fall
+back to end-of-day when no time is stored. The same code is on
+stable-3_5_0, unchanged since the early review-assignment port. Recommendation line: `getRecommendationString()` resolves
 against the journal's recommendation roster passed only by the OJS dashboard
 (`DashboardHandler::setupIndex`, `pageInitConfig['recommendations']`); OMP
 passes none (note f-omp1). Live-probed 2026-08-02: all eleven statuses
@@ -2361,7 +2371,21 @@ The same runs read the status table as quoted in Rule 2: an invited
 request whose response date (two days back) and review date (one day
 back) had both passed read "Overdue" / "Response due: {response date}",
 and an accepted one with a past review date "Overdue" / "Review due:
-{date}".
+{date}". Driven 2026-10-07 (Rules 2, 3, 13; OJS and OMP main, two runs
+each, as a Journal Manager or Press Manager and as the assigned Section
+Editor or Series Editor, read as landed and after a reload; dates set in
+the row's "Edit" window, which stores no time): an accepted request due
+today and an unanswered one whose response and review dates were both
+today read "Overdue" in red with "Review due: {today}" and "Send
+Reminder", and the unanswered one kept "Unassign Reviewer" and "Log
+Response" in its menu; an unanswered request with its response date today
+and its review date two weeks out read "Request Sent", an accepted one due
+tomorrow "Request Accepted", neither with "Send Reminder"; a response and
+a review due yesterday read as above. The reminder sent from both
+due-today rows showed "Notification sent." and a "Reviewer Reminded" line
+in History, and the row still read "Overdue". The reviewer's side of the
+same boundary is the *Reviewer's review* finding A18, driven 2026-10-05.
+Kept script `shared/playwright/checks/U27/I07/i07.js`, phase `due`.
 
 <a id="fn-c"></a>
 **c** — Search surface: legacy form template `advancedSearchReviewerForm.tpl`
@@ -2657,6 +2681,18 @@ asked nothing; after it the dialog showed as quoted in Rule 14b, its
 saved and closed it. The same box put "This review will be made publicly
 visible alongside the article." at the head of the "Mark this review as
 complete?" text (control without the box: the two sentences of Rule 14a).
+Driven again 2026-10-07 (OJS and OMP main, two runs each, on scratch
+contexts with the journal-wide public setting off, the box ticked by a
+Journal Manager or Press Manager; completed once by that manager and once
+by the assigned Section Editor or Series Editor, with an unticked
+control): the same sentence, "alongside the article" on the press too;
+the dialog's "Cancel" sent nothing; confirming showed "The review has been
+marked as complete.", the row read "Complete" with "Thank Reviewer" and
+"Revert Decision" (the recommendation under it on OJS only), also after a
+reload, and the open window's "Mark as Complete" went disabled with
+"Modify Review" enabled. The published book's page never shows such a
+review (*Monograph landing page* finding A26). Kept script
+`shared/playwright/checks/U27/I07/i07.js`, phase `complete`.
 Activity log: attributed modification entries
 (`SUBMISSION_LOG_REVIEW_REVIEWER_COMMENTS_MODIFIED`,
 `…REVIEWER_RECOMMENDATION_MODIFIED`, `…REVIEWER_FORM_RESPONSE_MODIFIED`),
