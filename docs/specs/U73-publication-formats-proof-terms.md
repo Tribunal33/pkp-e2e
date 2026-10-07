@@ -384,6 +384,12 @@ delete this item? This action cannot be undone." and "OK" and "Cancel"
       ⚠ [A21](#a21). An empty "Code Value" is refused with "This field
       is required." under the box, and nothing is saved. Nothing checks
       a value's form, an ISBN's included. <sup>g</sup> <sup>td24</sup>
+    - 18b. **A "Code Value" of spaces.** A "Code Value" holding only
+      spaces is refused: the window stays open with the box emptied and
+      no message, "Required fields are marked with an asterisk: *"
+      shows a second time, and no row is added. "A value is required."
+      shows only later, as a notice beside the next "Identification
+      Code added." [A23](#a23). <sup>g</sup> <sup>td32</sup>
 19. **"Publication Dates".** The list shows each date under "Date" and
     "Role". "Add publication date" opens the date window (Fields); "OK"
     adds the row with the notice "Publication Date added.". A row's
@@ -1077,8 +1083,8 @@ Left out of the scenarios above, by reason:
     Rule 18a)
   - A22 ("Role" arriving on "CIP date (35)"; Rule 19a; scenario 2
     passes it)
-  - A23 (a refused date shows no message in its window; Rule 19b;
-    scenario 2 passes it)
+  - A23 (a refused date, or a "Code Value" of spaces, shows no message
+    in its window; Rules 18b, 19b; scenario 2 passes the refused date)
   - A24 (a refused "URL Path" comes back as a notice on the next save;
     Rule 6; scenario 8 passes it)
   - A25 (the French "Availability" column heading and four texts of
@@ -1125,7 +1131,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | A book in a press's second language cannot get a format or chapter named in that language alone | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | A book format's "Select Files" window tells the editor to tick an "Include checkbox" and press "Search", neither of which it has | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A20](#a20) | A book file on "Direct Sales" at a zero price is free at "0" and out of readers' reach at "0.00" | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A23](#a23) | A date of the wrong length is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A23](#a23) | A date of the wrong length, or a code value of spaces, is refused with no message in its window | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | A refused "URL Path" comes back as a notice when the format is next saved, once per refusal | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A25](#a25) | In French the list's "Availability" column heading and four texts of "Add publication format" read raw codes | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | "URL Path" accepts a number, or a path another format already uses, and a reader link then answers "404 Not Found" | ❓ | minor | — |
@@ -1450,14 +1456,16 @@ Lean: no role; the list holds twenty-one roles, and any preselected one is recor
 Basis: probe. <sup>f-a22</sup>
 
 <a id="a23"></a>
-**A23 — A refused date shows no message in its window** · 🐞 · low.
+**A23 — A refused date, or a code value of spaces, shows no message in its window** · 🐞 · low.
 A date whose length does not fit its "Date Format" is refused with no
 message: the window stays open and only a second "Required fields are
 marked with an asterisk: *" appears. "A date is required and the date
 value must match the chosen date format." shows later, as a notice
-beside the next "Publication Date added.". Expected: the message shows
-in the window when "OK" is refused.
-Basis: probe, 2026-10-03. <sup>f-a23</sup>
+beside the next "Publication Date added.". "Add Code" refuses a "Code
+Value" holding only spaces the same way, its box emptied; the notice "A
+value is required." shows beside the next "Identification Code added.".
+Expected: each message shows in its window when "OK" is refused.
+Basis: probe, 2026-10-03. <sup>f-a23</sup> <sup>td32</sup>
 
 <a id="a24"></a>
 **A24 — A refused "URL Path" comes back as a notice on the next save** · 🐞 · low.
@@ -1723,7 +1731,10 @@ for a "string" format; message `grid.catalogEntry.dateRequired`). Row
 actions: `grid.action.edit`, `grid.action.delete` with
 `common.confirmDelete`. On screen the in-browser check refuses an empty
 "Code Value" or "Date" first ("This field is required.", no request
-sent), so "A value is required." never shows. `str_split()` splits
+sent), so the form's own required check on `value`
+(`grid.catalogEntry.valueRequired` "A value is required.") is reached
+only by a value of spaces, which the in-browser check lets through
+(Rule 18b, note td32). `str_split()` splits
 bytes, not characters: "202609é" (7 characters, 8 bytes) was saved as
 "YYYYMMDD" and "2026091é" (8 characters) refused. Live-probed
 2026-09-28: notes td14, td24.
@@ -2350,6 +2361,29 @@ payment method set up: the window's text and choices as quoted, and no
 notice about a payment method in the window or in the format's
 "Metadata" tab, before and after saving "Direct Sales" at "25.00".
 
+<a id="fn-td32"></a>
+**td32** — Walked 2026-10-03 (Rule 18b; A23), OMP `main`, as `dbarnes`
+on PKP's default test dataset: submission 4's format "PDF" › "Edit" ›
+"Metadata" › "Add Code" (the kept walk
+`shared/playwright/checks/issues/catalog-windows-refuse-without-message/walk.js`
+with `MODE=reach`, its step `r3-code-value-space`). A "Code Value" of
+one space › "OK": the window stayed open with no message in it and none
+at the top right, the box emptied, one more "Required fields are marked
+with an asterisk: *" line under the form, and no row added; a good value
+then saved, and the refusal's notice came with that save. The request
+trims the value to nothing (`PKPRequest::getUserVars()`), so the form's
+required check on `value` refuses it. Walked again 2026-10-07 (the same
+walk, steps `r3-code-value-space` and `r4-code-good`; OMP `main` at omp
+`0c6a3ebed1`, the default dataset freshly reset) for the late notice's
+words: the same refusal, then the good save closed the window and two
+notices showed, "A value is required." and "Identification Code added."
+(the page's notification fetch after the save: a `general` pair, "Errors
+occurred processing this form: A value is required." and "Notification:
+Identification Code added."). The words are
+`grid.catalogEntry.valueRequired` in OMP's `locale/en/locale.po` on
+`main` and `stable-3_5_0`. `stable-3_5_0` was read in the code, where
+`codeForm.tpl` and `IdentificationCodeForm.php` are the same files.
+
 <a id="fn-f-a1"></a>
 **f-a1** — Notes c and j. `setAvailable`, `editApprovedProof` and
 `saveApprovedProof` lack `ROLE_ID_ASSISTANT`, while the cell provider
@@ -2560,7 +2594,11 @@ role as 35).
 
 <a id="fn-f-a23"></a>
 **f-a23** — Note g (the custom length check, `grid.catalogEntry.dateRequired`).
-Live-probed 2026-09-28: note td14.
+Live-probed 2026-09-28: note td14. The code window: note td32
+(`IdentificationCodeGridHandler::updateCode()` answers a refusal with
+the form drawn again, and `codeForm.tpl` gives "Code Value" no place for
+a message and puts the required-fields line after `</form>`, so the
+redraw adds one).
 Issue report: [pkp-e2e#367](https://github.com/jardakotesovec/pkp-e2e/issues/367) ([docs/issues/U09-A11-static-page-refusal-repeated-after-save.md](../issues/U09-A11-static-page-refusal-repeated-after-save.md)).
 
 <a id="fn-f-a24"></a>

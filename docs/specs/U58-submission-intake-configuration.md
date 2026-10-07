@@ -296,6 +296,13 @@ shows only while its text is not empty. <sup>j</sup>
     form has changed. Do you wish to continue without saving?", and
     leaving the page asks the browser's leave-page question.
     <sup>f</sup> <sup>td13</sup>
+    - 15a. A press on the dimmed page beside the "Add a Component"
+      window closes it too. Made while the cursor is still in a "Name"
+      just typed, the press closes the window at once, without the
+      question "Close" asks: the typed name is lost, and the list has no
+      new row. The next time the page is reloaded or left, the browser
+      asks its leave-page question, though no window is open
+      ⚠ [A15](#a15). <sup>td15</sup>
 16. **Refused saves.** An empty "Name", a malformed "Key" and a "Key"
     already taken are refused with the messages in Fields, the window
     staying open. Only the empty "Name" is flagged under its box; the two
@@ -868,6 +875,8 @@ Left out of the scenarios above, by reason:
   - A1 (a new component sharing first place with the first one; Rules
     14, 18; scenarios 6 and 7 pass it)
   - A10 (a component "Name" of only spaces; Fields, "Name")
+  - A15 (a press on the dimmed page beside the "Add a Component" window
+    with a "Name" just typed; Rule 15a)
   - A12 (the "Delete" window left spinning after a refused delete; Rule
     17a; scenario 7 passes it)
   - A2 (a deleted dependent component still offered on the "Media" page;
@@ -950,6 +959,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | A component name of only spaces is refused with a raw text key | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | A refused component delete leaves its confirmation window spinning | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | In French (Canada), a press's "Disable Submissions" help reads a raw code | 🐞 | minor | — |
+| [A15](#a15) | A press on the dimmed page beside the "Add a Component" window closes it without the question "Close" asks, and the "Name" just typed is lost | 🐞 | minor | — |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its "Author Guidance" labels the copyright box "Copyright notice" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -1126,6 +1136,18 @@ opens on this panel. The press's French (Canada) translation leaves the
 text empty, the same kind of gap as the components tab's in
 [A9](#a9).
 Basis: probe, 2026-10-04. <sup>f-a14</sup>
+
+<a id="a15"></a>
+**A15 — A press beside the "Add a Component" window closes it without the question "Close" asks** · 🐞 · minor.
+A manager who types a "Name" in the "Add a Component" window and presses
+its "Close" is asked "The data on this form has changed. Do you wish to
+continue without saving?". A press on the dimmed page beside the window,
+made while the cursor is still in "Name", closes the window at once with
+no question: the typed name is lost, and the list has no new row. The
+next time the manager reloads or leaves the page, the browser asks its
+leave-page question, though no window is open and nothing is left to
+lose. A stray press beside the window costs what was typed in it.
+Basis: probe, 2026-10-06. <sup>f-a15</sup>
 
 ### OJS
 
@@ -1765,6 +1787,26 @@ only: not a defect (issues session ruling, 2026-10-02). Code read only,
 not driven: OJS and OMP open the same window and lack the same two
 French texts.
 
+<a id="fn-td15"></a>
+**td15** — Live-probed 2026-10-06 (Rule 15a; A15), OJS, OMP and OPS
+`main` after pkp/pkp-lib#13188 merged (ui-library `a36dc7fe78`), PKP's
+default test dataset, the manager `rvaca`, one run per app, each press a
+real mouse press at the left edge of a 1280 px wide page (kept script
+`shared/playwright/checks/U58/I07b/i07b.js`, restored 2026-10-07 from
+the walk that ran, and run that day on the three apps at ojs
+`3265fdc673`, omp `0c6a3ebed1`, ops `8ae6c68e04`, ui-library `7503fab4`,
+with the same reads): "Add a Component" with
+nothing typed closed at the press; opened again, with "u58b neighbour"
+filled into "Name" and the cursor left there, it closed at the same
+press with no `confirm` raised, and the list read 12 rows before and
+after (a press 15); the settings page, opened again by its address
+straight after, raised one `beforeunload` question on each app, and no
+later page load raised another. Control: the first row's "Delete" window
+closed at the same press, the row kept. First seen 2026-10-04 on OJS
+`main`, with and without the fix that retired A13. Not driven: the press
+once "Name" has been left with Tab, Escape, a row's "Edit" window, and
+`stable-3_5_0`.
+
 <a id="fn-f-a1"></a>
 **f-a1** — `GenreDAO::insertObject()` stores `(float) $genre->getSequence()`,
 0 for a new component, the sequence `installDefaults()` gives the first
@@ -1873,6 +1915,26 @@ interface in French (Canada): the help read
 (9c5e24246c) leaves the same text empty, and so does OPS's
 `locale/fr_CA/manager.po` on `main` (c8af945bb7) and `stable-3_5_0`;
 OJS's has a text.
+
+<a id="fn-f-a15"></a>
+**f-a15** — Live-probed 2026-10-06, all three apps, one run each (note
+td15). The window is the legacy `GenreForm` drawn in ui-library's side
+window (`AjaxModalWrapper.vue` inside `SideModal.vue`):
+"Close", Escape and a press outside all run `SideModal`'s
+`handleClose()`, whose close callback sends `containerClose` to the
+form. `FormHandler.containerCloseHandler()` (lib/pkp
+`js/controllers/form/FormHandler.js`) asks `form.dataHasChanged` only
+once `formChangesTracked` is set, and `formChange()` sets it on a
+field's `change` event, which a text box sends when it loses focus, and
+then registers the form for the page's leave-page question
+(`formChanged`). A press on "Close" takes the focus out of "Name" before
+the window closes. The record fits a press on the dimmed page that
+closes the window before "Name" loses focus, the `change` arriving after
+the close with nothing left to clear it: no question at the press, one
+`beforeunload` at the next page load. Code read 2026-10-07 at lib/pkp
+`f8285b0b8f` and ui-library `7503fab4`; the order of the two events was
+read, not traced in the browser, and the same read says the press asks
+once the box has been left.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — OJS `templates/gateway/lockss.tpl` and `clockss.tpl` test
