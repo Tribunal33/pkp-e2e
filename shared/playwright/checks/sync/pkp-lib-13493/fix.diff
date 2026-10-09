@@ -1,0 +1,55 @@
+--- a/lib/pkp/classes/orcid/OrcidManager.php
++++ b/lib/pkp/classes/orcid/OrcidManager.php
+@@ -179,7 +179,9 @@
+         // Overwrite redirect base url if variable is configured
+         $customRedirectUrl = self::getCustomRedirectUrl();
+         if (!empty($customRedirectUrl)) {
+-            $redirectUrl = preg_replace("#^https{0,1}:\/\/(.*)\/#U", $customRedirectUrl, $redirectUrl);
++            // The pattern takes the scheme, the host and the slash after it: put the slash back
++            // whether or not the configured base URL ends with one.
++            $redirectUrl = preg_replace("#^https{0,1}:\/\/(.*)\/#U", rtrim($customRedirectUrl, '/') . '/', $redirectUrl);
+         }
+ 
+         return self::getOauthPath($context) . 'authorize?' . http_build_query(
+--- a/lib/pkp/classes/orcid/actions/AuthorizeUserData.php
++++ b/lib/pkp/classes/orcid/actions/AuthorizeUserData.php
+@@ -233,8 +233,9 @@
+                 case 401:
+                     $errorData = json_decode($clientException->getResponse()->getBody()->getContents(), true);
+ 
+-                    if (json_last_error() !== JSON_ERROR_NONE) {
++                    if (json_last_error() !== JSON_ERROR_NONE || !is_array($errorData)) {
+                         $message .= $defaultReason;
++                        break;
+                     }
+ 
+                     $description =  $errorData['error_description'] ?? '';
+@@ -242,9 +243,9 @@
+ 
+                     if (empty($description) || empty($errorReason)) {
+                         $message .= $defaultReason;
++                        break;
+                     }
+ 
+-
+                     $message .= $description . '. Reason: ' . $errorReason . '.';
+                     break;
+                 default:
+--- a/lib/pkp/classes/migration/upgrade/v3_5_0/I13283_RestoreDegradedOrcidFunctionality.php
++++ b/lib/pkp/classes/migration/upgrade/v3_5_0/I13283_RestoreDegradedOrcidFunctionality.php
+@@ -80,6 +80,15 @@
+             return;
+         }
+ 
++        // A base URL already stored (the migration ran before, and the site setting may have been
++        // changed since) is kept: the config value only fills an empty or missing setting.
++        $stored = DB::table('site_settings')
++            ->where('setting_name', 'orcidCustomRedirectBaseUrl')
++            ->value('setting_value');
++        if (!empty($stored)) {
++            return;
++        }
++
+         DB::table('site_settings')
+             ->updateOrInsert(
+                 ['setting_name' => 'orcidCustomRedirectBaseUrl'],

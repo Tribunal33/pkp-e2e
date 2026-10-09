@@ -165,10 +165,10 @@ In French most of its headings and descriptions are raw codes
 4. **The confirmation window.** The final window is titled "Schedule For
    Publication" on a journal and press, and "Post the preprint" on a
    preprint server. It shows, in order: an optional warning list ("The
-   following issues were found, but will not prevent publishing"; none in
-   a stock install, plugins add them ⚠ [OJS7](#ojs7)), then either the
-   confirmation text
-   with a Publish/Post/Schedule For Publication button, or, when
+   following issues were found, but will not prevent publishing", worded
+   the same on a preprint server; its lines are named at the end of this
+   rule ⚠ [OJS7](#ojs7)), then either the confirmation text with a
+   Publish/Post/Schedule For Publication button, or, when
    requirements are unmet, "The following requirements must be met before
    this can be published." ("…posted." on a preprint server) with the
    list and **no confirm button at all**. The confirmation text opens "All
@@ -187,7 +187,22 @@ In French most of its headings and descriptions are raw codes
    state at once: the head's status and, in place of the publish
    button, "Unpublish" ("Unpost") or "Unschedule" (Rules 6, 8, 9).
    This holds after "Review Publishing Details" or directly (Rule 3).
-   <sup>l</sup>
+
+   In a stock install the warning list holds two lines, both about the
+   contributors' ORCID iDs and both only while ORCID is enabled for the
+   journal (see [ORCID integration](U04-orcid-integration.md)):
+   "Unauthenticated ORCiDs for contributors detected." when a
+   contributor's iD is unauthenticated, and "Duplicate ORCiDs for
+   contributors detected." when two contributors hold the same verified
+   iD. Two contributors sharing one unauthenticated iD get the
+   unauthenticated line alone. Neither line stops anything: under the
+   list the window still shows its all-met text and its button, and
+   confirming publishes the version, its reader page live. The warning
+   is this window's alone; no notice repeats it once the window has
+   closed. With ORCID off, or with every iD verified and no two alike,
+   there is no list. Plugins add lines of their own: on a journal, the
+   Crossref plugin's deposit checks (see [DOIs](U45-dois.md), its
+   Rule 39). <sup>l</sup>
 5. **What the issue choice decides {OJS}.** The four assignments map to
    outcomes. Only the choices the journal's issues allow are offered: with
    no future issue there are no "Future Issue" options, and with no issues
@@ -226,9 +241,7 @@ In French most of its headings and descriptions are raw codes
    re-posts it ⚠ [OPS1](#ops1). <sup>n</sup>
 7. **What blocks publishing.** The requirements list (Rule 4) refuses the
    following. In every app: a declined submission ("A declined submission
-   can not be published." / "…posted."), and a contributor's
-   unauthenticated or duplicated ORCID iD when ORCID is enabled (see
-   [ORCID integration](U04-orcid-integration.md)). On a journal: an
+   can not be published." / "…posted."). On a journal: an
    assigned issue that no longer exists; an unpaid publication fee once
    publication fees are fully in force (enabling payments and setting the
    fee is not enough, the chosen payment method must itself be completely
@@ -241,7 +254,10 @@ In French most of its headings and descriptions are raw codes
    The publish button first opens "Review Publishing Details", which
    requires, and saves, a Publication Stage and Revision Significance on
    the declined submission before the no-button window appears. A press
-   or preprint server opens the refused window directly. <sup>o</sup>
+   or preprint server opens the refused window directly. A contributor's
+   unauthenticated or duplicated ORCID iD is not a requirement: the
+   window warns about it and the publish goes through (Rule 4).
+   <sup>o</sup>
 8. **What publishing writes.** Going live stamps the publication date
    (today if the field was empty; a filled date is kept, even a past one),
    fills the empty copyright/license fields from the journal's defaults,
@@ -445,6 +461,11 @@ In French most of its headings and descriptions are raw codes
   any (Rule 15). Publication fees add their requirement (Rule 7) only once
   fully in force: payments on, a fee amount, and the chosen payment method
   itself completely set up.
+- **Enable ORCID functionality**: the journal's "ORCID" tab on Settings ›
+  Users & Roles, or site-wide from Site Settings; off by default (see
+  [ORCID integration](U04-orcid-integration.md)). On, the confirmation
+  window warns about contributors' unauthenticated or duplicated iDs
+  (Rule 4); off, it never does. <sup>l</sup>
 - **No switch for the rest.** No journal, press or server setting turns the
   "Publication Published" email off (each recipient can, in their own
   profile; Side effects). Nothing enables author self-posting on a preprint
@@ -473,8 +494,9 @@ In French most of its headings and descriptions are raw codes
 - [My Submissions](U22-my-submissions.md) /
   [Submissions dashboard](U23-submissions-dashboard.md): the list views a
   publish, schedule or unpublish moves a submission between.
-- [ORCID integration](U04-orcid-integration.md): the ORCID publishing
-  requirements (Rule 7) and the on-publish deposit.
+- [ORCID integration](U04-orcid-integration.md): the verified and
+  unauthenticated iDs the publish window warns about (Rule 4), and the
+  on-publish deposit.
 - [Payments & APCs](U52-payments-and-apcs.md): the publication fee whose
   unpaid state blocks a journal's publishing (Rule 7).
 - [Submission wizard](U21-submission-wizard.md): the preprint server's
@@ -1009,7 +1031,18 @@ Left out of the scenarios above, by reason:
     after the journal is renamed; and a minor version showing the
     earlier version's list before it is published (Fields, the
     Publication Settings page)
+  - on a scratch journal with ORCID enabled, a submission in Production
+    whose contributor holds an unauthenticated iD: the confirmation
+    window lists "Unauthenticated ORCiDs for contributors detected."
+    under "The following issues were found, but will not prevent
+    publishing", still offers "Publish" ("Post"), and confirming
+    publishes it, in every app; a submission without an iD on the same
+    journal shows no list (Rule 4; Settings)
 - **Rarely met**:
+  - two contributors holding the same verified iD, warned about with
+    "Duplicate ORCiDs for contributors detected.", and two sharing one
+    unauthenticated iD getting the unauthenticated line alone (Rule 4):
+    either takes one person's iD on two contributor records
   - the publish button skipping the details panel on a journal with
     issues, after a Publication Settings save on a version that already
     has its stage (Rules 3, 3b): scenario 5 runs on a journal with no
@@ -1073,9 +1106,6 @@ Left out of the scenarios above, by reason:
   - OPS6 (the first-post acknowledgement's "Preprint URL" leading to the
     editorial workflow, not the public preprint; Side effects)
 - **No seed**:
-  - the warning list "The following issues were found, but will not
-    prevent publishing" (Rule 4): plugins alone add entries, none in a
-    stock install
   - a scheduled press item published by the once-daily check when its
     date arrives (Rule 6): the date lies beyond the test session
   - a saved revision summary listed "Review (Round {n}) • {date} •
@@ -1088,8 +1118,8 @@ Left out of the scenarios above, by reason:
 - **Owned by another feature**:
   - the entry page saving for whoever may edit the publication (Actors
     row 6; *Publication metadata*)
-  - an unauthenticated or duplicated ORCID iD refused while ORCID is on
-    (Rule 7; *ORCID integration*)
+  - the Crossref plugin's lines in a journal's warning list (Rule 4;
+    *DOIs*, its scenario 14)
   - an unpaid publication fee refused once fees are fully in force
     (Rule 7; Settings; *Payments & APCs*)
   - publishing filling the empty copyright and license fields from the
@@ -1819,8 +1849,41 @@ second press.
 `publication.publish.warning`, then the app `PublishForm` — a
 confirmation-only form (`FieldHTML`). With `$requirementErrors` the page
 is added WITHOUT a submit button (`publication.publish.requirements`).
-Warnings come only from the `Publication::validatePublishWarnings` hook
-(core adds none). Confirmation strings: OJS
+Warnings: `Repository::validatePublishWarnings()`, read by
+`PublishHandler` alone, adds `orcid.verify.hasUnauthenticatedOrcid` and
+`orcid.verify.duplicateOrcidAuthor` while `OrcidManager::isEnabled()`
+(an iD without an access token is unauthenticated and is not counted
+toward a duplicate), then calls the `Publication::validatePublishWarnings`
+hook; OJS's Crossref plugin is the one subscriber the apps ship
+(*DOIs*, its note u), OMP and OPS ship none. The two ORCID lines were
+requirements until pkp/pkp-lib#13493 (issue pkp/pkp-lib#13283) moved
+them (fn-o). Live-probed 2026-10-09 at the PR head `e29a720de0`, before
+its merge, on OJS, OMP and OPS (PKP's default test dataset, ORCID enabled
+under "Public Sandbox", the iDs set in the database since ORCID's
+sign-in cannot complete on a test install and read back on the
+contributor form): with one contributor holding an unauthenticated iD
+the window listed "Unauthenticated ORCiDs for contributors detected."
+under "The following issues were found, but will not prevent
+publishing" (the heading unchanged in OPS's "Post the preprint"
+window), above the unchanged all-met text and "Publish" ("Post");
+with two contributors sharing one unauthenticated iD the same line
+alone; with two sharing one verified iD "Duplicate ORCiDs for
+contributors detected." alone. Each confirm closed the window, the
+head read "Status: Published" ("Posted") with "Unpublish" ("Unpost"),
+no notice showed and the public page answered. A submission with no iD
+showed no list, and a declined one (OJS, OPS) the refusal with no
+button, as before. The form's own route
+(`PUT …/publications/{id}/publish`), sent for a submission with an
+unauthenticated iD, answered 200 with the publication and no warning
+in its body. Not driven: ORCID off (the gate above; the windows probed
+since 2026-08-29 at the install default, ORCID off, carried no list);
+one verified and one unauthenticated holder of the same iD (the code
+reads it as a duplicate when the verified one is listed first). What a journal's
+window lists when the Crossref plugin has lines of its own and an
+ORCID line is due went to the team with the PR's review (2026-10-09)
+and is not claimed here. Kept check
+`shared/playwright/checks/sync/pkp-lib-13493/publish-warning.js`.
+Confirmation strings: OJS
 `publication.publish.confirmation[.backIssue|.continuousPublication|.issueLess|.futureIssue]`
 (the future-issue branch relabels the submit
 `editor.submission.schedulePublication`); OMP `…confirmation` ("…make
@@ -1880,9 +1943,8 @@ only usage stats). It publishes the current publication of scheduled
 submissions whose date has arrived.
 
 <a id="fn-o"></a>
-**o** — `validatePublish()`: shared — `publication.required.declined`,
-ORCID `orcid.verify.duplicateOrcidAuthor` /
-`orcid.verify.hasUnauthenticatedOrcid` (when ORCID enabled); OJS —
+**o** — `validatePublish()`: shared — `publication.required.declined`
+alone; OJS —
 `publication.invalidIssue`,
 `editor.article.payment.publicationFeeNotPaid` (when publication fees
 enabled), `publication.required.pmurReview`; OMP — no additions
@@ -1893,11 +1955,14 @@ Details" panel opened first and required Publication Stage + Revision
 Significance (an empty Confirm marks both "This field is required.";
 the filled values are saved onto the declined submission) before the
 no-button window appeared; OMP and OPS opened the refused window
-directly. The ORCID refusal live-probed 2026-08-29 on all three apps
-(scratch journal, press and preprint server, each with a contributor
-carrying an unauthenticated iD): the window listed "Unauthenticated
-ORCiDs for contributors detected." with no confirm button; the
-duplicate-iD case was not probed. The dangling-issue refusal ("The
+directly. The ORCID iDs: until pkp/pkp-lib#13493 (issue
+pkp/pkp-lib#13283) `orcid.verify.hasUnauthenticatedOrcid` and
+`orcid.verify.duplicateOrcidAuthor` were requirements of this check,
+and a contributor's unauthenticated iD was refused with no confirm
+button on all three apps (live-probed 2026-08-29); at the PR head
+`e29a720de0`, before its merge, live-probed 2026-10-09 on OJS, OMP and
+OPS, `validatePublish()` holds neither and both are warnings that let the
+publish through (fn-l). The dangling-issue refusal ("The
 issue for this publication could not be found.") was not reachable
 through the screens — live-probed 2026-08-29: deleting the assigned
 (unconfirmed) issue reverted the version to "Unscheduled" and the next
@@ -2871,8 +2936,8 @@ is homed at
 ## Reference — code anchors
 
 - `lib/pkp/classes/publication/Repository.php` — `publish()`,
-  `unpublish()`, `version()`, `validatePublish()`, the abstract
-  `setStatusOnPublish()`
+  `unpublish()`, `version()`, `validatePublish()`,
+  `validatePublishWarnings()`, the abstract `setStatusOnPublish()`
 - `{app}/classes/publication/Repository.php` — per-app
   `setStatusOnPublish()`, `validatePublish()` additions, `version()`
   cloning; OPS `canCurrentUserPublish()`

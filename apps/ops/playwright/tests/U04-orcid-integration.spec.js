@@ -15,7 +15,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A2 🐞,
- * A4 🐞, A5 🐞, A8 🐞, OPS2 🐞, A3 ❓, A6 ❓, A7 ❓, A9 ❓, OPS1 ❓, OPS3 ✅.
+ * A4 🐞, A5 🐞, A8 🐞, OPS2 🐞, A3 ❓, A6 ❓, A7 ❓, OPS1 ❓, OPS3 ✅.
  * Where a test passes through one (S2 presses the connect button beside
  * A4's link, S6 reads the page A8 marks, the S8 absence test seeds the
  * toggle OPS1 marks) it asserts the effect the spec states and leaves the

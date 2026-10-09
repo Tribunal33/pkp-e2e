@@ -19,8 +19,9 @@
  * (S2 asserts the connect button's popup only; the "What is ORCID?" link's
  * own page is S6's by URL), A2, A5, A3 (S7 registers without connecting
  * and asserts the block's presence only), A6 (serial S8 asserts the
- * toggle's behavior, never its label), A9 (site-level ORCID stays off and
- * untouched: a shared singleton across every worker and fleet).
+ * toggle's behavior, never its label). Site-level ORCID stays off and
+ * untouched: a shared singleton across every worker and fleet (the spec's
+ * "No seed" lines; its entry A9 is retired).
  *
  * Every test seeds its own scratch press via the scenario endpoints
  * (publicknowledge and the seeded roster stay untouched); ORCID enablement

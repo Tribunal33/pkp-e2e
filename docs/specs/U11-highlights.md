@@ -159,9 +159,9 @@ second language's boxes, labelled "{Field} in {language}" (Rule 11).
     the site hosts two or more journals; a site with exactly one journal
     has no site-level highlights screen. The same rule hides the site's
     "Appearance", "Announcements" and "Plugins" tabs and the Site Setup
-    side tabs "Settings", "Information", "Navigation" and "ORCID": a
+    side tabs "Settings", "Information" and "Navigation": a
     one-journal site shows only "Site Setup" with "Security", "Languages",
-    "Bulk Emails" and "Statistics". The rule belongs to *Site settings*.
+    "Bulk Emails", "Statistics" and "ORCID". The rule belongs to *Site settings*.
     <sup>c</sup>
 13. **The site's home page.** The site's highlights are meant to show on
     the site's own home page, the page that lists the hosted journals; none
@@ -665,7 +665,10 @@ journal manager gets the same page at the site's settings address and at
 <a id="fn-c"></a>
 **c — the site tab's availability.** `AdminHandler::siteSettingsAvailability()`
 sets `highlights` (with `siteAppearance`, `navigationMenus`, `announcements`,
-`siteTheme`, `siteInfo`, `siteConfig`, `orcidSiteSettings`) to
+`siteTheme`, `siteInfo`, `siteConfig`; `orcidSiteSettings` too until
+pkp/pkp-lib#13493, which shows the "ORCID" side tab whatever the count:
+driven at the PR head `e29a720de0`, before its merge, 2026-10-09, on
+PKP's default dataset, OJS, OMP and OPS) to
 `app()->get('context')->getCount() !== 1`: the tab shows on a site with
 no journal or with two or more, and never with exactly one. On a fleet the
 seeded `publicknowledge` is alone until the first scratch context is

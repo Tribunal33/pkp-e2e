@@ -12,7 +12,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
- * A2 🐞, A4 🐞, A5 🐞, A8 🐞, A3 ❓, A6 ❓, A7 ❓, A9 ❓. Where a test passes
+ * A2 🐞, A4 🐞, A5 🐞, A8 🐞, A3 ❓, A6 ❓, A7 ❓. Where a test passes
  * through one (S2 presses the connect button beside A4's link, S6 reads the
  * page A8 marks, S9 reads the completed review's row A1 marks) it asserts
  * the effect the spec states and leaves the finding's own claim unasserted

@@ -231,14 +231,19 @@ bottom, and a sixth, "Identity", once the book has been published;
       chosen, "Save" takes the first suggestion as chosen and publishes
       it; leaving the box with Tab also makes the first suggestion a
       chosen book ⚠ [A8](#a8).
-    - 12b. **Refused.** "Save" with nothing typed and nothing chosen, or
-      with a chosen book that a requirement refuses (an unverified or
-      duplicated ORCID iD while ORCID is on), is refused with "The form
-      was not saved because 1 error(s) were encountered. Please correct
-      these errors and try again.", a notice at the top right that
-      disappears after about five seconds. The panel stays open with its
-      chosen books, nothing in it is marked ⚠ [A5](#a5), and none of the
-      chosen books is added, even those no requirement refuses.
+    - 12b. **Refused.** "Save" with nothing typed and nothing chosen is
+      refused with "The form was not saved because 1 error(s) were
+      encountered. Please correct these errors and try again.", a notice
+      at the top right that disappears after about five seconds. The
+      panel stays open and nothing in it is marked ⚠ [A5](#a5).
+    - 12c. **A contributor's ORCID iD.** With ORCID on (Settings bullet
+      6), a book whose contributor has an unauthenticated ORCID iD is
+      added like any other: the panel closes, the book is in the list
+      and its public page answers. The Catalog page shows no notice or
+      warning about the iD.
+      The warning about it is the publish window's alone
+      ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+      its Rule 4), and "Add Entry" opens no such window. <sup>g</sup>
 13. **The Catalog Entry page.** Each version has its own; "Save" stores
     the whole page onto the shown version, with "Saving", then "Saved",
     beside the button, and after a reload the page shows the saved
@@ -337,9 +342,12 @@ bottom, and a sixth, "Identity", once the book has been published;
    releases ([Appearance & theming](U10-appearance-and-theming.md), its
    Rule 17); nothing on this feature's screens changes. <sup>j</sup>
 6. **ORCID** (Settings › Users & Roles › "ORCID", "Enable ORCID
-   functionality"; off on a new press). On, a book whose contributor has
-   an unverified or duplicated ORCID iD cannot be published, through "Add
-   Entry" too (Rule 12b; [ORCID integration](U04-orcid-integration.md)).
+   functionality"; off on a new press). On, the workflow's publish
+   window warns about a contributor's unauthenticated or duplicated
+   ORCID iD and still publishes
+   ([Publish, schedule & versions](U49-publish-schedule-and-versions.md),
+   its Rule 4; [ORCID integration](U04-orcid-integration.md)). "Add
+   Entry" opens no such window and shows no warning (Rule 12c).
    <sup>g</sup>
 7. **"Permit submission metadata edit."** of a role (Settings › Users &
    Roles › "Roles" › the role's "Edit"; unticked for the Layout Editor).
@@ -737,6 +745,10 @@ Left out of the scenarios above, by reason:
     "Identity" group on a book never published; and the list unchanged
     after the press is renamed (Fields, the "Catalog Entry" page;
     scenario 5 reads the group's heading only)
+  - on a scratch press with ORCID on, "Add Entry" › "Save" with a book
+    whose contributor has an unauthenticated ORCID iD: the panel
+    closes with no notice, the book is in the list and its public page
+    answers (Rule 12c; Settings bullet 6)
 - **Rarely met**:
   - "Add Entry" › "Save" of a book whose "Date Published" lies in the
     future: the book is scheduled, stays off the list and is still
@@ -765,9 +777,7 @@ Left out of the scenarios above, by reason:
     of monographs"; Rules 4, 13b; Settings bullets 2, 3)
   - A4 (a book flagged in one category and pressed in another; a book
     moved to another series; Rule 8)
-  - A5 ("Add Entry" › "Save" with nothing chosen, or with a book whose
-    contributor's ORCID iD is unverified or duplicated while ORCID is
-    on; Rule 12b; Settings bullet 6)
+  - A5 ("Add Entry" › "Save" with nothing chosen; Rule 12b)
   - A6 (the notice after "Unpublish"; Rule 14; scenario 2 passes the
     unpublish)
   - A8 ("Add Entry" › "Save" with a word typed and nothing chosen; Rule
@@ -819,7 +829,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A published book's Production stage says "using the links just above" with no links there, and shows it to the Author | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | With a filter, an ascending "Order of monographs" lists the other way round; after a filter the press's order is lost | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Catalog page: pressing "Featured in category" for a book's second category unfeatures it in the first | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A5](#a5) | Catalog "Add Entry" refuses a book with only "Please correct these errors" and never says why | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A5](#a5) | Catalog "Add Entry" refuses "Save" with no book chosen with only "Please correct these errors" and never says why | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | On a press, an unpublished book's Production stage still says the monograph has been approved | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Catalog "Add Entry": "Save" with a word typed publishes the first suggested book, chosen or not | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Catalog "Add Entry" still offers a book already chosen, and "Save" publishes it twice | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -903,19 +913,18 @@ series' box before it is featured there.
 Since: 2017-09-05 (nine years) · Basis: probe, 2026-10-03. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — Catalog "Add Entry" refuses a book with only "Please correct these errors" and never says why** · 🐞 · low.
-On a press with ORCID turned on, an editor chooses a book in the Catalog
-page's "Add Entry" and presses "Save". When one of the book's
-contributors has an unauthenticated ORCID iD, the book is not added, and
-the page shows only "The form was not saved because 1 error(s) were
-encountered. Please correct these errors and try again." for about five
-seconds. Nothing in the panel is marked, so the editor cannot tell why
-the book was refused, or which book when several were chosen.
+**A5 — Catalog "Add Entry" refuses "Save" with no book chosen with only "Please correct these errors" and never says why** · 🐞 · low.
+An editor opens the Catalog page's "Add Entry" and presses "Save" with
+nothing typed and no book chosen. The page shows only "The form was not
+saved because 1 error(s) were encountered. Please correct these errors
+and try again." for about five seconds, and nothing in the panel is
+marked. Expected: the box is marked with the reason. It shows on every
+press and version; the editor can guess the reason here.
 
-The same blank refusal answers "Save" with no book chosen, on every
-press and version; there the editor can guess the reason. The book's own
-workflow names the ORCID reason in its "Publish" window.
+A book whose contributor has an unauthenticated ORCID iD is not refused
+this way: "Add Entry" adds it (Rule 12c).
 Basis: probe, 2026-10-03. <sup>f-a5</sup>
+Report: refresh owed — pkp/pkp-lib#13493 (PR head e29a720de0, before its merge) moves the ORCID check out of the publish requirements: "Add Entry" now adds a book whose contributor has an unauthenticated iD, so the report's walked case no longer shows; the refusal with no book chosen is left (2026-10-09)
 
 <a id="a6"></a>
 **A6 — On a press, an unpublished book's Production stage still says the monograph has been approved** · 🐞 · low.
@@ -1271,7 +1280,8 @@ scheduled; the default page's submit label `common.save` "Save".
 `CatalogEditModal.vue` titles the panel "Add Entry". `addToCatalog()`
 answers 400 `api.submissions.400.submissionIdsRequired` with no ids, skips
 a current publication already published, runs `validatePublish()`
-(declined, ORCID) and answers 400 with the requirement-keyed errors, else
+(declined; the two ORCID checks too until pkp/pkp-lib#13493, below) and
+answers 400 with the requirement-keyed errors, else
 calls `Repo::publication()->publish()` for each id posted, which fires
 `PublicationPublished` and, through OMP `setStatusOnPublish()`, schedules a
 future date. `Form.vue::error()` turns a 400 into the `form.errors`
@@ -1311,6 +1321,27 @@ seconds and nothing marked, and a refused book chosen with an acceptable
 one left both unpublished; with the box unticked both books were added.
 With ORCID on and a verified contributor, the job queue held no ORCID
 deposit job before or after "Save".
+Live-probed 2026-10-09 at the PR head `e29a720de0`, before its merge
+(pkp/pkp-lib#13493, issue pkp/pkp-lib#13283; Rules 12b, 12c; Settings
+bullet 6), OMP, PKP's default test dataset, as `dbarnes`, ORCID on under
+"Public Sandbox": the change moves the ORCID checks from
+`validatePublish()` to `validatePublishWarnings()`, which the publish
+window alone reads and `addToCatalog()` does not. A Copyediting book
+whose first contributor held an unauthenticated iD (written into the
+database, shown on the contributor form with the hollow icon and
+"(unauthenticated)") was chosen in "Add Entry": "Save" answered 200, the
+panel closed with no notice, the book stood in the Catalog list and its
+public page answered. The same day's publish window for such a book
+listed "Unauthenticated ORCiDs for contributors detected." as a warning
+with "Publish" (the publishing spec's note l). So the 2026-09-27 ORCID
+refusals above, and the refused book that kept an acceptable one from
+being added, no longer show; in a stock install no requirement is left
+that a suggested book can fail (a declined book is never suggested).
+Not re-driven that day: "Save" with nothing chosen (2026-09-27 above
+and 2026-10-03, note f-a5) and a duplicated iD through "Add Entry" (the
+code reads it the same). Kept check
+`shared/playwright/checks/sync/pkp-lib-13493/publish-warning.js` (case
+`add-entry`).
 Live-probed 2026-09-28 (Side effects bullet 2), OMP, as a scratch
 press's Press manager, two runs, on a press with DOIs "Upon
 publication" ("Items with DOIs" publication only) and on one with DOIs
@@ -1653,7 +1684,14 @@ empty "Save" carries "You must provide one or more submission ids to be
 added to the catalog."; the workflow's "Schedule For Publication" window,
 for the same books, named the requirement and offered no publish button.
 "Please fix the errors marked below" is in no English locale file of the
-checkout.
+checkout. Walked again 2026-10-03 for the issue report, both cases.
+The ORCID case left the entry on 2026-10-09: at the PR head
+`e29a720de0`, before its merge (pkp/pkp-lib#13493, issue
+pkp/pkp-lib#13283), live-probed 2026-10-09 on OMP, "Add Entry" › "Save"
+added a book whose contributor had an unauthenticated iD, with no notice
+(note g). The refusal with no book chosen was not re-driven that day and
+stands on its 2026-10-03 basis; the report and its kept walk still hold
+the ORCID case until their refresh.
 Issue report: [pkp-e2e#735](https://github.com/jardakotesovec/pkp-e2e/issues/735) ([docs/issues/U70-A5-add-entry-refusal-no-reason.md](../issues/U70-A5-add-entry-refusal-no-reason.md)).
 
 <a id="fn-f-a6"></a>

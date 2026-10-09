@@ -950,11 +950,14 @@ context"); the validation-variant server (harness.md) covers the
 config-file settings.
 - On a fleet whose only context is `publicknowledge`, Administration › Site
   Settings shows one tab, "Site Setup", with the side tabs "Security",
-  "Languages", "Bulk Emails" and "Statistics"; the "Appearance",
+  "Languages", "Bulk Emails", "Statistics" and "ORCID"; the "Appearance",
   "Announcements" and "Plugins" tabs and the "Settings", "Information",
-  "Navigation", "Highlights" and "ORCID" side tabs appear once a second
+  "Navigation" and "Highlights" side tabs appear once a second
   context exists (the first scratch context). Site Settings, all three apps,
-  2026-09-16 (U11 claim check K2, `.reports/U11/cc-K2.md` Rule 12).
+  2026-09-16 (U11 claim check K2, `.reports/U11/cc-K2.md` Rule 12); "ORCID"
+  on a one-context site since pkp/pkp-lib#13493 (driven at the PR head
+  `e29a720de0`, before its merge, on PKP's default dataset, 2026-10-09;
+  before it the tab needed the second context).
 - The site's "Site Name" is empty on a fresh install, and the site Settings
   form refuses every save until it is filled; the site home's `<title>` is
   empty meanwhile. Site Settings › Setup › Settings, all three apps,

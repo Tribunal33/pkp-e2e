@@ -28,7 +28,7 @@ own features. This table covers only the ORCID capability on each of them.
 | Action | Who may — and when |
 |--------|--------------------|
 | **Enable & configure ORCID for one journal** | • Site Administrator; Journal Manager: the "ORCID" tab on Settings → Users & Roles (Rule 1). The tab is locked read-only while the site-wide configuration is active (Rule 3) <sup>a</sup> |
-| **Enable & configure ORCID site-wide** | • Site Administrator: the "ORCID" tab on Site Settings. The tab exists only while the install hosts more than one journal (Rule 2) <sup>b</sup> |
+| **Enable & configure ORCID site-wide** | • Site Administrator: the "ORCID" side tab on Site Settings, whatever the number of journals the install hosts (Rule 2). The same tab holds the site's "Custom Redirect Base URL" (Rule 2a) <sup>b</sup> |
 | **Connect / authorize own iD** | • Any signed-in user: profile, Identity tab (Rules 5–6)<br>• Any visitor: a journal's registration page (Rule 7). Not offered on the site-level registration page <sup>c</sup> |
 | **Remove own iD** | • The user themselves, while their iD is verified: "Delete" beside it on the Identity tab (Rule 6c)<br>• ⚠ [A13](#a13) nobody while the iD is unauthenticated: the tab offers no "Delete" for it <sup>d</sup> |
 | **Request a contributor's verification by email** | • Site Administrator; Journal Manager; Section Editor assigned to the submission: "Request verification" on the contributor's ORCID iD field (Rule 8)<br>• Author of the submission: the same button, from the submission wizard's Contributors step. On a journal or press the contributor list on the author's own dashboard is read-only. On a preprint server that list offers "Edit" on the author's not-yet-posted preprint, and the form it opens carries the same button (the preprint baseline is described in [Contributors & affiliations](U41-contributors-and-affiliations.md#ops1))<br>• ⚠ [A5](#a5) an Assistant who can edit the contributor is offered the same button. The request is refused, yet the field reports it as sent <sup>e</sup> |
@@ -50,8 +50,16 @@ Journal ORCID settings ("ORCID" tab, Settings → Users & Roles):
 | "Send e-mail to request ORCID authorization from authors when an article is accepted ie. sent to copy editing" | no | Turns on the automatic author emails of Rule 13 ⚠ [A6](#a6) |
 | "ORCID request log" | no | Error (default) or full logging of ORCID traffic, for the journal's technical staff <sup>a</sup> |
 
-Site-wide ORCID settings carry only the first three rows (enable, API, Client
-ID/Secret). City, the email toggle and the log level remain per-journal. <sup>b</sup>
+Site ORCID settings ("ORCID" side tab, Administration › Site Settings):
+
+| Field (UI label) | Required? | Rules |
+|------------------|-----------|-------|
+| "Enable ORCID functionality site-wide" | no | Ticked and saved, it turns ORCID on for every journal with the credentials below and locks each journal's own tab (Rules 2–3) <sup>b</sup> |
+| "Custom Redirect Base URL" | no | Described "A custom base URL used when constructing ORCID redirect URLs. This can be applied site-wide without enabling the above site-wide ORCID settings override as this setting is only applicable at a site level." A web address such as "https://example.com/"; anything else is refused under the field with "This is not a valid URL." and nothing is saved. Saved empty, the stored value is removed. What a value changes: Rule 2a <sup>b</sup> |
+| "ORCID API" / "Client ID" / "Client Secret" | yes (when the box is ticked) | Shown only while the box is ticked, under "Custom Redirect Base URL". "ORCID API" offers the same four choices as the journal's tab <sup>b</sup> |
+
+City, the email toggle and the log level have no site-wide field. They
+remain per-journal. <sup>b</sup>
 
 Contributor's ORCID iD field (add/edit contributor, Contributors list):
 
@@ -66,17 +74,31 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 1. **Per-journal switch.** ORCID is off until a Journal Manager enables it on
    the "ORCID" tab and saves credentials. Every rule below assumes it is on
    for the journal at hand. The tab is always present, enabled or not. <sup>a</sup>
-2. **Site-wide switch (multi-journal installs).** On an install hosting more
-   than one journal, the Site Administrator's Site Settings carry an "ORCID"
-   tab that enables ORCID **for every journal at once** with one set of
-   credentials. On a single-journal install the tab is absent ⚠ [A9](#a9).
-   What the tab shows in the French interface: Rule 17. <sup>b</sup>
+2. **Site-wide switch.** The Site Administrator's Site Settings
+   (Administration › Site Settings) carry an "ORCID" side tab, the last
+   one under "Site Setup", whatever the number of journals the install
+   hosts. Its box "Enable ORCID functionality site-wide" enables ORCID
+   **for every journal at once** with one set of credentials. What the
+   tab shows in the French interface: Rule 17. <sup>b</sup>
+   2a. **The site's own return address.** The same tab holds "Custom
+   Redirect Base URL", for a site whose ORCID credentials are registered
+   with one return address for all its journals. With a value saved,
+   every ORCID link the site builds sends the browser back to an address
+   starting with that value instead of the site's own address: the
+   "Create or Connect your ORCID iD" popup on the profile and on the
+   registration page, and the authorization link of the request emails
+   (Rule 14). With "https://example.com/" saved, the "redirect_uri" part
+   of the ORCID sign-in address those links open starts
+   "https://example.com/". The value applies whether or not the
+   site-wide box is ticked, and it leaves the journals' own ORCID tabs
+   editable. Saved empty, the links use the site's own address again. <sup>b</sup>
 3. Site-wide configuration overrides the journals. Each journal's tab then
    shows "Enable ORCID functionality" checked and locked, the API type and
    Client ID read-only, the secret masked, and a note ending "Contact your
    site administrator to disable ORCID functionality or change these
    credentials." City, the email toggle and the log level stay editable per
-   journal. <sup>b</sup>
+   journal. Unticking the site-wide box and saving gives each journal its
+   own API type, Client ID and secret back, editable again. <sup>b</sup>
 4. **Disabled means invisible.** With ORCID off for a journal, the profile's
    Identity tab shows no ORCID field at all, the registration page shows no
    ORCID block, and the contributor form has no ORCID iD field. <sup>c</sup>
@@ -101,6 +123,10 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
    ORCID to cancel this install's access token. ⚠ [A13](#a13) an
    unauthenticated iD has no "Delete", so its owner cannot remove it from
    the profile. <sup>d</sup>
+   6d. When ORCID refuses the journal's credentials at the end of the
+   sign-in (a wrong Client ID or Client Secret), the popup closes and the
+   profile shows a notice opening "ORCID authorization failed:". No iD is
+   stored, and the "Create or Connect your ORCID iD" button stays. <sup>c</sup>
 7. **Connecting while registering.** A journal's registration page offers the
    same "Create or Connect your ORCID iD" button at the top of the form.
    Completing ORCID's sign-in fills the name, email, country and affiliation
@@ -182,6 +208,16 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
     appears on the Emails settings screen. The re-authorization mail was once
     listed nowhere; it gained its journal and press rows upstream
     ([A7](#a7), resolved 2026-08-25). <sup>l</sup>
+    14a. **What the request emails say.** Both request emails greet the
+    contributor by name ("Dear {name},") and name the submission by its
+    title in quotes. "Submission ORCID" reads "You have been listed as an
+    author on a manuscript submission "{title}" to {journal name}.", and
+    "Requesting ORCID record access" reads "…on the manuscript submission
+    "{title}" to {journal name}." Both close with the journal's email
+    signature, by default "This is an automated message from {journal
+    name}." An email a journal has customized keeps the journal's wording
+    through an upgrade: it still greets the contributor by name, closes
+    with the journal's signature, and gains no title. <sup>l</sup>
 15. Other screens that surface ORCID follow the rules above. The invitation
     wizard's "Verify ORCID iD" step (described in
     [User invitations](U06-user-invitations.md)) appears only while ORCID is
@@ -223,8 +259,11 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 
 ## Settings that modify behavior
 
-- **Enable ORCID functionality** (per journal, or site-wide on multi-journal
-  installs): the master switch; Rules 1–4.
+- **Enable ORCID functionality** (per journal, or site-wide from Site
+  Settings): the master switch; Rules 1–4.
+- **Custom Redirect Base URL** (Site Settings, "ORCID" side tab; empty by
+  default): with a value, every ORCID link returns the browser to an
+  address starting with it instead of the site's own (Rule 2a).
 - **ORCID API**: Public collects verified iDs only; Member also deposits
   (Rules 11–12). The two Sandbox variants aim every link and deposit at
   ORCID's test service instead of the real one.
@@ -252,12 +291,19 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
 - **Emails management**: the stored ORCID email templates are edited on the
   Emails settings screen (feature spec to come: *Emails management*). This
   spec owns the ORCID-specific gaps ⚠ [OPS2](#ops2) ⚠ [A7](#a7).
-- **Publishing**: publication is the deposit trigger (Rule 11). The publish
-  action itself belongs to
-  [Publish, schedule & versions](U49-publish-schedule-and-versions.md).
+- **Publishing**: publication is the deposit trigger (Rule 11). A
+  contributor's unauthenticated iD, or the same iD on two contributors,
+  does not stop the publication: the final publish window lists
+  "Unauthenticated ORCiDs for contributors detected." or "Duplicate
+  ORCiDs for contributors detected." among its warnings and still offers
+  its button. The window and the publish action itself belong to
+  [Publish, schedule & versions](U49-publish-schedule-and-versions.md)
+  (Rule 4). <sup>j</sup>
 - **Site settings**: the site-wide "ORCID" tab is one of the Site Settings
-  side tabs. Its "Save", and a change left unsaved, follow that page's
-  rules ([Site settings](U60-site-settings.md), Rule 4).
+  side tabs, on a site hosting one journal too (what else that page
+  shows there: [Site settings](U60-site-settings.md), Rule 2). Its
+  "Save", and a change left unsaved, follow that page's rules (its
+  Rule 4).
 
 ## Canonical scenarios
 
@@ -491,6 +537,7 @@ Left out of the scenarios above, by reason:
   - the guard for A15 (issue report `docs/issues/U04-A15-orcid-pages-tab-no-page-name.md`): once fixed, the "What is ORCID?" and "ORCID Authorization" pages' browser tab reads "What is ORCID? | {journal name}" and "ORCID Authorization | {journal name}".
   - the profile's "Delete" window titled "Confirm", with "OK" and "Cancel" (Rule 6c; scenario 3's "Delete" bullet).
   - a contributor verified under the public API receiving "Requesting updated ORCID record access" from the journal's principal contact, with the personal authorization link and the What-is-ORCID link, when their article is published after the journal switched to the member API (Rules 11, 14; journals and preprint servers, a press deposits nothing, OMP1).
+  - the request emails greeting the contributor by name, naming the submission by its title in quotes and closing with the journal's email signature (Rule 14a; scenario 4's mailbox bullets).
 - **Nothing new to test**:
   - a Site Administrator on the journal's ORCID tab (Actors row 1; scenario 1's Journal Manager sees the same tab)
   - a Site Administrator or an assigned Section Editor requesting verification (Actors row 5; scenario 4's button)
@@ -499,7 +546,6 @@ Left out of the scenarios above, by reason:
   - Skip Review also triggering the emails (Rule 13; scenario 8's Accept)
   - the ORCID request log level, no user-facing change (Settings)
 - **Register carries it**:
-  - A9 (the site tab absent on a single-journal install; Rule 2)
   - A5 (an Assistant offered "Request verification" and "Delete", refused yet reported sent; Actors rows 5–6)
   - A1 (a Press Manager offered "Send Review To ORCID"; Actors row 8)
   - A4 ("What is ORCID?" beside the button opening the popup; Rule 6a; scenario 2 marks it)
@@ -516,8 +562,11 @@ Left out of the scenarios above, by reason:
   - A15 (the public ORCID pages' browser tab showing no page name; Rule 10)
 - **No seed**:
   - the Site Administrator enabling ORCID site-wide (Actors row 2, Rule 2): Site Settings → ORCID is one setting shared by every test running at once, so it stays off
-  - the journal tab locked read-only under the site-wide configuration (Rule 3): the same site-wide setting
+  - the journal tab locked read-only under the site-wide configuration, and its own values back once the box is unticked (Rule 3): the same site-wide setting
+  - a "Custom Redirect Base URL" saved, refused or emptied, and the ORCID links starting with it (Fields; Rule 2a): the same site-wide setting
+  - the "ORCID" side tab on an install hosting one journal (Rule 2): the test installs always host several journals
   - the sign-in completion storing the verified iD and reloading the tab (Rule 5): ORCID's own sign-in cannot complete on the test installs, so verified iDs are seeded instead
+  - a sign-in ORCID refuses for wrong credentials closing the popup with the "ORCID authorization failed:" notice (Rule 6d): the same sign-in
   - the emailed link completing verification, signed out (Actors row 7, Rule 9): the same sign-in
   - the emailed link being single-use (Actors row 7, Rule 9): the same sign-in
   - denying at ORCID's consent screen clearing the stored iD (Rule 6b): ORCID's consent screen
@@ -533,11 +582,14 @@ Left out of the scenarios above, by reason:
   - removing an iD cancelling the token at ORCID (Side effects): the same service
   - the ORCID request log written at the chosen level (Side effects): the application log is not read by the suites
   - a verified contributor whose permission has lapsed being asked again on Accept (Rule 13): no seed for a lapsed permission
+  - a customized request email keeping the journal's wording through an upgrade (Rule 14a): the test installs are never upgraded
 - **Owned by another feature**:
   - the invitation wizard's "Verify ORCID iD" step, present only while ORCID is enabled (Rule 15; *User invitations*)
   - the reviewer-suggestion form's plain "ORCID iD" field (Rule 15; *Reviewer suggestions*)
   - the reviewer lists' verified and unauthenticated icons (Rule 15; *Reviewer assignment & management*)
   - publishing without an issue failing for a contributor with a verified iD (Side effects; *Publish, schedule & versions*, its register entry OJS4)
+  - an unauthenticated or duplicate iD listed as a warning in the final publish window, the publication still published (Cross-feature interactions; *Publish, schedule & versions*, Rule 4)
+  - the "ORCID" side tab listed among the Site Settings side tabs of a site hosting several journals (Rule 2; *Site settings*, scenario 1)
   - the site tab's "Save" and a change left unsaved (Cross-feature interactions; *Site settings*, Rule 4)
 
 ## Findings register
@@ -561,9 +613,9 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
 | [A7](#a7) | The re-authorization email template is not editable in any app. Resolved upstream for journals and presses (pkp/pkp-lib#13050); the preprint-server gap is [OPS2](#ops2)'s | ❓ | latent | rebase check (claude) 2026-08-25 |
-| [A9](#a9) | The site tab's absence on single-journal installs rests on its switch-on condition, not observation | ❓ | minor | — |
 | [A13](#a13) | A user whose own iD is unauthenticated is offered no "Delete" on the profile's Identity tab | ❓ | minor | — |
 | [OPS1](#ops1) | The author-email toggle exists on a preprint server that can never trigger it | ❓ | latent | — |
+| [A9](#a9) | Retired: the site's "ORCID" tab was read as absent on a single-journal install. It now shows whatever the number of journals (pkp/pkp-lib#13493) | ✅ | retired | PR review (claude), 2026-10-09 — the question is gone at the PR head, before its merge |
 | [A10](#a10) | Deleting a contributor's unauthenticated iD fails: the confirm never completes and the iD stays (regression, pkp/pkp-lib#13003) | ✅ | retired | rebase check (claude), 2026-09-03 — fixed upstream (pkp-lib `ecd12271ed` + `d9e9b3fc7c`), suites green on all three apps |
 | [A12](#a12) | Retired: in French, the contributor's ORCID iD field shows raw codes for its button, questions and notes | ✅ | retired | Jarda 2026-10-08 · overturned |
 | [OMP1](#omp1) | A press requests and verifies iDs but deposits no works | ✅ | user-visible | — |
@@ -677,17 +729,6 @@ manager; there is no journal. The fix is one English sentence. Ten other
 languages translate it, nine of them naming a journal's manager or
 editor; their translators would update them afterwards.
 Basis: probe, 2026-10-03. <sup>[f-a8](#fn-a8)</sup>
-
-<a id="a9"></a>
-**A9 — Site ORCID tab on a single-journal install** · ❓ · minor.
-Rule 2 says a single-journal install carries no "ORCID" tab in Site
-Settings. The tab's presence on multi-journal installs is confirmed. Its
-absence rests on the condition that switches the tab on, since every
-install at hand hosts several journals.
-Question: is the tab really absent when the install hosts a single journal?
-Lean: yes. The tab renders only when the install counts more than one
-journal.
-Basis: code. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a11"></a>
 **A11 — In 32 interface languages, both ORCID settings tabs carry the name of the retired ORCID Profile plugin** · 🐞 · low.
@@ -808,6 +849,9 @@ Basis: probe + code (bundled files + migration helper).
 
 ### Retired
 
+<a id="a9"></a>
+**A9 — Site ORCID tab on a single-journal install** · ✅ · retired. The question is gone: the tab no longer depends on the number of journals (pkp/pkp-lib#13493, seen at the PR head before its merge), 2026-10-09. <sup>[f-a9](#fn-a9)</sup>
+
 <a id="a10"></a>
 **A10 — Deleting a contributor's iD fails outright** · ✅ · retired. Fixed upstream (pkp-lib `ecd12271ed` + `d9e9b3fc7c`, pkp/pkp-lib#13003 follow-ups), 2026-09-03. <sup>[f-a10](#fn-a10)</sup>
 
@@ -839,10 +883,13 @@ three apps.
 <a id="fn-b"></a>
 **b** — Site form: `PKP\components\forms\site\OrcidSiteSettingsForm`
 (component `orcidSiteSettings`), tab in `templates/admin/settings.tpl` gated
-`componentAvailability['orcidSiteSettings']` =
-`AdminHandler::settings()`'s `$isMultiContextSite = context count !== 1`.
-Site fields: enable ("Enable ORCID functionality site-wide"), API type,
-Client ID, Client Secret only. Override behavior:
+`componentAvailability['orcidSiteSettings']`, which
+`AdminHandler::siteSettingsAvailability()` sets `true` whatever the
+context count since pkp/pkp-lib#13493 (before it, the key followed
+`$isMultiContextSite`, context count !== 1). Site fields: enable ("Enable
+ORCID functionality site-wide"), `orcidCustomRedirectBaseUrl` ("Custom
+Redirect Base URL", `site.json` validation `nullable|url`, added by the
+same PR), API type, Client ID, Client Secret. Override behavior:
 `OrcidManager::isGloballyConfigured()` (site `orcidEnabled`) short-circuits
 `isEnabled()` to true for every context and makes `getClientId()/
 getClientSecret()/getApiType()` read site values; the context form then
@@ -851,11 +898,12 @@ as `*************************`, and appends
 `orcid.manager.settings.description.globallyconfigured` ("…Contact your site
 administrator to disable ORCID functionality or change these credentials.").
 City/email-toggle/log-level have no site fields (`getCity()` etc. always read
-the context). Live-probed 2026-08-07: the site tab carries exactly the four
-fields; enabling site-wide locks every journal's tab as described
+the context). Live-probed 2026-08-07: the site tab carried exactly the four
+fields it had then; enabling site-wide locks every journal's tab as described
 ("configured globally" text, masked secret); disabling it restores each
-journal's own editable values. The single-journal absence case was not
-exercised — every test install hosts several journals (finding A9).
+journal's own editable values. The single-journal case was not exercised
+then, every test install hosting several journals; the 2026-10-09 drive
+below settled it (A9, retired).
 Live-probed 2026-09-28 (OJS, OMP, OPS; English and French; two runs
 each; Rule 2, Fields "Site-wide ORCID settings"): the side tab
 (`#orcidSiteSettings-button`) under "Site Setup", its box "Enable ORCID
@@ -870,6 +918,44 @@ unticked after a reload. A tick left unsaved survives a trip to
 "Information" and back, and is dropped without a question on leaving the
 page (the Site settings spec's Rule 4). Site-level ORCID was never
 switched on (`orcidEnabled=0` before and after).
+Live-probed 2026-10-09 at the PR head `e29a720de0`, before its
+merge (pkp/pkp-lib#13493, issue pkp/pkp-lib#13283; OJS, OMP and OPS the
+same, on PKP's default test dataset, whose install hosts one journal;
+Actors row 2; Fields "Site ORCID settings"; Rules 2, 2a and 3): Site
+Settings showed
+"Site Setup" alone, with the side tabs "Security", "Languages", "Bulk
+Emails", "Statistics" and "ORCID"; once a second journal was created
+the page showed every tab, "ORCID" still the last "Site Setup" side
+tab. The tab read "Enable ORCID functionality site-wide" with its
+description, then "Custom Redirect Base URL" with the description
+quoted in Fields, then, the box ticked, "ORCID API" ("Public", "Public
+Sandbox", "Member", "Member Sandbox"), "Client ID" and "Client Secret",
+each "Required". On the one-journal install the box ticked and saved
+(Public Sandbox, a placeholder pair) left the journal's tab with "Enable
+ORCID functionality" checked and disabled, the note "The ORCID API was
+configured globally by the host. The ORCID API, Client ID, and Client
+Secret have been set at the site-level and cannot be changed here.
+Contact your site administrator to disable ORCID functionality or change
+these credentials.", "ORCID API" and "Client ID" as plain text and the
+secret as `*************************`; unticked and saved, the
+journal's tab was editable again with its own API type, Client ID and
+secret. "Custom Redirect Base URL": "not a url" was refused (400, "This
+is not a valid URL." under the field, "Please correct one error.") and
+stored nothing; `https://example.com/` was saved with the box unticked
+(`orcidEnabled` false) and still filled the field after a reload, the
+journal's tab staying editable with no "configured globally" note. With
+it stored, the `redirect_uri` of the sign-in address behind "Create or
+Connect your ORCID iD" on the profile and on the registration page, and
+behind the "Submission ORCID" email's link, read
+`https://example.com/index.php/publicknowledge/orcid/authorizeOrcid?targetOp=profile`,
+`…?targetOp=register` and
+`https://example.com/index.php/publicknowledge/orcid/verify?token=…&state=…&author_id=…`,
+where each began `http://127.0.0.1:<port>/` with nothing stored; saved
+empty, the stored row was gone and the three addresses began with the
+site's own address again. Mechanism: `OrcidManager::buildOAuthUrl()`
+replaces the scheme and host of the redirect address with
+`getCustomRedirectUrl()` (the site's `orcidCustomRedirectBaseUrl`),
+whatever `isGloballyConfigured()` says.
 
 <a id="fn-c"></a>
 **c** — Profile: `PKP\user\form\IdentityForm::fetch()` assigns
@@ -895,6 +981,26 @@ or `/activities/update` (member). Popup completion:
 `setVerifiedOrcidOAuthData()` (iD, verified flag, token, scope, refresh,
 expiry) and reloads the profile tab. The About link:
 `<a href="{orcid/about}" onclick="return openORCID();">` — finding A4.
+Refused credentials (Rule 6d): live-probed 2026-10-09 at the PR head
+`e29a720de0`, before its merge (pkp/pkp-lib#13493, issue
+pkp/pkp-lib#13283; OJS, OMP and OPS the same, on PKP's default test
+dataset, the journal on Public
+Sandbox with a placeholder pair; ORCID's token endpoint stood in
+locally, since the test installs reach no outside service). The popup's
+return address (`…/orcid/authorizeOrcid?targetOp=profile&code=…`), the
+stand-in answering 401
+`{"error":"invalid_client","error_description":"Client not found: APP-TEST"}`,
+closed the popup, and the profile's notification area read "ORCID
+authorization failed: Client not found: APP-TEST. Reason:
+invalid_client."; the account held no `orcid` setting afterwards and
+the Identity tab still showed "Create or Connect your ORCID iD". With
+the stand-in answering a token, the popup closed with no notice and the
+tab showed the iD as a link with "Delete" (Rule 5's completion).
+ORCID's own sandbox answers a made-up client with 401
+`{"error_description":"Client authentication failed","error":"invalid_client"}`.
+`AuthorizeUserData::execute()` catches the token request's
+`ClientException`, composes the notice (`getAuthErrorDisplayMessage()`)
+and, for `targetOp` `profile` and `invitation`, skips the token storage.
 
 <a id="fn-d"></a>
 **d** — Delete own iD: `#deleteOrcidButton` (guard
@@ -1068,7 +1174,21 @@ verified iD and token, a journal with no issues): the publish request
 failed on the server in the OJS work builder's issue read
 (`OrcidWork::getAppDoiExternalIds`), the publication was published after
 a reload, and no `DepositOrcidSubmission` was queued; the evidence and
-its controls are that spec's note f-ojs4.
+its controls are that spec's note f-ojs4. Publishing with an
+unauthenticated or duplicate iD (Cross-feature interactions): live-probed
+2026-10-09 at the PR head `e29a720de0`, before its merge
+(pkp/pkp-lib#13493, issue pkp/pkp-lib#13283; OJS, OMP and OPS, on PKP's
+default test dataset with ORCID on Public Sandbox; the iD rows set in the database
+and read on the contributor's ORCID iD field first). The final window
+("Schedule For Publication"; "Post the preprint" on OPS) listed, under
+"The following issues were found, but will not prevent publishing",
+"Unauthenticated ORCiDs for contributors detected." for one contributor
+with an unverified iD and for two contributors sharing an unverified
+iD, and "Duplicate ORCiDs for contributors detected." for two
+contributors sharing a verified iD; it still offered "Publish" ("Post"),
+which published the publication each time.
+`PKP\publication\Repository::validatePublishWarnings()` now holds the
+two checks `validatePublish()` held before the PR.
 
 <a id="fn-k"></a>
 **k** — Listener `PKP\observers\listeners\SendAuthorOrcidEmail` on
@@ -1106,6 +1226,38 @@ the Emails settings screen the two listed rows are titled by internal name
 — "orcidCollectAuthorId", "orcidRequestAuthorAuthorization" — so a manager
 finds them by searching "ORCID", not by the names above; the row naming
 itself is the Emails-management feature's territory.
+What the request emails say (Rule 14a): live-probed 2026-10-09 at the
+PR head `e29a720de0`, before its merge (pkp/pkp-lib#13493, issue
+pkp/pkp-lib#13283; OJS, OMP and OPS, on PKP's default test dataset, the
+three ORCID
+templates re-installed with `php lib/pkp/tools/installEmailTemplate.php`
+before the read, since the dataset's database was installed before the
+PR and its stored default bodies predate it).
+"Request verification" under Public Sandbox delivered "Submission
+ORCID" from the principal contact (Ramiro Vaca), opening "Dear Mark
+Irvine," and reading "You have been listed as an author on a manuscript
+submission "Computer Skill Requirements for New and Existing Teachers:
+Implications for Policy and Practice" to Journal of Public Knowledge.";
+under Member Sandbox, "Requesting ORCID record access" read "You have
+been listed as an author on the manuscript submission "The influence of
+lactation on the quantity and quality of cashmere production" to
+Journal of Public Knowledge." Both closed "This is an automated message
+from Journal of Public Knowledge." (OMP: "…to Public Knowledge Press.",
+"…from Public Knowledge Press."; OPS: "…to Public Knowledge Preprint
+Server.", "…from Public Knowledge Preprint Server."). The bodies end
+`{$contextSignature}`, the context's `emailSignature` setting, whose
+default is `default.contextSettings.emailSignature`; the `OrcidVariables`
+trait no longer offers `principalContactSignature`. "Requesting updated
+ORCID record access" carries the same `{$recipientName}`,
+`{$submissionTitle}` and `{$contextSignature}` in its template and was
+not delivered in this drive. Customized emails: on `stable-3_5_0`
+datasets upgraded to the PR head (OJS, OMP, OPS), a customized
+"Submission ORCID" still written with `{$authorName}` and
+`{$principalContactSignature}` arrived afterwards opening "Dear Carlo
+Corino,", with the journal's own sentence, no title, and the journal's
+signature at the end
+(`PKP\migration\upgrade\v3_5_0\I13283_RestoreDegradedOrcidFunctionality`
+swaps the two variables in stored bodies and adds nothing).
 
 <a id="fn-m"></a>
 **m** — Riders: invitation ORCID step gate
@@ -1305,11 +1457,17 @@ sentence verbatim, "journal manager" unchanged.
 Issue report: [pkp-e2e#738](https://github.com/jardakotesovec/pkp-e2e/issues/738) ([docs/issues/U04-A8-orcid-failure-page-says-journal-manager.md](../issues/U04-A8-orcid-failure-page-says-journal-manager.md)).
 
 <a id="fn-a9"></a>
-**f-a9** — Note b's gate: the tab renders only while
-`AdminHandler::settings()` counts more than one context
-(`$isMultiContextSite`). The test installs all host several journals, so
-the single-journal case was not exercised (2026-08-07); the multi-journal
-presence is live-probed.
+**f-a9** — The entry asked whether the site's "ORCID" tab is really
+absent on a single-journal install; it rested on note b's gate as it
+then read (the tab followed `$isMultiContextSite`), the test installs
+all hosting several journals (2026-08-07). Retired 2026-10-09:
+pkp/pkp-lib#13493 (issue pkp/pkp-lib#13283) sets
+`componentAvailability['orcidSiteSettings']` to `true` whatever the
+context count. Live-probed 2026-10-09 at the PR head `e29a720de0`, before its merge
+(OJS, OMP and OPS, on PKP's default test dataset, whose install hosts
+one journal): Site Settings showed "Site Setup" with "Security",
+"Languages", "Bulk Emails", "Statistics" and "ORCID", and "ORCID" stayed
+the last "Site Setup" side tab once a second journal existed (note b).
 
 <a id="fn-a10"></a>
 **f-a10** — POST `api/v1/orcid/deleteForAuthor/{authorId}` answers 500
@@ -1469,7 +1627,7 @@ rendered; OJS and OMP list no ORCID plugin row (absence controls).
 | Entry | Path | Atom |
 |-------|------|------|
 | Journal ORCID settings tab | Settings → Users & Roles → "ORCID" | AFFM-117 |
-| Site ORCID settings tab | Site Settings → "ORCID" (multi-journal installs) | AFFM-222 |
+| Site ORCID settings tab | Site Settings → "ORCID" | AFFM-222 |
 | Profile identity ORCID block | Profile → Identity tab | AFFU-065..066, 099..103 |
 | Registration ORCID block | `{journal}/user/register` | AFFU-099..101, 103 |
 | Contributor ORCID field | workflow → Contributors → add/edit | AFFU-106..110 |

@@ -121,8 +121,8 @@ with the line beside "Save" that Rule 4a quotes.
    "Site Setup" › "Settings" ⚠ [A7](#a7).
 2. **A one-journal site shows less.** While the installation hosts
    exactly one journal, the page shows the "Site Setup" tab alone, with
-   "Security", "Languages", "Bulk Emails" and "Statistics"; a site
-   hosting two or more journals shows every tab of Rule 1. Two further
+   "Security", "Languages", "Bulk Emails", "Statistics" and "ORCID"; a
+   site hosting two or more journals shows every tab of Rule 1. Two further
    ends are read from the code, since the test installs always host many
    journals: the count takes in every journal, enabled publicly or not,
    and a site with none shows every tab. <sup>b</sup> <sup>o</sup>
@@ -1141,7 +1141,9 @@ with the "Site Setup" tab's side tabs `settings`, `security`, `info`,
 `AdminHandler::siteSettingsAvailability()`: `$isMultiContextSite =
 app()->get('context')->getCount() !== 1` (every context, enabled or not;
 the comment says the full page shows with no context too); `siteSetup`,
-`languages`, `bulkEmails`, `statistics`, `siteSecurity` always true,
+`languages`, `bulkEmails`, `statistics`, `siteSecurity` and, since
+pkp/pkp-lib#13493 (issue pkp/pkp-lib#13283; read 2026-10-09 at the PR
+head `e29a720de0`, before its merge), `orcidSiteSettings` always true,
 every other key follows `$isMultiContextSite`. Labels: `admin.siteSetup`
 "Site Setup", `admin.settings` "Settings", `admin.security` "Security",
 `manager.setup.information` "Information" (each app's own locale),
@@ -1457,7 +1459,18 @@ Live-probed 2026-09-16 and 2026-09-23 (Rule 2; Highlights and Navigation
 menus claim checks, all three apps): with the seeded journal the only
 one, the page showed "Site Setup" alone with "Security", "Languages",
 "Bulk Emails" and "Statistics", and the other tabs appeared once a second
-journal existed. The ends where a journal is not enabled publicly, and
+journal existed; "ORCID" was one of those other tabs then.
+Live-probed 2026-10-09 at the PR head `e29a720de0`, before its merge
+(pkp/pkp-lib#13493, issue pkp/pkp-lib#13283; Rule 2; all three apps, on
+PKP's default test dataset, whose install hosts one journal): the page
+showed "Site Setup" alone with "Security", "Languages", "Bulk Emails",
+"Statistics" and "ORCID"; once a second journal was created it showed
+"Site Setup", "Appearance", "Announcements" and "Plugins" with the side
+tabs of Rule 1, "ORCID" still the last under "Site Setup". The PR makes
+the "ORCID" side tab independent of the number of journals (fn-b); the
+tab itself is described in
+[ORCID integration](U04-orcid-integration.md), Rule 2. The ends where a
+journal is not enabled publicly, and
 the site with none, are read from the code: the test installs host 24
 journals, 10 presses and 10 servers, and a journal cannot be removed.
 
