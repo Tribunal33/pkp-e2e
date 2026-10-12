@@ -951,8 +951,9 @@ alone.
    REPORT.md's severities, the outside contacts made or tried, what was
    allowed, and a paste-ready note for the author. It commits and pushes
    the private repo and posts the report in full in the thread, its
-   screenshots attached, tagging @jarda.kotesovec alone. The bot never writes to the gallery PR; a
-   maintainer passes the note on.
+   screenshots attached, untagged: whoever asked for the review reads it
+   there and follows up. The bot never writes to the gallery PR; the
+   person who asked passes the note on.
 6. **Tear down.** `down`, then `purge` once the report is pushed. A
    friction line, if one is owed, keeps the plugin's name out.
 
