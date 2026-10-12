@@ -17,10 +17,13 @@
 // On stable-3_5_0 (OPS only: OJS and OMP 3.5 offer no "DOI Versioning"): steps 1-4,
 // "Create New Version" ("Yes"; no "Revision Significance"), "Post", step 7.
 //
-// Reset first:  npm run fleet-prep -- --feature issues-ir2 --dataset 2 --reset
-// Run (main):   WALK=neighbour PROBE_FEATURE=issues-ir2 PROBE_AGENT=ir11 node bin/probe.js all shared/playwright/checks/issues/major-version-earlier-doi-stays-registered/walk.js
-// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-ir2-3_5 --dataset 2 --reset
-//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-ir2-3_5 PROBE_AGENT=ir11 node bin/probe.js ops shared/playwright/checks/issues/major-version-earlier-doi-stays-registered/walk.js
+// The fix (fix.diff beside this file, pkp-lib alone, the three apps) is tried with the
+// same command and FIX=1 PROBE_RUN=fix in front, between try-fix apply and revert.
+//
+// Reset first:  npm run fleet-prep -- --feature <feature> --dataset <n> --reset
+// Run (main):   WALK=neighbour PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/major-version-earlier-doi-stays-registered/walk.js
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature <feature>-3_5 --dataset <n> --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=<feature>-3_5 PROBE_AGENT=<id> node bin/probe.js ops shared/playwright/checks/issues/major-version-earlier-doi-stays-registered/walk.js
 const {forEachApp, launch, signIn, screen, record, sql} = require('../../../probe');
 const {APP, createVersion, publishLatest, readDoiRow, readVersionsWindow} = require('../minor-version-new-galley-dois/lib');
 const {storedStatuses, createVersion35, publish35} = require('./lib');
@@ -103,6 +106,8 @@ forEachApp(async (app) => {
         await frame.gotoEditorial(a.sid);
         await frame.expectVersionLoaded().catch(() => {});
         fact('5 create', stable35 ? await createVersion35(page, frame) : await createVersion(page, frame, 'Major Revision'));
+        // a read for the facts: whether the new version holds its DOI before it is published
+        fact('5 stored', storedStatuses(sql, app, a.sid));
         record(name('5-created'), await screen(page));
 
         // 6

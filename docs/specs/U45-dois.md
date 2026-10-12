@@ -1993,6 +1993,11 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-OMP1-file-dois-ignored-on-dois-page.md`): a press
     with "Files" alone ticked listing its books on the DOIs page, and a
     book missing only its file DOI listed under "Needs DOI" {OMP}
+  - the guard for A17 (Rule 32; issue report
+    `docs/issues/U45-A17-major-version-earlier-doi-stays-registered.md`):
+    under "DOI Versioning" "Yes", a new major version published over a
+    version whose DOI reads "Registered" turns that DOI "Needs Sync" in
+    the "View all" window
   - under "DOI Versioning" "Yes", a preprint's "Minor Revision" keeping
     its galley's DOI in the "View all" window {OPS} (Rule 12; OPS4
     retired)
@@ -2210,7 +2215,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-06 — re-verified |
-| [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-12 — re-verified |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | The Crossref and DataCite pages under Tools open with an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2473,22 +2478,31 @@ Basis: probe, 2026-09-26. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync"** · 🐞 · low.
-A journal, press or preprint server has "DOI Versioning" set to "Yes". A
-manager creates a new version of a published work with "Major Revision"
-and publishes it. The new version gets a DOI of its own, "Unregistered".
-The earlier version's DOI was "Registered" and still is, where the code
-means it to turn "Needs Sync". The status shows in the window that "View
-all" opens on the DOIs page. Only a preprint server's Crossref record
-for the earlier version is out of date: it should now name the new
-version. Depositing the work for its new DOI, by hand or by "Automatic
-Deposit", sends every version's record and sets every status again. On a
-journal and a press the earlier version's record at the agency does not
-change, so only the label differs from what the code intends. "DOI
-Versioning" is "Yes" by default on a preprint server and "No" on a
-journal and a press. A new version gets its DOI on publication unless
-"Automatic DOI Assignment" is "Never".
-Basis: probe, 2026-10-01. <sup>f-a17</sup>
-Report: refresh owed — `pkp/omp#2495` (round-4 PR head `fded668417`, merged 2026-10-09) makes OMP `getDoisForSubmission()` collect every version's DOIs, so the Cause's OMP paragraph ("reads the current publication only … a press still marks nothing") and the Reach bullet on a press's Mark actions no longer hold; the symptom and the `publish()` comparison are unchanged; the Summary's last sentence ("A new version gets its DOI on publication unless …") no longer holds either, since a major version made at Copyediting, Production or Done gets its DOI at its creation (Rule 5, round-2 heads) (2026-10-07)
+A journal, press or preprint server has "DOI Versioning" set to "Yes".
+A manager creates a new version of a published work with "Major
+Revision" and publishes it. The new version gets a DOI of its own,
+"Unregistered". The earlier version's DOI was "Registered" and still is,
+where the code means it to turn "Needs Sync", as it does on a 3.5
+preprint server. The earlier version's status shows only in the window
+that "View all" opens on the DOIs page; the work's row there reads
+"Unregistered", for the new version.
+One record at a registration agency is out of date meanwhile. A
+preprint server registers with Crossref, where the earlier version's
+record should name the new version. It does not from the day the new
+version is posted until the work is next deposited. That deposit is
+the one the new "Unregistered" DOI needs anyway: "Automatic Deposit"
+makes it, or the manager does from the work's "Unregistered" row, and
+it sends every version's record. On a journal no record is out of
+date: with Crossref the earlier version's record reads the same with
+or without the new version, and with DataCite no deposit sends an
+earlier version. A press is shipped without a registration agency
+plugin.
+"DOI Versioning" is "Yes" by default on a preprint server and "No" on a
+journal and a press. The new version gets its DOI by itself, when it is
+created or at the latest when it is published, unless "Automatic DOI
+Assignment" is "Never"; with no new DOI the earlier version's record
+has nothing new to name.
+Basis: probe, 2026-10-12. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error** · 🐞 · high · crash: server.
