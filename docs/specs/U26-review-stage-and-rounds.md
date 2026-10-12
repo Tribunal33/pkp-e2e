@@ -243,12 +243,31 @@ and the reviewer forms to *Reviewer assignment & management*.
     the full letter read-only in a side panel. This is where the author
     re-reads a decision letter. Until the first such letter, the list is
     absent entirely, not shown empty. <sup>k</sup>
-17. **Old addresses.** A bookmarked author link of the form used by earlier
-    versions (`{journal}/authorDashboard/submission/{id}`) lands on My
-    Submissions with the submission's workflow open. The old per-round tab
-    address from those versions
+17. **Old addresses.** A bookmarked author link from earlier versions
+    (`{journal}/authorDashboard/submission/{id}`) lands on My Submissions
+    with the submission's workflow open. A preprint server does the same
+    {OPS}. The old per-round tab address
     (`{journal}/authorDashboard/reviewRoundInfo/{id}`) answers with a bare
-    "404 Not Found" page, with or without an id. <sup>o</sup>
+    "404 Not Found" page, with or without an id, and in these cases too:
+    <sup>o</sup>
+    - **The old tab's own form.**
+      `{journal}/authorDashboard/reviewRoundInfo?submissionId={id}&stageId=3&reviewRoundId={round}`:
+      3 is the review stage, `{round}` the number after `workflow_3_` in
+      the address of the submission's open round
+      ([→ deep links](U24-workflow-screen-and-stage-access.md#deep-link)).
+      <sup>o</sup>
+    - **A language in the address.** Typed as
+      `{journal}/en/authorDashboard/reviewRoundInfo/{id}`, the address bar
+      drops the language and the same page shows. <sup>o</sup>
+    - **Someone else typing it.** With a submission's id, the page is the
+      same for an Author of another submission, an Editor, the round's
+      Reviewer and a visitor who is not signed in. The visitor gets this
+      page, not Login. <sup>o</sup>
+    - **A preprint server** {OPS}. The preprint's Author gets the page in
+      each form above, the old tab's ending
+      `?submissionId={id}&stageId=5`: Production, no round. With a
+      preprint's id, so do another Author, the Preprint Server Manager and
+      a visitor who is not signed in. <sup>o</sup>
 
 ## Side effects
 
@@ -669,6 +688,7 @@ Left out of the scenarios above, by reason:
   - scenario 4's first bullet read with no reload: the "Revisions Uploaded" panel listing the file as the closed upload window goes (Side effects, "Author uploads a revised file"): the OJS suite reloads the page before it reads the panel
   - after "Resubmit for Review" and the Author's first uploaded file: "Upload revisions" still offered ([A1](#a1)): the guard the issue report proposes
   - on a journal, scenario 12's "Read Review" remark (Rule 15; [OJS1](#ojs1) retired): the scenario states it, so a missing remark fails it there too; the OJS suite does not assert it yet
+  - the two old addresses on a preprint server, typed by the preprint's Author (Rule 17) {OPS}: scenario 14 opens a preprint's workflow as the Preprint Server Manager and types no address
 - **Rarely met**:
   - "Returned back to review." once every review is confirmed, and the reviewer sentences until then (Rules 5–6, Cross-feature): sending a submission back from Copyediting is not an ordinary week's action, and the sentence needs every review confirmed after the return
   - deleting the only revised file flipping the status back to "requested" (Rule 7): an author seldom deletes their only revised file; the task half of the path is A9
@@ -678,6 +698,8 @@ Left out of the scenarios above, by reason:
   - Funding Coordinator, the one assistant-level group the stage's assignment dialog offers (Actors row 1; the same screen as the editorial roles of scenario 1)
   - editorial roles filing revisions through the "Revisions Uploaded" panel's own controls (Actors row 4; the panel of scenario 4)
   - round created: the internal notice surfaces nowhere (Side effects)
+  - the old per-round address in its other two forms, with the submission, stage and round after it and with a language in it (Rule 17; the same "404 Not Found" page scenario 12's "Old addresses" bullet reads with an id and without one)
+  - the old per-round address typed by an Author of another submission, an Editor, the round's Reviewer, a visitor who is not signed in or, on a preprint server, the Preprint Server Manager (Rule 17; the same "404 Not Found" page scenario 12's "Old addresses" bullet reads as the submission's Author)
 - **Register carries it**:
   - A5 (production assistant roles with no way in; one assigned elsewhere refused; Actors row 1)
   - A2 (the same status box for every role; the author gets the editor's wording; Actors row 2, Rule 4)
@@ -1228,9 +1250,10 @@ author's behalf, ungated by round status; each file row's "More Actions"
 menu offers exactly "Update File Details", "More Information", "Delete"
 (delete confirms, then removes the file); no select/checkbox control. The
 author's per-file menu on the same panel is narrower — no "More
-Information". Legacy revision grids (`WorkflowReviewRevisionsGridHandler`
-GRID-029, `AuthorReviewRevisionsGridHandler` GRID-024) are wired to no
-current screen — see note o.
+Information". No current screen loads the legacy revision grids
+(`WorkflowReviewRevisionsGridHandler` GRID-029,
+`AuthorReviewRevisionsGridHandler` GRID-024); the author grid's own
+address still answers when typed — see note o.
 
 <a id="fn-j"></a>
 **j** — Author reading: redacted `ReviewerManager`
@@ -1246,7 +1269,8 @@ review-form responses filtered to elements marked "included in author view"
 or reviewer comments filtered to viewable-by-author (AFFW-667), plus the
 attachments grid `AuthorOpenReviewAttachmentsGridHandler` (GRID-010) — its
 listing is finding A3's subject (sibling `AuthorReviewAttachmentsGridHandler`,
-GRID-011, is unreachable — note o). Author window live-probed 2026-07-31 on
+GRID-011, is loaded by none of the current screens, though its own address
+still answers when typed — note o). Author window live-probed 2026-07-31 on
 OJS and OMP (finding A3); the
 anonymous-only control the same day — no reviewers
 panel mounts in the author view, matching the mount guard above.
@@ -1367,14 +1391,75 @@ redirect to My Submissions with the workflow open (Rule 17).
 `reviewRoundInfo` has no handler method or role assignment — the template
 `reviewRoundInfo.tpl` (AFFW-703/704) and, through it, `submissionEmails.tpl`
 (AFFW-701), `AuthorReviewAttachmentsGridHandler` (GRID-011) and
-`AuthorReviewRevisionsGridHandler` (GRID-024) render nowhere;
+`AuthorReviewRevisionsGridHandler` (GRID-024) are drawn nowhere;
 `WorkflowReviewRevisionsGridHandler` (GRID-029) likewise has no referencing
-screen. These six atoms are **waived as unreachable legacy surfaces**
-(evidence: no render/reference site in OJS, OMP or lib code; typed-URL probe
+screen. These six atoms are **waived as legacy surfaces that none of the
+current screens loads**.
+The three templates (AFFW-701, 703, 704) are unreachable: the one address
+that drew them answers an error. The two author grids (GRID-011, GRID-024)
+are unmounted, not unreachable: each grid's own address still answers when
+typed (the 2026-10-12 probe below). GRID-029's own address was not typed.
+Evidence: no render/reference site in OJS, OMP or lib code; typed-URL probe
 2026-07-31: `authorDashboard/submission` redirected to
 My Submissions with the workflow open, and `reviewRoundInfo` answered
-HTTP 404 both with and without a submission id — an error, not a screen; the
-waivers stand).
+HTTP 404 both with and without a submission id — an error, not a screen.
+Live-probed 2026-10-12 on OJS, OMP and OPS `main`, two runs each on scratch
+contexts (Rule 17). On a journal and a press, on a submission with a review
+round, a decision letter and a revised file,
+`authorDashboard/submission/{id}` redirected its Author to
+`dashboard/mySubmissions?workflowSubmissionId={id}` with the workflow open
+on the review round, the landing address ending
+`workflowMenuKey=workflow_3_{the round's id}`.
+`authorDashboard/reviewRoundInfo` answered HTTP 404, a
+page reading "404 Not Found" and nothing else, its title empty: to the
+submission's Author with an id, without one and with
+`?submissionId={id}&stageId=3&reviewRoundId={the round's id}` after it (an
+External Review round's values, the two the landing address ends with; the
+query was not typed for an Internal Review round); under `/en/` after a
+redirect to the address without the language; and, with an id, to an
+Author of another submission, a Journal or Press editor, the round's
+reviewer and a signed-out visitor (no redirect to Login), as well as to the
+Author for a submission under anonymous review and for one in a press's
+Internal Review. On OPS, with a preprint in Production,
+`authorDashboard/submission/{id}` redirected the preprint's Author to My
+Submissions with the preprint's workflow open, and `reviewRoundInfo`
+answered the same 404 to that Author in all four forms (the query as
+`?submissionId={id}&stageId=5`, Production, without a round, a preprint
+having none) and, with an id, to another Author, the
+Server manager and a signed-out visitor. None of these addresses wrote a
+server-log line.
+The same probe, the two author grids. No request named either grid on the
+reviewer's review steps, the editor's round view, the "Request Revisions"
+wizard or the author's view of each round (External and Internal Review,
+open and anonymous review, with the letter window, "Read Review" and
+"Upload revisions" opened), and the author's view held none of the three
+templates' elements and no legacy grid. Typed with the submission, stage
+and round
+(`{journal}/$$$call$$$/grid/files/review/author-review-revisions-grid/fetch-grid?submissionId={id}&stageId={stage}&reviewRoundId={round}`,
+`{journal}/$$$call$$$/grid/files/attachment/author-review-attachments-grid/fetch-grid`
+with the same query), each address answered HTTP 200 with JSON, the grid's
+markup in its `content`. The submission's Author got the "Revisions" grid
+with "Search", "Upload File" and that round's revised files, each with
+"Edit" and "Delete" ("No Files" on a round without one; a press's Internal
+Review round answered like an External Review one), and the
+"Reviewer's Attachments" grid with the reviewer files an editor had
+attached to a letter to the author: "No Files" before such a letter, even
+with the reviewer's file submitted, and under anonymous review a row of the
+file's number, name and date with no reviewer's name. An Author of another
+submission, the round's reviewer and a signed-out visitor got
+`status: false` with "You don't currently have access to that stage of
+the workflow."; a Journal or Press editor got the attachments grid with the
+same file and, for the revisions grid, "The current role does not have
+access to this operation." On OPS the preprint's Author got "Invalid review
+round." from both; another Author and a signed-out visitor "You don't
+currently have access to that stage of the workflow."; the Server manager
+"The current role does not have access to this operation." from the
+revisions grid and "Invalid review round." from the attachments grid. Every
+refusal was HTTP 200 with the message in the JSON. The addresses gave no
+role a file its screens withhold: the Author's revised files are on
+"Revisions Uploaded", and a reviewer's file entered the attachments grid
+only once an editor had attached it to a letter to the author. Kept script:
+`shared/playwright/checks/U26/UA1/ua1.js`.
 
 <a id="fn-p"></a>
 **p** — OPS absence, install facts: the preprint server's stage roster holds

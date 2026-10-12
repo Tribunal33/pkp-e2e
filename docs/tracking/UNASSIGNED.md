@@ -25,15 +25,34 @@ if real, their specs' own probes will resurface them.)
   screen, per the review-stage spec's retired-legacy-surfaces footnote.
   AFFW-702's email-modal body remains live via the Notifications panel and
   stays claimed by U26).
+- Evidence (housekeeping, U26 claim check UA1, live drive 2026-10-12, OJS,
+  OMP and OPS `main`, two runs each): `authorDashboard/reviewRoundInfo`
+  answers a bare "404 Not Found" in every form it is typed and for every
+  role, on a submission with a round, a decision letter and a revised
+  file; the author's round view (each round, external and internal, open
+  and anonymous review) holds none of the three templates' elements and no
+  legacy grid; its "Notifications" list is the Vue one, and only the letter
+  window's body (AFFW-702) comes from the old handler. Rerun:
+  `shared/playwright/checks/U26/UA1/ua1.js`.
 - Resolves: maintainer confirmation as dead code (removal candidates).
 
 ### GRID-011, GRID-024 — legacy author review-attachment / revisions grids
 - What: author-view grids for review attachments and uploaded revision files,
   mounted only from the retired author-dashboard round panel (AFFW-703/704).
-- Why parked: dead with their mount — no reachable screen loads them in the
-  current UI (same evidence as above; the open-review attachment grid
-  GRID-010 is live inside the read-review sheet and stays claimed).
-- Resolves: maintainer confirmation as dead code (removal candidates).
+- Why parked: unmounted — no reachable screen loads them in the current UI
+  (same evidence as above; the open-review attachment grid GRID-010 is
+  live inside the read-review sheet and stays claimed), though each grid's
+  own address still answers when typed.
+- Evidence (the same drive, 2026-10-12): no request of the reviewer's,
+  editor's or author's review-stage screens names either grid; typed with
+  the submission, stage and round, each address still answers the
+  submission's Author with the grid and that round's files, and refuses
+  an Author of another submission, a reviewer and a signed-out visitor;
+  nothing it lists is withheld from that role by the screens (*Review
+  stage & rounds*, footnote o). Rerun:
+  `shared/playwright/checks/U26/UA1/ua1.js`.
+- Resolves: maintainer confirmation as dead code (removal candidates; the
+  two handlers still serve, so removal takes their routes too).
 
 ### AFFW-076 — sectionPolicy.tpl start-submission block
 - What: OJS template block offering "start a submission" from the section
