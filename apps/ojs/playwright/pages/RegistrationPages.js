@@ -9,7 +9,8 @@
  *   or site-level (index/user/register), on any server (the fixed
  *   validation-variant server included, via an absolute origin).
  * - RegistrationCompletePage — the "Registration complete" landing.
- * - ProfileRolesTab — the profile's Roles tab (journal- or site-level).
+ * - ProfileRolesTab — the profile's Roles tab (journal- or site-level), its
+ *   role boxes and the "Reviewing interests" list.
  * - ProfileNotificationsTab — the profile's Notifications tab, the
  *   "Public Announcements" rows' two boxes (Rule 6).
  * - ProfileNameTabs — the Identity and Contact tabs' `[en]` name and
@@ -24,6 +25,7 @@
  */
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
+const {expectTextsInAnyOrder} = require('../../../../shared/playwright/support/order.js');
 
 /** The front-end user navigation: "Register" / "Login" or the username menu. */
 function siteHeader(page) {
@@ -85,6 +87,14 @@ exports.RegisterPage = class RegisterPage extends BasePage {
             'Which journals on this site would you like to register with?'
         );
         this.siteConsent = this.form.locator('input[name="privacyConsent[0]"]');
+        // Site-level: the interests box, a plain text box found by the
+        // question it sits under (shown whatever is ticked, Rule 8).
+        this.siteInterests = this.form
+            .locator('.reviewer_nocontext_interests')
+            .getByLabel(
+                'If you requested to be a reviewer on any journal, please enter your subject interests.',
+                {exact: true}
+            );
         this.submitButton = this.form.locator('button.submit');
         this.loginLink = this.form.getByRole('link', {name: 'Login', exact: true});
         // The interrupted destination the Login page's link carried in (Rule 9).
@@ -248,6 +258,8 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
         this.form = page.locator('form#rolesForm');
         this.tab = page.locator('#profileTabs').getByRole('tab', {name: 'Roles', exact: true});
         this.interestChips = this.form.locator('#interests ul.interests .tagit-label');
+        // The label under the interests list ("Reviewing interests").
+        this.interestsLabel = this.form.locator('label[for="interests"]');
     }
 
     /** Open the profile and switch to the Roles tab (jQuery UI tabs, AJAX-loaded). */
@@ -292,6 +304,17 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
     /** The ticked role boxes of the form, any journal. */
     checkedBoxes() {
         return this.form.locator('input[type="checkbox"]:checked');
+    }
+
+    /**
+     * "Reviewing interests" lists exactly these interests, each once. In
+     * either order: the interests are read with no ORDER BY (fix list B).
+     *
+     * @param {string[]} interests
+     */
+    async expectInterests(interests) {
+        await expect(this.interestsLabel).toHaveText('Reviewing interests');
+        await expectTextsInAnyOrder(this.interestChips, interests);
     }
 };
 

@@ -4,13 +4,16 @@
  * OMP page objects for U02 — Registration & account validation: the
  * press-level and site-level "Register" form (form#register), the
  * "Registration complete" page, and the profile's Roles tab (where a new
- * account's roles and reviewing interests are read back).
+ * account's roles and reviewing interests are read back: `interestChips`,
+ * `interestsLabel`, `expectInterests()`).
  *
  * Selectors follow lib/pkp/templates/frontend/pages/userRegister.tpl,
  * frontend/components/registrationForm.tpl, registrationFormContexts.tpl,
  * userRegisterComplete.tpl and lib/pkp/templates/user/userGroups.tpl.
  */
+const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
+const {expectTextsInAnyOrder} = require('../../../../shared/playwright/support/order.js');
 
 exports.RegisterPage = class RegisterPage extends BasePage {
     constructor(page) {
@@ -38,6 +41,15 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         this.siteConsent = this.form.locator(
             ':scope > .fields .optin-privacy input[type="checkbox"]'
         );
+        // Site-level: the interests box, a plain text box found by the
+        // question it sits under (on screen whatever is ticked, Rule 8; the
+        // press-level `#reviewerInterests` block is not on this page).
+        this.siteInterests = this.form
+            .locator('.reviewer_nocontext_interests')
+            .getByLabel(
+                'If you requested to be a reviewer for any press, please enter your subject interests.',
+                {exact: true}
+            );
         // Spam check (only on the validation-variant server).
         this.altchaWidget = this.form.locator('altcha-widget');
         this.submitButton = this.form.getByRole('button', {name: 'Register', exact: true});
@@ -199,6 +211,8 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
         // presses' alike (the positive control of a "no role ticked" read).
         this.allBoxes = this.userGroups.locator('input[type="checkbox"]');
         this.interestChips = this.form.locator('#interests li.tagit-choice .tagit-label');
+        // The label under the interests list ("Reviewing interests").
+        this.interestsLabel = this.form.locator('label[for="interests"]');
     }
 
     /** Open the tab from the profile at `contextPath` (`index` = site level). */
@@ -228,6 +242,17 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
 
     contextBox(name, role) {
         return this.contextSection(name).getByRole('checkbox', {name: role, exact: true});
+    }
+
+    /**
+     * "Reviewing interests" lists exactly these interests, each once. In
+     * either order: the interests are read with no ORDER BY (fix list B).
+     *
+     * @param {string[]} interests
+     */
+    async expectInterests(interests) {
+        await expect(this.interestsLabel).toHaveText('Reviewing interests');
+        await expectTextsInAnyOrder(this.interestChips, interests);
     }
 };
 

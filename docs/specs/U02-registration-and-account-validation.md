@@ -594,9 +594,9 @@ in the footnote. <sup>s</sup>
      journal, a journal whose roles are left unticked asking for no
      consent (Rule 5); on a press site every press's line is on screen from
      the start [OMP2](#omp2).
-   - **The role boxes**: tick "Reader" under one and, on a journal or
-     press, the reviewer role under the other (a preprint server offers
-     "Reader" only).
+   - **The role boxes**: tick "Reader" under one and, under the other, the
+     reviewer role on a journal or press and "Reader" on a preprint server,
+     which offers "Reader" only.
    - **The consent lines**: under each ticked journal a line "Yes, I agree
      to have my data collected and stored according to this journal's
      privacy statement." appears (on a press site it was there from the
@@ -604,17 +604,24 @@ in the footnote. <sup>s</sup>
      "Yes, I agree to have my data collected and stored according to the
      privacy statement." is on the page as well (it is only when the site
      itself has a Privacy Statement, Rule 5), tick that too.
+   - **The interests box** {OJS OMP}: in the box under "If you requested to
+     be a reviewer on any journal, please enter your subject interests." (a
+     press asks "…to be a reviewer for any press…") type glacier, ethics:
+     two interests with a comma and a space between them. A preprint server
+     shows the box too, though it offers no reviewer role
+     [OPS1](#ops1); leave it empty there.
    - **"Register"**: fill the form and press "Register": "Registration
      complete" appears with "Edit My Profile" and "Continue Browsing" only.
    - **The profile's Roles tab**: "Edit My Profile" › Roles shows exactly
-     the ticked roles in their journals.
-   - **The second visitor, nothing ticked**: the second visitor opens the
-     site-level page (Rule 1), ticks no journal and no role, fills the form
-     with a fresh username and email and presses "Register": no consent
-     line is on the page, and the form registers with no consent at all
-     (Rule 5);
-     "Registration complete" appears, and the profile's Roles tab shows no
-     role ticked in any journal (Rule 8).
+     the ticked roles in their journals and, on a journal or press,
+     "glacier" and "ethics" under "Reviewing interests", each listed once
+     (Rule 8).
+   - **The second visitor, nothing ticked**: opens the site-level page
+     (Rule 1), ticks nothing, fills the form with a fresh username and
+     email and presses "Register": no consent line is on the page (every
+     press's line is, left unticked [OMP2](#omp2)), and the form registers
+     with no consent at all (Rule 5); "Registration complete" appears, and
+     the profile's Roles tab shows no role ticked in any journal (Rule 8).
    - **Control**: the completion page offered, after either registration,
      no "Make a New Submission" and no "View Submissions", the reviewer
      role ticked or nothing at all (Rule 10).
@@ -745,9 +752,6 @@ Left out of the scenarios above, by reason:
     ([A1](#a1); Rule 14): the guard the issue report
     (`docs/issues/U02-A1-activation-link-expires-before-validation-timeout.md`)
     proposes, once fixed
-  - on a journal or press, two interests typed with a comma and a space
-    into the site-level page's interests box, each then listed once on the
-    new account's Roles tab (Rule 8)
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -1585,7 +1589,15 @@ page's header "Register" and the in-form "Register" link all answer
 `{disabled context}/login` (note g). Scenario 6 needs two open contexts,
 the seeded one plus the scratch one, and ticks the consent line under each;
 the site has no privacy statement of its own (`seed-facts.md`), so no site
-consent box is on the page; its second account, `u02s6b-<app>`, registers
+consent box is on the page; on OJS and OMP its first account types the two
+interests into the site-level `input#interests` (the
+`.reviewer_nocontext_interests` block, note k) before "Register", each word
+carrying the test's tag so that no other account, of this run or an earlier
+one, holds it (a word two visitors typed there is stored once per visitor,
+note k; what a later Roles "Save" does with the copies is *User profile*'s
+A20 and is not read here), and its Roles tab is then read for the two
+"Reviewing interests" chips, each word once; OPS leaves the box empty
+(OPS1); the scenario's second account, `u02s6b-<app>`, registers
 in a fresh browser context at `index/user/register` with nothing ticked,
 its Roles tab then reached through the profile address (`user/profile`, the
 seeded context's) and read for no ticked box anywhere (note c). Scenario 7

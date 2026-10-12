@@ -19,7 +19,9 @@
  * on the seeded journal or on a scratch journal; settings change only on
  * scratch journals, through the manager's own screens. Every registration,
  * and every sign-in that follows one, happens in a browser context the test
- * opens itself, never through the shared .auth cache. Mailpit reads are
+ * opens itself, never through the shared .auth cache. S6's two reviewing
+ * interests carry the test's tag: a word two accounts typed on the
+ * site-level page is stored once per account (Rule 8). Mailpit reads are
  * scoped by the throwaway address (PRINCIPLES A8). S7 navigates explicitly
  * to the validation-variant server (`variants.validation`, PRINCIPLES D9),
  * which shares the fleet's database. No hard-coded waits.
@@ -518,6 +520,7 @@ test.describe('registration & account validation', () => {
         const who = registrant(tag);
         const second = registrant(`${tag}b`);
         const scratchName = `Scratch journal ${tag}`;
+        const interests = [`glacier${tag}`, `ethics${tag}`];
         await ojsApi.createContext({tag, context: {name: {en: scratchName}}});
 
         // The site homepage (the journal list) › "Register" (Rule 1).
@@ -559,6 +562,16 @@ test.describe('registration & account validation', () => {
         await register.contextConsentBox(scratchBlock).check();
         await expect(register.visibleConsentLines()).toHaveCount(2);
 
+        // The interests box under "If you requested to be a reviewer on any
+        // journal, please enter your subject interests.": empty as it
+        // arrives, then two interests typed with a comma and a space between
+        // them, each word carrying the test's tag so that no other account
+        // holds it (Rule 8).
+        await expect(register.siteInterests).toBeVisible();
+        await expect(register.siteInterests).toHaveValue('');
+        await register.siteInterests.fill(interests.join(', '));
+        await expect(register.siteInterests).toHaveValue(`${interests[0]}, ${interests[1]}`);
+
         await register.fillProfile();
         await register.fillLogin(who);
         await register.submitButton.click();
@@ -571,7 +584,7 @@ test.describe('registration & account validation', () => {
         await complete.expectLinks(['Edit My Profile', 'Continue Browsing']);
 
         // "Edit My Profile" › Roles lists every journal; exactly the ticked
-        // roles are held (Rule 8).
+        // roles are held, in their journals (Rule 8).
         await complete.link('Edit My Profile').click();
         const roles = new ProfileRolesTab(page, null);
         await roles.open();
@@ -582,6 +595,10 @@ test.describe('registration & account validation', () => {
         await expect(scratchRoles.getByRole('checkbox', {name: 'Reviewer', exact: true})).toBeChecked();
         await expect(scratchRoles.getByRole('checkbox', {name: 'Reader', exact: true})).not.toBeChecked();
         await expect(roles.checkedBoxes()).toHaveCount(2);
+
+        // The same tab's "Reviewing interests": the two typed interests,
+        // each listed once (Rule 8).
+        await roles.expectInterests(interests);
 
         // The second visitor, in a browser of their own: the site-level page
         // with no journal and no role ticked shows no consent line and

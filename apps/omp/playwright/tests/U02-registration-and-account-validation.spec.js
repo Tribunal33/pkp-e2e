@@ -24,7 +24,9 @@
  * (privacy statement, registration, technical support contact); S5 seeds a
  * second scratch press disabled since its creation. Every registrant has a
  * unique username and mailbox naming app + test (Mailpit is shared across
- * the three fleets — never cleared). Every registration and every sign-in
+ * the three fleets — never cleared). S6's two reviewing interests carry the
+ * test's tag: a word two accounts typed on the site-level page is stored
+ * once per account (Rule 8, fn-s). Every registration and every sign-in
  * that follows one runs in a browser context the test opens itself
  * (`freshPage`), never the cached `.auth` storage state; "a second browser"
  * is a second such context, and S7's browser without JavaScript is one
@@ -533,6 +535,7 @@ test.describe('Registration & account validation (U02)', () => {
         const tag = makeTag(testInfo, 'u02s6');
         const press = await seedPress(ompApi, tag);
         const who = makeRegistrant(tag);
+        const interests = [`glacier${tag}`, `ethics${tag}`];
 
         // Site homepage (the press list) → header "Register" → site-level form.
         const page = await freshPage();
@@ -569,6 +572,16 @@ test.describe('Registration & account validation (U02)', () => {
         await register.contextConsent(PK_NAME).check();
         await register.contextConsent(press.name).check();
 
+        // The interests box under "If you requested to be a reviewer for any
+        // press, please enter your subject interests.": empty as it arrives,
+        // then two interests typed with a comma and a space between them,
+        // each word carrying the test's tag so that no other account holds
+        // it (Rule 8, fn-s).
+        await expect(register.siteInterests).toBeVisible();
+        await expect(register.siteInterests).toHaveValue('');
+        await register.siteInterests.fill(interests.join(', '));
+        await expect(register.siteInterests).toHaveValue(`${interests[0]}, ${interests[1]}`);
+
         await register.fillIdentity(who);
         await register.submit();
 
@@ -590,6 +603,10 @@ test.describe('Registration & account validation (U02)', () => {
         await expect(roles.contextBox(press.name, 'External Reviewer')).toBeChecked();
         await expect(roles.contextBox(press.name, 'Reader')).not.toBeChecked();
         await expect(roles.checkedBoxes).toHaveCount(2);
+
+        // The same tab's "Reviewing interests": the two typed interests,
+        // each listed once (Rule 8).
+        await roles.expectInterests(interests);
 
         // The second visitor: the site-level page with nothing ticked, no
         // press and no role; the consent lines stay untouched (on a press
