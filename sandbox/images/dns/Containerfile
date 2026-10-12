@@ -2,7 +2,8 @@
 # log (`podman logs dns`) and answers "no such name" to all of them. The
 # hosts a review allows are in the pod's /etc/hosts instead, so they never
 # reach it. Built as the sandbox user by sandbox/vm/setup.sh.
-FROM docker.io/library/alpine:3.22
+# alpine:3.22, pinned by digest (2026-10-12).
+FROM docker.io/library/alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8
 RUN apk add --no-cache dnsmasq
 USER 65534:65534
 CMD ["dnsmasq", "--keep-in-foreground", "--log-queries", "--log-facility=-", "--no-resolv", "--no-hosts", "--address=/#/", "--listen-address=127.0.0.1", "--bind-interfaces", "--port=53", "--user=", "--pid-file="]

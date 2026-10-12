@@ -15,6 +15,7 @@
  *   node bin/plugin-sandbox.js up|logs|down|status <review>
  *   node bin/plugin-sandbox.js snapshot <review> <label>
  *   node bin/plugin-sandbox.js diff <review> <from> <to>
+ *   node bin/plugin-sandbox.js show <review> <file>   (dns.log, requests.log, php-error.log, db.log, upgrade.log, snapshots/<label>/<file>)
  *   node bin/plugin-sandbox.js egress <review>
  *   node bin/plugin-sandbox.js php <review> <args>…
  *   node bin/plugin-sandbox.js purge <review>    (after the report: in/, out/ and .reports/plugin-review/<review>)
@@ -22,14 +23,17 @@
  *
  * OJS on stable-3_5_0 for now: the app is the line checkout with the
  * harness's overlays left out, the data PKP's dataset for the line. The
- * app answers at http://127.0.0.1:13000 (admin / admin and the dataset's
- * users), Mailpit at http://127.0.0.1:13025. `--gallery` takes the plugin
+ * app answers at http://127.0.0.1:19000 (admin / admin and the dataset's
+ * users), Mailpit at http://127.0.0.1:19025. `--gallery` takes the plugin
  * gallery's XML (the PR's plugins.xml): the app's gallery reads it from the
  * pod, and each release whose MD5 is a staged --package file's is
  * served from the pod too, so the install takes the app's real gallery
  * path, MD5 check included, without leaving the machine. `down` also
- * withdraws every egress allowance. `canary` is the acceptance test of
- * the walls: re-run it after any change to sandbox/ or the VM setup.
+ * withdraws every egress allowance and stops every process of the sandbox
+ * user. What the pod wrote (out/, in the sandbox user's home) is read only
+ * through the socket, as the sandbox user, never through a symlink:
+ * `show` prints it. `canary` is the acceptance test of the walls: re-run
+ * it after any change to sandbox/ or the VM setup.
  */
 process.env.PKP_E2E_LINE = process.env.PKP_E2E_LINE || 'stable-3_5_0';
 
@@ -37,6 +41,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const net = require('net');
+const os = require('os');
 const crypto = require('crypto');
 const {execFileSync, spawnSync} = require('child_process');
 const {REPO_ROOT, resolveApp} = require('./apps.js');
@@ -45,10 +50,9 @@ const {patchIni} = require('../shared/playwright/ini.js');
 
 const ROOT = '/srv/plugin-sandbox';
 const IN = path.join(ROOT, 'in');
-const OUT = path.join(ROOT, 'out');
 const SOCKET = '/run/plugin-sandbox.sock';
 const EGRESS_LOG = '/var/log/plugin-egress.log';
-const APP_URL = 'http://127.0.0.1:13000';
+const APP_URL = 'http://127.0.0.1:19000';
 const GALLERY_URL = 'http://127.0.0.1:8081'; // inside the pod
 const APP_NAME = 'ojs';
 
@@ -65,32 +69,28 @@ function reviewId(value) {
 /**
  * One request through the sandbox's socket: `egress` runs plugin-egress as
  * root, `pod` runs pod.sh as e2e-plugin (sandbox/vm/plugin-sandbox-dispatch).
- * Not sudo: the bot's unit sets NoNewPrivileges. The output is printed as
- * it arrives; the dispatcher's last line carries the exit status.
+ * Not sudo: the bot's unit sets NoNewPrivileges. The output is printed when
+ * the request ends; the dispatcher's last line carries this request's own
+ * id and the exit status, so nothing the sandbox prints can pass for it.
  */
 function request(kind, args, {check = true, quiet = false} = {}) {
     if (args.some((a) => /[\t\n]/.test(String(a)))) die('an argument holds a tab or a newline');
+    const id = crypto.randomBytes(16).toString('hex');
     return new Promise((resolve) => {
-        let pending = '';
-        let status = null;
-        const socket = net.createConnection(SOCKET, () => socket.write(`${[kind, ...args].join('\t')}\n`));
-        const emit = (line) => {
-            const m = line.match(/^__exit__ (\d+)$/);
-            if (m) status = Number(m[1]);
-            else if (!quiet) console.log(line);
-        };
-        socket.setEncoding('utf8');
-        socket.on('data', (chunk) => {
-            const lines = (pending + chunk).split('\n');
-            pending = lines.pop();
-            lines.forEach(emit);
-        });
+        const chunks = [];
+        const socket = net.createConnection(SOCKET, () => socket.write(`${[id, kind, ...args].join('\t')}\n`));
+        socket.on('data', (chunk) => chunks.push(chunk));
         socket.on('error', (error) => die(`the sandbox socket ${SOCKET}: ${error.message} (is sandbox/vm/setup.sh installed?)`));
         socket.on('close', () => {
-            if (pending) emit(pending);
-            if (status === null) status = 1;
+            const text = Buffer.concat(chunks).toString('utf8');
+            const trailer = `__exit__ ${id} `;
+            const at = text.lastIndexOf(trailer);
+            const tail = at < 0 ? '' : text.slice(at + trailer.length);
+            const status = /^\d+\n?$/.test(tail) ? Number(tail.trim()) : 1;
+            const output = /^\d+\n?$/.test(tail) ? text.slice(0, at) : text;
+            if (!quiet && output) process.stdout.write(output.endsWith('\n') ? output : `${output}\n`);
             if (check && status !== 0) die(`${kind === 'pod' ? 'pod.sh' : 'plugin-egress'} ${args[0]} failed (exit ${status})`);
-            resolve(status);
+            resolve({status, output});
         });
     });
 }
@@ -99,27 +99,21 @@ const pod = (args, options) => request('pod', args, options);
 const egressHelper = (args, options) => request('egress', args, options);
 
 /**
- * Read a file under out/, which the sandbox user writes: only a plain file
- * inside out/<review>, never through a symlink, so a process that left its
- * container cannot make the bot read (and repeat) one of its own files.
+ * A file under out/<review>, which the sandbox user writes: read through
+ * the socket as that user, never through a symlink, at most 20 MB, so a
+ * process that left its container cannot make the bot read (and repeat)
+ * one of the bot's own files.
  */
-function readOut(file, {missing = null} = {}) {
-    const real = path.join(OUT, path.relative(OUT, file));
-    if (!real.startsWith(OUT + path.sep)) die(`not under ${OUT}: ${file}`);
-    let at = OUT;
-    for (const part of path.relative(OUT, real).split(path.sep)) {
-        at = path.join(at, part);
-        let stat;
-        try {
-            stat = fs.lstatSync(at);
-        } catch {
-            if (missing !== null) return missing;
-            die(`missing: ${at}`);
-        }
-        if (stat.isSymbolicLink()) die(`refusing a symlink the sandbox wrote: ${at}`);
-        if (at === real && !stat.isFile()) die(`not a plain file: ${at}`);
-    }
-    return fs.readFileSync(real, 'utf8');
+async function readOut(review, file, {missing = null} = {}) {
+    const {status, output} = await pod(['read', review, file], {check: false, quiet: true});
+    if (status === 0) return output;
+    if (status === 4 && missing !== null) return missing;
+    return die(`out/${review}/${file}: ${output.trim() || `exit ${status}`}`);
+}
+
+async function listOut(review, folder) {
+    const {status, output} = await pod(['list', review, folder], {check: false, quiet: true});
+    return status === 0 ? output.split('\n').filter(Boolean) : [];
 }
 
 function md5(file) {
@@ -183,7 +177,7 @@ function stage(review, argv) {
     const config = patchIni(fs.readFileSync(path.join(source, 'config.inc.php'), 'utf8'), {
         general: {
             base_url: `"${APP_URL}"`,
-            allowed_hosts: `"[\\"127.0.0.1\\",\\"127.0.0.1:13000\\"]"`,
+            allowed_hosts: `"[\\"127.0.0.1\\",\\"127.0.0.1:19000\\"]"`,
             // The app's own beacon would fill the egress log with core traffic.
             enable_beacon: 'Off',
         },
@@ -237,18 +231,18 @@ function meta(review) {
 }
 
 /** Tree and table snapshots compared: what the plugin (or the drive) changed between two labels. */
-function diff(review, from, to) {
-    const dir = (label) => path.join(OUT, review, 'snapshots', label);
-    for (const label of [from, to]) if (!fs.existsSync(dir(label))) die(`no snapshot ${label} for ${review}`);
-    const tree = (label) =>
+async function diff(review, from, to) {
+    for (const label of [from, to]) if (!/^[a-z0-9-]{1,40}$/.test(label)) die(`not a snapshot label: ${label}`);
+    const snap = (label, file, options) => readOut(review, `snapshots/${label}/${file}`, options);
+    const tree = async (label) =>
         new Map(
-            readOut(path.join(dir(label), 'tree.txt'))
+            (await snap(label, 'tree.txt'))
                 .split('\n')
                 .filter(Boolean)
                 .map((line) => [line.slice(66), line.slice(0, 64)]),
         );
-    const a = tree(from);
-    const b = tree(to);
+    const a = await tree(from);
+    const b = await tree(to);
     const added = [...b.keys()].filter((f) => !a.has(f));
     const removed = [...a.keys()].filter((f) => !b.has(f));
     const changed = [...b.keys()].filter((f) => a.has(f) && a.get(f) !== b.get(f));
@@ -262,28 +256,27 @@ function diff(review, from, to) {
     list('Files removed', removed);
     list('Files changed', changed);
 
-    const lines = (label, file) => {
-        const full = path.join(dir(label), file);
-        return readOut(full, {missing: ''}).split('\n').filter(Boolean);
-    };
+    const lines = async (label, file) => (await snap(label, file, {missing: ''})).split('\n').filter(Boolean);
     const setDiff = (x, y) => {
         const counts = new Map();
         for (const line of y) counts.set(line, (counts.get(line) || 0) + 1);
         return x.filter((line) => (counts.get(line) || 0) === 0 || (counts.set(line, counts.get(line) - 1), false));
     };
-    const schemaAdded = setDiff(lines(to, 'schema.tsv'), lines(from, 'schema.tsv'));
-    const schemaRemoved = setDiff(lines(from, 'schema.tsv'), lines(to, 'schema.tsv'));
+    const schemaFrom = await lines(from, 'schema.tsv');
+    const schemaTo = await lines(to, 'schema.tsv');
+    const schemaAdded = setDiff(schemaTo, schemaFrom);
+    const schemaRemoved = setDiff(schemaFrom, schemaTo);
     out.push(`## Schema: ${schemaAdded.length} column(s) added, ${schemaRemoved.length} removed`);
     out.push(...schemaAdded.map((l) => `+ ${l}`), ...schemaRemoved.map((l) => `- ${l}`), '');
-    const countMap = (label) => new Map(lines(label, 'counts.tsv').map((l) => l.split('\t')));
-    const ca = countMap(from);
-    const cb = countMap(to);
+    const countMap = async (label) => new Map((await lines(label, 'counts.tsv')).map((l) => l.split('\t')));
+    const ca = await countMap(from);
+    const cb = await countMap(to);
     const moved = [...new Set([...ca.keys(), ...cb.keys()])].filter((t) => ca.get(t) !== cb.get(t));
     out.push(`## Row counts changed (${moved.length})`, ...moved.map((t) => `- ${t}: ${ca.get(t) ?? 'absent'} → ${cb.get(t) ?? 'absent'}`), '');
-    const tables = fs.readdirSync(dir(to), {withFileTypes: true}).filter((f) => f.isFile() && f.name.endsWith('.csv')).map((f) => f.name);
+    const tables = (await listOut(review, `snapshots/${to}`)).filter((f) => f.endsWith('.csv'));
     for (const table of tables) {
-        const before = lines(from, table);
-        const after = lines(to, table);
+        const before = await lines(from, table);
+        const after = await lines(to, table);
         const plus = setDiff(after.slice(1), before.slice(1));
         const minus = setDiff(before.slice(1), after.slice(1));
         if (!plus.length && !minus.length) continue;
@@ -294,29 +287,40 @@ function diff(review, from, to) {
     console.log(out.join('\n'));
 }
 
-/** The drops and the allowances since the review was staged, and the names the app looked up. */
-function egress(review) {
-    const since = Date.parse(meta(review).staged);
-    const drops = new Map();
-    const audit = [];
+/**
+ * The egress log holds two kinds of line, and only these are read: the
+ * kernel's drops (rsyslog takes them from the kernel's own log alone) and
+ * plugin-egress's audit lines.
+ */
+const DROP_LINE = /^(\S+) \S+ kernel: (\[[\d. ]+\] )?plugin-egress: drop /;
+const AUDIT_LINE = /^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ) plugin-egress: ((allow|reset)\b.*)$/;
+
+function egressLog(since) {
     const text = fs.existsSync(EGRESS_LOG) ? fs.readFileSync(EGRESS_LOG, 'utf8') : '';
+    const drops = [];
+    const audit = [];
     for (const line of text.split('\n')) {
-        const stamp = Date.parse(line.split(' ')[0]);
-        if (!(stamp >= since)) continue;
-        if (line.includes('plugin-egress: drop ')) {
-            const field = (k) => (line.match(new RegExp(`\\b${k}=(\\S+)`)) || [])[1] || '?';
-            const key = `${field('PROTO')} ${field('DST')}:${field('DPT')}`;
-            const seen = drops.get(key) || {count: 0, first: line.split(' ')[0]};
-            seen.count++;
-            seen.last = line.split(' ')[0];
-            drops.set(key, seen);
-        } else if (line.includes('plugin-egress: ')) {
-            audit.push(line.replace(/^\S+ /, '').trim());
-        }
+        let m;
+        if ((m = line.match(DROP_LINE)) && Date.parse(m[1]) >= since) drops.push({at: m[1], line});
+        else if ((m = line.match(AUDIT_LINE)) && Date.parse(m[1]) >= since) audit.push(`${m[1]} ${m[2]}`);
+    }
+    return {drops, audit};
+}
+
+/** The drops and the allowances since the review was staged, and the names the app looked up. */
+async function egress(review) {
+    const {drops: dropLines, audit} = egressLog(Date.parse(meta(review).staged));
+    const drops = new Map();
+    for (const {at, line} of dropLines) {
+        const field = (k) => (line.match(new RegExp(`\\b${k}=(\\S+)`)) || [])[1] || '?';
+        const key = `${field('PROTO')} ${field('DST')}:${field('DPT')}`;
+        const seen = drops.get(key) || {count: 0, first: at};
+        seen.count++;
+        seen.last = at;
+        drops.set(key, seen);
     }
     const names = new Map();
-    const dns = path.join(OUT, review, 'dns.log');
-    const dnsText = readOut(dns, {missing: ''});
+    const dnsText = await readOut(review, 'dns.log', {missing: ''});
     if (dnsText) {
         for (const line of dnsText.split('\n')) {
             const m = line.match(/^(\S+) .*query\[(\w+)\] (\S+) from/);
@@ -350,6 +354,12 @@ async function canary() {
     const review = 'canary';
     await pod(['down', review], {check: false, quiet: true});
     stage(review, ['--copy', `${path.join(REPO_ROOT, 'sandbox', 'canary')}:plugins/generic/sandboxCanary`]);
+    // This machine's own addresses, for the probe to try.
+    const own = Object.values(os.networkInterfaces())
+        .flat()
+        .filter((a) => !a.internal && !/^fe80:/i.test(a.address))
+        .map((a) => a.address);
+    fs.writeFileSync(path.join(IN, review, 'app', 'plugins', 'generic', 'sandboxCanary', 'targets.json'), JSON.stringify({own}) + '\n');
     await pod(['up', review]);
     await pod(['snapshot', review, 'before']);
     const res = await get(`${APP_URL}/plugins/generic/sandboxCanary/probe.php`);
@@ -362,9 +372,10 @@ async function canary() {
         await pod(['down', review]);
         die(`the canary did not answer JSON (HTTP ${res.status}): ${res.body.slice(0, 500)}`);
     }
-    const dns = readOut(path.join(OUT, review, 'dns.log'));
-    const drops = fs.readFileSync(EGRESS_LOG, 'utf8').split('\n').filter((l) => Date.parse(l.split(' ')[0]) >= Date.parse(meta(review).staged) && l.includes('plugin-egress: drop '));
-    const tree = readOut(path.join(OUT, review, 'snapshots', 'after', 'tree.txt'));
+    const dns = await readOut(review, 'dns.log');
+    const drops = egressLog(Date.parse(meta(review).staged)).drops.map((d) => d.line);
+    const tree = await readOut(review, 'snapshots/after/tree.txt');
+    const phpLog = await readOut(review, 'php-error.log');
     const checks = [
         ['runs as an unprivileged uid', /^33:/.test(probe.whoami)],
         ['every capability dropped', /CapEff:\s*0+\b/.test(probe.capabilities)],
@@ -378,6 +389,11 @@ async function canary() {
         ['the address attempt is in the egress log', drops.some((l) => l.includes('DST=1.1.1.1 ') && l.includes('DPT=443'))],
         ["the host's own services are unreachable", Object.values(probe.hostServices).every((v) => v === 'failed')],
         ['a file written outside the plugin shows in the snapshot', tree.includes('app/plugins/generic/sandboxCanaryDrop/dropped.txt')],
+        ["this machine's own addresses are unreachable", own.length > 0 && Object.values(probe.ownAddresses).every((v) => v === 'failed')],
+        ["pasta's DNS forwarder is unreachable", probe.pastaDns === 'failed'],
+        ['a DNS question over UDP gets no answer', probe.udpDns === 'no answer'],
+        ["the app's database role cannot run programs", /^denied/.test(probe.dbProgram)],
+        ['a log replaced by a symlink is not followed on the host', probe.logLink === 'planted' && !phpLog.includes(os.hostname())],
     ];
     await pod(['down', review]);
     console.log('\ncanary:');
@@ -402,8 +418,8 @@ async function main() {
         case 'logs':
             return pod(['logs', reviewId(rest[0])]);
         case 'down':
-            await pod(['down', reviewId(rest[0])]);
-            return egressHelper(['reset']);
+            // The dispatcher withdraws every allowance even when the pod's down fails.
+            return pod(['down', reviewId(rest[0])]);
         case 'status':
             return pod(['status']);
         case 'purge':
@@ -415,12 +431,14 @@ async function main() {
             return pod(['php', reviewId(rest[0]), ...rest.slice(1)]);
         case 'diff':
             return diff(reviewId(rest[0]), rest[1] || die('diff needs two labels'), rest[2] || die('diff needs two labels'));
+        case 'show':
+            return process.stdout.write(await readOut(reviewId(rest[0]), rest[1] || die('show needs a file under out/<review>')));
         case 'egress':
             return egress(reviewId(rest[0]));
         case 'canary':
             return canary();
         default:
-            die('usage: plugin-sandbox.js stage|allow|up|snapshot|diff|egress|logs|php|down|purge|status|canary … (see the file header)');
+            die('usage: plugin-sandbox.js stage|allow|up|snapshot|diff|show|egress|logs|php|down|purge|status|canary … (see the file header)');
     }
 }
 

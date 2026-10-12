@@ -9,19 +9,25 @@
  *
  * Reads the pkp/plugin-gallery PR's plugins.xml against its base, and for
  * every release the PR adds or changes:
- *   - downloads the package and checks it against the XML's MD5;
- *   - lists the archive before unpacking it (absolute paths, `..`, links
- *     refuse the unpack), checks version.xml against the XML entry;
- *   - clones the homepage repository at the release's tag and lists what
- *     the package has that the source does not, and the reverse;
+ *   - refuses a product name or version that is not a plain name, since
+ *     both become folder names here;
+ *   - downloads the package (https only, redirects too) and checks it
+ *     against the XML's MD5;
+ *   - lists the archive before unpacking it (absolute paths, `..`, links,
+ *     more than 500 MB unpacked refuse the unpack), checks version.xml
+ *     against the XML entry;
+ *   - clones the homepage repository at the release's tag, symlinks as
+ *     plain files, and lists what the package has that the source does
+ *     not, and the reverse;
  *   - for an update, lists what changed since the previous gallery release;
- *   - runs `composer audit` on a bundled composer.lock (lock file only, no
- *     plugins, no scripts);
+ *   - runs `composer audit` on a bundled composer.lock (the lock file
+ *     alone, no plugins, no scripts, none of the package's composer.json);
  *   - maps the code's hot spots (remote calls, code execution, file
  *     writes, hooks, injected scripts) for the reader: a map, not a verdict.
  * Writes .reports/plugin-review/<review>/integrity.md (the reader's input)
  * and leaves the packages, unpacked trees and the PR head's plugins.xml
- * beside it for `bin/plugin-sandbox.js stage`.
+ * beside it for `bin/plugin-sandbox.js stage`. The XML is the PR author's:
+ * nothing from it names a path outside that folder.
  */
 const fs = require('fs');
 const path = require('path');
@@ -30,6 +36,12 @@ const {execFileSync, spawnSync} = require('child_process');
 const {REPO_ROOT} = require('./apps.js');
 
 const GALLERY = 'pkp/plugin-gallery';
+// What the XML may name: both become folder and file names here.
+const PRODUCT = /^[A-Za-z0-9_-]{1,64}$/;
+const VERSION = /^\d{1,6}(\.\d{1,6}){0,3}$/;
+const MAX_UNPACKED = 500 * 1024 * 1024;
+const MAX_ENTRIES = 50000;
+const MAX_REPO_KB = 200 * 1024;
 
 function die(message) {
     console.error(`plugin-fetch: ${message}`);
@@ -41,7 +53,7 @@ function gh(args) {
 }
 
 function fetchTo(url, file) {
-    const result = spawnSync('curl', ['-fsSL', '--max-time', '120', '--max-filesize', '104857600', '-o', file, url], {encoding: 'utf8'});
+    const result = spawnSync('curl', ['-fsSL', '--proto', '=https', '--proto-redir', '=https', '--max-redirs', '5', '--max-time', '120', '--max-filesize', '104857600', '-o', file, url], {encoding: 'utf8'});
     return result.status === 0 ? null : (result.stderr || `curl exit ${result.status}`).trim();
 }
 
@@ -78,24 +90,31 @@ function parseGallery(xml) {
     return plugins;
 }
 
-/** tar's verbose listing: refuse anything that could land outside the target or link elsewhere. */
+/** tar's verbose listing: refuse anything that could land outside the target, link elsewhere or fill the disk. */
 function inspectArchive(file) {
-    const listing = execFileSync('tar', ['-tzvf', file], {encoding: 'utf8', maxBuffer: 64 * 1024 * 1024}).split('\n').filter(Boolean);
+    const result = spawnSync('tar', ['-tzvf', file], {encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 120000});
+    if (result.status !== 0) return {count: 0, tops: [], problems: [`the listing failed: ${(result.error && result.error.message) || (result.stderr || '').trim().split('\n').pop()}`]};
+    const listing = result.stdout.split('\n').filter(Boolean);
     const problems = [];
     const names = [];
+    let bytes = 0;
     for (const line of listing) {
         const type = line[0];
         const name = line.replace(/^.*?\d\d:\d\d(:\d\d)? /, '').replace(/ -> .*$/, '').replace(/ link to .*$/, '');
         names.push(name);
+        bytes += Number((line.match(/^\S+\s+\S+\s+(\d+)\s/) || [])[1] || 0);
         if (type === 'l' || type === 'h') problems.push(`link: ${line.replace(/^.*?\d\d:\d\d(:\d\d)? /, '')}`);
         if (name.startsWith('/') || name.split('/').includes('..')) problems.push(`path escapes the folder: ${name}`);
         if (!['-', 'd', 'l', 'h'].includes(type)) problems.push(`special file (${type}): ${name}`);
     }
+    if (names.length > MAX_ENTRIES) problems.push(`${names.length} entries, over ${MAX_ENTRIES}`);
+    if (bytes > MAX_UNPACKED) problems.push(`${bytes} bytes unpacked, over ${MAX_UNPACKED}`);
     const tops = [...new Set(names.map((n) => n.split('/')[0]).filter(Boolean))];
     return {count: names.length, tops, problems};
 }
 
 function unpack(file, into) {
+    inside(into);
     fs.rmSync(into, {recursive: true, force: true});
     fs.mkdirSync(into, {recursive: true});
     execFileSync('tar', ['-xzf', file, '-C', into, '--no-same-owner', '--no-same-permissions']);
@@ -157,11 +176,19 @@ function hotSpots(root) {
     return found;
 }
 
+let dir = null;
+
+/** Every path written, unpacked into, cloned into or removed stays inside the review's folder. */
+function inside(p) {
+    if (!path.resolve(p).startsWith(dir + path.sep)) die(`refusing a path outside ${dir}: ${p}`);
+    return p;
+}
+
 function main() {
     const [prArg, reviewArg] = process.argv.slice(2);
     const pr = parseInt(prArg, 10);
     if (!pr || !/^[a-z0-9][a-z0-9-]{0,62}$/.test(reviewArg || '')) die('usage: plugin-fetch.js <gallery PR number> <review>');
-    const dir = path.join(REPO_ROOT, '.reports', 'plugin-review', reviewArg);
+    dir = path.join(REPO_ROOT, '.reports', 'plugin-review', reviewArg);
     fs.rmSync(dir, {recursive: true, force: true});
     for (const sub of ['packages', 'unpacked', 'source']) fs.mkdirSync(path.join(dir, sub), {recursive: true});
 
@@ -195,6 +222,11 @@ function main() {
     const summary = [];
 
     for (const product of products) {
+        if (!PRODUCT.test(product || '')) {
+            md.push(`## Refused product name \`${String(product).replace(/`/g, "'").slice(0, 100)}\``, '', '- **Not fetched:** a product name is letters, digits, `_` and `-`, at most 64; this one would become a folder name.', '');
+            summary.push({label: String(product).slice(0, 100), problem: 'product name refused'});
+            continue;
+        }
         const plugin = head.get(product);
         const before = base.get(product);
         const known = new Set((before ? before.releases : []).map((r) => `${r.version} ${r.md5}`));
@@ -204,8 +236,13 @@ function main() {
         md.push('');
 
         for (const rel of releases) {
+            if (!VERSION.test(rel.version || '')) {
+                md.push(`### Refused release version \`${String(rel.version).replace(/`/g, "'").slice(0, 100)}\``, '', '- **Not fetched:** a version is up to four dot-separated numbers; this one would become a folder name.', '');
+                summary.push({label: `${product}-?`, problem: 'version refused'});
+                continue;
+            }
             const label = `${product}-${rel.version}`;
-            const pkg = path.join(dir, 'packages', `${label}.tar.gz`);
+            const pkg = inside(path.join(dir, 'packages', `${label}.tar.gz`));
             const compat = rel.compatibility.map((c) => `${c.application} ${c.versions.join(' ')}`).join('; ');
             md.push(`### Release ${rel.version} (${rel.date}) — ${compat}`, '', `- Package: ${rel.package}`);
             const err = rel.package.startsWith('https://') ? fetchTo(rel.package, pkg) : 'the package URL is not https';
@@ -217,15 +254,15 @@ function main() {
             const sum = md5(pkg);
             md.push(`- MD5: ${sum === rel.md5 ? `matches (${sum})` : `**does not match**: XML ${rel.md5}, file ${sum}`}`, `- Size: ${fs.statSync(pkg).size} bytes`);
             const archive = inspectArchive(pkg);
-            md.push(`- Archive: ${archive.count} entries, top folder(s) ${archive.tops.join(', ')}${archive.tops.length === 1 && archive.tops[0] === product ? '' : ` (**expected one folder named ${product}**)`}`);
+            md.push(`- Archive: ${archive.count} entries, top folder(s) ${archive.tops.join(', ')}${archive.tops.length === 1 && archive.tops[0] === product ? '' : ` (**expected one folder named ${product}**; OJS installs from any folder holding a version.xml)`}`);
             if (archive.problems.length) {
                 md.push('- **Not unpacked**, the listing has:', ...archive.problems.slice(0, 20).map((p) => `  - ${p}`), '');
                 summary.push({label, problem: 'unsafe archive'});
                 continue;
             }
-            const into = path.join(dir, 'unpacked', label);
+            const into = inside(path.join(dir, 'unpacked', label));
             unpack(pkg, into);
-            const root = archive.tops.length === 1 ? path.join(into, archive.tops[0]) : into;
+            const root = inside(archive.tops.length === 1 ? path.join(into, archive.tops[0]) : into);
             const files = walk(root);
             const vendor = files.filter((f) => /(^|\/)vendor\//.test(f.rel));
             const minified = files.filter((f) => /\.min\.js$|\.bundle\.js$/.test(f.rel) || (f.rel.endsWith('.js') && f.size > 300 * 1024));
@@ -251,20 +288,39 @@ function main() {
             }
 
             // The tagged source: the package URL names the tag on GitHub releases.
-            const repo = plugin.homepage.match(/github\.com\/([^/]+\/[^/#?]+)/);
+            const repo = plugin.homepage.match(/github\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)/);
             const tagMatch = rel.package.match(/github\.com\/[^/]+\/[^/]+\/releases\/download\/([^/]+)\//);
+            const repoName = repo && repo[1].replace(/\.git$/, '');
+            let repoKb = null;
             if (repo && tagMatch) {
-                const src = path.join(dir, 'source', label);
-                const clone = spawnSync('git', ['clone', '--quiet', '--depth', '1', '--branch', decodeURIComponent(tagMatch[1]), '--no-recurse-submodules', `https://github.com/${repo[1].replace(/\.git$/, '')}.git`, src], {
+                try {
+                    repoKb = JSON.parse(gh([`repos/${repoName}`])).size;
+                } catch {
+                    repoKb = null;
+                }
+            }
+            if (repo && tagMatch && repoKb !== null && repoKb > MAX_REPO_KB) {
+                md.push(`- Source: not compared (${repoName} is ${Math.round(repoKb / 1024)} MB, over ${MAX_REPO_KB / 1024})`);
+            } else if (repo && tagMatch) {
+                const src = inside(path.join(dir, 'source', label));
+                // Symlinks check out as plain files holding their target, so
+                // the comparison never reads through one.
+                const clone = spawnSync('git', ['-c', 'core.symlinks=false', 'clone', '--quiet', '--depth', '1', '--branch', decodeURIComponent(tagMatch[1]), '--no-recurse-submodules', '--', `https://github.com/${repoName}.git`, src], {
                     encoding: 'utf8',
+                    timeout: 300000,
                     env: {...process.env, GIT_TERMINAL_PROMPT: '0', GIT_LFS_SKIP_SMUDGE: '1'},
                 });
                 if (clone.status !== 0) {
-                    md.push(`- Source: **could not clone** ${repo[1]} at ${tagMatch[1]}: ${(clone.stderr || '').trim().split('\n').pop()}`);
+                    md.push(`- Source: **could not clone** ${repoName} at ${tagMatch[1]}: ${(clone.error && clone.error.message) || (clone.stderr || '').trim().split('\n').pop()}`);
                 } else {
+                    const links = (spawnSync('git', ['-C', src, 'ls-files', '-s'], {encoding: 'utf8', maxBuffer: 64 * 1024 * 1024}).stdout || '')
+                        .split('\n')
+                        .filter((l) => l.startsWith('120000 '))
+                        .map((l) => l.split('\t')[1]);
                     const d = treeDiff(root, src);
+                    if (links.length) md.push(`- **Symlinks in the source** (checked out as plain files): ${links.slice(0, 30).join(', ')}`);
                     md.push(
-                        `- Source at tag ${tagMatch[1]} (${repo[1]}): ${d.differ.length} file(s) differ, ${d.onlyA.length} only in the package, ${d.onlyB.length} only in the source`,
+                        `- Source at tag ${tagMatch[1]} (${repoName}): ${d.differ.length} file(s) differ, ${d.onlyA.length} only in the package, ${d.onlyB.length} only in the source`,
                         ...(d.differ.length ? [`  - **Differ:** ${d.differ.slice(0, 30).join(', ')}`] : []),
                         ...(d.onlyA.length ? [`  - Only in the package: ${d.onlyA.slice(0, 30).join(', ')}${d.onlyA.length > 30 ? ' …' : ''}`] : []),
                         ...(d.onlyB.length ? [`  - Only in the source: ${d.onlyB.slice(0, 30).join(', ')}${d.onlyB.length > 30 ? ' …' : ''}`] : []),
@@ -274,17 +330,17 @@ function main() {
                 md.push('- Source: not compared (the homepage is not a GitHub repository, or the package URL names no release tag)');
             }
 
-            const previous = before && before.releases.find((r) => r.version !== rel.version && r.package.startsWith('https://'));
+            const previous = before && before.releases.find((r) => r.version !== rel.version && VERSION.test(r.version || '') && r.package.startsWith('https://'));
             if (previous) {
-                const prevPkg = path.join(dir, 'packages', `${product}-${previous.version}.tar.gz`);
+                const prevPkg = inside(path.join(dir, 'packages', `${product}-${previous.version}.tar.gz`));
                 const prevErr = fetchTo(previous.package, prevPkg);
                 const prevArchive = prevErr ? null : inspectArchive(prevPkg);
                 if (prevErr || prevArchive.problems.length) {
                     md.push(`- Previous gallery release ${previous.version}: not compared (${prevErr || 'unsafe archive'})`);
                 } else {
-                    const prevInto = path.join(dir, 'unpacked', `${product}-${previous.version}`);
+                    const prevInto = inside(path.join(dir, 'unpacked', `${product}-${previous.version}`));
                     unpack(prevPkg, prevInto);
-                    const prevRoot = prevArchive.tops.length === 1 ? path.join(prevInto, prevArchive.tops[0]) : prevInto;
+                    const prevRoot = inside(prevArchive.tops.length === 1 ? path.join(prevInto, prevArchive.tops[0]) : prevInto);
                     const d = treeDiff(prevRoot, root, ['.git']);
                     md.push(`- Since the previous gallery release ${previous.version}: ${d.differ.length} changed, ${d.onlyB.length} added, ${d.onlyA.length} removed (the reader starts here: \`diff -ru unpacked/${product}-${previous.version} unpacked/${label}\`)`);
                 }
@@ -292,10 +348,18 @@ function main() {
 
             const lock = path.join(root, 'composer.lock');
             if (fs.existsSync(lock)) {
+                // The lock file alone: the package's composer.json could name
+                // repositories or a config of its own, and composer would follow them.
                 const tmp = fs.mkdtempSync(path.join(dir, 'audit-'));
                 fs.copyFileSync(lock, path.join(tmp, 'composer.lock'));
-                if (fs.existsSync(path.join(root, 'composer.json'))) fs.copyFileSync(path.join(root, 'composer.json'), path.join(tmp, 'composer.json'));
-                const audit = spawnSync('composer', ['audit', '--locked', '--no-plugins', '--no-scripts', '--no-interaction', '--format=plain'], {cwd: tmp, encoding: 'utf8'});
+                fs.writeFileSync(path.join(tmp, 'composer.json'), '{}\n');
+                fs.mkdirSync(path.join(tmp, 'home'));
+                const audit = spawnSync('composer', ['audit', '--locked', '--no-plugins', '--no-scripts', '--no-interaction', '--no-cache', '--format=plain'], {
+                    cwd: tmp,
+                    encoding: 'utf8',
+                    timeout: 120000,
+                    env: {...process.env, COMPOSER_HOME: path.join(tmp, 'home'), COMPOSER_NO_INTERACTION: '1'},
+                });
                 md.push(`- composer audit (lock file only): ${(audit.stdout + audit.stderr).trim().split('\n').slice(0, 12).join(' / ') || `exit ${audit.status}`}`);
                 fs.rmSync(tmp, {recursive: true, force: true});
             } else if (vendor.length) {

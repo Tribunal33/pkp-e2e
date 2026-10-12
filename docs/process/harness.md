@@ -431,20 +431,33 @@ home holds every credential. The sandbox exists on the VM alone; on the
 Mac a plugin is only read.
 
 - **The walls.** A rootless Podman pod owned by the user `e2e-plugin`,
-  which has no credentials and cannot read `/home/e2e`. Inside it the
-  app runs as uid 33 with every capability dropped, and its only mount
-  is the review's own copy of the app (the harness's `.env*` and test
-  configs left out). Every outbound packet of `e2e-plugin` and of its
-  subuids, which a process that left its container would run as, is
-  logged and dropped by the host (nft table `plugin_sandbox`, log
-  `/var/log/plugin-egress.log`), the host's own services on loopback
-  included. The pod's only resolver logs each name looked up and answers
-  none. No pod starts while the rule is not loaded.
+  which has no credentials, cannot read `/home/e2e`, and cannot log in
+  (sshd, cron and at refuse it). Inside the pod the app runs as uid 33
+  with every capability dropped, and its only mount is the review's own
+  copy of the app (the harness's `.env*` and test configs left out); its
+  database role is no superuser. Every outbound packet of `e2e-plugin`
+  and of its subuids, which a process that left its container would run
+  as, is logged and dropped by the host (nft table `plugin_sandbox`, log
+  `/var/log/plugin-egress.log`, which only the kernel and the helper
+  write), the host's own services on loopback included; the host's
+  resolver is hidden from the user, and its system bus from the pod.
+  The pod's only resolver logs each name looked up and answers none.
+- **Its limits.** The sandbox user's home is a 20 GB disk of its own,
+  root-owned except where Podman, the work copies and the pod's output
+  live, and `~/.config`, which root empties around each session; its
+  processes share 6 GB of memory, 4 CPUs and 4096 tasks, and
+  each container has its own cap. Its systemd session runs only during a
+  review: `up` starts it (never while the egress rule is not loaded),
+  `down` stops it, which ends every process the user has.
 - **The app.** OJS on `stable-3_5_0`: the line checkout with the
   harness's overlays left out, loaded with PKP's dataset for the line
   (`admin` / `admin` and the dataset's users, docs/process/dataset.md),
-  at `http://127.0.0.1:13000`, Mailpit at `:13025`. One pod at a time,
+  at `http://127.0.0.1:19000`, Mailpit at `:19025`. One pod at a time,
   machine-wide; the ports sit above every slot's and line's band.
+- **The browser** that drives the app runs as the bot, outside the wall
+  (the maintainer accepted that, 2026-10-12): the drive guards every
+  context with `sandbox/drive-guard.js`, which stops and logs a page's
+  request to any host but the pod's two ports.
 
 ```bash
 node bin/plugin-fetch.js <gallery PR> pg-<PR>        # download, MD5, unpack safely, compare with the tagged source → .reports/plugin-review/pg-<PR>/integrity.md
@@ -453,9 +466,10 @@ node bin/plugin-sandbox.js allow pg-<PR> <host>…     # only hosts the request 
 node bin/plugin-sandbox.js up pg-<PR>
 node bin/plugin-sandbox.js snapshot pg-<PR> <label>  # file hashes, row counts, the watched tables
 node bin/plugin-sandbox.js diff pg-<PR> <from> <to>
-node bin/plugin-sandbox.js logs pg-<PR>               # DNS, requests, PHP errors → /srv/plugin-sandbox/out/pg-<PR>/
+node bin/plugin-sandbox.js logs pg-<PR>               # DNS, requests, PHP errors, kept in the sandbox user's home
+node bin/plugin-sandbox.js show pg-<PR> <file>        # php-error.log, requests.log, dns.log, db.log, upgrade.log
 node bin/plugin-sandbox.js egress pg-<PR>             # drops, allowances and names since the stage
-node bin/plugin-sandbox.js down pg-<PR>               # logs, removes the pod, withdraws every allowance
+node bin/plugin-sandbox.js down pg-<PR>               # logs, removes the pod, withdraws every allowance, stops the user's processes
 node bin/plugin-sandbox.js purge pg-<PR>              # after the report
 node bin/plugin-sandbox.js canary                     # the acceptance test of the walls
 ```
@@ -467,8 +481,8 @@ node bin/plugin-sandbox.js canary                     # the acceptance test of t
 - **Allowing a host** opens it for a few hours (`--hours`, default 4):
   its public addresses go into the rule, its name into the pod's
   `/etc/hosts`, and the call into the log. `down` withdraws every
-  allowance; a private or loopback address, or one of this machine's
-  own, is never opened.
+  allowance, even when removing the pod fails; a private or loopback
+  address, or one of this machine's own, is never opened.
 - **Core's own traffic.** OJS itself looks up `download.db-ip.com` (the
   usage statistics' geo database) and `pkp.sfu.ca`: every Administration
   page runs the version check (`AdminHandler::initialize` →
@@ -479,25 +493,31 @@ node bin/plugin-sandbox.js canary                     # the acceptance test of t
   three connections of five SYNs, one per uid), logged whenever setup runs.
   A name or address the canary run also shows is core's, not the plugin's.
 - **The canary** (`sandbox/canary/probe.php`) tries the ways out a
-  plugin could: the bot's files, `/etc/shadow`, DNS, HTTP by name and by
-  address, the host's Postgres, SSH and Mailpit, a write outside its
-  folder. Every wall held on 2026-10-12. Re-run it after any change to
-  `sandbox/` or the VM.
+  plugin could: the bot's files, `/etc/shadow`, DNS over the pod's
+  resolver, pasta's and an outside one, HTTP by name and by address, the
+  host's Postgres, SSH and Mailpit, this machine's own addresses, the
+  database role running a program, a write outside its folder, and a
+  PHP log replaced by a symlink. Every wall held on 2026-10-12. Re-run
+  it after any change to `sandbox/` or the VM.
 - **The bot's door** is the socket `/run/plugin-sandbox.sock` (root's,
   the bot's group, mode 0660): for each connection systemd starts a root
   dispatcher that runs either the helper `/usr/local/sbin/plugin-egress`
   or `/srv/plugin-sandbox/bin/pod.sh` as `e2e-plugin`, nothing else,
   from one line of at most 4 KB, never through a shell; its unit hides
-  every home from it. Not sudo: the bot's unit sets `NoNewPrivileges`,
-  which closes sudo to every bot session. What the sandbox user writes
-  under `out/` is read only as plain files, never through a symlink.
-- **The VM setup** is root's: `sudo bash sandbox/vm/setup.sh`, idempotent,
-  makes the user, `/srv/plugin-sandbox`, the rule, its log, the helper,
-  the socket and its dispatcher, and builds the images with the rule
-  lifted for the build alone, then checks that the user and its subuids
-  reach nothing. It also gives the bot's unit `UMask=0027`, so the bot's
-  new files are no other user's. `pod.sh`, the helper and the dispatcher are
-  installed root-owned, so a change to any of them takes a setup re-run
+  every home from it. The reply ends with the request's own random id,
+  so nothing the pod prints passes for the dispatcher. Not sudo: the
+  bot's unit sets `NoNewPrivileges`, which closes sudo to every bot
+  session. What the pod writes is read only through the socket, as the
+  sandbox user, never through a symlink (`show`).
+- **The VM setup** is root's: `sudo bash sandbox/vm/setup.sh`, idempotent
+  and refused while a pod is up, makes the user, its disk, `/srv/plugin-sandbox`,
+  the rule, its log, the helper, the socket and its dispatcher, and
+  builds the images (bases and pulls pinned by digest; `up` checks the
+  ids setup recorded) with the rule lifted for the build alone, then
+  checks that the user and its subuids reach nothing. It also gives the
+  bot's unit `UMask=0027` and a private `/tmp`, effective at its next
+  restart. `pod.sh`, the helper and the dispatcher are installed
+  root-owned, so a change to any of them takes a setup re-run
   (`--no-build` skips the images).
 
 ## Slots (parallel sessions)

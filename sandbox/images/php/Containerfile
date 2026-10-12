@@ -2,7 +2,9 @@
 # host PHP the harness runs OJS 3.5 on (Composer's platform check refuses
 # a missing one). The app itself is never in the image: pod.sh mounts the review's
 # own copy at /sandbox/app. Built as the sandbox user by sandbox/vm/setup.sh.
-FROM docker.io/library/php:8.3-cli-bookworm
+# php:8.3-cli-bookworm, pinned by digest (2026-10-12): a new base is a deliberate
+# setup.sh re-run after changing it here.
+FROM docker.io/library/php@sha256:c24b55afdf860c874b9ec6267ced132ff52de97d308ab08e6cf41e8596e509f7
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

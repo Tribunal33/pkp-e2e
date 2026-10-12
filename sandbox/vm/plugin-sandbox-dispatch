@@ -4,28 +4,63 @@
 # The bot runs under NoNewPrivileges (its systemd unit), so sudo is closed
 # to it. Instead plugin-sandbox.socket (root-owned, the bot's group, mode
 # 0660) starts this script as root for each connection, with the socket as
-# stdin and stdout. It reads one line of at most 4 KB, the arguments
-# separated by tabs (never run through a shell), and runs exactly one of
-# two things:
+# stdin and stdout. It reads one line of at most 4 KB, the fields
+# separated by tabs (never run through a shell): a request id the client
+# made up, then exactly one of
 #   egress <args>…   /usr/local/sbin/plugin-egress <args>…   (as root)
 #   pod <args>…      /srv/plugin-sandbox/bin/pod.sh <args>…  (as e2e-plugin)
-# Both scripts validate their own arguments. `pod up` fails closed: it is
-# refused unless the egress rule is loaded, and one at a time. The output
-# goes back on the socket, then a last line "__exit__ <status>". Installed
-# root-owned to /usr/local/sbin by sandbox/vm/setup.sh, whose unit hides
-# every home from it; bin/plugin-sandbox.js is the client.
+# Both scripts validate their own arguments. The output goes back on the
+# socket, then a last line "__exit__ <request id> <status>": the id is
+# the client's, so nothing the sandbox prints can pass for it.
+#
+# The sandbox user exists as running processes only during a review:
+# `pod up` starts its systemd session (refused unless the egress rule is
+# loaded, and one at a time), `pod down` removes the pod, withdraws every
+# egress allowance and stops the session, which ends every process the
+# user has. Any other pod request finding the rule gone stops the session
+# too. Installed root-owned to /usr/local/sbin by sandbox/vm/setup.sh,
+# whose unit hides every home and the host's resolver and system bus from
+# it; bin/plugin-sandbox.js is the client.
 set -uo pipefail
 
+SBX=e2e-plugin
+SBX_UID=$(id -u "$SBX")
+SBX_HOME=$(getent passwd "$SBX" | cut -d: -f6)
+LINGER=/var/lib/systemd/linger/$SBX
+nonce=none
+
 finish() {
-    echo "__exit__ $1"
+    echo "__exit__ $nonce $1"
     exit 0
 }
+
+rule_loaded() { /usr/sbin/nft list chain inet plugin_sandbox output 2> /dev/null | grep -q 'jump sandbox'; }
+session_up() { systemctl is-active -q "user@$SBX_UID.service"; }
+# Each session starts with an empty ~/.config: Podman wants it the user's,
+# so nothing the user leaves there (a unit, a containers.conf) may last.
+fresh_config() {
+    rm -rf --one-file-system "$SBX_HOME/.config"
+    install -d -o "$SBX" -g "$SBX" -m 700 "$SBX_HOME/.config"
+}
+session_start() {
+    fresh_config
+    touch "$LINGER"
+    systemctl start "user@$SBX_UID.service"
+}
+session_stop() {
+    rm -f "$LINGER"
+    systemctl stop "user@$SBX_UID.service" "user-runtime-dir@$SBX_UID.service" 2> /dev/null
+    fresh_config
+}
+as_sbx() { cd / && /usr/sbin/runuser -u "$SBX" -- /srv/plugin-sandbox/bin/pod.sh "$@" < /dev/null 2>&1; }
 
 IFS= read -r -t 10 -n 4097 line || [[ -n ${line:-} ]] || { echo "plugin-sandbox: no request"; finish 2; }
 ((${#line} <= 4096)) || { echo "plugin-sandbox: request over 4 KB, refused"; finish 2; }
 IFS=$'\t' read -r -a args <<< "$line"
-kind=${args[0]:-}
-rest=("${args[@]:1}")
+[[ ${args[0]:-} =~ ^[0-9a-f]{32}$ ]] || { echo "plugin-sandbox: no request id"; finish 2; }
+nonce=${args[0]}
+kind=${args[1]:-}
+rest=("${args[@]:2}")
 export PLUGIN_SANDBOX_CALLER='e2e (socket)'
 
 case "$kind" in
@@ -34,16 +69,49 @@ egress)
     finish $?
     ;;
 pod)
-    if [[ ${rest[0]:-} == up ]]; then
-        if ! /usr/sbin/nft list chain inet plugin_sandbox output 2> /dev/null | grep -q 'jump sandbox'; then
+    case "${rest[0]:-}" in
+    up)
+        if ! rule_loaded; then
             echo "plugin-sandbox: the egress rule is not loaded (plugin-sandbox-firewall.service): no pod starts without it"
             finish 3
         fi
         exec 9> /run/plugin-sandbox-up.lock
         flock -n 9 || { echo "plugin-sandbox: another pod is starting"; finish 3; }
-    fi
-    cd / && /usr/sbin/runuser -u e2e-plugin -- /srv/plugin-sandbox/bin/pod.sh "${rest[@]}" < /dev/null 2>&1
-    finish $?
+        session_start || { echo "plugin-sandbox: the sandbox user's session did not start"; finish 3; }
+        as_sbx "${rest[@]}"
+        finish $?
+        ;;
+    down)
+        status=0
+        if session_up; then
+            as_sbx "${rest[@]}"
+            status=$?
+        fi
+        /usr/local/sbin/plugin-egress reset < /dev/null 2>&1 || status=1
+        session_stop
+        echo "down: the sandbox user's processes stopped"
+        finish $status
+        ;;
+    status)
+        session_up || { echo "no sandbox pod: the sandbox user is idle"; finish 0; }
+        as_sbx "${rest[@]}"
+        finish $?
+        ;;
+    read | list | purge)
+        as_sbx "${rest[@]}"
+        finish $?
+        ;;
+    *)
+        if ! rule_loaded; then
+            echo "plugin-sandbox: the egress rule is not loaded: the sandbox user's processes are stopped"
+            session_stop
+            finish 3
+        fi
+        session_up || { echo "plugin-sandbox: no sandbox pod is up"; finish 3; }
+        as_sbx "${rest[@]}"
+        finish $?
+        ;;
+    esac
     ;;
 *)
     echo "plugin-sandbox: unknown request (egress or pod)"
