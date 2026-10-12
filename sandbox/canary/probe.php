@@ -48,13 +48,16 @@ $try('hostServices', function () use ($connect) {
     }
     return $out;
 });
-// This machine's own addresses (targets.json, written by the canary command).
+// This machine's own addresses (targets.json, written by the canary command):
+// SSH, its only port open beyond loopback, and the published app port. Not
+// 5432 or 8080: pasta gives the pod the host's address, so those are the
+// pod's own database and app answering.
 $try('ownAddresses', function () use ($connect) {
     $targets = json_decode((string) @file_get_contents(__DIR__ . '/targets.json'), true) ?: ['own' => []];
     $out = [];
     foreach ($targets['own'] as $address) {
         $host = str_contains($address, ':') ? "[$address]" : $address;
-        foreach ([22, 5432, 19000] as $port) {
+        foreach ([22, 19000] as $port) {
             $out["$host:$port"] = $connect($host, $port);
         }
     }
