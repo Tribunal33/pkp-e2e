@@ -1,4 +1,4 @@
-// Issue report docs/issues/U48-A18-body-text-unconvertible-file-no-message.md (U48 A18): a file
+// Issue report pkp-e2e#574 (U48 A18, retired: fixed by pkp/ui-library#979, merged 2026-10-12; the report deleted): a file
 // sent to the Body Text editor that the converter cannot read ends the "Importing document" box
 // with no message. Walked through the screens on PKP's default test dataset (a dataset fleet,
 // harness.md "Dataset fleets"), OJS only. The kit builds nothing.

@@ -1,5 +1,5 @@
 // Helpers of walk.js (U48 OMP1: a press's file lists offer "Send to Text Editor", which leads nowhere;
-// docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md). Requiring this file runs nothing.
+// pkp-e2e#553, retired: fixed by pkp/ui-library#979, merged 2026-10-12). Requiring this file runs nothing.
 const {idle} = require('../../../probe');
 
 const T = 30_000;

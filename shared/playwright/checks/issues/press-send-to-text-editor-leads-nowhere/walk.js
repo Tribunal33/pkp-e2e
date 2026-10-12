@@ -1,6 +1,6 @@
 // U48 OMP1: a press's file lists offer "Send to Text Editor", whose window creates a version or does
 // nothing, since a press has no "Body Text" page to send to. Report:
-// docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md
+// pkp-e2e#553 (U48 OMP1, retired: fixed by pkp/ui-library#979, merged 2026-10-12; the report deleted)
 //
 // Runs on a dataset fleet (PKP's default test dataset), freshly reset, OMP and OJS (the control):
 //   npm run fleet-prep -- --feature <f> --dataset <n> --apps ojs,omp --reset

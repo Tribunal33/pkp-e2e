@@ -722,7 +722,7 @@ Left out of the scenarios above, by reason:
   - the guard for A9 (issue report `docs/issues/U48-A9-published-jats-xml-name-url-path.md`): with a URL path set, the downloaded "JATS XML" is named "<path>-publication-<id>-jats.xml", and a reader who downloaded it before the path changed gets the new name.
   - the guard for A14 (issue report `docs/issues/U48-A14-body-text-opens-with-unsaved-changes.md`): a never-saved Body Text opens without "Unsaved Changes", and "Save" reads "Saved" only when the text is saved, "Send to Text Editor" with an image included.
   - the guard for A15 (issue report `docs/issues/U48-A15-body-text-leaving-loses-text-unasked.md`): with unsaved text on "Body Text", choosing another side-menu entry asks "The data on this form has changed. Do you wish to continue without saving?", and "Cancel" keeps the text.
-  - the guard for A18 (issue report `docs/issues/U48-A18-body-text-unconvertible-file-no-message.md`): sending an unreadable file to "Body Text" ends the import with "Import failed" and its reason.
+  - the guard for A18 (retired): sending an unreadable file to "Body Text" ends the import with "Import failed" and its reason.
 - **Nothing new to test**:
   - a second "Upload" on a version that already has a file, which
     becomes a revision of that one file, listed in its "History"
@@ -1105,13 +1105,13 @@ Since: 2026-02-13 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 ### Retired
 
 <a id="a18"></a>
-**A18 — A file that cannot be converted fails with no message** · ✅ · retired. Fixed in pkp/ui-library#979 before its merge (at `85384f34ca`, 2026-09-28; again at `2ab08b9e74`, 2026-10-12): the box now reads "Import failed" with the converter's message and "Dismiss" (Rule 20b). <sup>f-a18</sup>
+**A18 — A file that cannot be converted fails with no message** · ✅ · retired. Fixed in pkp/ui-library#979 before its merge (at `85384f34ca`, 2026-09-28; again at `2ab08b9e74`, 2026-10-12), merged 2026-10-12: the box now reads "Import failed" with the converter's message and "Dismiss" (Rule 20b). <sup>f-a18</sup>
 
 <a id="a21"></a>
 **A21 — In French the tick box and the "Body Text" panel show raw codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a21</sup>
 
 <a id="omp1"></a>
-**OMP1 — A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing** · ✅ · retired. Fixed in pkp/ui-library#979 before its merge (at `e28a1de30d`, 2026-10-12): a press and a preprint server offer no "Send to Text Editor" on any file row (Purpose). <sup>f-omp1</sup>
+**OMP1 — A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing** · ✅ · retired. Fixed in pkp/ui-library#979 before its merge (at `e28a1de30d`, 2026-10-12), merged 2026-10-12: a press and a preprint server offer no "Send to Text Editor" on any file row (Purpose). <sup>f-omp1</sup>
 
 ---
 
@@ -1348,7 +1348,7 @@ Issue report: [pkp-e2e#566](https://github.com/jardakotesovec/pkp-e2e/issues/566
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note p: before pkp/ui-library#979 the box's failure state never showed and the import ended with no status (live-probed 2026-09-25); at the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28, and at its head `2ab08b9e74`, 2026-10-12, the box read "Import failed" with the converter's message and "Dismiss". Probe: d20.
-Issue report: [pkp-e2e#574](https://github.com/jardakotesovec/pkp-e2e/issues/574) ([docs/issues/U48-A18-body-text-unconvertible-file-no-message.md](../issues/U48-A18-body-text-unconvertible-file-no-message.md)).
+Merged 2026-10-12 as ui-library `c9889f00` (pkp/ui-library#979, with pkp-lib `f4c2578c94` and ojs `22d0136df7`), each the squash of its reviewed head. The report's walk (`checks/issues/body-text-unconvertible-file-no-message/walk.js`) on the default dataset at the merged tips reads "Import failed" with pandoc's message and "Dismiss"; the report deleted, [pkp-e2e#574](https://github.com/jardakotesovec/pkp-e2e/issues/574) closed.
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note e: `RedirectGuestToLogin` sends the visitor to `login?source=…/jats/download`; after `login/signIn` the browser follows to the download, whose attachment response leaves the tab on the Login page. Probe: d26.
@@ -1367,7 +1367,7 @@ Issue report: [pkp-e2e#923](https://github.com/jardakotesovec/pkp-e2e/issues/923
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Note b and note p: before the fix, OMP's navigation config had no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` found no entry after the version form's POST/PUT had run; the address kept `importFileUrl` and `importFileName` (live-probed 2026-10-02). At the PR head `e28a1de30d` (ui-library#979), before its merge, 2026-10-12, `useFileManagerConfig.js` `getManagerConfig()` drops `Actions.FILE_SEND_TO_EDITOR` from every file list's available actions unless `useApp().isOJS()` (`pkp.context.app === 'ojs2'`), so OMP and OPS offer it on no row, for any role; the author ruled (@jarda.kotesovec, 2026-10-12, in the review thread) that a press should not have the action at all. Probe: d28.
-Issue report: [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553) ([docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md](../issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md)).
+Merged 2026-10-12 as ui-library `c9889f00` (pkp/ui-library#979, with pkp-lib `f4c2578c94` and ojs `22d0136df7`), each the squash of its reviewed head. The report's walk (`checks/issues/press-send-to-text-editor-leads-nowhere/walk.js`, `DOCX=1`) on the default dataset at the merged tips: a press's Word row offers no "Send to Text Editor", a journal's still sends and imports; the report deleted, [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553) closed.
 
 <a id="fn-d28"></a>
 **d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry. At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (Purpose; OMP1), OMP, the Press Manager on a scratch press: the seeded "notes.md" on "Submission Files" offered "Update File Details", "More Information" and "Delete"; a Word file uploaded into that list offered "Send to Text Editor" first. The PR's author (@jarda.kotesovec, 2026-09-28, in the review thread) ruled the Word-only offer intended for now: "scope is focused intentionally to docx - with others possibly coming later". At the PR head `e28a1de30d` (ui-library#979), before its merge, 2026-10-12 (Purpose; OMP1), OMP, the Press Manager: a Word file "article.docx" on "Submission Files" and on "Production Ready Files" offered "Update File Details", "More Information" and "Delete", and no "Send to Text Editor"; the Series Editor's menus on "Submission Files" the same.
