@@ -5,7 +5,9 @@
  * press-level and site-level "Register" form (form#register), the
  * "Registration complete" page, and the profile's Roles tab (where a new
  * account's roles and reviewing interests are read back: `interestChips`,
- * `interestsLabel`, `expectInterests()`).
+ * `interestsLabel`, `expectInterests()`). A press's block on the site-level
+ * form is read whole by `expectContextListed()`: its name and role boxes on
+ * screen, the words "Request the following roles." a screen reader's only.
  *
  * Selectors follow lib/pkp/templates/frontend/pages/userRegister.tpl,
  * frontend/components/registrationForm.tpl, registrationFormContexts.tpl,
@@ -14,6 +16,13 @@
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
 const {expectTextsInAnyOrder} = require('../../../../shared/playwright/support/order.js');
+
+/**
+ * What a screen reader reads before a press's role boxes on the site-level
+ * form: the legend of the block's `fieldset.roles`, which the theme draws
+ * off the page (`.pkp_screen_reader`: absolute, 2000px to the left, clipped).
+ */
+const ROLES_PROMPT = 'Request the following roles.';
 
 exports.RegisterPage = class RegisterPage extends BasePage {
     constructor(page) {
@@ -111,6 +120,69 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         return this.form.locator('li.context').filter({
             has: this.page.locator('.name', {hasText: name}),
         });
+    }
+
+    /** The press's name as its site-level block shows it (`li.context > .name`). */
+    contextName(name) {
+        return this.contextBlock(name).locator('.name');
+    }
+
+    /**
+     * The group a screen reader announces before a press's role boxes: the
+     * block's `fieldset.roles`, named by its legend "Request the following
+     * roles.".
+     */
+    contextRolesGroup(name) {
+        return this.contextBlock(name).getByRole('group', {name: ROLES_PROMPT, exact: true});
+    }
+
+    /**
+     * A press's block on the site-level form, as scenario 6 states it: the
+     * press listed by its name, its role boxes (exactly `roles`) on screen
+     * under the name, and the words "Request the following roles." read by
+     * a screen reader before those boxes and not on screen.
+     *
+     * The words are the accessible name of the group that holds the boxes.
+     * Their legend is drawn off the page, where Playwright still calls it
+     * visible, so "not on screen" is a viewport read, taken with the name
+     * above and every role box below in the viewport (the positive control:
+     * a legend drawn in place would sit between them). Geometry needs the
+     * theme's stylesheet in (patterns.md parallel lesson 16).
+     *
+     * @param {string} name the press's name
+     * @param {string[]} roles the labels of its role boxes
+     */
+    async expectContextListed(name, roles) {
+        await this.stylesApplied();
+        await expect(this.contextBlock(name)).toHaveCount(1);
+        const nameLine = this.contextName(name);
+        await expect(nameLine).toHaveText(name);
+
+        // A screen reader: one group named by the words, holding the role boxes.
+        const group = this.contextRolesGroup(name);
+        await expect(group).toHaveCount(1);
+        await expect(group.getByRole('checkbox')).toHaveCount(roles.length);
+        const boxes = roles.map((role) => group.getByRole('checkbox', {name: role, exact: true}));
+
+        // On screen: the name and, under it, the role boxes.
+        await nameLine.scrollIntoViewIfNeeded();
+        await expect(nameLine).toBeInViewport();
+        for (const box of boxes) {
+            await expect(box).toBeVisible();
+            await expect(box).toBeInViewport();
+        }
+        await expect
+            .poll(async () => {
+                const line = await nameLine.boundingBox();
+                const tops = await Promise.all(boxes.map(async (box) => (await box.boundingBox())?.y));
+                return !!line && tops.every((top) => top !== undefined && top >= line.y + line.height);
+            })
+            .toBe(true);
+
+        // Not on screen: the words themselves.
+        const legend = group.locator('legend');
+        await expect(legend).toHaveText(ROLES_PROMPT);
+        await expect(legend).not.toBeInViewport();
     }
 
     /** A role box inside a press's site-level block. */

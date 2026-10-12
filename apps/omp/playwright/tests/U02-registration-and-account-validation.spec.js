@@ -546,15 +546,14 @@ test.describe('Registration & account validation (U02)', () => {
         await expect(page).toHaveURL(/\/index\/(en\/)?user\/register/);
         await expect(register.contextsLegend).toBeVisible();
 
-        // Both presses listed with "Request the following roles."; before
+        // Both presses listed by name, each with its role boxes under it;
+        // the words "Request the following roles." are not on screen, a
+        // screen reader reads them before each press's boxes. Before
         // anything is ticked, no role box is ticked under either, and on a
         // press site each press's consent line is on screen from the start
         // (the register's OMP2 shape, asserted as the spec states it).
         for (const name of [PK_NAME, press.name]) {
-            await expect(register.contextBlock(name)).toHaveCount(1);
-            await expect(
-                register.contextBlock(name).getByText('Request the following roles.')
-            ).toBeVisible();
+            await register.expectContextListed(name, ['Reader', 'External Reviewer']);
             await expect(register.contextRoleBoxes(name)).toHaveCount(2);
             await expect(register.contextBlock(name).locator('input:checked')).toHaveCount(0);
             await expect(register.contextConsentText(name)).toBeVisible();

@@ -44,7 +44,7 @@ never offered on a Register page; it arrives on the first submission (see
 | **Choose journals and roles (site-level)** | • Any visitor on the site-level page: for each journal with open registration, one checkbox per self-registering Reader and Reviewer role of that journal (a preprint server offers Reader only) (Rule 8) <sup>c</sup> |
 | **Activate an account from the emailed link** | • The holder of the "Validate Your Account" email, while the link is valid (Rules 11–14). Only when the installation requires email validation <sup>i</sup> |
 | **Add roles to an existing account** | • Any signed-in user, on their profile's Roles tab, described in the *User profile* spec. The Register pages offer a signed-in user nothing but the completion page (Rule 4) <sup>h</sup> |
-| **Open or close registration; make a role self-registering** | • Journal Manager, and any other role whose permission level on the Roles settings screen is Journal Manager (the Journal Editor of a default install {OJS OMP}; a preprint server installs no such second role), on Users & Roles. A Section Editor opening it is refused with "The current role does not have access to this operation." (see *Settings* below; the screens are described in the *Roles configuration* spec) <sup>g</sup> |
+| **Open or close registration; make a role self-registering** | • Journal Manager, and any other role whose permission level on the Roles settings screen is Journal Manager (the Journal Editor and the Production Editor of a default install {OJS OMP}; a preprint server installs no such other role), on Users & Roles. A Section Editor opening it is refused with "The current role does not have access to this operation." (see *Settings* below; the screens are described in the *Roles configuration* spec) <sup>g</sup> |
 | **Require email validation; turn a spam check on** | • The system administrator, in the configuration file; no screen offers either (see *Settings* below) <sup>f</sup> <sup>i</sup> |
 
 ## Fields & validation
@@ -73,7 +73,7 @@ except the two password boxes, which come back empty and must be retyped.
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Email" | yes | Must contain an "@" or the browser refuses it; an address as short as "a@b" passes the browser and the site alike. Must not belong to any existing account, disabled ones included, compared without regard to letter case: "The selected email address is already in use by another user." Up to 90 characters <sup>b</sup> |
+| "Email address" | yes | Must contain an "@" or the browser refuses it; an address as short as "a@b" passes browser and site alike. Must not belong to any existing account, disabled ones included, compared without regard to letter case: "The selected email address is already in use by another user." The box stops at 90 characters <sup>b</sup> |
 | "Username" | yes | Lower-case letters and digits, with single hyphens or underscores between them; it must start and end with a letter or digit ("The username can contain only lower-case alphanumeric characters, underscores, and hyphens, and must begin and end with an alphanumeric character."). A capital letter is refused, not lowered, and the box keeps what was typed. Must not belong to any existing account, disabled ones included, compared without regard to letter case: "The selected username is already in use by another user."; a name that is both badly formed and taken gets only this line. Up to 32 characters <sup>b</sup> |
 | "Password" | yes | At least the site's minimum length (6 on a default install): "The password must be at least {N} characters." When the repeat differs, only "The passwords do not match." is shown, even if the password is also too short. When the site's compromised-password check is on, a known-breached password is refused; the policy belongs to [Login & sessions](U01-login-and-sessions.md). The typing box stops at 32 characters, the same cap as the Login page (the *Login & sessions* finding [password boxes cut off](U01-login-and-sessions.md#a1)) <sup>b</sup> |
 | "Repeat password" | yes | Must match: "The passwords do not match." <sup>b</sup> |
@@ -82,7 +82,7 @@ except the two password boxes, which come back empty and must be retyped.
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| ORCID block ("Create or Connect your ORCID iD") | no | Above the form, when the journal's ORCID plugin is enabled. It belongs to [ORCID integration](U04-orcid-integration.md) <sup>a</sup> |
+| ORCID block | no | Shown while ORCID is enabled for the journal (see *Settings* below), under the required-fields line and above "Profile": the button "Create or Connect your ORCID iD" with the link "What is ORCID?" beside it. It belongs to [ORCID integration](U04-orcid-integration.md) <sup>a</sup> |
 | "Yes, I agree to have my data collected and stored according to the privacy statement." | yes, when shown | Shown only when the journal has a Privacy Statement (a fresh install gives every journal one); "privacy statement" opens the journal's "Privacy Statement" page in a new tab. Left unticked: "You must agree to the terms of the privacy statement." (Rule 5) <sup>d</sup> |
 | "Yes, I would like to be notified of new publications and announcements." | no | Arrives unticked. Left unticked, the new account starts with the journal's public notification emails switched off (Rule 6) <sup>e</sup> |
 | "Yes, I would like to be contacted with requests to review submissions to this journal." | no | Shown when exactly one reviewer role of the journal is self-registering. With several, the block is headed "Would you be willing to review submissions to this journal?" and offers one "Yes, request the {role} role." box per role {OJS OMP} (Rule 7) <sup>c</sup> |
@@ -92,7 +92,7 @@ except the two password boxes, which come back empty and must be retyped.
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| "Which journals on this site would you like to register with?" | no | One block per enabled journal, headed by its name, then "Request the following roles." with a checkbox per self-registering Reader and Reviewer role of that journal (Rule 8). A journal that requires sign-in to view its pages is listed as usual; a disabled journal is left out. Journals that closed registration still appear, with no roles under them ⚠ [A4](#a4) <sup>c</sup> |
+| "Which journals on this site would you like to register with?" | no | One block per enabled journal: its name, then a checkbox per self-registering Reader and Reviewer role of that journal (Rule 8). A screen reader also reads "Request the following roles." before the boxes; those words are not on screen. A journal that requires sign-in to view its pages is listed as usual; a disabled journal is left out. A journal that closed registration, or that has no self-registering Reader or Reviewer role, still appears, with nothing to tick under its name ⚠ [A4](#a4) <sup>c</sup> |
 | "Yes, I agree to have my data collected and stored according to this journal's privacy statement." (per journal) | yes, when a role of that journal is ticked | Appears under a journal the moment one of its roles is ticked, when that journal has a Privacy Statement and the site is not in single-statement mode (see *Settings* below); on a press site the line is on screen from the start under every press with a statement ⚠ [OMP2](#omp2). A ticked role whose journal's line is left unticked is refused with one line, however many journals are affected: "You must consent to the privacy statement for any journal with which you are registering." (Rule 5) ⚠ [OMP1](#omp1) <sup>d</sup> |
 | "If you requested to be a reviewer on any journal, please enter your subject interests." | no | Plain text box, commas separating interests (a press asks "…to be a reviewer for any press…"). An interest typed after a comma and a space that another visitor has typed too is kept a second time (Rule 8). Shown on every site-level page; a preprint server's asks "If you requested to be a reviewer, please enter your subject interests." though it offers no reviewer role, and what is typed there has no home on the profile ⚠ [OPS1](#ops1) <sup>k</sup> |
 | "Yes, I agree to have my data collected and stored according to the privacy statement." (site) | yes, when shown | Shown only when the site itself has a Privacy Statement. Missing: "You must consent to this site's privacy statement." ⚠ [OMP1](#omp1) <sup>d</sup> |
@@ -128,6 +128,10 @@ except the two password boxes, which come back empty and must be retyped.
    [Login & sessions](U01-login-and-sessions.md)). Its Register address
    (Rule 1), typed by hand, answers a page titled "Register" reading "This journal is
    currently not accepting user registrations." with a "Login" link. The
+   journal's "Submissions" page (the header's About › Submissions) keeps
+   its link all the same: it still tells a signed-out visitor "Login or
+   Register to make a submission.", and that "Register" opens the page
+   with the closed message ⚠ [A8](#a8). The
    site-level page closes the same way only when every journal on the site
    has closed registration; the site header keeps offering "Register"
    regardless, while the site's own Login page drops the "Register" link
@@ -186,10 +190,11 @@ except the two password boxes, which come back empty and must be retyped.
    Author then ([Submission wizard](U21-submission-wizard.md)). On a
    preprint server, merely opening "Make a New Submission" from the
    completion page already makes the new Reader an Author, so their next
-   sign-in lands on the submissions list headed "My Submissions as Author"
+   sign-in lands on their own submissions list, headed "Active submissions
+   (0)", which the side menu shows under "My Submissions as Author"
    (the *Submission wizard* finding
    [enrolment on a preprint server](U21-submission-wizard.md#ops2)).
-   <sup>c</sup> <sup>k</sup>
+   <sup>c</sup> <sup>h</sup> <sup>k</sup>
 8. **What the new account holds (site-level).** The account gets exactly the
    roles ticked, in the journals they belong to, and nothing else. Only
    self-registering Reader and Reviewer roles of journals with open
@@ -221,7 +226,8 @@ except the two password boxes, which come back empty and must be retyped.
     an account holding, in the journal, a role whose permission level on
     the Roles settings screen is Journal Manager, Section Editor, Assistant
     or Reviewer (on a default install: Journal Manager, Journal Editor,
-    Section Editor, Reviewer and the assistant-level roles; a preprint
+    Production Editor {OJS OMP}, Section Editor, Guest Editor {OJS},
+    Reviewer and the assistant-level roles; a preprint
     server's one assistant-level role is Editorial Board Member), never for an Author or
     Reader alone, so a fresh registrant sees it only after ticking the
     reviewer offer; it leads to that role's submissions list (a manager's,
@@ -307,7 +313,7 @@ except the two password boxes, which come back empty and must be retyped.
   ⚠ [A6](#a6). <sup>i</sup>
 - **On sign-in after a successful registration** (validation off): the
   account's last-login date is set, as any sign-in does (no screen in this
-  spec shows it). <sup>h</sup>
+  spec shows it). <sup>h</sup> <sup>l</sup>
 - **Monthly cleanup**: on the first of each month a scheduled task,
   "Remove unvalidated expired users", deletes accounts that never activated
   and never signed in, once they are older than the configured validation
@@ -335,8 +341,10 @@ except the two password boxes, which come back empty and must be retyped.
   the journal-level page it decides only whether the reviewer offer is
   shown, since Reader is granted regardless (Rule 7 ⚠ [A7](#a7)); on the
   site-level page it decides which Reader and Reviewer boxes each journal
-  offers (Rule 8); for Author roles, whether a new user may submit (the
-  *Submission wizard* spec). The *Roles configuration* spec owns the screen.
+  offers (Rule 8), and a journal left with none is still listed, with
+  nothing to tick ⚠ [A4](#a4); for Author roles, whether a new user may
+  submit (the *Submission wizard* spec). The *Roles configuration* spec
+  owns the screen.
   <sup>c</sup>
 - **Privacy Statement** (journal; Settings › Website › Setup › Privacy
   Statement): its presence creates the consent box (Rule 5); a fresh
@@ -374,9 +382,11 @@ except the two password boxes, which come back empty and must be retyped.
   minimum length and the compromised-password check, applied to the
   Password field here as everywhere; the *Site settings* spec owns the
   form. <sup>b</sup>
-- **ORCID** (journal plugin settings): adds the ORCID block to the
-  journal-level page ([ORCID integration](U04-orcid-integration.md)).
-  <sup>a</sup>
+- **ORCID** (journal; Settings › Users & Roles › "ORCID", the tab's
+  "Enable ORCID functionality", off until it is set up): while it is on,
+  the journal-level page carries the ORCID block (*Fields & validation*
+  above). The tab is described in the
+  [ORCID integration](U04-orcid-integration.md) spec. <sup>a</sup>
 
 ## Cross-feature interactions
 
@@ -397,11 +407,13 @@ except the two password boxes, which come back empty and must be retyped.
   path is a separate way to get an account and is described there.
 - **User profile**: the Roles tab (headed "Roles"; it lists the current
   journal's roles with the other journals folded under "Register with
-  other journals"; opened from the site level, "Edit My Profile" on the
-  site-level completion page included, it lands on that same tab inside
-  one of the user's journals) is where an existing account adds roles and
-  edits reviewing interests; the Notifications tab holds the opt-in of
-  Rule 6.
+  other journals") is where an existing account adds roles and edits
+  reviewing interests; the Notifications tab holds the opt-in of Rule 6.
+  "Edit My Profile" on the site-level completion page opens the profile
+  on its first tab, "Identity", from where "Roles" is pressed; only the
+  site-level Roles address, typed, opens "Roles" directly. Which profile
+  a site-level address shows, one journal's or the site-level one, is
+  [User profile](U03-user-profile.md)'s Rule 3. <sup>h</sup>
 - **ORCID integration**: the journal-level page's ORCID block, including
   the state of an iD connected while registering, belongs to the
   [ORCID integration](U04-orcid-integration.md) spec.
@@ -412,8 +424,14 @@ except the two password boxes, which come back empty and must be retyped.
 - **Roles configuration**: the User Registration and Site Access options and
   the per-role self-registration flag.
 - **Journal identity & about pages** / **Site settings**: the Privacy
-  Statement texts the consent boxes link to; the "Online Submissions"
-  paragraph of the about pages also carries a link to Register.
+  Statement texts the consent boxes link to.
+- **Submission intake configuration**: the journal's "Submissions" page
+  (the header's About › Submissions) opens, for a signed-out visitor,
+  with "Login or Register to make a submission.", whose "Register" leads
+  here; the page and its sentence are described in
+  [Submission intake configuration](U58-submission-intake-configuration.md),
+  its Rule 23a. The sentence stays when registration is closed (Rule 2).
+  <sup>g</sup>
 - **Navigation menus & site chrome**: the header's "Register" entry (shown
   while signed out and registration is open) belongs to the navigation
   feature; this spec describes only when it appears.
@@ -446,7 +464,7 @@ in the footnote. <sup>s</sup>
    - **"Register" in the header**: open the journal's homepage and press
      "Register" in the header.
    - **The "Register" form**: on "Register", fill in Given Name,
-     Affiliation, Country, Email, a new Username and the same password
+     Affiliation, Country, Email address, a new Username and the same password
      twice, tick "Yes, I agree to have my data collected and stored
      according to the privacy statement.", leave "Yes, I would like to be
      notified of new publications and announcements." unticked, as it
@@ -589,7 +607,9 @@ in the footnote. <sup>s</sup>
      "Register".
    - **"Which journals on this site would you like to register with?"**:
      under "Which journals on this site would you like to register with?"
-     both journals are listed with "Request the following roles.".
+     both journals are listed by name, each with its role boxes under it.
+     The words "Request the following roles." are not on screen; a screen
+     reader reads them before each journal's boxes.
    - **Before anything is ticked**: no consent line sits under either
      journal, a journal whose roles are left unticked asking for no
      consent (Rule 5); on a press site every press's line is on screen from
@@ -752,26 +772,39 @@ Left out of the scenarios above, by reason:
     ([A1](#a1); Rule 14): the guard the issue report
     (`docs/issues/U02-A1-activation-link-expires-before-validation-timeout.md`)
     proposes, once fixed
+  - a scratch journal that requires sign-in to view its pages: its
+    homepage sending a signed-out visitor to Login while its Register
+    address still shows the full form and its header offers "Register"
+    beside "Login" (Rule 3; Settings "Site Access")
+  - scenario 8, "Control": the site-level address read as the Author
+    too, offering "Edit My Profile" and "Continue Browsing" only
+    (Rule 10); the OJS and OMP suites read it as the Section Editor only
+  - scenario 3, "The profile's Roles tab": the label "Reviewing
+    interests" over the two interests (*Fields & validation*, "Reviewing
+    interests"); the OJS and OMP suites read the two interests without it
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
   - the User Registration option's wording on a press and a preprint server (Settings; scenario 5's option)
+  - "View Submissions" for a Production Editor {OJS OMP} and a Guest Editor {OJS} (Rule 10; the same link scenario 8's Section Editor sees)
 - **Register carries it**:
   - A7 (Reader granted though closed to self-registration; Rule 7)
+  - A8 (the "Submissions" page still offering "Register" on a journal that closed registration; Rule 2)
 - **No seed**:
   - every journal closed: the site-level page closes and the site Login drops the link (Rule 2)
-  - a restricted journal still rendering the form, its header offering "Register" (Rule 3): what is missing is a `restrictSiteAccess` key on `POST scenarios/context` (Settings "Site Access"); a Journal Manager's tick would be set-up for a visitor's read, not a step
   - the site's own statement present: the site consent asked (Rule 5)
   - `sitewide_privacy_statement` on: only the site consent asked (Rule 5)
-  - the Reviewer role closed to self-registration: box and interests gone (Rule 7): what is missing is a per-role "Allow user self-registration" passthrough on `POST scenarios/context` (a `userGroups[]` key)
-  - the self-registration flag deciding the site-level boxes per journal (Settings, Rule 8): the same missing passthrough
+  - the Reviewer role closed to self-registration: box and interests gone (Rule 7): the test tooling cannot untick a role's "Allow user self-registration" on a scratch journal (Settings)
+  - the self-registration flag deciding the site-level boxes per journal (Settings, Rule 8): the same reason
   - the link expiring after 3 days (Rule 14, `expiration_days`)
   - the monthly cleanup deleting unvalidated accounts older than the period (Side effects)
   - reCAPTCHA on Register (Settings "Spam checks")
   - the site password policy: a non-default minimum applied to the Password field (Settings)
 - **Owned by another feature**:
   - a signed-in user adding roles on the profile's Roles tab (Actors row 7; *User profile*)
-  - a Section Editor refused on Users & Roles (Actors row 8; *Roles configuration*)
+  - the profile opening on "Identity" from the site-level completion page's "Edit My Profile" (Cross-feature interactions; *User profile*)
+  - a Section Editor refused on Users & Roles, a Production Editor opening it (Actors row 8; *Roles configuration*)
+  - the "Submissions" page's "Register" opening the Register page while registration is open (Cross-feature interactions; *Submission intake configuration*)
   - OPS: opening "Make a New Submission" enrolling the Reader as Author (Rule 7; *Submission wizard*)
   - an interest two visitors typed on the site-level page listed twice for the account after a Roles "Save" (Rule 8; *User profile*)
   - an altered key answering a bare "404 Not Found" (Rule 14; *User invitations*)
@@ -798,6 +831,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OPS1](#ops1) | A preprint server's site-wide Register page asks for reviewing interests, though servers have no reviewers | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | The Register page's "Login" link aims at the profile's Roles tab, but sign-in lands as usual | ❓ | minor | — |
 | [A7](#a7) | A journal-level registration grants Reader even when the Reader role is closed to self-registration | ❓ | latent | — |
+| [A8](#a8) | A journal that closed registration still offers "Register" on its "Submissions" page; the link opens the closed message | ❓ | minor | — |
 
 ### All apps
 
@@ -866,13 +900,16 @@ enabled journal is listed by name, including one that closed registration.
 Such a journal shows its name with no role to tick under it (a screen
 reader also reads "Request the following roles."), an invitation the page
 cannot honor; on a press site its privacy consent box shows there too,
-with nothing above it to consent for ([OMP2](#omp2)). A disabled journal,
-by contrast, is left out. Expected: journals with closed registration are
-left out the same way. The same unfiltered list reaches the profile's
-Roles tabs, where saving the closed journal's tab ends the user's roles
-in the one other open journal; the shared issue report rates the fault
-medium for that.
+with nothing above it to consent for ([OMP2](#omp2)). The same shows for
+a journal that keeps registration open but has no self-registering Reader
+or Reviewer role. A disabled journal, by contrast, is left out. Expected:
+journals with closed registration, and journals with no role to offer,
+are left out the same way. The profile's Roles tab shows the same list,
+and the fault is rated medium for what happens there: the *User profile*
+finding
+[saving Roles in a closed journal ends the user's roles in another](U03-user-profile.md#a4).
 Basis: probe, 2026-10-04. <sup>[f-a4](#fn-a4)</sup>
+Report: refresh owed — the drift sweep of 2026-10-12 (claim check SW1, block SW1-9, the sweep's kept check) added a case the report (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`) does not have: an open journal whose Reader and Reviewer roles are all closed to self-registration is listed on the site-level Register page by name with nothing to tick, and the entry's Expected now leaves such a journal out too; whether the profile's Roles tabs list it the same way, and whether the proposed fix covers it, is for the walk (2026-10-12)
 
 <a id="a5"></a>
 **A5 — The "Login" link's destination is dropped** · ❓ · minor.
@@ -924,6 +961,23 @@ do? Lean: it should not; the setting reads as a promise, and a journal that
 wants no self-registered Readers has no other way to say so short of closing
 registration altogether.
 Basis: probe. <sup>[f-a7](#fn-a7)</sup>
+
+<a id="a8"></a>
+**A8 — A journal closed to registration still offers "Register" on its "Submissions" page** · ❓ · minor.
+A journal that closed registration drops "Register" from its header and
+from its Login and lost-password pages, but its "Submissions" page (the
+header's About › Submissions) still opens, for a signed-out visitor, with
+"Login or Register to make a submission." Pressing that "Register" opens
+the page reading "This journal is currently not accepting user
+registrations." ("This press…", "This server…"), so the visitor is
+invited to a page that can only turn them away. The "Submissions" page is
+described in
+[Submission intake configuration](U58-submission-intake-configuration.md),
+its Rule 23a.
+Question: should the sentence drop "or Register" while registration is
+closed, as the header and the Login page drop their links? Lean: yes; the
+link has nowhere to lead but the refusal.
+Basis: probe, 2026-10-12. <sup>[f-a8](#fn-a8)</sup>
 
 ### OMP
 
@@ -981,16 +1035,20 @@ either: where each server is listed with the roles a visitor can tick,
 "Reader" is the only one. The server's own Register page asks nothing of
 the kind.
 
-Whatever the newcomer types is accepted without a word and kept, though
-nothing on a server uses it. On main they never see it again: their
-Profile's "Roles" tab has no "Reviewing interests" field. On 3.5 that
-tab lists the interests under "Reviewing interests". Nothing breaks, but
-the newcomer answers a question that does not apply to them and may
-wonder whether they signed up to review.
+Whatever the newcomer types is accepted without a word and kept. On main
+they never see it again: their Profile's "Roles" tab has no "Reviewing
+interests" field (on 3.5 that tab lists the interests under "Reviewing
+interests"). A Server Manager does see it, under "Reviewing interests" in
+Users & Roles › "Edit" › "View more details", until the newcomer presses
+"Save" on that Roles tab, which removes the interests (the *User profile*
+finding [OPS3](U03-user-profile.md#ops3)). Nothing else breaks, but the
+newcomer answers a question that does not apply to them and may wonder
+whether they signed up to review.
 
 A site with several servers links to this page from its own menu. On a
 site with one server it is reached only by typing its address.
 Basis: probe, 2026-10-04. <sup>[f-ops1](#fn-ops1)</sup>
+Report: refresh owed — the drift sweep of 2026-10-12 (claim check SW2, block SW2-2, the sweep's kept check) corrected the entry's second paragraph: the interests typed on a preprint server's site-level Register page are not unused, a Preprint Server Manager reads them under "Reviewing interests" in Users & Roles › "Edit" › "View more details", until the newcomer's first "Save" on their profile's Roles tab removes them (*User profile* OPS3); the report still says nothing on a server uses them (2026-10-12)
 
 ---
 
@@ -1025,6 +1083,25 @@ and caps of the Fields tables, one "Register" button and a "Login" link
 beside it; the site-level page has the same two sections. No ORCID block on
 any page (the plugin is not enabled on the seeded journal; the enabled state
 is *ORCID integration*'s to verify).
+Corrected 2026-10-12 (Fields, "ORCID block"; Settings "ORCID"): the earlier
+wording ("Above the form, when the journal's ORCID plugin is enabled";
+"journal plugin settings") named a plugin and put the block outside the
+form. `RegistrationForm::fetch()` assigns `orcidEnabled` when a context is
+present and `OrcidManager::isEnabled()`, and `userRegister.tpl` includes
+`form/orcidProfile.tpl` inside `form#register`; a journal and a press list
+no ORCID plugin (*ORCID integration*, whose Fields quote the tab's "Enable
+ORCID functionality"; the tab's own wording was not read in this drive,
+the scratch context having been created with ORCID on). Live-probed
+2026-10-12 (OJS, OMP, OPS `main`, two runs each; kept script
+`shared/playwright/checks/U02/SW1/sw1.js`, phase `orcid`): on that scratch
+context's Register page the button "Create or Connect your ORCID iD" and
+the link "What is ORCID?" (→ `{context}/orcid/about`) sat inside the form,
+under "Required fields are marked with an asterisk: *" and above the
+"Profile" legend; the seeded context's page and the site-level page showed
+neither. The rest of this note's screen reads held that day (the header
+entry, the two pages' addresses with and without the language code, the
+"Register" links of the Login and "Reset Password" pages, the form's
+title, line and sections).
 
 <a id="fn-b"></a>
 **b** — `PKP\user\form\RegistrationForm::__construct()` checks, in order:
@@ -1070,6 +1147,23 @@ to the first box; all faults at once → username, password, email, consent
 lines in that order with the length line absent; 34 typed characters cut to
 32 in the username and both password boxes; after every refusal both
 password boxes were empty and the other values kept.
+Corrected 2026-10-12 (Fields, "Email address"): the row's label read
+"Email". The box's label is `user.email`, "Email address" in
+`lib/pkp/locale/en/common.po` (`registrationForm.tpl`). Live-probed
+2026-10-12 (OJS, OMP, OPS `main`, two runs each, the journal-level and the
+site-level page; kept script `shared/playwright/checks/U02/SW1/sw1.js`):
+the label reads "Email address"; "abc" was stopped by the browser ("Please
+include an '@' in the email address. 'abc' is missing an '@'."), "a@b"
+passed browser and site, a taken address in any letter case got "The
+selected email address is already in use by another user.", and the box
+stopped at 90 characters. The rest of this note's screen reads held that
+day. New then: with "Check passwords against compromised password
+databases" ticked for the drive and unticked again, "qwerty123456" and
+"password1234" were refused with "This password has appeared in data
+leaks. Please choose a different, strong password." while a password of
+the run's own registered; a disabled account's and a not-yet-validated
+account's username and email, as they are and in capitals, drew the two
+"already in use" lines (Rule 15).
 
 <a id="fn-c"></a>
 **c** — Role content: `PKP\user\form\UserFormHelper::assignRoleContent()`
@@ -1120,6 +1214,26 @@ nothing ticked, an account with no box ticked anywhere. With a scratch
 context closed to registration, a disabled one and a sign-in-restricted one
 on the same site: the closed one listed with the legend and no role box,
 the disabled one absent, the restricted one with its usual boxes.
+Corrected 2026-10-12 (Fields, "Which journals…"; scenario 6): "Request the
+following roles.", read above as part of each block, is the block's
+`fieldset.roles > legend` (`user.register.otherContextRoles`), which the
+default theme's `register.less` hides from sight (`.pkp_screen_reader`:
+positioned out of flow and clipped to one pixel); a text read that ignores
+visibility prints it. Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two
+runs each by two drives; kept scripts
+`shared/playwright/checks/U02/SW1/sw1.js` and
+`shared/playwright/checks/U02/SW2/sw2.js`): every block of the site-level
+page showed the context's name and its role boxes ("Reader" + "Reviewer"
+on OJS, "Reader" + "External Reviewer" on OMP, "Reader" on OPS) and no
+visible legend. On a scratch context the block followed the role flags box
+by box: "Allow user self-registration" unticked on the reviewer role left
+"Reader" alone; unticked on Reader as well, the context stayed listed by
+name with no box (finding A4); ticked on a second reviewer role (OJS: a
+created Reviewer-level role; OMP: "Internal Reviewer") the block offered
+both reviewer boxes, and the journal-level page showed the heading "Would
+you be willing to review submissions to this journal?" ("…this press?")
+with one "Yes, request the {role} role." box per role. The rest of this
+note's screen reads held that day.
 
 <a id="fn-d"></a>
 **d** — Journal-level: `userRegister.tpl` renders `privacyConsent` inside
@@ -1165,6 +1279,13 @@ with two contexts short. With no role ticked and no site statement the form
 registers with no consent at all. The per-context line sat off-screen
 (`left: -9999px`) until a role was ticked on OJS and OPS, on OMP in normal
 flow from the start (OMP2).
+Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each, the site
+statement typed for the drive and emptied again): this note's screen reads
+held as written. New then: on OJS and OPS the per-context line goes
+off-screen again when the role is unticked; the site box sits after the
+interests box, and leaving it unticked is refused even with a role and
+its context's line ticked. `sitewide_privacy_statement` was `Off` on every
+server driven, so the single-statement mode is still code reading.
 
 <a id="fn-e"></a>
 **e** — `RegistrationForm::execute()`: only `if ($request->getContext() &&
@@ -1184,6 +1305,9 @@ issue open access; OMP/OPS: the announcement row), every other section at
 its defaults; registered with it ticked, the "Do not send…" boxes are
 unticked; registered from the site-level page with it unticked, identical
 to the ticked control (A3).
+Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each): this note's
+screen reads held as written, and no message reached the address after a
+plain, an opted-in or a site-level registration on the default server.
 
 <a id="fn-f"></a>
 **f** — `RegistrationForm`: `captchaEnabled = [captcha] captcha_on_register
@@ -1231,6 +1355,19 @@ sentence. A second try with the same username, still with JavaScript off,
 got the same single line and no "already in use" line, and that username
 then registered on the default server, so the refused attempts had created
 nothing.
+The captcha section's keys are configuration-file facts with no screen of
+their own (note i: neither Users & Roles nor Site Settings › Security
+carries such a switch). Re-read 2026-10-12 in the three
+`config.TEMPLATE.inc.php`, identical: `recaptcha = off`,
+`captcha_on_register = on`, `captcha_on_login = on`,
+`recaptcha_enforce_hostname = Off`, `altcha = off`, `altcha_on_register`,
+`altcha_on_login` and `altcha_on_lost_password = on`,
+`altcha_encrypt_number = 10000`. The reCAPTCHA widget cannot be seen on
+the test install either (it needs Google's service to answer), so the
+"Spam check" row's reCAPTCHA sentence stays code reading. ALTCHA
+live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each, the variant
+server): this note's screen reads held as written, the refusal without
+JavaScript on all three apps.
 
 <a id="fn-g"></a>
 **g** — Closed registration: `RegistrationHandler::validate()` — with a
@@ -1298,6 +1435,42 @@ column "Journal Manager" / "Press Manager"); `sectioneditor.ana` landed on
 "The current role does not have access to this operation." OPS seeds no
 editor role (its Roles grid: "Preprint Server manager", "Moderator",
 "Author", "Reader", "Editorial Board Member").
+Corrected 2026-10-12 (Actors row 8): the row named the Journal Editor as
+the one other role at the Journal Manager's level; the Roles list reads
+"Journal manager", "Journal editor" and "Production editor" at permission
+level "Journal Manager" ("Press manager", "Press editor", "Production
+editor" at "Press Manager"; OPS "Preprint Server manager" alone at
+"Manager", "Moderator" at "Moderator"). Live-probed 2026-10-12 (OJS, OMP,
+OPS `main`, two runs each; kept script
+`shared/playwright/checks/U02/SW1/sw1.js`): Users & Roles (tabs "Users",
+"Roles", "Site Access Options", "ORCID") opened for `manager.maya`, on OJS
+and OMP for `editor.diana` and for a scratch Production editor;
+`sectioneditor.ana`, `assistant.rita`, `author.alex` and, on OJS, a
+scratch Guest editor and a scratch Subscription Manager landed on "The
+current role does not have access to this operation." The closed, the
+disabled and the sign-in-required scratch contexts read as above, the
+three radio labels and "Users must be registered and log in to view the
+journal site." ("…the press site.", "…the server site.") included; signed
+in, the scratch manager got "Registration complete" at the closed and at
+the disabled context's Register address, and `reader.rosa` at the closed
+one.
+Corrected 2026-10-12 (Cross-feature interactions): "the "Online
+Submissions" paragraph of the about pages" named the locale keys
+(`about.onlineSubmissions.*`), not a text on screen. The page is About ›
+"Submissions" (`about/submissions`, heading "Submissions"); signed out it
+opens with "Login or Register to make a submission.", "Register" leading
+to `{context}/en/user/register` (seen 2026-10-12, all three apps, the
+seeded context). On the closed scratch context the same sentence was
+still there (finding A8, its note).
+The all-closed state (Rule 2: the site-level page closing, the site Login
+page dropping its link; Actors row 2) was not driven on 2026-10-12: it
+needs every context on the site closed, the seeded one included, on a
+fleet nobody else is registering on. It stands on the 2026-09-02 probe
+above, and `RegistrationHandler::validate()` has no commit since
+2026-09-11. What settles it again: every context set to "The Journal
+Manager will register all user accounts…", then the site header,
+`index/user/register` and `index/en/login` read signed out, and once more
+after one context is reopened.
 
 <a id="fn-h"></a>
 **h** — Signed-in visitor: `RegistrationHandler::register()` —
@@ -1375,6 +1548,28 @@ pressed nothing was, at the next sign-in, landed on the submissions
 dashboard headed "My Submissions as Author"; the OJS and OMP controls stayed
 Readers and landed on the homepage (the wizard's preprint-server enrolment,
 *Submission wizard*'s finding).
+Corrected 2026-10-12 (Rule 7, last sentence; Rule 10's list of roles;
+Cross-feature "User profile"). Live-probed 2026-10-12 (OJS, OMP, OPS
+`main`, two runs each; kept script
+`shared/playwright/checks/U02/SW1/sw1.js`). OPS: a fresh Reader who opened
+"Make a New Submission" from the completion page and pressed nothing had
+"Author" ticked beside "Reader" on the Roles tab and, at the next sign-in,
+landed on `dashboard/mySubmissions?currentViewId=active`, the list headed
+"Active submissions (0)"; "My Submissions as Author" is the side menu's
+group over "Active submissions", "Scheduled for publication", "Published",
+"Declined" and "Start A New Submission", not the list's heading as the
+2026-09-02 reading had it (OJS, OMP: still a Reader, landing on the
+homepage). "Edit My Profile" on the site-level completion page ended on
+`{context}/en/user/profile` with "Identity" the active tab, for
+`reader.rosa`, for a new Reviewer (OJS, OMP) and for an account registered
+on the site-level page with "Reader" under the seeded context, each
+holding a role in one journal; the typed `index/en/user/profile/roles`
+ended on `{context}/en/user/profile#roles` with "Roles" active. The body
+sentence that had both land on Roles predated pkp/pkp-lib#13181 above.
+"View Submissions" at a scratch context's Register address: shown also
+for a Production editor (OJS, OMP) and a Guest editor (OJS), not for a
+Subscription Manager (OJS). The rest of this note's screen reads held
+that day.
 
 <a id="fn-i"></a>
 **i** — Validation flow. `RegistrationForm::execute()`: when `[email]
@@ -1482,6 +1677,24 @@ from `ValidateRegisteredEmail::manageEmail()` → `Mail::send()` in
 `RegistrationHandler::register()`), Mailpit held nothing for the address
 after 20 s, and sign-in was refused with the disabled reason above (finding
 A6).
+Live-probed 2026-10-12 (Rules 11–14; OJS, OMP, OPS `main`, two runs each,
+the validation-variant server; kept script
+`shared/playwright/checks/U02/SW2/sw2.js`): this note's screen reads held
+as written, journal-level and site-level. New then: with a Site Name set
+for the length of one registration the site-level mail read "an account
+with SW2 Site …, but before…"; "Invitation Unavailable" answered the used
+link signed in and signed out alike; a read-only query showed the pending
+record of a fresh registration expiring 3.000 days after it was made; the
+two accounts finding A6 strands stayed refused at sign-in and at Register
+until "Enable User" › "OK", pressed by the context's manager for one and
+by the site administrator for the other; an account still waiting that a
+manager enables keeps its emailed link working; Settings › Emails,
+searched for "Validate", lists "Validate Email (Journal Registration)" and
+"Validate Email (Site)" ("Validate Email (Press Registration)", "Validate
+Email (Server Registration)"). Not driven that day: a link expired by
+time, a mail failure, and a second validation link replacing the first
+(no screen issues one; `Invitation::invite()` still deletes the user's
+other pending invitations of the type).
 
 <a id="fn-j"></a>
 **j** — `PKP\task\RemoveUnvalidatedExpiredUsers::executeActions()`: returns
@@ -1498,6 +1711,16 @@ from a screen (checked 2026-09-02): no page runs or lists the task
 lifetime needs a clock; the file facts were re-read in the three checkouts'
 templates (`require_validation = Off`, `validation_timeout = 14`,
 `user_validation_period = 28`, `expiration_days = 3`, identical).
+Re-read 2026-10-12 at the three checkouts' tips, unchanged: `PKPScheduler`
+registers `RemoveUnvalidatedExpiredUsers` `monthlyOn(1)`; the task returns
+early without `require_validation` and reads `user_validation_period`; no
+file of the three apps reads `validation_timeout`. No screen runs, lists
+or times the task: the Administration page (live-probed 2026-10-12, all
+three apps) lists "Hosted Journals", "Site Settings", "View System
+Information", "Expire User Sessions", "Delete Data Caches", "Delete
+Template Cache", "Clear Scheduled Task Logs" with "Delete Task Logs",
+"View Jobs" and "View Failed Jobs", and the test API's task runner covers
+two other tasks only.
 
 <a id="fn-k"></a>
 **k** — Interests: `input#interests` (journal-level inside the reviewer
@@ -1543,6 +1766,20 @@ copy into the site's primary language). No screen renders the fr_CA value:
 the profile shows only `[en]` boxes whichever locale it is opened in, and
 the manager's Users › "Edit" prints the name once, read-only, so the storage
 under the page's language stays code reading.
+Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each; the kept
+scripts under `shared/playwright/checks/U02/` and the 2026-10-07 script
+again): this note's screen reads held as written, the two visitors' words
+included; what a preprint server's manager reads of them is finding
+OPS1's note.
+
+<a id="fn-l"></a>
+**l** — `Validation::registerUserSession()` stamps the account's
+last-login date (`setDateLastLogin`) on the sign-in that a registration
+performs, as on any sign-in (note h). No screen in this spec shows the
+date. Checked 2026-10-12 beside the drive by a read-only query (OJS, OMP,
+OPS, two runs each): the date is set straight after a registration with
+validation off, and stays empty under validation until the first sign-in
+after activating.
 
 <a id="fn-s"></a>
 **s** — Scenario seeding: the seeded journal/press/server
@@ -1629,7 +1866,16 @@ i). Scenario 8: `author.alex` and `sectioneditor.ana` (a Section Editor on
 OJS and OMP, a Moderator on OPS; `editor.diana` is not seeded on OPS, where
 Login answers "Invalid username/email or password. Please try again.");
 "View Submissions" for the Section Editor opens `dashboard/editorial`,
-heading "Assigned to me (N)" (note h).
+heading "Assigned to me (N)" (note h). Coverage's two "No seed" items on
+"Allow user self-registration" (Rules 7 and 8): what is missing is a
+per-role passthrough for that box on `POST scenarios/context` (a
+`userGroups[]` key).
+Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each; kept scripts
+`shared/playwright/checks/U02/SW1/sw1.js` and
+`shared/playwright/checks/U02/SW2/sw2.js`): every bullet of scenarios 1 to
+8 driven as written, but for scenario 6's "Which journals…" bullet, whose
+"Request the following roles." proved not to be on screen (note c,
+corrected that day).
 
 <a id="fn-a1"></a>
 **f-a1** — `config.TEMPLATE.inc.php` `[email] validation_timeout = 14` with
@@ -1692,6 +1938,16 @@ checked separately); every other open context kept its boxes. Restoring
 "Visitors can register a user account with the journal." brought the
 context's role boxes back. A context disabled on Administration › Hosted
 Journals was absent from the list in the same run.
+Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each; kept script
+`shared/playwright/checks/U02/SW1/sw1.js`): the closed scratch context was
+listed by name with no role box; "Request the following roles." is a
+legend hidden from sight (note c), so only a screen reader reads it; the
+context's consent line sat off-screen on OJS and OPS (`left: -9759px`) and
+on screen on OMP, which settles the point left open above. A scratch
+context with registration open and "Allow user self-registration" unticked
+on Reader and on Reviewer (OMP: External Reviewer) was listed the same
+way, name and no box, where the same block had offered "Reader" and the
+reviewer box before the two unticks.
 Issue report: [pkp-e2e#794](https://github.com/jardakotesovec/pkp-e2e/issues/794) ([docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md](../issues/U03-A4-closed-journal-listed-on-roles-tab.md)), shared with spec U03 A4.
 
 <a id="fn-a5"></a>
@@ -1731,6 +1987,19 @@ for the following reason: We've sent a confirmation email to you at
 install's mail catcher does not offer a failing transport. Whether adding a
 support contact afterwards lets those accounts be activated was not tested
 (the seeded context's settings are read-only for the campaign).
+Live-probed 2026-10-12 (OJS, OMP, OPS `main`, two runs each, the variant
+server, a scratch context as created, with no support contact; kept script
+`shared/playwright/checks/U02/SW2/sw2.js`): "Register" answered 500 with
+an empty page each time, the log carrying the `LogicException` above; the
+account existed, disabled with the reason, holding "Reader"; no message
+arrived; sign-in and a second registration were refused. The Contact form
+would not save without a support contact ("This field is required." under
+"Name" and "Email address", "Please correct 2 errors."); once one was
+saved, a new registration there reached the waiting page and its mail came
+from the new contact, while the two stranded accounts stayed refused until
+"Enable User" (note i), which answers the question left open above. A
+site-level registration with "Reader" under the seeded context, which has
+no support contact, sent its mail from the site's contact.
 Issue reports: [pkp-e2e#833](https://github.com/jardakotesovec/pkp-e2e/issues/833) ([docs/issues/U02-A6-register-no-support-contact-empty-page.md](../issues/U02-A6-register-no-support-contact-empty-page.md)), the missing sender; [pkp-e2e#834](https://github.com/jardakotesovec/pkp-e2e/issues/834) ([docs/issues/U02-A6-register-mail-down-says-email-sent.md](../issues/U02-A6-register-mail-down-says-email-sent.md)), the mail failure.
 
 <a id="fn-a7"></a>
@@ -1746,6 +2015,22 @@ Reviewer (OMP: External Reviewer) and on Reader, the Register form still
 rendered and registered; the manager's Users tab row read "Reader" in its
 Roles column; the registrant's Roles tab listed "Author" (OMP: "Author",
 "Chapter Author") only, unticked.
+
+<a id="fn-a8"></a>
+**f-a8** — `lib/pkp/templates/frontend/pages/submissions.tpl` prints each
+app's `about.onlineSubmissions.registrationRequired` ("{$login} or
+{$register} to make a submission.") with a link to `user/register` for
+every signed-out visitor; it does not consult `disableUserReg`, the
+setting `PKPNavigationMenuService::getDisplayStatus()` and
+`RegistrationHandler::validate()` read (note g). Live-probed 2026-10-12
+(OJS, OMP, OPS `main`, two runs each; kept script
+`shared/playwright/checks/U02/SW1/sw1.js`, phase `scratch`): on a scratch
+context set to "The Journal Manager will register all user accounts…" the
+homepage header read "Login" alone, while `about/submissions`, signed out,
+opened with "Login or Register to make a submission.", its "Register"
+pointing at `{context}/user/register`, which answered title "Register",
+"This journal is currently not accepting user registrations." ("This
+press…" / "This server…") and a "Login" link, no form.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `user.register.form.missingSiteConsent` and
@@ -1772,6 +2057,13 @@ statement: on OJS and OPS the line was at `left: -9999px` until "Reader" was
 ticked, then in view with the extra class; on OMP it was in normal flow
 before any tick and the class did not change on tick. Which OMP theme file
 lacks the toggle was not traced.
+Traced 2026-10-12 (files read at the tips): OMP's
+`plugins/themes/default/styles/pages/register.less` has no
+`.context_privacy` rule and its `plugins/themes/default/js/main.js` no
+`context_privacy_visible` toggle; OJS has both. Live-probed 2026-10-12
+(OJS, OMP, OPS `main`, two runs each): as above, the OJS and OPS line
+going off-screen again when the role is unticked, and no line under a
+press whose statement was emptied.
 Issue report: [pkp-e2e#838](https://github.com/jardakotesovec/pkp-e2e/issues/838) ([docs/issues/U02-OMP2-press-site-register-consent-shown-early.md](../issues/U02-OMP2-press-site-register-consent-shown-early.md)).
 
 <a id="fn-ops1"></a>
@@ -1788,6 +2080,18 @@ shown while every server block on the page offered "Reader" alone and no
 the OPS page were accepted, and the resulting account's Roles tab
 (`user/profile#roles`) had no "Reviewing interests" field, where OJS and
 OMP showed two chips.
+Corrected 2026-10-12: the entry said the typed interests were kept
+"though nothing on a server uses it"; a Server Manager's screen shows
+them. Live-probed 2026-10-12 (OPS `main`, two runs; kept script
+`shared/playwright/checks/U02/SW2/sw2.js`): two words typed into the box
+were accepted with no word about them and stored; the scratch server's
+manager read "Reviewing interests glacier…, ethics…" under Users & Roles ›
+"Edit" › "View more details"; the newcomer's Roles tab had no "Reviewing
+interests" field, and its "Save" ("Your changes have been saved.") left
+the manager's page reading "Reviewing interests --", the account's stored
+interests gone (*User profile*'s finding OPS3). The server's own Register
+page, seeded and scratch, showed no such question and no interests box,
+and every server's block offered "Reader" alone.
 Issue report: [pkp-e2e#839](https://github.com/jardakotesovec/pkp-e2e/issues/839) ([docs/issues/U02-OPS1-server-site-register-asks-reviewing-interests.md](../issues/U02-OPS1-server-site-register-asks-reviewing-interests.md)).
 
 ## Reference — entry points & surfaces

@@ -7,7 +7,9 @@
  * Surfaces:
  * - RegisterPage — the "Register" form, journal-level ({journal}/user/register)
  *   or site-level (index/user/register), on any server (the fixed
- *   validation-variant server included, via an absolute origin).
+ *   validation-variant server included, via an absolute origin). On the
+ *   site-level page each journal's block is read by its name, its role
+ *   boxes and the words only a screen reader gets before them.
  * - RegistrationCompletePage — the "Registration complete" landing.
  * - ProfileRolesTab — the profile's Roles tab (journal- or site-level), its
  *   role boxes and the "Reviewing interests" list.
@@ -155,6 +157,91 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         return this.form.locator('li.context').filter({
             has: this.page.locator('.name', {hasText: journalName}),
         });
+    }
+
+    /** The journal's name, the line that heads a site-level block. */
+    contextName(block) {
+        return block.locator('.name');
+    }
+
+    /** The labels of a site-level block's role boxes, in page order. */
+    contextRoleLabels(block) {
+        return block.locator('fieldset.roles label');
+    }
+
+    /**
+     * The words a screen reader reads before a site-level block's role
+     * boxes: the legend of the fieldset that holds them. The theme draws it
+     * for screen readers only (`pkp_screen_reader`: clipped to 1px and set
+     * 2000px left of the page), so `toBeVisible()` and `toContainText()`
+     * pass on it though nothing of it is on screen.
+     */
+    contextRolesLegend(block) {
+        return block.locator('fieldset.roles > legend');
+    }
+
+    /** A site-level block's group of role boxes, by the name a screen reader gives it. */
+    contextRolesGroup(block, prompt) {
+        return block.getByRole('group', {name: prompt, exact: true});
+    }
+
+    /**
+     * A journal is listed by its name with exactly these role boxes under
+     * the name, name and boxes on screen (scenario 6).
+     *
+     * @param {import('@playwright/test').Locator} block
+     * @param {string} journalName
+     * @param {string[]} roleNames the boxes' labels, in page order
+     */
+    async expectContextListed(block, journalName, roleNames) {
+        const name = this.contextName(block);
+        await expect(name).toHaveText(journalName);
+        await name.scrollIntoViewIfNeeded();
+        await expect(name).toBeInViewport();
+        await expect(this.contextRoleLabels(block)).toHaveText(roleNames);
+        for (const roleName of roleNames) {
+            await expect(this.contextRoleBox(block, roleName)).toBeInViewport();
+        }
+        // Under the name: no box starts above the name's lower edge.
+        await expect
+            .poll(() =>
+                block.evaluate((li) => {
+                    const nameBox = li.querySelector('.name');
+                    const boxes = [...li.querySelectorAll('fieldset.roles input[type="checkbox"]')];
+                    if (!nameBox || boxes.length === 0) return false;
+                    const lowerEdge = nameBox.getBoundingClientRect().bottom;
+                    return boxes.every((box) => box.getBoundingClientRect().top >= lowerEdge);
+                })
+            )
+            .toBe(true);
+    }
+
+    /**
+     * The words before a block's role boxes are a screen reader's only
+     * (scenario 6): they name the group holding the boxes, and they are
+     * not on screen while the journal's name and those boxes are (the
+     * positive control of the same read). Their box ends left of the
+     * page's left edge, where no scrolling reaches.
+     *
+     * @param {import('@playwright/test').Locator} block
+     * @param {string} prompt
+     * @param {string[]} roleNames the boxes the group holds
+     */
+    async expectRolesPromptForScreenReaderOnly(block, prompt, roleNames) {
+        const legend = this.contextRolesLegend(block);
+        const group = this.contextRolesGroup(block, prompt);
+        await expect(legend).toHaveText(prompt);
+        await expect(group).toHaveCount(1);
+        const name = this.contextName(block);
+        await name.scrollIntoViewIfNeeded();
+        await expect(name).toBeInViewport();
+        for (const roleName of roleNames) {
+            await expect(group.getByRole('checkbox', {name: roleName, exact: true})).toBeInViewport();
+        }
+        await expect(legend).not.toBeInViewport();
+        await expect
+            .poll(() => legend.evaluate((el) => el.getBoundingClientRect().right + window.scrollX))
+            .toBeLessThan(0);
     }
 
     /** The per-journal consent line inside a site-level block. */

@@ -63,6 +63,9 @@ const EMAIL_OPTIN_LABEL = 'Yes, I would like to be notified of new publications 
 const REVIEWER_OPTIN_TEXT = 'Yes, I would like to be contacted with requests to review';
 const CLOSED_MESSAGE = 'This server is currently not accepting user registrations.';
 const CONTEXTS_PROMPT = 'Which servers on this site would you like to register with?';
+// Site-level page: the role boxes under a default preprint server, and the
+// words a screen reader reads before them (not on screen).
+const SITE_ROLE_BOXES = ['Reader'];
 const ROLES_PROMPT = 'Request the following roles.';
 const PENDING_TITLE = 'Registration awaiting verification';
 const pendingSentence = (email) =>
@@ -478,12 +481,15 @@ test.describe('registration & account validation (U2) — OPS', () => {
         await expect(register.heading).toBeVisible();
         await expect(register.contextsLegend).toHaveText(CONTEXTS_PROMPT);
 
-        // Both servers listed with "Request the following roles." and a
-        // "Reader" box each (a preprint server offers Reader only, Rule 8).
+        // Both servers are listed by name, each with its role boxes under
+        // the name: one "Reader" box (a preprint server offers Reader only,
+        // Rule 8). "Request the following roles." is not on screen: a
+        // screen reader reads it before each server's boxes.
         for (const name of [PK_NAME, scratchName]) {
             const block = register.contextBlock(name);
             await expect(block).toBeVisible();
-            await expect(block.locator('fieldset.roles > legend')).toHaveText(ROLES_PROMPT);
+            await register.expectContextListed(name, SITE_ROLE_BOXES);
+            await register.expectRolesPromptForScreenReaderOnly(name, ROLES_PROMPT, SITE_ROLE_BOXES);
             await expect(register.readerBox(name)).toBeVisible();
             await expect(register.contextRoleBoxes(name)).toHaveCount(1);
         }

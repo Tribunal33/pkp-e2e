@@ -55,6 +55,10 @@ const CLOSED_MESSAGE = 'This journal is currently not accepting user registratio
 const CLOSED_OPTION = /^The Journal Manager will register all user accounts/;
 const CONTEXT_CONSENT =
     "Yes, I agree to have my data collected and stored according to this journal's privacy statement.";
+// Site-level page: the role boxes under a default journal, and the words a
+// screen reader reads before them (not on screen).
+const SITE_ROLE_BOXES = ['Reader', 'Reviewer'];
+const ROLES_PROMPT = 'Request the following roles.';
 const AWAITING_VERIFICATION = 'Registration awaiting verification';
 const VALIDATION_INTRO =
     'but before you can start using it, you need to validate your email account. To do this, simply follow the link below:';
@@ -530,13 +534,17 @@ test.describe('registration & account validation', () => {
         await register.expectForm();
         await expect(register.contextsLegend).toBeVisible();
 
-        // Both journals are listed with "Request the following roles.".
+        // Both journals are listed by name, each with its role boxes under
+        // the name. "Request the following roles." is not on screen: a
+        // screen reader reads it before each journal's boxes.
         const seededBlock = register.contextBlock(JOURNAL_NAME);
         const scratchBlock = register.contextBlock(scratchName);
         await expect(seededBlock).toHaveCount(1);
         await expect(scratchBlock).toHaveCount(1);
-        await expect(seededBlock).toContainText('Request the following roles.');
-        await expect(scratchBlock).toContainText('Request the following roles.');
+        await register.expectContextListed(seededBlock, JOURNAL_NAME, SITE_ROLE_BOXES);
+        await register.expectContextListed(scratchBlock, scratchName, SITE_ROLE_BOXES);
+        await register.expectRolesPromptForScreenReaderOnly(seededBlock, ROLES_PROMPT, SITE_ROLE_BOXES);
+        await register.expectRolesPromptForScreenReaderOnly(scratchBlock, ROLES_PROMPT, SITE_ROLE_BOXES);
 
         // Before anything is ticked: no consent line under either journal
         // (Rule 5); the role boxes themselves are on screen (the positive
@@ -630,7 +638,7 @@ test.describe('registration & account validation', () => {
             await expect(siteHeader(secondPage)).toContainText(second.username);
 
             // The Roles tab, through the profile address of the seeded
-            // journal (the site-level "Edit My Profile" lands there too).
+            // journal.
             const secondRoles = new ProfileRolesTab(secondPage, JOURNAL);
             await secondRoles.goto();
             await expect(secondRoles.roleBox('Reader')).toHaveCount(1);

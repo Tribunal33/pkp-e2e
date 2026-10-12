@@ -6,8 +6,11 @@
  * Surfaces:
  * - RegisterPage — the server-level ({server}/user/register) and site-level
  *   (index/user/register) "Register" form: the "Profile" and "Login"
- *   fieldsets, the consent and opt-in boxes, the site-level server blocks,
- *   the error list and the "Register" button.
+ *   fieldsets, the consent and opt-in boxes, the site-level server blocks
+ *   (each read by its name, its role boxes and the words only a screen
+ *   reader gets before them: `expectContextListed()`,
+ *   `expectRolesPromptForScreenReaderOnly()`), the error list and the
+ *   "Register" button.
  * - RegistrationCompletePage — the "Registration complete" landing.
  * - ProfileRolesTab — the profile's Roles tab (user/profile → "Roles"), read
  *   through its self-registration checkboxes.
@@ -119,6 +122,114 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         return this.form.locator('li.context').filter({
             has: this.page.locator('.name', {hasText: name}),
         });
+    }
+
+    /** The server's name, the line that heads its site-level block (`li.context > .name`). */
+    contextName(name) {
+        return this.contextBlock(name).locator('.name');
+    }
+
+    /** The labels of a site-level block's role boxes, in page order. */
+    contextRoleLabels(name) {
+        return this.contextBlock(name).locator('fieldset.roles label');
+    }
+
+    /**
+     * The words a screen reader reads before a site-level block's role
+     * boxes: the legend of the fieldset that holds them. The theme draws it
+     * for screen readers only (register.less extends `.pkp_screen_reader`:
+     * absolute, 2000px left of the page, clipped to 1px), so `toBeVisible()`
+     * and a text read pass on it though nothing of it is on screen.
+     */
+    contextRolesLegend(name) {
+        return this.contextBlock(name).locator('fieldset.roles > legend');
+    }
+
+    /**
+     * A site-level block's group of role boxes, by the name a screen reader
+     * gives it (the legend's words).
+     *
+     * @param {string} name the server's name
+     * @param {string} prompt the group's accessible name
+     */
+    contextRolesGroup(name, prompt) {
+        return this.contextBlock(name).getByRole('group', {name: prompt, exact: true});
+    }
+
+    /**
+     * A server is listed by its name with exactly these role boxes under
+     * the name, name and boxes on screen (scenario 6). Positions need the
+     * theme's stylesheet in (patterns.md parallel lesson 16).
+     *
+     * @param {string} name the server's name
+     * @param {string[]} roles the boxes' labels, in page order
+     */
+    async expectContextListed(name, roles) {
+        await this.stylesApplied();
+        const nameLine = this.contextName(name);
+        await expect(nameLine).toHaveText(name);
+        await expect(this.contextRoleLabels(name)).toHaveText(roles);
+        const boxes = roles.map((role) =>
+            this.contextBlock(name).getByRole('checkbox', {name: role, exact: true})
+        );
+        await nameLine.scrollIntoViewIfNeeded();
+        await expect(nameLine).toBeInViewport();
+        for (const box of boxes) await expect(box).toBeInViewport();
+        // Under the name: no box starts above the name's lower edge.
+        await expect
+            .poll(async () => {
+                const line = await nameLine.boundingBox();
+                const tops = await Promise.all(boxes.map(async (box) => (await box.boundingBox())?.y));
+                return !!line && tops.every((top) => top !== undefined && top >= line.y + line.height);
+            })
+            .toBe(true);
+    }
+
+    /**
+     * The words before a block's role boxes are a screen reader's only
+     * (scenario 6). For a screen reader: they name the one group that holds
+     * the role boxes, and their legend comes before every box of it. Not on
+     * screen: the legend is outside the viewport while the server's name
+     * above and every role box below are in it (the positive control of the
+     * same read: a legend drawn in place would sit between them), and its
+     * box ends left of the page's left edge, where no scrolling reaches.
+     *
+     * @param {string} name the server's name
+     * @param {string} prompt the words
+     * @param {string[]} roles the boxes the group holds
+     */
+    async expectRolesPromptForScreenReaderOnly(name, prompt, roles) {
+        await this.stylesApplied();
+        const legend = this.contextRolesLegend(name);
+        const group = this.contextRolesGroup(name, prompt);
+        await expect(legend).toHaveText(prompt);
+        await expect(group).toHaveCount(1);
+        await expect(group.getByRole('checkbox')).toHaveCount(roles.length);
+        expect(
+            await group.evaluate((fieldset) => {
+                const words = fieldset.querySelector(':scope > legend');
+                const boxes = [...fieldset.querySelectorAll('input[type="checkbox"]')];
+                return (
+                    !!words &&
+                    boxes.length > 0 &&
+                    boxes.every(
+                        (box) => words.compareDocumentPosition(box) & Node.DOCUMENT_POSITION_FOLLOWING
+                    )
+                );
+            }),
+            'the words come before every role box of their group'
+        ).toBe(true);
+
+        const nameLine = this.contextName(name);
+        await nameLine.scrollIntoViewIfNeeded();
+        await expect(nameLine).toBeInViewport();
+        for (const role of roles) {
+            await expect(group.getByRole('checkbox', {name: role, exact: true})).toBeInViewport();
+        }
+        await expect(legend).not.toBeInViewport();
+        await expect
+            .poll(() => legend.evaluate((el) => el.getBoundingClientRect().right + window.scrollX))
+            .toBeLessThan(0);
     }
 
     /** The "Reader" box of a site-level server block. */
