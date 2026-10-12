@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `c6e2c3a879` | 2026-10-09 | claude (daily maintenance session) |
-| omp | `486cbf9eb0` | 2026-10-09 | claude (daily maintenance session) |
-| ops | `399c4ebca3` | 2026-10-09 | claude (daily maintenance session) |
-| pkp-lib | `d702d012dd` (ojs; omp and ops at `8094f06bf5`) | 2026-10-09 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `f529e34b50` (2026-10-08, tree equal to `5d4ea3db73`); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
+| ojs | `5fc74d6213` | 2026-10-12 | claude (daily maintenance session) |
+| omp | `486cbf9eb0` | 2026-10-12 | claude (daily maintenance session; no new commits) |
+| ops | `399c4ebca3` | 2026-10-12 | claude (daily maintenance session; no new commits) |
+| pkp-lib | `f4f8fcdbc0` (ojs; omp and ops at `8094f06bf5`) | 2026-10-12 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
 
 ## Read log
 
@@ -22,6 +22,11 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-12 (daily session, VM s2) — ojs `c6e2c3a879..5fc74d6213` (4: three pointer bumps and the merge of pkp/ojs#5921), omp and ops none, pkp-lib `d702d012dd..f4f8fcdbc0` (2, ojs; omp and ops still at `8094f06bf5`), ui-library none; ojs `plugins/generic/jatsTemplate` `f529e34b50..96eacdab48`. `main` first: synced today, nothing confirmed there to carry over. Read in full; baselines advanced. No regression.**
+  - pkp-lib `f5119dce61` (#13494) → `=main acf22372dd` (read on `main` today): driven on the line's three apps at its parent and at the commit on 2026-10-09; what the change is for is recorded privately. No regression.
+  - pkp-lib `f4f8fcdbc0` (#13495) → `~main 1ec9023e8a` (`git range-diff`: the line's loop reads `$params['affiliations']` without `?? []`, the one added line the same): driven on the line's three apps on 2026-10-10 at a commit with the same tree; what the change is for is recorded privately. On 3.5 `editContributor()` is reached only by its PUT route, which the contributor forms call (ui-library `ContributorManager`, `ContributorsListPanel`, the wizard). No regression.
+  - ojs `b97ee559dc`, `5fc74d6213` (pkp/ojs#5921, the pointer to jatsTemplate#125 `96eacdab48`, merged 2026-10-12 08:06 UTC as the PR review of 2026-10-10 read it) → `~main 642946c4d6` (entry of 2026-10-10 below): `checks/sync/jatsTemplate-124/typed-tags.js` again at the line tip on a freshly loaded default dataset (`.reports/sync-13378-3_5/m1012/`): the title typed as "The <i>species</i> element in HTML" is text on the "JATS XML" page, its "Download" and the API, and the real markup beside typed tags in submission 6 is still converted. The titles half of the pkp/ojs#5813 regression is fixed on the line; its ci-triage row goes with `main`'s (`upstream-sync.md`, today). ojs `fc46f40aab`, `c90dfdb577` (pointer bumps to `f5119dce61`, `f4f8fcdbc0`) → nothing of their own.
+  - Open stable-line rows not re-run: the range moves the user-merge grid, the contributor affiliations and the JATS plugin, none of their code. #12780 stands as on `main`.
 - **2026-10-10 — PR review, pkp/pkp-lib#12874 on 3.5, second round (the author amended the PRs; asked again in the channel by @jarda.kotesovec): pkp/pkp-lib#13496 at `6b00301c8b` (one commit on the line tip `f4f8fcdbc0`) + pkp/ojs#5922 `93dc24186f` on `c90dfdb577`, pkp/omp#2504 `23f4962cdd` on `486cbf9eb0`, pkp/ops#1445 `559c728a29` on `399c4ebca3`, each now rewording two texts of its own `locale/en/invitation.po` (OJS marks them fuzzy in 22 translations) and moving `lib/pkp` to `6b00301c8b`. Not merged; baselines not advanced. No companion.**
   - pkp-lib `6b00301c8b` → `~main 9f9a224862` (the same changed lines file by file, except `locale/en/common.po` as in the first round): **no regression; the first round's three leftovers are taken in.** `side.sh … stable-3_5_0` with the app commits, on the line's default dataset freshly loaded for each side (`.reports/sync-12874-3_5/base/` at the app PRs' bases with `lib/pkp` `f4f8fcdbc0`, `head/` at the PR heads; OJS with its `lib/ui-library` as built at `0c91dcce4e`, six pointer-only commits behind the base): the same eight texts differ as on `main` and every "##" code leaves the accept page; 41 other facts per app the same; the server log holds the same warnings on both sides. `po-check.js`: 21 keys removed, nobody names them; no invitation key without a text; no "{name}" without "$". `render.php`: a translation marked fuzzy is still shown; only the intended texts differ.
   - Left, as on `main` (the report on the companion branch): the reworded "Invitation Sent" sentence keeps the promise of U06 A5 (pkp-e2e#515), and "GDPR polices" and "If you chose to skip it now" are still read on screen at the heads (pkp-e2e#540).
