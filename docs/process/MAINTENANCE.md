@@ -447,8 +447,12 @@ session that makes it:
   that missed, a correction the team asked for on Mattermost) puts one
   line in the entry, under its Basis line: `Report: refresh owed — <what
   changed: the commit or PR and what it did, or who asked, when, and
-  their words> (<date>)`. The backlog lists it and housekeeping step 4
-  works it. On a companion branch the line rides with the branch and
+  their words> (<date>)`. For a merged change the line names every
+  class or method the report rests on that the change touched (the
+  report's backticked names against the change's file list), not only
+  the sentence first noticed (two refreshes of 2026-10-12 found further
+  moved facts only by rereading the merge). The backlog lists it and
+  housekeeping step 4 works it. On a companion branch the line rides with the branch and
   lands when it merges, since the issue describes `main`.
 
 The same `Report:` line holds an entry's other states the backlog reads:
