@@ -98,6 +98,30 @@ function request(kind, args, {check = true, quiet = false} = {}) {
 const pod = (args, options) => request('pod', args, options);
 const egressHelper = (args, options) => request('egress', args, options);
 
+/**
+ * Read a file under out/, which the sandbox user writes: only a plain file
+ * inside out/<review>, never through a symlink, so a process that left its
+ * container cannot make the bot read (and repeat) one of its own files.
+ */
+function readOut(file, {missing = null} = {}) {
+    const real = path.join(OUT, path.relative(OUT, file));
+    if (!real.startsWith(OUT + path.sep)) die(`not under ${OUT}: ${file}`);
+    let at = OUT;
+    for (const part of path.relative(OUT, real).split(path.sep)) {
+        at = path.join(at, part);
+        let stat;
+        try {
+            stat = fs.lstatSync(at);
+        } catch {
+            if (missing !== null) return missing;
+            die(`missing: ${at}`);
+        }
+        if (stat.isSymbolicLink()) die(`refusing a symlink the sandbox wrote: ${at}`);
+        if (at === real && !stat.isFile()) die(`not a plain file: ${at}`);
+    }
+    return fs.readFileSync(real, 'utf8');
+}
+
 function md5(file) {
     return crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex');
 }
@@ -114,6 +138,7 @@ function overlayExcludes(appRoot) {
         '/public-ds*/',
         '/config.inc.php',
         '/config.test*.inc.php',
+        '.env*',
         '/.pkp-e2e-mount.json',
         ...mounted.map((file) => `/${file}`),
     ];
@@ -217,8 +242,7 @@ function diff(review, from, to) {
     for (const label of [from, to]) if (!fs.existsSync(dir(label))) die(`no snapshot ${label} for ${review}`);
     const tree = (label) =>
         new Map(
-            fs
-                .readFileSync(path.join(dir(label), 'tree.txt'), 'utf8')
+            readOut(path.join(dir(label), 'tree.txt'))
                 .split('\n')
                 .filter(Boolean)
                 .map((line) => [line.slice(66), line.slice(0, 64)]),
@@ -240,7 +264,7 @@ function diff(review, from, to) {
 
     const lines = (label, file) => {
         const full = path.join(dir(label), file);
-        return fs.existsSync(full) ? fs.readFileSync(full, 'utf8').split('\n').filter(Boolean) : [];
+        return readOut(full, {missing: ''}).split('\n').filter(Boolean);
     };
     const setDiff = (x, y) => {
         const counts = new Map();
@@ -256,7 +280,7 @@ function diff(review, from, to) {
     const cb = countMap(to);
     const moved = [...new Set([...ca.keys(), ...cb.keys()])].filter((t) => ca.get(t) !== cb.get(t));
     out.push(`## Row counts changed (${moved.length})`, ...moved.map((t) => `- ${t}: ${ca.get(t) ?? 'absent'} → ${cb.get(t) ?? 'absent'}`), '');
-    const tables = fs.readdirSync(dir(to)).filter((f) => f.endsWith('.csv'));
+    const tables = fs.readdirSync(dir(to), {withFileTypes: true}).filter((f) => f.isFile() && f.name.endsWith('.csv')).map((f) => f.name);
     for (const table of tables) {
         const before = lines(from, table);
         const after = lines(to, table);
@@ -292,8 +316,9 @@ function egress(review) {
     }
     const names = new Map();
     const dns = path.join(OUT, review, 'dns.log');
-    if (fs.existsSync(dns)) {
-        for (const line of fs.readFileSync(dns, 'utf8').split('\n')) {
+    const dnsText = readOut(dns, {missing: ''});
+    if (dnsText) {
+        for (const line of dnsText.split('\n')) {
             const m = line.match(/^(\S+) .*query\[(\w+)\] (\S+) from/);
             if (!m) continue;
             const seen = names.get(m[3]) || {types: new Set(), first: m[1]};
@@ -306,7 +331,7 @@ function egress(review) {
     for (const line of audit) console.log(`- ${line}`);
     console.log(`\n## Connections dropped (${drops.size} destinations)`);
     for (const [key, seen] of drops) console.log(`- ${key} ×${seen.count} (${seen.first} … ${seen.last})`);
-    console.log(`\n## Names looked up, none answered (${names.size})${fs.existsSync(dns) ? '' : ' — no dns.log yet: run `logs` first'}`);
+    console.log(`\n## Names looked up, none answered (${names.size})${dnsText ? '' : ' — no dns.log yet: run `logs` first'}`);
     for (const [name, seen] of names) console.log(`- ${name} (${[...seen.types].join(', ')}; first ${seen.first})`);
 }
 
@@ -337,9 +362,9 @@ async function canary() {
         await pod(['down', review]);
         die(`the canary did not answer JSON (HTTP ${res.status}): ${res.body.slice(0, 500)}`);
     }
-    const dns = fs.readFileSync(path.join(OUT, review, 'dns.log'), 'utf8');
+    const dns = readOut(path.join(OUT, review, 'dns.log'));
     const drops = fs.readFileSync(EGRESS_LOG, 'utf8').split('\n').filter((l) => Date.parse(l.split(' ')[0]) >= Date.parse(meta(review).staged) && l.includes('plugin-egress: drop '));
-    const tree = fs.readFileSync(path.join(OUT, review, 'snapshots', 'after', 'tree.txt'), 'utf8');
+    const tree = readOut(path.join(OUT, review, 'snapshots', 'after', 'tree.txt'));
     const checks = [
         ['runs as an unprivileged uid', /^33:/.test(probe.whoami)],
         ['every capability dropped', /CapEff:\s*0+\b/.test(probe.capabilities)],

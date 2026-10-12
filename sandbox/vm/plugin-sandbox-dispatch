@@ -2,34 +2,51 @@
 # plugin-sandbox-dispatch — the bot's one door into the plugin sandbox.
 #
 # The bot runs under NoNewPrivileges (its systemd unit), so sudo is closed
-# to it. Instead plugin-sandbox.socket (root-owned, group e2e, mode 0660)
-# starts this script as root for each connection, with the socket as
-# stdin and stdout. It reads one line, the arguments separated by tabs,
-# and runs exactly one of two things:
+# to it. Instead plugin-sandbox.socket (root-owned, the bot's group, mode
+# 0660) starts this script as root for each connection, with the socket as
+# stdin and stdout. It reads one line of at most 4 KB, the arguments
+# separated by tabs (never run through a shell), and runs exactly one of
+# two things:
 #   egress <args>…   /usr/local/sbin/plugin-egress <args>…   (as root)
 #   pod <args>…      /srv/plugin-sandbox/bin/pod.sh <args>…  (as e2e-plugin)
-# Both scripts validate their own arguments. The output goes back on the
-# socket, then a last line "__exit__ <status>". Installed root-owned to
-# /usr/local/sbin by sandbox/vm/setup.sh; bin/plugin-sandbox.js is the
-# client.
+# Both scripts validate their own arguments. `pod up` fails closed: it is
+# refused unless the egress rule is loaded, and one at a time. The output
+# goes back on the socket, then a last line "__exit__ <status>". Installed
+# root-owned to /usr/local/sbin by sandbox/vm/setup.sh, whose unit hides
+# every home from it; bin/plugin-sandbox.js is the client.
 set -uo pipefail
 
-IFS=$'\t' read -r -t 10 -a args || { echo "plugin-sandbox: no request"; echo "__exit__ 2"; exit 0; }
+finish() {
+    echo "__exit__ $1"
+    exit 0
+}
+
+IFS= read -r -t 10 -n 4097 line || [[ -n ${line:-} ]] || { echo "plugin-sandbox: no request"; finish 2; }
+((${#line} <= 4096)) || { echo "plugin-sandbox: request over 4 KB, refused"; finish 2; }
+IFS=$'\t' read -r -a args <<< "$line"
 kind=${args[0]:-}
 rest=("${args[@]:1}")
-export PLUGIN_SANDBOX_CALLER="${PLUGIN_SANDBOX_CALLER:-e2e (socket)}"
+export PLUGIN_SANDBOX_CALLER='e2e (socket)'
+
 case "$kind" in
 egress)
     /usr/local/sbin/plugin-egress "${rest[@]}" < /dev/null 2>&1
-    status=$?
+    finish $?
     ;;
 pod)
+    if [[ ${rest[0]:-} == up ]]; then
+        if ! /usr/sbin/nft list chain inet plugin_sandbox output 2> /dev/null | grep -q 'jump sandbox'; then
+            echo "plugin-sandbox: the egress rule is not loaded (plugin-sandbox-firewall.service): no pod starts without it"
+            finish 3
+        fi
+        exec 9> /run/plugin-sandbox-up.lock
+        flock -n 9 || { echo "plugin-sandbox: another pod is starting"; finish 3; }
+    fi
     cd / && /usr/sbin/runuser -u e2e-plugin -- /srv/plugin-sandbox/bin/pod.sh "${rest[@]}" < /dev/null 2>&1
-    status=$?
+    finish $?
     ;;
 *)
     echo "plugin-sandbox: unknown request (egress or pod)"
-    status=2
+    finish 2
     ;;
 esac
-echo "__exit__ $status"

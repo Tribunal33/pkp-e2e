@@ -33,7 +33,7 @@ Task:
    - **For the drive:** each suspicion as steps (the role, the screen or request, expected, suspected), and what the drive should watch for (an outside contact the code makes, a file it writes, a table it fills).
    - **Unverified hunches:** one line each, nothing more.
 
-Write only `read.md`. Do NOT post to Mattermost, write to PROGRESS.md or docs/tracking/app-changes.md, touch the sandbox, or edit anything under `checkouts/`. Commit nothing.
+Write only `read.md`, and keep every working file under `.reports/plugin-review/{{review}}/`, never in `/tmp`, which every local user can read. Do NOT post to Mattermost, write to PROGRESS.md or docs/tracking/app-changes.md, touch the sandbox, or edit anything under `checkouts/`. Commit nothing.
 
 Size: about 40 tool calls for a plugin of a few dozen files; finish the read even if it takes more.
 

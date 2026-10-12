@@ -40,8 +40,13 @@ echo "== the sandbox user"
 if ! id "$SBX" > /dev/null 2>&1; then
     useradd --create-home --home-dir "$SBX_HOME" --shell /usr/sbin/nologin --user-group "$SBX"
 fi
-grep -q "^$SBX:" /etc/subuid || usermod --add-subuids 200000-265535 "$SBX"
-grep -q "^$SBX:" /etc/subgid || usermod --add-subgids 200000-265535 "$SBX"
+# useradd gives the user a subuid range of its own; the egress rule reads
+# whatever range it got from /etc/subuid, never an assumed one.
+grep -q "^$SBX:" /etc/subuid || usermod --add-subuids 300000-365535 "$SBX"
+grep -q "^$SBX:" /etc/subgid || usermod --add-subgids 300000-365535 "$SBX"
+SBX_UID=$(id -u "$SBX")
+SUBUIDS=$(awk -F: -v u="$SBX" '$1 == u {printf "%d-%d", $2, $2 + $3 - 1; exit}' /etc/subuid)
+[[ $SUBUIDS =~ ^[0-9]+-[0-9]+$ ]] || { echo "setup.sh: no subuid range for $SBX" >&2; exit 1; }
 chmod 750 "$SBX_HOME"
 loginctl enable-linger "$SBX"
 systemctl start "user@$(id -u "$SBX").service"
@@ -61,7 +66,10 @@ chmod -R a+rX "$ROOT/images"
 echo "== egress rule, helper and log"
 install -o root -g root -m 755 "$HERE/plugin-egress" /usr/local/sbin/plugin-egress
 install -d -m 755 /etc/plugin-sandbox
-install -o root -g root -m 644 "$HERE/nft.conf" /etc/plugin-sandbox/nft.conf
+sed "s/@SANDBOX_UIDS@/$SBX_UID, $SUBUIDS/" "$HERE/nft.conf" > /etc/plugin-sandbox/nft.conf.tmp
+nft -c -f /etc/plugin-sandbox/nft.conf.tmp
+chmod 644 /etc/plugin-sandbox/nft.conf.tmp
+mv /etc/plugin-sandbox/nft.conf.tmp /etc/plugin-sandbox/nft.conf
 [[ -e /var/log/plugin-egress.log ]] || install -o syslog -g "$BOT" -m 640 /dev/null /var/log/plugin-egress.log
 cat > /etc/rsyslog.d/30-plugin-egress.conf << 'EOF'
 # The plugin sandbox's egress drops (sandbox/vm/nft.conf), in a file the bot reads.
@@ -125,12 +133,22 @@ printf '%s\n' \
     'ExecStart=/usr/local/sbin/plugin-sandbox-dispatch' \
     'StandardInput=socket' \
     'StandardOutput=socket' \
-    'StandardError=journal' > /etc/systemd/system/plugin-sandbox@.service
+    'StandardError=journal' \
+    '# The bot never needs the dispatcher near a home: hide them all.' \
+    'InaccessiblePaths=/home /root' \
+    'ProtectSystem=full' > /etc/systemd/system/plugin-sandbox@.service
 systemctl daemon-reload
 systemctl enable plugin-sandbox.socket > /dev/null 2>&1
 systemctl restart plugin-sandbox.socket
 # The sudoers grant the socket replaced: sudo is closed to the bot.
 rm -f /etc/sudoers.d/plugin-sandbox
+# The bot's new files readable by its own group at most, so a review's
+# working files are no one else's (effective at the bot's next restart).
+if [[ -e /etc/systemd/system/claude-threads.service ]]; then
+    install -d -m 755 /etc/systemd/system/claude-threads.service.d
+    printf '%s\n' '[Service]' 'UMask=0027' > /etc/systemd/system/claude-threads.service.d/umask.conf
+    systemctl daemon-reload
+fi
 
 as_sbx() {
     local uid
@@ -156,6 +174,15 @@ fi
 
 systemctl restart plugin-sandbox-firewall.service
 trap - EXIT
+
+echo "== self-test: the sandbox user and a subuid reach nothing"
+for uid in "$SBX_UID" "${SUBUIDS%-*}" $((${SUBUIDS%-*} + 33)); do
+    if timeout 5 setpriv --reuid="$uid" --regid="$uid" --clear-groups bash -c 'exec 3<>/dev/tcp/1.1.1.1/443' 2> /dev/null; then
+        echo "setup.sh: uid $uid reached 1.1.1.1:443 — the egress rule does not hold" >&2
+        exit 1
+    fi
+    echo "uid $uid: dropped"
+done
 echo "== done"
 nft list chain inet plugin_sandbox sandbox | sed -n "/ct state/,/drop$/p"
 as_sbx podman images --format '{{.Repository}}:{{.Tag}}  {{.Size}}'

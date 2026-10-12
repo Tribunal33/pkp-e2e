@@ -41,6 +41,10 @@ public_v6() {
     [[ $lower == ::1 || $lower == :: || $lower == fe8* || $lower == fe9* || $lower == fea* || $lower == feb* || $lower == fc* || $lower == fd* || $lower == ::ffff:* || $lower == ff* ]] && return 1
     return 0
 }
+# This machine's own addresses (its public one too, where SSH listens):
+# a host name whose DNS points here never opens them.
+OWN=$(ip -o addr show | awk '{print $4}' | cut -d/ -f1)
+own_address() { grep -qixF -- "$1" <<< "$OWN"; }
 
 cmd=${1:-}
 shift || true
@@ -69,7 +73,10 @@ allow)
     for name in "${names[@]}"; do
         added=()
         while read -r addr _; do
-            if public_v4 "$addr"; then
+            if own_address "$addr"; then
+                echo "plugin-egress: $name → $addr is this machine's own address, left closed" >&2
+                continue
+            elif public_v4 "$addr"; then
                 nft add element $TABLE allowed4 "{ $addr timeout ${hours}h }"
             elif public_v6 "$addr"; then
                 nft add element $TABLE allowed6 "{ $addr timeout ${hours}h }"

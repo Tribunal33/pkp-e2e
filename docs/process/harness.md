@@ -433,11 +433,13 @@ Mac a plugin is only read.
 - **The walls.** A rootless Podman pod owned by the user `e2e-plugin`,
   which has no credentials and cannot read `/home/e2e`. Inside it the
   app runs as uid 33 with every capability dropped, and its only mount
-  is the review's own copy of the app. Every outbound packet of
-  `e2e-plugin` is logged and dropped by the host (nft table
-  `plugin_sandbox`, log `/var/log/plugin-egress.log`), the host's own
-  services on loopback included. The pod's only resolver logs each name
-  looked up and answers none.
+  is the review's own copy of the app (the harness's `.env*` and test
+  configs left out). Every outbound packet of `e2e-plugin` and of its
+  subuids, which a process that left its container would run as, is
+  logged and dropped by the host (nft table `plugin_sandbox`, log
+  `/var/log/plugin-egress.log`), the host's own services on loopback
+  included. The pod's only resolver logs each name looked up and answers
+  none. No pod starts while the rule is not loaded.
 - **The app.** OJS on `stable-3_5_0`: the line checkout with the
   harness's overlays left out, loaded with PKP's dataset for the line
   (`admin` / `admin` and the dataset's users, docs/process/dataset.md),
@@ -465,7 +467,8 @@ node bin/plugin-sandbox.js canary                     # the acceptance test of t
 - **Allowing a host** opens it for a few hours (`--hours`, default 4):
   its public addresses go into the rule, its name into the pod's
   `/etc/hosts`, and the call into the log. `down` withdraws every
-  allowance; a private or loopback address is never opened.
+  allowance; a private or loopback address, or one of this machine's
+  own, is never opened.
 - **Core's own traffic.** OJS itself looks up `download.db-ip.com` (the
   usage statistics' geo database). A name or address the canary run also
   shows is core's, not the plugin's.
@@ -477,13 +480,17 @@ node bin/plugin-sandbox.js canary                     # the acceptance test of t
 - **The bot's door** is the socket `/run/plugin-sandbox.sock` (root's,
   the bot's group, mode 0660): for each connection systemd starts a root
   dispatcher that runs either the helper `/usr/local/sbin/plugin-egress`
-  or `/srv/plugin-sandbox/bin/pod.sh` as `e2e-plugin`, nothing else.
-  Not sudo: the bot's unit sets `NoNewPrivileges`, which closes sudo to
-  every bot session.
+  or `/srv/plugin-sandbox/bin/pod.sh` as `e2e-plugin`, nothing else,
+  from one line of at most 4 KB, never through a shell; its unit hides
+  every home from it. Not sudo: the bot's unit sets `NoNewPrivileges`,
+  which closes sudo to every bot session. What the sandbox user writes
+  under `out/` is read only as plain files, never through a symlink.
 - **The VM setup** is root's: `sudo bash sandbox/vm/setup.sh`, idempotent,
   makes the user, `/srv/plugin-sandbox`, the rule, its log, the helper,
   the socket and its dispatcher, and builds the images with the rule
-  lifted for the build alone. `pod.sh`, the helper and the dispatcher are
+  lifted for the build alone, then checks that the user and its subuids
+  reach nothing. It also gives the bot's unit `UMask=0027`, so the bot's
+  new files are no other user's. `pod.sh`, the helper and the dispatcher are
   installed root-owned, so a change to any of them takes a setup re-run
   (`--no-build` skips the images).
 
