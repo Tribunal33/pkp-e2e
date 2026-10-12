@@ -7,7 +7,8 @@
  * sandbox user e2e-plugin, whose every outbound packet the host logs and
  * drops unless the review's request allowed the host. This script stages
  * what the pod needs (read and copied as the bot, nothing executed), drives
- * sandbox/pod.sh through sudo, and reads what comes back as data.
+ * sandbox/pod.sh through the sandbox's socket, and reads what comes back
+ * as data.
  *
  *   node bin/plugin-sandbox.js stage <review> [--package <file.tar.gz>]… [--gallery <plugins.xml>] [--copy <dir>:<app path>]…
  *   node bin/plugin-sandbox.js allow <review> <host>… [--hours N]   (before up: the pod reads the allowance when it starts)
@@ -35,6 +36,7 @@ process.env.PKP_E2E_LINE = process.env.PKP_E2E_LINE || 'stable-3_5_0';
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const net = require('net');
 const crypto = require('crypto');
 const {execFileSync, spawnSync} = require('child_process');
 const {REPO_ROOT, resolveApp} = require('./apps.js');
@@ -44,7 +46,7 @@ const {patchIni} = require('../shared/playwright/ini.js');
 const ROOT = '/srv/plugin-sandbox';
 const IN = path.join(ROOT, 'in');
 const OUT = path.join(ROOT, 'out');
-const POD_SH = path.join(ROOT, 'bin', 'pod.sh');
+const SOCKET = '/run/plugin-sandbox.sock';
 const EGRESS_LOG = '/var/log/plugin-egress.log';
 const APP_URL = 'http://127.0.0.1:13000';
 const GALLERY_URL = 'http://127.0.0.1:8081'; // inside the pod
@@ -60,21 +62,41 @@ function reviewId(value) {
     return value;
 }
 
-function pod(args, {capture = false} = {}) {
-    const result = spawnSync('sudo', ['-n', '-u', 'e2e-plugin', POD_SH, ...args], {
-        cwd: '/',
-        encoding: 'utf8',
-        stdio: capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
-        maxBuffer: 64 * 1024 * 1024,
+/**
+ * One request through the sandbox's socket: `egress` runs plugin-egress as
+ * root, `pod` runs pod.sh as e2e-plugin (sandbox/vm/plugin-sandbox-dispatch).
+ * Not sudo: the bot's unit sets NoNewPrivileges. The output is printed as
+ * it arrives; the dispatcher's last line carries the exit status.
+ */
+function request(kind, args, {check = true, quiet = false} = {}) {
+    if (args.some((a) => /[\t\n]/.test(String(a)))) die('an argument holds a tab or a newline');
+    return new Promise((resolve) => {
+        let pending = '';
+        let status = null;
+        const socket = net.createConnection(SOCKET, () => socket.write(`${[kind, ...args].join('\t')}\n`));
+        const emit = (line) => {
+            const m = line.match(/^__exit__ (\d+)$/);
+            if (m) status = Number(m[1]);
+            else if (!quiet) console.log(line);
+        };
+        socket.setEncoding('utf8');
+        socket.on('data', (chunk) => {
+            const lines = (pending + chunk).split('\n');
+            pending = lines.pop();
+            lines.forEach(emit);
+        });
+        socket.on('error', (error) => die(`the sandbox socket ${SOCKET}: ${error.message} (is sandbox/vm/setup.sh installed?)`));
+        socket.on('close', () => {
+            if (pending) emit(pending);
+            if (status === null) status = 1;
+            if (check && status !== 0) die(`${kind === 'pod' ? 'pod.sh' : 'plugin-egress'} ${args[0]} failed (exit ${status})`);
+            resolve(status);
+        });
     });
-    if (result.status !== 0) die(`pod.sh ${args[0]} failed (exit ${result.status})`);
-    return result.stdout;
 }
 
-function egressHelper(args) {
-    const result = spawnSync('sudo', ['-n', '/usr/local/sbin/plugin-egress', ...args], {stdio: 'inherit'});
-    if (result.status !== 0) die(`plugin-egress ${args[0]} failed (exit ${result.status})`);
-}
+const pod = (args, options) => request('pod', args, options);
+const egressHelper = (args, options) => request('egress', args, options);
 
 function md5(file) {
     return crypto.createHash('md5').update(fs.readFileSync(file)).digest('hex');
@@ -301,18 +323,18 @@ function get(url) {
 /** The acceptance test of the walls: a plugin that tries every way out. */
 async function canary() {
     const review = 'canary';
-    spawnSync('sudo', ['-n', '-u', 'e2e-plugin', POD_SH, 'down', review], {cwd: '/', stdio: 'ignore'});
+    await pod(['down', review], {check: false, quiet: true});
     stage(review, ['--copy', `${path.join(REPO_ROOT, 'sandbox', 'canary')}:plugins/generic/sandboxCanary`]);
-    pod(['up', review]);
-    pod(['snapshot', review, 'before']);
+    await pod(['up', review]);
+    await pod(['snapshot', review, 'before']);
     const res = await get(`${APP_URL}/plugins/generic/sandboxCanary/probe.php`);
-    pod(['snapshot', review, 'after']);
-    pod(['logs', review]);
+    await pod(['snapshot', review, 'after']);
+    await pod(['logs', review]);
     let probe;
     try {
         probe = JSON.parse(res.body);
     } catch {
-        pod(['down', review]);
+        await pod(['down', review]);
         die(`the canary did not answer JSON (HTTP ${res.status}): ${res.body.slice(0, 500)}`);
     }
     const dns = fs.readFileSync(path.join(OUT, review, 'dns.log'), 'utf8');
@@ -332,7 +354,7 @@ async function canary() {
         ["the host's own services are unreachable", Object.values(probe.hostServices).every((v) => v === 'failed')],
         ['a file written outside the plugin shows in the snapshot', tree.includes('app/plugins/generic/sandboxCanaryDrop/dropped.txt')],
     ];
-    pod(['down', review]);
+    await pod(['down', review]);
     console.log('\ncanary:');
     for (const [name, ok] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}`);
     console.log(`\nprobe answer:\n${JSON.stringify(probe, null, 2)}`);
@@ -355,12 +377,12 @@ async function main() {
         case 'logs':
             return pod(['logs', reviewId(rest[0])]);
         case 'down':
-            pod(['down', reviewId(rest[0])]);
+            await pod(['down', reviewId(rest[0])]);
             return egressHelper(['reset']);
         case 'status':
             return pod(['status']);
         case 'purge':
-            pod(['purge', reviewId(rest[0])]);
+            await pod(['purge', reviewId(rest[0])]);
             fs.rmSync(path.join(IN, rest[0]), {recursive: true, force: true});
             fs.rmSync(path.join(REPO_ROOT, '.reports', 'plugin-review', rest[0]), {recursive: true, force: true});
             return console.log(`purge: ${rest[0]} removed from in/, out/ and .reports/plugin-review/`);

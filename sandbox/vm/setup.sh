@@ -13,8 +13,10 @@
 #   - /usr/local/sbin/plugin-egress and the nft table plugin_sandbox, loaded
 #     at boot by plugin-sandbox-firewall.service; drops logged to
 #     /var/log/plugin-egress.log (readable by the bot);
-#   - sudoers: the bot runs plugin-egress as root and pod.sh as e2e-plugin,
-#     nothing else;
+#   - the socket /run/plugin-sandbox.sock (the bot's group, mode 0660) and
+#     its root dispatcher: through it the bot runs plugin-egress as root
+#     and pod.sh as e2e-plugin, nothing else. Not sudo: the bot's unit sets
+#     NoNewPrivileges, which closes sudo to every bot session;
 #   - the images, built as e2e-plugin. The egress rule is lifted for the
 #     build alone, and only when no sandbox pod is up.
 set -euo pipefail
@@ -99,16 +101,36 @@ EOF
 systemctl daemon-reload
 systemctl enable plugin-sandbox-firewall.service > /dev/null 2>&1
 
-echo "== sudoers"
-cat > /etc/sudoers.d/plugin-sandbox.tmp << EOF
-# The plugin sandbox (pkp-e2e sandbox/vm/setup.sh): the bot may open hosts
-# for a review and drive the sandbox pod, nothing else.
-$BOT ALL=(root) NOPASSWD: /usr/local/sbin/plugin-egress
-$BOT ALL=($SBX) NOPASSWD: $ROOT/bin/pod.sh
-EOF
-visudo -cf /etc/sudoers.d/plugin-sandbox.tmp > /dev/null
-chmod 440 /etc/sudoers.d/plugin-sandbox.tmp
-mv /etc/sudoers.d/plugin-sandbox.tmp /etc/sudoers.d/plugin-sandbox
+echo "== the bot's door: socket and dispatcher"
+install -o root -g root -m 755 "$HERE/plugin-sandbox-dispatch" /usr/local/sbin/plugin-sandbox-dispatch
+printf '%s\n' \
+    '[Unit]' \
+    'Description=Plugin sandbox requests from the bot (pkp-e2e sandbox/vm/plugin-sandbox-dispatch)' \
+    '' \
+    '[Socket]' \
+    'ListenStream=/run/plugin-sandbox.sock' \
+    'SocketUser=root' \
+    "SocketGroup=$BOT" \
+    'SocketMode=0660' \
+    'Accept=yes' \
+    'MaxConnections=8' \
+    '' \
+    '[Install]' \
+    'WantedBy=sockets.target' > /etc/systemd/system/plugin-sandbox.socket
+printf '%s\n' \
+    '[Unit]' \
+    'Description=Plugin sandbox request (pkp-e2e sandbox/vm/plugin-sandbox-dispatch)' \
+    '' \
+    '[Service]' \
+    'ExecStart=/usr/local/sbin/plugin-sandbox-dispatch' \
+    'StandardInput=socket' \
+    'StandardOutput=socket' \
+    'StandardError=journal' > /etc/systemd/system/plugin-sandbox@.service
+systemctl daemon-reload
+systemctl enable plugin-sandbox.socket > /dev/null 2>&1
+systemctl restart plugin-sandbox.socket
+# The sudoers grant the socket replaced: sudo is closed to the bot.
+rm -f /etc/sudoers.d/plugin-sandbox
 
 as_sbx() {
     local uid

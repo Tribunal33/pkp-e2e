@@ -1,9 +1,9 @@
 #!/bin/bash
 # plugin-egress — the one switch for the plugin sandbox's network.
 #
-#   sudo plugin-egress allow <review> <host>... [--hours N]   (default 4 h)
-#   sudo plugin-egress list
-#   sudo plugin-egress reset
+#   plugin-egress allow <review> <host>... [--hours N]   (default 4 h)
+#   plugin-egress list
+#   plugin-egress reset
 #
 # By default the sandbox user reaches nothing (nft.conf). `allow` opens the
 # named hosts for a review that asked for them in its request: each name is
@@ -12,14 +12,15 @@
 # /srv/plugin-sandbox/allowed.hosts, which pod.sh writes into the pod's
 # /etc/hosts (the pod has no DNS of its own). Every call is written to
 # /var/log/plugin-egress.log. Installed root-owned to /usr/local/sbin by
-# sandbox/vm/setup.sh; the bot may run it through sudo, never edit it.
+# sandbox/vm/setup.sh; the bot reaches it through plugin-sandbox-dispatch
+# (the socket), never edits it.
 set -euo pipefail
 
 LOG=/var/log/plugin-egress.log
 HOSTS=/srv/plugin-sandbox/allowed.hosts
 TABLE='inet plugin_sandbox'
 
-audit() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) plugin-egress: $* (by ${SUDO_USER:-root})" >> "$LOG"; }
+audit() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) plugin-egress: $* (by ${PLUGIN_SANDBOX_CALLER:-${SUDO_USER:-root}})" >> "$LOG"; }
 die() { echo "plugin-egress: $*" >&2; exit 1; }
 
 # A public address only: an allowance never opens the host's own services

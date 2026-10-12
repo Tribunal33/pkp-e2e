@@ -474,13 +474,18 @@ node bin/plugin-sandbox.js canary                     # the acceptance test of t
   address, the host's Postgres, SSH and Mailpit, a write outside its
   folder. Every wall held on 2026-10-12. Re-run it after any change to
   `sandbox/` or the VM.
+- **The bot's door** is the socket `/run/plugin-sandbox.sock` (root's,
+  the bot's group, mode 0660): for each connection systemd starts a root
+  dispatcher that runs either the helper `/usr/local/sbin/plugin-egress`
+  or `/srv/plugin-sandbox/bin/pod.sh` as `e2e-plugin`, nothing else.
+  Not sudo: the bot's unit sets `NoNewPrivileges`, which closes sudo to
+  every bot session.
 - **The VM setup** is root's: `sudo bash sandbox/vm/setup.sh`, idempotent,
-  makes the user, `/srv/plugin-sandbox`, the rule, its log, the helper
-  `/usr/local/sbin/plugin-egress` and two sudoers lines (the bot runs the
-  helper as root and `/srv/plugin-sandbox/bin/pod.sh` as `e2e-plugin`,
-  nothing else), and builds the images with the rule lifted for the
-  build alone. `pod.sh` and the helper are installed root-owned, so a
-  change to either takes a setup re-run (`--no-build` skips the images).
+  makes the user, `/srv/plugin-sandbox`, the rule, its log, the helper,
+  the socket and its dispatcher, and builds the images with the rule
+  lifted for the build alone. `pod.sh`, the helper and the dispatcher are
+  installed root-owned, so a change to any of them takes a setup re-run
+  (`--no-build` skips the images).
 
 ## Slots (parallel sessions)
 

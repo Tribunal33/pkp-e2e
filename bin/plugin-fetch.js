@@ -173,14 +173,18 @@ function main() {
         return fs.readFileSync(target, 'utf8');
     };
     const headXml = raw(info.head.repo.full_name, info.head.sha, 'plugins.xml');
-    const baseXml = raw(GALLERY, info.base.sha, 'plugins.base.xml');
+    // The PR's own base is where its branch left the gallery's main, not
+    // main's tip today: against the tip, an older PR would seem to change
+    // every plugin merged since.
+    const mergeBase = JSON.parse(gh([`repos/${GALLERY}/compare/${info.base.sha}...${info.head.sha}`])).merge_base_commit.sha;
+    const baseXml = raw(GALLERY, mergeBase, 'plugins.base.xml');
     const head = parseGallery(headXml);
     const base = parseGallery(baseXml);
 
     const md = [
         `# Integrity: ${GALLERY}#${pr} — ${info.title}`,
         '',
-        `- PR head \`${info.head.sha.slice(0, 10)}\` (${info.head.repo.full_name}:${info.head.ref}), base \`${info.base.sha.slice(0, 10)}\`, by ${info.user.login}, ${info.state}`,
+        `- PR head \`${info.head.sha.slice(0, 10)}\` (${info.head.repo.full_name}:${info.head.ref}), merge base \`${mergeBase.slice(0, 10)}\`, by ${info.user.login}, ${info.state}`,
         `- Fetched ${new Date().toISOString()} by bin/plugin-fetch.js; nothing from the packages was run`,
         '',
     ];
@@ -310,7 +314,7 @@ function main() {
         }
     }
     fs.writeFileSync(path.join(dir, 'integrity.md'), md.join('\n') + '\n');
-    fs.writeFileSync(path.join(dir, 'fetch.json'), JSON.stringify({pr, head: info.head.sha, base: info.base.sha, products, summary}, null, 2) + '\n');
+    fs.writeFileSync(path.join(dir, 'fetch.json'), JSON.stringify({pr, head: info.head.sha, base: mergeBase, products, summary}, null, 2) + '\n');
     console.log(`integrity → ${path.relative(REPO_ROOT, path.join(dir, 'integrity.md'))}`);
     for (const s of summary) console.log(`  ${s.label}: ${s.problem || (s.md5 ? 'MD5 matches' : 'MD5 MISMATCH')}${s.unpacked ? `, unpacked at ${s.unpacked}` : ''}`);
 }

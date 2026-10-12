@@ -1,9 +1,10 @@
 #!/bin/bash
 # pod.sh — the plugin sandbox's pod, run as the sandbox user (harness.md
-# "The plugin sandbox"). The bot calls it only through
-#   sudo -u e2e-plugin /srv/plugin-sandbox/bin/pod.sh <command> …
-# (bin/plugin-sandbox.js does), where sandbox/vm/setup.sh installs it
-# root-owned. One pod at a time, machine-wide.
+# "The plugin sandbox"). The bot reaches it only through the socket
+# /run/plugin-sandbox.sock, whose root dispatcher runs it as e2e-plugin
+# (sandbox/vm/plugin-sandbox-dispatch; bin/plugin-sandbox.js is the
+# client); sandbox/vm/setup.sh installs it root-owned. One pod at a time,
+# machine-wide.
 #
 #   up <review>               copy in/<review> to the work dir, start the pod
 #   php <review> <args>…      run php inside the app container

@@ -1,0 +1,35 @@
+#!/bin/bash
+# plugin-sandbox-dispatch — the bot's one door into the plugin sandbox.
+#
+# The bot runs under NoNewPrivileges (its systemd unit), so sudo is closed
+# to it. Instead plugin-sandbox.socket (root-owned, group e2e, mode 0660)
+# starts this script as root for each connection, with the socket as
+# stdin and stdout. It reads one line, the arguments separated by tabs,
+# and runs exactly one of two things:
+#   egress <args>…   /usr/local/sbin/plugin-egress <args>…   (as root)
+#   pod <args>…      /srv/plugin-sandbox/bin/pod.sh <args>…  (as e2e-plugin)
+# Both scripts validate their own arguments. The output goes back on the
+# socket, then a last line "__exit__ <status>". Installed root-owned to
+# /usr/local/sbin by sandbox/vm/setup.sh; bin/plugin-sandbox.js is the
+# client.
+set -uo pipefail
+
+IFS=$'\t' read -r -t 10 -a args || { echo "plugin-sandbox: no request"; echo "__exit__ 2"; exit 0; }
+kind=${args[0]:-}
+rest=("${args[@]:1}")
+export PLUGIN_SANDBOX_CALLER="${PLUGIN_SANDBOX_CALLER:-e2e (socket)}"
+case "$kind" in
+egress)
+    /usr/local/sbin/plugin-egress "${rest[@]}" < /dev/null 2>&1
+    status=$?
+    ;;
+pod)
+    cd / && /usr/sbin/runuser -u e2e-plugin -- /srv/plugin-sandbox/bin/pod.sh "${rest[@]}" < /dev/null 2>&1
+    status=$?
+    ;;
+*)
+    echo "plugin-sandbox: unknown request (egress or pod)"
+    status=2
+    ;;
+esac
+echo "__exit__ $status"
