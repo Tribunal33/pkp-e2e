@@ -1,0 +1,105 @@
+#!/bin/bash
+# plugin-egress — the one switch for the plugin sandbox's network.
+#
+#   sudo plugin-egress allow <review> <host>... [--hours N]   (default 4 h)
+#   sudo plugin-egress list
+#   sudo plugin-egress reset
+#
+# By default the sandbox user reaches nothing (nft.conf). `allow` opens the
+# named hosts for a review that asked for them in its request: each name is
+# resolved here, its public addresses go into the nft sets with a timeout,
+# so an allowance lapses on its own, and name → address pairs go to
+# /srv/plugin-sandbox/allowed.hosts, which pod.sh writes into the pod's
+# /etc/hosts (the pod has no DNS of its own). Every call is written to
+# /var/log/plugin-egress.log. Installed root-owned to /usr/local/sbin by
+# sandbox/vm/setup.sh; the bot may run it through sudo, never edit it.
+set -euo pipefail
+
+LOG=/var/log/plugin-egress.log
+HOSTS=/srv/plugin-sandbox/allowed.hosts
+TABLE='inet plugin_sandbox'
+
+audit() { echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) plugin-egress: $* (by ${SUDO_USER:-root})" >> "$LOG"; }
+die() { echo "plugin-egress: $*" >&2; exit 1; }
+
+# A public address only: an allowance never opens the host's own services
+# or the private networks around it.
+public_v4() {
+    [[ $1 =~ ^([0-9]+)\.([0-9]+)\.[0-9]+\.[0-9]+$ ]] || return 1
+    local a=${BASH_REMATCH[1]} b=${BASH_REMATCH[2]}
+    ((a == 0 || a == 10 || a == 127 || a >= 224)) && return 1
+    ((a == 100 && b >= 64 && b <= 127)) && return 1
+    ((a == 169 && b == 254)) && return 1
+    ((a == 172 && b >= 16 && b <= 31)) && return 1
+    ((a == 192 && b == 168)) && return 1
+    return 0
+}
+public_v6() {
+    local lower=${1,,}
+    [[ $lower == *:* ]] || return 1
+    [[ $lower == ::1 || $lower == :: || $lower == fe8* || $lower == fe9* || $lower == fea* || $lower == feb* || $lower == fc* || $lower == fd* || $lower == ::ffff:* || $lower == ff* ]] && return 1
+    return 0
+}
+
+cmd=${1:-}
+shift || true
+case "$cmd" in
+allow)
+    review=${1:-}
+    shift || true
+    [[ $review =~ ^[a-z0-9][a-z0-9-]{0,62}$ ]] || die "allow needs a review id (lowercase letters, digits, dashes)"
+    hours=4
+    names=()
+    while (($#)); do
+        case "$1" in
+        --hours)
+            [[ ${2:-} =~ ^[0-9]{1,2}$ ]] && ((10#$2 >= 1 && 10#$2 <= 24)) || die "--hours takes 1 to 24"
+            hours=$((10#$2))
+            shift 2
+            ;;
+        *)
+            [[ $1 =~ ^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$ ]] || die "not a host name: $1"
+            names+=("${1,,}")
+            shift
+            ;;
+        esac
+    done
+    ((${#names[@]})) || die "allow needs at least one host name"
+    for name in "${names[@]}"; do
+        added=()
+        while read -r addr _; do
+            if public_v4 "$addr"; then
+                nft add element $TABLE allowed4 "{ $addr timeout ${hours}h }"
+            elif public_v6 "$addr"; then
+                nft add element $TABLE allowed6 "{ $addr timeout ${hours}h }"
+            else
+                echo "plugin-egress: $name → $addr is not public, left closed" >&2
+                continue
+            fi
+            echo "$addr $name" >> "$HOSTS"
+            added+=("$addr")
+        done < <(getent ahosts "$name" | awk '$2 == "STREAM" {print $1}' | sort -u)
+        ((${#added[@]})) || die "$name resolved to no public address"
+        audit "allow review=$review host=$name addresses=${added[*]} hours=$hours"
+        echo "allowed $name → ${added[*]} for ${hours} h"
+    done
+    sort -u -o "$HOSTS" "$HOSTS"
+    chmod 644 "$HOSTS"
+    ;;
+list)
+    nft list set $TABLE allowed4 | sed -n '/elements/,/}/p'
+    nft list set $TABLE allowed6 | sed -n '/elements/,/}/p'
+    [[ -s $HOSTS ]] && cat "$HOSTS" || echo "(no host names allowed)"
+    ;;
+reset)
+    nft flush set $TABLE allowed4
+    nft flush set $TABLE allowed6
+    : > "$HOSTS"
+    chmod 644 "$HOSTS"
+    audit "reset"
+    echo "every allowance removed"
+    ;;
+*)
+    die "usage: plugin-egress allow <review> <host>... [--hours N] | list | reset"
+    ;;
+esac

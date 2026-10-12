@@ -210,6 +210,25 @@ function loadDump(fleet, {host, username, password}) {
     const dump = path.join(fleet.source, 'database.sql');
     const env = {...process.env, ...(password ? {PGPASSWORD: password} : {})};
     const conn = [...(host ? ['-h', host] : []), ...(username ? ['-U', username] : [])];
+    const {text, counts} = cleanDump(dump);
+    dropDatabase(fleet.db, {host, username, password});
+    execFileSync('createdb', [...conn, fleet.db], {stdio: 'inherit', env});
+    const result = spawnSync('psql', ['-X', '-q', '-v', 'ON_ERROR_STOP=1', '--single-transaction', ...conn, '-d', fleet.db, '-f', '-'], {
+        env,
+        input: text,
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024,
+    });
+    if (result.status !== 0) {
+        throw new Error(
+            `psql stopped the load of ${path.relative(REPO_ROOT, dump)} (exit ${result.status}), nothing kept:\n${(result.stderr || String(result.error || '')).trim()}`,
+        );
+    }
+    return counts;
+}
+
+/** The dump's text as loadDump runs it (also the plugin sandbox's load), with counts of what was left out. */
+function cleanDump(dump) {
     const counts = {cleanDropped: 0, ownerDropped: 0};
     const clean = /^(ALTER TABLE (ONLY )?\S+ (DROP CONSTRAINT \S+|ALTER COLUMN \S+ DROP DEFAULT)|DROP (INDEX|SEQUENCE|TABLE|TRIGGER|FUNCTION|VIEW|TYPE|EXTENSION|SCHEMA) (IF EXISTS )?\S+);$/;
     let created = false;
@@ -233,20 +252,7 @@ function loadDump(fleet, {host, username, password}) {
         }
         kept.push(line);
     }
-    dropDatabase(fleet.db, {host, username, password});
-    execFileSync('createdb', [...conn, fleet.db], {stdio: 'inherit', env});
-    const result = spawnSync('psql', ['-X', '-q', '-v', 'ON_ERROR_STOP=1', '--single-transaction', ...conn, '-d', fleet.db, '-f', '-'], {
-        env,
-        input: kept.join('\n'),
-        encoding: 'utf8',
-        maxBuffer: 64 * 1024 * 1024,
-    });
-    if (result.status !== 0) {
-        throw new Error(
-            `psql stopped the load of ${path.relative(REPO_ROOT, dump)} (exit ${result.status}), nothing kept:\n${(result.stderr || String(result.error || '')).trim()}`,
-        );
-    }
-    return counts;
+    return {text: kept.join('\n'), counts};
 }
 
 /**
@@ -517,6 +523,7 @@ module.exports = {
     datasetFleet,
     resetDataset,
     loadDump,
+    cleanDump,
     dropStaleUsageLogs,
     dropDatabase,
     campaignCredentials,

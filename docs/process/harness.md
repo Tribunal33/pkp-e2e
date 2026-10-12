@@ -423,6 +423,65 @@ Two facts worth knowing before you write a test:
 - All three apps use the same scenario endpoints and the same
   `publicknowledge` context path.
 
+### The plugin sandbox
+
+A third-party plugin's code (MAINTENANCE "Plugin review") runs only
+here, never in a slot's checkout and never as the bot's own user, whose
+home holds every credential. The sandbox exists on the VM alone; on the
+Mac a plugin is only read.
+
+- **The walls.** A rootless Podman pod owned by the user `e2e-plugin`,
+  which has no credentials and cannot read `/home/e2e`. Inside it the
+  app runs as uid 33 with every capability dropped, and its only mount
+  is the review's own copy of the app. Every outbound packet of
+  `e2e-plugin` is logged and dropped by the host (nft table
+  `plugin_sandbox`, log `/var/log/plugin-egress.log`), the host's own
+  services on loopback included. The pod's only resolver logs each name
+  looked up and answers none.
+- **The app.** OJS on `stable-3_5_0`: the line checkout with the
+  harness's overlays left out, loaded with PKP's dataset for the line
+  (`admin` / `admin` and the dataset's users, docs/process/dataset.md),
+  at `http://127.0.0.1:13000`, Mailpit at `:13025`. One pod at a time,
+  machine-wide; the ports sit above every slot's and line's band.
+
+```bash
+node bin/plugin-fetch.js <gallery PR> pg-<PR>        # download, MD5, unpack safely, compare with the tagged source → .reports/plugin-review/pg-<PR>/integrity.md
+node bin/plugin-sandbox.js stage pg-<PR> --package <file> --gallery .reports/plugin-review/pg-<PR>/plugins.xml
+node bin/plugin-sandbox.js allow pg-<PR> <host>…     # only hosts the request named; before `up`
+node bin/plugin-sandbox.js up pg-<PR>
+node bin/plugin-sandbox.js snapshot pg-<PR> <label>  # file hashes, row counts, the watched tables
+node bin/plugin-sandbox.js diff pg-<PR> <from> <to>
+node bin/plugin-sandbox.js logs pg-<PR>               # DNS, requests, PHP errors → /srv/plugin-sandbox/out/pg-<PR>/
+node bin/plugin-sandbox.js egress pg-<PR>             # drops, allowances and names since the stage
+node bin/plugin-sandbox.js down pg-<PR>               # logs, removes the pod, withdraws every allowance
+node bin/plugin-sandbox.js purge pg-<PR>              # after the report
+node bin/plugin-sandbox.js canary                     # the acceptance test of the walls
+```
+
+- **The gallery path.** `--gallery` takes the PR's `plugins.xml`; the
+  app's Plugin Gallery reads it from the pod, and a release whose MD5 is
+  a staged package's is served from the pod, so "Install" takes the
+  app's own path, MD5 check included, without leaving the machine.
+- **Allowing a host** opens it for a few hours (`--hours`, default 4):
+  its public addresses go into the rule, its name into the pod's
+  `/etc/hosts`, and the call into the log. `down` withdraws every
+  allowance; a private or loopback address is never opened.
+- **Core's own traffic.** OJS itself looks up `download.db-ip.com` (the
+  usage statistics' geo database). A name or address the canary run also
+  shows is core's, not the plugin's.
+- **The canary** (`sandbox/canary/probe.php`) tries the ways out a
+  plugin could: the bot's files, `/etc/shadow`, DNS, HTTP by name and by
+  address, the host's Postgres, SSH and Mailpit, a write outside its
+  folder. Every wall held on 2026-10-12. Re-run it after any change to
+  `sandbox/` or the VM.
+- **The VM setup** is root's: `sudo bash sandbox/vm/setup.sh`, idempotent,
+  makes the user, `/srv/plugin-sandbox`, the rule, its log, the helper
+  `/usr/local/sbin/plugin-egress` and two sudoers lines (the bot runs the
+  helper as root and `/srv/plugin-sandbox/bin/pod.sh` as `e2e-plugin`,
+  nothing else), and builds the images with the rule lifted for the
+  build alone. `pod.sh` and the helper are installed root-owned, so a
+  change to either takes a setup re-run (`--no-build` skips the images).
+
 ## Slots (parallel sessions)
 
 Up to four sessions work on the VM at once, each in its own **slot**: a

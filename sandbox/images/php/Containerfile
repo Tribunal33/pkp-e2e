@@ -1,0 +1,25 @@
+# The plugin sandbox's app image: PHP 8.3 with the extensions of the
+# host PHP the harness runs OJS 3.5 on (Composer's platform check refuses
+# a missing one). The app itself is never in the image: pod.sh mounts the review's
+# own copy at /sandbox/app. Built as the sandbox user by sandbox/vm/setup.sh.
+FROM docker.io/library/php:8.3-cli-bookworm
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libicu-dev \
+        libzip-dev libxml2-dev libxslt1-dev libbz2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" pdo_pgsql pgsql gd intl zip bcmath xsl gettext exif ftp bz2 calendar soap sockets pcntl shmop sysvmsg sysvsem sysvshm \
+    && apt-get purge -y --auto-remove \
+        libpq-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev libicu-dev \
+        libzip-dev libxml2-dev libxslt1-dev libbz2-dev \
+    && apt-get install -y --no-install-recommends \
+        libpq5 libpng16-16 libjpeg62-turbo libfreetype6 libicu72 libzip4 libxml2 libxslt1.1 libbz2-1.0 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY php.ini /usr/local/etc/php/conf.d/zz-sandbox.ini
+COPY serve.sh /usr/local/bin/serve
+
+USER 33:33
+WORKDIR /sandbox/app
+CMD ["/usr/local/bin/serve"]

@@ -5,7 +5,8 @@ regression reader (`regression-read.md`, MAINTENANCE step 5), one for
 the issue reporter (`issue-report.md`, MAINTENANCE "Issue reports") and its two role
 reads of a written report (`issue-read.md`, developer and triage), one for a
 flake class's diagnostician (`flake-diagnosis.md`, MAINTENANCE "Standing
-duties"), plus two
+duties"), two for a plugin review's reader and drive (`plugin-read.md`,
+`plugin-drive.md`, MAINTENANCE "Plugin review"), plus two
 shared blocks the templates point at or take as a slot (`frame.md`,
 `digest-block.md`). The orchestrator
 renders a brief by copying the role's template and filling its slots. It
