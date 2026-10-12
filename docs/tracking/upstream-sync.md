@@ -24,7 +24,7 @@ deletes each once it is a report, a register entry or dismissed._
 
 _Newest first; one entry per sync: the date and the range per repo, then
 one line per change reviewed (commit → no impact / spec and tests touched /
-finding filed, with a link)._
+finding filed, with a link; its security verdict)._
 
 - **2026-10-12 (daily session, VM s2) — ojs `d014c16e98..d0b69b108d` (2, pointer bumps), omp and ops none, pkp-lib `51dc842b93..1ec9023e8a` (2 on `main`; ojs at `1ec9023e8a`, omp and ops still at `58c7f454ff`), ui-library none; jatsTemplate `c4de3affb7..06e35f8735` (the merge of #124, not yet in OJS's pointer). Read in full; baselines advanced. One merged companion fast-forwarded (`13378-main`); the one lead worked and dismissed. No regression report today.**
   - pkp-lib `acf22372dd` (#13494, straight onto `main` 2026-10-09; the same patch as the line's `f5119dce61`, `git range-diff` `=`) → the "Merge user" window offers "Merge into this User" only on accounts the manager fully administers and the merge itself refuses any other target; what the change is for is recorded privately, where the line's commit was driven on the three apps at its parent and at the commit on 2026-10-09. No regression. Spec owed stays as ci-triage K-13494 says (U53 Rule 16, note i and S6's assertion, once OMP's and OPS's pointers carry the commit); S6 already passes either way.

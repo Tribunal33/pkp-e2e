@@ -1,5 +1,5 @@
 <!--
-{{feature}}        feature id, e.g. U03; on a dataset fleet the fleet's own feature (`issues-sb2`), since bin/probe.js picks the fleet from `.reports/<PROBE_FEATURE>/fleet.json`, so the probe drives the fleet the routing came from
+{{feature}}        feature id, e.g. U03; for a regression reader's routing `sync` (`sync-3_5` on the stable line); on a dataset fleet the fleet's own feature (`issues-sb2`), since bin/probe.js picks the fleet from `.reports/<PROBE_FEATURE>/fleet.json`, so the probe drives the fleet the routing came from
 {{feature_name}}   the feature's name
 {{repo_root}}      absolute path of the pkp-e2e checkout
 {{sec_repo}}       absolute path of ../pkp-e2e-sec, the private security repo

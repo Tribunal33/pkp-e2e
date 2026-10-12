@@ -70,7 +70,8 @@ The scheduled prompt only points here; this section is the day's order.
 7. End pushed: commit and push everything commit-worthy to pkp-e2e `main`,
    and post a one-paragraph summary to the channel: what was synced, what
    was red and why, what was changed, what the stable line's read found,
-   with the day's regression report (sync loop step 5) attached as a file
+   how many security suspicions were read, reproduced and routed (counts
+   only), with the day's regression report (sync loop step 5) attached as a file
    when there is one.
 
 A ping about a developer's failing PR during the day follows "A
@@ -529,9 +530,12 @@ The apps move; the suite follows. The baselines live in
    flows, the REST API and what a client receives, downstream exports and
    imports (native XML, JATS, DOI and indexing plugins, OAI-PMH, sitemaps,
    citations, usage statistics), CLI tools, migrations, jobs and emails,
-   and the other two apps once their `lib/pkp` pointer catches up. A
-   trivial PR (docs, CI, locale, version bump, a one-line fix whose
-   callers are in the diff) gets the answer in the log line. A substantive
+   and the other two apps once their `lib/pkp` pointer catches up. Ask a
+   third question of every PR as well, new features as much as changes:
+   "does what it adds, changes or removes open a security weakness?",
+   with the questions of `briefs/regression-read.md` step 3, their only
+   home. A trivial PR (docs, CI, locale, version bump, a one-line fix whose
+   callers are in the diff) gets both answers in the log line. A substantive
    PR gets one agent rendered from `briefs/regression-read.md`, one or two
    agents at a time. The agent reads the diff and the callers of what it
    changed, writes every suspicion as steps with expected and suspected
@@ -563,13 +567,17 @@ The apps move; the suite follows. The baselines live in
    reaches the report or the tags, because a false regression report costs
    more than a missed one. If a shipped suite
    should have caught it, the missing check is a **Planned** item in the
-   owning spec. Anything security-shaped follows RUNBOOK "What goes where":
-   verify privately and post the finding in full in the thread, tagging
+   owning spec. A confirmed security weakness on `main` alone is reported
+   the same way, its header marked `- **Security** unreleased`. One in
+   released code follows RUNBOOK "What goes where": the reader routes it
+   unverified, one probe rendered from `briefs/security-verify.md` with
+   the feature `sync` (described "sync security verification") verifies
+   it, and the finding is posted in full in the thread, tagging
    @jarda.kotesovec alone, who watches over the security reports; none
    of it reaches the repo.
 6. **Advance the baseline.** Update `upstream-sync.md` with the new SHAs and
    a dated log entry: one line per change reviewed (commit, coverage
-   verdict, regression verdict when an agent read it, what was touched or
+   verdict, regression and security verdicts, what was touched or
    filed), never a narrative. Then re-check the open
    ci-triage rows (known-red tests, open regressions by re-running their
    kept reproduction) and companion rows against the new tips and delete
@@ -612,7 +620,10 @@ command points it at the line; without it every command means `main`.
      verdict carries over, cited from `upstream-sync.md` by its date. What
      is left is what only 3.5 has: grep the changed symbols' callers in
      the line checkout and put the answer in the log line. A twin `main`
-     has not read yet is read on `main` first, in the same session.
+     has not read yet is read on `main` first, in the same session. A
+     twin of a `main` commit whose security weakness was reported as
+     unreleased makes it released: say so in the thread, tagging
+     @jarda.kotesovec, who decides where it goes now.
    - `~main <sha,…>`: `main` has the same subject or issue number and a
      different patch, an adapted backport. `git range-diff <main sha>^!
      <stable sha>^!` inside the line checkout (both histories are there)
@@ -765,8 +776,10 @@ sync loop's critical triage, on one PR:
 5. **When the developer says their PR is merged.** Fetch `main`, confirm
    the commit is there, rebase the companion onto pkp-e2e `main`, run the
    touched suites once, fast-forward `main` to it, push. Advance that
-   repo's baseline in `upstream-sync.md` past the merged commit with a
-   one-line log entry, and delete the companion row. The merge is manual
+   repo's baseline in `upstream-sync.md` past the merged commit, with a
+   one-line log entry, only when the commit had sync loop step 5's read
+   (a PR review's did; the diagnosis of a red did not, and the daily
+   sync reads it then). Delete the companion row. The merge is manual
    and happens on request; a companion waiting more than a few weeks gets a
    nudge in the PR's thread, because its base drifts.
 
@@ -834,8 +847,8 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    migration is driven through a PHP driver against the fresh install's
    tables; see `checks/sync/pkp-lib-13317/`). Kept checks go under
    `shared/playwright/checks/sync/<repo>-<pr>/` on the companion, with the
-   before-evidence recorded at the previous tip. A confirmed regression or
-   intention gap follows step 5's report, posted in this thread untagged (whoever asked follows up here); a behavior the issue
+   before-evidence recorded at the previous tip. A confirmed regression,
+   security weakness or intention gap follows step 5's report, posted in this thread untagged (whoever asked follows up here); a behavior the issue
    leaves open is a ❓ in the owning spec, posted in the thread, and the
    team's reply is recorded as the entry's verdict the same day.
 5. **Run the suites on CI at the PR refs.** Push the companion, then
@@ -869,8 +882,9 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    seen; a dated sync-log entry with one line per
    change, the run lines and the CI run ids, and "baselines not advanced"
    stated; commit and push the companion; the thread gets the verdict
-   (green at the PR ref, needs a rebase, or a regression with the report)
-   in the "Findings first, short" shape. Leave the checkouts on the apps'
+   (green at the PR ref, needs a rebase, or a regression with the report;
+   and the security line, counts only for anything routed) in the
+   "Findings first, short" shape. Leave the checkouts on the apps'
    tips afterwards so the daily session starts where it expects.
 8. **On the merge ping**, "A developer's PR fails the suite" step 5:
    `npm run fetch-apps -- --update`, confirm the merge with `git
