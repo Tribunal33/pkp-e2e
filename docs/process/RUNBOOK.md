@@ -196,9 +196,13 @@ Test files cite these by number, so the numbers are stable.
   already settled and returning that piece alone; the session carries on
   with it on its own model (maintainer, 2026-10-12). Its description ends
   in "(Sonnet fallback)", which `npm run check-models` allows only in a
-  session that recorded a stop. When the flag is not a false positive, or
-  the narrow rerun is stopped too: record the gate reached in the
-  PROGRESS note and stop for maintainer review. A technical stall is not
+  session that recorded a stop. When the Sonnet rerun of a security
+  piece is stopped too, one more fresh agent takes that piece and
+  finishes it on whatever model the safeguard serves it (a downgraded
+  one, say); its result stands, named with that model (maintainer,
+  2026-10-12). When the flag is not a false positive, or another narrow
+  rerun is stopped too: record the gate reached in the PROGRESS note and
+  stop for maintainer review. A technical stall is not
   a flag: respawn on a narrower slice, at most twice.
 - The one exception is the security verification probe: a stop there, or
   the rest of its run served on another model, does not hold up the

@@ -5,7 +5,9 @@
 // verification probe may be stopped, or finished on another model, without
 // holding up the feature; and an agent described "(Sonnet fallback)", the narrow
 // rerun of a piece a false-positive safety flag stopped, may run on another model
-// when the session recorded a stop. Prints one line per agent that is off-model or
+// when the session recorded a stop; and an agent described "(downgraded finish)",
+// which finishes a security piece on whatever model the safeguard serves it after
+// the Sonnet fallback was stopped too. Prints one line per agent that is off-model or
 // was stopped, then a verdict; exit 1 means do not commit, pause for the maintainer.
 // run: node bin/check-models.mjs [--session <id or session.jsonl>] [--stops-warn]
 // --stops-warn (reports, MAINTENANCE "Issue reports"): nothing blocks. A
@@ -33,6 +35,7 @@ const STOP = 'Your response above was stopped by a safety classifier';
 // names security-verify.md, so the prompt cannot tell the probe apart.
 const SECURITY = /security\b.*verif/i;
 const FALLBACK = /\(sonnet fallback\)\s*$/i;
+const DOWNGRADED = /\(downgraded finish\)\s*$/i;
 
 function scan(jsonl) {
     const models = new Map();
@@ -57,11 +60,14 @@ for (const f of fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWit
     const metaFile = path.join(dir, f.replace(/\.jsonl$/, '.meta.json'));
     const meta = fs.existsSync(metaFile) ? JSON.parse(fs.readFileSync(metaFile, 'utf8')) : {};
     const s = scan(path.join(dir, f));
-    agents.push({ name: meta.description || f, security: SECURITY.test(meta.description || ''), fallback: FALLBACK.test(meta.description || ''), ...s });
+    agents.push({ name: meta.description || f, security: SECURITY.test(meta.description || ''), fallback: FALLBACK.test(meta.description || ''), downgraded: DOWNGRADED.test(meta.description || ''), ...s });
 }
 const sessionStops = agents.reduce((n, a) => n + a.stops, 0);
 // A stop the session answered with a narrow fallback that ran through is handled, not a block.
 const fallbackRan = agents.some((a) => a.fallback && !a.stops);
+// A fallback that was stopped too, answered by a downgraded finish, is handled the same way.
+const fallbackStopped = agents.some((a) => a.fallback && a.stops);
+const downgradedRan = fallbackStopped && agents.some((a) => a.downgraded);
 
 let blocked = 0;
 for (const a of agents) {
@@ -71,6 +77,8 @@ for (const a of agents) {
     if (a.security) console.log(`allowed  ${a.name}: ${what} (security probe: its verified-by line names the model that finished it, or the entry stays unverified)`);
     else if (a.fallback && sessionStops && !a.stops) console.log(`allowed  ${a.name}: ${what} (the narrow rerun after a safety flag)`);
     else if (!a.fallback && a.stops && !other.length && fallbackRan) console.log(`allowed  ${a.name}: ${what} (the stopped piece rerun by the Sonnet fallback)`);
+    else if (a.downgraded && fallbackStopped) console.log(`allowed  ${a.name}: ${what} (the security piece finished on the model the safeguard served, after the Sonnet fallback was stopped too)`);
+    else if (downgradedRan && a.stops && (a.fallback || !other.length)) console.log(`allowed  ${a.name}: ${what} (the stopped piece finished by a downgraded finish)`);
     else if (stopsWarn && !other.length) console.log(`warning  ${a.name}: ${what}, stayed on ${sessionModel}`);
     else if (stopsWarn) console.log(`noted    ${a.name}: ${what} (its report's Model bullet names it: npm run report-models -- --write)`);
     else { blocked++; console.log(`BLOCKED  ${a.name}: ${what}`); }
