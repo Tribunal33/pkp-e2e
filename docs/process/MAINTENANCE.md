@@ -942,12 +942,16 @@ alone.
    stop follows RUNBOOK "Model discipline".
 5. **Report.** The session writes
    `../pkp-e2e-sec/plugin-reviews/<product>-<version>.md` in the shape
-   of that folder's README, from `read.md` and `drive.md`: a verdict
+   of that folder's README, from `read.md` and `drive.md`. It opens with
+   what the plugin does, so a reviewer who has never seen it knows its
+   purpose before its findings: the read's description, then the
+   drive's screenshots of each place it shows in the app, copied into
+   `plugin-reviews/<product>-<version>/`. Then a verdict
    (merge, merge after changes, do not merge), the findings by lens with
    REPORT.md's severities, the outside contacts made or tried, what was
    allowed, and a paste-ready note for the author. It commits and pushes
-   the private repo and posts the report in full in the thread, tagging
-   @jarda.kotesovec alone. The bot never writes to the gallery PR; a
+   the private repo and posts the report in full in the thread, its
+   screenshots attached, tagging @jarda.kotesovec alone. The bot never writes to the gallery PR; a
    maintainer passes the note on.
 6. **Tear down.** `down`, then `purge` once the report is pushed. A
    friction line, if one is owed, keeps the plugin's name out.

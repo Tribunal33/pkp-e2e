@@ -26,6 +26,7 @@ Task:
 3. **Its own security.** Ask the questions of `docs/process/briefs/regression-read.md` step 3 of every entry point the plugin adds (handlers, API routes, grid and form operations, the hooks it puts into pages and forms, its templates), and of how it stores and shows its settings.
 4. **Fit.** The classes, hooks and helpers it uses exist on every line the XML claims (`checkouts/stable-3_5_0/ojs` for 3.5; `git -C checkouts/ojs/lib/pkp show origin/stable-3_4_0:<path>` and `origin/stable-3_3_0` for older lines); install and removal leave no tables or settings behind; its licence is GPL-compatible; its version.xml and locale files are complete.
 5. **Write `.reports/plugin-review/{{review}}/read.md`:**
+   - **What it does:** for a reviewer who has never seen it, in a few plain sentences: what it is for, what it adds to the app and where (screens, menus, workflow, public pages, emails, background work), and which roles use it.
    - **Gate:** `run` or `do not run`, with the reason. "Do not run" when it fetches and runs code from elsewhere, is obfuscated, or reaches past the app to the host; anything else runs, the sandbox is built for it.
    - **Outside contacts:** a table of host, when, what data, whether the site can turn it off.
    - **Findings**, by lens (dodgy, security, fit): file and line, why it matters, a severity on REPORT.md's scale, and the fix you would suggest to the author.
