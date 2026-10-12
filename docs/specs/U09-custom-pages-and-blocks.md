@@ -924,7 +924,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | An SVG, a PDF or any file but a JPEG, PNG, GIF, BMP or WEBP is ignored in "Insert/Edit Image", with no message | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A17](#a17) | A dropped or pasted picture the site refuses stays in the text, embedded, and is saved | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | A picture over the upload limit gets a server error, never "Files larger than {size} can not be uploaded." | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | A reviewer's typed review, a profile's signature or bio, or a static page's text is lost without asking on leaving the form | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A19](#a19) | A reviewer's typed review, a profile's signature or bio, or a static page's text is lost without asking on leaving the form | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [A20](#a20) | With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A2](#a2) | A deleted custom block would keep its place in the sidebar, so a later block of the same name appears unplaced | ❓ | minor | — |
 | [A5](#a5) | Pictures named ".jpeg" are refused while ".jpg" is accepted | ❓ | user-visible | — |
@@ -1215,33 +1215,33 @@ Basis: probe, 2026-10-01. <sup>f-a18</sup>
 **A19 — A reviewer's typed review, a profile's signature or bio, or a static page's text is lost without asking on leaving the form** · 🐞 · medium.
 A reviewer types a review into "For author and editor" on step 3, then
 presses the "2. Guidelines" tab to look something up, or leaves the
-page. The step is left at once and everything typed since the last
-"Save for Later" is gone, without a word. After a "Recommendation" is
-chosen on the same step, the tab first asks "The data on this form has
-changed. Do you wish to continue without saving?"; after typing the
-review alone it does not.
+page. The step is left at once, with no warning, and back on step 3 the
+box holds only what was last saved with "Save for Later": everything
+typed since is gone. After a "Recommendation" is chosen on the same
+step, the tab first asks "The data on this form has changed. Do you
+wish to continue without saving?"; after typing the review alone it
+does not.
 
 The Profile page loses "Signature", "Mailing Address" and "Bio
 Statement" the same way, when the user presses another tab or reloads.
 So do the side windows built on the older form framework (drawn by the
 server, not the newer Vue forms), when they are closed or a tab of
 theirs is pressed. In every case the question is skipped only when a
-text box with formatting buttons is the one thing changed. The windows
-met most often:
+text box with formatting buttons is the one thing changed, and one
+shared script decides that for all of them. Among the windows:
 
-- a static page's and a custom block's "Content" (two plugins the
-  default dataset leaves off);
+- a static page's (journals and presses) and a custom block's "Content"
+  (two plugins that are off until a manager turns them on);
 - an editor's emails to a reviewer: "Thank Reviewer", "Unassign
   Reviewer", "Send Reminder", "Resend Request", "Cancel Reviewer",
   "Reinstate";
 - an issue's "Description" on "Issue Data".
 
-A side window is also closed by a click on the page beside it, so a
-stray click loses its text too. The lost text cannot be brought back;
-the only way round is to press "Save for Later", "Save" or send before
-leaving.
-Basis: probe, 2026-10-02. <sup>f-a19</sup>
-Report: refresh owed — the custom block window was walked on `main` (OJS, OMP, OPS) on 2026-10-09 where the report has it closed by its close control only: a "Content"-only change is lost without a question on another address, on a reload, on "Edit Profile" at the window's top and on a press beside the window, which its Steps (13–16), Reach and "Not driven" do not say yet (2026-10-09)
+A side window is also closed by a click on the page beside it, and by
+Escape when the cursor is outside the box, so a stray click or key loses
+its text too. The lost text cannot be brought back; the only way round
+is to press "Save for Later", "Save" or send before leaving.
+Basis: probe, 2026-10-12. <sup>f-a19</sup>
 
 <a id="a20"></a>
 **A20 — With two form languages, the first language's "Content" box can stay under a "Loading..." spinner for good** · 🐞 · medium · crash: script.

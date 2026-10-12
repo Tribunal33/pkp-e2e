@@ -13,6 +13,8 @@
 //         the "Thank Reviewer" panel opens by itself (or from the row's actions when it does not)
 //   7–9.  in "Thank Reviewer": the same as 3–5, reopened from the row's actions
 //   c.    the control: "Thank Reviewer" with "Do not send an email" ticked as well, then the close control
+//   `escape` as the script's argument, on a fresh reset: "Unassign Reviewer", text added to the message,
+//         Escape with the caret in the message, then with the panel's heading pressed first
 //
 // Reset first:  npm run fleet-prep -- --feature issues-ir9 --dataset 1 --reset
 // Run (main):   PROBE_FEATURE=issues-ir9 PROBE_AGENT=ir9 node bin/probe.js ojs,omp shared/playwright/checks/issues/static-page-content-change-lost-on-close/review.js
@@ -24,6 +26,7 @@ const {forEachApp, launch, signIn, screen, shot, record, idle} = require('../../
 const L = require('./lib');
 
 const {T, sleep, flat} = L;
+const ESCAPE = process.argv[2] === 'escape';   // "Unassign Reviewer", text added to the message, then Escape: alone
 const SUB = {ojs: 7, omp: 12};
 const NAMES = {amccrae: 'Aisla McCrae', phudson: 'Paul Hudson'};
 
@@ -100,6 +103,28 @@ forEachApp(async (app) => {
         await L.closeWindow(page, p.close, p.form);
     }
 
+    if (ESCAPE) {
+        await open();
+        await press('amccrae', 'Unassign Reviewer');
+        const p = await panel('unassignReviewerForm');
+        await addToMessage(p, ' u09ir9 extra line');
+        const escape = async () => {
+            let asked = null;
+            const h = async (d) => { asked = d.message(); await d.dismiss(); };
+            page.on('dialog', h);
+            await page.keyboard.press('Escape');
+            await sleep(1500);
+            page.off('dialog', h);
+            return {asked, closed: !(await p.form.isVisible().catch(() => false))};
+        };
+        const e1 = await escape();
+        fact('e1-escape-caret-in-message', e1);
+        if (!e1.closed) {
+            await page.locator('[role="dialog"]').filter({has: p.form}).last().getByRole('heading').first().click();
+            fact('e2-escape-caret-out', await escape());
+        }
+        return;
+    }
     await walkWindow('unassign', 'amccrae', 'Unassign Reviewer', 'unassignReviewerForm');   // 3–5
     await open();                                                                      // 6
     await row('phudson').getByRole('button', {name: 'Read Review', exact: true}).click();

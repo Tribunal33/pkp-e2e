@@ -2,10 +2,12 @@
 // whose message a script fills after the editor loads (`setContent()`), and the two other ways a
 // side window closes. Walked with the fix in and out on PKP's default test dataset, OJS, `dbarnes`,
 // submission 12 "Sodium butyrate improves growth performance of weaned piglets…" (Review, round 1).
-// Nothing is typed in a1–b2: with the fix in, none may ask more than it asks with the fix out.
+// Nothing is typed in a0, a1, a3 and b0–b2: with the fix in, none may ask more than it asks with the fix out.
 //   a0  "Add Reviewer", "Select Reviewer" on Aisla McCrae, the window's "Close"
 //   a1  the same, the message clicked into and out of before "Close"
 //   a2  the same, " u28j" typed in the message instead (the fix's own case: it must ask)
+//   a3  the same, the caret put in the message and two arrow keys pressed, nothing typed, then "Close"
+//       (an arrow key's release makes the editor take an undo level, and with it fire `change`)
 //   b0  Participants › Stephanie Berardo › "Notify", untouched, "Close"
 //   b1  "Notify", a predefined message chosen, "Close"
 //   b2  the same, the message clicked into and out of before "Close"
@@ -72,12 +74,19 @@ forEachApp(async (app) => {
             await page.frameLocator(`[id="${id}_ifr"]`).locator('body').click();
             await page.keyboard.type(' u28j');
             await L.sleep(300);
+        } else if (touch === 'arrow') {
+            const id = await textarea.getAttribute('id');
+            await page.frameLocator(`[id="${id}_ifr"]`).locator('body').click();
+            await page.keyboard.press('ArrowDown');
+            await page.keyboard.press('ArrowRight');
+            await L.sleep(300);
         } else if (touch) await inAndOut(textarea, modal.locator('[id^="selectedReviewerName"]').first());
         return {message, ...(await closing(() => modal.getByRole('button', {name: 'Close', exact: true}).first().click(), form))};
     };
     await part('a0-add-reviewer-picked', () => addReviewer(false));
     await part('a1-add-reviewer-message-in-out', () => addReviewer(true));
     await part('a2-add-reviewer-message-typed', () => addReviewer('type'));
+    await part('a3-add-reviewer-message-arrow-keys', () => addReviewer('arrow'));
 
     const notify = async ({template, touch}) => {
         const panel = new ParticipantsPanel(page, app.contextPath);

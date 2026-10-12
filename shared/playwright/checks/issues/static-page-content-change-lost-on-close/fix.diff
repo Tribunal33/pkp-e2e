@@ -1,24 +1,37 @@
 --- a/lib/pkp/js/controllers/form/FormHandler.js
 +++ b/lib/pkp/js/controllers/form/FormHandler.js
-@@ -535,6 +535,21 @@
+@@ -535,6 +535,16 @@
  
  			validator.element(formElement);
  		}));
 +
 +		// A rich text box is not an ':input' that fires 'change', so report
-+		// its edits as a form change, as listbuilders do. TinyMCE also fires
-+		// 'change' when it takes an undo snapshot on blur or on save(), which
-+		// follows a script's setContent() (a template's text) with nothing
-+		// typed: those are not edits.
-+		tinyMCEObject.on('input change', this.callbackWrapper(
-+				function(tinyMCEObject, event) {
-+					var origin = event && event.originalEvent ?
-+							String(event.originalEvent.type).toLowerCase() : '';
-+					if (origin === 'blur' || origin === 'savecontent') {
-+						return;
-+					}
-+					this.getHtmlElement().trigger('formChange');
-+				}));
++		// its edits as a form change, as listbuilders do. TinyMCE fires
++		// 'input' on each keystroke and 'change' when its content differs
++		// from the last undo level. A script that puts text into an editor
++		// after it has loaded resets the undo levels (undoManager.reset()),
++		// so that its text is the starting point and not an edit.
++		tinyMCEObject.on('input change', this.callbackWrapper(function() {
++			this.getHtmlElement().trigger('formChange');
++		}));
  	};
  
+ 
+--- a/lib/pkp/js/controllers/grid/users/reviewer/AdvancedReviewerSearchHandler.js
++++ b/lib/pkp/js/controllers/grid/users/reviewer/AdvancedReviewerSearchHandler.js
+@@ -114,11 +114,15 @@
+ 
+ 		templateContent = options.reviewerMessages[templateKey];
+ 		editor.setContent(templateContent);
++		// The template's text is the message's starting point, not an edit
++		// (FormHandler reports the editor's 'change' as a form change).
++		editor.undoManager.reset();
+ 		$templateInput.val(templateKey);
+ 
+ 		editor.on('activate', function () {
+ 			if (!editor.getContent().length) {
+ 				editor.setContent(templateContent);
++				editor.undoManager.reset();
+ 			}
+ 		});
  
