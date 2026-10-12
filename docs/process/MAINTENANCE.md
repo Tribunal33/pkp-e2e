@@ -269,8 +269,9 @@ check for this work (`bin/check-models.mjs --stops-warn`) blocks
 nothing: a report partly served by another model lands like any
 other, and its Model bullet says so (REPORT.md "The header";
 maintainer, 2026-10-06), so the team knows to check it more closely;
-a classifier stop is reported, the attempt is never re-sent (RUNBOOK
-"Model discipline").
+a classifier stop is reported, and the attempt is never re-sent on the
+same model: a false positive's piece goes to a narrow Sonnet fallback
+(RUNBOOK "Model discipline").
 
 1. **Set up.** Start on the right code ("Session hygiene"), the
    stable-3_5_0 checkouts included (`npm run fetch-apps -- --line

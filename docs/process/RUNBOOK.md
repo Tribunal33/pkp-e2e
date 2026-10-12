@@ -91,8 +91,9 @@ orchestrator.
     PRs, a bad push gets a follow-up commit, never a force-push. Before
     committing, `npm run check-models` must pass: it lists every agent of
     the session that was stopped or served another model and blocks on any
-    but the security probe ("Model discipline"; for the probe, add
-    `(finished on <model>)` to its finding's `verified` line). Gate: the
+    but the security probe and a Sonnet fallback after a stop ("Model
+    discipline"; for the probe, add `(finished on <model>)` to its
+    finding's `verified` line). Gate: the
     commit on `origin/main`.
 11. **Report.** What was built, the register highlights, anything
     low-confidence; if
@@ -183,12 +184,22 @@ Test files cite these by number, so the numbers are stable.
 
 ## Model discipline
 
-- Fable or Opus, whichever the session runs on, runs every role; subagents
-  inherit the session model, no per-role pins.
-- A refusal or safeguard flag: discard the attempt, never re-press or
-  reword; record the gate reached in the PROGRESS note and stop for
-  maintainer review. A technical stall is not a flag: respawn on a narrower
-  slice, at most twice.
+- Opus 5.5 runs every role (maintainer, 2026-10-12); subagents inherit
+  the session model, no per-role pins: no agent is launched on another
+  model because its task looks light.
+- A refusal or safeguard flag: never re-press or reword on the same
+  model. When the flag is a false positive on legitimate work (security
+  work most often: the maintainers have access to PKP's advisories), the
+  piece it stopped is rerun in a fresh agent on Sonnet (Agent `model:
+  sonnet`), cut as narrow as it goes (one task, such as writing the
+  reproduction script for a security issue), briefed with what is
+  already settled and returning that piece alone; the session carries on
+  with it on its own model (maintainer, 2026-10-12). Its description ends
+  in "(Sonnet fallback)", which `npm run check-models` allows only in a
+  session that recorded a stop. When the flag is not a false positive, or
+  the narrow rerun is stopped too: record the gate reached in the
+  PROGRESS note and stop for maintainer review. A technical stall is not
+  a flag: respawn on a narrower slice, at most twice.
 - The one exception is the security verification probe: a stop there, or
   the rest of its run served on another model, does not hold up the
   feature. Its verdict stands with the model named on the finding's
