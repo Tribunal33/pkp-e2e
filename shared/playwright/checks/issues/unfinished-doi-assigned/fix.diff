@@ -1,6 +1,6 @@
 --- a/lib/pkp/classes/doi/Repository.php
 +++ b/lib/pkp/classes/doi/Repository.php
-@@ -445,6 +445,13 @@
+@@ -487,6 +487,13 @@
              throw new DoiException('doi.exceptions.missingPrefix');
          }
  

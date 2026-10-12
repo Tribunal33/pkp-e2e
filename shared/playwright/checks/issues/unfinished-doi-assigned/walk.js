@@ -24,15 +24,25 @@
 // whose symbols every item fills ("%j.%a" / "%p.%m"), and under "None" a
 // DOI typed by hand on the DOIs page ("Edit", type, "Save").
 //
-// Reset first:  npm run fleet-prep -- --feature issues-ir1 --dataset 1 --reset
-// Run (main):   PROBE_FEATURE=issues-ir1 PROBE_AGENT=ir4 node bin/probe.js all shared/playwright/checks/issues/unfinished-doi-assigned/walk.js
-// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-ir1-3_5 --dataset 1 --reset
-//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-ir1-3_5 PROBE_AGENT=ir4 node bin/probe.js all shared/playwright/checks/issues/unfinished-doi-assigned/walk.js
-// Facts: .reports/<feature>/ir4/facts[-<run>]-<app>.json
+// With WALK=issue (OJS only) it takes the report's issue steps, on a fresh
+// dataset: "Setup" with "Issues" ticked under "Items with DOIs", "DOI
+// Format" "None" and "Automatic DOI Assignment" "Never"; Issues › "Future
+// Issues" › "Vol. 2 No. 1 (2015)" › "Publish Issue" › "OK"; "DOIs" ›
+// "Issues": that issue's DOI; then "Assign DOIs" on "Vol. 1 No. 2 (2014)";
+// then the published issue's reader page.
+//
+// Reset first:  npm run fleet-prep -- --feature <feature> --dataset <n> --reset
+// Run (main):   PROBE_FEATURE=<feature> PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/unfinished-doi-assigned/walk.js
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature <feature>-3_5 --dataset <n> --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=<feature>-3_5 PROBE_AGENT=<agent> node bin/probe.js all shared/playwright/checks/issues/unfinished-doi-assigned/walk.js
+// Facts: .reports/<feature>/<agent>/facts[-<run>]-<app>.json
 const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
 
 const T = 20_000;
 const NEIGHBOUR = process.env.WALK === 'neighbour';
+const ISSUE = process.env.WALK === 'issue';
+const FUTURE_ISSUE = {id: 2, name: 'Vol. 2 No. 1 (2015)'};
+const BACK_ISSUE = {id: 1, name: 'Vol. 1 No. 2 (2014)'};
 const PREFIX = '10.1234';
 
 const ITEMS = {
@@ -42,7 +52,7 @@ const ITEMS = {
         pattern: '%j.%p',
         custom: [1, 5],
         // neighbour
-        // the journal's DOIs page lists only works past review
+        // on 3.5 the journal's DOIs page lists only works past review
         nbDefault: [6],
         nbPattern: '%j.%a',
         nbCustom: [9],
@@ -75,12 +85,16 @@ forEachApp(async (app) => {
     const items = ITEMS[app.name];
     const {DoiSettings, DoisPage, recordNotices, readerDoiItem} = require('../../../pages/DoisPages.js');
     const {expect} = require('@playwright/test');
-    const facts = {app: app.name, line: app.line || 'main', mode: NEIGHBOUR ? 'neighbour' : 'walk', run: process.env.PROBE_RUN || null};
+    const facts = {app: app.name, line: app.line || 'main', mode: NEIGHBOUR ? 'neighbour' : ISSUE ? 'issue' : 'walk', run: process.env.PROBE_RUN || null};
     const fact = (k, v) => {
         facts[k] = v;
         console.log(`[fact] ${app.name} ${k}: ${JSON.stringify(v).slice(0, 900)}`);
     };
-    const name = (s) => `${NEIGHBOUR ? 'nb-' : ''}${s}`;
+    const name = (s) => `${NEIGHBOUR ? 'nb-' : ISSUE ? 'issue-' : ''}${s}`;
+    if (ISSUE && app.name !== 'ojs') {
+        console.log(`[fact] ${app.name} issue mode: OJS only, nothing driven`);
+        return;
+    }
     const storedDois = (ids) =>
         sql(
             app,
@@ -110,8 +124,8 @@ forEachApp(async (app) => {
     };
 
     /** Expand a row and read its DOI table: [{type, doi}]. */
-    const readRow = async (id) => {
-        const row = dois.row(id);
+    const readRow = async (id, type = 'submission') => {
+        const row = dois.row(id, type);
         await dois.expand(row, id);
         const types = await dois.doiTypes(row);
         const out = [];
@@ -144,7 +158,74 @@ forEachApp(async (app) => {
 
     try {
         await signIn(page, 'dbarnes');
-        if (!NEIGHBOUR) {
+        if (ISSUE) {
+            // "Setup": "Issues" ticked, "None", "Never"
+            await settings.goto('Setup');
+            if ((await settings.prefixBox().inputValue()) !== PREFIX) await settings.prefixBox().fill(PREFIX);
+            await settings.setup.getByRole('checkbox', {name: 'Issues', exact: true}).check();
+            await settings.formatRadio('None').check();
+            await settings.creationTimeSelect().selectOption({label: 'Never'});
+            const saved = await settings.pressSave(settings.setup);
+            await expect(settings.savedStatus(settings.setup)).toBeVisible({timeout: T});
+            fact('i1 save', {status: saved.status(), kinds: await settings.kinds().catch((e) => String(e).slice(0, 120)), creationTime: await settings.creationTimeShown()});
+            record(name('i1-setup-saved'), await screen(page));
+
+            // Issues › "Future Issues" › "Publish Issue" › "OK"
+            const {IssuesAdmin} = require('../../../pages/IssuesPages.js');
+            const issues = new IssuesAdmin(page, app.contextPath);
+            await issues.goto('Future Issues');
+            const win = await issues.openPublish(FUTURE_ISSUE.name);
+            record(name('i2-publish-window'), await screen(page));
+            await win.ok();
+            fact('i2 published', {issue: FUTURE_ISSUE.name});
+
+            // "DOIs" › "Issues": the published issue's DOI
+            const issueRows = () => sql(app, 'select i.issue_id, d.doi, d.status from issues i left join dois d on d.doi_id = i.doi_id order by 1');
+            fact('i2 stored', issueRows());
+            await dois.goto();
+            await dois.openTab('Issues');
+            const futureRow = dois.row(FUTURE_ISSUE.id, 'issue');
+            await dois.expand(futureRow, FUTURE_ISSUE.id);
+            fact('i3 issue row', {
+                types: await dois.doiTypes(futureRow),
+                boxes: await dois.expanded(futureRow).locator('input[type="text"]').evaluateAll((bs) => bs.map((b) => b.value)),
+                text: (await futureRow.innerText()).replace(/\s+/g, ' ').trim(),
+            });
+            record(name('i3-issue-dois'), await screen(page));
+            await shot(page, name('i3-issue-dois')).catch(() => {});
+            await dois.collapse(futureRow, FUTURE_ISSUE.id);
+
+            // the Issues tab's own "Assign DOIs", on the issue the dataset published
+            const response = await dois.runBulk('Assign DOIs', [BACK_ISSUE.id], {type: 'issue', list: 'issues'});
+            let failed = null;
+            if (await dois.failedDialog().isVisible().catch(() => false)) {
+                failed = (await dois.failedDialog().innerText()).replace(/\s+/g, ' ').trim();
+                await dois.closeFailedDialog();
+            }
+            await page.waitForTimeout(500);
+            const backRow = dois.row(BACK_ISSUE.id, 'issue');
+            await dois.expand(backRow, BACK_ISSUE.id);
+            fact('i4 assign', {
+                status: response.status(),
+                body: (await response.text().catch(() => '')).slice(0, 400),
+                failedWindow: failed,
+                notices: await page.evaluate(() => [.../** @type {any} */ (window).__doiNotices || []]),
+                boxes: await dois.expanded(backRow).locator('input[type="text"]').evaluateAll((bs) => bs.map((b) => b.value)),
+                text: (await backRow.innerText()).replace(/\s+/g, ' ').trim(),
+            });
+            record(name('i4-issue-assign'), await screen(page));
+            await shot(page, name('i4-issue-assign')).catch(() => {});
+            fact('i4 stored', issueRows());
+
+            // the issue's reader page: its DOI link
+            await page.goto(`/index.php/${app.contextPath}/issue/view/${FUTURE_ISSUE.id}`);
+            await idle(page);
+            fact('i5 issue page', {
+                url: page.url(),
+                doiLinks: await page.locator('a[href*="doi.org"]').evaluateAll((as) => as.map((a) => `${a.textContent.trim()} -> ${a.getAttribute('href')}`)),
+            });
+            record(name('i5-issue-page'), await screen(page));
+        } else if (!NEIGHBOUR) {
             // "None": steps 2-5
             await setFormat('2', 'None');
             await assign('3-none', items.none);
@@ -176,7 +257,7 @@ forEachApp(async (app) => {
             await dois.expand(row, items.nbTyped);
             const type = (await dois.doiTypes(row))[0];
             await dois.startEditing(row);
-            await dois.doiBox(row, type).fill(`${PREFIX}/u45ir4-typed`);
+            await dois.doiBox(row, type).fill(`${PREFIX}/u45rf2-typed`);
             const statuses = await dois.saveEditing(row);
             await page.waitForTimeout(500);
             await dois.collapse(row, items.nbTyped);

@@ -2200,11 +2200,11 @@ an entry notes otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
+| [A2](#a2) | "None" (and every peer review) gets a DOI that is the prefix and a bare "/" | 🐞 | high | issues (claude), 2026-10-12 — re-verified |
 | [A3](#a3) | A DOI refused on the DOIs page gets only "Some DOI(s) could not be updated", never the reason | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A4](#a4) | After "Deposit DOIs", the item's agency box says it "has been manually registered", though nobody marked it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | On the DOIs page, a screen reader announces the "DOI Statuses" button and every row's tick box without a name | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
+| [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-12 — re-verified |
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -2271,11 +2271,14 @@ typed. Instead "Assign DOIs" and the automatic assignment give every
 work "{prefix}/" with nothing after the slash, the same value for every
 work; the DOIs page reports "Items successfully assigned new DOIs", and
 the work's public page, its citation tags, "How to cite" and OAI-PMH
-carry that DOI. On a journal with "Peer Review" ticked, every publicly
+carry that DOI. A journal's issue gets the same bare value when it is
+published, even with "Automatic DOI Assignment" on "Never" (Rule 8), and
+from "Assign DOIs" on the "Issues" tab. Only "Immediately, when an item
+is created" is not affected: it cannot be saved with "None" or "Custom
+pattern". On a journal with "Peer Review" ticked, every publicly
 shown review that counts as read gets the same bare value, under "None"
 and under "Custom pattern". One cause with [A9](#a9).
-Basis: probe, 2026-10-01. <sup>f-a2</sup>
-Report: refresh owed — `pkp/pkp-lib#13460` (PR head `246e5387f6`, merged 2026-10-09) deletes `VersionDois`, whose publish-time minting moves to `AssignDOIs::handlePublished()` with the same test, and adds the "Immediately…" paths, which refuse "None" and "Custom pattern"; the Reach's list of automatic paths changes; a review now gets a DOI only once it counts as read (Rule 7) (2026-10-07)
+Basis: probe, 2026-10-12. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — A DOI refused on the DOIs page gets only "Some DOI(s) could not be updated", never the reason** · 🐞 · low.
@@ -2362,7 +2365,7 @@ they give "10.1234/jpk.12-34" and "10.1234/k2.{Publisher ID}"). The row
 reads "Unregistered", and readers see that DOI on the work's page, in
 its citation tags and in OAI-PMH; Crossref's export would send it. One
 cause with [A2](#a2).
-Basis: probe, 2026-10-01. <sup>f-a9</sup>
+Basis: probe, 2026-10-12. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only** · ❓ · user-visible.
