@@ -1777,7 +1777,7 @@ granted to `ROLE_ID_SITE_ADMIN` and `ROLE_ID_MANAGER` on every workflow
 namespace and offered only when the name's last extension, in lower
 case, is in `PANDOC_IMPORT_EXTENSIONS`. At the PR head `85384f34ca`
 (ui-library#979), before its merge, 2026-09-28, that list is
-`documentImportUtils.js` `IMPORT_EXTENSIONS`, the keys of
+`documentImportFormats.js` `IMPORT_EXTENSIONS` (in `documentImportUtils.js` before the head `2ab08b9e74`), the keys of
 `IMPORT_READERS`, which holds `docx` alone ("Scoped to DOCX for now",
 the other formats commented out); on `main` before the PR it was
 `docx`, `odt`, `rtf`, `tex`, `latex`, `md`, `markdown`. Driven at that

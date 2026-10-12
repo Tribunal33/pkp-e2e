@@ -1995,7 +1995,7 @@ At the PR head `85384f34ca` (ui-library#979), before its merge,
 Details", "More Information" and "Delete"; a Word row offered "Send to
 Text Editor", "Update File Details", "More Information" and "Delete".
 `useFileManagerConfig.js` now takes `PANDOC_IMPORT_EXTENSIONS` from
-`documentImportUtils.js` `IMPORT_EXTENSIONS`, the keys of
+`documentImportFormats.js` `IMPORT_EXTENSIONS` (in `documentImportUtils.js` before the head `2ab08b9e74`), the keys of
 `IMPORT_READERS`, which holds `docx` alone ("Scoped to DOCX for now",
 the other formats commented out); the file name's last extension is
 compared in lower case. The PR's author (@jarda.kotesovec, 2026-09-28,
