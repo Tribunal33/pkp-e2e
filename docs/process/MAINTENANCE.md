@@ -953,7 +953,9 @@ user can read.
    REPORT.md's severities, the outside contacts made or tried, what was
    allowed, and a paste-ready note for the author. It commits and pushes
    the private repo and posts the report in full in the thread, its
-   screenshots attached, untagged: whoever asked for the review reads it
+   screenshots attached, untagged, and ends the post with the report's
+   link in that repo (`https://github.com/jardakotesovec/pkp-e2e-sec/blob/main/plugin-reviews/<product>-<version>.md`,
+   maintainer, 2026-10-12): whoever asked for the review reads it
    there and follows up. The bot never writes to the gallery PR; the
    person who asked passes the note on.
 6. **Tear down.** `down`, then `purge` once the report is pushed. A

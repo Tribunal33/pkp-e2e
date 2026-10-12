@@ -470,8 +470,14 @@ node bin/plugin-sandbox.js canary                     # the acceptance test of t
   allowance; a private or loopback address, or one of this machine's
   own, is never opened.
 - **Core's own traffic.** OJS itself looks up `download.db-ip.com` (the
-  usage statistics' geo database). A name or address the canary run also
-  shows is core's, not the plugin's.
+  usage statistics' geo database) and `pkp.sfu.ca`: every Administration
+  page runs the version check (`AdminHandler::initialize` →
+  `VersionCheck`, `ojs-version.xml`), with "Failed to retrieve the latest
+  version info" in the PHP log at the same second (a no-plugin baseline
+  showed it, pg-505, 2026-10-12). Both stay dropped and are reported as
+  core's, not the plugin's. So are `setup.sh`'s self-test drops (1.1.1.1:443,
+  three connections of five SYNs, one per uid), logged whenever setup runs.
+  A name or address the canary run also shows is core's, not the plugin's.
 - **The canary** (`sandbox/canary/probe.php`) tries the ways out a
   plugin could: the bot's files, `/etc/shadow`, DNS, HTTP by name and by
   address, the host's Postgres, SSH and Mailpit, a write outside its
