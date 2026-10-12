@@ -58,7 +58,7 @@
                      });
                  });
          });
-@@ -155,6 +170,14 @@
+@@ -170,6 +185,15 @@
                          $q->leftJoin('publication_formats as pfOnDoiPage', 'pOnDoiPage.publication_id', '=', 'pfOnDoiPage.publication_id')
                              ->orWhereNotNull('pfOnDoiPage.doi_id');
                      });
@@ -67,13 +67,14 @@
 +                            $q->select('sfOnDoiPage.submission_id')
 +                                ->from('submission_files as sfOnDoiPage')
 +                                ->where('sfOnDoiPage.file_stage', '=', SubmissionFile::SUBMISSION_FILE_PROOF)
++                                ->where('sfOnDoiPage.assoc_type', '=', Application::ASSOC_TYPE_PUBLICATION_FORMAT)
 +                                ->whereNotNull('sfOnDoiPage.doi_id');
 +                        });
 +                    });
                  });
          });
      }
-@@ -166,10 +189,22 @@
+@@ -181,10 +205,22 @@
              Repo::doi()::TYPE_PUBLICATION,
              Repo::doi()::TYPE_CHAPTER,
              Repo::doi()::TYPE_REPRESENTATION,
@@ -88,7 +89,7 @@
 +    protected function joinFormatProofFiles(JoinClause $join): JoinClause
 +    {
 +        return $join->on('current_sf.assoc_id', '=', 'current_pf.publication_format_id')
-+            ->where('current_sf.assoc_type', '=', Application::ASSOC_TYPE_REPRESENTATION)
++            ->where('current_sf.assoc_type', '=', Application::ASSOC_TYPE_PUBLICATION_FORMAT)
 +            ->where('current_sf.file_stage', '=', SubmissionFile::SUBMISSION_FILE_PROOF);
 +    }
 +

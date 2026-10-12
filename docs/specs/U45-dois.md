@@ -2227,7 +2227,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
-| [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
+| [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server's Crossref "Username" help reads "see the advise above" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2777,19 +2777,22 @@ Report: none — DataCite with a DOI per version is not implemented yet and is t
 
 <a id="omp1"></a>
 **OMP1 — A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs** · 🐞 · medium.
-A press ticks "Files" alone under "Items with DOIs" and saves. Its DOIs
-page then reads "No items found.", so the files' DOIs can be neither
-seen nor assigned there. With "Monographs" ticked as well, the press's
-books are listed with their file rows, but the "Needs DOI" filter
-ignores file DOIs. A book that has its own DOI but whose file has none
-is left out, although that file's row reads "Needs DOI". For a press
-that wants DOIs on files only, the way round is to tick a second kind,
-such as "Monographs". "Assign DOIs" then also gives each book a DOI of
-that kind, which the press must accept or delete row by row. Publishing
-a book still gives its files DOIs by themselves, unless "Automatic DOI
-Assignment" is "Never".
-Basis: probe, 2026-10-01. <sup>f-omp1</sup>
-Report: refresh owed — `pkp/omp#2495` (round-2 PR head `c9e1c8a521`, merged 2026-10-09) rewrites `addOnDoiPageFilterToQuery()`: every submitted book not declined is listed, besides the former list (Copyediting or Production, published, or a publication, chapter or format DOI; never a file's), which the new "Workflow" filter shows alone, so the Cause's sentence on its first clause and the fix's last bullet change; the empty list with "Files" alone stays (2026-10-07)
+A press's DOIs page does not count the DOIs of files. That shows as two
+faults, and one fix covers both.
+New on `main`, in no release: a press ticks "Files" alone under "Items
+with DOIs" and saves. Its DOIs page then reads "No items found.", so
+the files' DOIs can be neither seen nor assigned there. The way round
+is to tick a second kind, such as "Monographs", and "Assign DOIs" then
+also gives each book it is used on a DOI of its own. A book's files
+still get their DOIs automatically when it is published, unless
+"Automatic DOI Assignment" is "Never".
+In every release since 3.4: with a second kind ticked the books are
+listed with their file rows, but the filters and one action ignore file
+DOIs. "Needs DOI" leaves out a book that has its own DOI but whose file
+has none, although that file's row reads "Needs DOI". "Mark DOIs Needs
+Sync" refuses a book whose only registered DOI is a file's. "Assign
+DOIs" still fills a missing file DOI on any book that is ticked.
+Basis: probe, 2026-10-12. <sup>f-omp1</sup>
 
 <a id="omp2"></a>
 **OMP2 — A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure** · 🐞 · medium · crash: server.

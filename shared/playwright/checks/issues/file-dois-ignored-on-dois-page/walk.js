@@ -6,7 +6,7 @@
 //
 //   1. sign in as dbarnes
 //   2. Settings › Distribution › "DOIs" › "Setup": "DOI Prefix" 10.1234, "Save"
-//   3. "DOIs": tick book 5, "Bulk Actions" › "Assign DOIs", confirm
+//   3. "DOIs": read the list, tick book 5, "Bulk Actions" › "Assign DOIs", confirm
 //   4. "Setup": untick "Monographs", tick "Files", "Save"
 //   5. "DOIs": read the list
 //   6. "Setup": tick "Monographs" too, "Save"
@@ -15,16 +15,23 @@
 //
 // WALK=neighbour (fix in and out): steps 1-3, then with "Monographs" alone
 // the list, "Needs DOI" and "DOI Assigned" (file DOIs must not count while
-// "Files" is unticked).
+// "Files" is unticked), then, where the page has it (main), the "Workflow"
+// filter "In Copyediting, Production, Published or with DOIs".
 // WALK=reach (fix in only: unfixed, "Files" alone lists nothing): "Files"
-// alone, tick book 14, "Assign DOIs", "Mark DOIs Registered"; "Monographs"
-// ticked too; the "Registered" filter.
+// alone, the list and the "Workflow" filter, tick book 14, "Assign DOIs",
+// "Mark DOIs Registered"; "Monographs" ticked too; the "Registered" filter.
+// WALK=files (fix out, fix in, and 3.5): no step 3. "Files" alone: the list,
+// "Needs DOI" and "DOI Assigned"; where the list has book 5, "Assign DOIs",
+// the two filters again, "Mark DOIs Registered", "Mark DOIs Needs Sync".
+// Then "Chapters" and "Files" (book 5 has no chapter with a page, so only
+// its file gets a DOI): "Assign DOIs", "Mark DOIs Registered", "Mark DOIs
+// Needs Sync" on book 5, whose only registered DOI is then a file's.
 //
-// Reset first:  npm run fleet-prep -- --feature issues-ir2 --dataset 2 --reset
-// Run (main):   PROBE_FEATURE=issues-ir2 PROBE_AGENT=ir5 node bin/probe.js omp shared/playwright/checks/issues/file-dois-ignored-on-dois-page/walk.js
-// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-ir2-3_5 --dataset 2 --reset
-//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-ir2-3_5 PROBE_AGENT=ir5 node bin/probe.js omp shared/playwright/checks/issues/file-dois-ignored-on-dois-page/walk.js
-// Facts: .reports/<feature>/ir5/[<mode>-]facts[-<run>]-omp.json
+// Reset first:  npm run fleet-prep -- --feature issues --dataset --reset
+// Run (main):   PROBE_FEATURE=issues PROBE_AGENT=walk node bin/probe.js omp shared/playwright/checks/issues/file-dois-ignored-on-dois-page/walk.js
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 npm run fleet-prep -- --feature issues-3_5 --dataset --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-3_5 PROBE_AGENT=walk node bin/probe.js omp shared/playwright/checks/issues/file-dois-ignored-on-dois-page/walk.js
+// Facts: .reports/<feature>/<agent>/[<mode>-]facts[-<run>]-omp.json
 const {forEachApp, launch, signIn, screen, shot, record, sql} = require('../../../probe');
 
 const T = 20_000;
@@ -32,6 +39,7 @@ const MODE = process.env.WALK || 'walk';
 const PREFIX = '10.1234';
 const BOMB = 5; // "Bomb Canada and Other Unkind Remarks in the American Media"
 const BRICKS = 14; // "From Bricks to Brains: The Embodied Cognitive Science of LEGO Robots"
+const WORKFLOW = 'In Copyediting, Production, Published or with DOIs'; // main's "Workflow" filter (pkp/omp#2495)
 
 forEachApp(async (app) => {
     if (app.name !== 'omp') return; // file DOIs exist only on a press
@@ -96,6 +104,49 @@ forEachApp(async (app) => {
         return out;
     };
 
+    /** Press main's "Workflow" filter where the page offers it, and read the list. */
+    const workflowFilter = async (label) => {
+        const offered = await dois.filter(WORKFLOW).count();
+        fact(`${label} offered`, offered > 0);
+        if (!offered) return null;
+        await dois.pressFilter(WORKFLOW);
+        return readList(label);
+    };
+
+    /** A filter pressed, the list read, the filter lifted. */
+    const filtered = async (label, filterName) => {
+        await dois.pressFilter(filterName);
+        const out = await readList(label);
+        await dois.pressFilter(filterName);
+        return out;
+    };
+
+    /**
+     * "DOIs": tick `ids`, "Bulk Actions" › "Mark DOIs Needs Sync", confirm;
+     * records the answer whether the action is taken or refused (the "DOI
+     * Updates Failed" window, closed with "OK").
+     */
+    const needsSync = async (label, ids) => {
+        await dois.goto();
+        await dois.tick(ids);
+        const dialog = await dois.chooseBulkAction('Mark DOIs Needs Sync');
+        const acted = page.waitForResponse((r) => /\/api\/v1\/dois\/submissions\/markStale/.test(r.url()), {timeout: T});
+        await dialog.getByRole('button', {name: 'Mark DOIs Needs Sync', exact: true}).click();
+        const response = await acted;
+        const body = await response.text().catch(() => '');
+        await page.waitForTimeout(1500);
+        const failed = (await dois.failedDialog().count()) ? (await dois.failedDialog().innerText()).replace(/\s+/g, ' ').trim() : null;
+        fact(`${label} Mark DOIs Needs Sync`, {
+            status: response.status(),
+            body: body.slice(0, 400),
+            failedWindow: failed,
+            notices: await page.evaluate(() => [.../** @type {any} */ (window).__doiNotices || []]),
+        });
+        record(name(`${label}-needs-sync`), await screen(page));
+        await shot(page, name(`${label}-needs-sync`)).catch(() => {});
+        if (failed) await dois.closeFailedDialog();
+    };
+
     /** "DOIs": tick `ids`, run a bulk action, confirm. */
     const bulk = async (label, action, ids) => {
         await dois.goto();
@@ -108,8 +159,12 @@ forEachApp(async (app) => {
         // steps 1-3 (every mode)
         await signIn(page, 'dbarnes');
         await setKinds('2', {});
-        await bulk('3', 'Assign DOIs', [BOMB]);
-        fact('3 stored', stored());
+        await dois.goto();
+        await readList('3');
+        if (MODE !== 'files') {
+            await bulk('3', 'Assign DOIs', [BOMB]);
+            fact('3 stored', stored());
+        }
 
         if (MODE === 'walk') {
             // "Files" alone: steps 4-5
@@ -134,9 +189,46 @@ forEachApp(async (app) => {
             await dois.pressFilter('Needs DOI');
             await dois.pressFilter('DOI Assigned');
             await readList('n3-doi-assigned');
+            await dois.pressFilter('DOI Assigned');
+            await workflowFilter('n4-workflow');
+        } else if (MODE === 'files') {
+            // "Files" alone
+            await setKinds('f1', {Monographs: false, Files: true});
+            await dois.goto();
+            const listed = await readList('f1');
+            await filtered('f1-needs-doi', 'Needs DOI');
+            await filtered('f1-doi-assigned', 'DOI Assigned');
+            if (listed.ids.includes(String(BOMB))) {
+                await bulk('f2', 'Assign DOIs', [BOMB]);
+                fact('f2 stored', stored());
+                await filtered('f2-needs-doi', 'Needs DOI');
+                await filtered('f2-doi-assigned', 'DOI Assigned');
+                await bulk('f3', 'Mark DOIs Registered', [BOMB]);
+                fact('f3 stored', stored());
+                await needsSync('f4', [BOMB]);
+                fact('f4 stored', stored());
+                await dois.goto();
+                await readRow('f4', BOMB);
+            } else {
+                fact('f2 nothing to tick', true);
+            }
+            // "Chapters" and "Files": book 5's only DOI is its file's
+            await setKinds('f5', {Monographs: false, Chapters: true, Files: true});
+            await dois.goto();
+            await readList('f5');
+            await bulk('f6', 'Assign DOIs', [BOMB]);
+            await bulk('f7', 'Mark DOIs Registered', [BOMB]);
+            fact('f7 stored', stored());
+            await needsSync('f8', [BOMB]);
+            fact('f8 stored', stored());
+            await dois.goto();
+            await readRow('f8', BOMB);
         } else if (MODE === 'reach') {
             // the Registration filters, fix in only
             await setKinds('r1', {Monographs: false, Files: true});
+            await dois.goto();
+            await readList('r1');
+            await workflowFilter('r1-workflow');
             await bulk('r2', 'Assign DOIs', [BRICKS]);
             await bulk('r3', 'Mark DOIs Registered', [BRICKS]);
             fact('r3 stored', stored());
