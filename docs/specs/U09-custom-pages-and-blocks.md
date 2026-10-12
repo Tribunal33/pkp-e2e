@@ -916,7 +916,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | A custom block named only outside the manager's interface language is kept as a blank row with neither "Edit" nor "Delete" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A7](#a7) | Typing a page preview's address below manager level, or signed out, gives a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A10](#a10) | A static page or custom page whose "Path" has a "." in its first two parts answers "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A11](#a11) | A manager's good save in the static page window shows the earlier refusal as a red notice | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A11](#a11) | A manager's good save in the static page window shows the earlier refusal as a red notice | 🐞 | low | issues (claude), 2026-10-12 — re-verified |
 | [A12](#a12) | Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A custom block whose name holds "&" can never be placed, edited or deleted | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | A custom block cannot be deleted on PostgreSQL: "OK" spins and the block stays | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1090,9 +1090,13 @@ either. A press editor presses "OK" on a second sales-rights entry with
 "Rest of World?" ticked, a market "Date" or "Price" of spaces, or a
 publication date of the wrong length, and is told nothing: the window
 stays open, and the reason appears only beside the next "Market added."
-or similar. By the code, the same fault also reaches the galley window
-in OJS and OPS, OMP's format window and "Assign Participant".
-Basis: probe, 2026-10-03. <sup>f-a11</sup>
+or similar. The galley window in OJS and OPS
+([→ Galleys, A8](U46-galleys.md#a8)) and a book format's "Edit" window
+in OMP repeat a refused "URL Path" the same way. By the code, the same
+fault also reaches "Assign Participant", the settings windows of the
+Citation Style Language, Announcement Feed, PubMed export and Browse
+block plugins and, in 3.5 and older, the file metadata window.
+Basis: probe, 2026-10-12. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Right after "Static Pages Plugin" is unticked, the tab's "Add Static Page" fails on the server** · 🐞 · low · crash: server · {OJS OMP}.

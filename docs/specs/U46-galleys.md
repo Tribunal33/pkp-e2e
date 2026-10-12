@@ -702,7 +702,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The ordering arrows have no names for screen readers | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | A galley's separate-website box keeps an address typed without "https://", and readers' link lands on "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A8](#a8) | A good "Save" in the galley window shows an earlier refused "URL Path" as a red notice | 🐞 | low | — |
+| [A8](#a8) | A good "Save" in the galley window shows an earlier refused "URL Path" as a red notice | 🐞 | low || issues (claude), 2026-10-12 — re-verified |
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -809,7 +809,6 @@ when the "Save" is refused, and a save that succeeds shows no error. The
 fault and its fix are the static page window's
 ([→ Custom pages & blocks, A11](U09-custom-pages-and-blocks.md#a11)).
 Basis: probe, 2026-10-09. <sup>f-a8</sup>
-Report: refresh owed — the galley window was walked on `main` (OJS, OPS) on 2026-10-09, where the report has it "by code": its Affects, Summary, Reach and Evidence say so, and "Tracked in" gains this entry (2026-10-09)
 
 ### OJS
 
