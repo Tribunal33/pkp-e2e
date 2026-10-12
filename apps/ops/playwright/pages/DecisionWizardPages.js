@@ -42,6 +42,7 @@
  * `.insertContent__item__description`.
  */
 const {expect} = require('@playwright/test');
+const {motionEnded} = require('../../../../shared/playwright/support/motion.js');
 
 /** The window titles (lib/pkp `common.attachFiles`, `common.insertContent`, the upload source's label). */
 const ATTACH_WINDOW = 'Attach Files';
@@ -263,6 +264,11 @@ exports.ComposerPage = class ComposerPage {
         const win = this.sourceWindow(windowTitle);
         await expect(win).toBeVisible({timeout: 30_000});
         await expect(win.getByRole('button', {name: 'Back', exact: true}).last()).toBeVisible({timeout: 30_000});
+        // In place before it is handed on: the window slides in from beyond
+        // the viewport's right edge and is "visible" there, and the forced
+        // tick of a row's box does not wait for it (U34 S3 on CI:
+        // "Element is outside of the viewport"; motion.js).
+        await motionEnded(win);
         return win;
     }
 

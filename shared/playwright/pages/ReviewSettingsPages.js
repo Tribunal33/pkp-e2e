@@ -48,6 +48,7 @@
 const {expect} = require('@playwright/test');
 const {BasePage} = require('./BasePage.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
+const {motionEnded} = require('../support/motion.js');
 
 /** The side tabs, by on-screen name, and the panel id each writes. */
 const SIDE_TABS = {
@@ -409,6 +410,16 @@ class ReviewFormsList extends BasePage {
         await this.windowTab(name).click();
         await expect(this.windowTab(name)).toHaveAttribute('aria-selected', 'true', {timeout: 30_000});
         await waitForJQueryIdle(this.page);
+    }
+
+    /**
+     * Press a greyed window tab. The press is forced (Playwright would
+     * wait for the tab to take it), and a forced press does not wait for
+     * the window's slide-in, so that is waited out first (motion.js).
+     */
+    async pressGreyedWindowTab(name) {
+        await motionEnded(this.windowTab(name));
+        await this.windowTab(name).click({force: true});
     }
 
     /** Close the form window through its "Close" control. */

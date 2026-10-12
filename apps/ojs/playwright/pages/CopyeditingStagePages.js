@@ -31,6 +31,7 @@
  */
 const {expect} = require('@playwright/test');
 const {BasePage} = require('../../../../shared/playwright/pages/BasePage.js');
+const {motionEnded} = require('../../../../shared/playwright/support/motion.js');
 const {WorkflowPage: WorkflowFrame} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 const {
     DecisionPage,
@@ -438,8 +439,13 @@ exports.SelectFilesWindow = class SelectFilesWindow {
         return this.fileRow(name).locator('input[type="checkbox"]');
     }
 
-    /** Tick a file (the box sits under a styled label, so the click is forced). */
+    /**
+     * Tick a file (the box sits under a styled label, so the click is
+     * forced; a forced click does not wait for the window's slide-in, so
+     * that is waited out first: motion.js).
+     */
     async tick(name) {
+        await motionEnded(this.checkbox(name));
         await this.checkbox(name).check({force: true});
         await expect(this.checkbox(name)).toBeChecked();
     }

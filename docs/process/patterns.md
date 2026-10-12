@@ -244,9 +244,25 @@ Each of these has bitten at least once.
 
 Playwright auto-waits on every interaction. Explicit waits are only for
 **arrival**: a navigation or DOM transition has completed. The harness
-disables animations globally (see `harness.md`), so nothing waits on a modal
-slide. Durations are 0.01ms rather than 0 because presence helpers wait on
-`animationend`, and a true 0 can mean the event never fires.
+disables animations globally (see `harness.md`), so no ordinary action waits
+on a modal slide. Durations are 0.01ms rather than 0 because presence helpers
+wait on `animationend`, and a true 0 can mean the event never fires.
+
+- **A forced action or a geometry read in a window that has just opened
+  waits for the window to stand in place.** Shortened is not gone: a side
+  window (a legacy one included) is mounted at its slide's first keyframe,
+  `translateX(100%)`, wholly right of the viewport, and stays there until
+  the browser has drawn two to four frames (9 to 229 ms at eight workers
+  on the VM), while `toBeVisible()`, counts and text reads already pass on
+  it. An ordinary action waits that out (the "stable" check, and a retry
+  on a target outside the viewport); `{force: true}` and `boundingBox()`
+  do not, and a forced press throws "Element is outside of the viewport"
+  at once (U34 S3, four CI reds, diagnosed 2026-10-12). So no `force`
+  where the plain action works; where it is needed (a box under a styled
+  label, a greyed control pressed to show that nothing happens) it lives
+  in a page object that calls `motionEnded(locator)` (`support/motion.js`)
+  on its target first, or whose opener returns the window through it;
+  never a test-level `{force: true}`.
 
 - **Wait on a landmark, not the network**:
   `await expect(page.getByRole('heading', {name: 'Dashboard'})).toBeVisible()`.

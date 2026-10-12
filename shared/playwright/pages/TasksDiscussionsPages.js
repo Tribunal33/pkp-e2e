@@ -68,6 +68,7 @@
 const {expect} = require('@playwright/test');
 const {BasePage} = require('./BasePage.js');
 const {WorkflowPage} = require('./WorkflowPage.js');
+const {motionEnded} = require('../support/motion.js');
 
 /** The lib/pkp texts the spec quotes (all apps alike, spec fn-a). */
 const TEXT = {
@@ -1142,6 +1143,8 @@ class AttachFilesWindow extends BasePage {
 
     /** Tick a file and "Attach Selected": both windows close. */
     async attachWorkflowFile(fileName) {
+        // A forced tick does not wait for the window's slide-in (motion.js).
+        await motionEnded(this.fileBox(fileName));
         await this.fileBox(fileName).check({force: true});
         await this.attachSelectedButton().click();
         await expect(this.page.getByRole('dialog', {name: 'Workflow Files', exact: true})).toHaveCount(0, {timeout: 30_000});

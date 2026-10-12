@@ -591,8 +591,8 @@ test.describe('review setup & review forms', () => {
         await expect(forms.windowTab('Preview Form')).toHaveAttribute('aria-selected', 'true', {timeout: 30_000});
         await expect(forms.windowTab('Review Form')).toHaveAttribute('aria-disabled', 'true');
         await expect(forms.windowTab('Form Items')).toHaveAttribute('aria-disabled', 'true');
-        await forms.windowTab('Review Form').click({force: true});
-        await forms.windowTab('Form Items').click({force: true});
+        await forms.pressGreyedWindowTab('Review Form');
+        await forms.pressGreyedWindowTab('Form Items');
         await expect(forms.windowTab('Preview Form')).toHaveAttribute('aria-selected', 'true');
         await expect(forms.previewForm).toContainText(`${items[0]}*`);
         await forms.closeWindow();

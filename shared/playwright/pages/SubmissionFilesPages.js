@@ -42,6 +42,7 @@ const fs = require('fs');
 const {expect} = require('@playwright/test');
 const {BasePage} = require('./BasePage.js');
 const {waitForJQueryIdle} = require('../support/legacy.js');
+const {motionEnded} = require('../support/motion.js');
 
 /** The stage menu keys (WORKFLOW_STAGE_ID_*), for `WorkflowPage.gotoEditorial(id, {menuKey})`. */
 const MENU_KEYS = {
@@ -990,9 +991,14 @@ exports.SelectFilesWindow = class SelectFilesWindow extends BasePage {
             .locator('input[type="checkbox"]');
     }
 
-    /** Tick a file (the box sits under a styled label, so the click is forced). */
+    /**
+     * Tick a file (the box sits under a styled label, so the click is
+     * forced; a forced click does not wait for the window's slide-in, so
+     * that is waited out first: motion.js).
+     */
     async tick(name, group) {
         const box = this.fileCheckbox(name, group);
+        await motionEnded(box);
         await box.check({force: true});
         await expect(box).toBeChecked();
     }

@@ -1239,19 +1239,28 @@ trips.
   U03 S4 and OJS U12 S6 (36698118029 `server-crash.txt`): both move under
   the segfault class. OPS U60 S11 stays open on its own condition.
 
-- **The "Review Files" window's row box outside the viewport** (U34 S3,
-  OJS, CI once): ojs 36668070912 (2026-09-30, a PR run on pkp-e2e
-  `main`), `DecisionWizardPages.js:901` `check({force: true})` "Element
-  is outside of the viewport" right after `openAttachSource('Attach
-  Review Files', 'Review Files')`; the error context shows the window
-  open, its box unticked and "Attach Selected" disabled; green on retry.
-  Lead: the side window still sliding in (a forced check skips the
-  stability wait). **Watch condition**: a second sighting; then read the
-  retry's trace for the window's transition.
-  Second sighting 2026-10-08: OJS, the pkp-e2e push run 37804093852 on
-  the branch `10669-main-AO-label` at `959dfcba`, shard 1/3, the same
-  line and words, green on retry. The watch condition is tripped; the
-  trace read is the housekeeping session's.
+- **A forced press in a side window still off screen: "Element is
+  outside of the viewport"** (U34 S3; **diagnosed and fixed 2026-10-12**,
+  housekeeping, `.reports/flake-1012/u34s3-review-files-box/diagnosis.md`).
+  Four CI sightings, each green on retry, each at
+  `DecisionWizardPages.js` `check({force: true})` right after
+  `openAttachSource('Attach Review Files', 'Review Files')`: OJS, pkp/ojs
+  36668070912 (2026-09-30); OJS, pkp-e2e 37804093852 (2026-10-08); OJS,
+  pkp/ojs 37960692151 (2026-10-09); OMP, pkp-e2e 37984077140 (2026-10-09).
+  Mechanism: the harness shortens the side window's slide-in to 0.01 ms
+  and does not remove it, so the window is first drawn at
+  `translateX(100%)`, right of the viewport, for two to four frames (12
+  to 31 ms idle, up to 229 ms at eight workers); `toBeVisible()` passes
+  there and a forced action neither waits nor retries. Red 15 of 15 with
+  the slide held or the animation clock slowed, 0 of 15 with the fix:
+  `motionEnded(locator)` (`support/motion.js`) before the forced action,
+  in `openAttachSource()` (the three apps) and four more page-object
+  sites of the same shape (U34 S7, U37 S1, U32 S5, U29 S7 red under the
+  lever; U36's tick the same shape); patterns.md "Waiting strategy" has
+  the rule. **Watch condition**: a further "outside of the viewport" on
+  CI is a forced action not routed through `motionEnded()`; its
+  `error-context.md` names the line. Delete the entry after four weeks
+  without one (2026-11-09).
 
 - **The OPS wizard's galley "Add File" never offered** (U40 S11, OPS,
   CI once): the push run 36984010083 (2026-10-02,
