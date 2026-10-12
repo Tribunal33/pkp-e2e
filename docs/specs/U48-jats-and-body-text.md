@@ -261,9 +261,9 @@ Nothing on either page is required, and neither page has a form-level
     workflow opens the chosen version's "Body Text" page, and a box above
     the editor reads "Importing document" with its current step:
     "Downloading document…", "Loading converter…", "Converting…", then
-    "Uploading images…", shown for a file without images too. Then the
-    box goes. The import runs once per send; reloading the page does not
-    repeat it. <sup>p</sup> <sup>d20</sup>
+    "Uploading images…" when the file holds images. Then the box goes.
+    The import runs once per send; reloading the page does not repeat it.
+    <sup>p</sup> <sup>d20</sup>
     - 20a. **What arrives.** The converted text replaces whatever the
       editor holds, with the file's images as figures; nothing asks
       first. The import is not saved: the "Unsaved Changes" badge shows
