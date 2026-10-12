@@ -344,7 +344,7 @@ In French most of its headings and descriptions are raw codes
     immediately, without an issue. Scheduling is unreachable. With ORCID
     on under the member API, that publish fails when a contributor holds
     a verified iD ⚠ [OJS4](#ojs4). <sup>m</sup>
-16. **Send to Text Editor {OJS OMP}.** The action lives on the workflow's
+16. **Send to Text Editor {OJS}.** The action lives on the workflow's
     Production stage, in its "Production Ready Files" list. A file row's
     "More Actions" menu offers "Send to Text Editor" only on a Word file,
     one whose name ends in ".docx"; a Markdown or PDF row has no such
@@ -353,7 +353,9 @@ In French most of its headings and descriptions are raw codes
     send this file?" ("Create New Version" first, then each existing
     version by its side-menu name, Rule 11a), with none selected as it
     opens. What happens to the file afterwards belongs to
-    [JATS & Body Text](U48-jats-and-body-text.md). <sup>v</sup>
+    [JATS & Body Text](U48-jats-and-body-text.md). A press offers "Send
+    to Text Editor" on no file row, a Word file's included, for any
+    role. <sup>v</sup>
 17. **The awaiting-approval notice.** While no version is published, a
     press's Production stage shows the banner "Awaiting approval." with
     "The monograph will not be listed in the catalog until it has been
@@ -932,7 +934,7 @@ each scenario's seeding are in its footnote.
     submission in Production whose "Production Ready Files" list holds a
     Word file, "article.docx", and a Markdown file, "notes.md".
 
-    - **The Word row**: on the workflow's Production stage, open the
+    - **The Word row** {OJS}: on the workflow's Production stage, open the
       Word row's "More Actions": it offers "Send to Text Editor",
       "Update File Details", "More Information" and "Delete"; choose
       "Send to Text Editor": the dialog "Send File to Text Editor" asks
@@ -940,6 +942,9 @@ each scenario's seeding are in its footnote.
       New Version" first, then each existing version, none selected
       (Rule 16); press "Cancel": the file stays where it is, and what a
       confirmed send does with it belongs to *JATS & Body Text*.
+    - **The Word row on a press** {OMP}: on the workflow's Production
+      stage, the Press Manager opens the Word row's "More Actions": it
+      offers no "Send to Text Editor" (Rule 16).
     - **Control**: the Markdown row's "More Actions" offers "Update File
       Details", "More Information" and "Delete", and no "Send to Text
       Editor" (Rule 16). A preprint server's workflow shows no
@@ -2017,8 +2022,15 @@ Record 1.0", "Version of Record 1.1"), stage-less ones as "Unassigned
 version ({date})" (fn-a9). The OPS
 workflow mounts no file manager at all (live-probed 2026-08-29: the
 Production stage view's panels are Discussions and Participants only;
-zero FileManager components in the OPS workflow configs) — hence the
-rule's {OJS OMP} marker.
+zero FileManager components in the OPS workflow configs). At the PR head
+`e28a1de30d` (ui-library#979), before its merge, 2026-10-12,
+`useFileManagerConfig.js` `getManagerConfig()` drops
+`Actions.FILE_SEND_TO_EDITOR` from every list's available actions unless
+`useApp().isOJS()` (`pkp.context.app === 'ojs2'`), so OMP offers it on no
+row, for any role (a press has no Body Text to import into); the PR's
+author ruled (@jarda.kotesovec, 2026-10-12, in the review thread) that a
+press should not have it at all. Hence the rule's {OJS} marker; the OMP
+offers above are from before that head.
 
 <a id="fn-w"></a>
 **w** — `PKPApproveSubmissionNotificationManager::updateNotification()`
@@ -2721,7 +2733,10 @@ header's included on OJS, is fn-d's.
 **s18 — scenario 18 seeding.** Seeded submissions carry no files
 (scenarios.md), so both files are uploaded through the "Production Ready
 Files" list's own upload control; the suite supplies a small Word file
-(`article.docx`) and a Markdown file (`notes.md`) as fixtures. The picker opens with no selection in both apps (fn-v). The preprint server's absence rests on fn-v: the
+(`article.docx`) and a Markdown file (`notes.md`) as fixtures, on the
+seeded press too, where the Word row's menu then offers no "Send to Text
+Editor" (fn-v, at the PR head `e28a1de30d`). The picker opens with no
+selection (fn-v). The preprint server's absence rests on fn-v: the
 OPS workflow mounts no file manager.
 
 ## Reference — entry points & surfaces

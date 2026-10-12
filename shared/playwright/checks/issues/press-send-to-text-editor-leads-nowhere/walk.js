@@ -5,15 +5,20 @@
 // Runs on a dataset fleet (PKP's default test dataset), freshly reset, OMP and OJS (the control):
 //   npm run fleet-prep -- --feature <f> --dataset <n> --apps ojs,omp --reset
 //   PROBE_FEATURE=<f> PROBE_AGENT=<a> node bin/probe.js all shared/playwright/checks/issues/press-send-to-text-editor-leads-nowhere/walk.js
-// MODE=walk (default): the report's steps. MODE=nb: the neighbour check for the fix, alone: the same upload,
+// MODE=walk (default): the report's steps; DOCX=1 for a Word file. MODE=nb: the neighbour check for the fix, alone: the same upload,
 // the row's menu read, and on a journal the send to the existing version, which must still open "Body Text"
 // with the file imported. Every screen is recorded with screen(); nothing throws on a missing control.
 const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
 const L = require('./lib');
 
 const MODE = process.env.MODE || 'walk';
-const FILE = 'u48r6-notes.md';
-const MD = {name: FILE, mimeType: 'text/markdown', buffer: Buffer.from('# u48r6 heading\n\nA u48r6 paragraph sent to the text editor.\n')};
+// DOCX=1 sends a Word file instead (sync/pkp-lib-12897/noimage.docx): once only Word files are offered
+// the action (pkp/ui-library#979), the Markdown file no longer tells the press's fix from that filter.
+const DOCX = !!process.env.DOCX;
+const FILE = DOCX ? 'u48r6-article.docx' : 'u48r6-notes.md';
+const MD = DOCX
+    ? {name: FILE, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', buffer: require('fs').readFileSync(require('path').join(__dirname, '../../sync/pkp-lib-12897/noimage.docx'))}
+    : {name: FILE, mimeType: 'text/markdown', buffer: Buffer.from('# u48r6 heading\n\nA u48r6 paragraph sent to the text editor.\n')};
 const PER_APP = {
     omp: {id: 4, title: 'How Canadians Communicate: Contexts of Canadian Popular Culture', component: 'Book Manuscript'},
     ojs: {id: 5, title: 'Genetic transformation of forest trees', component: 'Article Text'},

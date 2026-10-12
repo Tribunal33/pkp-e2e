@@ -78,7 +78,7 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 | **"Delete"** (row menu; Rule 4) | • The stage's team, on every list<br>• Author: on "Revisions Uploaded" only <sup>g</sup> |
 | **"Download All Files"** (under a list; Rule 3) | • The stage's team: under "Submission Files" and "Production Ready Files"<br>• Author: under "Submission Files"<br>• Every role, only while the list holds at least one file; the other lists never offer it <sup>h</sup> <sup>d1</sup> |
 | **Download a file** (its name in a list; Rule 3) | • Everyone the list shows the file to<br>• A reviewer: the files their review gives them (*[Reviewer's review](U28-reviewers-review.md#step-1)*), under a neutral name in an "Anonymous Reviewer/Anonymous Author" review, under the file's own name in an "Anonymous Reviewer/Disclosed Author" or "Open" one (Rule 3) <sup>i</sup> |
-| **"Send to Text Editor"** (row menu, on a Word file only, Rule 2) | • Site Administrator; Journal Manager, Editor and Production editor (the manager-level roles), on every list<br>• Section Editor, Guest Editor {OJS}, the assistant roles, Author: never. The window it opens, "Send File to Text Editor", is *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*' Rule 16; what the send does is *JATS & Body Text*'s <sup>j</sup> <sup>d10</sup> |
+| **"Send to Text Editor"** {OJS} (row menu, on a Word file only, Rule 2) | • Site Administrator; Journal Manager, Editor and Production editor (the manager-level roles), on every list<br>• Section Editor, Guest Editor, the assistant roles, Author: never<br>• On a press: nobody; no row offers it, for any role. The window it opens, "Send File to Text Editor", is *[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*' Rule 16; what the send does is *JATS & Body Text*'s <sup>j</sup> <sup>d10</sup> |
 | **The submission wizard's "Files" panel** {OJS OMP} (add, choose the component, change it, remove; Rules 17–18) | • Whoever may open the draft's wizard (*[Submission wizard](U21-submission-wizard.md)*, its Actors), until the submission is submitted <sup>k</sup> |
 | **A galley's file** {OJS OPS} ("Change File" and "More Information" on the publication's "Galleys" page) | • Who is offered them is *Galleys*'. "Change File" opens this spec's upload wizard for that one file (Rule 9a), "More Information" this spec's window (Rule 13)<br>• A press's publication formats belong to *Publication formats & proof terms* {OMP} <sup>l</sup> |
 
@@ -131,9 +131,9 @@ record what each role is offered once the list is on screen. <sup>b</sup>
 2. **What a list offers.** Above the list sits "Upload" (Rules 5–7) or
    "Upload/Select Files" (Rule 15), depending on the list (Actors row 2).
    A row's "More Actions" menu offers, in this order, the entries the
-   reader may use: "Send to Text Editor" (only on a Word file, one whose
-   name ends in ".docx"; Actors), "Update File Details", "More
-   Information" and "Delete". The
+   reader may use: "Send to Text Editor" (only on a journal, and there
+   only on a Word file, one whose name ends in ".docx"; Actors), "Update
+   File Details", "More Information" and "Delete". The
    menu button reads "More Actions" on every row, with no file name in
    it ⚠ [A6](#a6). <sup>m</sup> <sup>j</sup>
 <a id="download"></a>
@@ -620,7 +620,9 @@ tooling recipe are in the footnote. <sup>s0</sup>
    - **The Journal Manager's row menus**: "More Actions" on
      "article.docx" offers "Send to Text Editor", "Update File Details",
      "More Information" and "Delete"; on "notes.md" the same entries
-     without "Send to Text Editor" (Rule 2; Actors row 8).
+     without "Send to Text Editor". On a press, the Press Manager's menu
+     on "article.docx" offers no "Send to Text Editor" either (Rule 2;
+     Actors row 8).
    - **The assigned Section Editor**: Section Editor: open the same
      submission at the Submission stage: "Upload" stands above
      "Submission Files" and opens "Upload Submission File" with the same
@@ -629,7 +631,7 @@ tooling recipe are in the footnote. <sup>s0</sup>
      Information" and "Delete" (Actors rows 2–5; Rule 5).
    - **Control**: the Section Editor's "More Actions" on "article.docx"
      offers no "Send to Text Editor", which the Journal Manager's menu
-     offers on the same row (Actors row 8).
+     offers on the same row on a journal (Actors row 8).
 
 2. **Leave the wizard before "Complete"** {OJS OMP}
 
@@ -703,7 +705,8 @@ tooling recipe are in the footnote. <sup>s0</sup>
    - **The row menu**: open "More Actions" on "article.docx": it offers,
      in this order, "Send to Text Editor", "Update File Details", "More
      Information" and "Delete"; on "notes.md" and on "article.pdf" the
-     same entries without "Send to Text Editor" (Rule 2; Actors row 8).
+     same entries without "Send to Text Editor". On a press, "article.docx"
+     offers them without "Send to Text Editor" too (Rule 2; Actors row 8).
    - **"Update File Details"**: choose it on "article.pdf": a window
      titled "Edit a file" opens with "Name the file (e.g., Manuscript;
      Table 1)" holding "article.pdf", and "Save" and "Cancel" (Rule 10;
@@ -1792,7 +1795,14 @@ intentionally to docx - with others possibly coming later". It opens `WorkflowVe
 titled `fileManager.sendFileToTextEditor`. The menu button's label is
 `common.moreActions` (`FileManagerCellMoreActions.vue`), with no file name.
 Live-probed 2026-09-23 (Rule 2; OJS and OMP): the entries in that order, and
-every row's button named "More Actions", for every role (d10).
+every row's button named "More Actions", for every role (d10). At the PR
+head `e28a1de30d` (ui-library#979), before its merge, 2026-10-12,
+`getManagerConfig()` drops `FILE_SEND_TO_EDITOR` from every list's
+available actions unless `useApp().isOJS()` (`pkp.context.app ===
+'ojs2'`), so a press offers it on no row, for any role (the action
+imports into the journal's Body Text, which a press does not install);
+the PR's author ruled (@jarda.kotesovec, 2026-10-12, in the review
+thread) that a press should not have it at all.
 
 <a id="fn-d10"></a>
 **d10** — Live-probed 2026-09-23 (Actors row 8; OJS and OMP): "Send to Text
@@ -1801,7 +1811,9 @@ Administrator, the Journal Manager, the Editor and the Production editor,
 assigned or not, on "Submission Files", "Draft Files" and "Production Ready
 Files"; never offered to the Section Editor, Guest Editor, Funding
 coordinator, Copyeditor, Layout Editor, Proofreader or Author. Since
-pkp/ui-library#979 a Word file takes the place of "notes.md" (note j).
+pkp/ui-library#979 a Word file takes the place of "notes.md", and at its
+head `e28a1de30d`, before its merge, 2026-10-12, OMP offers it on no row
+(note j).
 
 <a id="fn-k"></a>
 **k** — `PKPSubmissionHandler::getSubmissionFilesListPanel()`: title

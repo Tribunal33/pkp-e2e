@@ -1405,32 +1405,16 @@ test.describe('Publish, schedule & versions (U49)', () => {
         await uploadProductionReadyFile(managerPage, 'article.docx');
         await uploadProductionReadyFile(managerPage, 'notes.md');
 
-        // The Word row's "More Actions" offers "Send to Text Editor"; its
-        // dialog asks which version to send the file to, "Create New
-        // Version" first, then each existing version, none selected as it
-        // opens (Rule 16); Cancel leaves the file where it is.
+        // The Word row on a press: its "More Actions" offers no "Send to Text
+        // Editor" (Rule 16: a press offers it on no row); the menu's other
+        // items are the settled bound.
         const docxItems = await openFileRowMenu(managerPage, 'article.docx');
-        const send = docxItems.filter({hasText: 'Send to Text Editor'});
-        await expect(send).toHaveCount(1);
-        await send.click();
-        const dialog = managerPage.getByRole('dialog', {name: 'Send File to Text Editor'});
-        await expect(dialog).toBeVisible({timeout: 30_000});
-        await expect(
-            dialog.getByText('To which version would you like to send this file?')
-        ).toBeVisible();
-        const picker = dialog.getByLabel('To which version would you like to send this file?');
-        await expect(picker.locator('option').first()).toHaveText('Create New Version', {
-            timeout: 30_000,
-        });
-        await expect(picker.locator('option')).toHaveCount(2);
-        await expect(picker).toHaveValue('');
-        await dialog.getByRole('button', {name: 'Cancel', exact: true}).click();
-        await expect(dialog).toHaveCount(0, {timeout: 30_000});
-        await expect(fileRow(managerPage, 'article.docx')).toBeVisible();
+        await expect(docxItems.filter({hasText: 'Update File Details'})).toHaveCount(1);
+        await expect(docxItems.filter({hasText: 'Send to Text Editor'})).toHaveCount(0);
+        await closeMenu(managerPage);
 
         // Control: the Markdown row's "More Actions" offers no "Send to Text
-        // Editor", only a Word file is offered it (the menu's other items
-        // are the settled bound).
+        // Editor" either (the menu's other items are the settled bound).
         const mdItems = await openFileRowMenu(managerPage, 'notes.md');
         expect(await mdItems.count()).toBeGreaterThan(0);
         await expect(mdItems.filter({hasText: 'Send to Text Editor'})).toHaveCount(0);

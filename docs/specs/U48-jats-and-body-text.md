@@ -26,9 +26,8 @@ each version in the workflow's "Publication" group. <sup>a</sup>
 OMP and OPS do not install this feature: a press's and a preprint
 server's publication pages list no "JATS XML" and no "Body Text", their
 published pages carry no "JATS XML" link, and neither app ships the "JATS
-Template Plugin". A press's file lists still offer "Send to Text Editor"
-on a Word file, whose confirmed send leads nowhere ⚠ [OMP1](#omp1).
-<sup>b</sup> <sup>d28</sup>
+Template Plugin". Their file lists offer no "Send to Text Editor" on any
+file, for any role ([OMP1](#omp1), retired). <sup>b</sup> <sup>d28</sup>
 
 ## Actors & permissions
 
@@ -712,7 +711,6 @@ Left out of the scenarios above, by reason:
     ticked: its "JATS XML" refused signed out and for a reader without a
     subscription, served to a subscriber
   - the guard for A20 (issue report `docs/issues/U47-A6-media-jats-upload-server-log-warning.md`): upload a JATS file on "JATS XML" and check the server log holds no PHP warning for the request.
-  - the guard for OMP1 (issue report `docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md`): on a press, a Press manager's "More Actions" on a Word file in "Production Ready Files" lists no "Send to Text Editor".
   - the guard for A12 (issue report `docs/issues/U48-A12-published-jats-upload-delete-offered.md`): a published version's "JATS XML" page offers neither "Upload" nor "Delete" to an editor who may edit the publication.
   - the guard for A11 (issue report `docs/issues/U48-A11-jats-download-saves-refusal-json.md`): a Copyeditor's "Download" of the uploaded JATS file on "JATS XML" saves the XML.
   - the guard for A13 (issue report `docs/issues/U48-A13-jats-image-upload-breaks-page.md`): an image and an ISO-8859-1 JATS XML file uploaded on "JATS XML" are refused with a message, and the page still opens.
@@ -767,12 +765,15 @@ Left out of the scenarios above, by reason:
   - A17 (opening a section while another is open closing both; Rule 19)
   - A20 (a warning in the server's log on each JATS "Upload"; Rule 3;
     scenario 1 uploads without reading the log)
-  - OMP1 (a press's confirmed "Send to Text Editor" leading nowhere;
-    Purpose)
 - **No seed**:
   - the XML that cannot be produced: the reason in place of the XML,
     with no "Download" and no tick box (Rule 7)
 - **Owned by another feature**:
+  - a press's file rows offering no "Send to Text Editor", a Word
+    file's included (Purpose; *[Submission
+    files](U36-submission-files.md)*, scenarios 1 and 4; *[Publish,
+    schedule & versions](U49-publish-schedule-and-versions.md)*,
+    scenario 18)
   - the author view listing neither page (Actors preamble; *[Workflow
     screen & stage access](U24-workflow-screen-and-stage-access.md)*,
     scenario 7)
@@ -812,7 +813,6 @@ entry notes otherwise; the team settles them on spec review.
 | [A17](#a17) | On "Body Text", pressing a closed side section closes the open one and leaves the pressed one closed | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | Each JATS "Upload" leaves a warning in the server's log | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A22](#a22) | On a subscription journal, the article page's "JATS XML" gives the article's text to visitors its galleys refuse | 🐞 | high | issues (claude), 2026-10-05 — re-verified |
-| [OMP1](#omp1) | A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | A published version's Body Text stays editable | ❓ | minor | — |
 | [A4](#a4) | A new version starts with an empty Body Text, though its JATS file and media are copied | ❓ | user-visible | — |
 | [A5](#a5) | The saved Body Text reaches no reader and not the JATS XML | ❓ | user-visible | — |
@@ -820,6 +820,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | Signed in for the "JATS XML" download, the visitor is left on the Login page | ❓ | minor | — |
 | [A21](#a21) | Retired: in French the tick box, its two windows and labels of the "Body Text" panel show raw codes | ✅ | retired | Jarda 2026-10-08 · overturned |
 | [A18](#a18) | Retired: a file sent to the Body Text editor that could not be converted ended the import with no message; fixed in pkp/ui-library#979 before its merge | ✅ | retired | re-probe at the PR head (claude), 2026-10-12 — fixed before merge |
+| [OMP1](#omp1) | Retired: a press's editor was offered "Send to Text Editor" on a file, and confirming it imported nothing; fixed in pkp/ui-library#979 before its merge | ✅ | retired | re-probe at the PR head (claude), 2026-10-12 — fixed before merge |
 
 ### All apps
 
@@ -1101,19 +1102,6 @@ available "for public download when the publication is published", not
 that this bypasses subscriptions.
 Since: 2026-02-13 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
 
-### OMP
-
-<a id="omp1"></a>
-**OMP1 — A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing** · 🐞 · low.
-A press's file lists offer "Send to Text Editor" on a Word file, and
-its window asks "To which version would you like to send this file?". A
-press has no "Body Text" page, so after "Confirm" nothing opens and
-nothing is imported; with "Create New Version" chosen, a new version is
-created all the same. The action should not be offered on a press. The
-action is the journal's import of a file into the version's "Body Text"
-page, which works on OJS and stays there.
-Basis: probe, 2026-10-02. <sup>f-omp1</sup>
-
 ### Retired
 
 <a id="a18"></a>
@@ -1121,6 +1109,9 @@ Basis: probe, 2026-10-02. <sup>f-omp1</sup>
 
 <a id="a21"></a>
 **A21 — In French the tick box and the "Body Text" panel show raw codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a21</sup>
+
+<a id="omp1"></a>
+**OMP1 — A press's editor is offered "Send to Text Editor" on a file, and confirming it imports nothing** · ✅ · retired. Fixed in pkp/ui-library#979 before its merge (at `e28a1de30d`, 2026-10-12): a press and a preprint server offer no "Send to Text Editor" on any file row (Purpose). <sup>f-omp1</sup>
 
 ---
 
@@ -1141,7 +1132,7 @@ d6, d20, d28).
 **a** — Pages: `useWorkflowNavigationConfigOJS.js::getPublicationItemsEditorial()` pushes `jats` (`publication.jats` "JATS XML") after the settings-gated pages, outside the `permissions.canAccessProduction` block, and `bodyText` (`publication.bodyText` "Body Text") first inside it; `workflowConfigEditorialOJS.js` maps `jats` → `WorkflowPublicationJats` (props `canEdit: permissions.canEditPublication`, `submission`, `publication`) and `bodyText` → `WorkflowPublicationBodyText` (no `canEdit` prop). Both components are registered only in `WorkflowPageOJS.vue`. Heading "Publication: {page}" is U24 Rule 9. Live-probed 2026-08-28 (U40, note on its Rule 1): the OJS editorial list runs "… Funding, JATS XML, Body Text, Galleys, Media …"; live-probed 2026-09-24 (U42 claim check): the OJS "JATS XML" page generated a reference list and the "Body Text" side panel listed each reference under "References" with "Cite".
 
 <a id="fn-b"></a>
-**b** — OMP `useWorkflowNavigationConfigOMP.js` and OPS `useWorkflowNavigationConfigOPS.js` push neither `jats` nor `bodyText`; `workflowConfigEditorialOMP.js` / `…OPS.js` define no such keys. OMP and OPS `api/v1/submissions/index.php` mount neither `PKPJatsController` nor `PKPBodyTextController` (OJS's does, on `urlParts[7] == 'jats' | 'bodyText'`); neither app's templates carry a JATS link, and `plugins/generic/jatsTemplate` exists only in OJS. OMP still offers "Send to Text Editor": `useFileManagerConfig.js` grants `FILE_SEND_TO_EDITOR` to `ROLE_ID_SITE_ADMIN`/`ROLE_ID_MANAGER` in every namespace; live-probed 2026-09-23 (U36, its note d10: offered on OJS and OMP on "notes.md", absent on "article.pdf"); OPS mounts no file list (U49 note v). Live-probed 2026-09-24 (U42 claim check): OMP and OPS offer no "JATS XML" and no "Body Text" entry.
+**b** — OMP `useWorkflowNavigationConfigOMP.js` and OPS `useWorkflowNavigationConfigOPS.js` push neither `jats` nor `bodyText`; `workflowConfigEditorialOMP.js` / `…OPS.js` define no such keys. OMP and OPS `api/v1/submissions/index.php` mount neither `PKPJatsController` nor `PKPBodyTextController` (OJS's does, on `urlParts[7] == 'jats' | 'bodyText'`); neither app's templates carry a JATS link, and `plugins/generic/jatsTemplate` exists only in OJS. Before pkp/ui-library#979, OMP offered "Send to Text Editor": `useFileManagerConfig.js` grants `FILE_SEND_TO_EDITOR` to `ROLE_ID_SITE_ADMIN`/`ROLE_ID_MANAGER` in every namespace; live-probed 2026-09-23 (U36, its note d10: offered on OJS and OMP on "notes.md", absent on "article.pdf"). At the PR head `e28a1de30d` (ui-library#979), before its merge, 2026-10-12, `getManagerConfig()` drops that action from every list's available actions unless `useApp().isOJS()`, so neither OMP nor OPS offers it (note f-omp1); OPS mounts no file list on its publication pages (U49 note v). Live-probed 2026-09-24 (U42 claim check): OMP and OPS offer no "JATS XML" and no "Body Text" entry.
 
 <a id="fn-c"></a>
 **c** — Client gates: `WorkflowPublicationJats.vue` shows "Upload" (`common.upload`) when `publication.status !== STATUS_PUBLISHED && canEdit`; "More Information" (`grid.action.moreInformation`) when `!isDefaultContent`; "Delete" (`common.delete`, `is-warnable`, `:disabled="isLoading"`) when `!isDefaultContent && status !== STATUS_PUBLISHED && canEdit`; "Download" (`common.download`) and the `Checkbox` (`publication.jats.makePublic` "Make available with publication", `:disabled="isUpdatingVisibility"`) when `workingJatsProps.loadingContentError == null`, with no `canEdit` check. `canEdit` = `permissions.canEditPublication` = `selectedPublication.canCurrentUserChangeMetadata` (`useWorkflowPermissions.js`), which the publication map fills from `Repo::submission()->canEditPublication()` (U40 note b). Server: `PKPJatsController` and `PKPBodyTextController` admit GET to `ROLE_ID_MANAGER`, `SITE_ADMIN`, `SUB_EDITOR`, `ASSISTANT`, `AUTHOR` behind `PublicationAccessPolicy`; POST/DELETE/PUT (and the visibility PUT) to the same minus `AUTHOR`, behind `PublicationWritePolicy` = `PublicationAccessPolicy` + `StageRolePolicy([SUB_EDITOR, ASSISTANT, AUTHOR])` + `PublicationCanBeEditedPolicy` (`api.submissions.403.userCantEdit` "You are not allowed to edit this publication."; site admin passes). `canEditPublication()` locks a published/scheduled publication only for all-Author assignments, so editorial roles may write to published versions server-side (Rule 21; A3). Role defaults: seed-facts ("Permit submission metadata edit." ticked on Section editor, ticked and greyed on Journal editor and Production editor, unticked on Guest editor and every assistant-level role; U47 claim check 2026-09-24). The uploaded file's "Download" is the file's own `url` (`FileApiHandler` download, stage Production per `SubmissionFile\Repository::getWorkflowStageId()` for `SUBMISSION_FILE_JATS`); "More Information" opens `FileInformationCenterHandler` with `stageId: WORKFLOW_STAGE_ID_PRODUCTION`, whose `WorkflowStageAccessPolicy` a role without Production in its stage set does not pass. On the workflow page `pkp.const.STATUS_PUBLISHED` and `pkp.const.STATUS_SCHEDULED` read undefined (live-probed 2026-09-25), so the `status !== STATUS_PUBLISHED` test always passes and "Upload" and "Delete" stay on a published version (Rule 8; A12).
@@ -1375,11 +1366,11 @@ Security-shaped and unreleased: its issue report carries "- **Security** unrelea
 Issue report: [pkp-e2e#923](https://github.com/jardakotesovec/pkp-e2e/issues/923) ([docs/issues/U48-A22-subscription-jats-xml-served-to-refused-visitors.md](../issues/U48-A22-subscription-jats-xml-served-to-refused-visitors.md)).
 
 <a id="fn-f-omp1"></a>
-**f-omp1** — Note b and note p: OMP's navigation config has no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` finds no entry after the version form's POST/PUT has run; the address keeps `importFileUrl` and `importFileName`. Probe: d28.
+**f-omp1** — Note b and note p: before the fix, OMP's navigation config had no `bodyText` item, so `navigateToMenu('publication_{id}_bodyText')` found no entry after the version form's POST/PUT had run; the address kept `importFileUrl` and `importFileName` (live-probed 2026-10-02). At the PR head `e28a1de30d` (ui-library#979), before its merge, 2026-10-12, `useFileManagerConfig.js` `getManagerConfig()` drops `Actions.FILE_SEND_TO_EDITOR` from every file list's available actions unless `useApp().isOJS()` (`pkp.context.app === 'ojs2'`), so OMP and OPS offer it on no row, for any role; the author ruled (@jarda.kotesovec, 2026-10-12, in the review thread) that a press should not have the action at all. Probe: d28.
 Issue report: [pkp-e2e#553](https://github.com/jardakotesovec/pkp-e2e/issues/553) ([docs/issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md](../issues/U48-OMP1-press-send-to-text-editor-leads-nowhere.md)).
 
 <a id="fn-d28"></a>
-**d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry. At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (Purpose; OMP1), OMP, the Press Manager on a scratch press: the seeded "notes.md" on "Submission Files" offered "Update File Details", "More Information" and "Delete"; a Word file uploaded into that list offered "Send to Text Editor" first. The PR's author (@jarda.kotesovec, 2026-09-28, in the review thread) ruled the Word-only offer intended for now: "scope is focused intentionally to docx - with others possibly coming later".
+**d28** — Live-probed 2026-09-25 (Purpose, absence; OMP1), OMP and OPS: a monograph's and a preprint's publication lists carry no "JATS XML" and no "Body Text"; the typed menu keys land on the stage page; the published book and preprint pages carry no "JATS" link; no installed plugin row mentions JATS. On OMP, "Send to Text Editor" on "notes.md" was offered to the Press Manager and the Press Editor, not to the Series Editor or the Author; its window asks "To which version would you like to send this file?". "Confirm" with the existing version closed the window and stayed on "Workflow: Submission" with nothing imported; with "Create New Version" the side menu gained a second "Unassigned version" entry. At the PR head `85384f34ca` (ui-library#979), before its merge, 2026-09-28 (Purpose; OMP1), OMP, the Press Manager on a scratch press: the seeded "notes.md" on "Submission Files" offered "Update File Details", "More Information" and "Delete"; a Word file uploaded into that list offered "Send to Text Editor" first. The PR's author (@jarda.kotesovec, 2026-09-28, in the review thread) ruled the Word-only offer intended for now: "scope is focused intentionally to docx - with others possibly coming later". At the PR head `e28a1de30d` (ui-library#979), before its merge, 2026-10-12 (Purpose; OMP1), OMP, the Press Manager: a Word file "article.docx" on "Submission Files" and on "Production Ready Files" offered "Update File Details", "More Information" and "Delete", and no "Send to Text Editor"; the Series Editor's menus on "Submission Files" the same.
 
 ## Reference — entry points & surfaces
 

@@ -13,8 +13,6 @@
  * Deliberately NOT covered (register IDs from the spec's Findings register;
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
- * - OMP1: the press's file lists offering "Send to Text Editor" with no
- *   "Body Text" page to send to (🐞).
  * - A1–A19: all on the journal's "JATS XML" and "Body Text" pages or the
  *   article's page, which a press does not have.
  *

@@ -110,7 +110,6 @@ const DEPENDENT_COMPONENTS = ['Image', 'HTML Stylesheet'];
 const REMOVED_DEFAULT = 'Glossary';
 
 const EDITOR_MENU = ['Update File Details', 'More Information', 'Delete'];
-const MANAGER_MENU_IMPORTABLE = ['Send to Text Editor', ...EDITOR_MENU];
 
 const REVISE_QUESTION = 'If you are uploading a revision of an existing file, please indicate which file.';
 const SUMMARY_LABEL = 'Summary of Changes (Amendment Notice)';
@@ -270,10 +269,10 @@ test.describe('submission files', () => {
         expect(new Set(numbers).size).toBe(3);
         const revisable = ['article.pdf', 'article.docx', 'notes.md', 'Final manuscript'];
 
-        // The control's other side: the Press Manager's menu on article.docx
-        // offers "Send to Text Editor"; on notes.md, a Markdown file, it
-        // does not (only a Word file is offered it).
-        expect(await list.menuEntries(list.row('article.docx'))).toEqual(MANAGER_MENU_IMPORTABLE);
+        // The Press Manager's menus: a press offers no "Send to Text Editor"
+        // on any row, the Word file article.docx included (Rule 2; Actors
+        // row 8); the exact list is the settled read.
+        expect(await list.menuEntries(list.row('article.docx'))).toEqual(EDITOR_MENU);
         expect(await list.menuEntries(notesRow)).toEqual(EDITOR_MENU);
 
         // The assigned Section Editor: the same "Upload" and window, the same
@@ -291,7 +290,7 @@ test.describe('submission files', () => {
             .toEqual([NOT_A_REVISION, ...revisable].sort());
         await seWizard.cancel({uploaded: false});
         for (const name of revisable) {
-            // Control: no "Send to Text Editor" on article.docx for the Section Editor.
+            // Control: the same three entries, no "Send to Text Editor", for the Section Editor.
             expect(await seList.menuEntries(seList.row(name)), `the Section Editor's menu on ${name}`).toEqual(EDITOR_MENU);
         }
     });
@@ -450,9 +449,9 @@ test.describe('submission files', () => {
         const list = new FileList(page, frame, SUBMISSION_FILES);
         await list.expectNames(['article.pdf', 'notes.md', 'article.docx']);
 
-        // The row menu, in order; "Send to Text Editor" only on the Word
-        // file, not on the Markdown or the PDF one.
-        expect(await list.menuEntries(list.row('article.docx'))).toEqual(MANAGER_MENU_IMPORTABLE);
+        // The row menu, in order; a press offers no "Send to Text Editor",
+        // not even on the Word file.
+        expect(await list.menuEntries(list.row('article.docx'))).toEqual(EDITOR_MENU);
         expect(await list.menuEntries(list.row('notes.md'))).toEqual(EDITOR_MENU);
         expect(await list.menuEntries(list.row('article.pdf'))).toEqual(EDITOR_MENU);
 
