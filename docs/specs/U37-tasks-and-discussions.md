@@ -1466,7 +1466,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A25](#a25) | A discussion turned into a task reads "Begin Task Upon Saving", but the saved task is not begun | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A26](#a26) | After "No" to a Tasks & Discussions box's question, a screen reader hears the box in the opposite state | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A28](#a28) | A discussion turned into a task reads "Task created by …" in its History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A29](#a29) | A file attached to the first message in the "Add" window never shows in the discussion's History | 🐞 | low | issues (claude), 2026-10-12 — re-verified |
 | [A31](#a31) | A discussion's letter keeps "{$signature}" when its writer is not a participant: auto-added, or a manager stays out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A32](#a32) | A task's "Started" and "Closed" boxes, and every template's "Auto-add at stage" box, have names a screen reader cannot tell apart | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A33](#a33) | A task's or discussion's History lists the lines one save writes within a second oldest first | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
@@ -1808,14 +1808,16 @@ Basis: probe, 2026-10-02. <sup>[f-a28](#fn-a28)</sup>
 Someone starts a discussion or task with the "Add" button of a stage's
 "Tasks & Discussions" panel and attaches a file to its first message.
 That file gets no "{file name} uploaded by …" line in the discussion's
-or task's History, so the History has no "Download" row for it. Files
+or task's History, so the History has no "Download" link for it. Files
 attached to a reply, or added later through "Edit", do get that line.
-When the file is later taken off through "Edit", the History logs "…
-removed by …", so it shows the file leaving but never arriving. The file
-itself stays under the first message, where it can still be opened.
-Discussions and tasks already started this way keep the gap after a fix.
-Basis: probe, 2026-10-02. <sup>[f-a29](#fn-a29)</sup>
-Report: refresh owed — the report's Evidence says the pair form `[['dateLogged', 'desc'], ['id', 'desc']]` would sort the History; on the event log's entries it sorts nothing, as the A33 report (`docs/issues/U37-A33-history-same-second-order.md`, `sortcheck.php` beside its walk) shows: the sentence is to be corrected, and its fix checked for resting on it (2026-10-09)
+The file itself is not lost: it stays under the first message, where it
+can still be opened. When it is later taken off through "Edit", it is
+gone from the message and the History logs "… removed by …", so the
+History shows the file leaving but never arriving.
+The History is on `main` alone, so no released install holds such a
+discussion or task. Those started this way on an install that runs
+`main` keep the gap after a fix.
+Basis: probe, 2026-10-12. <sup>[f-a29](#fn-a29)</sup>
 
 <a id="a30"></a>
 **A30 — A task loses its owner silently** · ❓ · minor.

@@ -8,11 +8,14 @@
 //   remove   the row's "Edit": figure.png's "Remove", "Save"; "History"
 //   PROBE_FEATURE=issues-u37r14 PROBE_AGENT=u37r14 node bin/probe.js all shared/playwright/checks/issues/add-window-file-missing-from-history/walk.js
 //   (PROBE_RUN=fix in front for the walk with the fix applied.)
+// After each "History" on main the discussion's rows of event_log are read (evidence, not a step): which lines
+// share a second and in which order they were saved, through the U37 A33 walk's logRows().
 // On stable-3_5_0 (PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-u37r14-3_5 in front) the stage has
 // the older "Production Discussions" grid: "Add discussion" with the participant, a subject, a message and
 // "Upload File" (figure.png), "OK"; the row's actions and the query window read.
 const {forEachApp, launch, signIn} = require('../../../probe');
 const L = require('./lib.js');
+const {logRows} = require('../history-same-second-order/lib.js');
 
 forEachApp(async (app) => {
     const facts = {app: app.name, line: app.line || 'main', words: L.WORDS[app.name]};
@@ -35,15 +38,15 @@ forEachApp(async (app) => {
         const panel = await L.openPanel(page, app);
         await step('add', async () => {
             const added = await L.addItem(page, app, panel, {name, message: 'Please see the attached file.', file: L.FIRST_FILE, label: 'add'});
-            return {...added, history: await L.readHistory(page, panel, name, 'add')};
+            return {...added, history: await L.readHistory(page, panel, name, 'add'), log: logRows(app, name)};
         });
         await step('reply', async () => {
             const replied = await L.replyWithFile(page, app, panel, name, {message: 'A second file.', file: L.REPLY_FILE, label: 'reply'});
-            return {...replied, history: await L.readHistory(page, panel, name, 'reply')};
+            return {...replied, history: await L.readHistory(page, panel, name, 'reply'), log: logRows(app, name)};
         });
         await step('remove', async () => {
             const edited = await L.editItem(page, panel, name, {remove: L.FIRST_FILE, label: 'remove'});
-            return {...edited, history: await L.readHistory(page, panel, name, 'remove')};
+            return {...edited, history: await L.readHistory(page, panel, name, 'remove'), log: logRows(app, name)};
         });
     } finally {
         require('../../../probe').record('facts', facts);
