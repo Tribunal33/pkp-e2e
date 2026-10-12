@@ -1288,7 +1288,6 @@ itself stays on the page.
 The table redrew the whole list after each save until a 2012 change made
 it redraw one row in one group, which missed this case.
 Basis: probe, 2026-10-03. <sup>f-a13</sup>
-Report: refresh owed — the report's Kind reads "regression" on OMP `7218a8698` (2012), which the A20 report found already in OMP's first tag (`omp-0_9_9-0`): no release redrew the row right, so the kind is to be checked against REPORT.md (a header fact; no walk) (2026-10-09)
 
 <a id="a14"></a>
 **A14 — A refused representative delete leaves its dialog open** · 🐞 · low.

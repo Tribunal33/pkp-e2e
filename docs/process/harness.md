@@ -340,7 +340,10 @@ npm run dataset-facts -- --write                         # regenerate dataset.md
   fleet's files (`dropStaleUsageLogs()`, said in the output): the 3.4
   pre-flight check stops the upgrade on any
   `usageStats/usageEventLogs/usage_events_<date>.log` dated before
-  yesterday, and the dump carries the log of the day pkp's CI built it.
+  yesterday, and on a newer one whose addresses are not the install's
+  `base_url`; the dump carries the log of the day pkp's CI built it,
+  under CI's address, so every such log goes (2026-10-09: a dump
+  regenerated the same day kept its log and stopped the upgrade).
   With `PKP_E2E_DATASET_BRANCH=stable-3_3_0`, 3.3.0.23 upgrades to
   3.6.0.0 on `main` and to 3.5.0.5 on 3.5 in about 3 s per app
   (2026-10-09, the PR review of pkp/pkp-lib#13481, whose kept check
@@ -641,7 +644,12 @@ files dir it must carry:
   stand-in on 127.0.0.1 goes to the dead proxy like any other (`no_proxy`
   in the environment is not read), so a PHP driver that needs one points
   `Config::getData()['proxy']` at its own stub in its process, as
-  `checks/sync/pkp-lib-13475/lookups.php` does. Do not remove
+  `checks/sync/pkp-lib-13475/lookups.php` does. A Crossref "Export
+  DOIs" answers 400 "An XML validation error occurred" on every fleet
+  for the same reason (the filter fetches crossref.org's XSD): what an
+  export or a deposit would carry is read with a read-only CLI call
+  that builds the XML with validation off, as
+  `checks/sync/pkp-lib-13460/deposit-lists.php --xml` does on OJS. Do not remove
   it, and re-add it by hand on new machines. There is no OS-level firewall
   and no DTD mirror.
 - `[database] persistent = On` (the generator writes it since 2026-09-14;

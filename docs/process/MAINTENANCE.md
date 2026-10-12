@@ -794,7 +794,13 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    right code"): `git fetch upstream pull/<n>/head:pr-<n>` in the app,
    `git fetch origin pull/<n>/head:pr-<n>` in its `lib/pkp`, merge-base
    check against each repo's tip first, then `git checkout pr-<n>` and
-   `git submodule update --init lib/pkp lib/ui-library`. A PR based on an
+   `git submodule update --init lib/pkp lib/ui-library`. On a later
+   round a shared PR's new head is fetched in every app's submodule and
+   checked out by its full sha (`git fetch origin pull/<n>/head && git
+   checkout --detach <sha>`): a `pr-<n>` branch fetched in one app stays
+   at the last round's head in the other two, and its checkout succeeds
+   silently, so the three `git rev-parse HEAD` answers are compared
+   before any drive (pkp-lib#13479 round 2, 2026-10-09). A PR based on an
    old tip is "needs a rebase before e2e can verify". `composer install`
    in `lib/pkp`, `npm run build` when `lib/ui-library` or `js/` moved
    since the checkout was last built, `npm run mount`, `npm run
@@ -837,7 +843,12 @@ merge (first run: issue pkp/pkp-lib#13274, companion `13274`, 2026-09-12).
    its own (at `main`) both run the merge result. Run it in the background
    under the keepalive; it prints each failed and flaky test per app. The
    VM runs no whole suite for a review. The app PR's own check picks the
-   companion up by name on its next run.
+   companion up by name on its next run. A PR that moves only a plugin
+   submodule, with no app PR for the pointer, has no dispatch to cite
+   (the workflow pins the app, pkp-lib and ui-library, no plugin): the
+   spec files that read the plugin's output, run on the VM at the PR
+   head, stand in, and the verdict says so (jatsTemplate#124,
+   2026-10-10).
 6. **Reds.** A red that an app without its own PR shows is the PR's once
    the same spec files are green with the submodule rebuilt at the PR's
    base on the same database; that app meets it with its next pointer

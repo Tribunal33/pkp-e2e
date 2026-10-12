@@ -70,6 +70,10 @@ function dispatch(opts) {
     if (ref === 'HEAD') throw new Error('detached HEAD: pass --ref <pushed branch>');
     const fields = [];
     const add = (key, value) => value && fields.push('-f', `${key}=${value}`);
+    // actions/checkout fetches a shortened sha as a branch of that name and every job fails at checkout.
+    for (const key of ['ojs-ref', 'omp-ref', 'ops-ref', 'pkp-lib-ref', 'ui-library-ref']) {
+        if (/^[0-9a-f]{7,39}$/i.test(opts[key] || '')) throw new Error(`--${key} ${opts[key]}: a commit is named by its full 40-character sha (git rev-parse ${opts[key]})`);
+    }
     for (const app of ['ojs', 'omp', 'ops']) {
         add(`${app}_ref`, opts[`${app}-ref`]);
         add(`${app}_repo`, opts[`${app}-repo`]);

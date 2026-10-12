@@ -679,7 +679,12 @@ class IssueForm extends BasePage {
         return this.form.locator('label.error');
     }
 
-    /** Press "Save": bounded by the save's answer. */
+    /**
+     * Press "Save": bounded by the save's answer. A refusal answers 200 too
+     * (the form drawn again), and a new issue's "Title" show box is ticked,
+     * so a save with no title typed is one: untick it first, as the U50
+     * suite does, or read `fieldErrors()`.
+     */
     async save() {
         const saved = postTo(this.page, REQUEST.saveIssue);
         await this.saveButton().click();

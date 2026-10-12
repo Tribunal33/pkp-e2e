@@ -2,7 +2,7 @@
 
 - **Severity** low
 - **Effort** small
-- **Kind** regression
+- **Kind** defect
 - **Affects**
   - main: OMP
   - 3.5: OMP
@@ -13,6 +13,10 @@
 - **Tracked in** spec U74 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U74-onix-metadata-export.md#a13)
 - **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-12: the Kind is "defect", where it read "regression".
+The 2012 change named under Introduced is already in OMP's first
+release, so no release ever redrew the row right (Evidence, "Kind").
 
 ## Summary
 
@@ -194,6 +198,11 @@ full-redraw event.
   answers `{"name":"dataChanged","data":{"0":"2","parentElementId":"0"}}`.
   Another run of the same script uses the extra row ("Edit", then
   "Delete"); it was walked on `main` only.
+- Kind: the table dates from OMP 5e0d3c7ff (2012-01-29) and redrew
+  the whole list until 7218a8698. OMP's first tag, `omp-0_9_9-0`
+  (2012-09-17), already holds both commits, so no release redrew this
+  row right: a defect, not a regression (read 2026-10-12 with
+  `git describe --contains`; the same reading as the A20 report's).
 - Chromium on PostgreSQL. Datasets: pkp/datasets e8dafbc (2026-10-02).
 - Branch tips. `main`: OMP 3b0ecf794, pkp-lib 3dc90c81a6. 3.5: OMP
   9c5e24246, pkp-lib cf3f984335. 3.4: OMP 0aec65441, pkp-lib

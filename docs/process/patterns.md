@@ -536,7 +536,13 @@ no cleanup fixture.
   (`ReviewWizardPage.expectStep`), and nothing in the panel is counted,
   read or pressed before: a count reads 0, a press on the stale form loses
   its answer, and a "press again" retry covers neither (U28 S10,
-  2026-09-29).
+  2026-09-29). A second tab pressed while the first is still loading
+  aborts that load and leaves the first panel empty for good, which
+  changes what the window does afterwards (a format's "Edit" and "Edit a
+  file" ask about unsaved changes on "Close" only then, on `main` and
+  3.5 alike): an opener waits for the first tab's form before it presses
+  "Identifiers" or any other tab (U44 I09's two lines read apart for
+  this, 2026-10-09).
 - **Server-rendered TinyMCE values never reach the backing textarea.** There
   is deliberately no helper. Read the editor directly:
   `page.evaluate((id) => window.tinymce?.get(id)?.getContent(), fieldId)`.
@@ -635,7 +641,8 @@ name this fleet's own host (a dataset user's address is mailed by every
 fleet of the slot, both lines', within the same minute), `baseURL` the probe server (base port + 50),
 `variant('validation')` the +90 server with email validation and ALTCHA on,
 `db` the fleet's database, which `sql(app, query)` queries through psql
-(rows as lines, columns joined by `|`; a `plugin_settings` row written
+(one string: rows as lines, so `.split('\n')` for several, columns
+joined by `|`; a `plugin_settings` row written
 this way is not read until the fleet's Laravel cache, `cache/opcache` or
 `cache/opcache-ds<n>`, is cleared, as `PluginSettingsDAO` caches each
 plugin's settings: U44, U52 issue walks, sync rr7527), and `contextTables` the per-app

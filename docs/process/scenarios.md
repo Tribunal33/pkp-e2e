@@ -2745,6 +2745,12 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   screens: `admin` seeded in `users[]` with one more role ends its manager
   role on its own Users & Roles › Edit page and signs in again, seed-facts,
   U38 claim check 2026-09-23).
+- Context: `doiCreationTime: 'immediate'` ("Immediately…", the option
+  `pkp/pkp-lib#13460` added, 2026-10-09; the key takes `copyediting` /
+  `production`, `publication` and `never`, so a walk picks it on the
+  "Setup" tab, as `chooseImmediately()` in
+  `checks/sync/pkp-lib-13460/lib.js` does; U45's Planned "Immediately…"
+  items).
 - Context passthroughs: `notifyAllAuthors` (Settings › Workflow › Emails
   "Notify All Authors", U30), `reviewerRecommendations[]` (Settings ›
   Workflow › Review "Reviewer Recommendations", U29), the remaining
