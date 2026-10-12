@@ -1,40 +1,56 @@
-// Issue reports docs/issues/U45-A15-deposit-without-doi-reports-success.md
-// (U45 A15): "Deposit DOIs" on a published work whose article (preprint) has
-// no DOI reports success, and nothing is sent (WALK=nodoi, galley); and
-// docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md:
-// "Deposit All" marks a galley DOI "Submitted" without sending it
-// (WALK=galleyall, galleylater). Takes the reports' Steps
-// through the screens on a dataset fleet freshly reset to PKP's default test
-// dataset (`job_runner` On as the dataset ships it):
+// Kept walk of two issue reports on one surface, the DOIs page's deposits:
+//   docs/issues/U45-A15-deposit-without-doi-reports-success.md (U45 A15, pkp-e2e#223):
+//     "Deposit DOIs" on a published work with no DOI reports success, and nothing
+//     is deposited (WALK=nodoi, OJS and OPS, Crossref);
+//   docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md (U45 OJS5,
+//     pkp-e2e#931): DataCite deposits leave a galley DOI "Submitted" and unsent when
+//     its article has no DOI (WALK=galleyall for "Deposit All", WALK=galley for
+//     "Deposit DOIs"; OJS, DataCite).
+// Takes the reports' Steps through the screens on a dataset fleet freshly reset to
+// PKP's default test dataset (`job_runner` On as the dataset ships it):
 //   1.   sign in as dbarnes
 //   2.   Settings › Website › "Plugins": tick "Crossref Manager Plugin"
-//        (WALK=galley: "DataCite Manager Plugin")
-//   3.   DOIs › "Setup": "DOI Prefix" 10.1234 (WALK=galley: also tick
+//        (WALK=galley…: "DataCite Manager Plugin")
+//   3.   DOIs › "Setup": "DOI Prefix" 10.1234 (WALK=galley, galleyall: also tick
 //        "Article galleys, such as a published PDF"), "Save"
-//   4.   DOIs › "Registration": Crossref, depositor name and email (WALK=galley:
-//        DataCite, "Username (symbol)" u45ir8), "Save"
+//   4.   DOIs › "Registration": Crossref, depositor name and email (WALK=galley…:
+//        DataCite, "Username (symbol)" u45rf1), "Save"
 //   WALK=nodoi (default):
 //   5.   DOIs page: the item (OJS 17, OPS 2) reads "Needs DOI"; tick it,
 //        "Deposit DOIs"
-//   WALK=galley (OJS only: of the agencies, only DataCite takes galley DOIs):
+//   WALK=galley (OJS):
 //   5.   "Assign DOIs" on the item; 6. expand, "Edit", empty the "Article"
 //        DOI, "Save"; 7. "Deposit DOIs" on it
-//   WALK=galleyall (OJS, DataCite): as WALK=galley, but 7. "Deposit All" ›
-//        "Deposit all DOIs"; after "Failed Jobs", 10. as dbarnes "Deposit All"
-//        once more
-//   WALK=galleylater (OJS, DataCite): 3. without galleys; 5. "Assign DOIs";
-//        6. "Mark DOIs Registered"; 7. "Setup": tick galleys, "Save"; 8.
-//        "Assign DOIs" (the PDF gets its DOI); 9. "Deposit All"
+//   WALK=galleyall (OJS): as WALK=galley, but 7. "Deposit All" › "Deposit all
+//        DOIs"; after "Failed Jobs", 10. as dbarnes "Deposit All" once more
 //   then: reload the DOIs page until the queue is empty (the queue is read
 //   from the database to know when to stop; read only), expand the item;
 //   sign in as admin: Administration › "Failed Jobs".
-// NEIGHBOUR=1 (with WALK=nodoi) is the path the fix must leave alone: the item
-// is given a DOI ("Assign DOIs") before "Deposit DOIs", which must still be
-// accepted ("Items successfully submitted for deposit", "Submitted", a
-// deposit queued), with fix.diff in and out. NEIGHBOUR=1 with WALK=galleyall
-// skips step 6 (the article keeps its DOI): "Deposit All" must still queue
-// the work and mark both its DOIs "Submitted", with fix-deposit-all.diff in and out. (The test installs cannot reach
-// Crossref, so that deposit then fails at connection, U45 A18.)
+// Controls, the paths the fixes must leave alone:
+//   NEIGHBOUR=1 (WALK=nodoi): the item is given a DOI ("Assign DOIs") before
+//        "Deposit DOIs", which must still be accepted ("Items successfully
+//        submitted for deposit", "Submitted", a deposit queued), with fix.diff in
+//        and out.
+//   NEIGHBOUR=1 WALK=galleyall: step 6 is skipped (the article keeps its DOI):
+//        "Deposit All" must still queue the work, mark both DOIs "Submitted" and
+//        post the article first, with fix-datacite-ojs.diff in and out.
+//   WALK=galleylater (OJS, DataCite): 3. without galleys; 5. "Assign DOIs";
+//        6. "Mark DOIs Registered"; 7. "Setup": tick galleys, "Save"; 8.
+//        "Assign DOIs" (the PDF gets its DOI); 9. "Deposit All": a deposit is
+//        queued since pkp/pkp-lib#13253 (none on 3.5).
+//   WALK=galleyonly (OJS, DataCite): 3. tick galleys and untick "Articles";
+//        5. "Assign DOIs" (the PDF alone gets a DOI); "Deposit All": the PDF's
+//        deposit is queued since pkp/pkp-lib#13253 (none on 3.5).
+//   WALK=galleyleft (OJS, DataCite): as WALK=galley, then 6b. "Setup": untick the
+//        galleys again (the PDF keeps its DOI, the work reads "Needs DOI");
+//        "Deposit DOIs", and at the end "Export DOIs" on the work. Nothing of
+//        the work has a DOI of a ticked kind: with fix-datacite-ojs.diff the
+//        deposit sends nothing and the export answers 400.
+//   WAYROUND=1 (WALK=galleyall, galley): after the Steps, "Assign DOIs" on the
+//        work, then "Deposit DOIs" on it: the report's way round.
+// The test installs cannot reach an agency, so a deposit that gets that far
+// fails at the connection (U45 A18). Which object it was posting shows in the
+// export file it leaves in files_dir/temp (lib.js leftExportFiles(), read only).
 // OMP has no registration agency plugin: no surface, skipped.
 // Reset first, then run:
 //   npm run fleet-prep -- --feature issues-ir1 --dataset 1 --reset
@@ -42,19 +58,20 @@
 // On 3.5: PKP_E2E_LINE=stable-3_5_0 in front of both, feature issues-ir1-3_5,
 // and PROBE_RUN=r35 in front of the run.
 const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
-const {depositAll} = require('./lib');
+const {depositAll, leftExportFiles} = require('./lib');
 
 const T = 30_000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const flat = (s, n = 400) => (s == null ? s : String(s).replace(/\s+/g, ' ').trim().slice(0, n));
 const WALK = process.env.WALK || 'nodoi';
 const NEIGHBOUR = !!process.env.NEIGHBOUR;
+const WAYROUND = !!process.env.WAYROUND;
 
 const ITEM = {ojs: 17, ops: 2};
 const GALLEY = WALK.startsWith('galley');
-const ALL = WALK === 'galleyall' || WALK === 'galleylater';
+const ALL = WALK === 'galleyall' || WALK === 'galleylater' || WALK === 'galleyonly';
 const AGENCY = GALLEY
-    ? {plugin: 'dataciteplugin', label: 'DataCite', apps: ['ojs'], fields: {username: 'u45ir8'}}
+    ? {plugin: 'dataciteplugin', label: 'DataCite', apps: ['ojs'], fields: {username: 'u45rf1'}}
     : {plugin: 'crossrefplugin', label: 'Crossref', apps: ['ojs', 'ops'],
         fields: {depositorName: 'Public Knowledge Project', depositorEmail: 'dbarnes@mailinator.com'}};
 
@@ -98,7 +115,8 @@ forEachApp(async (app) => {
         // 3
         await settings.goto('Setup');
         await settings.prefixBox().fill('10.1234');
-        if (WALK === 'galley' || WALK === 'galleyall') await settings.kindBox('Article galleys, such as a published PDF').check();
+        if (['galley', 'galleyall', 'galleyonly', 'galleyleft'].includes(WALK)) await settings.kindBox('Article galleys, such as a published PDF').check();
+        if (WALK === 'galleyonly') await settings.kindBox('Articles').uncheck();
         const r3 = await settings.save(settings.setup);
         fact('3 setup save', {status: r3.status(), kinds: await settings.kinds()});
 
@@ -140,7 +158,7 @@ forEachApp(async (app) => {
                 table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
             await dois.collapse(row, id);
         }
-        if ((WALK === 'galley' || WALK === 'galleyall') && !NEIGHBOUR) {
+        if (['galley', 'galleyall', 'galleyleft'].includes(WALK) && !NEIGHBOUR) {
             // 6: empty the article (preprint) DOI, the table's first row
             await dois.expand(row, id);
             const types = await dois.doiTypes(row);
@@ -155,6 +173,16 @@ forEachApp(async (app) => {
             fact('6 article doi emptied', {types, before, statuses, notices: await notices(page),
                 table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
             await dois.collapse(row, id);
+        }
+        if (WALK === 'galleyleft') {
+            // 6b: galley DOIs turned off again; the PDF keeps the DOI it has
+            await settings.goto('Setup');
+            await settings.kindBox('Article galleys, such as a published PDF').uncheck();
+            const r6b = await settings.save(settings.setup);
+            const kinds = await settings.kinds();
+            await dois.goto();
+            await row.waitFor({timeout: T});
+            fact('6b galleys unticked', {status: r6b.status(), kinds, badge: flat(await dois.rowBadge(row).innerText()), dois: doiRows()});
         }
 
         // deposit
@@ -202,6 +230,8 @@ forEachApp(async (app) => {
             panel: flat(await dois.agencyPanel(row).innerText().catch(() => null)),
             failedJobs: sql(app, `select substring(payload from 'displayName":"([^"]+)') || ' | ' || split_part(exception, E'\\n', 1) from failed_jobs order by id offset ${failedBefore}`)
                 .split('\n').filter(Boolean).map((l) => flat(l, 400)),
+            // the object a deposit was posting when it died: its export file stays in files_dir/temp (read only)
+            exportFilesLeft: leftExportFiles(app),
             jobsLeft: sql(app, 'select count(*) from jobs'),
             dois: doiRows(),
         });
@@ -228,6 +258,55 @@ forEachApp(async (app) => {
             record(`${pre}-10-deposit-all-again`, s10);
             fact('10 deposit all again', {status: again.status, notices: await notices(page), queued,
                 table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
+        }
+
+        if (WAYROUND) {
+            // the way round, from the Steps' end state: "Assign DOIs" on the work, then "Deposit DOIs" on it
+            const failedSoFar = Number(sql(app, 'select count(*) from failed_jobs') || 0);
+            await signIn(page, 'dbarnes');
+            await dois.goto();
+            await row.waitFor({timeout: T});
+            const assigned = await dois.runBulk('Assign DOIs', [id]);
+            await dois.expand(row, id);
+            fact('wr1 assign', {status: assigned.status(), badge: flat(await dois.rowBadge(row).innerText()), notices: await notices(page),
+                table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
+            await dois.collapse(row, id);
+            const deposited = await dois.runBulk('Deposit DOIs', [id]);
+            await sleep(800);
+            fact('wr2 deposit', {status: deposited.status(), badge: flat(await dois.rowBadge(row).innerText()), notices: await notices(page),
+                queued: sql(app, `select substring(payload from 'displayName":"([^"]+)') from jobs order by id`).split('\n').filter(Boolean), dois: doiRows()});
+            for (let n = 0; n < 30; n++) {
+                await sleep(4000);
+                await dois.reload();
+                if (n >= 4 && Number(sql(app, "select count(*) from jobs where payload like '%Deposit%'") || 0) === 0) break;
+            }
+            await sleep(2000);
+            await dois.reload();
+            await dois.expand(row, id);
+            record(`${pre}-wayround-after`, await screen(page));
+            fact('wr3 after the way round', {
+                badge: flat(await dois.rowBadge(row).innerText()),
+                table: flat(await dois.expanded(row).locator('table').innerText()),
+                failedJobs: sql(app, `select substring(payload from 'displayName":"([^"]+)') || ' | ' || substring(exception from '"message":"([^"]*)"') from failed_jobs order by id offset ${failedSoFar}`)
+                    .split('\n').filter(Boolean).map((l) => flat(l, 300)),
+                exportFilesLeft: leftExportFiles(app), dois: doiRows(),
+            });
+        }
+
+        if (WALK === 'galleyleft') {
+            // "Export DOIs" on the same work
+            await signIn(page, 'dbarnes');
+            await dois.goto();
+            await row.waitFor({timeout: T});
+            const answer = page.waitForResponse((r) => /\/api\/v1\/dois\/submissions\/export/.test(r.url()), {timeout: T}).catch(() => null);
+            let threw = null;
+            await dois.runBulk('Export DOIs', [id]).catch((e) => {
+                threw = flat(String(e), 300);
+            });
+            const res = await answer;
+            await sleep(800);
+            record(`${pre}-export`, await screen(page));
+            fact('export', {status: res && res.status(), body: flat(res && (await res.text().catch(() => null)), 300), notices: await notices(page), threw});
         }
     } finally {
         record(`${pre}-facts`, facts);

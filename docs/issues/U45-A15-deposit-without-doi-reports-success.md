@@ -3,21 +3,23 @@
 - **Severity** medium
 - **Effort** small
 - **Kind** defect
-- **Crash** server (main only; on 3.5 the deposit does not fail on the server, and the 3.4 code shows the same)
+- **Crash** server (main only: the queued deposit fails; on 3.5 and 3.4 it is not refused, and fails only where the install cannot reach the agency)
 - **Affects**
   - main: OJS, OPS
   - 3.5: OJS, OPS (a record without a DOI is sent instead)
   - 3.4: OJS, OPS (code; as 3.5)
   - 3.3: none (code; no DOIs page, and the agencies' export pages list only works with a DOI)
-- **Introduced** [75f5c71339](https://github.com/pkp/pkp-lib/commit/75f5c713391f663bef74c309242ff38d40e10c74) (`pkp/pkp-lib#7014`, 2021-06-08, Erik Hanson, ewhanson) wrote the deposit endpoint's check, which has never asked for a DOI. PR `pkp/pkp-lib#12098` for issue `pkp/pkp-lib#11590` ([c01b8adb80](https://github.com/pkp/pkp-lib/commit/c01b8adb807f6dbafbb92cee025e398afa5d2dfd), 2025-12-02, Bozana Bokan, bozana) made the deposit job refuse a work without a DOI
-- **Upstream** none found (2026-10-06). `pkp/pkp-lib#13252` (open) asks whether peer-review DOIs (and, in its proposals, galley DOIs) can be deposited without article DOIs and names the same refusal in the deposit job, for those setups only
+- **Introduced** [75f5c71339](https://github.com/pkp/pkp-lib/commit/75f5c713391f663bef74c309242ff38d40e10c74) (`pkp/pkp-lib#7014`, 2021-06-08, Erik Hanson, ewhanson) wrote the deposit endpoint's check, which has never asked for a DOI. PR `pkp/pkp-lib#12098` for issue `pkp/pkp-lib#11590` ([c01b8adb80](https://github.com/pkp/pkp-lib/commit/c01b8adb807f6dbafbb92cee025e398afa5d2dfd), 2025-12-02, Bozana Bokan, bozana) made the deposit job refuse a work without a DOI, which is why `main` fails in the job where 3.5 and 3.4 send the record
+- **Upstream** none found (2026-10-12). `pkp/pkp-lib#13252` (open) asks whether peer-review DOIs can be deposited without article DOIs and names the same refusal in the deposit job, for that setup only
 - **Tracked in** spec U45 [A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a15)
-- **Checked** 2026-10-06, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-12, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
 
-**Update 2026-10-06.** "Deposit All" marking a galley DOI "Submitted"
-without queuing any deposit is a separate fault, now in its own report
-(pkp-e2e#931, [U45 OJS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md)).
+**Update 2026-10-12.** Since `pkp/pkp-lib#13460` (for
+`pkp/pkp-lib#13253`, merged 2026-10-09) a work with only a galley's DOI
+is a different fault, now in pkp-e2e#931
+([U45 OJS5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md)).
+This report is the work with no DOI at all.
 
 ## Summary
 
@@ -28,32 +30,35 @@ agency, and the background deposit fails on the server. Only the site
 administrator's "Failed Jobs" page shows the failure.
 
 The way round is to give the work a DOI first ("Assign DOIs") and deposit
-again. With DataCite, pressing "Deposit DOIs" on a work whose article DOI
-was cleared while its galley kept one is worse: the galley's DOI turns
-"Submitted" and stays so, though nothing was sent.
+again.
 
-It needs a registration agency (Crossref, or DataCite on a journal) and a
-published work without an article or preprint DOI. Every work published
-before the journal or server set its DOI prefix is in that state, as are
-works whose DOI was cleared. On 3.5 the same notice shows, and the work's
-record is sent to the agency with an empty DOI, which cannot register
-anything; the work stays "Needs DOI".
+It needs a registration agency (seen with Crossref; the code is the same
+for DataCite on a journal) and a published work with no DOI, its own or
+a galley's: every work published before the journal or server set its
+DOI prefix, until "Assign DOIs" is pressed.
+"Deposit All" and the automatic deposit leave such a work alone. A press
+has no registration agency to deposit with.
+
+On 3.5 and 3.4 the same notice shows and the work's record is sent to the
+agency with an empty DOI, which cannot register anything. The work stays
+"Needs DOI", and the app keeps no trace of what the agency answered.
 
 ## Impact
 
-- **Lost.** The ticked work's deposit only: the other works ticked in
-  the same batch are deposited as usual.
-- **Who.** Managers catching up on a back catalogue, who may press
-  "Deposit DOIs" (or the expanded view's "Deposit DOI(s)", offered for a
-  work with no DOI) before "Assign DOIs".
-- **Way round.** The "Needs DOI" badge stays in view as a hint. A galley
-  DOI this leaves "Submitted" stays so until the work gets an article DOI
-  and "Deposit DOIs" is pressed on it again.
+- **Lost.** A true answer: the manager is told a deposit went out for a
+  work that has nothing to deposit. Works with DOIs ticked in the same
+  click are deposited as usual.
+- **Who.** Managers catching up on a back catalogue, who press "Deposit
+  DOIs" (or the expanded view's "Deposit DOI(s)", offered for a work
+  with no DOI) before "Assign DOIs".
+- **Way round.** "Assign DOIs" first. The "Needs DOI" badge stays in view
+  as the hint.
 
-Medium: a false success notice and a failure only the administrator sees,
-with a hint on screen and an easy way round. The galley DOI left
-"Submitted" for good is the silent case that would make this high, but it
-needs DataCite, galley DOIs and a cleared article DOI.
+Medium: the page reports a deposit that cannot have happened, and
+nothing a manager sees says it failed; on 3.5 and 3.4 a record with an
+empty DOI also leaves for the agency. It
+is not high: nothing registered is lost or wrong, the badge still reads
+"Needs DOI", and "Assign DOIs" puts it right.
 
 ## Steps to reproduce
 
@@ -68,8 +73,12 @@ Preconditions:
   apart, so the deposit's outcome shows after about 20 s of page loads. An
   install with a worker (`php lib/pkp/tools/jobs.php`) shows it once the
   worker has run.
-
-No DOI at all, Crossref (OJS and OPS):
+- Network: on `main` the Steps post nothing to Crossref, since the deposit
+  is refused before the post. The control below and the Steps on 3.5 do
+  post, to `https://api.crossref.org/v2/deposits`, with the depositor
+  fields and no credentials. To keep them off Crossref's live address,
+  tick "Use the Crossref test API (testing environment) for the DOI
+  deposit" in step 4, or use an install without outbound network.
 
 1. Sign in as `dbarnes`.
 2. Settings › Website › "Plugins": tick "Crossref Manager Plugin".
@@ -89,60 +98,36 @@ No DOI at all, Crossref (OJS and OPS):
 7. Sign in as `admin`: Administration › "Failed Jobs", "Details" on the
    row.
 
-A galley DOI without the article DOI, DataCite (OJS), from a freshly
-loaded dataset:
+**Expected.** "Deposit DOIs" refuses a work that has no DOI, as "Export
+DOIs" already does: the request answers 400 with "One or more invalid
+publication objects were included with the request.", no success notice
+shows, nothing is queued, no DOI changes status and no job fails.
 
-1. Sign in as `dbarnes`.
-2. "Plugins": tick "DataCite Manager Plugin".
-3. "DOIs" › "Setup": "DOI Prefix" `10.1234`, tick "Article galleys, such as
-   a published PDF", "Save".
-4. "Registration": "Registration Agency" "DataCite", "Username (symbol)"
-   `u45ir8` (any value serves), "Save".
-5. "DOIs": tick submission 17; "Bulk Actions" › "Assign DOIs" › "Assign
-   DOIs". The "Article" and "PDF" rows get DOIs.
-6. Expand it, "Edit", empty the "Article" DOI box, "Save".
-7. Tick it; "Bulk Actions" › "Deposit DOIs" › "Deposit DOIs".
-8. Reload the DOIs page for about 20 s; expand the work.
-9. As `admin`: Administration › "Failed Jobs".
-
-**Expected.** "Deposit DOIs" refuses a work that has no article (preprint)
-DOI, as "Export DOIs" already does: the request answers 400 with "One or
-more invalid publication objects were included with the request.", no
-success notice shows, nothing is queued, no DOI changes status and no job
-fails. The page drops that message today for every refused bulk action
-(the window closes and nothing is shown), a separate fault tracked as
-[A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a13)
-([report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-A13-bulk-action-refusal-no-message.md)).
-
-**Observed.** No DOI at all: step 5 shows "Items successfully submitted
-for deposit" and the badge stays "Needs DOI". Step 6: still "Needs DOI";
-the expanded view reads `Article Needs DOI` (`Preprint Needs DOI`), and
-its Crossref box reads "The metadata for this item has not been submitted
-to Crossref." with "Deposit DOI(s)". Step 7: "There's a total of 1 failed
-job(s).", one row, `PKP\jobs\doi\DepositSubmission`, whose exception
-reads:
+**Observed.** Step 5 shows "Items successfully submitted for deposit"
+and the badge stays "Needs DOI". Step 6: still "Needs DOI"; the expanded
+view has one row, "Article" ("Preprint") with an empty DOI box and the
+status "Needs DOI", and its Crossref box reads "The metadata for this
+item has not been submitted to Crossref." with "Deposit DOI(s)". Step 7:
+"There's a total of 1 failed job(s).", one row,
+`PKP\jobs\doi\DepositSubmission`, whose exception reads:
 
 ```
 {"message":"invalid.job.payload","code":0,"file":".../lib/pkp/jobs/doi/DepositSubmission.php","line":63,...}
 ```
 
-[3.5: the same notice and "Needs DOI", but the job sends the work to
-Crossref: the failed job here is the connection error for
-`https://api.crossref.org/v2/deposits`, because the test installs cannot
-reach Crossref. The expanded view has no status column.]
-
-Galley DOI: step 7 shows "Items successfully submitted for deposit". The
-row's badge reads "Unregistered" before and after. Step 8: the expanded
-view reads `Article Needs DOI` and `PDF Submitted`, and the PDF's DOI
-stayed "Submitted" on every later load. Step 9: the same failed job and
-exception. [3.5: the job sends the work to DataCite: first an article
-record without a DOI, then the PDF's. On the test installs the first
-post fails at connecting to `mds.datacite.org`, and the PDF's DOI stays
-"Submitted"; DataCite's answer to the record without a DOI was not
-seen.]
+[3.5: the same notice and "Needs DOI", and the job posts the work's
+record, without a DOI, to Crossref. What "Failed Jobs" then shows depends
+on the install's network. Where Crossref cannot be reached (the test
+installs), the job fails at the connection: one failed job, the
+connection error for `https://api.crossref.org/v2/deposits`. Where it can
+be reached, an error answer from Crossref (the plugin expects a 401 for a
+post without valid credentials) is caught and no job fails, so "Failed
+Jobs" stays empty and nothing shows (by the code, not walked). The
+expanded view has no status column.]
 
 A work given a DOI first ("Assign DOIs", then "Deposit DOIs") is accepted
-and queued as usual.
+and queued, and its job posts the record to Crossref. On an install that
+reaches Crossref, an error answer turns that row "Error" (by the code).
 
 ## Cause
 
@@ -150,76 +135,89 @@ and queued as usual.
 `api/v1/dois/PKPDoiController.php`, lines 528–540) accepts any work in the
 context whose current publication is published. It then dispatches one
 `DepositSubmission` job per work and marks every DOI that
-`Repo::doi()->getDoisForSubmission()` returns as "Submitted" (line 555).
-It never checks that the work has a DOI to deposit.
+`Repo::doi()->getPublishedDoisForSubmission()` returns as "Submitted"
+(lines 549–555). It never checks that the work has a DOI to deposit.
 
 The rest of the deposit path requires one. Since `pkp/pkp-lib#11590`,
 `DepositSubmission::handle()` (lib/pkp `jobs/doi/DepositSubmission.php`,
 lines 57–63) takes only a work listed by
-`Repo::publication()->getExportableDOIsSubmissionIds()`, a published
-publication with a DOI (`classes/publication/DAO.php` line 522,
-`whereNotNull('p.doi_id')`), and throws
-`JobException::INVALID_PAYLOAD` otherwise. The same change made
-`exportSubmissions()` (line 419) refuse such a work up front, but left
-`depositSubmissions()` as it was. So the request answers 200 and the page
-shows its success notice, the job fails three times (`BaseJob::$tries`),
-and it is recorded as a failed job. Each ticked work has its own job, so
-the other works in the batch are deposited as usual (code read).
+`Repo::publication()->getExportableDOIsSubmissionIds()` and throws
+`JobException::INVALID_PAYLOAD` otherwise. The list holds a work with a
+published publication that has a DOI. `whereHasDoi()` decides what
+counts: the publication's own DOI in lib/pkp
+(`classes/publication/DAO.php`, line 532, called at line 522), and since
+`pkp/pkp-lib#13253` a galley's DOI too, in the apps' overrides (OJS
+`classes/publication/DAO.php` line 163, OPS line 65).
 
-What gets marked depends on the work's other DOIs, since its publication
-has none. With no other DOI, nothing changes and the badge stays "Needs
-DOI". A galley DOI (OJS with DataCite, the only agency that takes galleys)
-is marked "Submitted" and stays so: the job stops before the agency
-plugin, whose `updateDepositStatus()` would move it on, and "Deposit
-All" takes only "Unregistered", "Error" and "Needs Sync". So the stuck
-galley DOI here comes from "Deposit DOIs" pressed by hand on that work,
-which queues a job that fails; "Deposit All" marks a galley DOI without
-queuing any job, the separate fault named above.
+The change that added the job's check made `exportSubmissions()`
+(line 419) refuse such a work up front, but left `depositSubmissions()`
+as it was. So the request answers 200 and the page shows its success
+notice, the job fails three times (`BaseJob::$tries`), and it is recorded
+as a failed job. A work with no DOI has nothing to mark, so its badge
+stays "Needs DOI".
+
+The job stops before it calls the agency plugin, so a DataCite journal
+meets the same failure (code read; walked with Crossref). Each ticked
+work has its own job, so the others ticked with it are deposited (code
+read).
 
 Before `pkp/pkp-lib#11590` (3.5, 3.4) the job had no such check and handed
-the work to the agency plugin (code read, not walked against a live
-agency). Crossref's `ArticleCrossrefXmlFilter` writes `doi_data` with an
-empty `doi` from `$publication->getDoi()`. `exportAndDeposit()` collects
-the XML validation errors but does not check them, and `depositXML()`
-posts the record. A Crossref record is identified by its DOI, so a record
-with an empty one cannot register or change anything there; Crossref's
-exact answer was not seen. DataCite's `depositSubmissions()` sends the
-work itself whenever article DOIs are on, and its `depositXML()` only
-`assert()`s a DOI, so it posts an article record without one ahead of
-the galleys' (code read; DataCite's answer not seen). Whichever status
-the plugin then writes,
-`updateDepositStatus()` writes it to the DOIs of `getDoisForSubmission()`,
-which for a work with no DOI at all are none, so the work stays "Needs
-DOI" and no error is stored.
+the work to the agency plugin. Crossref's `ArticleCrossrefXmlFilter`
+writes `doi_data` with an empty `doi` from `$publication->getDoi()`.
+`exportAndDeposit()` collects the XML validation errors but does not
+check them, and `depositXML()` posts the record (on 3.5 the record at
+the post held no DOI: Evidence). A Crossref record is identified by its
+DOI, so one with an empty DOI cannot register or change anything there.
+
+What 3.5 and 3.4 keep of the agency's answer is nothing.
+`depositXML()` catches an HTTP error answer and hands it, like a
+success, to `updateDepositStatus()`, which writes to the DOIs of
+`getDoisForSubmission()`. A work with no DOI has none, so no status and
+no message are stored, no job fails, and the work stays "Needs DOI" (by
+the code; Crossref's answer was not seen, and with valid credentials
+what Crossref does with the record is its own matter).
 
 Reach:
 
 - "Deposit DOI(s)" in an expanded work's agency box, offered for a work
   with no DOI (on screen), calls the same endpoint (`DoiListItem.vue`
   emits `deposit-triggered`; code read).
+- "Deposit All" and the scheduled automatic deposit do not reach it:
+  they queue the works of the DOIs `getAllDepositableSubmissionIds()`
+  lists, and a work with no DOI has none to list. On screen, "Deposit
+  All" on a DataCite journal queued only the one work that had a DOI.
 - Peer-review DOIs (OJS with Crossref) of a work without an article DOI
-  are marked "Submitted" the same way and their deposits never run: code
-  read, not walked. `pkp/pkp-lib#13252` asks whether that setup should be
-  allowed at all.
-- `getDoisForSubmission()` walks every version, so with "DOI
-  Versioning" off a work whose current version has no DOI while an
-  earlier one has keeps that DOI at "Submitted" the same way. With it on,
-  any published version with a DOI makes the work depositable
-  (`getExportableDOIsSubmissionIds()` then skips the current-version
-  join), so the job runs. Code read, not walked.
+  are marked "Submitted" by the same click, and the job that would send
+  them is refused, since the list counts no review's DOI. Code read, not
+  walked.
+- An earlier version's DOI, with "DOI Versioning" off: the endpoint marks
+  the DOIs of every published version
+  (`getPublishedDoisForSubmission()`), and the job refuses a work whose
+  current version has no DOI. So a DOI that only an earlier version
+  carries is left "Submitted" and unsent. With "DOI Versioning" on, the
+  list takes a work on any published version's DOI, and the job runs.
+  Code read, not walked.
+- Issues (OJS): `DoiController::depositIssues()` (OJS
+  `api/v1/dois/DoiController.php`, line 124 on) accepts any published
+  issue the same way, and `DepositIssue::handle()` has no check either,
+  so an issue without a DOI goes to the agency plugin. Code read, not
+  walked; the fix below does not cover it.
+- A journal work whose galley alone has a DOI is on the list, so this
+  check passes it. Its deposit fails later, in the DataCite plugin:
+  [a separate report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md).
 - OMP: a press has a DOIs page for its chapter and format DOIs, but no
   registration agency plugin, so there is nothing to deposit with and no
   surface.
 
 ## Proposed fix
 
-The rule `main` applies since `pkp/pkp-lib#11590`: a work is deposited
-only when its publication has a DOI, and its galley and peer-review
-DOIs go with it. Make `depositSubmissions()` apply that rule, as
-`exportSubmissions()` and the job already do. Its existing check (the current version must be
-published) stays, and a work must also have a DOI ready to deposit. A work
-without one is then refused with the same 400 as an unpublished work,
-before anything is queued or marked:
+The rule `main` applies since `pkp/pkp-lib#11590`, as widened by
+`pkp/pkp-lib#13253`: a work is deposited only when a published version of
+it has a DOI, its own or a galley's. Make `depositSubmissions()` apply
+that rule by reading the list `exportSubmissions()` and the job already
+read. Its existing check (the current version must be published) stays.
+A work without a DOI is then refused with the same 400 as an unpublished
+work, before anything is queued or marked:
 
 ```diff
              ->getIds()
@@ -239,18 +237,28 @@ The diff, against the app root:
 The rule lives in the endpoint because the endpoint decides what to queue
 and what to mark "Submitted". The job's own check stays as a second guard.
 
-Tried on `main`: with the fix in, both paths of the Steps showed the
-Expected on OJS and OPS (400 with the message, no notice, no job, the PDF's
-DOI still "Unregistered"). A work given a DOI first was still accepted,
-marked "Submitted" and queued, with the fix in and out.
+Two details of the diff are a matter of taste. Replacing the collector
+with the list, as c01b8adb80 did in `exportSubmissions()`, gives the same
+set: a work's current publication is its most mature published one
+(lib/pkp `classes/submission/Repository.php`, line 1503), so every listed
+work passes the published check. The diff intersects only to keep that
+check in view beside the sibling endpoints. The `(bool)` cast follows
+`getAllDepositableSubmissionIds()`; the list's two existing callers pass
+the setting as stored, and the dataset stores it, so the cast can go.
+
+Tried on `main`: with the fix in, the Steps showed the Expected on OJS
+and OPS (400 with the message, no notice, no job). The control was
+still accepted, marked "Submitted" and queued, with the fix in and out,
+and so was a DataCite journal's work with only a galley's DOI, with the
+fix in.
 
 **What the manager sees after the fix.** Nothing: the window closes, the
 list reloads, and no message says the deposit was refused, because the
 DOIs page drops the reason of every refused bulk action (tracked apart as
 U45 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a13),
-[its report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-A13-bulk-action-refusal-no-message.md)). That trades a false success for silence. We recommend
-shipping this fix together with the fix that shows those messages, or
-after it.
+[its report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-A13-bulk-action-refusal-no-message.md)).
+That trades a false success for silence. We recommend shipping this fix
+together with the fix that shows those messages, or after it.
 
 **Alternatives:**
 
@@ -269,100 +277,105 @@ after it.
 
 - Batches: with the fix, one ticked work without a DOI makes the whole
   "Deposit DOIs" request fail, and the works with DOIs ticked beside it are
-  not deposited either. Today they are. "Export DOIs" and an unpublished
-  work in a deposit batch already behave this way.
-- Galley-only and peer-review-only setups: a DataCite journal with
-  "Article galleys" ticked and "Articles" unticked, or a Crossref journal
-  with peer-review DOIs on and article DOIs off, has no article DOIs, so
-  the fix refuses every deposit it asks for at the endpoint. On `main`
-  the job already refuses each of them today (the deposit fails as in the
-  Steps); on 3.5 such a journal deposits its galley DOIs. Whether galley
-  or peer-review DOIs may be deposited without an article DOI is the
-  question `pkp/pkp-lib#13252` raises; if the answer is yes, the job's
-  check and this one change together.
-- Stored data: galley or older-version DOIs already stuck at "Submitted"
+  not deposited either, as "Export DOIs" and an unpublished work in a
+  deposit batch already behave.
+- Peer-review DOIs without article DOIs (Crossref): such a journal has no
+  DOI the list counts, so the fix refuses its deposits at the endpoint,
+  where the job refuses them today. If `pkp/pkp-lib#13252` decides that
+  setup may deposit, the list changes and this check follows without an
+  edit.
+- Stored data: review or older-version DOIs already stuck at "Submitted"
   this way cannot be told apart from deposits still queued, so no
   migration is proposed.
-- Test: a unit test on `depositSubmissions()` in lib/pkp, or the e2e
-  scenario in the pkp-e2e U45 spec, ticking a published work without a DOI
-  and asserting the 400 and that no job is queued.
+- Test: lib/pkp has no unit harness for an API controller (its `tests/`
+  hold `classes/` and `jobs/`; `tests/jobs/doi/DepositSubmissionTest.php`
+  covers the job's check). The guard is an integration case: one beside
+  OJS `cypress/tests/integration/DoiCrossref.cy.js`, or the e2e scenario
+  in the pkp-e2e U45 spec, ticking a published work without a DOI and
+  asserting the 400 and that no job is queued.
 - Backport: on 3.5 and 3.4, `getExportableDOIsSubmissionIds()` does not
   exist (it came with `pkp/pkp-lib#12098`), so the backport needs that DAO
-  method or a check on the current publication's `doiId`. The endpoint's
-  published check there uses `filterByStatus()`, so the hunk applies by
-  hand.
+  method or a check on the current publication's `doiId`. The diff's
+  context lines do not match there (the published check uses
+  `filterByStatus()`), so the check is added under it by hand. There the
+  refusal also stops the record with an empty DOI being sent.
 
-Small: a few lines in one lib/pkp controller method, with a unit test and
-no data repair.
+Small: a few lines in one lib/pkp controller method and one integration
+case, with no data repair.
 
 ## Evidence
 
 - Kept script, which takes the Steps through the screens:
-  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/deposit-without-doi-reports-success/walk.js).
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/deposit-without-doi-reports-success/walk.js)
+  with [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/deposit-without-doi-reports-success/lib.js).
   Run it on an install loaded from the default dataset with
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/deposit-without-doi-reports-success/walk.js`
-  (Crossref, no DOI at all; `WALK=galley` for the DataCite galley path on
-  OJS; `NEIGHBOUR=1` gives the work a DOI before depositing;
-  `PKP_E2E_LINE=stable-3_5_0` in front for 3.5). Where the walk differs from the Steps: it reloads at least five
-  times and until the `jobs` table holds no deposit, instead of for a
-  fixed 20 s, and it reads the failed job's exception from the
-  `failed_jobs` row that "Failed Jobs" › "Details" shows (read only).
-- The fix, tried 2026-10-01 and again 2026-10-06 on the `main` tips
-  below: walk.js's three paths (no DOI, `WALK=galley`, `NEIGHBOUR=1`)
-  with `fix.diff` applied to OJS and OPS, and `NEIGHBOUR=1` also without
-  it.
-- Walked 2026-10-06 on PostgreSQL. Each install was freshly loaded from
+  (`NEIGHBOUR=1` gives the work a DOI before depositing;
+  `PKP_E2E_LINE=stable-3_5_0` in front for 3.5; its `WALK=galley…` modes
+  belong to the report on DataCite galley DOIs).
+- Where the walk differs from the Steps: it reloads at least five times
+  and until the `jobs` table holds no deposit, instead of for a fixed
+  20 s, and it reads the failed job's exception from the `failed_jobs`
+  row that "Failed Jobs" › "Details" shows (read only). It also lists the
+  export files a failed deposit leaves in `files_dir/temp` (read only):
+  none on `main`; on 3.5 `crossrefplugin-articles-17-1.xml` (OPS:
+  `crossrefplugin-preprints-2-1.xml`), three times, its XML without a DOI.
+- The fix, tried 2026-10-12 on the `main` tips below (and 2026-10-01,
+  2026-10-06 on earlier tips): `fix.diff` applied to OJS and OPS, then
+  the Steps, `NEIGHBOUR=1` with the fix in and out, and `WALK=galley`
+  (OJS, DataCite, the article's DOI cleared and the PDF's kept) with the
+  fix in.
+- Walked 2026-10-12 on PostgreSQL. Each install was freshly loaded from
   pkp/datasets
-  [5a53d3d](https://github.com/pkp/datasets/commit/5a53d3dc4d85eacde1a042c5a0e40446f357cb09)
-  (2026-10-05), `<app>/main/pgsql` and `<app>/stable-3_5_0/pgsql`, with no
+  [fac2371](https://github.com/pkp/datasets/commit/fac23716137c760359271218bc335a421061f115)
+  (2026-10-11), `<app>/main/pgsql` and `<app>/stable-3_5_0/pgsql`, with no
   upgrade needed.
-  - main: OJS [1f4cef786f](https://github.com/pkp/ojs/commit/1f4cef786fd89237bbfc559a00507a013edcfd4d)
-    (lib/pkp [a7f5e3081b](https://github.com/pkp/pkp-lib/commit/a7f5e3081bced9ddf0717c752b111396c5117da1),
-    crossref-ojs b7b3e73), OPS
-    [21e41026b2](https://github.com/pkp/ops/commit/21e41026b254b52a59c81923f9e5d082fc29409a)
-    (lib/pkp a7f5e3081b, crossref-ops b6b94dd): as Observed, both paths.
-  - stable-3_5_0: OJS [4342473090](https://github.com/pkp/ojs/commit/4342473090c91b1be9066dfebb2ea6b6452c4a06)
-    (lib/pkp 771474347e, crossref-ojs 97a9311), OPS
-    [38b61882d3](https://github.com/pkp/ops/commit/38b61882d3a2396f08e56e2c622ff654fbe48c44)
-    (lib/pkp cf3f984335, crossref-ops 20f5409): as the brackets say. On
-    the galley path the PDF's DOI stays "Submitted" there too, but only
-    because the deposit could not reach DataCite (the failed job is the
-    connection error to `mds.datacite.org`). The code:
-    `depositSubmissions()` checks
+  - main: OJS [d0b69b108d](https://github.com/pkp/ojs/commit/d0b69b108da49a53ff8a6cc15ffe0ea7b7824950)
+    (lib/pkp [1ec9023e8a](https://github.com/pkp/pkp-lib/commit/1ec9023e8a9f3d701bfab396b8b148249c374dab),
+    crossref-ojs f358a32628), OPS
+    [8d04ca333c](https://github.com/pkp/ops/commit/8d04ca333c6bec2d40d35f5ef8cfcd0108986444)
+    (lib/pkp [58c7f454ff](https://github.com/pkp/pkp-lib/commit/58c7f454ff88baf7dc6df9cd0c9090fb97364b56),
+    crossref-ops 4968397748): as Observed.
+  - stable-3_5_0: OJS [c90dfdb577](https://github.com/pkp/ojs/commit/c90dfdb577e9870229206ead446f7771d8300338)
+    (lib/pkp f4f8fcdbc0, crossref-ojs 97a9311), OPS
+    [399c4ebca3](https://github.com/pkp/ops/commit/399c4ebca3096ce80124dc7cb7da122064b7fde5)
+    (lib/pkp 8094f06bf5, crossref-ops 20f5409): as the bracket says. The
+    code: `depositSubmissions()` checks
     `filterByStatus([Submission::STATUS_PUBLISHED])` only (line 459);
     `DepositSubmission::handle()` refuses only a missing submission or
     agency, then calls the agency's `depositSubmissions()`; Crossref's
     `exportAndDeposit()` ignores `$exportErrors` and calls
     `depositXML()`, whose status writes go through
-    `updateDepositStatus()`; DataCite's `depositSubmissions()` adds the
-    work itself when article DOIs are on, and its `depositXML()` only
-    `assert()`s a DOI.
-  - OMP: no registration agency plugin, so no surface.
+    `updateDepositStatus()`.
 - Code reads, not walked:
   - 3.4: lib/pkp `origin/stable-3_4_0`
-    [767353f4fe](https://github.com/pkp/pkp-lib/commit/767353f4fee3078decec6eb95d7de1a0fc58d67c)
+    [55c8e406b3](https://github.com/pkp/pkp-lib/commit/55c8e406b33a3158bc360d5fc16b27673965b861)
     (OJS `upstream/stable-3_4_0`
-    [d68934d0d1](https://github.com/pkp/ojs/commit/d68934d0d1f8542c4856351f7a11bbc8b3d860d0),
+    [daf0ca971d](https://github.com/pkp/ojs/commit/daf0ca971d7ac1985c2941240a444629adc2dfa4),
     OPS [acd8ae704b](https://github.com/pkp/ops/commit/acd8ae704b26a97e5a32147e151ca339699cf96a)):
     `PKPDoiHandler::depositSubmissions()` checks only the published status
     (line 439), dispatches `DepositSubmission` and marks the DOIs
     "Submitted" (lines 455–459), and the job refuses only a missing
     submission or agency, as on 3.5.
   - 3.3: OJS `upstream/stable-3_3_0`
-    [ac77c9fb35](https://github.com/pkp/ojs/commit/ac77c9fb350552c0cdaeb9d65f991d923815d91b),
-    lib/pkp ac3fa73402: no DOIs page and no `api/v1/dois`; the export
-    pages' list (`PubIdExportSubmissionsListGridHandler`) requires the
-    `pub-id::doi` setting. OPS
+    [d7d9dd14ec](https://github.com/pkp/ojs/commit/d7d9dd14ec9d08d48b30d55c49cc97d714866b61),
+    lib/pkp 5e84acd11b: no DOIs page and no `api/v1/dois`; the export
+    pages' list (`PubIdExportSubmissionsListGridHandler`) is filtered on
+    the plugin's pub id type. OPS
     [c5532e2161](https://github.com/pkp/ops/commit/c5532e2161952b912635d2920d6b63f0cffeaf09)
-    has no DOIs page either.
+    has no `api/v1/dois` either.
 - Introduced, traced from the check's lines (528–533) back through two
   reshapings of the same published-only check to 75f5c71339, which wrote
   it in `PKPDoiHandler::depositSubmissions()`.
-- Upstream search, 2026-10-01 and again 2026-10-06: pkp/pkp-lib, pkp/ojs
-  and pkp/ui-library, by the symptom (deposit without a DOI, "Needs
-  DOI", "submitted for deposit") and by `invalid.job.payload`,
-  `DepositSubmission`, `depositSubmissions` and `11590`.
-  `pkp/pkp-lib#7524` (closed) led to the "Needs DOI" filter; it is not
-  this fault.
-- Unverified: Crossref's and DataCite's answers to the 3.5 record with
-  an empty DOI; the batch behaviour, today and with the fix (code read).
+- Upstream search, 2026-10-01, 2026-10-06 and again 2026-10-12:
+  pkp/pkp-lib, pkp/ojs and pkp/ui-library, by the symptom (deposit
+  without a DOI, "Needs DOI", "submitted for deposit") and by
+  `invalid.job.payload`, `DepositSubmission`, `depositSubmissions` and
+  `getExportableDOIsSubmissionIds`.
+- Unverified: Crossref's answer to the 3.5 record with an empty DOI, and
+  what an install that reaches Crossref then shows (code read: the 3.5
+  plugin `CrossrefExportPlugin::depositXML()`, lines 301–354, and
+  `updateDepositStatus()`, line 403); the batch behaviour, today and with
+  the fix (code read); a DataCite journal's work with no DOI at all (code
+  read: the job stops before the agency plugin); the "Reach" items marked
+  code read. The walks ran with PHP's `zend.assertions = -1`.

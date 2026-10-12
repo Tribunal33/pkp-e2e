@@ -1,0 +1,34 @@
+--- a/plugins/generic/datacite/DatacitePlugin.php
++++ b/plugins/generic/datacite/DatacitePlugin.php
+@@ -118,7 +118,8 @@
+         $items = [];
+ 
+         foreach ($submissions as $submission) {
+-            if (in_array(Repo::doi()::TYPE_PUBLICATION, $context->getEnabledDoiTypes())) {
++            // An article without a DOI of its own is left out, as a galley without one is: its galleys' DOIs still go
++            if (in_array(Repo::doi()::TYPE_PUBLICATION, $context->getEnabledDoiTypes()) && $submission->getCurrentPublication()->getDoi()) {
+                 $items[] = $submission;
+             }
+             if (in_array(Repo::doi()::TYPE_REPRESENTATION, $context->getEnabledDoiTypes())) {
+@@ -130,6 +131,11 @@
+             }
+         }
+ 
++        // Nothing here has a DOI of an enabled kind: refuse (the endpoint answers 400), where exportAsDownload() throws on an empty list
++        if (empty($items)) {
++            return ['temporaryFileId' => null, 'xmlErrors' => [__('api.dois.400.invalidPubObjectIncluded')]];
++        }
++
+         $temporaryFileId = $exportPlugin->exportAsDownload($context, $items, null, $xmlErrors);
+         return ['temporaryFileId' => $temporaryFileId, 'xmlErrors' => $xmlErrors];
+     }
+@@ -153,7 +159,8 @@
+         $items = [];
+ 
+         foreach ($submissions as $submission) {
+-            if (in_array(Repo::doi()::TYPE_PUBLICATION, $context->getEnabledDoiTypes())) {
++            // An article without a DOI of its own is left out, as a galley without one is: its galleys' DOIs still go
++            if (in_array(Repo::doi()::TYPE_PUBLICATION, $context->getEnabledDoiTypes()) && $submission->getCurrentPublication()->getDoi()) {
+                 $items[] = $submission;
+             }
+             if (in_array(Repo::doi()::TYPE_REPRESENTATION, $context->getEnabledDoiTypes())) {

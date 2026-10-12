@@ -2214,7 +2214,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-06 — re-verified |
+| [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
 | [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-12 — re-verified |
 | [A18](#a18) | A DOI deposit that cannot connect to Crossref or DataCite reads "Submitted" for good, with no error | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | Saving a DOI registration agency can untick every DOI kind and leave the DOIs page blank | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
@@ -2225,7 +2225,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
-| [OJS5](#ojs5) | "Deposit All" marks a galley DOI "Submitted" when its article has no DOI, and the deposit then fails without sending it | 🐞 | medium · crash: server | PR review (claude), 2026-10-08 — narrowed |
+| [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -2452,17 +2452,17 @@ deposit", but the work stays "Needs DOI", nothing reaches the registration
 agency, and the background deposit fails on the server. Only the site
 administrator's "Failed Jobs" page shows the failure.
 The way round is to give the work a DOI first ("Assign DOIs") and deposit
-again. With DataCite, pressing "Deposit DOIs" on a work whose article DOI
-was cleared while its galley kept one is worse: the galley's DOI turns
-"Submitted" and stays so, though nothing was sent.
-It needs a registration agency (Crossref, or DataCite on a journal) and a
-published work without an article or preprint DOI. Every work published
-before the journal or server set its DOI prefix is in that state, as are
-works whose DOI was cleared. On 3.5 the same notice shows, and the work's
-record is sent to the agency with an empty DOI, which cannot register
-anything; the work stays "Needs DOI".
-Basis: probe, 2026-10-06. <sup>f-a15</sup>
-Report: refresh owed — `pkp/pkp-lib#13460` `d19b2ed294` with `pkp/ojs#5903` `99f5b3dfc8` and `pkp/ops#1435` `5dfa560a8f` (round-8 PR heads, merged 2026-10-09; `pkp/pkp-lib#13253`) make `getExportableDOIsSubmissionIds()` accept a published version that has only a galley's DOI (`whereHasDoi()`), so the Cause's `whereNotNull('p.doi_id')` sentence and the Proposed fix's intersection no longer refuse such a work: on DataCite the job for a work whose article DOI was cleared now reaches the plugin and fails there ("DataCite export: no DOI assigned to the object being deposited."), where it failed with `invalid.job.payload`; "Deposit All" now queues that same failing job ([OJS5](#ojs5)), so the Cause's last sentence on "Deposit All" changes; a work with no DOI at all fails as before (2026-10-08)
+again.
+It needs a registration agency (seen with Crossref; the code is the same
+for DataCite on a journal) and a published work with no DOI, its own or
+a galley's: every work published before the journal or server set its
+DOI prefix, until "Assign DOIs" is pressed.
+"Deposit All" and the automatic deposit leave such a work alone. A press
+has no registration agency to deposit with.
+On 3.5 and 3.4 the same notice shows and the work's record is sent to the
+agency with an empty DOI, which cannot register anything. The work stays
+"Needs DOI", and the app keeps no trace of what the agency answered.
+Basis: probe, 2026-10-12. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — A "Needs Sync" item's agency panel says its metadata "has not been submitted"** · ❓ · minor.
@@ -2702,20 +2702,27 @@ fix belongs with or after that one.
 Basis: probe, 2026-10-09. <sup>f-ojs4</sup>
 
 <a id="ojs5"></a>
-**OJS5 — "Deposit All" marks a galley DOI "Submitted" when its article has no DOI, and the deposit then fails without sending it** · 🐞 · medium · crash: server.
-A journal deposits its DOIs with DataCite, with "Articles" and galley
-DOIs both ticked. A published article has no DOI of its own, because it
-was cleared on the DOIs page or never given, while its galley has one.
-A manager presses "Deposit All" and sees "Items successfully submitted
-for deposit"; the galley's row turns "Submitted". The work's deposit is
-expected to send the galley's DOI. Instead it fails on the server
-before the galley is reached. The galley's DOI stays "Submitted", is
-never sent, and later presses skip it; only Administration › "Failed
-Jobs" lists the failure. "Deposit DOIs" on the same work ends the same
-way ([A15](#a15)), and with "Automatic Deposit" on, the scheduled
-deposit does it without anyone pressing.
-Basis: probe, 2026-10-08, at the round-8 PR heads of `pkp/pkp-lib#13447` before their merge. <sup>f-ojs5</sup>
-Report: refresh owed — `pkp/pkp-lib#13460` `d19b2ed294` with `pkp/ojs#5903` `99f5b3dfc8` (round-8 PR heads, merged 2026-10-09; `pkp/pkp-lib#13253`) give a galley DOI's row its work in `getAllDepositableSubmissionIds()` and let `getExportableDOIsSubmissionIds()` accept a version with only a galley's DOI, so two of the report's three cases are fixed (galley DOIs turned on after the articles were registered; galley DOIs with "Articles" unticked: a deposit is queued and reaches DataCite's address). What remains is the cleared or missing article DOI with "Articles" ticked: a `DepositSubmission` job is now queued and fails in `DataciteExportPlugin::depositXML()` ("no DOI assigned to the object being deposited"), where nothing was queued. The title, Summary, severity (high, now medium with a crash), Steps (the turned-on-later path goes), Cause and Proposed fix all change; the same failed job as [A15](#a15)'s DataCite case, so the refresh may join the two (2026-10-08)
+**OJS5 — DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI** · 🐞 · medium · crash: server.
+On a journal that deposits article and galley DOIs with DataCite, the
+background deposit of a published article that has a galley DOI but no
+DOI of its own fails on the server, and the galley's DOI is never sent.
+A manager who presses "Deposit All", or ticks the article and presses
+"Deposit DOIs", sees "Items successfully submitted for deposit" and the
+galley's row turn "Submitted".
+The row stays "Submitted", which reads as a deposit on its way, and
+later presses of "Deposit All" skip it. Only Administration › "Failed
+Jobs" lists the failure. The way round is "Assign DOIs" on the article,
+then "Deposit DOIs" on it.
+It takes an article whose own DOI was emptied on the DOIs page while its
+galley kept one. A journal with "Articles" unticked is not hit: its
+galley DOIs are deposited. The other articles the same "Deposit All"
+takes are deposited too.
+That is `main`. On 3.5 and 3.4 "Deposit All" also has an older and wider
+fault, which `main` no longer has: it marks a galley DOI "Submitted" and
+starts no deposit unless the article's own DOI goes out with it. So it also leaves galley DOIs unsent when the article's DOI is
+already "Registered" (galley DOIs turned on after the articles were
+registered) and when "Articles" is unticked.
+Basis: probe, 2026-10-12. <sup>f-ojs5</sup>
 
 <a id="ojs7"></a>
 **OJS7 — A review that loses its "Unregistered" DOI and qualifies again gets a new DOI under "Immediately…" and none under the other settings** · ✅ · minor.
