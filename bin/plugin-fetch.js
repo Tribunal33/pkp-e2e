@@ -38,7 +38,7 @@ const {REPO_ROOT} = require('./apps.js');
 const GALLERY = 'pkp/plugin-gallery';
 // What the XML may name: both become folder and file names here.
 const PRODUCT = /^[A-Za-z0-9_-]{1,64}$/;
-const VERSION = /^\d{1,6}(\.\d{1,6}){0,3}$/;
+const VERSION = /^\d{1,6}(\.\d{1,6}){0,3}(-\d{1,6})?$/; // 1.2.3.4, or 1.0.0-33 as a few gallery releases are
 const MAX_UNPACKED = 500 * 1024 * 1024;
 const MAX_ENTRIES = 50000;
 const MAX_REPO_KB = 200 * 1024;
@@ -237,7 +237,7 @@ function main() {
 
         for (const rel of releases) {
             if (!VERSION.test(rel.version || '')) {
-                md.push(`### Refused release version \`${String(rel.version).replace(/`/g, "'").slice(0, 100)}\``, '', '- **Not fetched:** a version is up to four dot-separated numbers; this one would become a folder name.', '');
+                md.push(`### Refused release version \`${String(rel.version).replace(/`/g, "'").slice(0, 100)}\``, '', '- **Not fetched:** a version is up to four dot-separated numbers, with an optional `-N`; this one would become a folder name.', '');
                 summary.push({label: `${product}-?`, problem: 'version refused'});
                 continue;
             }
