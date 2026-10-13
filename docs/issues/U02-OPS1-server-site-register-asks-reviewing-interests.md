@@ -224,7 +224,9 @@ Small: a few lines in one pkp-lib template, and an e2e check.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/server-site-register-asks-reviewing-interests/walk.js)
   (helpers in `lib.js` beside it) takes steps 1–8 through the screens
   on OJS, OMP and OPS, on an install freshly loaded from the default
-  dataset; on OJS and OMP `rvaca` is the Journal or Press manager.
+  dataset; on OJS and OMP `rvaca` is the Journal or Press manager. Run it with
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/server-site-register-asks-reviewing-interests/walk.js`
+  (`PKP_E2E_LINE=stable-3_5_0` in front for 3.5).
   `neighbour` as its argument runs the nearby paths: on OJS and OMP the
   site-wide page with the reviewer role ticked, then the "Roles" tab; on
   OPS the server's own Register page. The fix was tried on 2026-10-04's

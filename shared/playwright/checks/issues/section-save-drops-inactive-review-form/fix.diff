@@ -1,0 +1,18 @@
+--- a/controllers/grid/settings/sections/form/SectionForm.php
++++ b/controllers/grid/settings/sections/form/SectionForm.php
+@@ -122,6 +122,15 @@
+         while ($reviewForm = $reviewForms->next()) {
+             $reviewFormOptions[$reviewForm->getId()] = $reviewForm->getLocalizedTitle();
+         }
++        // A form deactivated after the section chose it stays the section's default (deactivation
++        // only withholds it from new choices): list it too, so the window shows it and saving keeps it.
++        $currentReviewFormId = (int) $this->getData('reviewFormId');
++        if ($currentReviewFormId && !isset($reviewFormOptions[$currentReviewFormId])) {
++            $currentReviewForm = $reviewFormDao->getById($currentReviewFormId, Application::ASSOC_TYPE_JOURNAL, $journal->getId());
++            if ($currentReviewForm) {
++                $reviewFormOptions[$currentReviewFormId] = $currentReviewForm->getLocalizedTitle();
++            }
++        }
+         $templateMgr->assign('reviewFormOptions', $reviewFormOptions);
+ 
+         return parent::fetch($request, $template, $display);

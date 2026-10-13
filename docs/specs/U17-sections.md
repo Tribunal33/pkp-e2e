@@ -924,6 +924,10 @@ Left out of the scenarios above, by reason:
     "Make a new submission to the {section} section." line, and an
     inactive section's policy absent for the editorial roles ([A7](#a7),
     [A8](#a8)): the guard the issue report proposes
+  - {OJS} a section whose review form was deactivated, saved and the
+    form made active again, still on that form in its "Edit" window and
+    preselected by Add Reviewer ([A11](#a11)): the guard the issue report
+    proposes
   - the sections endpoint asked for its list at the site's address by
     the Site Administrator answering a refusal (404), not a server error
     ([A10](#a10)): the guard the issue report proposes
@@ -1092,7 +1096,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | With "Disable Submissions" ticked, the "Submissions" page keeps its per-section submission links | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | The REST API's sections endpoint refuses a missing or another journal's section with a raw message code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | The sections interface fails with a server error on a section asked for by a word, and on the site's address | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A11](#a11) | A section saved while its default review form is inactive loses the default, with "Your changes have been saved." and no word about it | 🐞 | minor | — |
+| [A11](#a11) | Saving a journal section while its review form is inactive silently clears the section's review form | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [OMP2](#omp2) | The series path message says "only letters and numbers" while ".", "/", "_" and "-" are accepted | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A series "Save" with an SVG cover chosen saves nothing, not even the other changes, and shows no message | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP5](#omp5) | A press manager deactivating or reactivating a series is asked about a "section" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1250,23 +1254,30 @@ resource was not found."; other roles there are refused by role.
 Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — A section saved while its default review form is inactive loses the default** · 🐞 · minor.
-A journal makes a review form inactive while a section has it as its
-"Review Form". The section's "Edit" window then lists the other active
-forms with "None / Free Form Review" chosen (it has no "Review Form"
-field at all when the journal has no other active form), and nothing
-says the section has a default that is not shown. "Save", even with
-nothing changed, answers "Your changes have been saved." and the default
-is gone. When the form is made active again, the section's "Edit" still
-reads "None / Free Form Review" and Add Reviewer preselects no form for
-the section's submissions, where a section not saved in between gets its
-form back in both places. A save that changed nothing should change
-nothing. Only the preselection is lost: the form can be chosen again in
-the section's window, and by hand in Add Reviewer. A reviewer's "Edit"
-window drops an inactive form from a review request in the same way
-(*[Review setup & review forms](U29-review-setup-and-review-forms.md#a9)*
-A9).
-Basis: probe, 2026-10-09. <sup>f-a11</sup>
+**A11 — Saving a journal section while its review form is inactive silently clears the section's review form** · 🐞 · medium.
+A journal manager deactivates a review form that a section has chosen
+under "Review Form". The section's "Edit" window then shows "None / Free
+Form Review" chosen, and nothing says the section has a form that is not
+shown. "Save", even with nothing changed, answers "Your changes have
+been saved." and clears the section's form. When the form is made active
+again, the section still reads "None / Free Form Review", and "Add
+Reviewer" no longer preselects the form for the section's submissions.
+
+From then on, review requests in the section go out without the
+journal's form unless an editor picks it by hand each time, until
+someone notices and chooses the form again in the section's window.
+
+It needs a form deactivated while a section still uses it, and a save of
+that section, for any reason, before the form is active again. A journal
+deactivates a form in use when it stops using it for a while, or when it
+replaces it with a revised copy: a form that reviews have used offers
+only "Copy" and "Preview", so the journal edits a copy and deactivates
+the old form while sections still point at it. Only a journal's sections
+have a "Review Form" field; a press's series and a preprint server's
+sections have none. A reviewer's "Edit" window drops an inactive form
+from a review request in the same way (*[Review setup & review
+forms](U29-review-setup-and-review-forms.md#a9)* A9).
+Basis: probe, 2026-10-13. <sup>f-a11</sup>
 
 ### OMP
 
@@ -1679,6 +1690,7 @@ Issue report for the word as id, joined to the API-wide unknown-route fault: [pk
 
 <a id="fn-f-a11"></a>
 **f-a11** — fn j: OJS `SectionForm::fetch()` offers the journal's active forms only (`ReviewFormDAO::getActiveByAssocId()`), so the window of a section whose stored form is inactive posts `reviewFormId` empty, or not at all when the select is not rendered, and `SectionForm::execute()` stores what was posted (`setReviewFormId(null)`); `ReviewerForm::initData()` preselects the section's stored form, which Add Reviewer's own list of active forms leaves out while the form is inactive. Live-probed 2026-10-09 (Fields "Review Form"; Settings bullet 6), OJS `main` (ojs `6d5b793c4e`, lib/pkp `d1bc3a9ecc`) and `stable-3_5_0` (ojs `c6e2c3a879`), two runs on each, the same in all four, on scratch journals as the journal's manager: one journal with the active forms "I09 Form A" and "I09 Form B", one with "I09 Form A" alone, each with the sections "Articles" and "Reviews", both set to "I09 Form A", and a submission at Review in each section. Baseline: "Articles" › "Edit" reopened on "I09 Form A", and Add Reviewer, "Select Reviewer" on Rex Reviewer, arrived on it. "I09 Form A" unticked under "Active" ("Are you sure you wish to deactivate this review form? It will no longer be available for new review assignments.", "OK"): "Articles" › "Edit" listed "None / Free Form Review" (chosen) and "I09 Form B" in the first journal and had no "Review Form" field in the second; "Save" with nothing changed answered 200, closed the window and showed "Your changes have been saved."; Add Reviewer arrived on "None / Free Form Review" for both sections' submissions (in the second journal its window had no "Review Form" list). The form ticked "Active" again ("Are you sure you wish to activate this review form? Once it's assigned to a review you will no longer be able to deactivate it.", "OK"): "Articles" › "Edit" read "None / Free Form Review" with "I09 Form A" back in the list, and Add Reviewer arrived on "None / Free Form Review" for its submission, "I09 Form A" offered; "Reviews", never saved in between, read "I09 Form A" in both places. `sections.review_form_id` of "Articles" was empty from the unchanged "Save" on; that of "Reviews" kept the form's id throughout. No request failed and no page script failed. Kept script: `shared/playwright/checks/U17/I09/i09.js` (row L37).
+Issue report: [docs/issues/U17-A11-section-save-drops-inactive-review-form.md](../issues/U17-A11-section-save-drops-inactive-review-form.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn h, k, m, n, p: OMP's form, grid handler and `ContextService`; OMP's `submissions.tpl` override (fn e). Live-probed 2026-09-25: notes td9, td10, td11, td12.
