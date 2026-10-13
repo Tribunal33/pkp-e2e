@@ -219,7 +219,12 @@ function stage(review, argv) {
     const commit = spawnSync('git', ['-C', app.root, 'rev-parse', 'HEAD'], {encoding: 'utf8'}).stdout.trim();
     const meta = {review, staged: new Date().toISOString(), app: APP_NAME, line: app.line, commit, packages: staged, gallery: Boolean(gallery), copies: copies.map(([, to]) => to)};
     fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
-    execFileSync('chmod', ['-R', 'g+rX', dir]);
+    // The pod reads the copy as the sandbox user, which is neither the bot nor
+    // in its group: rsync keeps the source's group (the bot's), and the bot's
+    // unit runs with UMask=0027 since setup, so everything is opened to others
+    // too. in/ (root-made, the bot's and e2e-plugin's group, mode 2750) keeps
+    // every other user out.
+    execFileSync('chmod', ['-R', 'go+rX', dir]);
     console.log(
         `staged ${review}: ${app.line} ${APP_NAME} at ${commit.slice(0, 10)}, dataset ${app.line} ` +
             `(${counts.cleanDropped} --clean drops, ${counts.ownerDropped} OWNER TO lines left out), ` +
@@ -362,7 +367,9 @@ async function canary() {
         .flat()
         .filter((a) => !a.internal && !/^fe80:/i.test(a.address))
         .map((a) => a.address);
-    fs.writeFileSync(path.join(IN, review, 'app', 'plugins', 'generic', 'sandboxCanary', 'targets.json'), JSON.stringify({own}) + '\n');
+    const targets = path.join(IN, review, 'app', 'plugins', 'generic', 'sandboxCanary', 'targets.json');
+    fs.writeFileSync(targets, JSON.stringify({own}) + '\n');
+    fs.chmodSync(targets, 0o644);
     await pod(['up', review]);
     await pod(['snapshot', review, 'before']);
     const res = await get(`${APP_URL}/plugins/generic/sandboxCanary/probe.php`);
