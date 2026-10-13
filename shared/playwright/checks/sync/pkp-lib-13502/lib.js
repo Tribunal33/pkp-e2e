@@ -1,7 +1,7 @@
 // Helpers of walk.js here (U42 A22). Requiring this file runs nothing. Every helper drives the
 // screens a person uses; the database reads are reads, never steps.
 const {idle, sql} = require('../../../probe');
-const A13 = require('../citation-author-row-kept-after-close/lib');
+const A13 = require('../../issues/citation-author-row-kept-after-close/lib');
 
 const T = 30_000;
 const {flat, sleep, tickMetadata, authorRows, afterClose} = A13;

@@ -1,5 +1,6 @@
-// Issue report docs/issues/U42-A22-reference-author-orcid-any-link.md (U42 A22): a reference
-// author's "ORCID iD" takes any text, and the References page links the author's ORCID icon to it.
+// PR review of pkp/pkp-lib#13502 (issue pkp/pkp-lib#13501; U42 A22, retired at the PR head): a
+// reference author's "ORCID iD" took any text, and the References page linked the author's ORCID
+// icon to it. Kept from the A22 issue report's walk (deleted with the retirement; git keeps it).
 //
 // Takes the report's Steps through the screens on a dataset fleet freshly reset to PKP's default
 // test dataset (`main`), on `publicknowledge`, on the submission of lib.js SUBMISSION: `dbarnes`
@@ -9,16 +10,16 @@
 // Requests to example.com are answered by the browser context itself (no outside traffic).
 //
 // Modes (first argument; each runs alone on a freshly reset dataset):
-//   steps (default)  the Steps (revision 1: the reference added by dbarnes before lookup is turned on).
+//   steps (default)  the Steps (the reference added by dbarnes before lookup is turned on).
 //   reach            the same box as `dbarnes`, typed as a `javascript:` address: stored? linked?
 //                    does pressing the icon run it?
-//   nb               what a fix must leave alone: a full ORCID address, a sandbox one and an empty
+//   nb               what the fix must leave alone: a full ORCID address, a sandbox one and an empty
 //                    box are accepted and linked (orcid.org addresses only).
 //
-// Reset first:  npm run fleet-prep -- --feature issues-x5 --dataset 7 --reset
-// Run (main):   PROBE_FEATURE=issues-x5 PROBE_AGENT=x5 node bin/probe.js <app|all> shared/playwright/checks/issues/reference-author-orcid-any-link/walk.js [steps|reach|nb]
-// 3.5:          PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-x5-3_5 … (3.5 has no structured References page: the walk records what it finds)
-// Fix trial:    PROBE_RUN=fix (steps), nb-in / nb-out (nb), with fix.diff applied or not.
+// Both sides, all three modes:  shared/playwright/checks/sync/pkp-lib-13502/side.sh <base|head>
+// (lib/pkp checked out at the side's commit in every app first).
+// One mode by hand:  npm run fleet-prep -- --feature issues-x5 --dataset 7 --reset, then
+//   PROBE_RUN=<run> PROBE_FEATURE=issues-x5 PROBE_AGENT=x5 node bin/probe.js <app|all> shared/playwright/checks/sync/pkp-lib-13502/walk.js [steps|reach|nb]
 // Facts: .reports/issues-x5/x5/a22-facts[-<run>]-<app>.json
 const {forEachApp, launch, signIn, signOut, screen, shot, record, idle, loc} = require('../../../probe');
 const L = require('./lib');

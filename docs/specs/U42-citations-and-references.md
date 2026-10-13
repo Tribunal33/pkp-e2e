@@ -86,7 +86,7 @@ that fails validation keeps the panel open with the error on the field and
 | **Arxiv** | No | Help text "e.g. 1234.123456v2, arxiv:1234.123456v2, https://arxiv.org/abs/1234.123456v2". Any of the three forms is accepted and kept as the bare ID, with its version when it has one: "2101.12345v2", "arxiv:2101.12345v2" and "https://arxiv.org/abs/2101.12345v2" are each stored as "2101.12345v2". Anything else: "This is not formatted correctly." <sup>f</sup> |
 | **Handle** | No | Help text "e.g. 20.1000/100, handle:20.1000/100, https://hdl.handle.net/20.1000/100". Kept as the bare handle. Anything else: "This is not formatted correctly." <sup>f</sup> |
 | **Title** | No | The cited work's title. <sup>f</sup> |
-| **Author Information** | No | A small table with the columns **Given Name**, **Family Name** and **ORCID iD**, an "Add" button for a new row and a "Delete" per row. The boxes have no names for a screen reader ⚠ [A14](#a14). A row added and left empty is saved as an author with no name [A13](#a13). The ORCID iD box takes any text and keeps it as typed, and the expanded row links the author's ORCID icon to it ⚠ [A22](#a22). <sup>f</sup> |
+| **Author Information** | No | A small table with the columns **Given Name**, **Family Name** and **ORCID iD**, an "Add" button for a new row and a "Delete" per row. The boxes have no names for a screen reader ⚠ [A14](#a14). A row added and left empty is saved as an author with no name [A13](#a13). The ORCID iD box takes only an ORCID address, "https://orcid.org/…" or "https://sandbox.orcid.org/…" with a valid check digit, as a data citation's "Creators" do. Anything else (another website's address, a `javascript:` link, the bare iD) is refused with "The ORCID iD you specified is invalid. Please include the full URI (e.g. "https://orcid.org/0000-0002-1825-0097")." under the row's box, and nothing is saved. A row with the box empty is saved with no iD. The expanded row gives each author with an iD an ORCID icon linking to it. <sup>f</sup> <sup>f-a22</sup> |
 | **Source Name** · **Source Issn** · **Publisher or Host** | No | Free text: the journal, book series or platform the cited work appeared in. <sup>f</sup> |
 | **Source Type** | No | A list: Book Series, Conference, Ebook Platform, Journal, Metadata, Other, Repository. It arrives with nothing chosen and has no empty entry: once a value is picked it can be changed but not cleared. <sup>f</sup> |
 | **Publication Date** | No | A date picker. <sup>f</sup> |
@@ -956,6 +956,12 @@ Left out of the scenarios above, by reason:
     A12 retired): "Edit citation" keeps it in each of the three forms, the
     lookup picks it out of a reference's text with it, and a data citation
     of type "ARXIV" saves it, typed bare or as its address
+  - a reference author's ORCID iD in "Edit citation" ([Fields &
+    validation](#fields); A22 retired): another website's address and a
+    `javascript:` link refused under the row's box with nothing saved; a
+    full, a sandbox and an empty box saved, and only the first two linked
+    from the expanded row (owed once OJS's, OMP's and OPS's `lib/pkp`
+    carry pkp/pkp-lib#13502)
   - identifiers read out of a reference's text (Rule 11, step 1): a DOI
     followed by a comma or a closing bracket, a dx.doi.org address, a
     handle followed by a sentence and a URN followed by a comma, each
@@ -1082,7 +1088,6 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Editing a data citation, its identifier cannot be removed and a cleared Repository, Year or URL is kept | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A22](#a22) | A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A24](#a24) | A screen reader hears that a refused box of the data citation panel is invalid, but not why | 🐞 | minor | — |
 | [A25](#a25) | A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text, without a word | 🐞 | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
@@ -1099,6 +1104,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | A book with no references shows an empty "References" heading | ✅ | retired | — |
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | ✅ | retired | — |
 | [A21](#a21) | Retired: in French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | ✅ | retired | Jarda 2026-10-08 · overturned |
+| [A22](#a22) | Retired: a reference author's "ORCID iD" took any web address, and editors' ORCID icon linked to it; fixed by pkp/pkp-lib#13502 | ✅ | retired | PR review (claude), 2026-10-13 — fixed at pkp/pkp-lib#13502's head |
 
 ### All apps
 
@@ -1287,23 +1293,6 @@ are icon-only buttons with no name; a screen reader announces only
 "button".
 Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
-<a id="a22"></a>
-**A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · 🐞 · medium.
-On a submission's "References" page, "Edit citation" has an "ORCID iD"
-box for each author of a cited work. The box for a data citation's
-creators refuses anything but an ORCID address. This one keeps
-whatever is typed, including another website's address or a
-`javascript:` link. With metadata lookup on, the expanded reference
-shows that author with an ORCID icon, and pressing the icon opens the
-typed address in a new tab instead of an ORCID profile.
-Anyone who may edit the publication can type it. On a preprint server
-that includes the submitting author, because authors may edit their
-metadata by default. On a journal or press it includes the author
-once an editor has ticked the author's permission to change the
-publication. The editors, managers and assistants who press the icon
-are the ones sent to the author's page.
-Since: 2025-09-16 · Basis: probe, 2026-10-05. <sup>f-a22</sup>
-
 <a id="a24"></a>
 **A24 — A screen reader hears that a refused box of the data citation panel is invalid, but not why** · 🐞 · minor.
 When "Add Data Citation" or "Edit Data Citation" refuses a save, the
@@ -1405,6 +1394,9 @@ Basis: probe, 2026-10-07. <sup>f-a27</sup>
 
 <a id="a21"></a>
 **A21 — In French the References page shows raw codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · ✅ · retired. Fixed by `pkp/pkp-lib#13502` (for `pkp/pkp-lib#13501`, the team's copy of the issue report), verified 2026-10-13 at the PR's head before its merge on OJS, OMP and OPS: "Edit citation" refuses a reference author's ORCID iD that is not an ORCID address, a `javascript:` link included, and saves a full, a sandbox or an empty one as before ([Fields & validation](#fields)). <sup>f-a22</sup>
 
 ---
 
@@ -2725,7 +2717,26 @@ writes without schema validation. 3.5, 3.4 and 3.3 do not have it: they
 have no structured references (no `citation.json`, citations API or
 CitationManager).
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
-Issue report: [pkp-e2e#927](https://github.com/jardakotesovec/pkp-e2e/issues/927) ([docs/issues/U42-A22-reference-author-orcid-any-link.md](../issues/U42-A22-reference-author-orcid-any-link.md)).
+PR review 2026-10-13, at the PR head `fd2b199c3c` (pkp/pkp-lib#13502, on
+`f4c2578c94`; pkp/ojs#5925 `aa38bf6d54` moves only OJS's `lib/pkp` to it;
+OMP and OPS at their tips with `lib/pkp` checked out at the head), before
+its merge: `authors.items.orcid` gets `"validation": ["nullable",
+"orcid"]`, the fix the issue report proposed, and nothing else changes in
+the Vue. On PKP's default dataset (`checks/sync/pkp-lib-13502/walk.js`,
+`side.sh base|head`): at the head "Save" with another website's address
+or a `javascript:` link answers 400 with the ORCID message keyed to
+`authors.0.orcid`, the panel stays open with it under the row's box and
+nothing is stored, on OJS, OMP and OPS; a full, a sandbox and an empty box
+are saved, the first two linked from the expanded row (`rel` still
+empty). At the base all three apps store the off-site address and open it
+from the ORCID icon in a new tab. The PR's
+`CitationAuthorOrcidValidationTest` passes at the head and fails at the
+base (OJS, PostgreSQL). By code, still open after the fix and left as the
+report's alternative: a value stored before the fix on an install running
+`main` keeps its link, and the lookup's own writes are not validated
+(OpenAlex gives `https://orcid.org/…` iDs, which the rule accepts, so a
+reference the lookup structured can still be saved).
+Issue report: [pkp-e2e#927](https://github.com/jardakotesovec/pkp-e2e/issues/927), to close with the fix; the report, its `fix.diff` and its place under `checks/issues/` deleted at the PR review (git keeps them).
 
 <a id="fn-f-a23"></a>
 **f-a23 — A23 evidence.** `PKP\citation\Repository::copyCitations()`
