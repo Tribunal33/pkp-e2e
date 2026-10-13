@@ -49,7 +49,7 @@ Site Administrator allows the journal bulk email (Settings bullet 1).
 | "Roles", described "Select the users who should receive your email notification." | yes, refused when none is ticked | A box per role the journal may email (Rule 3), under the name the "Roles" tab gives it; none ticked when the tab opens. Missing: "You must indicate the user roles that should receive this email." under the boxes (Rule 7) <sup>b</sup> |
 | "Subject" | yes | A one-line box, empty when the tab opens. Missing: "You must provide a subject for the email." (Rule 7) <sup>b</sup> |
 | "Email" | yes | A large text box with the icon buttons Bold, Italic, Superscript, Subscript and Insert/edit link, empty when the tab opens. Missing: "You must include an email to be sent." (Rule 7) <sup>b</sup> |
-| "Copy": one box, "Send a copy of this email to me at {email}." | no | Unticked when the tab opens; {email} is the signed-in manager's own address (Side effects) <sup>b</sup> |
+| "Copy": one box, "Send a copy of this email to me at {email}." | no | Unticked when the tab opens; {email} is the signed-in manager's own address (Side effects). Ticked and then unticked before "Save", it still sends the copy ⚠ [A5](#a5) <sup>b</sup> |
 
 No label on the tab carries the required-field mark, although the first
 three fields are refused when empty ⚠ [A2](#a2). The button under the
@@ -168,7 +168,10 @@ the journal is ticked under "Bulk Emails":
   journal) gets one email addressed to them alone, however many of the
   ticked roles they hold; no recipient sees the others' addresses. With
   "Copy" ticked the sending manager gets one more, or none extra when
-  they are already a recipient. <sup>k</sup>
+  they are already a recipient; a manager outside the ticked roles gets
+  one too when the box was ticked and then unticked before "Save"
+  ⚠ [A5](#a5) (a manager who also holds a ticked role was not tried).
+  <sup>k</sup>
 - **Who is a recipient is decided when the email goes out,** not when
   "Send Email" is pressed: a member disabled, or whose role ended, in
   between gets nothing, and the address used is the one the account has
@@ -435,6 +438,7 @@ Left out of the scenarios above, by reason:
   - scenario 2's "Nothing filled in": "Roles", "Subject" and "Email" marked required, and "Save" refused with each field named and no window ([A2](#a2); Rule 4): the guard the issue report proposes, once fixed
   - a send to "Nobody role" alone, with "Copy" ticked and unticked, refused with a message under "Roles" and nothing queued ([A4](#a4); Rule 9): the guard the issue report proposes, once fixed
   - scenario 1's "Author" + "Reader" + "Copy" window reading the number of people the emails reach ([A3](#a3); Rule 5): the guard the issue report proposes, once fixed
+  - a send to "Author" with "Copy" ticked and then unticked before "Save" reaching only the Authors, the manager getting no copy ([A5](#a5); Side effects bullet 1): the guard, once fixed
 - **Register carries it**:
   - A1 (the button that sends reads "Save"; Fields; scenario 1 passes it)
   - A2 (no required mark, and the window opening on "0 users" before any
@@ -443,6 +447,8 @@ Left out of the scenarios above, by reason:
     Rule 5; scenario 1 passes it)
   - A4 (a send to roles with no current member: no "queued" line and no
     email; Rule 9)
+  - A5 (a "Copy" box ticked and then unticked before "Save" still sending
+    the manager a copy; Fields; Side effects bullet 1)
 - **No seed**:
   - a member whose role starts after today, left out of the total (Rule
     5; a start date no screen makes)
@@ -467,6 +473,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | Users & Roles › "Notify": no field is marked required, and an empty form asks to email "0 users" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Notify users: the "Send Email" window counts a person once per ticked role and leaves out the copy | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | Users & Roles › "Notify": an email to roles nobody holds is accepted with "Saved" and sent to no one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A5](#a5) | Users & Roles › "Notify": "Copy" ticked and then unticked before "Save" still sends the manager a copy | 🐞 | minor | — |
 
 ### All apps
 
@@ -508,6 +515,7 @@ number the manager confirms is wrong. In PKP's default test data every
 Author is also a Reader, so "Author" and "Reader" together read 40 for
 20 people.
 Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-04. <sup>f-a3</sup>
+Report: refresh owed — the housekeeping claim check of 2026-10-13 (C55) drove the case the report lists as unverified: a Copy box ticked then unticked still sends the manager a copy (new entry A5); the report's Unverified bullet should take the result (2026-10-13)
 
 <a id="a4"></a>
 **A4 — Users & Roles › "Notify": an email to roles nobody holds is accepted with "Saved" and sent to no one** · 🐞 · low.
@@ -522,6 +530,18 @@ the manager a copy of the email), the same send shows "Emails are
 successfully queued to be sent at the earliest convenience." and only
 that copy goes out, which reads like proof that the roles were reached.
 Since: 2020-11-25 (the tab's first version; the silent "Saved" since 2023-03-22) · Basis: probe, 2026-10-04. <sup>f-a4</sup>
+
+<a id="a5"></a>
+**A5 — Users & Roles › "Notify": "Copy" ticked and then unticked before "Save" still sends the manager a copy** · 🐞 · minor.
+On Settings › Users & Roles › "Notify", a manager who ticks "Copy"
+("Send a copy of this email to me at {email}.") and unticks it again
+before "Save" › "Send Email" still gets the email, once, besides the
+members of the ticked roles. The box shows unticked at "Save", and the
+window's total does not count the copy. A box never ticked sends no
+copy.
+The manager gets an email they chose not to receive; the recipients'
+emails are unaffected.
+Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-13. <sup>f-a5</sup>
 
 ---
 
@@ -591,9 +611,10 @@ accounts, and the member holding both got one email. Code: `PKPNotifyUsersForm::
 (`FieldText`, `email.subject` "Subject"), `body` (`FieldRichTextarea`,
 `email.email` "Email", size large, the default toolbar `bold italic
 superscript subscript | link`), `copy` (`FieldOptions`, `common.copy`
-"Copy", one option `manager.setup.notifyUsers.copyDetails` "Send a copy
-of this email to me at {$email}." with the signed-in user's
-`getEmail()`). The three fields pass `'required' => true`, a key
+"Copy", value `0`, one option `manager.setup.notifyUsers.copyDetails`
+"Send a copy of this email to me at {$email}." with the signed-in
+user's `getEmail()` and the option value `true`, `1` on
+`stable-3_5_0`). The three fields pass `'required' => true`, a key
 `Field::__construct()` ignores (it sets only declared properties, and the
 property is `isRequired`), so the fields reach the page unmarked and the
 form's own required check skips them (A2). The page's submit button is
@@ -773,7 +794,8 @@ and "Tasks" read "No Items". Code:
 `Repo::user()->getCollector()->filterByContextIds([$contextId])->filterByUserGroupIds($ids)->getIds()`
 (the collector's defaults: account status active, role assignment
 active, one row per user), appends the sender's id with `copy` when not
-already present, splits the ids into `Mailer::BULK_EMAIL_SIZE_LIMIT`
+already present (`copy` is cast with `(bool)`, so a posted "false"
+counts as ticked: A5), splits the ids into `Mailer::BULK_EMAIL_SIZE_LIMIT`
 (50) and dispatches one `BulkEmailSender` per chunk as a batch.
 `BulkEmailSender::handle()` reloads the users with the same collector at
 run time (so a user disabled or removed from the context in between is
@@ -881,6 +903,32 @@ Issue report: [pkp-e2e#914](https://github.com/jardakotesovec/pkp-e2e/issues/914
 `totalBulkJobs` the page's only signal of success. Live-probed
 2026-09-26, all three apps (note f).
 Issue report: [pkp-e2e#915](https://github.com/jardakotesovec/pkp-e2e/issues/915) ([docs/issues/U55-A4-notify-send-to-nobody-accepted-silently.md](../issues/U55-A4-notify-send-to-nobody-accepted-silently.md)).
+
+<a id="fn-f-a5"></a>
+**f-a5** — The "Copy" field of note b is a `FieldOptions` with the
+non-array value `0`, so Vue's checkbox `v-model` holds `true` or
+`false`, and `Form.vue` posts `submitValues` form-encoded through
+`$.ajax`: the send carries `copy=0` for a box never touched,
+`copy=true` ticked, and `copy=false` ticked and then unticked.
+`PKPEmailController::create()` reads `case 'copy': $params[$param] =
+(bool) $val;`, and `(bool) "false"` is true, so `!empty($params['copy'])`
+appends the sender's id (note k). The field and the cast both date from
+pkp/pkp-lib#4017 (lib/pkp `891eba202`, 2020-11-25); the same code is on
+`stable-3_5_0` (lib/pkp `f4f8fcdbc0`, Vue 3 ui-library, option value
+`1`), read in the code only. A fix reads the value as a boolean string
+(`filter_var($val, FILTER_VALIDATE_BOOLEAN)`) or gives the field an
+array value (`'value' => []`), so an unticked box posts an empty value.
+Live-probed 2026-10-13 (Fields, the "Copy" row; Side effects bullet 1),
+OJS and OMP four runs each, OPS two, a send to "Author" (one member) in
+three ways: ticked and then unticked before "Save" posted `copy=false`,
+the queued job carried the Author and the manager, and after the jobs
+ran each had one email addressed to them alone, while the box read
+unticked at "Save" and the window read "1 users"; never ticked (two
+runs per app) posted
+`copy=0`, the job carried the Author alone, and the manager had no
+email; ticked posted `copy=true` and sent both, the window again "1
+users". Every send answered 200 `{"totalBulkJobs":1}` with the "queued"
+line.
 
 ## Reference — entry points & surfaces
 
