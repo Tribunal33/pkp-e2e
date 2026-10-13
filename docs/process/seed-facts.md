@@ -1246,11 +1246,11 @@ config-file settings.
   empty. Tools › "Import/Export" lists a journal's DOAJ Export, DataCite,
   Crossref, Native XML, Users XML and PubMed tools; a press's Native XML,
   Tab Delimited, Users XML and ONIX 3.0; a preprint server's Crossref and
-  Native XML. {OMP} "ONIX 3.0 Monograph Export Plugin" › "Export
-  Submissions" fails for every book ("The process failed … supports input
-  classes.submission.Submission[] - array given"), validation ticked or
-  not; the Native XML export carries each format's ONIX product instead
-  (2026-09-28, U73 claim check K5, K5-11, `o-09`, `o-10`); with nothing
+  Native XML. {OMP} "ONIX 3.0 Monograph Export Plugin" shows its "Export" tab
+  only once the press's four ONIX details on Settings › Press › "Masthead"
+  are filled (blank on the default dataset); then "Export Submissions"
+  completes ("The export completed successfully.") on `main` and
+  `stable-3_5_0` (pkp/omp#2372; 2026-10-13, U74 claim check H13D); with nothing
   ticked its results tab opens empty and the server answers 500, validation
   ticked or not (2026-09-28, U74 claim check K5, K5-1). The order of the lines is not fixed: every tool sorts
   equal, so the list follows the order the plugins register in, which

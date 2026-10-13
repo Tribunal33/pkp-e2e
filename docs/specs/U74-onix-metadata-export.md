@@ -99,8 +99,10 @@ headed "Representatives" with "Add Representative" at its top right and
 the columns "Name" and "Role". The table has two groups, "Agents" and
 "Suppliers", each listing the book's representatives of that type:
 the name, and the role as its list names it, such as "Exclusive sales
-agent (05)". A group with no representative reads "No Items". An arrow
-before a name opens "Edit" and "Delete". <sup>e</sup> <sup>td7</sup>
+agent (05)". A group with no representative reads "No Items"; a group
+just emptied by "Delete" shows nothing under its heading until the page
+is reloaded ⚠ [A21](#a21). An arrow before a name opens "Edit" and
+"Delete". <sup>e</sup> <sup>td7</sup> <sup>f-a21</sup>
 
 **The representative window.** "Add Representative" opens a window
 headed "Add Representative", a representative's "Edit" one headed
@@ -242,8 +244,9 @@ nothing is ticked and the box is ticked again. <sup>td19</sup>
 8. **Deleting a representative.**
    - 8a. "Delete" opens the delete dialog, titled "Delete", with "Are
      you sure you wish to delete this item? This action cannot be
-     undone.", "OK" and "Cancel"; "OK" removes the representative and
-     shows "Representative removed.", "Cancel" keeps it. <sup>e</sup> <sup>td13</sup>
+     undone.", "OK" and "Cancel"; "OK" removes the representative at
+     once and shows "Representative removed.", "Cancel" keeps it. What a
+     group emptied this way shows is [A21](#a21). <sup>e</sup> <sup>td13</sup> <sup>f-a21</sup>
    - 8b. A representative that a market territory names as its agent
      or supplier, on any format of any version of the book, is kept.
      "OK" raises a browser pop-up reading "You can not delete this
@@ -451,6 +454,13 @@ each item by its ONIX element, quoted below as the file shows it.
       ([Publication formats & proof terms](U73-publication-formats-proof-terms.md)),
       and the book's title, contributors, language, keywords, abstract,
       cover, series, license and funders. <sup>o</sup>
+    - 24c. The product of a digital format (its "Physical format" box
+      unticked) states the format's file size in megabytes, worked out
+      from the format's files approved with "Approve Proof"
+      ([Publication formats & proof terms](U73-publication-formats-proof-terms.md)):
+      whole megabytes followed by ".3", so a format with no files or
+      under 1 MB reads "0.3", one of 1.9 MB "1.3" and one of 3.8 MB
+      "3.3" ⚠ [A22](#a22). <sup>f-a22</sup>
 25. **Coming back in.** A press's Native XML import
     ([Import & export](U63-import-export.md), its Rule 10) rebuilds the
     trade data from each product:
@@ -1010,6 +1020,9 @@ Left out of the scenarios above, by reason:
     `docs/issues/U74-A13-representative-type-change-listed-twice.md`):
     a supplier switched to "Agent" is listed under "Agents" only,
     before any reload
+  - a digital format's product in the ONIX tool's file stating a file
+    size worked out from the format's approved files (Rule 24c; its
+    value is A22)
 - **Rarely met**:
   - a format that has used all nine sales-rights types, whose "Add
     Sales Rights" list is empty (Rule 10)
@@ -1063,6 +1076,10 @@ Left out of the scenarios above, by reason:
   - A19 (an import adding the exporting press as a supplier; Rule 25b)
   - A20 (the install's first representative listed only after a
     reload, the server failing; Rule 5)
+  - A21 (a group emptied by "Delete" left without its "No Items" line
+    until a reload; Fields, the "Representatives" page; Rule 8a)
+  - A22 (a digital format's file size written as whole megabytes
+    followed by ".3"; Rule 24c)
 - **Owned by another feature**:
   - the Author's view without a "Marketing" group (Actors row 1;
     *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md#side-menu)*)
@@ -1103,6 +1120,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | The returns and availability the "Metadata" tab shows can differ from what the product carries, and an import loses both | 🐞 | medium | issues (claude), 2026-10-06 — re-verified |
 | [A19](#a19) | A Native XML import adds the exporting press as a supplier and changes the suppliers' websites | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A20](#a20) | A book's "Representatives" table does not redraw the first representative ever added on the install | 🐞 | low · crash: both | issues (claude), 2026-10-09 — re-verified |
+| [A21](#a21) | A book's "Representatives" group emptied by "Delete" shows nothing under its heading until a reload | 🐞 | minor | — |
+| [A22](#a22) | A digital format's file size in the book's ONIX product reads whole megabytes followed by ".3" | 🐞 | minor | — |
 | [A3](#a3) | A saved audience list cannot be emptied again | ❓ | minor | — |
 | [A10](#a10) | A representative's ID, and an agent's phone and email, reach no file | ❓ | minor | — |
 | [A1](#a1) | On a freshly installed press, the ONIX 3.0 tool's "Export Submissions" ended in "The process failed" for every book | ✅ | retired | PR review (claude), 2026-10-05 — fixed by pkp/omp#2372, merged 2026-10-05 |
@@ -1385,6 +1404,32 @@ agent or supplier, whichever book it belongs to. Once it is deleted
 the fault is over on that install for good: an emptied list does not
 bring it back.
 Basis: probe, 2026-10-09. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — A book's "Representatives" group emptied by "Delete" shows nothing under its heading until a reload** · 🐞 · minor.
+An editor deletes the last agent, or the last supplier, on a book's
+"Marketing" › "Representatives" page. "Representative removed."
+appears and the row goes, but nothing shows under the group's heading
+where "No Items" should be; the line comes back only after a reload.
+The same happens when the table's very last representative is deleted:
+both headings stand with nothing under either. Adding a representative
+to a group that reads "No Items" hides the line at once, as expected.
+Basis: probe, 2026-10-13. <sup>f-a21</sup>
+
+<a id="a22"></a>
+**A22 — A digital format's file size in the book's ONIX product reads whole megabytes followed by ".3"** · 🐞 · minor.
+A press exports a book with Tools › "ONIX 3.0 Monograph Export
+Plugin". Each digital format's product states a file size: the whole
+megabytes of the format's approved files, followed by ".3". An e-book of
+3.8 MB is announced to the trade as 3.3 MB, one of 1.9 MB as 1.3 MB,
+and a format hosted at another website, or one with no files, as
+0.3 MB. Nothing on screen shows the figure, and the press cannot
+correct it: the format's "Metadata" tab never shows its "File Size in
+Mbytes" box
+([Publication formats & proof terms, its A6](U73-publication-formats-proof-terms.md#a6)).
+Expected: the files' size in megabytes to three decimals (3.8 MB as
+"3.800"), and no file size for a format with no files.
+Since: 2012-06-22, a date read from the code's history · Basis: probe, 2026-10-13. <sup>f-a22</sup>
 
 ### Retired
 
@@ -2176,7 +2221,7 @@ by element since: `MonographONIX30XmlFilter` (note k) writes the header from
 `createHeaderNode()` and, per product, identification codes and a DOI,
 `DescriptiveDetail` (composition, form, measurements, license, series
 `Collection`, title, contributors with roles and verified ORCID iDs,
-language, extents, keywords as a `Subject`), `CollateralDetail`
+language, keywords as a `Subject`), `CollateralDetail`
 (abstract, cover), `PublishingDetail` (imprint, publisher, funders,
 city, publishing dates), `RelatedMaterial`. The Native XML file, which
 strips the header, contributors, abstract, cover and series (note l),
@@ -2184,7 +2229,8 @@ showed on 2026-09-28 a product's `ProductIdentifier` (15, the ISBN-13;
 a `PKID` one for a format without codes), `PublishingDate`,
 `ProductComposition`, `CountryOfManufacture`, title, `Language` "eng",
 the keywords as one `Subject` (scheme 20), `Publisher` and
-`CityOfPublication`.
+`CityOfPublication`. A digital format's file-size `Extent` (Rule 24c)
+was read from the tool's own file on 2026-10-13: note f-a22.
 
 <a id="fn-m"></a>
 **m** — OMP `plugins/importexport/native/filter/NativeXmlPublicationFormatFilter.php`:
@@ -2518,7 +2564,57 @@ report step 3, with "Representative added."); its row fetch answered 500 with
 listed it; the next one (id 2) was listed without a reload. Upstream
 pkp/pkp-lib#8968 (a new representative not listed, closed in 2023 with
 a change to `CategoryGridHandler`) concerns the same page.
+Seen again 2026-10-13 (A20; Rule 5) on OMP `main` and `stable-3_5_0`,
+two runs each on a freshly reset default test dataset as the Press
+manager: the first representative added answered "Representative
+added.", its `fetch-row?rowId=1&rowCategoryId=0` answered 500, and both
+groups kept "No Items" until a reload; every representative added after
+it was listed at once.
 Issue report: [pkp-e2e#945](https://github.com/jardakotesovec/pkp-e2e/issues/945) ([docs/issues/U74-A20-first-representative-not-listed.md](../issues/U74-A20-first-representative-not-listed.md)).
+
+<a id="fn-f-a21"></a>
+**f-a21** — Note e. lib/pkp `js/controllers/grid/GridHandler.js`
+`deleteElement()` shows the empty line only when the deleted row is
+the last `.gridRow` in its `tbody` (`getElementsByType()`); in a
+category table the group's own heading row (`tr.gridRow.category`) sits
+in the same `tbody`, so the count never comes to one and the line is
+never shown. The check dates from lib/pkp `8f42c17a3c` (2012-11-26,
+"Handle grid item addition with paging"). Every legacy category table
+uses the same handler; only "Representatives" was driven. Live-probed
+2026-10-13 (A21; Fields, the "Representatives" page; Rules 5, 8a) on OMP
+`main` and `stable-3_5_0`, two runs each, as the Press manager on a
+freshly reset default test dataset: two agents and a supplier added,
+each listed at once in its group with "Representative added."; the
+agents deleted one by one, each row gone at once with "Representative
+removed."; after the last agent's delete the group's "No Items" line
+stayed in the page, hidden, and showed after a reload. The same after
+the last supplier's delete, whether or not "Agents" was empty, after a
+supplier deleted first from a table holding one supplier and one agent,
+and after the table's last row (both groups blank). The delete answered
+200 and the row fetch 200 with `elementNotFound`; no server error and
+no page error.
+
+<a id="fn-f-a22"></a>
+**f-a22** — Notes k and o. OMP
+`classes/publicationFormat/PublicationFormat.php::getCalculatedFileSize()`
+sums the format's proof files marked viewable (approved) and returns
+`sprintf('%d.3', $bytes / (1024 * 1024))`: `%d` truncates to whole
+megabytes and ".3" is literal text (`%.3f` meant).
+`MonographONIX30XmlFilter` writes it as the `Extent` (`ExtentType` 22,
+file size; `ExtentUnit` 19, Mbytes) of every format without the physical
+flag whenever no `fileSize` is stored, and the "Metadata" tab never
+shows the field that stores one. The line came with omp `395ded913`
+(2012-06-22, "allow file size in publication metadata to be calculated
+automatically") and is on `stable-3_5_0` too. Live-probed 2026-10-13
+(A22; Rule 24c) on OMP `main` and `stable-3_5_0`, two runs each, as the
+Press manager on a freshly reset default test dataset with the press's
+four ONIX details filled, validation ticked, every export "The export
+completed successfully.": the remotely hosted "PDF" of one book and a
+new digital format with no files read `ExtentValue` 0.3; another book's
+"PDF" with six approved files of 14,572 bytes each read 0.3; a new
+digital format with one approved 1,992,294-byte file read 1.3, and with
+a second such file 3.3. The "Metadata" tab of both digital formats
+listed the physical groups and no file-size box.
 
 ## Reference — entry points & surfaces
 
