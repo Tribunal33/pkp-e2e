@@ -28,9 +28,6 @@
  * - A4 🐞: after S13's "Deposit DOIs" the item's agency panel is not read.
  * - A8 🐞: rows' tick boxes are reached by their place in the row; their
  *   missing name is not asserted.
- * - A13 🐞: S13's refused export and deposit are read as nothing
- *   downloaded / nothing marked, bounded by the action's own answer; the
- *   missing message is not asserted.
  * - A14 🐞: S9 reads the "Mark DOIs Needs Sync" question up to "…previously
  *   submitted DOIs."; its "stale" sentence is not asserted.
  * - OPS5 ❓: S4's draft is read through the "DOI Assigned" filter before
@@ -1196,8 +1193,8 @@ test.describe('DOIs', () => {
         await expect(dois.agencySentence(taRow)).toHaveText(TEXT.manuallyRegistered);
         await expect(dois.agencyButtons(taRow)).toHaveCount(0);
 
-        // "Export DOIs" with an unposted preprint: the question; nothing
-        // downloads (Rule 29; A13 not asserted).
+        // "Export DOIs" with an unposted preprint: the question; the "Error"
+        // window with the server's reason; nothing downloads (Rule 29).
         /** @type {string[]} */
         const downloads = [];
         page.on('download', (d) => downloads.push(d.suggestedFilename()));
@@ -1207,15 +1204,19 @@ test.describe('DOIs', () => {
         const exported = await dois.confirmAction(exporting, 'Export DOIs');
         expect(exported.status(), 'the export is refused').toBe(400);
         expect(exported.headers()['content-disposition'] || '').not.toContain('attachment');
+        await expect(dois.errorDialog()).toContainText(TEXT.invalidObjects);
+        await dois.closeErrorDialog();
         expect(downloads).toEqual([]);
 
-        // "Deposit DOIs" with an unposted preprint: the question; nothing
-        // marked (Rule 29; A13 not asserted).
+        // "Deposit DOIs" with an unposted preprint: the question; the "Error"
+        // window with the server's reason; nothing marked (Rule 29).
         await dois.tick([axolotl.submissionId, moss.submissionId]);
         const depositing = await dois.chooseBulkAction('Deposit DOIs');
         await expect(depositing).toContainText(TEXT.depositQuestion(2, 'Crossref'));
         const refused = await dois.confirmAction(depositing, 'Deposit DOIs');
         expect(refused.status(), 'the deposit is refused').toBe(400);
+        await expect(dois.errorDialog()).toContainText(TEXT.invalidObjects);
+        await dois.closeErrorDialog();
         await expect(dois.rowBadge(axRow)).toHaveText('Unregistered');
         await expect(dois.rowBadge(moRow)).toHaveText('Unpublished');
 

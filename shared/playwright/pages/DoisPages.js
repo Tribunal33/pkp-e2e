@@ -99,6 +99,8 @@ const DOIS_TEXT = {
     updated: 'DOI(s) successfully updated',
     partialFailure: 'Some DOI(s) could not be updated',
     failedTitle: 'DOI Updates Failed',
+    errorTitle: 'Error',
+    invalidObjects: 'One or more invalid publication objects were included with the request.',
     assigned: 'Items successfully assigned new DOIs',
     markedRegistered: 'Items successfully marked registered',
     markedUnregistered: 'Items successfully marked unregistered',
@@ -934,6 +936,17 @@ class DoisPage extends BasePage {
     async closeFailedDialog() {
         await this.failedDialog().getByRole('button', {name: 'OK', exact: true}).click();
         await expect(this.failedDialog()).toBeHidden({timeout: T});
+    }
+
+    /** The "Error" window a refused bulk action leaves open, with the server's reason (A13 retired). */
+    errorDialog() {
+        return this.dialog(DOIS_TEXT.errorTitle);
+    }
+
+    /** Close the "Error" window with its "OK". */
+    async closeErrorDialog() {
+        await this.errorDialog().getByRole('button', {name: 'OK', exact: true}).click();
+        await expect(this.errorDialog()).toBeHidden({timeout: T});
     }
 
     /**
