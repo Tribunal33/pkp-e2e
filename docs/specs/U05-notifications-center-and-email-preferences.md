@@ -949,7 +949,7 @@ Profile page
 ([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a2)).
 It worked in 3.0 and broke in 3.1.
 Basis: probe, 2026-10-03. <sup>[f-a3](#fn-a3)</sup>
-Report: refresh owed — the housekeeping claim check of 2026-10-13 (C05, kept script `shared/playwright/checks/U05/C05/c05.js`, new entry [A15](#a15)) found that the other roles see the count only on a journal whose only "Forms" language is English: with French under "Forms" no role sees it, and at 992 px or wider the number shows nowhere; the report's contrast ("while the other roles' menus do") and its Steps rest on the dataset journal, whose "Forms" languages were not stated; and the report says "the menu under the name" where Rule 4a puts the number beside the name in the header (2026-10-13)
+Report: refresh owed — the housekeeping claim check of 2026-10-13 (claim check C05 and its kept script, new entry [A15](#a15)) found that the other roles see the count only on a journal whose only "Forms" language is English: with French under "Forms" no role sees it, and at 992 px or wider the number shows nowhere; the report's contrast ("while the other roles' menus do") and its Steps rest on the dataset journal, whose "Forms" languages were not stated; and the report says "the menu under the name" where Rule 4a puts the number beside the name in the header (2026-10-13)
 
 <a id="a4"></a>
 **A4 — The site-level tab governs nothing** · ❓ · latent.
