@@ -692,8 +692,8 @@ test.describe('submissions dashboard', () => {
         await expect(dash.dataRows()).toHaveCount(30);
 
         // First click on "ID": descending, recorded in the address (Rules
-        // 4–5). The third, switch-off click is a Planned item (the fix,
-        // ui-library 7f5e51ca, is not in the apps' pointers yet).
+        // 4–5). The third, switch-off click is a Planned item (the guard
+        // for the retired A5).
         const idHeader = dash.sortButton('ID');
         await idHeader.click();
         await expect(page).toHaveURL(/sortColumn=id/);

@@ -154,9 +154,7 @@ the account's roles, never on which dashboard page it opens from:
    address records the sort while it is on, descending or ascending. The
    third click, which switches the sort off, takes it out of the address
    and leaves the view and a search phrase there, so a reload then shows
-   the default order. That is the behavior since a fix of 2026-10-08;
-   an app built before it keeps the switched-off sort in the address,
-   and a reload sorts the list by that column again. <sup>a5</sup> A
+   the default order. <sup>a5</sup> A
    screen reader is never told
    which of these states a header is in ⚠ [A15](#a15). The list pages at
    30 rows; paging a view whose submissions share a submission date and
@@ -818,7 +816,7 @@ Left out of the scenarios above, by reason:
   - the "Loaded" a screen reader hears once the list has loaded (Rule 5)
   - the guard for A10 (issue report `docs/issues/U23-A10-pager-next-lacks-spoken-label.md`): on a list with two pages, every pager button carries a "Go to …" name, "Go to Next" included
   - the guard for the retired A4 and A6 and for the day count (pkp/pkp-lib#13472, Rule 10): the popover of a request the editor cancelled reads "Review request cancelled by editor" and offers "Reinstate Reviewer" alone, which puts the reviewer back; that of an accepted review past its deadline says "The review was due on {date}"; a response due tomorrow reads 1 day; it needs a cancelled reviewer and an overdue review, which no scenario sets
-  - the guard for the retired A5 (Rule 5): in scenario 7 ("Sort and page"), a third click on "ID" leaves the address without `sortColumn` and `sortDirection`; to be asserted once all three apps' builds include the fix (Rule 5 says how a build without it behaves)
+  - the guard for the retired A5 (Rule 5): in scenario 7 ("Sort and page"), a third click on "ID" leaves the address without `sortColumn` and `sortDirection`, and a reload shows the default order
   - a number in the search box listing the submission with that ID and those whose titles hold its digits, in either box (Rules 6, 7)
   - the "Clear Filters" beside the chips dropping the filters and keeping the search chip (Rule 8b)
   - a phrase typed without Enter staying in the box on the next view, over its full list with no chip (Rule 6)
@@ -1932,7 +1930,14 @@ with the phrase "the" searched, two more clicks on "ID" gave ascending
 and then `currentViewId=active&searchPhrase=the`, the sort alone gone.
 On that day the three apps' own `lib/ui-library` pointers stood at
 `ea5061b0`, one commit before the fix, so an app built from its own
-`main` still showed the old behavior.
+`main` still showed the old behavior. Walked again 2026-10-09 on OJS,
+OMP and OPS `main`, their own `lib/ui-library` pointers at `38814ea1`
+(which includes the fix), PKP's default test dataset freshly loaded,
+the same kept walk, as `dbarnes` on "Active submissions": after the
+third click on "ID" and after a reload the address held
+`currentViewId=active` alone and the rows stood in the default order
+(OJS 20 first, OMP 18 first; OPS one preprint). The fix is in every
+app's own build from that day.
 
 <a id="fn-a6"></a>
 **a6 — A6 evidence.** Live-probed 2026-08-26 (OJS + OMP, same string on

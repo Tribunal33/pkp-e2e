@@ -766,8 +766,7 @@ test.describe('Submissions dashboard — editorial (U23)', () => {
 
         // First click on "ID": descending — the address records the sort
         // and the highest ID rises to the top (Rules 4–5). (The third,
-        // switch-off click is a Planned item: the fix, ui-library 7f5e51ca,
-        // is not in the apps' pointers yet.)
+        // switch-off click is a Planned item: the guard for the retired A5.)
         await dash.sortButton('ID').click();
         await expect(page).toHaveURL(/sortColumn=id/);
         await expect(page).toHaveURL(/sortDirection=descending/);

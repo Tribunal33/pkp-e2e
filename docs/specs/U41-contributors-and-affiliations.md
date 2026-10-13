@@ -1095,7 +1095,7 @@ Any journal can meet this, with one language or several: the name box
 only has to be emptied. The list says the same when the institution
 holds a name in a language the journal has since stopped taking for
 submission metadata. That save is refused with no reason shown to
-anyone, so "[object Object]" is all a screen reader is told.
+anyone ([A28](#a28)), so "[object Object]" is all a screen reader is told.
 Basis: probe, 2026-10-08. <sup>f-a7</sup>
 
 <a id="a8"></a>

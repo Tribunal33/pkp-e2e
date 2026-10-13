@@ -331,7 +331,10 @@ same model: a false positive's piece goes to a narrow Sonnet fallback
    slot (U35, U45, U50, U51, U54 issues sessions, 2026-10-01). A claim
    checker driving the slot's own fleets beside reporters takes the same
    lock for each run on `main`, since a fix applied mid-run serves its
-   pages too (U03, U39 claim checks, 2026-10-07). On the VM that lock
+   pages too (U03, U39 claim checks, 2026-10-07); a run of its that
+   changes a site-wide setting (Site Settings, the site record) takes it
+   `exclusive`, as one command that puts the setting back, since every
+   visitor of the fleet reads it (U02 sweep, 2026-10-12). On the VM that lock
    is `bin/app-lock.sh <shared|exclusive> <apps> -- <command>`: a walk
    or a drive takes it `shared`, any number at once since only a fix
    changes the code, and a fix trial takes it `exclusive` as one command

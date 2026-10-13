@@ -5,7 +5,7 @@
  
  		{* When a user is registering for no specific journal, allow them to
 -		   enter their reviewer interests *}
-+		   enter their reviewer interests, if any journal offers a reviewer role *}
++		   enter their reviewer interests, if any journal or press offers a reviewer role *}
  		{if !$currentContext}
 -			<div class="fields">
 -				<div class="reviewer_nocontext_interests">

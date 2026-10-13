@@ -371,7 +371,13 @@ shows only while its text is not empty. <sup>j</sup>
     <sup>k</sup>
     - 23a. Signed out: "Login or Register to make a submission.", where
       "Login" opens the Login page and "Register" the journal's Register
-      page.
+      page. A journal closed to registration (Settings › Users & Roles ›
+      "Site Access Options", "The Journal Manager will register all user
+      accounts…") still shows the sentence with its "Register" link, and
+      the link opens the page reading
+      "This journal is currently not accepting user registrations."
+      ("This press…", "This server…")
+      ([Registration & account validation](U02-registration-and-account-validation.md#a8)).
     - 23b. Signed in: "Make a new submission or view your pending
       submissions.". "Make a new submission" opens the "Make a
       Submission" start screen with "Begin Submission" for every
@@ -939,6 +945,10 @@ Left out of the scenarios above, by reason:
   - a journal closed to visitors sending a signed-out visitor to the
     Login page, and back after signing in (Rule 26; Settings bullet 7;
     *[Roles configuration](U54-roles-configuration.md)*, scenario 7)
+  - a journal closed to registration still offering "Register" in the
+    signed-out sentence (Rule 23a;
+    *[Registration & account validation](U02-registration-and-account-validation.md#a8)*,
+    whose register carries it as A8)
 
 ## Findings register
 
@@ -1552,7 +1562,14 @@ journal site." ticked, the typed address signed out landed on
 `login?source=…/about/submissions`, and signing in there returned to the
 "Submissions" page (Rule 26, one run per app); the box reads "… the press
 site." on a press and "… the server site." on a preprint server (Settings
-bullet 7).
+bullet 7). The signed-out sentence does not consult `disableUserReg`
+(Rule 23a): live-probed 2026-10-12, all three apps, two runs each (the
+registration spec's drift sweep, its note f-a8), on a scratch journal set
+to "The Journal Manager will register all user accounts…" the header read
+"Login" alone while the page, signed out, read "Login or Register to make
+a submission.", and its "Register" opened `{context}/user/register`
+reading "This journal is currently not accepting user registrations."
+("This press…" / "This server…") with no form.
 
 <a id="fn-k"></a>
 **k** — Links: "view your pending submissions" opens page `submissions`

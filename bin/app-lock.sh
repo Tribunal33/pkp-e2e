@@ -15,14 +15,20 @@ dir=${APPLOCK_DIR:-$root/.reports/locks}
 mkdir -p "$dir"
 flag=-s; [ "$mode" = exclusive ] && flag=-x
 echo "[applock] $mode $apps: asked $(date +%T)" >&2
+# Each wait runs in the background so a signal reaches this script while it waits, and the
+# trap ends the waiting flock with it: a killed caller leaves no flock queued on a gate.
+waiter=
+trap '[ -n "$waiter" ] && kill "$waiter" 2>/dev/null; exit 143' TERM INT HUP
+take() { flock "$@" & waiter=$!; wait "$waiter"; waiter=; }
 gates=(); fds=()
 for a in ojs omp ops; do
-  case ",$apps," in *",$a,"*) exec {g}>>"$dir/$a.gate"; flock -x "$g"; gates+=("$g");; esac
+  case ",$apps," in *",$a,"*) exec {g}>>"$dir/$a.gate"; take -x "$g"; gates+=("$g");; esac
 done
 for a in ojs omp ops; do
-  case ",$apps," in *",$a,"*) exec {fd}>>"$dir/$a.lock"; flock $flag "$fd"; fds+=("$fd");; esac
+  case ",$apps," in *",$a,"*) exec {fd}>>"$dir/$a.lock"; take $flag "$fd"; fds+=("$fd");; esac
 done
 for g in "${gates[@]}"; do flock -u "$g"; eval "exec $g>&-"; done
+trap - TERM INT HUP
 echo "[applock] $mode $apps: holds $(date +%T)" >&2
 # The command runs without the lock descriptors, so a server it starts cannot keep a lock.
 ( for fd in "${fds[@]}"; do eval "exec $fd>&-"; done; exec "$@" ) && rc=0 || rc=$?

@@ -828,7 +828,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press site's site-wide Register page, each press's privacy consent box shows before any role is ticked | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OPS1](#ops1) | A preprint server's site-wide Register page asks for reviewing interests, though servers have no reviewers | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [OPS1](#ops1) | A preprint server's site-wide Register page asks for reviewing interests, though servers have no reviewers | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A5](#a5) | The Register page's "Login" link aims at the profile's Roles tab, but sign-in lands as usual | ❓ | minor | — |
 | [A7](#a7) | A journal-level registration grants Reader even when the Reader role is closed to self-registration | ❓ | latent | — |
 | [A8](#a8) | A journal that closed registration still offers "Register" on its "Submissions" page; the link opens the closed message | ❓ | minor | — |
@@ -1038,17 +1038,18 @@ the kind.
 Whatever the newcomer types is accepted without a word and kept. On main
 they never see it again: their Profile's "Roles" tab has no "Reviewing
 interests" field (on 3.5 that tab lists the interests under "Reviewing
-interests"). A Server Manager does see it, under "Reviewing interests" in
-Users & Roles › "Edit" › "View more details", until the newcomer presses
-"Save" on that Roles tab, which removes the interests (the *User profile*
-finding [OPS3](U03-user-profile.md#ops3)). Nothing else breaks, but the
-newcomer answers a question that does not apply to them and may wonder
-whether they signed up to review.
+interests"). A Preprint Server manager does see it, under "Reviewing
+interests" in Users & Roles › "Edit" › "View more details". The server
+stores and shows reviewer interests it never asked of a reviewer, so the
+manager reads them as if they meant something. On main the newcomer's
+next "Save" on that Roles tab removes them (the *User profile* finding
+[OPS3](U03-user-profile.md#ops3)); 3.5 keeps them. Nothing else breaks,
+but the newcomer answers a question that does not apply to them and may
+wonder whether they signed up to review.
 
 A site with several servers links to this page from its own menu. On a
 site with one server it is reached only by typing its address.
-Basis: probe, 2026-10-04. <sup>[f-ops1](#fn-ops1)</sup>
-Report: refresh owed — the drift sweep of 2026-10-12 (claim check SW2, block SW2-2, the sweep's kept check) corrected the entry's second paragraph: the interests typed on a preprint server's site-level Register page are not unused, a Preprint Server Manager reads them under "Reviewing interests" in Users & Roles › "Edit" › "View more details", until the newcomer's first "Save" on their profile's Roles tab removes them (*User profile* OPS3); the report still says nothing on a server uses them (2026-10-12)
+Basis: probe, 2026-10-13. <sup>[f-ops1](#fn-ops1)</sup>
 
 ---
 

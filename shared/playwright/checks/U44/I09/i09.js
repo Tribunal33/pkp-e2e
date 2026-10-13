@@ -356,6 +356,10 @@ forEachApp(async (app) => {
             const dialog = page.getByRole('dialog').filter({has: page.getByRole('tab', {name: 'Identifiers', exact: true})}).last();
             const win = new LegacyIdentifiersWindow(page, dialog);
             await win.tab('Identifiers').waitFor({timeout: T});
+            // The first tab's form loaded before the switch, as the chapter and galley openers do:
+            // a switch that aborts that request leaves the window asking on close (rrlead, 2026-10-09).
+            await expect(dialog.locator('form').first()).toBeVisible({timeout: T});
+            await idle(page);
             await win.openIdentifiersTab();
             await idle(page);
             return win;

@@ -152,15 +152,20 @@ wish to delete this item? This action cannot be undone." and the buttons
    once. The save shows no notice of its own; a "URL Path" refused
    before it shows its reason as a red notice now (Rule 5, [A8](#a8)).
    <sup>h</sup>
-   - 6a. **Leaving with unsaved changes.** After a field is changed,
-     moving to the other tab or pressing the window's header "Close"
-     first asks "The data on this form has changed. Do you wish to
+   - 6a. **Leaving with unsaved changes.** After a field on "Edit
+     Metadata" is changed, moving to the other tab or pressing the
+     window's header "Close" first asks "The data on this form has changed. Do you wish to
      continue without saving?". "OK" drops the change and switches the
      tab or closes the window; "Cancel" stays where it was. "Create New Galley"'s header "Close"
      asks the same. The form's own "Cancel" closes without asking and
      stores nothing. After a refused "Save" (Rule 5), the "Edit"
      window's header "Close" closes it at once, without asking, although
      the box still holds the refused path. <sup>h</sup>
+   - 6b. **Leaving the "Identifiers" tab with a typed value.** A move to
+     "Edit Metadata" asks the question of Rule 6a. The window's header
+     "Close" asks nothing: it closes the window at once, and the typed
+     box is empty when the tab is opened again
+     ⚠ [→ Identifiers A17](U44-identifiers.md#a17). <sup>h</sup>
 7. **The read-only window.** On a preprint server, "View" opens the same
    window headed "View Galley", with every field greyed out, "Save"
    greyed out and no "Cancel"; its "Identifiers" tab is read-only as
@@ -680,6 +685,9 @@ Left out of the scenarios above, by reason:
     *Workflow screen & stage access*, scenario 4)
   - the "Identifiers" tab of the galley's window (Actors row 5; Rule 6;
     *Identifiers*, scenarios 1 and 7)
+  - a value typed on the "Identifiers" tab, then a switch to "Edit
+    Metadata" or the header "Close" (Rule 6b; *Identifiers*, its
+    register A17)
   - "Enable for Galleys" ticked (Settings bullet 1; *Identifiers*,
     scenario 1)
   - the "URN" plugin with "Galleys" ticked {OJS} (Settings bullet 2;
@@ -1073,7 +1081,14 @@ showed no notice, at the save and after a reload (two runs each). After
 no question, the box still reading "123" (OJS three runs, OPS two);
 control, two runs each: a path typed and not saved, the header "Close"
 asked the question and "OK" closed the window. A field changed
-again after the refusal, then "Close", was not driven.
+again after the refusal, then "Close", was not driven. Live-probed
+2026-10-09 (Rule 6b; Identifiers A17), OJS and OPS, `main` and
+`stable-3_5_0`, two runs or more each, as the manager of a scratch
+journal and preprint server on the galley "PDF" of an unpublished
+submission: with a Publisher ID (OJS, OPS) or a URN suffix (OJS) typed
+on "Identifiers" and not saved, the header "Close" raised no question
+and the reopened tab's box was empty; a switch to "Edit Metadata"
+raised the question, and so did "Close" after a changed galley label.
 
 <a id="fn-i"></a>
 **i** — `galleyView()` opens the same `editGalley` operation titled

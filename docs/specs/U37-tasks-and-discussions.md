@@ -488,10 +488,11 @@ one-line description under its heading (Rule 6). <sup>m</sup>
 18. **"History".** The row menu's "History" opens a side window titled
     "History", with the item's name under it, and a table "Date", "User",
     "Event", newest first. <sup>y</sup>
-    Events saved in the same second are not put in the order they were
-    saved, latest first: a reply's "posted a response" line stood above
-    its file's "uploaded by" line on a journal and below it on a
-    preprint server ⚠ [A33](#a33). <sup>td22</sup>
+    Lines one save writes within one second stand oldest first
+    ⚠ [A33](#a33): a reply's "posted a response" line stands above its
+    file's "uploaded by" line when both fall in one second, below it when
+    the file's line falls in the next. "Date" shows no time, so either
+    order may show. <sup>td22</sup>
     "User" is the person's full name; "Event" uses the
     username. During Login As, "User" reads "{real person} (acting as {the
     person impersonated})", and "Event" and the row's "Activity" name the
@@ -2183,7 +2184,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **td21** — Live-probed 2026-10-02 (Rule 15f; A34; OJS; the default dataset, `dbarnes`): a task added on Copyediting due in fourteen days, its stored due date then moved three weeks back in the database in place of waiting; "Edit" showed the past date under "Due Date" and the badge "Overdue"; "Save" with only "Name" changed answered 422 (`dateDue`: "Start date should be greater than or equal to today") and the window stayed open with "Please correct one error.". OMP and OPS were not driven.
 
 <a id="fn-td22"></a>
-**td22** — Live-probed 2026-10-02 (Rule 18; A33; OJS and OPS; the default dataset, `dbarnes`): a reply with a file attached, its two History lines in the same second: OJS listed "… posted a response …" above "replacement.pdf uploaded by …", OPS the other way round.
+**td22** — Live-probed 2026-10-02 (Rule 18; A33; OJS and OPS; the default dataset, `dbarnes`): a reply with a file attached: OJS listed "… posted a response …" above "replacement.pdf uploaded by …", OPS the other way round; the seconds the two lines were saved in were not read. Walked again 2026-10-09 on all three apps on PostgreSQL (the A33 issue report's walk, reading each line's saved time from the database, as the History's "Date" shows no time): the order follows the timing, not the app. Of the four replies walked on the unchanged apps, the two whose lines fell within one second (OMP, OPS) listed the reply's line on top, the earlier line first, at every read; the two whose file line fell in the next second (OJS, and OMP's first walk) listed the file's line on top. Of the ten replies walked in all, the report's fix trial included, five saved both lines within one second.
 
 <a id="fn-td23"></a>
 **td23** — Live-probed 2026-10-05 (Rule 13d; A36; all three apps, two runs, two browsers at once on a scratch journal): a discussion written by the Section Editor (Moderator) with the Journal Manager and a second Section Editor, the Journal Manager's window open while the Section Editor unticked them in "Edit" and saved; the Journal Manager's "Add New Message" › "Save" answered 422 and showed "Error" "An unexpected error has occurred. Please reload the page and try again." with "OK", and after a reload the window read "To add a new message, please assign yourself as a participant."; the Section Editor's reply after the Journal Manager unticked them from a discussion the Journal Manager wrote: 401 "You do not have permission to modify this discussion." (`user.authorization.submissionQuery.edit`), and after a reload no row for it.
@@ -2305,7 +2306,7 @@ Issue report: [pkp-e2e#430](https://github.com/jardakotesovec/pkp-e2e/issues/430
 Issue report: [pkp-e2e#949](https://github.com/jardakotesovec/pkp-e2e/issues/949) ([docs/issues/U37-A32-task-boxes-screen-reader-shared-names.md](../issues/U37-A32-task-boxes-screen-reader-shared-names.md)).
 
 <a id="fn-a33"></a>
-**f-a33** — Live-probed 2026-10-02 (note td22). The event-log `Collector` returns a task's entries ordered by `date_logged` alone; `TaskResource::toArray()` then calls `sortBy(['dateLogged' => 'desc', 'id' => 'desc'])` (c69d929b26, `pkp/pkp-lib#12451`, merged 2026-03-15), which Laravel's `sortByMany()` reads as the values to sort on, so it sorts nothing and lines of one second keep the database's order. Checked in PHP against the bundled Laravel, 2026-10-02: that array leaves a collection as it is, where `[['dateLogged', 'desc'], ['id', 'desc']]` sorts it. Note y saw the same on 2026-09-23 (events of one second in different orders between apps).
+**f-a33** — Live-probed 2026-10-02 (note td22). The event-log `Collector` returns a task's entries ordered by `date_logged` alone; `TaskResource::toArray()` then calls `sortBy(['dateLogged' => 'desc', 'id' => 'desc'])` (c69d929b26, `pkp/pkp-lib#12451`, merged 2026-03-15), which Laravel's `sortByMany()` reads as the values to sort on, so it sorts nothing and lines of one second keep the database's order. Checked in PHP against the bundled Laravel (12.65.0, all three apps' lib/pkp) on `EventLogEntry` objects, 2026-10-09 (`shared/playwright/checks/issues/history-same-second-order/sortcheck.php`): that array leaves the list as it is, and so does the pair form `[['dateLogged', 'desc'], ['id', 'desc']]`, since an `EventLogEntry` keeps its values behind `getData()` and `data_get()` reads `null` for each; two comparison closures sort it. Which way a reply's two lines stand is timing: `addNote()` logs the reply with the message's creation time and its files with the current time, the same second or the next (note td22). Note y saw events of one second in different orders between apps on 2026-09-23.
 Issue report: [pkp-e2e#948](https://github.com/jardakotesovec/pkp-e2e/issues/948) ([docs/issues/U37-A33-history-same-second-order.md](../issues/U37-A33-history-same-second-order.md)).
 
 <a id="fn-a34"></a>

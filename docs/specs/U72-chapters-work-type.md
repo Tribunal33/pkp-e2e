@@ -154,13 +154,16 @@ wizard on Review ⚠ [A5](#a5). <sup>h</sup>
      success the window closes, the notice "Your changes have been
      saved." appears, and the list shows the change. <sup>g</sup>
    - 5b. "Cancel" closes the window without asking and keeps nothing
-     typed in it. With a change typed, the window's close arrow, or a
-     switch between "Edit Metadata" and "Identifiers", asks "The data on
-     this form has changed. Do you wish to continue without saving?":
-     the question's "Cancel" keeps the window and the change, its "OK"
-     drops the change.
-     Leaving the page with text typed in "Add Chapter" raises the
-     browser's own "Leave site?" question, and leaving drops the
+     typed in it. With a change typed on "Edit Metadata", the window's
+     close arrow, or a switch to "Identifiers", asks "The data on this
+     form has changed. Do you wish to continue without saving?": the
+     question's "Cancel" keeps the window and the change, its "OK" drops
+     the change. A change typed on "Identifiers" gets the same question
+     on a switch to "Edit Metadata", but the close arrow closes the
+     window at once, asking nothing, and the change is lost
+     ⚠ [→ Identifiers A17](U44-identifiers.md#a17).
+     Opening another address in the tab with text typed in "Add
+     Chapter" raises Chrome's "Leave site?" question; leaving drops the
      chapter. <sup>g</sup>
 6. **Chapter authors.** The contributors ticked under "Add Contributor"
    are the chapter's authors: they are listed under the chapter, and the
@@ -760,7 +763,8 @@ Left out of the scenarios above, by reason:
   - an Edited Volume or a Monograph submitted with no chapter, the Review
     panel showing only its heading and "Edit" (Rule 16)
   - a switch between "Edit Metadata" and "Identifiers" with a change
-    typed, which asks the same question as the close arrow (Rule 5b)
+    typed, which asks the same question as the close arrow does after a
+    change on "Edit Metadata" (Rule 5b)
   - an unsaved "Publication Dates" choice, dropped without a prompt when
     another page of the workflow opens (Fields, the "Publication Dates"
     page)
@@ -790,6 +794,9 @@ Left out of the scenarios above, by reason:
     row 5; *[Identifiers](U44-identifiers.md)*)
   - chapter identifiers switched on (Settings bullet 5;
     *[Identifiers](U44-identifiers.md)*)
+  - the close arrow after a change typed on "Identifiers", which closes
+    the window without asking (Rule 5b;
+    *[Identifiers A17](U44-identifiers.md#a17)*)
   - the Author whose assignment carries the metadata-edit permission
     (Settings bullet 6; *[Publication
     metadata](U40-publication-metadata.md#edit-gate)*)
@@ -1295,7 +1302,13 @@ text (four runs); switching to "Identifiers" with a
 changed box asked the same, and continuing dropped the change (two
 presses); leaving the page with a title typed in "Add Chapter" raised
 the browser's "Leave site?", and after leaving the list held no new
-chapter (two runs).
+chapter (two runs). Live-probed 2026-10-09 (the Identifiers claim
+check, [Identifiers note q26](U44-identifiers.md#fn-q26)), OMP `main`
+and `stable-3_5_0`, two runs each, on "Edit Chapter" of an unpublished
+book: with a URN suffix typed on "Identifiers" and not saved, the
+header close arrow raised no question and the reopened tab's box was
+empty; a switch to "Edit Metadata" raised the question, and so did the
+close arrow after a changed title on "Edit Metadata" (Rule 5b).
 
 <a id="fn-td6"></a>
 **td6** — Live-probed 2026-09-28 (Fields, Title). An empty Title with

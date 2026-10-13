@@ -189,7 +189,12 @@ function main() {
     const pr = parseInt(prArg, 10);
     if (!pr || !/^[a-z0-9][a-z0-9-]{0,62}$/.test(reviewArg || '')) die('usage: plugin-fetch.js <gallery PR number> <review>');
     dir = path.join(REPO_ROOT, '.reports', 'plugin-review', reviewArg);
-    fs.rmSync(dir, {recursive: true, force: true});
+    // A refresh keeps the review's own work (the reader's read.md, the drives' drive* files).
+    if (fs.existsSync(dir)) {
+        for (const f of fs.readdirSync(dir)) {
+            if (!/^(read|drive)/.test(f)) fs.rmSync(path.join(dir, f), {recursive: true, force: true});
+        }
+    }
     for (const sub of ['packages', 'unpacked', 'source']) fs.mkdirSync(path.join(dir, sub), {recursive: true});
 
     const info = JSON.parse(gh([`repos/${GALLERY}/pulls/${pr}`]));

@@ -2,8 +2,9 @@
 // On PKP's default test dataset: a visitor, signed out, opens the site-wide Register page by its
 // address, reads the context's block and the "If you requested to be a reviewer…" prompt, ticks
 // "Reader" and the privacy line, types "ethics, statistics" into the prompt's box and presses
-// "Register"; then opens the context's Profile › "Roles"; then `admin` opens Settings ›
-// "Users & Roles", finds the newcomer and chooses "Edit". OPS shows the fault; OJS and OMP are
+// "Register"; then opens the context's Profile › "Roles"; then the manager `rvaca` opens
+// Settings › "Users & Roles", finds the newcomer, chooses "Edit" and "View more details"
+// (refresh 2026-10-13: the manager reads what was typed). OPS shows the fault; OJS and OMP are
 // the control (their blocks offer a reviewer role).
 // Modes (the argument after the script; each runs alone, from a freshly reset dataset):
 //   walk       (default) the steps above
@@ -67,10 +68,10 @@ forEachApp(async (app) => {
             // 7: the context's Profile › "Roles"
             await step(facts, 'w-roles', () => H.readRolesInterests(page, app.contextPath));
             record('w-3-roles', await screen(page));
-            // 8: admin's Users & Roles › Edit
+            // 8: the manager's Users & Roles › Edit › "View more details"
             await signOut(page);
             await step(facts, 'w-manager', async () => {
-                await signIn(page, 'admin');
+                await signIn(page, 'rvaca');
                 return H.readManagerEdit(page, app, 'u02g.visitor', ['ethics', 'statistics']);
             });
             record('w-4-manager-edit', await screen(page));
