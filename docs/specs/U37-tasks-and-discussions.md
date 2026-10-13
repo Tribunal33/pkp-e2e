@@ -1458,7 +1458,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | A task's owner is offered "Edit" but cannot save even a new due date on a task someone else opened | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A7](#a7) | A press or preprint server refuses a discussion edit with a raw key, not the reason | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | An Author cannot save an edit of their discussion once its first message has an uploaded file | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it | 🐞 | medium | issues (claude), 2026-10-06 — re-verified |
+| [A9](#a9) | Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A10](#a10) | A task's "Due Date" before today is refused with a message about a start date | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | In French, the template search for a new task or discussion is labelled "find an email template" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A16](#a16) | A task due today already reads "Overdue" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1599,20 +1599,16 @@ Basis: probe, 2026-10-02. <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it** · 🐞 · medium.
-A user with a manager role (such as Journal Manager or Journal Editor)
-who uses "Edit" on a discussion opened by a message from the
+A user who uses "Edit" on a discussion opened by a message from the
 Participants panel ("Notify", or the "Message" box of "Assign
 Participant") does not change that message. The first "Save", even one
 that only renames the discussion or adds a participant, adds the
 window's message text as a second message. Later saves rewrite that
-copy, and the original message stays as it was.
-The copy is headed with the name the discussion's row shows under
-"Created by". On a journal or a preprint server that is the person the
-message was sent to, who is also offered "Edit" and whose "Save" adds a
-message of their own. On a press it is the sender.
+copy, and the original message stays as it was. The copy is headed with
+the name of the person who sent the message, whoever saved the edit.
 Nobody can remove the copy. Every discussion such a message opens is
-affected, in every stage.
-Basis: probe, 2026-10-06. <sup>[f-a9](#fn-a9)</sup>
+affected, in every stage, on OJS, OMP and OPS.
+Basis: probe, 2026-10-13. <sup>[f-a9](#fn-a9)</sup>
 
 <a id="a10"></a>
 **A10 — A task's "Due Date" before today is refused with a message about a start date** · 🐞 · low.
@@ -2221,7 +2217,7 @@ Issue report: [pkp-e2e#424](https://github.com/jardakotesovec/pkp-e2e/issues/424
 Issue report: [pkp-e2e#423](https://github.com/jardakotesovec/pkp-e2e/issues/423) ([docs/issues/U37-A8-author-discussion-with-file-edit-refused.md](../issues/U37-A8-author-discussion-with-file-edit-refused.md)).
 
 <a id="fn-a9"></a>
-**f-a9** — The Participants message path of note aa (`PKPStageParticipantNotifyForm::sendMessage()`) creates its first `Note` without `isHeadnote`; `addQuery()` (the comments box and the recommendation) has flagged it since pkp/pkp-lib#13409 (`3dc90c81a6`, 2026-09-29, issue pkp/pkp-lib#13345), and the auto-added item was never affected. On the Participants path `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new flagged one with the edited text, which later saves update; the window heads it with the item's `createdBy`. With no head note the `EditTask` `description` closure passes (note v), so the recipient's save is held neither to the message's writer nor to the hour. Live-probed 2026-09-23, before that change (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save". Re-probed 2026-09-30: the Participants path alone, a name-only "Save" adding the copy and the next one rewriting it, and the recipient Author's and Funding Coordinator's saves past the hour (td10).
+**f-a9** — The Participants message path of note aa (`PKPStageParticipantNotifyForm::sendMessage()`) creates its first `Note` without `isHeadnote`; `addQuery()` (the comments box and the recommendation) has flagged it since pkp/pkp-lib#13409 (`3dc90c81a6`, 2026-09-29, issue pkp/pkp-lib#13345), and the auto-added item was never affected. On the Participants path `editTask()` reads the head note as `null` (its later `$headnote->id` reads a property of null, a warning); `EditorialTask::saveHeadnote()` finds no flagged note and saves a new flagged one with the edited text, which later saves update; the window heads it with the item's `createdBy`. With no head note the `EditTask` `description` closure passes (note v), so the recipient's save is held neither to the message's writer nor to the hour. Live-probed 2026-09-23, before that change (all three apps, the recommendation OJS and OMP): the "Notify", comments-box and recommendation discussions each gaining a second message under the recipient's, the Author's or the recommender's username after another person's "Save". Re-probed 2026-09-30: the Participants path alone, a name-only "Save" adding the copy and the next one rewriting it, and the recipient Author's and Funding Coordinator's saves past the hour (td10). Re-walked 2026-10-13 (all three apps, lib/pkp f4c2578c94): with pkp/pkp-lib `1c3367a163` (pkp/pkp-lib#12593) in all three pointers a Participants message's `createdBy` is the sender, so the copy is headed with the sender and the recipient's row offers no "Edit"; the manager's name-only "Save" still adds the copy and the next one rewrites it.
 Issue report: [pkp-e2e#422](https://github.com/jardakotesovec/pkp-e2e/issues/422) ([docs/issues/U37-A9-participant-message-edit-adds-message.md](../issues/U37-A9-participant-message-edit-adds-message.md)).
 
 <a id="fn-a10"></a>
