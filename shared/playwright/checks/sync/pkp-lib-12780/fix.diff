@@ -1,0 +1,139 @@
+--- a/lib/pkp/classes/core/PKPSessionGuard.php
++++ b/lib/pkp/classes/core/PKPSessionGuard.php
+@@ -106,6 +106,72 @@
+     }
+ 
+     /**
++     * Sign the user in again from the "remember me" cookie when the session holds no user,
++     * e.g. after the session expired or the browser was closed.
++     *
++     * The user is registered in the session as a sign-in does (Validation::registerUserSession()),
++     * so a disabled account stays signed out and every check of the session agrees on the user.
++     */
++    public function loginViaRememberCookie(): ?User
++    {
++        if ($this->getUserId() || is_null($recaller = $this->recaller())) {
++            return null;
++        }
++
++        // Not on API requests, whose responses do not carry the session cookies, nor later in them
++        if (Application::get()->getRequest()->getRouter() instanceof APIRouter) {
++            $this->recallAttempted = true;
++            return null;
++        }
++
++        $user = $this->userFromRecaller($recaller);
++
++        // A changed password ends the remembered sign-in, as AuthenticateSession does for the session
++        if ($user && !$this->isRecallerPasswordHashValid($user, $recaller->hash())) {
++            $user = null;
++        }
++
++        $reason = null;
++        if (!$user || !Validation::registerUserSession($user, $reason)) {
++            $this->viaRemember = false;
++            $this->getCookieJar()->queue($this->getCookieJar()->forget($this->getRecallerName()));
++            $this->updateSessionCookieToResponse();
++            return null;
++        }
++
++        $this->setUser($user);
++        $this->fireLoginEvent($user, true);
++
++        return $user;
++    }
++
++    /**
++     * Check the password hash of the "remember me" cookie against the user's password
++     *
++     * @see \Illuminate\Session\Middleware\AuthenticateSession::validatePasswordHash()
++     */
++    protected function isRecallerPasswordHashValid(AuthenticatableContract|User $user, string $hash): bool
++    {
++        return hash_equals($this->hashPasswordForCookie($user->getAuthPassword()), $hash)
++            || hash_equals($user->getAuthPassword(), $hash);
++    }
++
++    /**
++     * @copydoc \Illuminate\Auth\SessionGuard::logoutOtherDevices($password)
++     *
++     * Also sends the "remember me" cookie the parent queues with the new password hash,
++     * so this browser keeps its remembered sign-in.
++     */
++    public function logoutOtherDevices($password)
++    {
++        $user = parent::logoutOtherDevices($password);
++
++        $this->updateSessionCookieToResponse();
++
++        return $user;
++    }
++
++    /**
+      * Sign In as different user
+      */
+     public function signInAs(AuthenticatableContract|User $user): void
+@@ -212,11 +278,12 @@
+         /** @var \Illuminate\Http\Response $response */
+         $response = app()->get(\Illuminate\Http\Response::class);
+ 
+-        // clear out the previous session and remember me cookies
++        // clear out the previous session cookie and any remember me cookie already set on this response;
++        // the browser keeps its remember me cookie unless a sign in or sign out queued one (below)
+         foreach ([$session->getName(), $this->getRecallerName()] as $cookieName) {
+             $response->headers->removeCookie($cookieName, $config['path'], $config['domain']);
+-            $response->headers->clearCookie($cookieName, $config['path'], $config['domain']);
+         }
++        $response->headers->clearCookie($session->getName(), $config['path'], $config['domain']);
+ 
+         $cookie = new Cookie(
+             name: $session->getName(),
+--- a/lib/pkp/classes/middleware/PKPAuthenticateSession.php
++++ b/lib/pkp/classes/middleware/PKPAuthenticateSession.php
+@@ -32,6 +32,10 @@
+      */
+     public function handle($request, Closure $next)
+     {
++        if ($request->hasSession()) {
++            app()->get('auth.driver')->loginViaRememberCookie();
++        }
++
+         $response = parent::handle($request, $next);
+ 
+         if ($request->hasSession()
+@@ -61,10 +65,13 @@
+             'newIp' => $request->ip(),
+         ]);
+ 
+-        Auth::logout();
++        // End this browser's session and remove its "remember me" cookie, as Laravel's AuthenticateSession
++        // does, without cycling the token that keeps the user's other browsers remembered
++        Auth::logoutCurrentDevice();
+ 
+         $request->session()->invalidate();
+         $request->session()->regenerateToken();
++        app()->get('auth.driver')->updateSessionCookieToResponse();
+ 
+         return $this->redirectTo($request);
+     }
+--- a/lib/pkp/classes/core/PKPUserProvider.php
++++ b/lib/pkp/classes/core/PKPUserProvider.php
+@@ -100,12 +100,13 @@
+      */
+     public function updateRememberToken(UserContract $user, $token)
+     {
+-        if ($user->getRememberToken() === $token) {
+-            return;
+-        }
+-
++        // The guard sets the new token on the user before calling this, so always store it
+         $user->setRememberToken($token);
+-        Repo::user()->edit($user);
++
++        $this->connection
++            ->table($this->table)
++            ->where($user->getAuthIdentifierName(), $user->getAuthIdentifier())
++            ->update([$user->getRememberTokenName() => $token]);
+     }
+ 
+     /**
