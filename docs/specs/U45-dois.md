@@ -710,19 +710,14 @@ links under the list. <sup>g</sup>
     "Error" once the background deposit has run, and the window reads
     "The XML is not valid against the Crossref schema and was not
     deposited. Validation errors:" over the check's list; a work deposited
-    in the same action whose file passes is sent as usual. An install
-    that cannot fetch Crossref's format gets the same for every work, its
-    list "Failed to locate the main schema resource at
-    'https://www.crossref.org/schemas/crossref5.4.0.xsd'.", and sends
-    nothing ⚠ [A30](#a30). A deposit that cannot reach the agency never
+    in the same action whose file passes is sent as usual. When the
+    install cannot fetch Crossref's format, the file is sent unchecked
+    and Crossref checks it. A deposit that cannot reach the agency never
     gets there: its background job fails, is tried twice more and is
     dropped, and the DOI stays "Submitted" with nothing on the DOIs page
-    to show it ⚠ [A18](#a18); with Crossref, that is an install that can
-    fetch the format and cannot send (one that can do neither meets A30
-    first). The test installs reach no agency: a deposit there stays
-    "Submitted" while its job waits, and a Crossref one reads "Error" by
-    A30 once its job has run.
-    <sup>r</sup> <sup>q22</sup> <sup>f-a13</sup> <sup>f-a30</sup>
+    to show it ⚠ [A18](#a18). The test installs reach no agency, so
+    every deposit there stays "Submitted".
+    <sup>r</sup> <sup>q22</sup> <sup>f-a13</sup>
 
 <a id="agencies"></a>
 **Registration agencies**
@@ -2201,7 +2196,6 @@ Left out of the scenarios above, by reason:
   - A12 (clearing a "Registration" filter after "Unregistered"; Rule 22)
   - A8 (the unnamed "DOI Statuses" button and row tick boxes; Fields, the DOIs page)
   - A22 (the "Bulk Actions" menu left open over the list after "Assign DOIs"; Rule 24)
-  - A30 (a Crossref deposit refused when the format cannot be fetched; Rule 33; the suites never run a deposit's job)
   - A14 (the "Mark DOIs Needs Sync" question's "stale"; Rule 28; scenario 9 passes it)
   - A19 (choosing an agency unticking every kind; Rule 35)
   - A5 (a refused block field keeping the agency; Rule 35; scenario 16 passes it)
@@ -2256,7 +2250,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | The DOIs page's rows show a title's italic word as `<i>…</i>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A29](#a29) | A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it | 🐞 | user-visible | — |
-| [A30](#a30) | With Crossref, a deposit is refused as "not valid" whenever Crossref's format cannot be fetched, and nothing is sent | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
@@ -2667,21 +2660,6 @@ DOIs page any DOI made with the wrong one.
 That is `main`, and 3.5 since 3.5.0-2. An upgrade from 3.3 to 3.4
 stops on such an install with a database error instead.
 Since: 2026-10-09 (pkp/pkp-lib#13481; on 3.5 pkp/pkp-lib#12082) · Basis: probe, 2026-10-09. <sup>f-a29</sup>
-
-<a id="a30"></a>
-**A30 — With Crossref, a deposit is refused as "not valid" whenever Crossref's format cannot be fetched, and nothing is sent** · 🐞 · user-visible.
-A journal or preprint server manager deposits works with Crossref
-("Deposit DOIs", "Deposit All" or the automatic deposit). Before sending
-a work the install checks its file against Crossref's published format,
-which it fetches from www.crossref.org each time. When that fetch fails
-(the site down or slow, or a server allowed to reach only Crossref's
-deposit service), every work is turned "Error" and nothing is sent, and
-"View Error" says "The XML is not valid against the Crossref schema and
-was not deposited." over "Failed to locate the main schema resource at
-'https://www.crossref.org/schemas/crossref5.4.0.xsd'." The files are
-valid; Crossref would have taken them, and checks them itself. Depositing
-again once the site answers gets them registered.
-Since: the PR heads of pkp/pkp-lib#13507 (pkp/crossref-ojs#114, pkp/crossref-ops#73; not merged) · Basis: probe, 2026-10-13. <sup>f-a30</sup>
 
 ### OJS
 
@@ -4867,11 +4845,12 @@ answered 400 `api.dois.400.invalidPubObjectIncluded`; exports answered
 exported.". In each case the confirm window closed, no other window or
 notice appeared, and the list reloaded with nothing ticked.
 Issue report: [pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234) (the report, deleted at the PR review below, is in git).
-PR review 2026-10-13, at the PR heads (`pkp/ui-library#1016` `47b565cb42`,
-`pkp/pkp-lib#13508` `cbaf79526c`, `pkp/crossref-ojs#114` `12574dea5f`,
-`pkp/crossref-ops#73` `b8d107ef10`, through `pkp/ojs#5928` `2458eead21`,
-`pkp/omp#2506` `18f197514e` and `pkp/ops#1447` `bd864266eb`), before their
-merge: `DoiListPanel.vue` `onBulkActionComplete()` closes the dialog only
+PR review 2026-10-13, at the PR heads of round 2 (`pkp/ui-library#1016`
+`47b565cb42`, `pkp/pkp-lib#13508` `f1586e0d37`, `pkp/crossref-ojs#114`
+`477eec29d0`, `pkp/crossref-ops#73` `8e82eda7cc`, through `pkp/ojs#5928`
+`12a0ae5bfb`, `pkp/omp#2506` `602f236674` and `pkp/ops#1447`
+`ce4b5111d7`; round 1 at `cbaf79526c`, `12574dea5f`, `b8d107ef10`,
+`2458eead21`, `18f197514e`, `bd864266eb`), before their merge: `DoiListPanel.vue` `onBulkActionComplete()` closes the dialog only
 while the modal store's dialog is still the confirmation (`name`
 "bulkActions"), so an "Error" window `ajaxErrorCallback()` opened in its
 place stays; `PKPDoiController` (and OJS's `DoiController` for issues)
@@ -4886,7 +4865,13 @@ a work whose first author has no given name lists the two `surname`
 messages (Crossref's format served by the stand-in `crossref-stub.js`)
 and on the plain test install the schema message; "Mark DOIs Registered"
 with an unpublished work still shows "DOI Updates Failed". At the base
-every one of these closed with no window.
+every one of these closed with no window. The plugins' deposit stops on
+libxml's schema validity errors only (`XML_SCHEMAV_*`, codes 1800–1899):
+a file failing the schema is not sent ("Error" with the messages, Rule
+33), and when the schema cannot be fetched the file is sent as before
+(the stand-in answering 503 for it: "Registered" at both sides). Round 1
+also refused that case as "not valid"; the round-2 plugin heads take the
+fix this review suggested.
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the
@@ -5080,34 +5065,6 @@ suites' reach (an install is never upgraded in a test run).
 Written up for the team in
 [docs/reports/2026-10-09-pkp-lib-13481.md](../reports/2026-10-09-pkp-lib-13481.md)
 (the PR review of pkp/pkp-lib#13481, posted in the channel on 2026-10-09).
-
-<a id="fn-f-a30"></a>
-**f-a30** — `CrossrefExportPlugin::exportAndDeposit()` at
-`pkp/crossref-ojs#114` `12574dea5f` and `pkp/crossref-ops#73`
-`b8d107ef10` (not merged) stops a work's deposit on any error
-`exportXML()` hands back, sets "Error" with
-`plugins.importexport.crossref.export.error.validation` and the messages,
-and sends nothing. `exportXML()` keeps libxml's ERROR and FATAL entries;
-`XMLTypeDescription::checkType()` validates against the filter's
-`xml::schema(https://www.crossref.org/schemas/crossref5.4.0.xsd)`, which
-libxml fetches through PHP's default stream context (the `[proxy]` keys
-apply, `PKPContainer::settingProxyForStreamContext()`). A schema that
-cannot be fetched gives level ERROR, code 1757 (`XML_SCHEMAP_FAILED_LOAD`,
-"Failed to locate the main schema resource…"); a file that fails the
-schema gives the 18xx `XML_SCHEMAV_*` codes (the empty `surname`:
-`minLength` and `pattern`); an imported schema that cannot be fetched is
-a warning only (3083), not kept. Before the PR the deposit ignored these
-errors and sent the file. Live-probed 2026-10-13 on PKP's default dataset
-(`checks/sync/pkp-lib-13508/walk.js` step 10, OJS work 1, OPS work 5, with
-the Crossref stand-in answering 503 for the schema and taking deposits):
-at the head the work read "Error" with the window quoted and the
-stand-in received nothing; at the base, with no outbound connection at
-all (`checks/issues/deposit-unreachable-agency-stays-submitted/walk.js`),
-the schema check failed the same way and the file was still sent
-(cURL error 7 to api.crossref.org, the failed job of A18). On the plain
-test installs (the dead `[proxy]`) the head's deposit reads "Error"
-with the schema message. Written up in the PR review's report on the
-companion branch `13507`, `docs/reports/2026-10-13-pkp-lib-13508.md`.
 
 <a id="fn-f-a25"></a>
 **f-a25** — At the PR heads of `pkp/pkp-lib#13460` (`246e5387f6`, with
