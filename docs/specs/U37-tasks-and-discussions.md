@@ -1483,7 +1483,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | Retired: "Cancel" asks before discarding, like the close control | ✅ | retired | — |
 | [A22](#a22) | Retired: leaving the page after a discarded window asks nothing | ✅ | retired | — |
 | [A24](#a24) | Retired: an assistant's "Workflow Files" offers stages that show nothing | ✅ | retired | re-probe (claude), 2026-10-05 — overturned |
-| [A9](#a9) | Retired: editing a discussion that "Notify" or "Assign" opened added a copy of its message instead of changing it; fixed by pkp/pkp-lib#13506 | ✅ | retired | PR review (claude), 2026-10-13 — fixed at pkp/pkp-lib#13506's head |
+| [A9](#a9) | Retired: editing a discussion that "Notify" or "Assign" opened added a copy of its message instead of changing it; fixed by pkp/pkp-lib#13506 | ✅ | retired | PR review (claude), 2026-10-13 — fixed by pkp/pkp-lib#13506, merged |
 
 ### All apps
 
@@ -1986,7 +1986,7 @@ Basis: probe. <sup>[f-ops2](#fn-ops2)</sup>
 **A24 — An assistant's "Workflow Files" stages show nothing** · ✅ · retired. Overturned on screen 2026-10-05 (OJS, OMP): a stage the Copyeditor or Layout Editor cannot use is greyed and cannot be chosen (Rule 14a); the 2026-09-23 observation of stages that showed nothing came from test tooling that recorded the refused choice as an empty stage. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a9"></a>
-**A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it** · ✅ · retired. Fixed by `pkp/pkp-lib#13506` (for `pkp/pkp-lib#13505`, the team's copy of the issue report), verified 2026-10-13 at the PR's head before its merge on OJS, OMP and OPS: "Edit" › "Save" on a discussion "Notify" or "Assign" opened keeps one first message, headed with the sender, and replaces its text in place (Rule 15e). <sup>[f-a9](#fn-a9)</sup>
+**A9 — Editing a discussion that "Notify" or "Assign" opened adds a copy of its message instead of changing it** · ✅ · retired. Fixed by `pkp/pkp-lib#13506` (for `pkp/pkp-lib#13505`, the team's copy of the issue report), merged 2026-10-13 (pkp-lib `a4f625a068`; no app's `lib/pkp` carries it yet, pkp/ojs#5927 having closed unmerged), reviewed at the PR's head before the merge and walked at the merge the same day on OJS, OMP and OPS: "Edit" › "Save" on a discussion "Notify" or "Assign" opened keeps one first message, headed with the sender, and replaces its text in place (Rule 15e). <sup>[f-a9](#fn-a9)</sup>
 
 ---
 
@@ -2220,7 +2220,13 @@ flag's readers (`saveHeadnote()`, the `EditTask` rule, `NoteAccessPolicy`,
 first message, as on every other item. Discussions opened this way on an
 install of `main` before the fix stay unflagged (no repair; unreleased
 code).
-Issue report: [pkp-e2e#422](https://github.com/jardakotesovec/pkp-e2e/issues/422), to close with the fix; the report, its `fix.diff` and its place under `checks/issues/` moved or deleted at the PR review (git keeps them).
+Merged 2026-10-13 16:01 UTC as pkp-lib `a4f625a068`, a merge of the
+reviewed head `c4500bab75` on `3608f5e200` (the merge's own diff is the
+reviewed patch); pkp/ojs#5927 closed unmerged, so no app's `lib/pkp`
+carries it yet. `side.sh merge` on the default dataset, the three apps
+at their tips with `lib/pkp` at the merge: every walk reads as at the
+head.
+Issue report: [pkp-e2e#422](https://github.com/jardakotesovec/pkp-e2e/issues/422), closed 2026-10-13 with the fix; the report, its `fix.diff` and its place under `checks/issues/` moved or deleted at the PR review (git keeps them).
 
 <a id="fn-a10"></a>
 **f-a10** — `EditTask::messages()` maps `dateDue.after_or_equal` to `validation.after_or_equal` "Start date should be greater than or equal to today" (lib/pkp `locale/en/validation.po`). The date field's `min: 'today'` greys earlier days in the picker; typed, it reaches the server (td11, live-probed 2026-09-23).
