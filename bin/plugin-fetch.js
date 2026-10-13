@@ -39,6 +39,30 @@ const GALLERY = 'pkp/plugin-gallery';
 // What the XML may name: both become folder and file names here.
 const PRODUCT = /^[A-Za-z0-9_-]{1,64}$/;
 const VERSION = /^\d{1,6}(\.\d{1,6}){0,3}(-\d{1,6})?$/; // 1.2.3.4, or 1.0.0-33 as a few gallery releases are
+
+/** Version order: numeric parts, then the -build suffix. */
+function compareVersions(a, b) {
+    const parts = (v) => v.split(/[.-]/).map(Number);
+    const [pa, pb] = [parts(a), parts(b)];
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+        if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) - (pb[i] || 0);
+    }
+    return 0;
+}
+
+/**
+ * The gallery release an update follows: the highest one below it on its
+ * own major line (a plugin keeps a line per app version, 1.x for 3.3, 2.x
+ * for 3.4…), else the highest one below it at all; never merely the first
+ * listed, which for a long-lived plugin is its oldest.
+ */
+function previousRelease(releases, version) {
+    const below = releases
+        .filter((r) => VERSION.test(r.version || '') && r.package.startsWith('https://') && VERSION.test(version) && compareVersions(r.version, version) < 0)
+        .sort((x, y) => compareVersions(y.version, x.version));
+    const major = (v) => v.split('.')[0];
+    return below.find((r) => major(r.version) === major(version)) || below[0] || null;
+}
 const MAX_UNPACKED = 500 * 1024 * 1024;
 const MAX_ENTRIES = 50000;
 const MAX_REPO_KB = 200 * 1024;
@@ -335,7 +359,7 @@ function main() {
                 md.push('- Source: not compared (the homepage is not a GitHub repository, or the package URL names no release tag)');
             }
 
-            const previous = before && before.releases.find((r) => r.version !== rel.version && VERSION.test(r.version || '') && r.package.startsWith('https://'));
+            const previous = before && previousRelease(before.releases, rel.version);
             if (previous) {
                 const prevPkg = inside(path.join(dir, 'packages', `${product}-${previous.version}.tar.gz`));
                 const prevErr = fetchTo(previous.package, prevPkg);
