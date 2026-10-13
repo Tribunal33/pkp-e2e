@@ -181,15 +181,15 @@ in. <sup>i</sup> <sup>q14</sup>
 | "DC.Date.modified" | the day of the version's last change | OJS OMP <sup>q14</sup> |
 | "DC.Description" | the abstract, per language, its formatting removed; an "&" arrives as "&amp;" [A7](#a7) | OJS OMP <sup>q14</sup> |
 | "DC.Format" | for each galley with a file, the file's type, such as "application/pdf" | OJS <sup>q14</sup> |
-| "DC.Identifier" | the item's "URL Path", or without one its number | OJS OMP <sup>q14</sup> |
-| "DC.Identifier.pageNumber", "DC.Identifier.articleNumber" | "Pages" and "Article Number", when set | OJS <sup>q14</sup> |
-| "DC.Identifier.DOI" | the DOI, when the version has one | OJS OMP <sup>q14</sup> |
-| "DC.Identifier.URN" | the URN ([Identifiers](U44-identifiers.md), Side effects) | OJS OMP <sup>q14</sup> |
-| "DC.Identifier.URI" | the item page's own address, with no language in it | OJS OMP <sup>q14</sup> |
+| "DC.Identifier" | the item's "URL Path", or without one its number; on a press's file view page, the book's "URL Path" (or its number), the format's number and the file's number, joined by "/" (Rule 17) | OJS OMP <sup>q14</sup> |
+| "DC.Identifier.pageNumber", "DC.Identifier.articleNumber" | "Pages" and "Article Number", when set; on a press only "DC.Identifier.pageNumber", only on a chapter's file view page (Rule 17) | OJS OMP <sup>q14</sup> |
+| "DC.Identifier.DOI" | the DOI, when the version has one; on a press's file view page, the file's, or without one its chapter's or the book's (Rule 17) | OJS OMP <sup>q14</sup> |
+| "DC.Identifier.URN" | the URN ([Identifiers](U44-identifiers.md), Side effects); never on a press's file view page (Rule 17) [OMP7](#omp7) | OJS OMP <sup>q14</sup> |
+| "DC.Identifier.URI" | the item page's own address, with no language in it; on a press's file view page, {journal address}/catalog/book/ followed by the three parts of "DC.Identifier", which opens the book's page (Rule 17) [OMP5](#omp5) | OJS OMP <sup>q14</sup> |
 | "DC.Language" | the submission language's code | OJS OMP <sup>q14</sup> |
 | "DC.Rights" | "Copyright (c) {copyright year} {copyright holder}" when both are set, worded in the interface language (Rule 14); a second one with the license address, when set | OJS OMP <sup>q14</sup> |
 | "DC.Source" | the journal's name in its primary language | OJS OMP <sup>q14</sup> |
-| "DC.Source.ISSN" | the "Online ISSN", or without one the "Print ISSN" | OJS <sup>q14</sup> |
+| "DC.Source.ISSN" | the "Online ISSN", or without one the "Print ISSN"; on a press only on a file's view page, the series' "Online ISSN" alone (Rule 17) | OJS OMP <sup>q14</sup> |
 | "DC.Source.Issue", "DC.Source.Volume" | the issue's number and volume, each while the issue shows it | OJS <sup>q14</sup> |
 | "DC.Source.URI" | the journal's home page address ⚠ [OJS1](#ojs1) | OJS OMP <sup>q14</sup> |
 | "DC.Subject" | one per subject and one per keyword, per language | OJS OMP <sup>q14</sup> |
@@ -364,22 +364,34 @@ in. <sup>i</sup> <sup>q14</sup>
     PDF file's link opens the file's view page while "PDF.js PDF
     Viewer" is enabled, and an HTML file's link while "HTML Monograph
     File" is; a new press has both enabled. The view page's address is
-    {journal address}/catalog/view/ and the book's, format's and file's
-    numbers. It carries the Dublin Core tags alone, describing the file.
-    Any other file's link, and a PDF or HTML file's link with its viewer
-    plugin disabled, downloads the file and opens no page, so no tag
-    describes that file. [Monograph landing
+    {journal address}/catalog/view/ followed by the book's "URL Path"
+    (or its number), the format's "URL Path" (or its number) and the
+    file's number, joined by "/". It carries the Dublin Core tags alone.
+    A chapter's file is described by its chapter (its title and
+    contributors, never the book's abstract), a file for the whole book
+    by the book (its title, contributors and abstract). Any other
+    file's link, and a PDF or HTML file's link with its viewer plugin
+    disabled, downloads the file and opens no page, so no tag describes
+    that file. [Monograph landing
     page](U69-monograph-landing-page.md) owns what a file's link opens
     (its Rule 13). The view page's tags:
     <sup>i</sup> <sup>q19</sup>
     - "DC.Identifier" reads the book's "URL Path" (or its number), the
-      format's number and the file's number, joined by "/";
+      format's number and the file's number, joined by "/"; it keeps the
+      format's number even when the format has a "URL Path";
     - "DC.Identifier.URI" is {journal address}/catalog/book/ followed by
       the same three parts, an address that shows the book's page, not
       the file's ⚠ [OMP5](#omp5);
-    - "DC.Identifier.ISBN" gives each ISBN of the file's format,
-      "DC.Identifier.pageNumber" the pages (a chapter's, on a chapter's
-      file) and "DC.Source.ISSN" the series' online ISSN;
+    - "DC.Identifier.DOI" gives the file's own DOI; without one, a
+      chapter's file gives its chapter's, or none when the chapter has
+      none (never the book's), and a file for the whole book the book's;
+    - no "DC.Identifier.URN": a URN assigned to the file (its window's
+      "Identifiers" tab) appears in no tag ⚠ [OMP7](#omp7);
+    - "DC.Identifier.ISBN" gives each ISBN of the file's format;
+      "DC.Identifier.pageNumber" gives the chapter's "Pages" on a
+      chapter's file, when set, and a file for the whole book has none;
+    - "DC.Source.ISSN" gives the series' "Online ISSN", none when the
+      series has only a "Print ISSN";
     - "DC.Type" reads "Text.Chapter" whether or not the file belongs to a
       chapter ⚠ [OMP3](#omp3).
 
@@ -924,6 +936,9 @@ Left out of the scenarios above, by reason:
   - {OMP} a chapter with "Show this chapter on its own page…" ticked: its entry in the sitemap, and its page's own tags, the chapter's title, contributors and abstract beside the book's identifiers (Fields, "What the sitemap lists"; Rule 16; Settings bullet 15)
   - {OMP} a series' page in the sitemap (Fields, "What the sitemap lists")
   - {OMP} a book whose only PDF file is for sale ("Direct Sales"): the address its "citation_pdf_url" gives sends a signed-out visitor to the Login page (Rule 12)
+  - {OMP} a book and its "PDF" format with a "URL Path" each: the "PDF" link opens a view page whose address carries both, while its "DC.Identifier" keeps the format's number (Rule 17)
+  - {OMP} a chapter's file view page beside a whole-book file's: the chapter's title and contributors on the first, the book's title, contributors and abstract on the second (Rule 17)
+  - {OMP} a series with only a "Print ISSN": a file's view page carries no "DC.Source.ISSN"; with an "Online ISSN", that one (Rule 17)
 - **Rarely met**:
   - "User Registration" set to "The Journal Manager will register all
     user accounts. …", which takes "Register" out of the sitemap
@@ -973,11 +988,14 @@ Left out of the scenarios above, by reason:
     "citation_fulltext_html_url", "citation_pdf_url"; Rule 12)
   - OMP4 {OMP} (a new version of a published book: the chapter entries;
     Rule 2c)
+  - OMP7 {OMP} (a URN assigned to a book file: its view page's
+    "DC.Identifier.URN"; Rule 17)
   - OPS1 {OPS} (a preprint with a "URL Path": the HTML full-text tag;
     Fields, "citation_fulltext_html_url")
 - **No seed**:
   - {OMP} the ISBNs of a format (Fields, "citation_isbn"; Rule 17)
-  - the DOI tags (Fields, "citation_doi", "DC.Identifier.DOI")
+  - the DOI tags (Fields, "citation_doi", "DC.Identifier.DOI"), a
+    file's view page's included (Rule 17)
   - "Pages", "Coverage", "Type" and the copyright and license tags
     (Fields, the two tag tables)
   - the visit Google's script reports to google-analytics.com once it
@@ -1021,6 +1039,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP3](#omp3) | A press's chapter pages tell indexes they are books, and whole-book file pages that they are chapters | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP4](#omp4) | After "Create New Version", a press's sitemap lists the book's chapter pages at addresses that answer "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OMP5](#omp5) | A press's book file view page names the book's page as its address in Dublin Core tags | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [OMP7](#omp7) | A press's file view page never gives indexes the URN assigned to the file | 🐞 | minor | — |
 | [OPS1](#ops1) | A preprint with a "URL Path" announces an HTML full-text address that ends on "404 Not Found" | 🐞 | high | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | The site's own "Google Analytics Plugin" box can be ticked but changes nothing | ❓ | minor | — |
 | [A4](#a4) | The three apps' sitemaps list different kinds of listing pages: only a press lists its categories, and a press omits its Search page | ❓ | minor | — |
@@ -1244,6 +1263,16 @@ chapter's, while "Dublin Core Indexing Plugin" is enabled, as it is on
 every new press.
 Basis: probe, 2026-10-03. <sup>f-omp5</sup>
 
+<a id="omp7"></a>
+**OMP7 — A press's file view page never gives indexes the URN assigned to the file** · 🐞 · minor.
+A press whose URN plugin has "Files" ticked assigns a book file its URN
+on the file's window, "Identifiers" tab. It expects the file's view page to
+name that URN in a "DC.Identifier.URN" tag, as the book's and a
+chapter's pages name theirs. The view page carries no URN tag at all,
+for a file of the whole book and for a chapter's file alike. Readers see
+nothing wrong, and the press is not told.
+Basis: probe, 2026-10-13. <sup>f-omp7</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1303,7 +1332,7 @@ OMP's own code.
 **h** — Google Scholar: OJS and OPS `GoogleScholarPlugin::submissionView()` on `ArticleHandler::view` and `PreprintHandler::view` (the landing page only, with no galley), returning early when the second request argument is `version`; tags as the Fields table, from `$submission->getCurrentPublication()` and its `locale`: `citation_journal_title`, `citation_journal_abbrev` (`abbreviation`, else `acronym`, primary locale), `citation_issn` (`onlineIssn`, `printIssn`, `issn`) for `ojs2`; `citation_publisher` for `ops`; `citation_author` / `citation_author_institution` per `getAffiliations()` name; `citation_title` `getLocalizedFullTitle($publicationLocale)`; `citation_language`; OJS `citation_date` (`Y/m/d` of `datePublished` unless the issue's year differs, else the issue year, else the issue's date), `citation_volume` / `citation_issue` by `getShowVolume()` / `getShowNumber()`, `citation_firstpage` / `citation_lastpage` from `getStartingPage()` / `getEndingPage()` when `pages`, else `articleNumber` as first page (OJS only); OPS `citation_online_date`; `citation_doi`; `citation_{pubIdType}` per `pubIdPlugins`; `citation_abstract_html_url` (`urlPath ?? id`, `urlLocaleForPage: ''`); `citation_abstract`; `citation_keywords` for `subjects` then `keywords` of the publication locale; per galley file `citation_pdf_url` (`application/pdf`, `…/download/{id}/{galley}`) or `citation_fulltext_html_url` (`text/html`, `…/view/{id}/{galley}`); `citation_reference` per `citations` (hook `GoogleScholarPlugin::references`). OMP `GoogleScholarPlugin::monographView()` on `CatalogBookHandler::book` (book and chapter pages), skipping any request whose arguments contain `version`: `citation_title` (chapter's on a chapter page), `citation_language`, `citation_publication_date` (`Y-m-d`; the chapter's date when `getEnableChapterPublicationDates()`), authors (`chapterAuthors` on a chapter page) with institutions, `citation_abstract`, `citation_doi` (the publication's), keywords, then for each of `availableFiles` matched to its format: on the book page files with no chapter, `citation_isbn` per identification code `02`/`15`, and `_setFileUrl()`; on a chapter page that chapter's files; then `citation_publisher`, `citation_issn` (series online ISSN), `citation_reference`. `_setFileUrl()` switches on the mimetype with `case 'application/pdf'` and `case 'text/xml' or 'text/html'`, which PHP reads as `case true`, so every other mimetype takes the second branch (OMP1); it receives `$i` by value, so the header names `googleScholarPdfUrl{$i}` / `googleScholarHtmlUrl{$i}` repeat when no ISBN moved `$i`, and `addHeader()` keeps the last written (OMP2). `availableFiles` comes from the submission file `Collector`, ordered by `created_at` descending, so the last written is the file uploaded first; files sharing a `created_at` come in the database's order. `CatalogBookHandler::book()` puts every format file with a direct-sales price set ("Open Access" or "Direct Sales") in `availableFiles`, so a priced file takes part like a free one. OMP writes no `citation_{pubIdType}` tag (the Identifiers spec, "citation_urn" absent on a book page). Live-probed 2026-09-26 (Rules 12, 14, 16; the Google Scholar table): notes q14, q16, q18.
 
 <a id="fn-i"></a>
-**i** — Dublin Core: OJS `DublinCoreMetaPlugin::articleView()` on `ArticleHandler::view` (skipping `version` requests): `schema.DC` link; `DC.Contributor.Sponsor` (`supportingAgencies` per locale), `DC.Coverage`, `DC.Creator.PersonalName` (`getFullName(false, false, $publicationLocale)`), `DC.Date.created` (`datePublished`), `DC.Date.dateSubmitted`, `DC.Date.issued` (issue's `getDatePublished()`), `DC.Date.modified` (`lastModified`), `DC.Description` (abstract per locale, `strip_tags`), `DC.Format` (galley file mimetype), `DC.Identifier` (`urlPath` else id), `DC.Identifier.pageNumber`, `DC.Identifier.articleNumber`, `DC.Identifier.DOI`, `DC.Identifier.{pubIdType}`, `DC.Identifier.URI`, `DC.Language` (`rfc5646`), `DC.Rights` (`submission.copyrightStatement` "Copyright (c) {$copyrightYear} {$copyrightHolder}" when both, and `licenseUrl`), `DC.Source` (name, primary locale), `DC.Source.ISSN`, `DC.Source.Issue` / `DC.Source.Volume`, `DC.Source.URI` (OJS1), `DC.Subject` (subjects, keywords per locale), `DC.Title`, `DC.Title.Alternative`, `DC.Type` `Text.Serial.Journal` and `type` per locale, `DC.Type.articleType` (section title, primary locale). No tag reads `disciplines`, `rights` or `source`. OMP `monographView()` on `CatalogBookHandler::book` (book and chapter pages): the same set without the issue, format, pages, article number, ISSN and article-type tags, chapter values on a chapter page (`chapterAuthors`, chapter abstract, chapter DOI and pub IDs, chapter title), `DC.Source.URI` `url(…, ROUTE_PAGE, $press->getPath())`, `DC.Type` `Text.Book`. OMP `monographFileView()` on `CatalogBookHandler::view` (the inline viewer path of `CatalogBookHandler::download(…, true)`, reached before `PdfJsViewerPlugin`, which registers `Hook::SEQUENCE_LATE`): skips a format of another publication; `DC.Identifier` `{bestId}/{formatId}/{fileId}`, `DC.Identifier.pageNumber` (chapter's or publication's `pages`), `DC.Identifier.DOI` (file, chapter, publication), `DC.Identifier.ISBN` per format code `02`/`15`, `DC.Identifier.URI` `catalog/book/{bestId}/{formatId}/{fileId}`, `DC.Language` scheme `ISO639-1`, `DC.Source.ISSN` (series online ISSN), `DC.Type` `Text.Chapter` always (OMP3). Live-probed 2026-09-26 (Rules 12, 14, 16, 17; the Dublin Core table): notes q14, q16, q18, q19.
+**i** — Dublin Core: OJS `DublinCoreMetaPlugin::articleView()` on `ArticleHandler::view` (skipping `version` requests): `schema.DC` link; `DC.Contributor.Sponsor` (`supportingAgencies` per locale), `DC.Coverage`, `DC.Creator.PersonalName` (`getFullName(false, false, $publicationLocale)`), `DC.Date.created` (`datePublished`), `DC.Date.dateSubmitted`, `DC.Date.issued` (issue's `getDatePublished()`), `DC.Date.modified` (`lastModified`), `DC.Description` (abstract per locale, `strip_tags`), `DC.Format` (galley file mimetype), `DC.Identifier` (`urlPath` else id), `DC.Identifier.pageNumber`, `DC.Identifier.articleNumber`, `DC.Identifier.DOI`, `DC.Identifier.{pubIdType}`, `DC.Identifier.URI`, `DC.Language` (`rfc5646`), `DC.Rights` (`submission.copyrightStatement` "Copyright (c) {$copyrightYear} {$copyrightHolder}" when both, and `licenseUrl`), `DC.Source` (name, primary locale), `DC.Source.ISSN`, `DC.Source.Issue` / `DC.Source.Volume`, `DC.Source.URI` (OJS1), `DC.Subject` (subjects, keywords per locale), `DC.Title`, `DC.Title.Alternative`, `DC.Type` `Text.Serial.Journal` and `type` per locale, `DC.Type.articleType` (section title, primary locale). No tag reads `disciplines`, `rights` or `source`. OMP `monographView()` on `CatalogBookHandler::book` (book and chapter pages): the same set without the issue, format, pages, article number, ISSN and article-type tags, chapter values on a chapter page (`chapterAuthors`, chapter abstract, chapter DOI and pub IDs, chapter title), `DC.Source.URI` `url(…, ROUTE_PAGE, $press->getPath())`, `DC.Type` `Text.Book`. OMP `monographFileView()` on `CatalogBookHandler::view` (the inline viewer path of `CatalogBookHandler::download(…, true)`, reached before `PdfJsViewerPlugin`, which registers `Hook::SEQUENCE_LATE`): skips a format of another publication; `DC.Identifier` `{bestId}/{formatId}/{fileId}`, `DC.Identifier.pageNumber` (chapter's or publication's `pages`), `DC.Identifier.DOI` (`$submissionFile->getDoi() ?? ($chapter ? $chapter->getDoi() : $publication->getDoi())`), `DC.Identifier.ISBN` per format code `02`/`15`, `DC.Identifier.{pubIdType}` over `pubIdPlugins` (never assigned on this path, OMP7), `DC.Identifier.URI` `catalog/book/{bestId}/{formatId}/{fileId}`, `DC.Language` scheme `ISO639-1`, `DC.Source.ISSN` (`$series->getOnlineISSN()` only), `DC.Type` `Text.Chapter` always (OMP3); the view page's own address (`templates/frontend/components/downloadLink.tpl`) takes the book's, the format's and the file's `getBestId()`, while `DC.Identifier` uses `$publicationFormat->getId()`. Live-probed 2026-09-26 (Rules 12, 14, 16, 17; the Dublin Core table): notes q14, q16, q18, q19.
 
 <a id="fn-j"></a>
 **j** — Versions: OJS `ArticleHandler::view()` and OPS `PreprintHandler::view()`, on the landing branch, add `noindex` `<meta name="robots" content="noindex">` and `canonical` `<link rel="canonical" href="{current page}">` when the requested publication is not the current one, before the plugins' hook; on the galley branch they add `noindex` alone. OMP `CatalogBookHandler::book()` does the same for an earlier version. The plugins' own `version` check returns before writing any tag. Live-probed 2026-09-26 (Rule 13): note q15.
@@ -1366,7 +1395,7 @@ OMP's own code.
 **q18** — Live-probed 2026-09-26 (Rule 16; Settings bullet 15), OMP: on "Chapter One Tides" (its own page ticked, with its own abstract, contributor and file), the chapter's title, its contributor with his two affiliations and its abstract; "2023-11-02" in both date tags with chapter dates on, the book's "2024-03-05" with them off, and a chapter with no date of its own the book's; "citation_doi" the book's, "DC.Identifier.DOI" the chapter's; "DC.Identifier" and "DC.Identifier.URI" the book's and "DC.Type" "Text.Book"; keywords, subjects and references the book's; "citation_pdf_url" the chapter's own file and none of the book's. Saved unticked, the book page listed the chapter without a link and its address answered "404 Not Found"; ticked, the chapter's page carried its tags.
 
 <a id="fn-q19"></a>
-**q19** — Live-probed 2026-09-26 (Rule 17; OMP3, OMP5), OMP: every file page opened from the book page carried Dublin Core tags alone: "DC.Identifier" `sea-study/13/14`, "DC.Identifier.URI" `…/catalog/book/sea-study/13/14`, which opened the book's page with the book's own tags; "DC.Identifier.ISBN" "9780306406157" on the "PDF" file's page once saved; "DC.Identifier.pageNumber" "5-9" on the chapter's file and none on the whole-book files; "DC.Source.ISSN" the series' online ISSN; "DC.Type" "Text.Chapter" on every file page, while the book page read "Text.Book". The pages' viewer showed no file, the download answering 500 and the page script failing with "PDFJS is not defined" (OMP6; fixed 2026-10-05, f-omp6). "DC.Language" used the scheme "ISO639-1" there and "rfc5646" on the book page. Re-driven 2026-10-05 on OMP `main` after omp `8c807c919`, two runs, on a scratch press (book 50): with "PDF.js PDF Viewer" and "HTML Monograph File" enabled, the "PDF" (`…/catalog/view/50/59/194`), "HTML" (`50/60/195`) and "Chapter PDF" (`50/62/197`, from the book's and the chapter's page) links opened view pages answering 200 with "DC." tags and the Dublin Core schema link, no "citation_" tag and no "gs_meta_revision"; "DC.Identifier" `50/59/194`, `50/60/195`, `50/62/197`; "DC.Type" "Text.Chapter" on all three (OMP3); "DC.Identifier.pageNumber" "5-9" on the chapter's file; `…/catalog/book/50/62/197` opened the book's page with "DC.Identifier" "50" and "DC.Type" "Text.Book" (OMP5). The Markdown "Notes" link `…/catalog/view/50/61/196` downloaded notes.md and left the book page on screen. With both viewer plugins unticked on the press, the "PDF", "Chapter PDF" and "HTML" links downloaded article.pdf and article.html the same way; both were ticked again afterwards.
+**q19** — Live-probed 2026-09-26 (Rule 17; OMP3, OMP5), OMP: every file page opened from the book page carried Dublin Core tags alone: "DC.Identifier" `sea-study/13/14`, "DC.Identifier.URI" `…/catalog/book/sea-study/13/14`, which opened the book's page with the book's own tags; "DC.Identifier.ISBN" "9780306406157" on the "PDF" file's page once saved; "DC.Identifier.pageNumber" "5-9" on the chapter's file and none on the whole-book files; "DC.Source.ISSN" the series' online ISSN; "DC.Type" "Text.Chapter" on every file page, while the book page read "Text.Book". The pages' viewer showed no file, the download answering 500 and the page script failing with "PDFJS is not defined" (OMP6; fixed 2026-10-05, f-omp6). "DC.Language" used the scheme "ISO639-1" there and "rfc5646" on the book page. Re-driven 2026-10-05 on OMP `main` after omp `8c807c919`, two runs, on a scratch press (book 50): with "PDF.js PDF Viewer" and "HTML Monograph File" enabled, the "PDF" (`…/catalog/view/50/59/194`), "HTML" (`50/60/195`) and "Chapter PDF" (`50/62/197`, from the book's and the chapter's page) links opened view pages answering 200 with "DC." tags and the Dublin Core schema link, no "citation_" tag and no "gs_meta_revision"; "DC.Identifier" `50/59/194`, `50/60/195`, `50/62/197`; "DC.Type" "Text.Chapter" on all three (OMP3); "DC.Identifier.pageNumber" "5-9" on the chapter's file; `…/catalog/book/50/62/197` opened the book's page with "DC.Identifier" "50" and "DC.Type" "Text.Book" (OMP5). The Markdown "Notes" link `…/catalog/view/50/61/196` downloaded notes.md and left the book page on screen. With both viewer plugins unticked on the press, the "PDF", "Chapter PDF" and "HTML" links downloaded article.pdf and article.html the same way; both were ticked again afterwards. Re-driven 2026-10-13 (Rule 17; the Dublin Core table's "DC.Identifier", "DC.Identifier.pageNumber", "DC.Identifier.DOI", "DC.Identifier.URN", "DC.Identifier.URI", "DC.Source.ISSN" rows; OMP3, OMP5, OMP7), OMP `main` on a scratch press (book 19: "PDF" with an ISBN-13, "HTML", a Markdown "Notes", "Chapter PDF" on chapter 1 with "Pages" 5-9, "Chapter Two PDF" on chapter 2 with none, series "Sea Series") and `stable-3_5_0` on PKP's default test dataset (book 14, as its Press Manager), two runs each, signed out. With the book's "URL Path" "sea-study" and the "PDF" format's "URL Path" "pdf" saved, the book page linked `…/catalog/view/sea-study/pdf/146` (main; `sea-study/pdf/108` on 3.5) and the other formats `sea-study/7/149`; those pages answered 200 with "DC.Identifier" `sea-study/4/146` (`sea-study/3/108`). A chapter's file view page carried the chapter's "DC.Title" and its one "DC.Creator.PersonalName" ("Chapter One Tides", "Ada Author"); a whole-book file's the book's title, all its authors and its "DC.Description". "DC.Identifier.ISBN" "9780306406157" on the "PDF" file's page, none on "HTML"; "DC.Identifier.pageNumber" "5-9" on "Chapter PDF" alone. DOIs (Settings › Distribution › "DOIs", prefix 10.1234, "Assign DOIs" on the DOIs page): with "Monographs" alone, whole-book files gave the book's DOI and chapter files none; with "Chapters" added, chapter files gave their chapter's DOI (3.5: only chapter 54, the one with its own page, received one); with "Files" added, every file its own. A series saved with "Online ISSN" "1234-5679" put it in "DC.Source.ISSN" on every view page; with only "Print ISSN" "0317-8471", no ISSN tag. `…/catalog/view/1/1/1` and `…/catalog/book/1` answered "404 Not Found" on OJS and OPS, both lines.
 
 <a id="fn-q20"></a>
 **q20** — Live-probed 2026-09-26 (Rule 18), all three apps: "Google Analytics Plugin" unticked on a new context, on `publicknowledge` and on the site's own Plugins list, its description as the plugins table quotes; the home, item and Login pages and the Dashboard held no "googletagmanager".
@@ -1444,6 +1473,9 @@ Issue report: [docs/issues/U20-OMP5-book-file-page-uri-names-book-page.md](../is
 <a id="fn-f-omp6"></a>
 **f-omp6** — Every `GET {press address}/catalog/download/{book}/{format}/{file}`, with or without `?inline=1`, current or earlier version, answered 500, the server logging "Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization"; the file's view page failed in the browser with "PDFJS is not defined" and "UnexpectedResponseException". The failure is in the book file download, which *Monograph landing page* owns; the tags merely name its addresses. Live-probed 2026-09-26: notes q14, q15, q19. Fixed by omp `8c807c919` (pkp/pkp-lib#13444): `CatalogBookHandler::download()` builds its `UsageEvent` with the local `$publication`. Re-driven 2026-10-05 on OMP `main`, two runs, on a scratch press, signed out (a browser, and a cookie-less client with Googlebot's and a plain user agent) and as the press's Reader: every address the book and chapter pages' "citation_pdf_url" and "citation_fulltext_html_url" give, and every format link's download address, current version and earlier (`…/catalog/download/{book}/version/{publication}/{format}/{file}`), with and without `?inline=1`, answered its file with 200, and no catalog address answered 500. The PDF view page rendered the PDF ("of 1", one page, no error bar), and both its bar's "Download" and the viewer's own "Download" saved article.pdf. Each download wrote a usage line (assocType 515 for a Book or Chapter Manuscript file, 531 for the default "Appendix" component). The page script still logs "PDFJS is not defined" on every PDF view page, which [Monograph landing page](U69-monograph-landing-page.md#a23) A23 records. Kept check `shared/playwright/checks/U20/S05/s05.js`; notes q14, q19.
 Issue report: [pkp-e2e#282](https://github.com/jardakotesovec/pkp-e2e/issues/282) (closed 2026-10-05, fixed by omp `8c807c919`).
+
+<a id="fn-f-omp7"></a>
+**f-omp7** — Note i: `DublinCoreMetaPlugin::monographFileView()` writes the pub-ID tags in a loop over the `pubIdPlugins` template variable, which `CatalogBookHandler::download()` (the view page's path) never assigns (only `CatalogBookHandler::book()` does), so the loop never runs. Its condition, `$submissionFile->getStoredPubId(…) ?? $chapter ? $chapter->getDoi() : $publication->getStoredPubId(…)`, groups as `($submissionFile->getStoredPubId(…) ?? $chapter) ? … : …`: assigning the variable alone would make the view page of a whole-book file with a stored URN fail with a server error (`getDoi()` on a null chapter), and would give a chapter's file its chapter's DOI under "DC.Identifier.URN"; a fix needs both. The same code is on `stable-3_5_0`. Live-probed 2026-10-13, OMP `main` (scratch press, two runs) and `stable-3_5_0` (PKP's default test dataset, book 14, two runs), with the URN plugin on for "Chapters", "Publication Formats" and "Files" and URNs assigned to chapter 1, a chapter's file and a whole-book file: chapter 1's page carried "DC.Identifier.URN" with the chapter's URN, and every file's view page answered 200 with no "DC.Identifier.URN" tag. Kept check `shared/playwright/checks/U20/H13D/h13d.js`.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Note h: OPS `citation_fulltext_html_url` names `preprint/view/{bestId}/{galleyBestId}`; with a "URL Path" set, the redirect to the download address drops the galley. Live-probed 2026-09-26: note q14.
