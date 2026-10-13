@@ -10,9 +10,9 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `5fc74d6213` | 2026-10-12 | claude (daily maintenance session) |
-| omp | `486cbf9eb0` | 2026-10-12 | claude (daily maintenance session; no new commits) |
-| ops | `399c4ebca3` | 2026-10-12 | claude (daily maintenance session; no new commits) |
+| ojs | `5fc74d6213` | 2026-10-13 | claude (daily maintenance session; no new commits) |
+| omp | `486cbf9eb0` | 2026-10-13 | claude (daily maintenance session; no new commits) |
+| ops | `399c4ebca3` | 2026-10-13 | claude (daily maintenance session; no new commits) |
 | pkp-lib | `f4f8fcdbc0` (ojs; omp and ops at `8094f06bf5`) | 2026-10-12 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
 
 ## Read log
@@ -22,6 +22,7 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-13 (daily session, VM s0) — no new commits on any repo's `stable-3_5_0` (ojs, omp, ops, pkp-lib, ui-library; `bin/line-range.js` 0 each, pkp-lib's branch tip at the pointer `f4f8fcdbc0`). `main`'s finding of the day carried over: the Norwegian Bokmål regression (Weblate's list, `docs/reports/2026-10-13-pkp-lib-weblate-nb.md`) shows on 3.5 too, driven on OJS (`.reports/sync-nb-3_5/s1013/`, `LocaleMetadata.php:241`); the released 3.5.0-5 package (2026-06-30) predates it. Open stable-line rows not re-run: nothing moved.**
 - **2026-10-12 (daily session, VM s2) — ojs `c6e2c3a879..5fc74d6213` (4: three pointer bumps and the merge of pkp/ojs#5921), omp and ops none, pkp-lib `d702d012dd..f4f8fcdbc0` (2, ojs; omp and ops still at `8094f06bf5`), ui-library none; ojs `plugins/generic/jatsTemplate` `f529e34b50..96eacdab48`. `main` first: synced today, nothing confirmed there to carry over. Read in full; baselines advanced. No regression.**
   - pkp-lib `f5119dce61` (#13494) → `=main acf22372dd` (read on `main` today): driven on the line's three apps at its parent and at the commit on 2026-10-09; what the change is for is recorded privately. No regression.
   - pkp-lib `f4f8fcdbc0` (#13495) → `~main 1ec9023e8a` (`git range-diff`: the line's loop reads `$params['affiliations']` without `?? []`, the one added line the same): driven on the line's three apps on 2026-10-10 at a commit with the same tree; what the change is for is recorded privately. On 3.5 `editContributor()` is reached only by its PUT route, which the contributor forms call (ui-library `ContributorManager`, `ContributorsListPanel`, the wizard). No regression.

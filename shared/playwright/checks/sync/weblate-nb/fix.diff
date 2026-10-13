@@ -1,0 +1,13 @@
+diff --git a/classes/dev/ComposerScript.php b/classes/dev/ComposerScript.php
+index 48bd953448..d8643f7ff9 100644
+--- a/classes/dev/ComposerScript.php
++++ b/classes/dev/ComposerScript.php
+@@ -43,7 +43,7 @@ class ComposerScript
+         try {
+             $dirPath = dirname(__FILE__, 3) . '/lib/weblateLanguages';
+             $langFilePath = "{$dirPath}/languages.json";
+-            $urlCsv = 'https://raw.githubusercontent.com/WeblateOrg/language-data/main/languages.csv';
++            $urlCsv = 'https://raw.githubusercontent.com/WeblateOrg/language-data/2026.10/languages.csv';
+ 
+             if (!is_dir($dirPath)) {
+                 mkdir($dirPath);

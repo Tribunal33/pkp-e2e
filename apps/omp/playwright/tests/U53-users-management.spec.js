@@ -448,8 +448,9 @@ test.describe('users management', () => {
         await expect(merge.grid.row(mail(ash))).toHaveCount(1);
         await expect(merge.grid.arrow(mail(ashdown))).toHaveCount(1);
         await expect(merge.grid.arrow(mail(ash))).toHaveCount(0);
-        // The site administrator's row is left out: it offers the action only before
-        // pkp/pkp-lib#13494, which an app has once its lib/pkp carries it (ci-triage K-13494).
+        // The site administrator's row offers nothing: only accounts the manager may act on in
+        // full offer "Merge into this User" (Rule 16; pkp/pkp-lib#13494).
+        await expect(merge.grid.arrow('admin@mail.test')).toHaveCount(0);
         for (const address of [mail(ashdown), mail(manager)]) {
             expect(await merge.grid.actionLabels(address)).toContain('Merge into this User');
         }

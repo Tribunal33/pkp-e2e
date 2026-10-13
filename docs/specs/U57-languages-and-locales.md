@@ -72,7 +72,7 @@ journals. See the OJS documentation for information on adding support for
 new languages." ("hosted presses" and "OMP" on a press, "hosted servers"
 and "OPS" on a preprint server), then one tick box per language the
 installation can carry and has not installed, labelled with its two names
-and its code in brackets, such as "German/Deutsch (de)", and the buttons
+and its code in brackets, such as "German/Deutsch (de)" ⚠ [A14](#a14), and the buttons
 "Cancel" and "Save". When every language is installed the window reads
 "No additional locales are available for installation." and offers no
 "Save". <sup>b</sup>
@@ -971,6 +971,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A6](#a6) | Two managers adding the same form language at the same moment: one tick silently fails on the server | 🐞 | latent · crash: server | Jarda 2026-09-26 · risk accepted |
 | [A7](#a7) | On a one-language site, typing in "Create Journal" makes the page's script fail at every keystroke | 🐞 | low · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A8](#a8) | A press's or preprint server's French (Canada) guidelines, checklist, privacy statement, role and component names show internal text codes | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
+| [A14](#a14) | Norwegian (Bokmål) is no longer offered to install, and a site that has it installed fails on its settings pages | 🐞 | high | — |
 | [A2](#a2) | "Reload defaults" is offered to the Site Administrator alone | ❓ | minor | — |
 | [A9](#a9) | Two scripts of one language carry the same name, so a reader cannot tell their links apart | ❓ | minor | — |
 | [A10](#a10) | With German the site's primary, the site's home once named a press in French | ❓ | minor | — |
@@ -1181,6 +1182,21 @@ language? Lean: yes; Rule 10a sets the expectation, and the texts
 exist.
 Basis: test run. <sup>[f-a13](#fn-a13)</sup>
 
+<a id="a14"></a>
+**A14 — Norwegian (Bokmål) is no longer offered, and a site that has it fails on its settings pages** · 🐞 · high.
+The "Install Locale" window no longer lists Norwegian Bokmål ("nb_NO"),
+although each app ships the language: a new site cannot add it. A site
+that already has it installed and enabled, once the application itself
+is installed again or updated on the server (by the server's
+administrator, not on any screen), answers a server error on Administration › "Site
+Settings" and on every journal's Settings › Website, so neither the
+site's languages nor a journal's website settings can be managed, and
+the journal's pages in Norwegian (`…/nb_NO/…`) answer "Not Found". Its
+pages in its other languages open. Norwegian Nynorsk ("nn") is still
+offered. It began on 2026-09-30, when the list of languages the apps
+download on install began naming Norwegian Bokmål "nb".
+Basis: probe, 2026-10-13. <sup>[f-a14](#fn-a14)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1312,6 +1328,9 @@ Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360
 
 <a id="fn-a13"></a>
 **f-a13** — `emailTemplate\DAO::fromRow()` joins the default texts of `email_templates_default_data` only in the journal's `supportedLocales` (the "UI" list), while the window's language buttons follow `supportedFormLocales`. Code read 2026-09-27. Test runs 2026-09-27 (three apps, scenario 1 with German ticked under "Forms" alone): the "German" button present, the German subject and body empty on the first open, before anything was typed, and again after German was removed and installed again, while the install had written the German default rows ("Vielen Dank für Ihre Einreichung bei {$contextName}"); by-hand reads the same day (OJS with German, OPS with French (Canada) on three scratch servers): "Forms" alone gave empty boxes and the email's API answer a null French subject; "UI" then "Forms", or a server created with the language under both, gave "Accusé de réception de la soumission à {$contextName}" and the German "Guten Tag {$recipientName}, …".
+
+<a id="fn-a14"></a>
+**f-a14** — `ComposerScript::weblateFilesDownload()` (a `post-install-cmd` of lib/pkp's `composer.json`) builds `lib/pkp/lib/weblateLanguages/languages.json` from WeblateOrg/language-data's `main` `languages.csv`; `Locale::getLocales()` keeps a locale folder only when `isLocaleValid()` finds its name in that file, and `LocaleMetadata::_parse()` throws `DomainException: Invalid locale "nb_NO"` for an installed one that is not. language-data [`1d5b84f67d`](https://github.com/WeblateOrg/language-data/commit/1d5b84f67d) (2026-09-30, "fix: prefer nb for Norwegian Bokmål", first in its tag 2026.11) renamed `nb_NO` to `nb`; the apps' folders stay `nb_NO`, the name 3.5's `I9707_WeblateUILocales` gave them to match Weblate. Code read 2026-10-13. Live-probed 2026-10-13 on PKP's default dataset, OJS `main` and `stable-3_5_0` (`checks/sync/weblate-nb/norwegian.js`): with the file as built before that change, "Install Locale" offered "Norwegian Bokmål/norsk bokmål (nb_NO)", the install and enabling worked and `/publicknowledge/nb_NO` served `lang="nb-NO"`; with today's file, on the same install, GET `/index.php/index/en/admin/settings` and `/publicknowledge/en/management/settings/website` answered 500 with that exception and `/publicknowledge/nb_NO` 404. OMP and OPS by code (the same lib/pkp code and `nb_NO` folders). Report: `docs/reports/2026-10-13-pkp-lib-weblate-nb.md`.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `admin.locale.maybeIncomplete`: `omp/locale/en/admin.po` "* Marked locales may be incomplete.", `ojs/locale/en/admin.po` and `ops/locale/en/admin.po` "Marked locales may be incomplete.". Code read 2026-09-27. Live-probed 2026-09-27: the lines as quoted under the site's list, the asterisks beside the languages the same; OMP's French line also opens with one ("*Les paramètres marqués pourraient être incomplets.").

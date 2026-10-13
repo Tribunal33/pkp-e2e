@@ -38,9 +38,15 @@ journal still puts the user out of reach. A Site Administrator's account
 is never within a manager's reach. The Site Administrator reaches every
 other account, with one exception below. <sup>n</sup>
 
-The exception is a second Site Administrator's account: the Site
-Administrator's menu offers "Login As" and "Merge user" on its row, but
-the app refuses both. <sup>v</sup>
+The exception is a second Site Administrator's account: on Settings ›
+Users & Roles › "Users" of a journal where that account holds a role,
+the Site Administrator's "…" menu on its row offers "Login As" and
+"Merge user", but the app refuses both. "Merge user" opens the "Merge
+user" window, but once an account is chosen in it, "OK" in the
+"Confirm" dialog leaves the dialog open with a spinner and no message,
+and the account is not merged ⚠ [A21](#a21). What "Login As" shows on
+that row has not been seen; that it is refused is read from the code.
+<sup>v</sup>
 
 | Action | Who may, and when |
 |--------|--------------------|
@@ -85,8 +91,11 @@ The "Disable {full name}" and "Enable {full name}" windows (Rules 10–12):
 
 The "Merge user" window's list and the Site Administrator's older grid
 (Rules 16, 19) share a list with the columns "Given Name", "Family Name",
-"Username", "Roles" and "Email", and one search form, which opens from
-the "Search" link above the list. The "Roles" column names the user's
+"Username", "Roles" and "Email", the last one headed "Email address" on
+some installs (the install, not a setting, decides; see
+[Contributors & affiliations](U41-contributors-and-affiliations.md#a19),
+its A19), and one search form, which opens from the "Search" link above
+the list. The "Roles" column names the user's
 roles in this journal, empty for a user whose roles here have all
 ended; the Site Administrator's row shows none ⚠ [A13](#a13). <sup>i</sup>
 
@@ -273,8 +282,20 @@ The Site Administrator's "Add User" (step 1) and "Edit User" windows
 16. **"Merge user".** It opens the side window "Merge user", holding a
     list headed "Merge into this User" with the search form of the Fields
     section, at first listing this journal's users, including those whose
-    roles here have all ended (nothing under "Roles"). Every row but the
-    account being merged offers "Merge into this User". <sup>i</sup>
+    roles here have all ended (nothing under "Roles"). Which rows offer
+    "Merge into this User" is Rule 16a. <sup>i</sup>
+16a. **The accounts to merge into.** A row offers "Merge into this User",
+    behind the arrow at its start, only when the signed-in user may act
+    on that account in full:
+    - a manager other than the Site Administrator: their own row and the
+      rows of users whose roles all sit in journals where they hold a
+      manager-level role; never the Site Administrator's row, nor the row
+      of a user holding a role in a journal they do not manage;
+    - the Site Administrator: every row, their own included, but a
+      second Site Administrator's.
+
+    The row of the account being merged never offers it. A row without
+    the action has no arrow. <sup>i</sup>
 17. **The merge.** "Merge into this User" asks, in a dialog headed
     "Confirm", "Are you sure you wish to merge the account with the username "{old username}" into the account
     with the username "{new username}"? The account with the username
@@ -498,7 +519,8 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
      second browser, opens Administration › "Hosted Journals", the
      journal's row, the arrow at its start, "Settings wizard", then the
      tab "Users": a list headed "Current Users" with the columns "Given
-     Name", "Family Name", "Username", "Roles" and "Email", "Search" and
+     Name", "Family Name", "Username", "Roles" and "Email" (or "Email
+     address"), "Search" and
      "Add User" above it, and under it a line beginning "Items per page:
      10 25 50 75 100" with page links (Rule 19).
    - **Control**: on the Users & Roles list, the "…" of Quinn Ashdown's
@@ -633,8 +655,10 @@ passwords and the tooling recipe are in the footnote. <sup>s</sup>
      "…" of Quinn Ash's row, then "Merge user": the side window "Merge
      user" opens, holding a list of this journal's users headed "Merge
      into this User", with the columns "Given Name", "Family Name",
-     "Username", "Roles" and "Email". Every row but Quinn Ash's offers
-     "Merge into this User" (Rule 16; Fields, the shared list).
+     "Username", "Roles" and "Email" (or "Email address"). Quinn
+     Ashdown's row and the Journal Manager's own offer "Merge into this
+     User"; the Site Administrator's row and Quinn Ash's have no arrow
+     and offer nothing (Rules 16, 16a; Fields, the shared list).
    - **The search form**: press the "Search" link above the list: the
      form opens with the box "Search", the role select on "All Roles"
      and "Include users with no roles in this journal." unticked. Type
@@ -804,6 +828,14 @@ Left out of the scenarios above, by reason:
   - the guard for A5 (issue report
     `docs/issues/U53-A5-users-list-row-button-raw-key.md`): every row's "…"
     button on the users list has an accessible name with no "##"
+  - the "Merge user" window opened by a manager on a journal where a user
+    also holds a role in another journal the manager does not manage:
+    that user's row has no arrow, while a manager of both journals is
+    offered "Merge into this User" on it (Rule 16a)
+  - the "Merge user" window opened by the Site Administrator: every row
+    but the account being merged and a second Site Administrator's offers
+    "Merge into this User", the administrator's own and other journals'
+    users included (Rule 16a)
 - **Nothing new to test**:
   - a "Username" outside the characters the Fields section allows, on
     "Add User", whose refusal the Fields section does not quote (Fields
@@ -851,6 +883,8 @@ Left out of the scenarios above, by reason:
     15a)
   - A20 (a role with an end date still to come that neither the list nor
     the roles page can end; Rule 3a)
+  - A21 ("Merge user" on a second Site Administrator's row, the "Confirm"
+    dialog left spinning; Actors paragraph)
 - **No seed**:
   - a Site Administrator whose only role in the journal is Reader,
     opening the list by its address (Actors row 1; ending the
@@ -902,6 +936,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | On "Add User", unticking "Generate Password" leaves "Notify User" greyed out, so no welcome email can be chosen | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | After "Edit User" ends a role, the grid's row still lists it until the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A19](#a19) | "Remove User" keeps a role that starts on a later date, and removing the user again fails | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A21](#a21) | "Merge user" on a second Site Administrator's row leaves the "Confirm" dialog spinning with no message, and nothing is merged | 🐞 | minor | — |
 | [OPS1](#ops1) | On a French preprint server the "Roles" column prints raw codes for two roles | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A3](#a3) | A user removed from the journal stays in the list with no role | ❓ | minor | — |
 | [A8](#a8) | "Remove User" tells the user nothing, where "Remove Role" emails them | ❓ | minor | — |
@@ -1166,6 +1201,19 @@ Question: should a role with a future end date count as current for
 already treats it.
 Basis: probe. <sup>f-a20</sup>
 
+<a id="a21"></a>
+**A21 — Merging a second Site Administrator's account hangs with no message** · 🐞 · minor.
+On an install with a second Site Administrator, on Settings › Users &
+Roles › "Users" of a journal where that account holds a role, the Site
+Administrator's "…" menu on its row offers "Merge user", and the "Merge
+user" window opens. After "Merge into this User" on another row and "OK" in
+the "Confirm" dialog, the dialog stays open with "OK", "Cancel" and a
+spinner that keeps turning; no message appears, the window stays open,
+and after a reload the account is still there, unmerged. The Site
+Administrator expects either the merge or a message saying it cannot be
+done, or no "Merge user" on that row.
+Basis: probe, 2026-10-13. <sup>f-a21</sup>
+
 ### OPS
 
 <a id="ops1"></a>
@@ -1229,11 +1277,22 @@ included.
 `getPropertyCanMergeUsers()` answer true on every row but one's own for a
 site admin, while `getAdministrationLevel()` makes a Site Administrator
 target `ADMINISTRATION_PROHIBITED`, which `LoginHandler::signInAsUser()`
-and `UserGridHandler::mergeUsers()` refuse. It cannot be seen on the test
-installs: none holds a second Site Administrator, and the Settings
-wizard's "User Roles" boxes list journal roles only (2026-09-25). Settled
-by the row menu of a second Site Administrator's account as the first one
-sees it.
+and `UserGridHandler::mergeUsers()` refuse. The test installs hold no
+second Site Administrator, and the Settings wizard's "User Roles" boxes
+list journal roles only (2026-09-25), so one is made by adding a
+`user_user_groups` row for the site's administrator group (deleted after
+the probe). Live-probed 2026-10-13 (Actors paragraph; A21), all three
+apps, two runs, as the Site Administrator, on a second Site
+Administrator who was also an Author in the journal: the row's "…"
+offered "Edit", "Email", "Login As", "Remove User", "Disable User" and
+"Merge user". "Merge user" opened the window, where every row but the
+second administrator's own offered "Merge into this User". On another
+Author's row, "Confirm" then "OK": the request answered 200
+`{"status":false}`; "Confirm" stayed open with "OK", "Cancel" and its
+spinner still turning 2.5 s later, the pressed link greyed; no page
+notice and no browser dialog; the window stayed open, and the account
+was still listed after a reload. "Login As" was not pressed: that half
+is still read from the code only.
 
 <a id="fn-a"></a>
 **a** — Page: `ManagementHandler::settings()` maps `access` to
@@ -1477,7 +1536,13 @@ modal titled "Merge user" on `UserGridHandler::mergeUsers()` with
 `oldUserId`, which, without `newUserId`, returns a fresh `UserGridHandler`
 grid titled `grid.user.mergeUsers.mergeIntoUser` "Merge into this User";
 its rows (`UserGridRow` with `oldUserId`) carry only the `mergeUser`
-action labelled "Merge into this User", skipped on the old user's own row.
+action labelled "Merge into this User", skipped on the old user's own row
+and, since pkp/pkp-lib#13494 (`acf22372dd`, 2026-10-09, in the three
+apps' pointers by 2026-10-13), on every row whose account
+`Validation::getAdministrationLevel()` does not give the current user
+`ADMINISTRATION_FULL` (the Site Administrator, a second Site
+Administrator, members of journals the manager does not manage);
+`mergeUsers()` checks both accounts the same way.
 Filter form `userGridFilter.tpl`: `common.search` "Search" box,
 `userGroup` select led by `grid.user.allRoles` "All Roles", checkbox
 `user.noRoles.selectUsersWithoutRoles` (app locale: "Include users with no
@@ -1497,6 +1562,17 @@ narrowed the list; the box "Include users with no roles in this journal."
 here was listed only with the box ticked; users whose roles here had all
 ended were listed without it, their "Roles" cell empty. The window's list
 is headed "Merge into this User"; the merged account's row has no arrow.
+Live-probed 2026-10-13 (Rule 16a; Fields, the shared list; scenario 6),
+three apps, two runs, as the Site Administrator, a Journal (Press,
+Preprint Server) Manager, a manager of two journals, and on OJS and OMP
+an Editor and a Production Editor: the rows that lack the action have no
+arrow; the signed-in user's own row offers it (the main list's menu
+offers no "Merge user" there). The Editor and the Production Editor saw
+what the Journal Manager saw. "Merge into this User" on a row the
+manager may act on merged as in Rule 17. The last column read "Email
+address" on all three apps in every run: its label is lib/pkp's
+`user.email`, which `common.po` defines as "Email address" and `user.po`
+as "Email", so the install decides (note td15).
 
 <a id="fn-j"></a>
 **j** — Confirmation `grid.user.mergeUsers.confirm`
@@ -2115,6 +2191,15 @@ on the other. "Disable User" named the role under "Current Roles : " (a
 window that lists every role, A6). The Settings wizard's "Users" grid was
 not tried. Code: the menu's guard (note c); the roles page labels any
 role with an end date as removed.
+
+<a id="fn-f-a21"></a>
+**f-a21** — Live-probed 2026-10-13, all three apps, two runs each: note
+v. No response of 500 or more, no page error and no browser dialog: the
+refusal is `UserGridHandler::mergeUsers()` answering 200
+`{"status":false}` because `getAdministrationLevel()` does not give the
+acting Site Administrator `ADMINISTRATION_FULL` over the old account
+(note i), and the page shows nothing for that answer. Seen on `main`
+only.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Seen 2026-09-04 (user-profile claim check K2), OPS French
