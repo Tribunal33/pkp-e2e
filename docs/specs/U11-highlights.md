@@ -172,6 +172,15 @@ second language's boxes, labelled "{Field} in {language}" (Rule 11).
 14. **Live at once, for everyone.** A highlight is public from the moment
     it is saved: there is no draft state, no publish step, no date range
     and no per-role visibility. <sup>a</sup> <sup>m</sup>
+15. **The programming interface.** The Highlights panel lists, adds,
+    edits, deletes and orders highlights through the install's
+    programming interface, which programs outside the apps can also call
+    (the address is in the footnote). With each highlight it lists, the
+    interface gives the address that highlight can be read back from on
+    its own. For a journal's highlight that address points at the site
+    instead of the journal, and the highlight cannot be read back on its
+    own at either address ⚠ [A10](#a10). The panel never reads one
+    highlight on its own, so no screen meets this. <sup>p</sup>
 
 ## Side effects
 
@@ -434,6 +443,8 @@ Left out of the scenarios above, by reason:
   - A6 (a dot pressed under the carousel; Rule 4; scenario 3 marks it)
   - A8 ("Save Order" on an empty list; Rule 9a)
   - A9 (the image replaced on an edit emptying "Alternate text"; Rule 10)
+  - A10 (a journal's highlight read on its own through the programming
+    interface; Rule 15)
 - **No seed**:
   - the Site Administrator adding a site highlight and any visitor seeing
     the site's carousel on the site's home page (Actors rows 2 and 3;
@@ -466,6 +477,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site administrator cannot add site highlights: "Save" leaves the panel open and "Save Order" shows an error | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
+| [A10](#a10) | Through the programming interface, a journal's highlight cannot be read on its own: its own address points at the site, and the journal's address for it fails | 🐞 | latent · crash: server | — |
 | [A2](#a2) | "URL" accepts any text although its hint asks for a full web address, so a slide's button can point nowhere | ❓ | user-visible | — |
 | [A6](#a6) | The carousel's dots do nothing when pressed and have no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | "Save Order" on an empty list shows the generic "An unexpected error has occurred…" dialog | ❓ | minor | — |
@@ -568,6 +580,21 @@ highlight saves without an alternate text. Question: should the alternate
 text survive a replaced picture? Lean: keep it; the emptied box is easy to
 miss, and a picture without a description fails visitors on assistive
 devices. Basis: probe. <sup>f-a9</sup>
+
+<a id="a10"></a>
+**A10 — Through the programming interface, a journal's highlight cannot be read on its own** · 🐞 · latent · crash: server.
+The apps' own screens never read one highlight on its own, so no user of
+them meets this. A program listing a journal's highlights through the
+install's programming interface (Rule 15) gets, with each highlight, the
+address to read that highlight back from, and expects it to give the
+highlight. The address points at the site instead of the journal. There
+the journal's Journal Manager is refused with "The current role does not
+have access to this operation.", the Site Administrator's request fails
+with a server error (the failure behind [A5](#a5)), and a visitor who is
+not signed in is refused. Asked for at the journal's own address, the
+same highlight fails with a server error for the Journal Manager and the
+Site Administrator alike.
+Since: 2023-10-13 · Basis: probe, 2026-10-13. <sup>f-a10</sup>
 
 ### Retired
 
@@ -934,6 +961,19 @@ inherits the default theme's script; a theme that does not include
 offers "Default Theme" alone, and every Setup and Appearance side tab and
 the theme's option list carry nothing named after highlights.
 
+<a id="fn-p"></a>
+**p — the programming interface.** `HighlightsController` serves
+`{journal}/api/v1/highlights` and, at site scope,
+`index/api/v1/highlights`: list, get, add, edit, delete and
+`highlights/order`. The panel (`HighlightsListPanel.vue`) builds each
+item's address as `apiUrl + '/' + id`, sends list, add, edit, delete and
+order, and never reads `_href` nor sends the single-item `get`. Each
+record's `_href` comes from `PKP\highlight\maps\Schema::mapByProperties()`
+(A10). Code read 2026-10-13. Live-probed 2026-10-13 (Rule 15), OJS, OMP
+and OPS: the panel's "Save" sends the add to `{journal}/api/v1/highlights`
+(answered 200), and the journal's list reads from the same address
+(note f-a10).
+
 <a id="fn-s1"></a>
 **s1 — scenario 1 seeding.** `POST scenarios/context` with `users[]`
 `manager`, `sectionEditor`, `author` and `reader` (passwords: the
@@ -1092,6 +1132,36 @@ empty "Alternate text" box; after "Save" the stored `altText` is empty. `FieldUp
 watches its value and sets the box to the new value's `altText` whenever
 the value changes; a fresh upload's value has none, so the box empties.
 
+<a id="fn-f-a10"></a>
+**f-a10 — A10 evidence.** Two causes, identical on `main` and
+`stable-3_5_0`. `PKP\highlight\maps\Schema::mapByProperties()` builds
+`_href` with `getApiUrl('highlights/' . $item->getId())` and no second
+argument, so `core/maps/Schema::getApiUrl()` falls back to
+`PKPApplication::SITE_CONTEXT_PATH` (`index`); the publication, ROR and
+submission-file maps pass the context's `urlPath`. Since 9984fe44707
+(2023-10-12). `HighlightsController::get()` passes
+`$this->getRequest()->getContext()`, the context object, where
+`Repository::get(int $id, ?int $contextId)` takes an id, so the request
+fails on the server; the controller's other operations pass the context's
+id. Since 71e79e31e3d (2023-10-13). The site route, once A5 is fixed,
+would look the id up among site highlights only (`DAO::get()` matches
+`COALESCE(context_id, 0) = 0`) and answer 404 rather than the journal's
+highlight (code only). Live-probed 2026-10-13 (Rule 15), OJS, OMP and
+OPS `main` (ojs 7c6fba2064, omp eb9381314, ops 1bc3f78888, lib/pkp
+f4c2578c94), twice each on a scratch journal with one highlight added
+through the panel: the add answer and the journal's list both carry the
+nine properties of note a, with `_href`
+`/index.php/index/api/v1/highlights/{id}`. That address answers the
+journal's manager 401 `user.authorization.roleBasedAccessDenied` ("The
+current role does not have access to this operation."), the
+administrator 500 (A5's failure in the `has.roles` middleware) and a
+signed-out request 401. `{journal}/api/v1/highlights/{id}` answers 500
+to the manager and the administrator and 401 signed out. The site's own
+list answered the administrator 500 (A5), so no site highlight's `_href`
+could be compared. 3.5 read in the code only (lib/pkp f4f8fcdbc0 under
+ojs, 8094f06bf5 under omp and ops); 3.4 and 3.3 have no highlights
+(note a).
+
 ## Reference — entry points & surfaces
 
 | Entry | Path | Atom |
@@ -1102,7 +1172,7 @@ the value changes; a fresh upload's value has none, so the box empties.
 | Row "Delete" (confirm dialog) | the same tab | AFFM-040 |
 | Site's Highlights panel (same controls, site scope) | Administration › Site Settings › Site Setup › Highlights (multi-journal site only) | AFFM-219 |
 | Home-page carousel: slide button, "Previous slide" / "Next slide", dots | the journal's home page; the site's home page | AFFR-017 |
-| Highlights API | `highlights` (list, get, add, edit, delete) and `highlights/order` at journal or site scope; the single-item `get` passes the context object where an id is expected and is not called by the panel | API-022 |
+| Highlights API | `highlights` (list, get, add, edit, delete) and `highlights/order` at journal or site scope. The single-item `get` answers 500 at journal scope, and a journal highlight's `_href` points at the site's address ([A10](#a10)). The panel calls neither. | API-022 |
 | Highlight record shape | — | SET-015 |
 
 ## Reference — code anchors
