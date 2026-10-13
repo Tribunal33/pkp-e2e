@@ -1,0 +1,38 @@
+--- a/lib/pkp/classes/core/PKPSessionGuard.php
++++ b/lib/pkp/classes/core/PKPSessionGuard.php
+@@ -106,6 +106,23 @@
+     }
+ 
+     /**
++     * @copydoc \Illuminate\Auth\SessionGuard::userFromRecaller($recaller)
++     *
++     * A user signed back in from the "remember me" cookie gets the same session data as a sign-in
++     * (userId, username, email), so that every reader of the session agrees on the user.
++     */
++    protected function userFromRecaller($recaller)
++    {
++        $user = parent::userFromRecaller($recaller);
++
++        if ($user) {
++            $this->setUserDataToSession($user);
++        }
++
++        return $user;
++    }
++
++    /**
+      * Sign In as different user
+      */
+     public function signInAs(AuthenticatableContract|User $user): void
+--- a/lib/pkp/classes/middleware/PKPAuthenticateSession.php
++++ b/lib/pkp/classes/middleware/PKPAuthenticateSession.php
+@@ -32,6 +32,9 @@
+      */
+     public function handle($request, Closure $next)
+     {
++        // Sign the user back in from the "remember me" cookie, if any, before the session is first saved
++        $this->guard()->user();
++
+         $response = parent::handle($request, $next);
+ 
+         if ($request->hasSession()

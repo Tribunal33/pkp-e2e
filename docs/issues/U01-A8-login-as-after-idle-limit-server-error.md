@@ -29,16 +29,15 @@ Update 2026-10-13: the fix now proposed for the "Keep me logged in"
 regression
 ([docs/reports/2026-10-07-pkp-lib-12780.md](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/reports/2026-10-07-pkp-lib-12780.md),
 its [fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/sync/pkp-lib-12780/fix.diff))
-signs the person back in as the session starts, through
-`Validation::registerUserSession()`, which writes `userId`, instead of
-reading the cookie in `getUser()`. It covers this fault without this
-report's override, and it replaces the cookie read this report waits
-for. With it applied, this report's walk on the three apps on `main`
+asks Laravel's guard for the user as the session starts, so its cookie
+restore runs before the session is saved, and carries this report's
+override of `userFromRecaller()` (plus the removal of a cookie that
+signs no one in, and no restore on API requests). It is the early call
+this section says the override needs. With it applied, this report's walk on the three apps on `main`
 ends as Expected: step 3 opens Users & Roles signed in, step 4 opens the
 dashboard as `dbuskins`, the public header shows the user, and the
 Login page goes on to the dashboard. The neighbour check gives the same
-three results as listed below. Apply that fix rather than the override
-below.
+three results as listed below.
 
 ## Summary
 

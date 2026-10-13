@@ -1,57 +1,37 @@
 --- a/lib/pkp/classes/core/PKPSessionGuard.php
 +++ b/lib/pkp/classes/core/PKPSessionGuard.php
-@@ -106,6 +106,72 @@
+@@ -106,6 +106,52 @@
      }
  
      /**
-+     * Sign the user in again from the "remember me" cookie when the session holds no user,
-+     * e.g. after the session expired or the browser was closed.
++     * @copydoc \Illuminate\Auth\SessionGuard::userFromRecaller($recaller)
 +     *
-+     * The user is registered in the session as a sign-in does (Validation::registerUserSession()),
-+     * so a disabled account stays signed out and every check of the session agrees on the user.
++     * A user signed back in from the "remember me" cookie gets the same session data as a sign-in
++     * (userId, username, email), so that every reader of the session agrees on the user; a cookie
++     * that signs no one in is removed. Not on API requests, whose responses do not carry the cookies.
 +     */
-+    public function loginViaRememberCookie(): ?User
++    protected function userFromRecaller($recaller)
 +    {
-+        if ($this->getUserId() || is_null($recaller = $this->recaller())) {
++        if ($this->recallAttempted) {
 +            return null;
 +        }
 +
-+        // Not on API requests, whose responses do not carry the session cookies, nor later in them
 +        if (Application::get()->getRequest()->getRouter() instanceof APIRouter) {
 +            $this->recallAttempted = true;
 +            return null;
 +        }
 +
-+        $user = $this->userFromRecaller($recaller);
++        $user = parent::userFromRecaller($recaller);
 +
-+        // A changed password ends the remembered sign-in, as AuthenticateSession does for the session
-+        if ($user && !$this->isRecallerPasswordHashValid($user, $recaller->hash())) {
-+            $user = null;
-+        }
-+
-+        $reason = null;
-+        if (!$user || !Validation::registerUserSession($user, $reason)) {
-+            $this->viaRemember = false;
++        if ($user) {
++            $this->setUserDataToSession($user);
++            Registry::set('user', $user);
++        } elseif ($recaller->valid()) {
 +            $this->getCookieJar()->queue($this->getCookieJar()->forget($this->getRecallerName()));
 +            $this->updateSessionCookieToResponse();
-+            return null;
 +        }
 +
-+        $this->setUser($user);
-+        $this->fireLoginEvent($user, true);
-+
 +        return $user;
-+    }
-+
-+    /**
-+     * Check the password hash of the "remember me" cookie against the user's password
-+     *
-+     * @see \Illuminate\Session\Middleware\AuthenticateSession::validatePasswordHash()
-+     */
-+    protected function isRecallerPasswordHashValid(AuthenticatableContract|User $user, string $hash): bool
-+    {
-+        return hash_equals($this->hashPasswordForCookie($user->getAuthPassword()), $hash)
-+            || hash_equals($user->getAuthPassword(), $hash);
 +    }
 +
 +    /**
@@ -73,7 +53,7 @@
       * Sign In as different user
       */
      public function signInAs(AuthenticatableContract|User $user): void
-@@ -212,11 +278,12 @@
+@@ -212,11 +258,12 @@
          /** @var \Illuminate\Http\Response $response */
          $response = app()->get(\Illuminate\Http\Response::class);
  
@@ -90,18 +70,17 @@
              name: $session->getName(),
 --- a/lib/pkp/classes/middleware/PKPAuthenticateSession.php
 +++ b/lib/pkp/classes/middleware/PKPAuthenticateSession.php
-@@ -32,6 +32,10 @@
+@@ -32,6 +32,9 @@
       */
      public function handle($request, Closure $next)
      {
-+        if ($request->hasSession()) {
-+            app()->get('auth.driver')->loginViaRememberCookie();
-+        }
++        // Sign the user back in from the "remember me" cookie, if any, before the session is first saved
++        $this->guard()->user();
 +
          $response = parent::handle($request, $next);
  
          if ($request->hasSession()
-@@ -61,10 +65,13 @@
+@@ -61,10 +64,13 @@
              'newIp' => $request->ip(),
          ]);
  
