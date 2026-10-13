@@ -3936,7 +3936,7 @@ lib/pkp form and template, with no override in OMP (read in the code
 ([docs/issues/U27-A2-request-resent-row-shows-review-deadline.md](../issues/U27-A2-request-resent-row-shows-review-deadline.md)),
 which names it as a separate fault; that walk read the stored dates
 (the two picked) on 3.5.
-Issue report: [docs/issues/U27-A44-resend-email-names-old-response-date.md](../issues/U27-A44-resend-email-names-old-response-date.md).
+Issue report: [pkp-e2e#958](https://github.com/jardakotesovec/pkp-e2e/issues/958) ([docs/issues/U27-A44-resend-email-names-old-response-date.md](../issues/U27-A44-resend-email-names-old-response-date.md)).
 
 <a id="fn-a45"></a>
 **f-a45** — Live-probed 2026-10-05 (OJS and OMP, main and
