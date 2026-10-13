@@ -166,7 +166,8 @@ In French most of its headings and descriptions are raw codes
    Publication" on a journal and press, and "Post the preprint" on a
    preprint server. It shows, in order: an optional warning list ("The
    following issues were found, but will not prevent publishing"; none in
-   a stock install, plugins add them), then either the confirmation text
+   a stock install, plugins add them ⚠ [OJS7](#ojs7)), then either the
+   confirmation text
    with a Publish/Post/Schedule For Publication button, or, when
    requirements are unmet, "The following requirements must be met before
    this can be published." ("…posted." on a preprint server) with the
@@ -337,7 +338,9 @@ In French most of its headings and descriptions are raw codes
     "Review (Round {n}) • {date} • {file}" ("External Review (Round {n})
     • …" on a press). Choosing one appends its text after whatever the box
     already holds. With none saved it reads "No saved summaries found for
-    this submission's review revisions." A preprint server has no review,
+    this submission's review revisions." A saved summary holding HTML
+    markup that carries a script runs that script in the editor's browser
+    when the panel opens ⚠ [A11](#a11). A preprint server has no review,
     so it has no such button. <sup>u</sup>
 15. **A journal with no issues {OJS}.** With not a single issue created,
     the publish flow shows no issue fields at all and publishes
@@ -1049,6 +1052,8 @@ Left out of the scenarios above, by reason:
   - A9 (same-day unassigned versions sharing one name; Rules 11a, 16)
   - A10 (in French the version dialog and the entry page reading raw
     codes; Fields)
+  - A11 (a revision summary saved with markup running as script when
+    "Insert Content" opens; Rule 14)
   - OJS1 (a required plain language summary refusing the panel's Confirm
     without naming the summary; Rule 4)
   - OJS2's second half (where only future issues exist, a Publication
@@ -1059,6 +1064,8 @@ Left out of the scenarios above, by reason:
   - OJS4 (a publish without an issue failing for a contributor with a
     verified ORCID iD under the member API; Rule 15)
   - OJS5 (a refused Confirm opening a second, blank panel; Rule 3c)
+  - OJS7 (a title typed with markup in Crossref's publish warning;
+    Rule 4)
   - OPS1 (the scheduled preprint waiting forever; Rule 6; scenario 15
     marks it)
   - OPS3 (a screening plugin lifting the author block with no Post
@@ -1128,6 +1135,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | Readers never see a new version's Summary of Changes, though the editor is told it appears publicly | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Creating a new version, still unpublished, makes the reader page say "Published {today} — Updated on {real date}" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [A11](#a11) | Markup an author saves in a revision's summary of changes runs as script in the editor's browser when "Insert Content" opens | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused without naming the summary and publishing is unreachable | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1143,6 +1151,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A7](#a7) | The press's and preprint server's confirmation shows a requirement-shaped stage sentence under "All … requirements have been met" | ❓ | minor | — |
 | [A9](#a9) | Unassigned versions made the same day carry identical names in every version list | ❓ | minor | — |
 | [OJS6](#ojs6) | With a summary required, a version with saved details skips the refused panel and would publish without one | ❓ | latent | — |
+| [OJS7](#ojs7) | A title typed with markup may run as script in the editor's browser when Crossref's publish warning names it | ❓ | user-visible | — |
 | [OMP1](#omp1) | The press's publish confirmation promises to make the entry public while a future date schedules it instead | ❓ | minor | — |
 | [OPS2](#ops2) | The posted acknowledgement is sent even when the post only scheduled the preprint | ❓ | minor | — |
 | [OPS3](#ops3) | An author granted posting by a plugin still finds no Post control on the workflow | ❓ | latent | — |
@@ -1338,6 +1347,26 @@ finding, and why a missing French text shows as a code at all is
 [Languages & locales](U57-languages-and-locales.md), its Rule 21a.
 Since: 2026-09-30 · Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 
+<a id="a11"></a>
+**A11 — Markup an author saves in a revision's summary of changes runs as script in the editor's browser when "Insert Content" opens** · 🐞 · user-visible.
+An Author who uploads a revised file in review fills its "Summary of
+Changes (Amendment Notice)" in the upload's details step, and the text
+is kept as typed. Later, a Journal Manager or Editor presses "Insert
+Content" on a version's Summary of Changes box (Rule 14). Expected: the
+panel lists each saved summary as text. Observed: a summary holding
+HTML markup that carries a script (an image tag with an error handler,
+for one) runs that script in the editor's browser, under the editor's
+sign-in, the moment the panel opens. When the summary holds no other
+text the panel reads "No saved summaries found for this submission's
+review revisions.", so the editor sees nothing amiss. Any author of a
+submission in review can save such a summary. It runs for whoever opens
+"Insert Content" on that submission: the may-publish roles (Actors),
+and anyone else the entry page lets edit the publication. A journal and
+a press; a preprint server has no such button.
+Security: unreleased.
+Since: 2026-05-28 · Basis: probe, 2026-10-13 (a journal; a press by the
+code). <sup>[f-a11](#fn-a11)</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1415,6 +1444,25 @@ issue choice and stage are already saved skips the refused panel
 checks the summary. Question: should publishing require it too? Lean:
 no; the setting asks for it "before accepting their submission", and a
 press and preprint server publish without one. Basis: code, 2026-10-05. <sup>[f-ojs6](#fn-ojs6)</sup>
+
+<a id="ojs7"></a>
+**OJS7 — A title typed with markup may run as script in the editor's browser when Crossref's publish warning names it** · ❓ · user-visible.
+On a journal where Crossref is the DOI registration agency, "Articles"
+is ticked and "Automatic DOI Assignment" is not "Upon publication", a
+version with no DOI shows 'The submission "{title}" is not associated
+with a DOI and cannot be deposited with Crossref.' in the publish
+window's warning list (Rule 4; the warnings themselves are
+[DOIs](U45-dois.md)' Rule 39). The window prints each warning as HTML,
+not as text, and a tag typed into the title as visible text comes back
+as a real tag in the warning. So an Author who types a tag that carries
+a script into the title would have that script run in the browser of
+the Journal Manager or Editor who presses "Schedule For Publication".
+Expected: the warning shows the title as typed.
+Question: does such a title's script run when the window opens? Lean:
+yes; nothing between the saved title and the window escapes it. A press
+and a preprint server show no Crossref warning.
+Security: unreleased.
+Since: 2026-05-12 · Basis: code, 2026-10-13. <sup>[f-ojs7](#fn-ojs7)</sup>
 
 ### OMP
 
@@ -2366,6 +2414,32 @@ script error was logged.
 Issue report: [pkp-e2e#548](https://github.com/jardakotesovec/pkp-e2e/issues/548) ([docs/issues/U49-A10-ops-french-date-posted-raw-key.md](../issues/U49-A10-ops-french-date-posted-raw-key.md)).
 Issue report: [pkp-e2e#228](https://github.com/jardakotesovec/pkp-e2e/issues/228) ([docs/issues/U13-A1-french-version-name-raw-key.md](../issues/U13-A1-french-version-name-raw-key.md)), the list of versions to copy from.
 
+<a id="fn-a11"></a>
+**f-a11** — Rests on the maintainer's own live run (2026-10-12/13, ojs
+`1b0f84edae`, lib/pkp `3bcc0a0cb2`, ui-library `3f6a3e8d`, OJS `main`,
+PKP's default dataset) plus today's code read on main, not re-driven
+here: a harmless marker an author saved as a review revision file's
+summary of changes ran in the editor's session when the editor pressed
+"Insert Content" on Publication Settings, and the panel then read "No
+saved summaries found for this submission's review revisions.". No
+crash. Code read 2026-10-13, OJS `main` (ojs `7c6fba2064`, lib/pkp
+`f4c2578c94`, ui-library `c9889f00`), unchanged:
+`InsertSummaryOfChangesModal.vue` `htmlToPlainText()` assigns each
+file's `summaryOfChanges` to `innerHTML` of a `div` made with
+`document.createElement('div')` and reads its `textContent`; the files
+come from the submissions files API with `fileStages` review revision
+(OMP adds internal-review revision through `isOMP()`), and the summary
+is saved as typed by `SubmissionFilesMetadataForm`
+(`api/file/manage-file-api/save-metadata`). The press: the same
+component on OMP's catalog entry form (fn-u), by the code. Since
+ui-library `881503b4` (Blesilda Biazon, 2026-05-28, pkp/pkp-lib#12584,
+"Add 'Summary of Changes/Amendment' field on file revision upload").
+Proposed fix: parse inertly (`DOMParser`, or the `textContent` of a
+`template` element's content). `stable-3_5_0`'s ui-library has no
+`InsertSummaryOfChanges` component, so no release carries it.
+Security-shaped and unreleased: its issue report carries "- **Security**
+unreleased" (REPORT.md).
+
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with
 "Require the author to provide a plain language summary…" on, the
@@ -2494,6 +2568,30 @@ stage and status (fn-h), so that path sends no save. Not walked. The
 setting's text: "Require the author to provide a plain language summary
 before accepting their submission."; pkp-e2e#323's Fix notes call a
 check at publishing a product decision.
+
+<a id="fn-ojs7"></a>
+**f-ojs7** — Code read 2026-10-13, OJS `main` (ojs `7c6fba2064`, lib/pkp
+`f4c2578c94`), not walked by anyone: `CrossrefPlugin` hooks
+`Publication::validatePublishWarnings` (crossref `377b9be`, taslangraham,
+2026-05-12, pkp/pkp-lib#12617 "Don't let crossref validation block
+publishing"); with Crossref the enabled agency, publication DOIs on and
+`doiCreationTime` not `CREATION_TIME_PUBLICATION`,
+`getValidationMessages()` passes `publicationTitle =>
+$publication->getLocalizedTitle()` to `plugins.generic.crossref.doi.required`
+and `doi.url`, and the `issueId` rule passes it to `issueId.invalid`.
+`PKPPublication::getLocalizedTitle()`'s default `text` format runs
+`htmlspecialchars_decode(strip_tags($title))`, so a tag typed as text
+(stored `&lt;…&gt;`) comes back as a tag; `publish.tpl` prints
+`{$warning}` unescaped in its `<li>` (note l, `PublishHandler`). Settled
+by: an editor pressing "Schedule For Publication" on such a submission
+whose title holds visible markup with a harmless console marker, read
+twice. Proposed fix: `{$warning|escape}` in `publish.tpl`, or escape the
+parameter. OMP has no Crossref plugin; OPS's registers no such hook.
+`stable-3_5_0`'s `CrossrefPlugin` registers no
+`Publication::validatePublishWarnings` hook, and its only publish
+warnings are ORCID texts with no user content, so no release carries
+it. Security-shaped and unreleased: an issue report, once walked,
+carries "- **Security** unreleased" (REPORT.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `PublishForm` shows the single confirmation string for

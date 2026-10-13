@@ -1,0 +1,40 @@
+--- a/lib/pkp/classes/publication/PKPPublication.php
++++ b/lib/pkp/classes/publication/PKPPublication.php
+@@ -22,6 +22,7 @@
+ use APP\facades\Repo;
+ use APP\publication\enums\VersionStage;
+ use Illuminate\Support\Str;
++use PKP\affiliation\Affiliation;
+ use PKP\author\contributorRole\ContributorType;
+ use PKP\context\Context;
+ use PKP\core\Core;
+@@ -489,21 +490,28 @@
+      * Include optional additional languages.
+      *
+      * Publication: locale, multilingual metadata props
+-     * Authors: multilingual props
++     * Authors: multilingual props, and those of their affiliations
+      */
+     public function getLanguages(?array ...$additionalLocales): array
+     {
+         $getMProps = fn (string $schema): array => app()->get('schema')->getMultilingualProps($schema);
+         $metadataprops = $getMProps(PKPSchemaService::SCHEMA_PUBLICATION);
+         $authorProps = $getMProps(PKPSchemaService::SCHEMA_AUTHOR);
++        $affiliationProps = $getMProps(PKPSchemaService::SCHEMA_AFFILIATION);
+ 
+         $getlocales = fn (array $props, object $item): array => array_map(fn (string $prop): array => array_keys($item->getData($prop) ?? []), $props);
+         $metadataLocales = $getlocales($metadataprops, $this);
+         $authorsLocales = $this->getData('authors')?->map(fn (Author $author): array => $getlocales($authorProps, $author)) ?? [];
++        $affiliationsLocales = $this->getData('authors')?->map(
++            fn (Author $author): array => collect($author->getAffiliations())
++                ->map(fn (Affiliation $affiliation): array => $getlocales($affiliationProps, $affiliation))
++                ->all()
++        ) ?? [];
+ 
+         return collect([$this->getData('locale')])
+             ->concat($metadataLocales)
+             ->concat($authorsLocales)
++            ->concat($affiliationsLocales)
+             ->concat($additionalLocales)
+             ->flatten()
+             ->filter()

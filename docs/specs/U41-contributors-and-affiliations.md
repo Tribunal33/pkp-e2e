@@ -846,6 +846,9 @@ Left out of the scenarios above, by reason:
     "Conceptualization" with no degree picked, and a role a row shows
     grayed out in every row's list (Fields "CRediT roles and the degrees
     of contribution")
+  - a contributor whose hand-entered institution is named in a language
+    then unticked under "Metadata" saved with nothing changed, the save
+    going through ([A28](#a28)): the guard the issue report proposes
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills
@@ -949,7 +952,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A20](#a20) | "Add Contributor" never saves when a "Forms" language is not a metadata language | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | An "Add Contributor" refused for an institution's missing name still adds the contributor, so the corrected save lists the same person twice | 🐞 | user-visible | — |
-| [A28](#a28) | A contributor whose hand-entered institution is named in a language since unticked under "Metadata" cannot be saved, and the form shows no reason | 🐞 | user-visible | — |
+| [A28](#a28) | Once a journal stops taking a language for metadata, a contributor whose institution is named in it cannot be saved, and the form shows no reason | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A7](#a7) | A refused affiliation reads "Go to Affiliations: [object Object]" to screen-reader users of the contributor form | 🐞 | low | issues (claude), 2026-10-08 — re-verified |
 | [A9](#a9) | On an article, book or preprint page, screen readers announce the ROR logo beside an affiliation or funder as an unnamed link | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1387,26 +1390,27 @@ ROR mark sits between the name and that comma.
 Basis: probe, 2026-10-07. <sup>f-a27</sup>
 
 <a id="a28"></a>
-**A28 — A contributor cannot be saved once a language an institution is named in is unticked under "Metadata", and the form shows no reason** · 🐞 · user-visible.
-A hand-entered institution can be named in each of the journal's
-metadata languages. When one of those languages is later unticked under
-"Metadata" (Settings › Website › "Setup" › "Languages", "Submission
-Languages"), the contributor's "Edit" window shows the institution with
-name boxes for the remaining languages only, and its row reads "All
-translations available". "Save" in that window is then refused, even
-with nothing changed. The page says "The form was not saved because 1
-error(s) were encountered. Please correct these errors and try again."
-and the form's foot "Please correct one error.", but no message appears
-under "Affiliations" or under any other field. The save is refused for
-the name in the unticked language, which the window no longer shows, so
-there is nothing on the form to correct or clear. The expected outcome
-is a save that goes through, or a form that names what to correct.
+**A28 — Once a journal stops taking a language for metadata, a contributor whose institution is named in it cannot be saved, and the form shows no reason** · 🐞 · medium.
+A hand-entered institution (one typed in, not picked from the ROR
+registry) can be named in each of the journal's metadata languages. A
+manager can later stop taking one of those languages: on the "Languages"
+tab of Settings › Website › "Setup", in the "Submission Languages"
+table, they untick its "Metadata" box. The contributor's "Edit" window
+then shows the institution with name boxes for the remaining languages
+only, and "Save" in that window is refused, even with nothing changed.
+The page says "The form was not saved because 1 error(s) were
+encountered. Please correct these errors and try again.", no message
+appears under any field, and "Save" stays disabled.
 
-This was seen in the workflow's "Edit", on submissions with no other
-text in the unticked language. A submission that holds some, such as a
-title, was not tried, and neither was any way round. A screen reader is
-told only "Go to Affiliations: [object Object]" ([A7](#a7)).
-Basis: probe + code reading, 2026-10-08. <sup>f-a28</sup>
+The server refuses the institution's name in the unticked language,
+which the window no longer shows, so there is nothing on the form to
+correct. No change to that contributor can be saved while the
+institution holds that name.
+
+It happens only on a submission with no other text in the unticked
+language. When the submission's title or a contributor's name is written
+in that language, the form keeps offering it and the save goes through.
+Basis: probe + code reading, 2026-10-13. <sup>f-a28</sup>
 
 ### OMP
 
@@ -2640,6 +2644,7 @@ ticking the language again), the submission wizard's step, a second
 "Save", and whether "Save" is disabled after the refusal. A7's report
 names this refusal as a fault of its own that its fix does not cover
 (counted there it would rate medium); no issue report covers it yet.
+Issue report: [docs/issues/U41-A28-affiliation-dropped-language-save-refused.md](../issues/U41-A28-affiliation-dropped-language-save-refused.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP
