@@ -139,8 +139,10 @@ The three fields hold one text per form language of the journal (Rule
 
    A template edited to drop the placeholder sends without the signature.
    A new journal's signature reads a dash, then "This is an automated
-   message from {journal name}." with the journal's name as a link to its
-   home page. The box's "Insert Content" lists the journal's own
+   message from {journal name}.", the journal's name a link to its home
+   page at the address the site had when the journal was created. The link
+   keeps that address after the site moves to another one ⚠ [A13](#a13).
+   The box's "Insert Content" lists the journal's own
    placeholders (its name, address, initials, principal contact's name and
    email, mailing address, and the addresses of the lost-password page, the
    submissions list and the user's profile), not the signature itself; on
@@ -857,6 +859,8 @@ Left out of the scenarios above, by reason:
     confirmation speaking of "la revue"; Rule 20)
   - A12 (the rows' "Edit" left in English in the French "Manage
     Emails"; Rule 6a)
+  - A13 (the installed signature's link keeping the address the journal
+    was created at; Rule 2; scenario 4 passes it)
   - OMP1 (the press's masthead email whose "Edit" leaves the page stuck;
     Rule 9)
   - OMP2 (a press's "Notify Primary Contact" with neither choice
@@ -920,6 +924,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | The manual payment email is not on the list | ❓ | latent | — |
 | [A8](#a8) | "Sent From" › "Reader" never lists anything on a press or a preprint server | ❓ | minor | — |
 | [A9](#a9) | An emptied second-language field of a default template comes back on save | ❓ | minor | — |
+| [A13](#a13) | A journal's installed signature keeps linking to the address the journal was created at | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server lists "Submission Accepted", which it never sends | ❓ | latent | — |
 | [A11](#a11) | Retired: In French (Canada), "Manage Emails" shows codes instead of some emails' names and descriptions | ✅ | retired | Jarda 2026-10-08 · overturned |
 
@@ -1075,6 +1080,24 @@ French names and descriptions; it should read "Modifier". A screen
 reader already names the same button in French, "Modifier {email
 name}". The button still opens the email as it does in English.
 Basis: probe, 2026-10-04. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — A journal's installed signature keeps linking to the address the journal was created at** · ❓ · minor.
+A new journal's "Signature" (Settings › Workflow › "Emails") links the
+journal's name to its home page, with the address the site had when
+the journal was created written into the text. After the site moves (a new
+domain, http to https, a copy restored on another server), every email
+carrying the signature ends with a link to the old address, stale or
+dead, while the same email's other links and its unsubscribe footer use
+the current one. The box shows only the name, so the manager does not
+see the address. Seen in all three apps: on a journal served away from
+the address it was created at, the monthly statistics email ended with
+a signature link that did not open.
+Question: should the installed signature follow the site's current
+address, as the rest of the email does?
+Lean: yes, a defect; the box's own "Insert Content" offers the journal's
+address as a placeholder filled in when the email goes out.
+Basis: probe, 2026-10-13. <sup>f-a13</sup>
 
 ### OMP
 
@@ -1270,7 +1293,10 @@ each app's `locale/en/emails.po` (lib/pkp's where the app has none):
 `submissionAckCanPost`, `submissionAckNotAuthor`, `userValidateContext`.
 The field's `preparedContent` is `ContextEmailVariable::descriptions()`
 without `contextSignature`. The user's own signature is
-`SenderEmailVariable`'s `signature` (*User profile*).
+`SenderEmailVariable`'s `signature` (*User profile*). Live-probed
+2026-10-13 (Rule 2, the link's address), all three apps on `main` and
+3.5: a journal served at another address than the one it was created
+at kept the old address in its signature (note f-a13).
 
 <a id="fn-d"></a>
 **d** — Live-probed 2026-09-26 (Rule 3; Settings bullets 2, 5–7), all
@@ -1817,6 +1843,27 @@ Live-probed 2026-10-04 on `main`, all three apps, on `publicknowledge`
 in French (Canada), each row's shown text and screen-reader name read:
 every row's button showed "Edit" while its screen-reader name read
 "Modifier …".
+
+<a id="fn-f-a13"></a>
+**f-a13** — Live-probed 2026-10-13 on `main` and `stable-3_5_0`, all
+three apps, two runs each, on PKP's default dataset served at the
+slot's own address: `publicknowledge`'s stored `emailSignature` read
+`<a href="http://localhost/index.php/publicknowledge">{name}</a>`, the
+address the dataset was built at. The monthly statistics email, sent
+both by `php lib/pkp/tools/scheduler.php test --name=PKP\task\StatisticsReport`
+and by a request, ended with that link, which failed to open
+(`net::ERR_CONNECTION_REFUSED`); every other link and the
+`List-Unsubscribe` header carried the slot's address. Code (lib/pkp):
+`PKPContextService::add()` passes `contextUrl` built from the creating
+request to `PKPSchemaService::setDefaults()`, which fills
+`default.contextSettings.emailSignature` (`<a
+href="{$contextUrl}">{$contextName}</a>`) once and stores the result;
+`restoreLocaleDefaults()` does the same for a language added later. At
+send time `ContextEmailVariable::getContextSignature()` runs the stored
+text through `Mail::compileParams()` with the context's variables, so a
+signature holding "{$contextUrl}" would be filled with the current
+address. The journal's name is written in the same way (read from the
+code, not driven).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26 on the seeded press and on a new

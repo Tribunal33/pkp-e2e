@@ -193,7 +193,7 @@ ships it; its text can be changed on Settings › Workflow › "Emails" ›
 | Figures | "New submissions this month: {n}", "Declined submissions this month: {n}", "Accepted submissions this month: {n}", "Total submissions in the system: {n}" | the same | the same, "Accepted submissions this month:" left blank ⚠ [OPS4](#ops4) |
 | Closing | "Login to the journal to view more detailed editorial trends and published article stats. A full copy of this month's editorial trends is attached." | "Login to the the press to view more detailed editorial trends and published book stats. …" ⚠ [A11](#a11) | "Login to the the preprint server to view more detailed trends and posted preprint stats. A full copy of this month's trends is attached." |
 | Links | "editorial trends" opens "Editorial Activity"; "published article stats" opens Statistics › "Articles" | "editorial trends" opens "Editorial Activity"; "published book stats" opens "Monographs" | "trends" opens "Editorial Activity"; "posted preprint stats" opens "Preprints" |
-| Signature and footer | "Sincerely," and the journal's signature, then the unsubscribe footer of [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md) | the same | the same |
+| Signature and footer | "Sincerely," and the journal's "Signature" from Settings › Workflow › "Emails" (as installed: a dash, then "This is an automated message from {journal name}.", the name a link to the journal's home page at the address the site had when the journal was created, which a later change of the site's address does not update: [Emails management](U56-emails-management.md) Rule 2); then, after a second dash, the unsubscribe footer of [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md), whose links carry the site's current address | the same | the same |
 | Attachment | "editorial-report.csv" (Rule 26) | the same | the same |
 
 "{month}" is the previous month's name in the journal's primary
@@ -1062,6 +1062,9 @@ Left out of the scenarios above, by reason:
 - **Owned by another feature**:
   - "COUNTER Reports" {OJS} opening its page (Rule 19;
     *[Statistics — usage](U64-usage-statistics.md)*, scenario 12)
+  - the monthly email's signature link on a journal created before
+    the site's address changed (Fields "Signature and footer";
+    *[Emails management](U56-emails-management.md)*)
 
 ## Findings register
 
@@ -1941,6 +1944,14 @@ is French (Canada), OJS's email was wholly French, OMP's and OPS's
 English with "août" and a French footer (A13), the links carried `/en/`
 (A10), and the press's attachment read
 "##workflow.review.externalReview##",3 (OMP5).
+Live-probed 2026-10-13 (Fields "Signature and footer") on PKP's default
+dataset, three apps, `main` and 3.5, sent by the command line and by
+the test tooling's run alike: the signature's link read
+`http://localhost/index.php/publicknowledge` (the context's stored
+`emailSignature`, filled from `default.contextSettings.emailSignature`'s
+`{$contextUrl}` by `PKPSchemaService::setDefaults()` when the dataset
+was built at that address) and did not open, while every other link and
+the `List-Unsubscribe` header carried the install's address.
 
 <a id="fn-q"></a>
 **q** — The `StatisticsReportNotify` job calls
