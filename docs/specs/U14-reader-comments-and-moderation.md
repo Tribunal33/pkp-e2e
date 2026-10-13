@@ -47,12 +47,12 @@ page. Every row below assumes the journal has public comments switched on
 | Action | Who may, and when |
 |--------|--------------------|
 | **Read the comments under an article** | • anyone, signed in or not, on a published article's landing page: the approved comments (Rule 6)<br>• the writer of a comment that is not approved, signed in: that comment as well, marked "Your comment will be visible when the editor approves it" (Rule 6); nobody else sees it, a moderator included <sup>e</sup> |
-| **Write a comment** | • any signed-in visitor, on the article's latest published version only (Rule 4)<br>• a visitor who is not signed in is offered "Log in to comment" instead, which leads through the Login page back to the comments (Rule 4b) <sup>f</sup> |
+| **Write a comment** | • any signed-in visitor, on the article's latest published version only (Rule 4); a request made by hand, which no screen sends, also writes one on a submission not yet published, even with comments switched off, and the answer names that submission's title and first author ⚠ [A18](#a18)<br>• a visitor who is not signed in is offered "Log in to comment" instead, which leads through the Login page back to the comments (Rule 4b) <sup>f</sup> |
 | **Report a comment** | • any signed-in visitor, on another person's comment that is showing, through the comment's "…" menu (Rule 8); a moderator gets the same offer there and nothing more; a request made by hand, which no screen sends, also files a report on another journal's approved comment [A12](#a12)<br>• nobody on their own comment: its menu offers "Delete Comment" and no "Report" (Rule 7) <sup>g</sup> |
 | **Delete a comment from the landing page** | • the comment's own writer, signed in, through the comment's "…" menu (Rule 9); the menu on anyone else's comment offers no "Delete Comment", and a moderator deletes other people's comments on the Comments page only (Rule 14) <sup>h</sup> |
 | **Switch public comments on or off** | • a Journal Manager, an Editor whose role permits settings changes (the Roles screen's "Permit changes to Settings", ticked by default), and a Site Administrator working in the journal, on Settings › Website › Content › "Comments" (Rule 2) <sup>b</sup> |
 | **Open the Comments page** | • a Journal Manager and an Editor, whether or not their role permits settings changes: the Content › Comments menu entry while the setting is on (Rule 3), and the page's address at any time (Rule 2b)<br>• a Site Administrator holding no manager role in the journal: on a journal the page opens; on a press or a preprint server the menu entry is offered but the address answers the access-denied page ⚠ [OMP1](#omp1) ⚠ [OPS1](#ops1) (Rule 17)<br>• a Section Editor, an Assistant, an Author, a Reviewer or a Reader: no menu entry, and the address answers the access-denied page<br>• a visitor who is not signed in: the address answers the Login page <sup>i</sup> <sup>m</sup> |
-| **Approve, hide or delete a comment; view or delete a report** | • whoever can open the Comments page (the row above), on every comment of the journal, their own included (Rules 12 to 16)<br>• the screens offer this journal's comments only (Rule 10a), but a request made by hand, which no screen sends, lets a Journal Manager of this journal act on another journal's comment by its number ⚠ [A12](#a12) <sup>j</sup> |
+| **Approve, hide or delete a comment; view or delete a report** | • whoever can open the Comments page (the row above), on every comment of the journal, their own included (Rules 12 to 16)<br>• anyone, signed in or not, also reads the reports on every approved comment, the reporter's name and reason included, by a request made by hand, which no screen sends ⚠ [A17](#a17)<br>• the screens offer this journal's comments only (Rule 10a), but a request made by hand, which no screen sends, lets a Journal Manager of this journal act on another journal's comment by its number ⚠ [A12](#a12) <sup>j</sup> |
 | **Receive the moderation tasks** | • every Journal Manager and Editor of the journal, in the Tasks panel (Side effects); a Site Administrator holding no manager role in the journal gets none <sup>l</sup> |
 
 ## Fields & validation
@@ -204,8 +204,9 @@ page. Every row below assumes the journal has public comments switched on
    same comment a second time, which files a second report ⚠ [A3](#a3).
    A report the server refuses closes the dialog the same way, with no
    message ⚠ [A14](#a14).
-   The report is visible only on the Comments page (Rule 15); the comment
-   stays showing. The moderators are told (Side effects). <sup>g</sup>
+   No screen but the Comments page shows the report (Rule 15)
+   [A17](#a17); the comment stays showing. The moderators are told
+   (Side effects). <sup>g</sup>
 9. **Deleting one's own comment.** "Delete Comment" opens the dialog
    "Delete Comment": "Are you sure you want to delete the following
    comment?" with the comment's text in bold under it, and the buttons
@@ -862,6 +863,8 @@ Left out of the scenarios above, by reason:
   - A9 (the Site Administrator with Reader as their only journal role: the "Error" dialog over the Comments page, and the page working after "OK"; Rule 17b)
   - A12 (moderating or reporting another journal's comment by requests made by hand; Actors rows 3 and 7)
   - A15 (the verified and the unverified ORCID icon under a comment sharing one name and no text; Rule 6b)
+  - A17 (the reports on approved comments read by anyone through a request made by hand; Actors row 7)
+  - A18 (a comment written by hand on a submission that is not published, with comments off; Actors row 2)
   - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rules 17a, 17c)
 - **Owned by another feature**:
   - the Tasks panel's own controls on a comment task, Mark Read and Delete (Cross-feature interactions; *Notifications center & email preferences*, scenario 2)
@@ -887,6 +890,8 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | On the editorial Comments page, the browser tab shows only the journal's name, not "Comments" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
+| [A17](#a17) | Anyone, signed in or not, reads the reports on every approved comment, with the reporter's name and reason, by a request made by hand | 🐞 | latent | — |
+| [A18](#a18) | Any signed-in account comments by a request made by hand on a submission that is not published, with comments off, and learns its title and first author | 🐞 | latent | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
 | [A2](#a2) | Approving or hiding a comment leaves every moderator's "pending review" task in place | ❓ | minor | — |
 | [A3](#a3) | The report dialog neither refuses an empty reason with a message nor confirms a filed report, and the same person can report the same comment again | ❓ | minor | — |
@@ -1123,6 +1128,47 @@ over to the chosen account? Lean: oversight; the merge hands over
 everything else the account wrote, and two accounts merged are usually
 one person's, whose public comments should survive it.
 Basis: probe, 2026-10-04; code for what the merge hands over. <sup>f-a16</sup>
+
+<a id="a17"></a>
+**A17 — Anyone, signed in or not, reads the reports on every approved comment by a request made by hand** · 🐞 · latent.
+The comments under an article come from a list anyone may ask for,
+signed in or not. Asked by hand to include the reports (`GET
+api/v1/comments/public?publicationIds={id}&includeReports=1`, which no
+screen sends; note f-a17), the list returns with each approved comment every report
+filed on it: the reporter's name, affiliation and ORCID iD, and the
+reason as they typed it. Only the moderators are meant to read these, on
+the Comments page (Rule 15); without that request the list carries no
+reports, and the moderators' own request for a comment's reports refuses
+a visitor who is not signed in. Expected the reports withheld from all
+but the moderators; observed them handed to anyone, so a reader who
+reports a comment is named, with their reason, to its writer and to the
+public.
+Security: unreleased.
+Since: 2025-06-18 · Basis: probe, 2026-10-13, on a journal; code for the
+press and the preprint server. <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — Any signed-in account comments by a request made by hand on a submission that is not published, and learns its title and first author** · 🐞 · latent.
+The landing page writes a comment only on a published article's latest
+version (Rule 4) and only while public comments are on (Rule 2b). The
+same request made by hand (`POST api/v1/comments` with a publication
+id, which the site numbers in sequence; note f-a18), which no screen
+sends, naming the current version of a
+submission still in the Submission or the Review stage, is
+accepted from a signed-in Reader who is not among its authors, with
+"Enable Public Comments" unticked. The comment is kept, pending, and the
+answer names the submission's full title and its first author's family
+name ("Novak"; "Montgomerie et al." with several authors). A submission
+of another journal was not tried; the check looks the version up across
+the whole site, so it would be accepted too. Expected the comment refused
+as not on a published article of this journal, and refused while comments
+are off; observed it accepted. Any account can thus read the title and
+first author of work under review, a Reviewer assigned "Anonymous
+Reviewer/Anonymous Author" included.
+Security: unreleased.
+Since: 2025-08-28 · Basis: probe, 2026-10-13, on a journal; code for
+another journal's submission, the press and the preprint server.
+<sup>f-a18</sup>
 
 ### OMP
 
@@ -2226,6 +2272,59 @@ they have no comment box. The A10 issue report
 ([pkp-e2e#904](https://github.com/jardakotesovec/pkp-e2e/issues/904))
 names this question and leaves it out; its fix for the blank tasks is
 needed either way.
+
+<a id="fn-f-a17"></a>
+**f-a17 — A17.** `UserCommentController::getManyPublicComments()` is the
+`GET api/v1/comments/public` route, outside the `has.user` group and
+authorized by `PublicAccessPolicy`; it lists the context's approved
+comments (and the signed-in viewer's own unapproved ones) through
+`UserCommentResource`, whose `toArray()` adds `reports`
+(`UserCommentReportResource`: the reporter's `userName`,
+`userAffiliation`, `userOrcidDisplayValue`, `note`) whenever the query
+carries the key `includeReports`, with no moderator check, while
+`approvedAt` and `approvedByUserName` sit behind
+`mergeWhen(… isModerator())`. No screen sends `includeReports`
+(ui-library and lib/pkp grepped). The key has been ungated since the
+comments API was added (pkp/pkp-lib#11326, `3aa127313b`, 2025-06-18).
+stable-3_5_0 has no `api/v1/comments/`. Live-probed 2026-10-13 on OJS
+`main` (ojs `7c6fba2064`, lib/pkp `f4c2578c94`), two runs from a reset of
+the dataset install, under the one exception to screen-only driving (an
+API route no screen calls with these values): with comments on, a
+comment by `ccorino` on the published article of submission 17
+(publication 18), approved by `rvaca` and reported by `lchristopher`;
+signed out, `GET …/comments/public?publicationIds=18&includeReports=1`
+answered 200 with the comment and its `reports` holding one report with
+the reporter's name ("Leo Christopher"), a non-empty affiliation, the
+ORCID key (empty for this account) and the reason as typed. Control: the
+same list without `includeReports` carried no `reports`, and signed out
+`GET …/comments/{id}/reports` answered 401. No server error in either
+run. OMP and OPS read in the code: the three apps' lib/pkp is the same
+commit, with the same controller and resource, and each app registers
+the `comments` API; no comment box writes comments on a press or a
+server, so there the reports sit only on comments written through the
+API.
+
+<a id="fn-f-a18"></a>
+**f-a18 — A18.** `UserCommentController::submit()` (the `has.user` group,
+no role check) validates with `formRequests/AddComment`: `rules()` asks
+only `Rule::exists('publications', 'publication_id')`, site-wide, and
+`after()` only that the publication is its submission's current one; no
+check of its status, its context or `enablePublicComments`. The comment
+is created with the request's `contextId` and the answer is a
+`UserCommentResource`, whose `publication` holds `fullTitle` and
+`authorsStringShort` (since pkp/pkp-lib#11576, `1869f217fd`,
+2025-08-28). stable-3_5_0 has no `api/v1/comments/`. Live-probed
+2026-10-13 on OJS `main` (as footnote f-a17), two runs from a reset, with
+`enablePublicComments` saved as off: `ccorino` (Author and Reader in the
+journal, not an author of either submission) `POST …/api/v1/comments` on
+publication 5 (submission 4, Submission stage, unpublished) and 11
+(submission 10, Review stage, unpublished) answered 200 both times, the
+comment kept unapproved, the answer's `publication` reading "Computer
+Skill Requirements for New and Existing Teachers: Implications for
+Policy and Practice" / "Montgomerie et al." and "Condensing Water
+Availability Models to Focus on Specific Water Management Systems" /
+"Novak". No server error. Another journal's publication, OMP and OPS:
+read in the code (same lib/pkp commit in the three apps).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`

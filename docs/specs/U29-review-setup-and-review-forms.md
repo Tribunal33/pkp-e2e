@@ -362,7 +362,11 @@ and "Save" is greyed out until the boxes are filled: <sup>g</sup>
     an editor copies into a decision email (*Editorial decision recording*)
     and the author's own reading of an open review
     ([→ reading reviews as the author](U26-review-stage-and-rounds.md#author-read-review));
-    the editor still reads it in full. <sup>f</sup>
+    the editor still reads it in full. On a journal, once the article is
+    published, the public review data of a review the editor has made
+    public, which anyone may request
+    without signing in (no screen shows it), lists the unticked item and
+    its answer all the same ⚠ [OJS1](#ojs1). <sup>f</sup>
 
 16. **Languages.** A journal with more than one form language gives every
     multilingual box in this spec a version per language, shown in two
@@ -933,6 +937,8 @@ Left out of the scenarios above, by reason:
     already in use, its "More Actions" menu gone; Rule 18)
   - OMP3 (the "Internal Review Guidelines" toolbar without quote and list
     buttons; Fields)
+  - OJS1 (a public review's unticked items and their answers in the
+    public review data anyone may request without signing in; Rule 15)
 - **No seed**:
   - the automatic reminder email, the "Reminder" date and the activity-log
     row (Rule 9; Side effects): the test installs' daily clock is off
@@ -982,6 +988,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A12](#a12) | On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name | 🐞 | minor | — |
 | [A13](#a13) | A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations | 🐞 | medium | issues (claude), 2026-10-07 — re-verified |
+| [OJS1](#ojs1) | A review made public gives anyone who asks, without signing in, the review form answers meant for the editor only | 🐞 | user-visible | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1183,6 +1190,26 @@ later, and is that intended while the reviewer can still pick another
 before submitting? Lean: yes to both, since the saved review carries the
 entry and an edit or a delete would change or remove what the reviewer
 picked. Basis: probe, 2026-10-07. <sup>f-a14</sup>
+
+### OJS
+
+<a id="ojs1"></a>
+**OJS1 — A review made public gives anyone who asks, without signing in, the review form answers meant for the editor only** · 🐞 · user-visible.
+A journal's review form can hold items with "Included in message to
+author" unticked: questions whose answers only the editor is meant to
+read (Rule 15). An editor makes a review public ("Publicly Show
+Reviewer Comments" ticked on the review, then "Mark as Complete"), and
+the article is published. The journal's public review data for that
+article, which anyone may request without signing in, then lists every
+item of the reviewer's form with its answer, the unticked ones
+included. No screen of the journal shows that data (the article page
+shows no reviews,
+[→ Article landing page & reading's OJS12](U13-article-landing-page-and-reading.md#ojs12)),
+so nobody on the journal sees what it gives away. Expected: the data
+leaves the unticked items out, as the decision email and the Author's
+own reading of the review do; the editor's "Read Review" window shows
+them, as it should. A press has no such data. Security: unreleased.
+Since: 2025-10-15 (a year) · Basis: probe, 2026-10-13. <sup>f-ojs1</sup>
 
 ### OMP
 
@@ -2168,6 +2195,50 @@ delete of an entry on a saved draft review refused (406) when sent
 directly. Kept script `shared/playwright/checks/U29/I07b/i07b.js` (phases
 `rev2save`, `deact`).
 
+<a id="fn-f-ojs1"></a>
+**f-ojs1** — The public review data is `GET
+/index.php/{journal}/api/v1/peerReviews/open/submissions/{submissionId}`
+(lib/pkp `api/v1/peerReviews/PeerReviewController.php`,
+`getSubmissionPeerReview()`), registered only by `ojs
+api/v1/peerReviews/index.php`; the controller adds `PublicAccessPolicy`
+and no role gate, so it answers without a session. Its
+`SubmissionPeerReviewResource` lists the publicly visible, accepted and
+confirmed (considered or acknowledged) reviews of each round, and
+`getReviewFormQuestions()` walks every element of the review's form with
+no `getIncluded()` check, returning `{question, responses}` for each
+answered element. The editor-side and email paths skip such elements
+(footnote f: `getReviewFormResponses()` `authorFriendly`,
+`reviewDownload.tpl`, and `PKP\mail\traits\ReviewerComments`, which
+`continue`s on `!getIncluded()`). Fix: skip elements whose
+`getIncluded()` is false in `getReviewFormQuestions()`. The review form
+answers came with the API's first version (`pkp/pkp-lib#11922`,
+`222d16a881`, 2025-10-15). OMP's routing names a `publicationPeerReviews`
+entry point whose controller class is absent from lib/pkp, and OPS has
+no review stage, so neither serves this data; OJS `stable-3_5_0` has no
+`api/v1/peerReviews/` (main only, so the finding is an ordinary one with
+"Security: unreleased", no private routing). The article page never
+calls this data (*Article landing page & reading*, OJS12):
+`ArticleHandler::view()` builds the same resource into
+`openReviewConfig` through `OpenReviewComponent`, but no template prints
+that variable, so the page's source does not carry the answers either
+(code, read on `main` 2026-10-13). Live-probed
+2026-10-13 on OJS `main` (ojs `7c6fba2064`, lib/pkp `f4c2578c94`), two
+runs, each from a fresh reset of the dataset fleet, all preconditions
+made through the app: a review form built under Settings › Workflow ›
+Review › "Review Forms" with one item ticked "Included in message to
+author" and one unticked, activated, and attached in the reviewer row's
+"Edit" window of a published article's first round with "Publicly Show
+Reviewer Comments" ticked; the review submitted through the wizard with
+an answer to each item; the editor's "Read Review" window listed both
+items with their answers, and "Mark as Complete" confirmed the review.
+Signed out, the request answered 200 with one round and one review whose
+`reviewForm.questions` held both items, the unticked one with its
+answer; the review's other keys carry the reviewer's name, affiliation
+and ORCID as the review mode allows (`pkp/pkp-lib#12045`). No server
+error in either run. Kept script
+`shared/playwright/checks/U27/S13/api-rows.js` (phase `api62`; its other
+phases belong to other features).
+
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the
 press wizard's missing "Recommendation" list is the reviewer's-review
@@ -2213,6 +2284,7 @@ Issue report: [pkp-e2e#907](https://github.com/jardakotesovec/pkp-e2e/issues/907
 | OMP legacy preview template (not rendered) | — | AFFW-669 |
 | "Review" › "Reviewer Recommendations" {OJS} | same page, side tab; `api/v1/reviewers/recommendations` | VUE-047 · VUE-069 · API-054 · AFFM-078 (Add), AFFM-079 (Activate tick), AFFM-080 (Edit), AFFM-081 (Delete) |
 | Automatic reminder clock | daily scheduled task, no screen | JOB-054 |
+| Public review data {OJS} (where Rule 15's unticked items leak, OJS1) | `api/v1/peerReviews/open/submissions/{submissionId}`, read without a session; no screen calls it | API-030 |
 
 ## Reference — code anchors
 
@@ -2224,6 +2296,7 @@ Issue report: [pkp-e2e#907](https://github.com/jardakotesovec/pkp-e2e/issues/907
 - `lib/pkp/controllers/listbuilder/settings/reviewForms/ReviewFormElementResponseItemListbuilderHandler.php`, `lib/pkp/controllers/listbuilder/settings/SetupListbuilderHandler.php`
 - `lib/pkp/templates/manager/reviewForms/` (`reviewFormForm.tpl`, `reviewFormElementForm.tpl`, `previewReviewForm.tpl`), `lib/pkp/templates/controllers/grid/settings/reviewForms/editReviewForm.tpl`, `lib/pkp/templates/reviewer/review/reviewFormResponse.tpl`, `lib/pkp/templates/controllers/grid/common/cell/selectStatusCell.tpl`
 - `lib/pkp/classes/reviewForm/` — `ReviewForm.php`, `ReviewFormDAO.php`, `ReviewFormElement.php`, `ReviewFormElementDAO.php`
+- `lib/pkp/api/v1/peerReviews/PeerReviewController.php`, `resources/SubmissionPeerReviewResource.php` (`getReviewFormQuestions()`) — the public review data's form answers (OJS1); `lib/pkp/classes/mail/traits/ReviewerComments.php` — the decision email's form block, which honours "Included in message to author"
 - `lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php`, `EditReviewForm.php`, `traits/HasReviewDueDate.php` — where the defaults land
 - `lib/pkp/classes/submission/reviewer/recommendation/` — `ReviewerRecommendation.php`, `Repository.php`, `enums/ReviewerRecommendationType.php`; `ojs api/v1/reviewers/recommendations/ReviewerRecommendationController.php` and its `formRequests/`; `ojs classes/components/forms/context/ReviewerRecommendationForm.php`, `ojs classes/components/listPanels/ReviewerRecommendationsListPanel.php`; `ojs classes/services/ContextService.php` (default entries); lib/ui-library `managers/ReviewerRecommendationManager/`
 - `lib/pkp/classes/task/ReviewReminder.php`, `lib/pkp/jobs/email/ReviewReminder.php`, `lib/pkp/classes/mail/mailables/ReviewRemindAuto.php`, `ReviewResponseRemindAuto.php`, `ojs classes/scheduler/Scheduler.php`, `omp classes/scheduler/Scheduler.php`

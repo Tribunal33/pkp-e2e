@@ -90,10 +90,19 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
    dashboard. An account holding both an editorial role and Reviewer lands
    on the Dashboard. A Site Administrator lands by the roles they hold in
    this journal, like any other account: with only Author there, on My
-   Submissions; with only Reader, on the journal's home page. Whoever
-   holds Author keeps the author group one click away in the sidebar. The
-   retired submission-list address from older versions forwards the same
-   way. An old bookmarked author-dashboard link for a specific submission
+   Submissions; with only Reader, on the journal's home page. Any account
+   holding a single Reader-level role and nothing else lands on the
+   journal's home page too, as does one holding no role in the journal. A
+   Reader-level role is the Reader role or a role whose permission level on
+   Settings › Users & Roles › "Roles" is "Reader". An account holding two
+   Reader-level roles and nothing else lands on the access-denied page
+   instead ⚠ [A7](#a7). Whoever holds Author keeps the author group one
+   click away in the sidebar. The retired submission-list address from
+   older versions (`{journal path}/submissions`) forwards the same way for an account holding Author, an
+   editorial role or Reviewer, and for a Site Administrator. Any other
+   account, one holding only Reader-level roles or no role in the
+   journal, gets the access-denied page at that address. An old
+   bookmarked author-dashboard link for a specific submission
    lands the submission's own author on My Submissions with that
    submission's workflow panel already open. Any other signed-in user
    following the same link gets an access-denied page instead. The same
@@ -427,6 +436,11 @@ App-specific:
 
 Left out of the scenarios above, by reason:
 
+- **Planned**:
+  - an account holding a single Reader-level role, or no role in the
+    journal, landing on the journal's home page after signing in on the
+    journal's login page, and getting the access-denied page at the
+    retired submission-list address `{journal path}/submissions` (Rule 3)
 - **Rarely met**:
   - a change someone else makes showing on the list only after a workflow
     panel closes or the page reloads, and not after pressing the open
@@ -456,6 +470,9 @@ Left out of the scenarios above, by reason:
     or Site Administrator who also authors; Rule 5)
   - A5 (an old link to a draft opening the workflow panel the list never
     offers; Rule 3)
+  - A7 (an account holding two Reader-level roles, or on a journal a
+    Subscription Manager alone, landing on the access-denied page after
+    sign-in; Rule 3)
   - OMP1 (no series filter on a press; Rule 5; scenario 3 marks it)
 - **Owned by another feature**:
   - "Start A New Submission" beside the menu group (Rule 1; *Submission
@@ -487,6 +504,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
+| [A7](#a7) | An account holding two Reader-level roles and nothing else lands on the access-denied page after every sign-in | 🐞 | user-visible | — |
 | [A1](#a1) | The author sees the review progress count ("Review update 1/2") for their submission under review | ❓ | user-visible | — |
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
 | [A3](#a3) | On a press or preprint server, nothing was found that feeds the "Scheduled for publication" view | ❓ | minor | — |
@@ -560,6 +578,21 @@ Question: should the forward refuse, or hand off to the wizard, for a
 submission that was never submitted? Lean: oversight, harmless. Only the
 draft's own author can reach it.
 Basis: probe. <sup>a5</sup>
+
+<a id="a7"></a>
+**A7 — Two Reader-level roles land on the access-denied page after sign-in** · 🐞 · user-visible.
+An account whose only roles in the journal are two Reader-level roles,
+the Reader role plus a role created at the "Reader" permission level,
+signs in on the journal's login page and lands, every time, on a page
+reading "The current role does not have access to this operation."
+instead of the journal's home page. The account holding either role alone
+lands on the home page (Rule 3). {OJS} An account whose only role is
+Subscription Manager lands on the same page after sign-in, by the same
+cause; *[Subscriptions](U51-subscriptions.md)* describes that landing.
+Rationale for 🐞: the home page is chosen only for an account holding
+exactly one Reader-level role, so a second one sends the account on to a
+page that refuses Reader-level roles.
+Basis: probe, 2026-10-13. <sup>a7</sup>
 
 ### OMP
 
@@ -664,9 +697,15 @@ with "View" (probed 2026-08-26, OJS).
 <a id="fn-c"></a>
 **c — landing and forwards.** `PKPPageRouter::getHomeUrl()` reads only the
 account's active user groups in the current journal (`context_id` of the
-journal): none, or Reader alone → the journal's `index`; manager /
+journal): none, or Reader alone → the journal's `index` (`count() == 1`:
+a second Reader-level group falls through every branch, fn-a7; one
+Reader group, a created Reader-level group alone, or no group → `index`,
+live-probed 2026-10-13, all three apps, five runs); manager /
 sub-editor / assistant / admin → `dashboard/editorial`; else reviewer →
-`dashboard/reviewAssignments`; else author → `dashboard/mySubmissions`.
+`dashboard/reviewAssignments`; else author → `dashboard/mySubmissions`;
+else (no branch matched: two Reader-level groups, or on OJS a
+Subscription Manager alone) → `{journal}/submissions`, which refuses the
+account (A7).
 The Site Administrator group belongs to the site, not the journal, so the
 admin branch never matches a site-level administrator; they land by their
 journal roles. Live-probed 2026-09-28 (all three apps, two runs; Rule 3):
@@ -675,7 +714,13 @@ Roles › Edit page, then a fresh sign-in on the journal's login page — with
 Author left, `dashboard/mySubmissions?currentViewId=active`, "Active
 submissions (1)", listing the administrator's own submission and not
 another author's; with Reader left, the journal's `index`; the retired
-`{journal}/submissions` address forwards the same way in both cases.
+`{journal}/submissions` address forwards the same way in both cases (the
+administrator passes that page's role check by the site role; a plain
+Reader, a created Reader-level role alone, two Reader-level roles or an
+account with no role in the journal typing `{journal}/submissions` gets
+`user/authorizationDenied`, "The current role does not have access to
+this operation.", live-probed 2026-10-13, all three apps, five runs; an
+Author alone typing it is forwarded to My Submissions).
 Control: with Journal Manager and Author, `dashboard/editorial` ("Assigned
 to me").
 Landing precedence live-probed 2026-08-26 with scratch combo accounts on
@@ -688,7 +733,10 @@ Section Editor+Reviewer account, no Author role): both apps landed on
 Reviewer" group still in the sidebar — matching the `getHomeUrl()` order
 above. Legacy
 `submissions` page (`PKP\pages\dashboard\DashboardHandler::index`)
-redirects through the same home logic — probed on all three apps. Old
+redirects through the same home logic — probed on all three apps — for
+an account its role assignment admits (site admin, manager, sub-editor,
+author, reviewer, assistant); any other account is refused before the
+redirect. Old
 author-dashboard links: `PKPAuthorDashboardHandler::submission()` redirects
 to `dashboard/mySubmissions?workflowSubmissionId={id}`; the OMP subclass
 overrides `submission()` but ends in the same parent redirect; OJS/OPS
@@ -1052,6 +1100,37 @@ submission declined at the Submission stage "Rejetée", the columns "ID
 Trier / Soumissions / Étape / Activité éditoriale / Actions", the heading
 "Soumissions actives (6)". Neither `dashboard.reviewUpdateCounts` nor
 `common.moreActions` exists in pkp-lib's `fr_CA` locale files (U57 Rule 21a).
+
+<a id="fn-a7"></a>
+**a7 — A7 evidence.** `PKPPageRouter::getHomeUrl()` returns the journal's
+`index` only on `isEmpty() || (count() == 1 && role_id == ROLE_ID_READER)`;
+two Reader-level groups (`ROLE_ID_READER`) match neither that nor the
+manager, reviewer or author branches and fall through to the final
+`{journal}/submissions`, whose `PKP\pages\dashboard\DashboardHandler`
+role assignment (site admin, manager, sub-editor, author, reviewer,
+assistant) has no Reader, so the request ends at
+`user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`.
+A Subscription Manager alone (`ROLE_ID_SUBSCRIPTION_MANAGER`, OJS) falls
+through the same way. Same branches on `stable-3_5_0` (code read
+2026-10-13); the `count() == 1` Reader test predates the Eloquent
+refactor of the method. Live-probed 2026-10-13 (Rule 3; OJS, OMP, OPS
+`main`, five runs per app, scratch journals): the second role was created
+in Settings › Users & Roles › "Roles" › "Create New Role" at permission
+level "Reader" and given to the scratch account alongside the default
+Reader by a `user_user_groups` row (the Users & Roles screens give an
+existing account a created role only through an emailed invitation).
+That account, signing
+in on the journal's login page, went `login/signIn` → `{journal}/submissions`
+→ `user/authorizationDenied`, a page with the breadcrumb "Home /" and
+"The current role does not have access to this operation.", on every
+sign-in including a second one; its "Home" link opened the journal home.
+Controls on the same journals: the default Reader alone, the created
+Reader-level role alone and an account with no role in the journal each
+landed on `{journal}/index`; an Author alone on
+`dashboard/mySubmissions?currentViewId=active`. On OJS a Subscription
+Manager alone signing in on the journal's login page landed on the same
+access-denied page in all five runs. No server error, page error or
+dialog in any run.
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's filter form

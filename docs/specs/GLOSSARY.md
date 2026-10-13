@@ -367,7 +367,9 @@ The long form of the legend. Each spec's Conventions line carries the three symb
   breaking from the app declining. A ✅ entry whose impact
   reads *retired* is a former 🐞 or ❓ that was fixed upstream or
   overturned; its one line says why and when, and any verdict quoted
-  under it is the record of the earlier ruling.
+  under it is the record of the earlier ruling. A line **Security:
+  unreleased.** in an entry marks a security weakness in code only `main`
+  holds (no release has it); it reads and is tested like any other entry.
 - **Coverage.** The canonical scenarios are what the automated suites
   check: a scenario's bold leads name what it opens, its badge which apps
   run it. The Coverage section lists what they leave out and why: a

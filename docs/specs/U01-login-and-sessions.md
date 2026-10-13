@@ -118,7 +118,9 @@ Login, the site's name stands in for the journal's), but after a refused
    Otherwise, a user holding a role beyond Reader **in the journal signed
    into** lands on that journal's Dashboard. A user with no such role there
    (Reader-only, role-less, or holding roles only in other journals) lands
-   on the journal home page. Signing in at the site-level Login of a
+   on the journal home page; one holding two Reader-level roles and nothing
+   else lands on the access-denied page instead
+   ([My Submissions A7](U22-my-submissions.md#a7)). Signing in at the site-level Login of a
    multi-journal site lands on the site home page whatever the user's roles,
    because the Dashboard landing needs a journal to aim at. <sup>b</sup>
 4. **An interrupted visit resumes.** A signed-out visitor who opens a private
