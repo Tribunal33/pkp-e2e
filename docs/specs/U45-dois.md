@@ -5437,7 +5437,7 @@ in DataCite", was open with milestone 3.6 that day.
 
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Note c: OJS `classes/publication/Repository.php` `createDois()`, the author-response block (`:392-404` at ojs `7c6fba2064`), tests `empty($authorResponses->doiId)`, the collection from `getReviewAuthorResponses()`, not the loop's `$authorResponse`. A Laravel collection has no `__isset`, so `empty()` is always true and `Repo::doi()->mintDoi()` runs for every response on every call, replacing its `doiId`. The peer-review block above it tests the item (`$reviewAssignment->getData('doiId')`). The kind is reachable only through the API: `schemas/context.json` `enabledDoiTypes` allows `authorResponse`, while `DoiSetupSettingsForm` and `Repository::getAllDepositableTypes()` comment it out. From `30e82d3876` (Erik Hanson, 2026-01-27, `pkp/pkp-lib#11332`); `stable-3_5_0` has no author responses. Reported by the maintainer from a code read, 2026-10-13; walked the same day on the default dataset (three assignments, three DOIs, two left with no item; the fix keeps the first).
-Issue report: [docs/issues/U45-OJS9-author-response-doi-reminted.md](../issues/U45-OJS9-author-response-doi-reminted.md).
+Issue report: [pkp-e2e#965](https://github.com/jardakotesovec/pkp-e2e/issues/965) ([docs/issues/U45-OJS9-author-response-doi-reminted.md](../issues/U45-OJS9-author-response-doi-reminted.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
