@@ -1756,7 +1756,11 @@ three apps (`checks/sync/pkp-lib-13504/cli.sh`), on references stored
 with lookup off and one submission's without a status: a second `queue`
 queued nothing, one job row per reference throughout, `--limit` held, the
 emptied job table brought the warning and `repair --status=queued` one
-chain each.
+chain each. Merged 2026-10-13 as pkp-lib `5d962d743e` (the reviewed head
+`c3a89aa3e3` unchanged) and pkp/ojs#5926 as ojs `55914e80d4`; OMP's and
+OPS's `lib/pkp` do not carry it yet. Both walks run again the same day at
+the merge, the three apps with `lib/pkp` at `5d962d743e`
+(`side.sh merge`), read as at the head.
 Live-probed 2026-09-24 (Rule 11), all three apps: a reference added
 through "Add" with a DOI and an arXiv ID in its text showed its text alone,
 with no identifier link, after the Add and after a reload. Structured by
