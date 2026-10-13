@@ -412,7 +412,12 @@ bottom, then "Save": <sup>q</sup>
     a month is widened to the whole month and the "Exceptions" line says
     so. The refusals are the Fields list's. On a journal, "Journal
     Article Requests (IR_A1)" lists rows its "Metric_Types" line leaves
-    out ⚠ [OJS5](#ojs5). <sup>l</sup> <sup>td5</sup>
+    out ⚠ [OJS5](#ojs5). On "Item Master Report (IR)" {OJS OPS},
+    "Authors" ticked under "Attributes To Show" is named on the
+    "Report_Attributes" line and adds an "Authors" column after
+    "Platform"; "Journal Article Requests (IR_A1)" {OJS} always has that
+    column. The column names only the last of a work's authors ⚠
+    [A15](#a15). <sup>l</sup> <sup>td5</sup>
 21. **No COUNTER figures yet.** COUNTER figures exist only for whole
     months after the installation (or after the journal's first
     publication, if later): the earliest possible date is the first day
@@ -442,7 +447,11 @@ bottom, then "Save": <sup>q</sup>
     reads "You are not authorized to access the requested resource."
     signed out, "The current role does not have access to this
     operation." signed in. Restricted, a Section Editor's "Counter R5"
-    fails (Actors row 3) [A5](#a5). <sup>n</sup>
+    fails (Actors row 3) [A5](#a5). Asked for "Item Master Report (IR)"
+    {OJS OPS} with the authors shown, the address lists each work's
+    authors and their ORCID iDs, but an author without an iD who
+    follows one with an iD is given that earlier author's iD ⚠
+    [A16](#a16). <sup>n</sup>
 24. **The platform.** A COUNTER report names the journal as the platform
     providing the figures (its "Created_By" line and "Platform" column).
     With the site's "Platform" ticked and a "Platform ID", every
@@ -464,10 +473,12 @@ bottom, then "Save": <sup>q</sup>
     - 25a. A year's link downloads that year's report as an XML file
       named with today's date, not the year's ("counter-4.1-JR1-{today}.xml",
       "counter-4.1-AR1-{today}.xml"); inside, the report's name is a
-      cut-off code path ⚠ [OJS6](#ojs6). A year without figures has no
-      link: its report address typed by hand returns to the page with no
-      notice, and "The report parameters were invalid." shows on the
-      next editorial page opened. <sup>p</sup> <sup>td11</sup>
+      cut-off code path ⚠ [OJS6](#ojs6), and the time in its "Created"
+      attribute may read twelve hours early for a file made after noon
+      UTC, the test installs' time zone ⚠ [OJS7](#ojs7). A year without
+      figures has no link: its report address typed by hand returns to
+      the page with no notice, and "The report parameters were invalid."
+      shows on the next editorial page opened. <sup>p</sup> <sup>td11</sup>
 
 **Settings tabs**
 
@@ -1173,6 +1184,8 @@ Left out of the scenarios above, by reason:
   - a "Start Date" before the earliest possible date in a "Counter R5" report's "Report Settings": the refusal under the box names the plain date, no "##" (the guard for A3, once fixed)
   - with an article page visited and no file opened, the "Journal Article Requests (IR_A1)" file's "Metric_Type" column holds only the types its "Metric_Types" line names (the guard for OJS5, once fixed) {OJS}
   - a "COUNTER Reports" year link's XML file names its report "JR1" (and "AR1") in its "Name" attribute (the guard for OJS6, once fixed) {OJS}
+  - "Item Master Report (IR)" downloaded with "Authors" ticked, and "Journal Article Requests (IR_A1)" {OJS}, for a work with several authors: the IR file names "Authors" on its "Report_Attributes" line, and each file's "Authors" column lists every author in order, an ORCID iD after each who has one (Rule 20; the guard for A15, once fixed) {OJS OPS}
+  - the SUSHI "Item Master Report (IR)" asked with the authors shown, for a work whose first author alone has an ORCID iD: only that author carries an iD (Rule 23; the guard for A16, once fixed) {OJS OPS}
   - a reader opening a book's PDF and its "Appendix" file from the book page, each visit a line in the day's log <sup>j</sup>, of type PDF and "Supplementary File" (Rule 1; OMP3, retired) {OMP}
 - **Nothing new to test**:
   - the site as the COUNTER platform on an installation without a "Site
@@ -1211,6 +1224,10 @@ Left out of the scenarios above, by reason:
     Fields)
   - A14 (a refused request for the "Articles" figures answering with a
     code alone; Rule 9a)
+  - A15 (the "Authors" column of "Item Master Report (IR)" and "Journal
+    Article Requests (IR_A1)" naming only the last author; Rule 20)
+  - A16 (the SUSHI "Item Master Report (IR)" giving an author without
+    an ORCID iD an earlier author's iD; Rule 23)
   - OJS1 (the Release 4 page beside "Counter R5"; Rule 25; scenario 12
     marks it)
   - OJS2 (one HTML galley view counted once more per missing file it
@@ -1222,6 +1239,8 @@ Left out of the scenarios above, by reason:
     Rule 20)
   - OJS6 (the report name inside the Release 4 file; Rule 25a; scenario
     12 marks it)
+  - OJS7 (the "Created" time of a Release 4 file made after noon;
+    Rule 25a)
   - OMP4 (an HTML "Appendix" file opened in its view page; Rule 1)
 - **No seed**:
   - visits turned into figures the next day, with known robots and
@@ -1257,6 +1276,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A refused request for the "Articles" figures answers with a code, not a sentence | 🐞 | minor | — |
+| [A15](#a15) | "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author | 🐞 | user-visible | — |
+| [A16](#a16) | The SUSHI "Item Master Report (IR)" gives an author without an ORCID iD the iD of an author before them | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | One view of an HTML galley counts once more for each file it names that was never uploaded | 🐞 | minor | upstream sync (claude), 2026-10-05 — ❓ settled to 🐞 |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1267,6 +1288,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | After a preset, the "Custom Range" boxes still show the page's first range, and "Apply" on them undoes the preset | ❓ | minor | — |
 | [OJS1](#ojs1) | A journal still offers the retired COUNTER Release 4 reports beside "Counter R5" | ❓ | minor | — |
 | [OJS3](#ojs3) | The "Issues" search finds no issue by a bare volume or number | ❓ | minor | — |
+| [OJS7](#ojs7) | "COUNTER Reports": the XML file's "Created" time may read twelve hours early for a file made after noon | ❓ | minor | — |
 | [OMP4](#omp4) | An HTML "Appendix" file opened in its view page counts as an "HTML" file view, not a "Supplementary File" | ❓ | minor | — |
 | [OMP1](#omp1) | A press counts series-page visits that no page shows | ✅ | invisible | — |
 | [OMP2](#omp2) | A press offers "Filters" only while it has a series, and names abstract views "Catalog Entries" | ✅ | minor | — |
@@ -1479,6 +1501,43 @@ code on screen; a program sending the request without the page
 sentence to show its user.
 Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
+<a id="a15"></a>
+**A15 — "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author** · 🐞 · user-visible.
+On Statistics › "Counter R5" of a journal or a preprint server, an
+editor presses "Edit" on "Item Master Report (IR)", ticks "Authors"
+under "Attributes To Show" and presses "Download"; on a journal,
+"Journal Article Requests (IR_A1)" has the "Authors" column without
+asking. For a work with several authors, the column names only the
+last one: an article by Alan Mwandenga, Amina Mansour and Nicolas
+Riouf reads "Nicolas Riouf", and a preprint by Catherine Kwantes and
+Urho Kekkonen reads "Urho Kekkonen", even when the first author has an
+ORCID iD. Only the last author's own iD shows, as
+"Nicolas Riouf(ORCID:https://orcid.org/…)". Expected: every author,
+in order, an iD after each who has one.
+
+The figures in the row are right. A library that reads the file
+credits each work to its last author alone.
+Basis: probe, 2026-10-13. <sup>f-a15</sup>
+
+<a id="a16"></a>
+**A16 — The SUSHI "Item Master Report (IR)" gives an author without an ORCID iD the iD of an author before them** · 🐞 · user-visible.
+A harvesting system asks the journal's SUSHI address (Rule 23) for
+"Item Master Report (IR)" with the authors shown, the same request
+"Download" sends with "Authors" ticked. Each work lists all its
+authors and the ORCID iD of each who has one, but an author with no
+iD who comes after one with an iD is given that earlier author's iD. In an article
+by Alan Mwandenga, Amina Mansour and Nicolas Riouf where only Alan
+Mwandenga has one, all three carry his; in a preprint by Catherine
+Kwantes and Urho Kekkonen where only she has one, he carries hers. An
+author before the first one with an iD correctly has none. Expected:
+an iD only on the authors who have one.
+
+A system that matches authors by their iD takes the other authors for
+that one researcher. The address answers so on a journal and on a
+preprint server; the downloaded file names only the last author
+instead ([A15](#a15)).
+Basis: probe, 2026-10-13. <sup>f-a16</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1569,6 +1628,20 @@ file by hand.
 
 The fix is a one-line change in the plugin.
 Basis: probe, 2026-10-03. <sup>f-ojs6</sup>
+
+<a id="ojs7"></a>
+**OJS7 — "COUNTER Reports": the XML file's "Created" time may read twelve hours early for a file made after noon** · ❓ · minor.
+The XML file a year link of "COUNTER Reports" downloads (Rule 25a)
+records when it was made in its "Created" attribute. Timed by the
+tester's own clock in UTC, the installs' time zone, a file made
+before noon reads that time exactly. One file, by its session's record
+downloaded in the evening, read "10:35:21", with nothing saying
+afternoon; no file made between noon and midnight UTC has yet been
+timed.
+Question: does a file made after noon read its time twelve hours
+early? Lean: yes (🐞); the time is written with the twelve-hour hour,
+while the "Created" line of a "Counter R5" file uses the 24-hour hour.
+Basis: probe, 2026-10-13. <sup>f-ojs7</sup>
 
 ### OMP
 
@@ -1979,7 +2052,13 @@ institution with no credited visits gave `Institution_Name`,
 Available for Requested Dates(No usage available for requested dates.
 Request was for 2026-06-01 to 2026-08-31.)" and the column row alone.
 The list named the journal's institutions with the site's institutional
-statistics off and on. Refusals: td5.
+statistics off and on. Re-probed 2026-10-13 (Rule 20), OJS and OPS,
+`main` and `stable-3_5_0`: "Item Master Report (IR)" with "Authors"
+ticked sent `attributes_to_show=Authors`, and the file read
+`Report_Attributes,Attributes_To_Show=Authors` with the column row
+`Item,Publisher,"Publisher ID",Platform,Authors,DOI,…`; OJS's IR_A1
+file read `Attributes_To_Show=Article_Version|Authors|Access_Type|Publication_Date;Include_Parent_Details=True`
+with "Authors" after "Platform" (f-a15). Refusals: td5.
 
 <a id="fn-m"></a>
 **m** — `CounterR5Report::getEarliestDate()`: the first day of the month
@@ -2546,6 +2625,39 @@ before `error`; the port to Laravel routing (pkp/pkp-lib#9176) dropped
 it, so this is a regression, not a choice. Named in A1's issue report
 (f-a1) and left out of its fix.
 
+<a id="fn-f-a15"></a>
+**f-a15** — `IR::getTSVReportItems()` (OJS and OPS `classes/sushi/IR.php`;
+OJS's `IR_A1` inherits it) assigns `$authorRowValue =
+$author->getFullName(…)` on each pass of the authors loop instead of
+appending, so the cell keeps the last author and that author's
+`(ORCID:…)`. Found by code read 2026-10-03; live-probed 2026-10-13, OJS
+and OPS, `main` (pkp-lib `f4c2578c94`) and `stable-3_5_0` (3.5.0.5),
+dataset fleet, as `dbarnes`: install and publication dates aged to
+2026-06-15 in the database, visits by a signed-out reader loaded as
+2026-09-15 by the app's own usage-statistics loader task, and an ORCID
+iD set in the database (no test-install screen attaches one) on the
+first author in three runs per line and on the last author in two.
+OJS "The Signalling Theory Dividends" (three authors): IR and IR_A1
+rows read `"Nicolas Riouf"` with the iD on the first author and
+`"Nicolas Riouf(ORCID:https://orcid.org/0000-0002-1825-0097)"` with it
+on the last; OPS "The Facets Of Job Satisfaction…" (two authors) read
+`"Urho Kekkonen"` and `"Urho Kekkonen(ORCID:…)"` likewise. The column
+setup: fn-l.
+
+<a id="fn-f-a16"></a>
+**f-a16** — `IR::getReportItems()` (OJS and OPS `classes/sushi/IR.php`)
+reuses one `$itemContributor` array across the authors loop and sets
+`Identifier` only when the author has an ORCID iD, so the previous
+author's value stays. The address is
+`{journal}/api/v1/stats/sushi/reports/ir?…&attributes_to_show=Authors`
+(fn-n), read as JSON in the browser as `dbarnes`. Live-probed
+2026-10-13, the f-a15 setup, OJS and OPS, `main` and `stable-3_5_0`,
+two runs per line with the iD on the first author: `Item_Contributors`
+gave Alan Mwandenga, Amina Mansour and Nicolas Riouf each
+`"Identifier":"https://orcid.org/0000-0002-1825-0097"`, and Catherine
+Kwantes and Urho Kekkonen the same; two runs per line with the iD on
+the last author: only that author carried it.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-p. Live-probed 2026-09-27: td11; the side menu offers
 "Counter R5" at the same time.
@@ -2598,6 +2710,21 @@ Issue report: [docs/issues/U64-OJS5-ir-a1-lists-investigation-rows.md](../issues
 Title="Journal Report 1">` (AR1 likewise); `<ItemPlatform>` reads "Open
 Journal Systems". fn-p.
 Issue report: [docs/issues/U64-OJS6-counter-release-4-report-name-code-path.md](../issues/U64-OJS6-counter-release-4-report-name-code-path.md), filed as [pkp-e2e#628](https://github.com/jardakotesovec/pkp-e2e/issues/628).
+
+<a id="fn-f-ojs7"></a>
+**f-ojs7** — The plugin's pkp/COUNTER library,
+`plugins/reports/counter/classes/COUNTER/Report.php`, sets `created`
+with `date("Y-m-d\Th:i:sP")`: `h` is the 12-hour hour, with no AM/PM.
+`CounterR5Report` writes its `Created` with `H`. Live-probed
+2026-10-02 (OJS6's walk): `Created="2026-10-02T10:35:21+00:00"` on a
+file whose download time was not recorded; the walk's commit at 22:41
+UTC that evening puts it after noon. Live-probed 2026-10-13, OJS `main`
+and `stable-3_5_0`, a JR1 and an AR1 download in each of ten runs at
+04:13–04:23 UTC: each `Created` matched the answer's `Date` header to
+the second (as `2026-10-13T04:13:15+00:00` beside `Tue, 13 Oct 2026
+04:13:15 GMT`), an hour where both clocks read the same. The installs' time zone is UTC.
+Settles it: one year-link download between 12:00 and 23:59 UTC, its
+`Created` hour beside the `Date` header. fn-p.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler` fires the series event and
