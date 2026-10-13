@@ -38,7 +38,7 @@
  * - OPS2 ❓: no test opens "Workflow Files" on a preprint server.
  * - A13 ❓: S4 reads that the closed task moved to "Closed" only.
  * - A18 ❓: S9 never reads the auto-added item's "Activity" or History.
- * - A4 🐞, A6 🐞, A7 🐞, A8 🐞, A9 🐞, A10 🐞, A15 🐞, A16 🐞, A17 🐞, A24 🐞,
+ * - A4 🐞, A6 🐞, A7 🐞, A8 🐞, A10 🐞, A15 🐞, A16 🐞, A17 🐞, A24 🐞,
  *   A29 🐞, A31 🐞, A12 ❓, A14 ❓, A19 ❓, A20 ❓, A23 ❓, A27 ❓, A30 ❓: no
  *   scenario reaches them here.
  * - OMP1: another app's territory.

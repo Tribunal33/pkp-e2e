@@ -1,4 +1,4 @@
-// U37 A9 walk (issue report docs/issues/U37-A9-participant-message-edit-adds-message.md).
+// U37 A9 walk (PR review pkp/pkp-lib#13506; the A9 issue report, deleted at the review, is in git).
 // On PKP's default test dataset, the Production stage of the app's submission (OJS 5, OMP 4, OPS 1):
 //   editor  dbarnes "Notify"s the author with "Discussion (Production)" and "u37r4 first message";
 //           "Edit" › Name "u37r4 renamed" › "Save"; the window read; "Edit" › message
@@ -6,7 +6,7 @@
 //   author  dbarnes "Notify"s the author again ("u37r4 second message"); the author signs in, opens
 //           the discussion's "Edit", types "u37r4 author text", "Save"; the window read
 //           (where the row offers no menu, as on OMP since pkp/pkp-lib#13385, the window is read instead)
-//   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/participant-message-edit-adds-message/walk.js
+//   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/sync/pkp-lib-13506/walk.js
 //   (3.5: PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 in front, PROBE_FEATURE the line fleet's feature; there the
 //   stage's "Production Discussions" grid takes the panel's place, and its "Edit" the window's.)
 const {forEachApp, launch, signIn, signOut, screen, record} = require('../../../probe');

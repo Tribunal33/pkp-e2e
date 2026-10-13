@@ -1,9 +1,9 @@
-// U37 A9 email check (issue report docs/issues/U37-A9-participant-message-edit-adds-message.md):
+// U37 A9 email check (PR review pkp/pkp-lib#13506; the A9 issue report, deleted at the review, is in git):
 // what a participant added in the first "Edit" of a "Notify" discussion receives. OJS submission 5,
 // "Production", as dbarnes: "Notify" Diaga Diouf with "Discussion (Production)" and a tagged
 // "u37r4 mail …" message; "Edit" › Name "u37r4 mailed" and Graham Cox (`gcox`) ticked › "Save";
 // the window read and gcox's mailbox read. `main` only.
-//   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js ojs shared/playwright/checks/issues/participant-message-edit-adds-message/email.js
+//   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js ojs shared/playwright/checks/sync/pkp-lib-13506/email.js
 const {forEachApp, launch, signIn, signOut, record} = require('../../../probe');
 const L = require('./lib.js');
 

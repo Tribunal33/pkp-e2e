@@ -35,7 +35,7 @@
  * - A18 ❓: S9 never reads the auto-added item's "Activity" or History.
  * - A20 ❓: S11 reads the cancelled reviewer's item's participants, never
  *   its "Edit".
- * - A4 🐞, A7 🐞, A8 🐞, A9 🐞, A10 🐞, A15 🐞, A16 🐞, A17 🐞, A24 🐞,
+ * - A4 🐞, A7 🐞, A8 🐞, A10 🐞, A15 🐞, A16 🐞, A17 🐞, A24 🐞,
  *   A29 🐞, A31 🐞, A12 ❓, A14 ❓, A19 ❓, A23 ❓, A27 ❓, A30 ❓: no scenario
  *   reaches them here.
  * - OPS1, OPS2: other apps' territory.

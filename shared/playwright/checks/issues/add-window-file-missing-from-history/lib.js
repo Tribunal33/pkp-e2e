@@ -108,7 +108,7 @@ async function editItem(page, panel, name, {remove, rename, label}) {
 /** dbarnes at Production; "Add discussion" with the file; the grid's rows, the row's actions, the query window. */
 async function walk35(page, app, {subject, message, file}) {
     const P = require('../typed-participant-message-not-sent/lib.js');
-    const Q = require('../participant-message-edit-adds-message/lib.js');
+    const Q = require('../../sync/pkp-lib-13506/lib.js');
     const {addQuery35} = require('../author-discussion-with-file-edit-refused/lib.js');
     await P.openWorkflow(page, app, WORDS[app.name].id, MENU_KEY);
     record('r35-panel', await screen(page));

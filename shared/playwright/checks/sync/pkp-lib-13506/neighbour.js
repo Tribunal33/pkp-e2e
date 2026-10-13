@@ -1,10 +1,10 @@
-// U37 A9 neighbour check (issue report docs/issues/U37-A9-participant-message-edit-adds-message.md):
+// U37 A9 neighbour check (PR review pkp/pkp-lib#13506; the A9 issue report, deleted at the review, is in git):
 // the fix must leave a discussion added by hand as it is. As dbarnes on the Production stage of the
 // app's submission (OJS 5, OMP 4, OPS 1): "Production Tasks & Discussions" › "Add", the Name
 // "u37r4 own discussion", the author ticked, "u37r4 own message", "Save"; then "Edit" › Name
 // "u37r4 own renamed" › "Save" and "Edit" › message "u37r4 own edited" › "Save", the window read
 // after each: one message, replaced in place. `main` only.
-//   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/participant-message-edit-adds-message/neighbour.js
+//   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/sync/pkp-lib-13506/neighbour.js
 const {forEachApp, launch, signIn, signOut, screen, record, idle} = require('../../../probe');
 const L = require('./lib.js');
 

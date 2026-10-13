@@ -180,9 +180,9 @@ function helpers(app, page) {
 
 // ---------------------------------------------------------------------------------------------
 // 3.5: the stage's discussions grid (legacy). The grid, its row "Edit" and the query window are the
-// U37 A9 walk's (../participant-message-edit-adds-message/lib.js); this adds "Add discussion" with
+// U37 A9 walk's (../../sync/pkp-lib-13506/lib.js); this adds "Add discussion" with
 // a file uploaded through the form's "Upload File" wizard.
-const Q = require('../participant-message-edit-adds-message/lib.js');
+const Q = require('../../sync/pkp-lib-13506/lib.js');
 
 /** "Add discussion": the participant ticked, subject, message, "Upload File" (wizard), "OK". */
 async function addQuery35(page, app, {participantName, subject, message, file}) {

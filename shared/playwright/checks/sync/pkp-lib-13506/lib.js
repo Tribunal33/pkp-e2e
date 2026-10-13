@@ -1,10 +1,10 @@
-// Helpers of walk.js and neighbour.js here (issue report
-// docs/issues/U37-A9-participant-message-edit-adds-message.md). Requiring this file runs nothing.
-// "Participants" › "Notify" is the U35 A3 walk's (../typed-participant-message-not-sent/lib.js);
+// Helpers of walk.js, neighbour.js and assign.js here (U37 A9;
+// the A9 issue report, deleted at the PR review of pkp/pkp-lib#13506, is in git). Requiring this file runs nothing.
+// "Participants" › "Notify" is the U35 A3 walk's (../../issues/typed-participant-message-not-sent/lib.js);
 // this file adds the per-app dataset facts and the discussions panel's "Edit" and window reads
 // (main), and the 3.5 "Production Discussions" grid (its "Edit" and its query window).
 const {screen, record, idle} = require('../../../probe');
-const P = require('../typed-participant-message-not-sent/lib.js');
+const P = require('../../issues/typed-participant-message-not-sent/lib.js');
 
 const {sleep, flat} = P;
 
