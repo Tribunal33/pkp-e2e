@@ -56,7 +56,7 @@ Editor; on a preprint server the Preprint Server Manager alone. <sup>e</sup>
 |--------|--------------------|
 | **Open the Tasks panel** | • Any signed-in user on an editorial page, whatever their roles, including a user with no role in that journal, a user with no role in any journal, and the Site Administrator (Rule 2). The panel lists the account holder's own tasks only; what one Journal Manager deletes leaves another's rows untouched <sup>a</sup> |
 | **Mark tasks read or new, delete tasks** | • The account holder, on their own list only (Rule 3) <sup>a</sup> |
-| **See the unread count on the reader-side header** | • A signed-in user holding Journal Manager, Author, Reviewer or an assistant-level role in the journal, or the Site Administrator (Rule 4); the count shows even when it is "0"<br>• On the site's own home page nobody, at a desktop-width window: every name is bare, and the "Dashboard" entry under the Site Administrator's name carries the number without displaying it [A13](#a13) (Rule 4)<br>• A Section Editor sees their name without a count, with or without unread tasks ⚠ [A3](#a3); a Reader sees the bare name too <sup>c</sup> |
+| **See the unread count on the reader-side header** | • A signed-in user holding Journal Manager, Author, Reviewer or an assistant-level role in the journal, or the Site Administrator, on a journal whose only "Forms" language is English (Rule 4a); the count shows even when it is "0"<br>• The same roles on a journal with French under "Forms": beside the name nobody; only a window narrower than 992 px shows the number, after "Dashboard" [A15](#a15) (Rule 4c)<br>• On the site's own home page, in a window 992 px or wider, nobody: every name is bare, and the "Dashboard" entry under the Site Administrator's name carries the number without displaying it [A13](#a13); in a narrower window the Site Administrator sees it after "Dashboard" (Rule 4d)<br>• A Section Editor sees their name without a count, with or without unread tasks ⚠ [A3](#a3); a Reader sees the bare name too <sup>c</sup> |
 | **Choose which events reach them, and which by email** | • The account holder, per journal, on the Profile page's "Notifications" tab (Rule 5) <sup>d</sup> |
 | **Open the Unsubscribe page and unsubscribe** | • Whoever holds the emailed link, signed in or not; the page names and acts on the addressee, not on whoever is signed in (Rule 8, scenario 6) <sup>f</sup> |
 | **Receive a task or a notification email** | • Decided per event type by the feature that raises it; the roster in Rule 6 says who is told, where it shows and whether an email goes out <sup>e</sup> |
@@ -193,19 +193,34 @@ items" on an empty list). No text can be typed anywhere in the panel.
    rows at once, with no confirmation and no way back. After each action
    every box is unticked again, and once the window is closed the badge on
    the bell shows the new number of unread rows. <sup>a</sup>
-4. **The reader-side count.** On the reader-facing pages, a signed-in
-   user's name in the header is followed by the
-   number of unread tasks the bell shows, as "{name} 1" with one and "0"
-   with none, every journal's tasks counted. Actors says who sees it; a
-   Section Editor and a Reader see the bare name, with or without unread
-   tasks [A3](#a3). On the site's own home page every name is bare, the Site
-   Administrator's included, and at a desktop-width window (992 px or
-   wider) the "Dashboard" entry in the drop-down list under the Site
-   Administrator's name reads "Dashboard" alone: the number of unread tasks is written
-   after it in the page's source but not displayed ⚠ [A13](#a13); a
-   Journal Manager, even one with roles in two journals, has a bare
-   "Dashboard" entry there too.
-   It is a count only: the reader-side header offers no list. <sup>c</sup>
+4. **The reader-side count.** It is a count only: the reader-side header
+   offers no list. Actors says who sees it; a Section Editor and a Reader
+   see the bare name, with or without unread tasks [A3](#a3). <sup>c</sup>
+   - 4a. **Beside the name.** On a journal's reader-facing pages, in a
+     window 992 px or wider, a signed-in user's name in the header is
+     followed by the number of unread tasks the bell shows, as "{name} 1"
+     with one and "{name} 0" with none, every journal's tasks counted.
+   - 4b. **In a narrower window.** Below 992 px the header shows an "Open
+     Menu" button in place of its menus. Pressing it lists the signed-in
+     user's name, bare, with "Dashboard", "View Profile" and "Logout" under
+     it, and the number follows "Dashboard" ("Dashboard 2", "Dashboard
+     0").
+   - 4c. **With French under "Forms".** On a journal whose "Forms"
+     languages ([→ "Forms"](U57-languages-and-locales.md#form-languages))
+     include French, no name carries the number, whatever the role. In a
+     window 992 px or wider the journal's public pages then show it
+     nowhere, while the bell on the editorial pages still counts the
+     tasks; a narrower window shows it after "Dashboard" as in 4b
+     ⚠ [A15](#a15). Unticking French under "Forms" brings the number back
+     beside the name on the next page opened.
+   - 4d. **The site's own home page.** Every name is bare, the Site
+     Administrator's included. In a window 992 px or wider the "Dashboard"
+     entry in the list under the Site Administrator's name reads
+     "Dashboard" alone: the number is written after it in the page's
+     source but not displayed ⚠ [A13](#a13). In a narrower window that
+     entry displays it ("Dashboard 2"). A Journal Manager, even one with
+     roles in two journals, has a bare "Dashboard" entry there at either
+     width.
 5. **What the Notifications tab's boxes do.** <sup>d</sup>
    - 5a. **"Enable these types of notifications." unticked** means the
      event is not raised for this account in this journal: no task, and
@@ -413,6 +428,12 @@ items" on an empty list). No text can be typed anywhere in the panel.
 - **Rows per page (configuration file, no screen).** The Tasks panel's page
   size, 25 on a default install; the panel's own "Items per page:" choice
   changes it for the moment only (Rule 2b). <sup>i</sup>
+- **The journal's "Forms" languages.** Settings › Website › "Setup" ›
+  "Languages", the "Forms" column
+  (*[Languages and locales](U57-languages-and-locales.md#form-languages)*);
+  a new journal has its primary language alone there. With English alone
+  the signed-in name carries the unread count (Rule 4a); with French
+  ticked as well it carries none (Rule 4c) [A15](#a15). <sup>c</sup>
 - **The announcement's and the issue's email box** ("Send an email about
   this to all registered users.", Rule 6), **the open-access notification
   and the journal's announcements switch** decide whether the events in
@@ -457,7 +478,10 @@ tooling recipe are in the footnote. <sup>s0</sup>
 
 **The scratch journal.** Its accounts' Notifications tabs start at their
 defaults, and the Site Administrator is a Journal Manager of it, so every
-new submission's "needs an editor" task reaches them too (Rule 6).
+new submission's "needs an editor" task reaches them too (Rule 6). Its
+only "Forms" language is English, as on the seeded journal, and every
+page is read in a window 992 px or wider, so the unread count sits
+beside the name (Rules 4a, 4c).
 
 **When emails arrive.** Every email in scenarios 1–6 and 11 leaves at the
 moment of the action and is in its mailbox within a second. Where a
@@ -799,6 +823,7 @@ Left out of the scenarios above, by reason:
   - a reply in a discussion with "Discussion activity." switched off reaching neither the Tasks window nor the mailbox, and with it on a row reading "… replied to …" (Rule 6; the guard [A1](#a1)'s issue report proposes)
   - unticking a box on the "Unsubscribe" page leaving the emails switched off before still off (Rule 8c; the guard [A2](#a2)'s issue report proposes)
   - a preprint server's new-preprint row on the Notifications tab reading "A new preprint, "Title", has been submitted." (*Fields & validation*; the guard [OPS2](#ops2)'s issue report proposes)
+  - in a window narrower than 992 px, after "Open Menu", the name bare and the unread count after "Dashboard", on a journal's home page and for the Site Administrator on the site's (Rules 4b, 4d)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -819,7 +844,8 @@ Left out of the scenarios above, by reason:
   - A4 (the site-level set governing nothing; Rule 5d)
   - A9 (the Unsubscribe page keeping the statistics box with the email off; *Settings*)
   - A12 (two tasks raised within one second listed in either order; Rule 2b; scenario 2's second submission comes a second after the first)
-  - A13 (the Site Administrator's unread count hidden on the site's home page at a desktop width, and the narrow window meant to display it; Rule 4; scenario 7 marks it)
+  - A13 (the Site Administrator's unread count hidden on the site's home page at a desktop width; Rule 4d; scenario 7 marks it)
+  - A15 (no unread count beside the name on a journal with French under "Forms"; Rule 4c, *Settings*)
 - **No seed**:
   - the journal initials on the rows of an account with roles in several journals (Rules 2b, 2d)
   - each journal keeping its own set of choices (Rule 5d)
@@ -855,6 +881,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A15](#a15) | On a journal with French under "Forms", no name on the public pages carries the unread count, and a window 992 px or wider shows it nowhere | 🐞 | minor | — |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
 | [A5](#a5) | A mail program's own "Unsubscribe" button, offered because of the emails' headers, is probably refused | ❓ | latent | — |
 | [A6](#a6) | Without an API secret in the configuration file, which a fresh install leaves empty, every footer "Unsubscribe" link opens "404 Not Found" | ❓ | user-visible | — |
@@ -863,7 +890,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | The Unsubscribe page lists "Statistics report summary." on a journal whose statistics email is off | ❓ | minor | — |
 | [A11](#a11) | A Section Editor ticked under "Editorial Assignments" gets neither task nor email for a new submission; the manager-level roles get the "needs an editor" pair instead, and what the editor gets on the install's first journal was never seen | ❓ | user-visible | — |
 | [A12](#a12) | Two tasks raised within the same second are listed in either order in the Tasks window | ❓ | minor | — |
-| [A13](#a13) | On the site's own home page the Site Administrator's unread count is never displayed at a desktop width: the "Dashboard" entry carries it hidden and the name carries none | ❓ | minor | — |
+| [A13](#a13) | On the site's own home page the Site Administrator's unread count is never displayed at a desktop width: the "Dashboard" entry carries it hidden and the name carries none; a narrow window displays it | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server lists "A reviewer has commented on "Title"." and "Weekly email of outstanding tasks", two events it never raises | ❓ | minor | — |
 | [A14](#a14) | Retired: over an open window a toast's "×" did nothing, or closed the submission's workflow along with the toast; it now removes the toast alone, and the pointer keeps it (Rule 9b) | ✅ | retired | PR review merge (claude), 2026-10-06 — fixed upstream (pkp/pkp-lib#13188) |
 
@@ -909,9 +936,11 @@ Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
 **A3 — No reader-side count for a Section Editor** · 🐞 · low.
-On the journal's public pages, the menu under the signed-in user's name
-shows a Journal Manager, a Journal editor, an assistant, a Reviewer or
-an Author their number of unread tasks (Rule 4). A Section Editor
+On the public pages of a journal whose only "Forms" language is English,
+the menu under the signed-in user's name shows a Journal Manager, a
+Journal editor, an assistant, a Reviewer or an Author their number of
+unread tasks (Rule 4a); with French under "Forms" no role sees it there
+([A15](#a15)). A Section Editor
 (Series Editor on a press, Moderator on a preprint server) who holds
 none of those roles in the journal never sees the number there, even
 while the bell shows "1", and learns of new tasks only from the bell on
@@ -920,6 +949,7 @@ Profile page
 ([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a2)).
 It worked in 3.0 and broke in 3.1.
 Basis: probe, 2026-10-03. <sup>[f-a3](#fn-a3)</sup>
+Report: refresh owed — the housekeeping claim check of 2026-10-13 (C05, kept script `shared/playwright/checks/U05/C05/c05.js`, new entry [A15](#a15)) found that the other roles see the count only on a journal whose only "Forms" language is English: with French under "Forms" no role sees it, and at 992 px or wider the number shows nowhere; the report's contrast ("while the other roles' menus do") and its Steps rest on the dataset journal, whose "Forms" languages were not stated; and the report says "the menu under the name" where Rule 4a puts the number beside the name in the header (2026-10-13)
 
 <a id="a4"></a>
 **A4 — The site-level tab governs nothing** · ❓ · latent.
@@ -1082,21 +1112,45 @@ Basis: test run. <sup>[f-a12](#fn-a12)</sup>
 <a id="a13"></a>
 **A13 — The Site Administrator's unread count is hidden on the site's home page** · ❓ · minor.
 On a journal's home page a Journal Manager's name carries the number of
-unread tasks (Rule 4). On the site's own home page the Site
-Administrator's name is bare, and the "Dashboard" entry in the list under
-it, where the number is written, reads "Dashboard" alone at a
-desktop-width window: the number is in the page's source and never
-displayed. So the Site Administrator has no visible unread count anywhere
-on the site's home page, while a journal's home page shows one beside the
-name. In a window narrower than 992 px the theme's narrow layout is meant
-to display the entry's number and hide the one beside the name instead;
-that layout was not tried.
+unread tasks (Rule 4a). On the site's own home page the Site
+Administrator's name is bare, and in a window 992 px or wider the
+"Dashboard" entry in the list under it, where the number is written,
+reads "Dashboard" alone: the number is in the page's source and never
+displayed. So at that width the Site Administrator has no visible unread
+count anywhere on the site's home page, while a journal's home page shows
+one beside the name. In a window narrower than 992 px, after "Open Menu",
+the entry reads "Dashboard 2", the number displayed: only a narrow window
+shows the Site Administrator the number there (Rule 4d).
+The bare name may be the fault in [A15](#a15) rather than a choice: the
+site's own languages on the test installs are French and English, and
+read from the application, the Site Administrator's name is given the
+number as a Journal Manager's is. One look settles it: the Site
+Administrator's name on the site's home page of an install whose only
+site language is English. If the number shows there, this entry folds
+into A15.
 Question: is the number under "Dashboard" meant to show at a desktop
 width where the name carries none? Lean: yes, on the site's home page; a
 number kept in the page but never displayed tells nobody anything, and the
-name there could carry the count as it does on a journal's home page.
-Basis: test run (the desktop-width read), code (the narrow layout).
-<sup>[f-a13](#fn-a13)</sup>
+name there could carry the count as it does on a journal's home page. On
+the cause, the lean is A15's fault.
+Basis: test run (the desktop-width read), probe, 2026-10-13 (the narrow
+window). <sup>[f-a13](#fn-a13)</sup>
+
+<a id="a15"></a>
+**A15 — With French under "Forms", the unread count leaves the name on the journal's public pages** · 🐞 · minor.
+On a journal whose "Forms" languages include French, a signed-in Journal
+Manager, Editor, Reviewer, Author or holder of an assistant-level role
+sees no number of unread tasks beside their name on the journal's public
+pages, where Rule 4a puts it. In a window 992 px or wider the number
+shows nowhere on those pages, while the bell on the editorial pages
+counts the tasks; a narrower window still shows it after "Dashboard".
+Unticking French under "Forms" brings the number back beside the name on
+the next page, and ticking it again takes it away. On such a journal the
+editors, reviewers and authors lose the one sign of new tasks the public
+pages give. The cause is not traced; the browser's page inspector finds
+no number beside the name, so it is missing from the page, not hidden
+by its styling.
+Basis: probe, 2026-10-13. <sup>[f-a15](#fn-a15)</sup>
 
 ### OPS
 
@@ -1225,7 +1279,7 @@ pkp/ojs#5608 and pkp/ops#1315, seen 2026-10-01 at the PR heads
 initials", "Server initials" until then).
 
 <a id="fn-c"></a>
-**c** — `PKPNavigationMenuService::setNMIDisplayTitles()` (`NMI_TYPE_USER_DASHBOARD`,
+**c** — `PKPNavigationMenuService::getDisplayStatus()` (`NMI_TYPE_USER_DASHBOARD`,
 the signed-in user's name item seeded in `registry/navigationMenus.xml`)
 swaps the title for `frontend/components/navigationMenus/dashboardMenuItem.tpl`
 (title plus `<span class="task_count">{$unreadNotificationCount}</span>`)
@@ -1254,8 +1308,31 @@ computed `display: none`: the default theme's `head.less` hides
 `> li > a .task_count` (the count beside the name) is hidden instead. The
 2026-09-04 "Dashboard 46" was the entry's text content, not what the
 screen displayed (A13). OMP's copy of `head.less` is identical and OPS's
-differs only in link colours (files compared 2026-09-13); the narrow
-layout was not driven.
+differs only in link colours (files compared 2026-09-13).
+Live-probed 2026-10-13 on OJS, OMP and OPS `main`, two runs each, at
+1280 and 800 px (Rules 4a–4d; Actors row 3; Settings "Forms"): the
+2026-09-04 `publicknowledge` reads again ("editor.diana 0",
+"manager.maya 0", "reviewer.julia 0", "author.alex 0", "copyeditor.carla
+0" / OPS "assistant.rita 0", `span.task_count` `inline-block`; the bare
+`sectioneditor.ana` and `reader.rosa`). At 800 px, after "Open Menu", the
+name's span computes `display: none` and the entry's span `inline-block`
+("Dashboard 0"), every role that has one. A scratch context seeded with
+`supportedFormLocales: ['en','fr_CA']` (French also a UI language), a
+discussion opened by its Journal Manager with the Editor (not OPS), the
+Section Editor and the Author: bells "Tasks 2", "Tasks 2", "Tasks 1",
+"Tasks 1"; at 1280 px every name bare with no `span.task_count` in its
+`innerHTML`, the entry "Dashboard" with "Dashboard 2" in its text content
+(span `display: none`); at 800 px "Dashboard 2" displayed. French unticked
+under "Forms" on Setup › "Languages" ("Locale settings saved.", the grid
+the same after a reload): "{mgr} 2", "{editor} 2", "{author} 1",
+"{reviewer} 0", "{assistant} 0" on the next page; ticked again: bare
+again. The Manager on a second scratch journal (English forms) holding
+none of the tasks: "{mgr} 2". On the site's home page (`index/en`;
+`site.supported_locales` `["fr_CA","en"]` on every fleet) `admin`'s
+entry "Dashboard" at 1280 px with "Dashboard 1" / "Dashboard 2" in its
+text (the bell's number), "Dashboard 1" / "Dashboard 2" displayed at
+800 px; the two-journal Manager's entry bare at both widths, linking to
+`index/en/user/profile`.
 
 <a id="fn-d"></a>
 **d** — `PKPNotificationSettingsForm::getNotificationSettingCategories()`
@@ -1768,7 +1845,7 @@ a row switched off on the tab came back ticked on the page, and
 Issue report: [pkp-e2e#850](https://github.com/jardakotesovec/pkp-e2e/issues/850) ([docs/issues/U05-A2-unsubscribe-page-reenables-emails.md](../issues/U05-A2-unsubscribe-page-reenables-emails.md)).
 
 <a id="fn-a3"></a>
-**f-a3** — Note c: the role list in `setNMIDisplayTitles()` omits
+**f-a3** — Note c: the role list in `getDisplayStatus()` omits
 `ROLE_ID_SUB_EDITOR`. Live-probed 2026-09-04 on OJS, OMP and OPS: a scratch
 Section Editor (Series Editor, Moderator) with the bell at "Tasks 1" from a
 discussion shows the bare name on the journal's home page; `manager.maya`
@@ -1918,8 +1995,36 @@ on OJS (scenario 7, viewport 1280×900): with the menu open the
 `display: none` with a zero-size box; the name link on the site's home
 page has no `span.task_count` at all (`admin`, `manager.maya`). OMP's
 `head.less` is identical and OPS's differs only in link colours (files
-compared 2026-09-13); the narrow layout (a window under 992 px) was not
-driven on any app.
+compared 2026-09-13). The narrow layout, live-probed 2026-10-13 on OJS,
+OMP and OPS `main` at 800 px after "Open Menu", two runs each: `admin`'s
+entry displayed "Dashboard 1" / "Dashboard 2", equal to the bell, span
+`inline-block` (note c). Open (the cause): the site's languages are
+`fr_CA` and `en` on every test fleet, and `getDisplayStatus()` lets a
+site admin through as it lets a manager; unticking French as a site
+language is site-wide and was not done on the shared fleet. Settling
+observation: `admin`'s name on `index/en` of an install whose site
+languages are English alone.
+
+<a id="fn-a15"></a>
+**f-a15** — Live-probed 2026-10-13 on OJS, OMP and OPS `main`, two runs
+each with the same result (note c): on a scratch context with
+`supportedFormLocales` `['en','fr_CA']` the user-menu name's `innerHTML`
+is the bare username for the Journal Manager, the Editor (not OPS), the
+Reviewer (not OPS), the Author and the assistant (Copyeditor; Editorial
+Board Member on OPS), with no `span.task_count`; the "Dashboard" entry
+carries `<span class="task_count">` (`display: none` at 1280 px,
+`inline-block` at 800 px). Unticking French under "Forms" on Setup ›
+"Languages" put "username <span class="task_count">2</span>" back in the
+name on the next page; ticking it again took it out. First seen
+2026-10-03 on the default dataset's journal as `dbarnes` (French under
+"Forms" there), where taking French out of the form languages in the
+database brought the count back. Ticking French under "Forms" also logs
+five script errors,
+[Languages and locales](U57-languages-and-locales.md#a5) A5, unrelated
+to the count. Not traced: `dashboardMenuItem.tpl`, the
+default theme's `head.less` and `getDisplayStatus()`'s title and role
+code are unchanged from `stable-3_5_0`, which therefore likely behaves
+the same (code read, not driven); a 3.5 drive settles it.
 
 <a id="fn-a14"></a>
 **f-a14** — While the "Notify" side panel is open, the page body,
@@ -1999,6 +2104,6 @@ Issue report: [pkp-e2e#847](https://github.com/jardakotesovec/pkp-e2e/issues/847
 - `lib/pkp/classes/mail/traits/Unsubscribe.php` · `traits/Discussion.php` · `lib/pkp/locale/en/emails.po` (`emails.footer.unsubscribe*`)
 - Emitters: `lib/pkp/api/v1/announcements/PKPAnnouncementController.php` · `lib/pkp/jobs/notifications/NewAnnouncementNotifyUsers.php` · `lib/pkp/classes/observers/listeners/AssignEditors.php` · `NotifyAuthorOnPublication.php` · `lib/pkp/classes/context/SubEditorsDAO.php` · `lib/pkp/classes/editorialTask/Repository.php` · `lib/pkp/api/v1/submissions/tasks/EditorialTaskController.php` · `lib/pkp/classes/submission/reviewer/form/PKPReviewerReviewStep3Form.php` · `lib/pkp/jobs/email/EditorialReminder.php` · `lib/pkp/classes/task/StatisticsReport.php` · `lib/pkp/jobs/notifications/StatisticsReportMail.php` · OJS `classes/controllers/grid/issues/IssueGridHandler.php`, `jobs/notifications/IssuePublishedNotifyUsers.php`, `classes/tasks/OpenAccessNotification.php`, `jobs/notifications/OpenAccessMailUsers.php`
 - `lib/pkp/classes/user/form/RegistrationForm.php` (`emailConsent`)
-- `lib/pkp/classes/services/PKPNavigationMenuService.php` (`setNMIDisplayTitles`) · `lib/pkp/classes/template/PKPTemplateManager.php` (`unreadTasksCount`, `unreadNotificationCount`, `hasSystemNotifications`)
+- `lib/pkp/classes/services/PKPNavigationMenuService.php` (`getDisplayStatus`) · `lib/pkp/classes/template/PKPTemplateManager.php` (`unreadTasksCount`, `unreadNotificationCount`, `hasSystemNotifications`)
 - UI: `lib/ui-library/src/components/TopNavActions/TopNavActions.vue` · `components/Container/Page.vue` · `components/Notification/Notification.vue` · `lib/pkp/js/controllers/SiteHandler.js` · `NotificationHandler.js` · `lib/pkp/js/controllers/grid/notifications/NotificationsGridHandler.js`
 - Templates: `lib/pkp/templates/user/notificationSettingsForm.tpl` · `notification/unsubscribeNotificationsForm.tpl` · `unsubscribeNotificationsResult.tpl` · `controllers/page/tasks.tpl` · `controllers/grid/tasks/task.tpl` · `controllers/notification/notificationOptions.tpl` · `frontend/components/navigationMenus/dashboardMenuItem.tpl` · `layouts/backend.tpl`
