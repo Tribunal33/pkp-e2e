@@ -846,6 +846,9 @@ Left out of the scenarios above, by reason:
     "Conceptualization" with no degree picked, and a role a row shows
     grayed out in every row's list (Fields "CRediT roles and the degrees
     of contribution")
+  - a contributor's CRediT table with two rows, each row's two
+    drop-downs named once by their own labels ([A25](#a25)): the guard
+    the issue report proposes
   - a contributor whose hand-entered institution is named in a language
     then unticked under "Metadata" saved with nothing changed, the save
     going through ([A28](#a28)): the guard the issue report proposes
@@ -958,7 +961,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A10](#a10) | The typed affiliation's per-language name boxes are announced wrongly by a screen reader | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | The button that deletes a contributor role is labelled with a warning question, not the action | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the contributor form labels "Competing Interests" with raw link markup | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A25](#a25) | In the CRediT table, a later row's labels are tied to the first row's drop-downs: a click on one lands in the first row, and a screen reader gets the later rows unnamed | 🐞 | minor | — |
+| [A25](#a25) | A contributor's later CRediT rows have unnamed drop-downs, and a click on their labels edits the first row | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A26](#a26) | On the landing page a contributor's affiliations can print in another order than "Edit" lists them | 🐞 | minor | — |
 | [A27](#a27) | On the landing page several affiliations print with a space before each comma ("First Univ , Second Univ") | 🐞 | minor | — |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
@@ -1343,21 +1346,25 @@ translation.
 Basis: probe, 2026-10-13. <sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — Only the first CRediT row's drop-downs are tied to their labels** · 🐞 · minor.
-In a contributor's "CRediT roles and the degrees of contribution"
-table, each row shows its own "Select a new role (required)" and
-"Degree" labels, but every row's labels are tied to the first row's two
-drop-downs. With two or more rows, a click on a later row's label puts
-the cursor in the first row's drop-down, and a pick then made from the
-keyboard changes the first row: its "Conceptualization" became "Writing
-– Review & Editing" while the row whose label was clicked stayed as it
-was. A screen reader is given the first row's drop-downs with their
-labels doubled ("Degree Degree") and every later row's with no name. It
-shows in "Add Contributor" and "Edit" in the workflow and in the
-submission wizard's "Add Contributor". The table is in no released
-version yet. The typed affiliation's name boxes carry the same defect
-([A10](#a10)).
-Basis: probe, 2026-10-07. <sup>f-a25</sup>
+**A25 — A contributor's later CRediT rows have unnamed drop-downs, and a click on their labels edits the first row** · 🐞 · low.
+A contributor's "CRediT roles and the degrees of contribution" table has
+one row per role, each with its own "Select a new role (required)" and
+"Degree" labels. But every row's labels belong to the first row's two
+drop-downs. So once there are two or more rows, a click on a later row's
+label puts the cursor in the first row. A choice then made with the
+keyboard changes the first row, and the row whose label was clicked
+stays as it was. This holds for both labels, the role's and the
+degree's.
+
+A screen reader is given the first row's drop-downs with their label
+repeated once per row ("Degree Degree" with two rows, "Degree Degree
+Degree" with three), and every later row's with no name at all.
+
+The table is part of the contributor form on every install, with no
+setting to turn it on. It shows wherever a contributor is edited: "Add
+Contributor" and "Edit" on the publication's Contributors page, and the
+submission wizard's "Add Contributor".
+Basis: probe, 2026-10-13. <sup>f-a25</sup>
 
 <a id="a26"></a>
 **A26 — A contributor's affiliations can print in another order than "Edit" lists them** · 🐞 · minor.
@@ -2548,6 +2555,7 @@ per-row `formId`, so every row gets the same ids, as A10's name boxes
 do (f-a10); A10's issue report names this component in its Reach, read
 in the code and left out of its fix. `main` only: `stable-3_5_0` has no
 CRediT roles (f-a23).
+Issue report: [docs/issues/U41-A25-credit-role-rows-labels-first-row.md](../issues/U41-A25-credit-role-rows-labels-first-row.md).
 
 <a id="fn-f-a26"></a>
 **f-a26 — A26 evidence.** Live-probed 2026-10-07 (Rule 14; Fields

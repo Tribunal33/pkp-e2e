@@ -1,0 +1,18 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldCreditRoles.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldCreditRoles.vue
+@@ -30,6 +30,7 @@
+ 					>
+ 						<TableCell>
+ 							<FieldSelect
++								:form-id="`${props.formId}-${props.name}-${creditRoleIndex}`"
+ 								name="role"
+ 								:label="t('submission.submit.creditRoles.selectRole')"
+ 								:is-required="true"
+@@ -44,6 +45,7 @@
+ 						</TableCell>
+ 						<TableCell>
+ 							<FieldSelect
++								:form-id="`${props.formId}-${props.name}-${creditRoleIndex}`"
+ 								name="degree"
+ 								:label="t('submission.submit.creditRoles.selectDegree')"
+ 								:value="degree"
