@@ -2519,7 +2519,7 @@ an error, with no transaction around the two; `editContributor()`
 validates the affiliations before `Repo::author()->edit()`. A14's
 role-less contributors come from the same early insert (f-a14).
 `stable-3_5_0` not driven.
-Issue report: [docs/issues/U41-A24-refused-add-contributor-saved-twice.md](../issues/U41-A24-refused-add-contributor-saved-twice.md).
+Issue report: [pkp-e2e#954](https://github.com/jardakotesovec/pkp-e2e/issues/954) ([docs/issues/U41-A24-refused-add-contributor-saved-twice.md](../issues/U41-A24-refused-add-contributor-saved-twice.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25 — A25 evidence.** Live-probed 2026-10-07 (Fields "CRediT roles
