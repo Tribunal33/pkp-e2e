@@ -458,6 +458,15 @@ Mac a plugin is only read.
   (`admin` / `admin` and the dataset's users, docs/process/dataset.md),
   at `http://127.0.0.1:19000`, Mailpit at `:19025`. One pod at a time,
   machine-wide; the ports sit above every slot's and line's band.
+- **The claim.** The sandbox serves one review at a time, slots
+  included, and the dispatcher keeps which (`/run/plugin-sandbox.claim`,
+  root's): a review's first `allow` or `up` takes it, its `down` gives it
+  back. While another review holds it, `allow`, `up`, `php`, `snapshot`,
+  `logs`, `down` and the canary are refused with the holder's name, so no
+  session removes another's pod or allowances; `status` names the holder
+  (`claim: pg-549`). A review whose `up` failed still holds it and
+  downs it. Only an abandoned review's claim is freed by `down <its id>`,
+  after `node bin/slot.js status` shows no session working on it.
 - **The browser** that drives the app runs as the bot, outside the wall
   (the maintainer accepted that, 2026-10-12): the drive guards every
   context with `sandbox/drive-guard.js`, which stops and logs a page's

@@ -18,7 +18,17 @@
 # loaded, and one at a time), `pod down` removes the pod, withdraws every
 # egress allowance and stops the session, which ends every process the
 # user has. Any other pod request finding the rule gone stops the session
-# too. Installed root-owned to /usr/local/sbin by sandbox/vm/setup.sh,
+# too.
+#
+# The sandbox serves one review at a time, and the claim says which: the
+# first `egress allow` or `pod up` of a review takes it (root's file
+# /run/plugin-sandbox.claim, out of the sandbox user's reach), `pod down`
+# of that review gives it back. While another review holds it, every
+# request naming a review (allow, up, php, snapshot, logs, down) is
+# refused, and so is `egress reset`: one session's down or canary can no
+# longer remove another's pod or allowances. A claim whose review was
+# abandoned is freed by `down <that review>`; `pod status` names it.
+# Installed root-owned to /usr/local/sbin by sandbox/vm/setup.sh,
 # whose unit hides every home and the host's resolver and system bus from
 # it; bin/plugin-sandbox.js is the client.
 set -uo pipefail
@@ -52,6 +62,23 @@ session_stop() {
     systemctl stop "user@$SBX_UID.service" "user-runtime-dir@$SBX_UID.service" 2> /dev/null
     fresh_config
 }
+CLAIM=/run/plugin-sandbox.claim
+claimant() { [[ -f $CLAIM && ! -L $CLAIM ]] && head -c 64 "$CLAIM" || true; }
+# Refuse unless the claim is free or <review>'s; with "take", make it <review>'s.
+# The claim lock makes the check and the write one step between connections.
+claim() {
+    local review=$1 take=${2:-} held
+    [[ $review =~ ^[a-z0-9][a-z0-9-]{0,62}$ ]] || { echo "plugin-sandbox: a review id is lowercase letters, digits and dashes"; finish 2; }
+    exec 8> /run/plugin-sandbox-claim.lock
+    flock -w 10 8 || { echo "plugin-sandbox: the claim is busy, try again"; finish 3; }
+    held=$(claimant)
+    if [[ -n $held && $held != "$review" ]]; then
+        echo "plugin-sandbox: the sandbox is $held's review: refused for $review (one review at a time; \`down $held\` frees it only if that review is abandoned)"
+        finish 3
+    fi
+    [[ $take == take && -z $held ]] && printf '%s\n' "$review" > "$CLAIM"
+    exec 8>&-
+}
 as_sbx() { cd / && /usr/sbin/runuser -u "$SBX" -- /srv/plugin-sandbox/bin/pod.sh "$@" < /dev/null 2>&1; }
 
 IFS= read -r -t 10 -n 4097 line || [[ -n ${line:-} ]] || { echo "plugin-sandbox: no request"; finish 2; }
@@ -65,6 +92,10 @@ export PLUGIN_SANDBOX_CALLER='e2e (socket)'
 
 case "$kind" in
 egress)
+    case "${rest[0]:-}" in
+    allow) claim "${rest[1]:-}" take ;;
+    reset) [[ -z $(claimant) ]] || { echo "plugin-sandbox: the sandbox is $(claimant)'s review: its allowances go with its \`pod down\`"; finish 3; } ;;
+    esac
     /usr/local/sbin/plugin-egress "${rest[@]}" < /dev/null 2>&1
     finish $?
     ;;
@@ -75,6 +106,7 @@ pod)
             echo "plugin-sandbox: the egress rule is not loaded (plugin-sandbox-firewall.service): no pod starts without it"
             finish 3
         fi
+        claim "${rest[1]:-}" take
         exec 9> /run/plugin-sandbox-up.lock
         flock -n 9 || { echo "plugin-sandbox: another pod is starting"; finish 3; }
         session_start || { echo "plugin-sandbox: the sandbox user's session did not start"; finish 3; }
@@ -82,6 +114,9 @@ pod)
         finish $?
         ;;
     down)
+        claim "${rest[1]:-}"
+        exec 9> /run/plugin-sandbox-up.lock
+        flock -n 9 || { echo "plugin-sandbox: a pod is starting: down it once its up has answered"; finish 3; }
         status=0
         if session_up; then
             as_sbx "${rest[@]}"
@@ -89,10 +124,13 @@ pod)
         fi
         /usr/local/sbin/plugin-egress reset < /dev/null 2>&1 || status=1
         session_stop
-        echo "down: the sandbox user's processes stopped"
+        rm -f "$CLAIM"
+        echo "down: the sandbox user's processes stopped, the claim released"
         finish $status
         ;;
     status)
+        held=$(claimant)
+        echo "claim: ${held:-free}"
         session_up || { echo "no sandbox pod: the sandbox user is idle"; finish 0; }
         as_sbx "${rest[@]}"
         finish $?
@@ -107,6 +145,7 @@ pod)
             session_stop
             finish 3
         fi
+        claim "${rest[1]:-}"
         session_up || { echo "plugin-sandbox: no sandbox pod is up"; finish 3; }
         as_sbx "${rest[@]}"
         finish $?

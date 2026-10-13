@@ -32,8 +32,11 @@
  * withdraws every egress allowance and stops every process of the sandbox
  * user. What the pod wrote (out/, in the sandbox user's home) is read only
  * through the socket, as the sandbox user, never through a symlink:
- * `show` prints it. `canary` is the acceptance test of the walls: re-run
- * it after any change to sandbox/ or the VM setup.
+ * `show` prints it. One review holds the sandbox at a time: its first
+ * `allow` or `up` claims it, its `down` releases it, and the dispatcher
+ * refuses every other review meanwhile (harness.md "The claim").
+ * `canary` is the acceptance test of the walls: re-run it after any
+ * change to sandbox/ or the VM setup.
  */
 process.env.PKP_E2E_LINE = process.env.PKP_E2E_LINE || 'stable-3_5_0';
 

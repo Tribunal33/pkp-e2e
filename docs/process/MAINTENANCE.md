@@ -964,7 +964,10 @@ user can read.
 6. **Tear down.** `down`, then `purge` once the report is pushed. A
    friction line, if one is owed, keeps the plugin's name out.
 
-One plugin review runs at a time: the sandbox has one pod.
+One plugin review runs at a time: the sandbox has one pod, held by the
+review that claimed it (harness.md "The claim"). A second review reads
+while the first drives, and stages and drives once `status` says
+`claim: free`.
 
 ## Coverage requests
 
