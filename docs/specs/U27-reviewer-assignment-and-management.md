@@ -3947,7 +3947,7 @@ quoted in the entry is `editor.review.errorAddingReviewer.dateValidationFailed`
 (note f), shown unchanged by "Add Reviewer", "Edit" and "Resend Review
 Request" after an inverted pair; the misspelling is in the shipped en
 locale on both lines.
-Issue report: [docs/issues/U27-A45-inverted-review-dates-notice-says-adding.md](../issues/U27-A45-inverted-review-dates-notice-says-adding.md).
+Issue report: [pkp-e2e#959](https://github.com/jardakotesovec/pkp-e2e/issues/959) ([docs/issues/U27-A45-inverted-review-dates-notice-says-adding.md](../issues/U27-A45-inverted-review-dates-notice-says-adding.md)).
 
 <a id="fn-a46"></a>
 **f-a46** — Live-probed 2026-10-05 (OJS and OMP, main and
@@ -3960,7 +3960,7 @@ date-validation notice (note f-a45). The window reads "Email to be sent
 to reviewer", "Do not send email to Reviewer.", "Important Dates" with the
 two pickers, and "Cancel" / "Resend Review Request", with no guidance
 sentence; "Add Reviewer" and "Edit" show it in the same runs.
-Issue report: [docs/issues/U27-A46-resend-inverted-dates-try-again-alert.md](../issues/U27-A46-resend-inverted-dates-try-again-alert.md).
+Issue report: [pkp-e2e#960](https://github.com/jardakotesovec/pkp-e2e/issues/960) ([docs/issues/U27-A46-resend-inverted-dates-try-again-alert.md](../issues/U27-A46-resend-inverted-dates-try-again-alert.md)).
 
 <a id="fn-a47"></a>
 **f-a47** — Mechanism: `ReviewAssignment::getStatus()` returns
