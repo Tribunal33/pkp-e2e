@@ -384,6 +384,11 @@ The three fields hold one text per form language of the journal (Rule
       confirmation ("Submission Confirmation"; on a preprint server
       "Submission Acknowledgement (Pending Moderation)") is a journal's,
       speaking of "la revue" ⚠ [A10](#a10).
+    - On a press the French body of "Editorial Reminder" reads
+      "{$journalName}" where the English one reads "{$contextName}", and
+      the reminder sent from it (by the scheduled task; no screen sends
+      it) prints that code as it stands to an editor who gets the press's
+      emails in French ⚠ [OMP3](#omp3).
 
     The seeded journal has one form language, so its fields hold one text
     and the window has no language button. <sup>u</sup>
@@ -865,6 +870,8 @@ Left out of the scenarios above, by reason:
     Rule 9)
   - OMP2 (a press's "Notify Primary Contact" with neither choice
     selected; Fields, the "Emails" tab; scenario 2 passes it)
+  - OMP3 (a press's French "Editorial Reminder" printing
+    "{$journalName}"; Rule 20)
   - OPS1 (the preprint server's initials placeholder described by a raw
     key; Rules 2, 14)
   - OPS2 ("Submission Accepted" listed on a preprint server; Rule 6;
@@ -918,6 +925,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A12](#a12) | In French (Canada), every row's button on "Manage Emails" reads "Edit" in English | 🐞 | minor | — |
 | [OMP1](#omp1) | On a press, "Edit" on the masthead email leaves the page stuck behind a spinner | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | On a press, "Notify Primary Contact" opens with neither "Yes" nor "No" selected | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [OMP3](#omp3) | On a press, the French "Editorial Reminder" prints "{$journalName}" where the press's name belongs | 🐞 | minor | — |
 | [OPS1](#ops1) | Preprint server emails: "Insert Content" describes the server's initials with a raw code | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Two filters of one block narrow the list instead of widening it | ❓ | minor | — |
 | [A6](#a6) | An edited one-template email can only be restored by "Reset All" | ❓ | user-visible | — |
@@ -1128,6 +1136,24 @@ journals and servers upgraded from 3.3, have no stored value: a new
 default fixes only presses created afterwards, and an upgrade step has
 to fill in the rest.
 Basis: probe, 2026-10-04. <sup>f-omp2</sup>
+
+<a id="omp3"></a>
+**OMP3 — On a press, the French "Editorial Reminder" prints "{$journalName}" where the press's name belongs** · 🐞 · minor.
+On a press with French (Canada) as a form language, "Edit" on "Editorial
+Reminder" in "Manage Emails" opens "Edit Template" with a French body
+that reads "… soumissions dans {$journalName}. Des actions sont …"; the
+English body reads "{$contextName}" there. The reminder a Press Manager
+assigned to a submission receives in French then reads "Vous êtes
+présentement assigné-e à {number} soumissions dans {$journalName}",
+the code printed as it stands and linked to the press's home page. Its
+subject, "Tâches éditoriales en attente pour {press name}", names the
+press. A journal's French reminder names the journal in the same
+sentence; a preprint server has no "Editorial Reminder".
+The French text is copied into the press's templates when French is
+added, so a corrected translation does not reach a press that already
+has French until a manager edits the body or an upgrade step rewrites
+the stored copy.
+Basis: probe, 2026-10-13. <sup>f-omp3</sup>
 
 ### OPS
 
@@ -1885,6 +1911,43 @@ arrival; the journal and the preprint server arrive at "No". OMP's
 `schemas/context.json` redefines `copySubmissionAckPrimaryContact`
 without lib/pkp's `default: false`.
 Issue report: [pkp-e2e#877](https://github.com/jardakotesovec/pkp-e2e/issues/877) ([docs/issues/U56-OMP2-press-notify-primary-contact-unselected.md](../issues/U56-OMP2-press-notify-primary-contact-unselected.md)).
+
+<a id="fn-f-omp3"></a>
+**f-omp3** — lib/pkp `locale/fr_CA/emails.po`
+`emails.editorialReminder.body` names `{$journalName}` on `main` and
+`stable-3_5_0`, and so does `stable-3_4_0`'s; OMP's own
+`locale/fr_CA/emails.po` has no text for it. `emailTemplate\DAO::installEmailTemplateLocaleData()`
+stores each language's text through `renameApplicationVariables()`,
+whose map is the app's `variablesToRename()`: OJS `journalName →
+contextName`, OMP `pressName → contextName`, OPS `serverName →
+contextName`. The `EditorialReminder` mailable fills `contextName`
+alone, so the code stays. OMP's 3.5 upgrade
+`I10962_UpdateEmailTemplateVariables` renames `pressName` and its
+siblings only. OPS registers no `EDITORIAL_REMINDER`. Live-probed
+2026-10-13, OJS (control) and OMP `main`, two runs each, on a scratch
+context with French (Canada) primary and English second under "UI" and
+"Forms", a manager assigned to one submission at the Submission stage,
+the manager's own language unset: "Edit Template" showed both
+languages' bodies, OMP's French body with `{$journalName}`, OJS's with
+`{$contextName}`. The routine task's job for that context alone
+(`EditorialReminder`) mailed the manager: OMP "Vous êtes présentement
+assigné-e à 1 soumissions dans {$journalName} ( …/index.php/{press}/fr_CA )",
+subject "Tâches éditoriales en attente pour {press name}"; OJS "… dans
+{journal name} ( … )". The job sends in the context's primary language
+unless the editor's own languages pick another the context offers
+(`EditorialReminder::getLocale()`); a French editor on an
+English-primary press was not driven. OPS's "Manage Emails" (17 rows)
+has no "Editorial Reminder". Not driven: lib/pkp `locale/nb_NO/emails.po`
+(`main`, `stable-3_5_0`; `locale/nb/emails.po` on `stable-3_4_0`) names
+`{$journalName}` in the bodies of `reviewAck`,
+`decision.notifyReviewers`, `decision.notifyOtherAuthors`,
+`editorDecisionSendToExternal`, `editorDecisionRevisions`,
+`editorDecisionResubmit` and the `editorialReminder` subject; OMP
+installs all seven templates, OPS only "Notify Other Authors", so a
+press or preprint server with Norwegian (Bokmål) is expected to print
+the code the same way. On `main` "Install Locale" offered no
+Norwegian (Bokmål) on 2026-10-13, all three apps, so it cannot be
+added there.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — `ContextEmailVariable::descriptions()` uses

@@ -445,6 +445,8 @@ empty statement changes: Rule 18 and Side effects. <sup>j</sup>
     ("…its presses and submissions to its presses.", "…its servers and
     submissions of preprints."). On a press it still opens "This press
     uses …" ⚠ [OMP2](#omp2). <sup>w</sup> <sup>td18</sup>
+    In a few languages the page shows the raw placeholder text, such as
+    "{$ ojsVersion}", where the version number should be ⚠ [A14](#a14).
 21. **The "Edit" link.** "About the Journal", "Contact", each
     Information page (under the heading) and "Editorial History" (below
     the lists, Rule 16) carry a link "Edit" for the users of Actors row
@@ -1072,6 +1074,7 @@ Left out of the scenarios above, by reason:
   - A10 (a reviewer whose submitted review was cancelled still listed under "Peer Reviewers in Previous Year"; Rule 15)
   - A11 (Hosted Journals "Edit" refused on a journal whose "Country" was never set; Settings bullet 8)
   - A13 (the invitation and the role-change email promising a masthead listing the journal does not show; Settings bullet 3)
+  - A14 (the page about the software in Russian on a press, and in Hindi and Uzbek on a journal, showing the version's placeholder; Rule 20)
   - OMP1 (Settings › Press headed "Setup"; Rule 1; scenario 2 marks it)
   - OPS2 ("Sponsoring organization" used nowhere; Fields; Rule 10)
   - OPS3 (a preprint server's French privacy default arriving as a raw text key; Fields)
@@ -1106,6 +1109,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the Submissions page, not the Privacy Statement page {OJS OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
+| [A14](#a14) | In Russian on a press, and in Hindi and Uzbek (Latin) on a journal, the page about the software shows "{$ompVersion, …" or "{$ ojsVersion}" instead of the version {OJS OMP} | 🐞 | minor | — |
 | [OMP2](#omp2) | On a site hosting several presses, the site's "About Open Monograph Press" page says "This press uses" {OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1256,6 +1260,27 @@ reviewers are promised the very listing that was made optional to
 protect them. The older promise for roles the masthead never lists:
 [User invitations A11](U06-user-invitations.md#a11).
 Since: 2026-09-28 · Basis: probe + code reading. <sup>f-a13</sup>
+
+<a id="a14"></a>
+**A14 — In Russian on a press, and in Hindi and Uzbek (Latin) on a journal, the page about the software shows "{$ompVersion, …" or "{$ ojsVersion}" instead of the version** {OJS OMP} · 🐞 · minor.
+A visitor who opens the page about the software (Rule 20) in another
+language expects the version number, as English gives it ("Open Journal
+Systems 3.6.0.0"). Three translations misspell the placeholder, so the
+page prints its raw text instead:
+
+- **Russian, on a press**: "{$ompVersion, которая является …" (the
+  closing brace left out), on the site's page and each press's page.
+- **Hindi, on a journal**: "{$ ojsVersion}" on the site's page; a
+  journal's own page shows the version. In both Hindi paragraphs the
+  link to PKP's website runs on to the end of the paragraph, so the
+  licence and everything after it is link text; on the site's page a
+  stray "<" shows inside that link text, and the journal's page has no
+  link to "Contact".
+- **Uzbek (Latin), on a journal**: "{$ ojsVersion}" on the site's page
+  and each journal's page.
+
+A journal in Russian shows the version. Each fix is one translated text.
+Basis: probe, 2026-10-13. <sup>f-a14</sup>
 
 ### OMP
 
@@ -2297,6 +2322,9 @@ Systems 3.6.0.0, which is open source preprint server management software
 "contact the server". From the site's own home: OJS and OPS "This site
 uses …", OMP "This press uses …", each ending as Rule 20 quotes, with no
 contact link.
+Re-read 2026-10-13 (Rule 20; OMP2; all three apps, two runs each): the
+same headings, paragraphs and links, the site's page reached from the
+PKP logo in the footer of the site's home; OMP's site had 11 presses.
 
 <a id="fn-x"></a>
 **x** — Senders: the journal's own mailables set their sender from the
@@ -2542,6 +2570,31 @@ reviewer role. Kept check
 Written up for the team in `docs/reports/2026-09-29-pkp-lib-13370.md` (a
 temporary report, deleted once acted on; git history keeps it); issue
 pkp/pkp-lib#13370.
+
+<a id="fn-f-a14"></a>
+**f-a14** — Live-probed 2026-10-13 (Rule 20; OJS and OMP `main`, two
+runs each; OPS ships no Russian, Hindi or Uzbek): signed out, the site's
+`index/<locale>/about/aboutThisPublishingSystem`, also reached from the
+footer logo of the site's home, and a scratch context's page in each
+language, after installing the languages on Administration › Site
+Settings › "Site Setup" › "Languages" › "Install Locale" (removed again
+afterwards). OMP `ru`: the site's and the press's pages, headed "Об Open
+Monograph Press", printed "{$ompVersion, которая является …" and no
+version; the press's "свяжитесь с издательством" link still led to its
+Contact page. OJS `hi`: the site's page printed "{$ ojsVersion}", its
+one link (to `http://pkp.sfu.ca/`) wrapping "सार्वजनिक ज्ञान परियोजना
+<द्वारा … के तहत ।"; the journal's page printed "3.6.0.0" with the same
+kind of link and no contact link. OJS `uz_Latn`: both pages printed
+"{$ ojsVersion}". OJS `ru` (the control): both pages printed "3.6.0.0".
+Mechanism: `LocaleBundle` replaces only the exact token
+`{$name}`, so a misspelt one prints as written. OMP `locale/ru/locale.po`
+`about.aboutOMPSite` and `about.aboutOMPPress` read `{$ompVersion,
+которая` with no closing brace; OJS `locale/hi/locale.po`
+`about.aboutOJSSite` and `locale/uz_Latn/locale.po` `about.aboutOJSSite`
+and `about.aboutOJSJournal` read `{$ ojsVersion}`. Read in the code:
+stable-3_5_0 carries the same texts, and stable-3_4_0 too (`uz@latin`);
+on stable-3_3_0 OMP's `ru_RU` leaves the text empty (English shows) and
+OJS's `hi_IN` site text is broken the same way.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `locale/en/locale.po` `manager.setup` "Setup" (OJS

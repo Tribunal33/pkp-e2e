@@ -20,6 +20,8 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
+- 2026-10-13 (housekeeping, U56 claim check C56, block C56-3 in `.reports/U56/cc-C56.md`): Administration › "Install Locale" no longer offers Norwegian Bokmål on OJS, OMP or OPS `main` (78/68/68 languages offered, none `nb_NO` or `nb`); the list comes from `lib/pkp/lib/weblateLanguages/languages.json`, downloaded at `composer install` from WeblateOrg/language-data `main`, which renamed `nb_NO` to `nb` on 2026-09-30 while PKP's locale folders stay `nb_NO`; the 3.5 checkout here (list built 2026-09-27) still offers it, so any 3.5 build made after 2026-09-30 likely loses it too. Not driven: an install that already uses Norwegian. Candidate for U57 (and a stable-line read).
+
 ## Sync log
 
 _Newest first; one entry per sync: the date and the range per repo, then
