@@ -1305,7 +1305,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A25](#a25) | A book's HTML file that links another book shows with every "omp://" link dead | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A26](#a26) | A review made public never shows on the published book's page | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A27](#a27) | A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
-| [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
+| [A24](#a24) | On a press, every file link on a book's preview opens "404 Not Found" | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
 | [A2](#a2) | A book published only as an Author's Original has no page | ❓ | minor | — |
 | [A21](#a21) | On a preview, "How to Cite" works only for the roles assigned to the book | ❓ | minor | — |
@@ -1631,15 +1631,19 @@ it is on a new press.
 Basis: probe, 2026-10-05. <sup>f-a23</sup>
 
 <a id="a24"></a>
-**A24 — On a preview, every file link of the book opens "404 Not Found"** · 🐞 · minor.
+**A24 — On a press, every file link on a book's preview opens "404 Not Found"** · 🐞 · medium.
 A preview of an unpublished book, or of a new version of a published
 one, lists the version's files as the published page will. Pressing any
-of them, "PDF" or "HTML", opens the "404 Not Found" page instead of the
-file's view page, for everyone who may open the preview, the Press
-manager, the Site Administrator and the book's Author included. Whoever
-checks a version before publishing it cannot read its files from the
-page that previews it.
-Basis: probe, 2026-10-05. <sup>f-a24</sup>
+of them opens the "404 Not Found" page instead of the file's view page.
+This happens for every file type, viewer or download, and for everyone
+who may open the preview: the press's managers and editors, its series
+editors and assistants, and the book's authors. On the published book's
+page the same links work.
+
+The files can still be downloaded from the book's workflow. What cannot
+be checked before publishing is the file as readers will get it, in its
+viewer.
+Basis: probe, 2026-10-13. <sup>f-a24</sup>
 
 <a id="a25"></a>
 **A25 — A book's HTML file that links another book shows with every "omp://" link dead** · 🐞 · medium.
@@ -2000,6 +2004,7 @@ Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283
 
 <a id="fn-f-a24"></a>
 **f-a24** — Note j: `CatalogBookHandler::download()`, which `view()` calls, answers not found for any publication that is not published and never asks `Repo::submission()->canPreview()`, where `book()` does (note c). Refused on OMP `main` and `stable-3_5_0` (walked 2026-10-04 for the issue report pkp-e2e#920, its Cause's reach) and on 3.4 and 3.3 (code, same report). Live-probed 2026-10-05 (Rule 5c; Actors row 3; two runs): a new version of a published book, its formats "PDF" (article.pdf) and "HTML" (article.html) copied with the version, links `catalog/view/{id}/version/{pubId}/{formatId}/{fileId}`: "HTML" and "PDF" pressed by the Press manager, an unassigned Series editor, an unassigned Copyeditor, the book's Author and the Site Administrator each opened "404 Not Found"; the workflow header's "Preview" led to the same page and links. A book never published (`catalog/view/{id}/{formatId}/{fileId}`): the same for the Press manager, a Series editor, the Author and the Site Administrator. A visitor typing those addresses: "404 Not Found". Control: the published version's "HTML" and "PDF" opened their view pages. A journal's and a server's new-version preview opened the "PDF" reader page (200), whose file request then answered 404 (Article landing page & reading, its Rule 12 and A2).
+Issue report: [docs/issues/U69-A24-book-preview-file-links-not-found.md](../issues/U69-A24-book-preview-file-links-not-found.md).
 
 <a id="fn-f-a25"></a>
 **f-a25** — OMP `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::handleOmpUrl()` passes `$urlParts[1]` (a string) as the path of `PKPRequest::url()`, whose path is `?array` since lib/pkp bee9547b49 (2024-06-26, the change behind A16); `Hook::call()` logs the plugin's TypeError and carries on, and `CatalogBookHandler::download()` then serves the file as stored, its `omp://` links unrewritten (before omp `8c807c919` it failed on A9's line instead). OJS's `htmlArticleGalley` twin passes a list. 3.5 (code): the same call in `HtmlMonographFilePlugin.php` against the same signature and the same hook catch. Fix shape as A16's: `[$urlParts[1]]`. The A16 issue report (pkp-e2e#284) names this caller in its Cause and leaves it out of its fix. Live-probed 2026-10-05 before omp `8c807c919` (Fields, the HTML view page; two runs; a visitor, a Reader and the Press manager): the file holding `omp://monograph/{id}` opened the tab "HTML view of the file i05-monograph-link-r1-omp.html", whose frame `catalog/download/{id}/{format}/{file}?inline=1` answered 500 and stayed empty; the log read "TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159", then "Uncaught Error: Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization in …/CatalogBookHandler.php:533". Re-probed the same day at omp `8c807c919` (A25's symptom; two runs; the same three users): a file holding "See also the other book and the press." with links `omp://monograph/{id}` and `omp://press` opened its HTML view page, its frame `catalog/download/{id}/{format}/{file}?inline=1` answering 200 `text/html` with the text shown; both links kept their `omp://` addresses, and pressing either changed neither the frame's nor the page's address, opened no tab and raised no page error; the server logged the TypeError above at each opening, and no request answered an error. The file whose only link is `omp://press` still had it rewritten to the press's home page and followed there. Control: td26.

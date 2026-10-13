@@ -1,0 +1,41 @@
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -422,9 +422,11 @@
+             }
+         }
+ 
++        // Serve 404 unless the publication is published, or the user may
++        // preview it (as book() allows for the publication's page)
+         if (
+             empty($publication) ||
+-            $publication->getData('status') !== PKPPublication::STATUS_PUBLISHED ||
++            ($publication->getData('status') !== PKPPublication::STATUS_PUBLISHED && !Repo::submission()->canPreview($request->getUser(), $submission)) ||
+             $publicationFormat->getData('publicationId') !== $publication->getId()
+         ) {
+             throw new NotFoundHttpException();
+--- a/plugins/generic/pdfJsViewer/templates/display.tpl
++++ b/plugins/generic/pdfJsViewer/templates/display.tpl
+@@ -82,8 +82,8 @@
+ 		{rdelim});
+ 	</script>
+ 
+-	<div id="pdfCanvasContainer" class="viewable_file_frame{if !$isLatestPublication} viewable_file_frame_with_notice{/if}">
+-		{if !$isLatestPublication}
++	<div id="pdfCanvasContainer" class="viewable_file_frame{if !$isLatestPublication && $filePublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED} viewable_file_frame_with_notice{/if}">
++		{if !$isLatestPublication && $filePublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED}
+ 			<div class="viewable_file_frame_notice">
+ 				<div class="viewable_file_frame_notice_message" role="alert">
+ 					{translate key="submission.outdatedVersion" datePublished=$filePublication->getData('datePublished') urlRecentVersion=$submissionUrl}
+--- a/plugins/generic/htmlMonographFile/templates/display.tpl
++++ b/plugins/generic/htmlMonographFile/templates/display.tpl
+@@ -38,8 +38,8 @@
+ 		</a>
+ 	</header>
+ 
+-	<div id="htmlContainer" class="viewable_file_frame{if !$isLatestPublication} viewable_file_frame_with_notice{/if}" style="overflow:visible;-webkit-overflow-scrolling:touch">
+-		{if !$isLatestPublication}
++	<div id="htmlContainer" class="viewable_file_frame{if !$isLatestPublication && $filePublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED} viewable_file_frame_with_notice{/if}" style="overflow:visible;-webkit-overflow-scrolling:touch">
++		{if !$isLatestPublication && $filePublication->getData('status') === PKP\publication\PKPPublication::STATUS_PUBLISHED}
+ 			<div class="viewable_file_frame_notice">
+ 				<div class="viewable_file_frame_notice_message" role="alert">
+ 					{translate key="submission.outdatedVersion" datePublished=$filePublication->getData('datePublished') urlRecentVersion=$submissionUrl}
