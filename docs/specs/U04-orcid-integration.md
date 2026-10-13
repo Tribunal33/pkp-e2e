@@ -87,9 +87,9 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
    starting with that value instead of the site's own address: the
    "Create or Connect your ORCID iD" popup on the profile and on the
    registration page, and the authorization link of the request emails
-   (Rule 14). With "https://example.com/" saved, the "redirect_uri" part
-   of the ORCID sign-in address those links open starts
-   "https://example.com/". The value applies whether or not the
+   (Rule 14). With "https://example.com/" or "https://example.com"
+   saved, the "redirect_uri" part of the ORCID sign-in address those
+   links open starts "https://example.com/". The value applies whether or not the
    site-wide box is ticked, and it leaves the journals' own ORCID tabs
    editable. Saved empty, the links use the site's own address again. <sup>b</sup>
 3. Site-wide configuration overrides the journals. Each journal's tab then
@@ -955,7 +955,7 @@ empty, the stored row was gone and the three addresses began with the
 site's own address again. Mechanism: `OrcidManager::buildOAuthUrl()`
 replaces the scheme and host of the redirect address with
 `getCustomRedirectUrl()` (the site's `orcidCustomRedirectBaseUrl`),
-whatever `isGloballyConfigured()` says.
+whatever `isGloballyConfigured()` says. At the PR heads of 2026-10-13 (pkp-lib `1836046394`, before their merge; OJS, OMP and OPS the same, on PKP's default test dataset), "https://example.com" saved without its closing slash gave the same addresses as "https://example.com/": `https://example.com/index.php/publicknowledge/orcid/authorizeOrcid?targetOp=profile` (`…targetOp=register` on the registration page, `…/orcid/verify?token=…` in the "Submission ORCID" email); at the first heads it had given `https://example.comindex.php/…` (Rule 2a).
 
 <a id="fn-c"></a>
 **c** — Profile: `PKP\user\form\IdentityForm::fetch()` assigns

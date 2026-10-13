@@ -1878,10 +1878,12 @@ unauthenticated iD, answered 200 with the publication and no warning
 in its body. Not driven: ORCID off (the gate above; the windows probed
 since 2026-08-29 at the install default, ORCID off, carried no list);
 one verified and one unauthenticated holder of the same iD (the code
-reads it as a duplicate when the verified one is listed first). What a journal's
-window lists when the Crossref plugin has lines of its own and an
-ORCID line is due went to the team with the PR's review (2026-10-09)
-and is not claimed here. Kept check
+reads it as a duplicate when the verified one is listed first). With the Crossref plugin's
+deposit lines due as well (Crossref the agency, a version with no DOI),
+the list holds the ORCID line first, then Crossref's: driven at the PR
+heads of 2026-10-13 (pkp-lib `1836046394`, pkp/crossref-ojs#115
+`548e65b58c` through ojs#5920 `fec26d01f3`), before their merge, on
+PKP's default dataset (OJS, submission 6). Kept check
 `shared/playwright/checks/sync/pkp-lib-13493/publish-warning.js`.
 Confirmation strings: OJS
 `publication.publish.confirmation[.backIssue|.continuousPublication|.issueLess|.futureIssue]`
