@@ -234,8 +234,12 @@ wish to delete this item? This action cannot be undone." and the buttons
   the galley's language added in brackets when it is not the language
   the reader is browsing in. A galley's reader address ends in its URL
   Path instead of its number when one is set. A remote galley's link
-  opens the remote address. Which galleys the page lists, and under which
-  heading, is *Article landing page & reading*'s. <sup>p</sup> <sup>q17</sup>
+  opens the remote address. On a journal, the full text a signed-out
+  reader sees on an HTML galley's reader page can be a copy that one
+  crafted visit planted for every later signed-out reader
+  ⚠ [OJS2](#ojs2). Which
+  galleys the page lists, and under which heading, is *Article landing
+  page & reading*'s. <sup>p</sup> <sup>q17</sup>
 - **Files deleted.** Deleting a galley deletes its file and the file's
   dependent files (Rule 9). <sup>k</sup>
 - **No email, no notice of its own.** Adding, editing, ordering or
@@ -680,6 +684,8 @@ Left out of the scenarios above, by reason:
     Rule 11)
   - A4 and OJS1 (deleting the published version's galley after a new
     version copied it; Rule 11)
+  - OJS2 (an HTML galley's copy for signed-out readers made by one
+    crafted visit; Side effects, "What readers see")
 - **Owned by another feature**:
   - the roles the side menu does not offer the page (Actors row 1;
     *Workflow screen & stage access*, scenario 4)
@@ -712,6 +718,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Until an order is saved, editing a galley moves it to the end of the list | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A good "Save" in the galley window shows an earlier refused "URL Path" as a red notice | 🐞 | low || issues (claude), 2026-10-12 — re-verified |
 | [OJS1](#ojs1) | Deleting a published galley that a new version copied fails with an error | 🐞 | high · crash: server · crash: script | issues (claude), 2026-10-02 — re-verified |
+| [OJS2](#ojs2) | One crafted visit decides what an HTML galley shows every later signed-out reader for a day, including markup that runs on the journal's site | 🐞 | user-visible | — |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | A preprint's Author manages the galleys while they may edit the preprint; a journal's Author never does | ✅ | — | issue report (claude), 2026-10-02 — rescoped to the Author |
@@ -834,6 +841,24 @@ later, as on a preprint server, the delete goes through without a word
 and takes the copy's file with it ([A4](#a4)). A published galley that
 no version copied, and the copy itself, delete cleanly.
 Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
+
+<a id="ojs2"></a>
+**OJS2 — One crafted visit decides what an HTML galley shows every later signed-out reader for a day, including markup that runs on the journal's site** · 🐞 · user-visible.
+Signed-out readers of a published HTML galley are served a copy the
+journal keeps for a day, made at the first signed-out visit. Where the
+configuration file's list of allowed host names is empty, that visit
+can be crafted: sent by hand, its host header names another site. That
+host value goes unescaped into the copy's image and file addresses, so
+later signed-out readers that day get images from that site, or markup
+carried in the value running in the article page's galley frame on the
+journal's own site. Signed-in visitors always get the galley fresh, so
+the editorial side does not see it; "Change File" does not clear the
+copy. The test install, like any the installer set up, lists its own
+host there and refuses another with a bare page reading "Server host
+not allowed"; the list is empty where the file came from the app's
+template or an older version. Expected: every reader gets the galley
+as the journal published it. Security: unreleased.
+Since: 2026-07-13 · Basis: probe, 2026-10-13. <sup>f-ojs2</sup>
 
 ### OPS
 
@@ -1524,6 +1549,49 @@ with no error. Controls on both apps: a published galley no version
 copied, and the copy itself, deleted cleanly.
 Issue report: [pkp-e2e#618](https://github.com/jardakotesovec/pkp-e2e/issues/618) ([docs/issues/U46-A4-OJS1-new-version-galley-shares-published-file.md](../issues/U46-A4-OJS1-new-version-galley-shares-published-file.md)).
 
+<a id="fn-f-ojs2"></a>
+**f-ojs2** — `HtmlArticleGalleyPlugin::articleDownloadCallback()` serves
+a signed-out request `Cache::remember('htmlArticleGalley-' .
+$galley->getId(), 60 * 60 * 24, …)`: keyed on the galley id alone, a
+day long; a signed-in request always calls
+`HtmlGalleyHelper::getHTMLContents()`. That method rewrites each
+dependent and publication media file's reference with `$request->url(…)`
+and writes the result into `src`/`href`/`data`/`url(…)` unescaped;
+`PKPRequest::getServerHost()` takes `X-Forwarded-Host` before `Host`,
+so a quote in the header's value ends the attribute and the rest of
+the value lands in the copy as markup. Nothing calls `Cache::forget`
+for the key, so a new file does not clear it. With `[general]
+allowed_hosts` set, `AllowedHostsPolicy::callOnDeny()` answers a
+foreign host 400 with the bare page `<h1>400 Server host not allowed</h1>` before the plugin
+runs; `PKPInstall` writes the install's own host there,
+`config.TEMPLATE.inc.php` ships it empty. The test install's configs
+set it: the harness writes `["127.0.0.1","127.0.0.1:<port>"]`
+(`make-test-config.js`, and `dataset.js` over the dataset's own
+`["localhost"]`), so a check there empties it in the fleet's
+`config.inc.php` first. With `[security]
+filter_galley_html` On (Off in the template) the sanitizer runs before
+the copy is stored; not read further. Introduced by ojs `04ff2f998c`
+(Alec Smecher, 2026-07-13, pkp/pkp-lib#12752 "Cache HTML body for users
+who are not logged in"); `stable-3_5_0`'s plugin has no `Cache::` call,
+so 3.5 and earlier do not have the fault. Live-probed in the
+maintainer's own session, 2026-10-12/13, OJS `main` (ojs `1b0f84edae`,
+lib/pkp `3bcc0a0cb2`), with `allowed_hosts` empty: one signed-out
+request sent by hand for the galley's download address (the one the
+reader page's frame loads) while no copy was held, with an
+`X-Forwarded-Host` naming another host, filled the copy (a browser's
+address bar cannot set that header); every later signed-out reader got
+the planted markup, and a harmless marker ran in
+the article page's unsandboxed, same-origin galley frame; a plain host
+name instead pointed every image at that host. Code re-read 2026-10-13
+on OJS `main` (ojs `7c6fba2064`, lib/pkp `f4c2578c94`), unchanged; not
+re-driven here. Fix proposed with the row: key the copy on the host
+too, or build the addresses from the configured base URL, escape them,
+and clear the copy when the galley's file changes. By the same code, a
+file replaced with "Change File" would reach signed-out readers only
+when the day's copy expires; not driven. Security-shaped and
+unreleased: its issue report carries "- **Security** unreleased"
+(REPORT.md).
+
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes b, c and l: OPS `PreprintGalleyGridHandler::canEdit()`
 (`7d9c84e9b6`, 2025-05-28, pkp/pkp-lib#10263; `ab4b990d96`, 2026-09-08,
@@ -1601,5 +1669,5 @@ Files" list (*Submission wizard*). Recorded in UNASSIGNED.md.
 - Legacy grids and forms: `ojs/controllers/grid/articleGalleys/{ArticleGalleyGridHandler,ArticleGalleyGridRow,ArticleGalleyGridCellProvider}.php`, `form/ArticleGalleyForm.php`; `ops/controllers/grid/preprintGalleys/{PreprintGalleyGridHandler,PreprintGalleyGridRow,PreprintGalleyGridCellProvider}.php`, `form/PreprintGalleyForm.php`; `templates/controllers/grid/{articleGalleys,preprintGalleys}/editFormat.tpl`, `form/{articleGalleyForm,preprintGalleyForm}.tpl`; `lib/pkp/js/controllers/grid/representations/form/RepresentationFormHandler.js`; `lib/pkp/classes/controllers/grid/feature/OrderGridItemsFeature.php`
 - Model: `lib/pkp/classes/galley/{Galley,Repository,Collector,DAO}.php`; `ojs/schemas/galley.json`, `ops/schemas/galley.json`; `ojs|ops/classes/publication/Repository.php` (`version()`, `delete()`, DOI minting)
 - Upload: `lib/pkp/controllers/wizard/fileUpload/form/SubmissionFilesUploadForm.php` (revision path)
-- Reader: `ojs/pages/article/ArticleHandler.php`, `ops/pages/preprint/PreprintHandler.php`, `templates/frontend/objects/galley_link.tpl`
+- Reader: `ojs/pages/article/ArticleHandler.php`, `ops/pages/preprint/PreprintHandler.php`, `templates/frontend/objects/galley_link.tpl`; the HTML reader's signed-out copy (OJS2): `ojs/plugins/generic/htmlArticleGalley/HtmlArticleGalleyPlugin.php`, `classes/HtmlGalleyHelper.php`; `lib/pkp/classes/core/PKPRequest.php` (`getServerHost()`), `lib/pkp/classes/security/authorization/AllowedHostsPolicy.php`
 - Unreached: `lib/pkp/pages/authorDashboard/PKPAuthorDashboardHandler.php` (`representationsGridUrl`), `ojs|ops/pages/authorDashboard/AuthorDashboardHandler.php` and `ops/pages/workflow/WorkflowHandler.php` (`_getRepresentationsGridUrl()`)
