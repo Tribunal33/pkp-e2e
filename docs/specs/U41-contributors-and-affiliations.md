@@ -2644,7 +2644,7 @@ ticking the language again), the submission wizard's step, a second
 "Save", and whether "Save" is disabled after the refusal. A7's report
 names this refusal as a fault of its own that its fix does not cover
 (counted there it would rate medium); no issue report covers it yet.
-Issue report: [docs/issues/U41-A28-affiliation-dropped-language-save-refused.md](../issues/U41-A28-affiliation-dropped-language-save-refused.md).
+Issue report: [pkp-e2e#953](https://github.com/jardakotesovec/pkp-e2e/issues/953) ([docs/issues/U41-A28-affiliation-dropped-language-save-refused.md](../issues/U41-A28-affiliation-dropped-language-save-refused.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP
