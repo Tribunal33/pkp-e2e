@@ -2292,7 +2292,7 @@ the `TypeError` in `CategoryCategoryController.php` (`main`). A damaged
 JPG or GIF passes the same header check and fails the same decode
 (checked outside the app, not walked). Kept script:
 `shared/playwright/checks/issues/series-damaged-cover-save-hangs/walk.js`.
-Issue report: [docs/issues/U17-OMP10-series-damaged-cover-save-hangs.md](../issues/U17-OMP10-series-damaged-cover-save-hangs.md).
+Issue report: [pkp-e2e#952](https://github.com/jardakotesovec/pkp-e2e/issues/952) ([docs/issues/U17-OMP10-series-damaged-cover-save-hangs.md](../issues/U17-OMP10-series-damaged-cover-save-hangs.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read
