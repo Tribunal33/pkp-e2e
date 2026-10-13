@@ -951,7 +951,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A14](#a14) | On a journal with one contributor role, adding or editing any contributor fails with an error | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A20](#a20) | "Add Contributor" never saves when a "Forms" language is not a metadata language | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A24](#a24) | An "Add Contributor" refused for an institution's missing name still adds the contributor, so the corrected save lists the same person twice | 🐞 | user-visible | — |
+| [A24](#a24) | A refused "Add Contributor" still saves the contributor, so correcting it lists the person twice | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A28](#a28) | Once a journal stops taking a language for metadata, a contributor whose institution is named in it cannot be saved, and the form shows no reason | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A7](#a7) | A refused affiliation reads "Go to Affiliations: [object Object]" to screen-reader users of the contributor form | 🐞 | low | issues (claude), 2026-10-08 — re-verified |
 | [A9](#a9) | On an article, book or preprint page, screen readers announce the ROR logo beside an affiliation or funder as an unnamed link | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1321,26 +1321,26 @@ Only a reload before reopening puts the stored names back. The same as
 Since: 2025-11-11 (10½ months) · Basis: probe, 2026-10-03. <sup>f-a22</sup>
 
 <a id="a24"></a>
-**A24 — A refused "Add Contributor" still adds the contributor, so the corrected save adds a second one** · 🐞 · user-visible.
-"Add Contributor" is refused when an institution entered by hand has
-no name in the submission's language (its name box emptied under "Edit
-institution name"). The panel stays open with "Please provide
-affiliation name in the submission primary locale." under the field,
-and the page says "The form was not saved because 1 error(s) were
-encountered. Please correct these errors and try again." Yet the
-contributor is already
-saved on the version, without the institution, and the list behind the
-panel does not show it.
+**A24 — A refused "Add Contributor" still saves the contributor, so correcting it lists the person twice** · 🐞 · medium.
+"Add Contributor" is refused when an institution entered by hand has no
+name in the submission's language. The panel stays open with "Please
+provide affiliation name in the submission primary locale." under the
+field. Yet the server has already saved the new contributor, without the
+institution, and the list behind the panel does not show that
+contributor.
 
 Typing the name back and pressing "Save" adds the contributor a second
 time: the list then shows the same person on two rows, and only the
-second row's "Edit" lists the institution. Leaving by "Close" instead
-keeps the contributor the refusal saved, who appears in the list after a
-reload. An editor in the workflow and an author on the submission
-wizard's "Contributors" step get it alike. A refused "Edit" saves
-nothing. A failed add on a one-role journal leaves a contributor behind
-the same way ([A14](#a14)).
-Basis: probe, 2026-10-07. <sup>f-a24</sup>
+second row's "Edit" lists the institution. Pressing "Close" instead does
+not undo the first save: after a reload, the contributor appears in the
+list without the institution.
+
+The refusal needs a deliberate edit. A typed institution always fills
+the submission's language first, whatever the interface language, and
+"Add" stays disabled until it does. The name in that language must then
+be cleared under "Edit institution name", for example to keep only a
+translation.
+Basis: probe, 2026-10-13. <sup>f-a24</sup>
 
 <a id="a25"></a>
 **A25 — Only the first CRediT row's drop-downs are tied to their labels** · 🐞 · minor.
@@ -2519,6 +2519,7 @@ an error, with no transaction around the two; `editContributor()`
 validates the affiliations before `Repo::author()->edit()`. A14's
 role-less contributors come from the same early insert (f-a14).
 `stable-3_5_0` not driven.
+Issue report: [docs/issues/U41-A24-refused-add-contributor-saved-twice.md](../issues/U41-A24-refused-add-contributor-saved-twice.md).
 
 <a id="fn-f-a25"></a>
 **f-a25 — A25 evidence.** Live-probed 2026-10-07 (Fields "CRediT roles

@@ -1,0 +1,65 @@
+--- a/lib/pkp/api/v1/submissions/PKPSubmissionController.php
++++ b/lib/pkp/api/v1/submissions/PKPSubmissionController.php
+@@ -30,6 +30,7 @@
+ use Illuminate\Http\Request;
+ use Illuminate\Http\Response;
+ use Illuminate\Support\Enumerable;
++use Illuminate\Support\Facades\DB;
+ use Illuminate\Support\Facades\Mail;
+ use Illuminate\Support\Facades\Route;
+ use Illuminate\Support\LazyCollection;
+@@ -1626,26 +1627,38 @@
+         $affiliationParams = $params['affiliations'];
+         unset($params['affiliations']);
+         $author = Repo::author()->newDataObject($params);
+-        $newId = Repo::author()->add($author);
+ 
+-        $affiliations = $newAffiliationErrors = [];
+-        foreach ($affiliationParams as $position => $affiliationParam) {
+-            $affiliationParam['authorId'] = $newId;
+-            $affiliationErrors = Repo::affiliation()->validate(null, $affiliationParam, $submission, $submissionContext);
+-            // Map errors to the specific affiliation in the UI using the position = index
+-            if (!empty($affiliationErrors)) {
+-                $newAffiliationErrors['affiliations'][$position] = $affiliationErrors;
++        // The affiliations are validated against the new author's id, so the author is
++        // inserted first. Roll it back when an affiliation is refused: a refused request
++        // must store nothing.
++        DB::beginTransaction();
++        try {
++            $newId = Repo::author()->add($author);
++
++            $affiliations = $newAffiliationErrors = [];
++            foreach ($affiliationParams as $position => $affiliationParam) {
++                $affiliationParam['authorId'] = $newId;
++                $affiliationErrors = Repo::affiliation()->validate(null, $affiliationParam, $submission, $submissionContext);
++                // Map errors to the specific affiliation in the UI using the position = index
++                if (!empty($affiliationErrors)) {
++                    $newAffiliationErrors['affiliations'][$position] = $affiliationErrors;
++                }
++                $affiliation = Repo::affiliation()->newDataObject($affiliationParam);
++                $affiliations[] = $affiliation;
+             }
+-            $affiliation = Repo::affiliation()->newDataObject($affiliationParam);
+-            $affiliations[] = $affiliation;
+-        }
+ 
+-        if (!empty($newAffiliationErrors)) {
+-            return response()->json($newAffiliationErrors, Response::HTTP_BAD_REQUEST);
+-        }
++            if (!empty($newAffiliationErrors)) {
++                DB::rollBack();
++                return response()->json($newAffiliationErrors, Response::HTTP_BAD_REQUEST);
++            }
+ 
+-        foreach ($affiliations as $affiliation) {
+-            Repo::affiliation()->add($affiliation);
++            foreach ($affiliations as $affiliation) {
++                Repo::affiliation()->add($affiliation);
++            }
++            DB::commit();
++        } catch (\Throwable $e) {
++            DB::rollBack();
++            throw $e;
+         }
+ 
+         $author = Repo::author()->get($newId);
