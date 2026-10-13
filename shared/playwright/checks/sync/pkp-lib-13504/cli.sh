@@ -8,6 +8,8 @@
 #
 #   npm run fleet-prep -- --feature sync-13503 --dataset 1 --reset --apps <app>
 #   shared/playwright/checks/sync/pkp-lib-13504/cli.sh <ojs|omp|ops> [feature]
+# Round 2 (PR head c3a89aa3e3): `repair --status=processed` is refused, scope IDs that are not digits are
+# refused by name, `queue` goes in ascending submission ID order, a lookup-off context gets its own note.
 #
 # Output: .reports/<feature>/cli-<app>-<lib/pkp sha>.txt
 set -uo pipefail
@@ -49,12 +51,15 @@ tool -h
 tool status context 999
 tool status submission 999
 tool status submission abc
+tool status context 1x
+tool queue submission 1 -3
 tool status context
 tool status journal 1
 tool queue --limit=0
 tool queue --limit=x
 tool repair
 tool repair --status=bogus
+tool repair --status=processed
 
 echo; echo "# lookup off, as the dataset arrives"
 tool status
@@ -64,6 +69,7 @@ echo; echo "# lookup on"
 lookup 1
 tool status
 tool queue --limit=1
+echo "  submissions queued: $(q "select string_agg(distinct p.submission_id::text, ',') from citations c join publications p on p.publication_id = c.publication_id join citation_settings cs on cs.citation_id = c.citation_id and cs.setting_name = 'processingStatus' and cs.setting_value = '-2'") (lowest $(q 'select min(submission_id) from submissions'), highest $(q 'select max(submission_id) from submissions'))"
 tool queue --limit=1
 tool queue --limit=3
 tool queue submission "$multi"
