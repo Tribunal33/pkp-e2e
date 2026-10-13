@@ -78,7 +78,7 @@ top to bottom: <sup>d</sup> <sup>td1</sup>
 | "Path" | yes | Under it: "The category's URL will be: {address}", the journal's address followed by "catalog/category/path" ("preprints/category/path" on a preprint server): the last word stays "path" whatever the box holds, also in "Edit Category" for a saved category ⚠ [A21](#a21). Letters, digits, "-", "_", "." and "/" are accepted; anything else is refused with "The category path must consist of only letters and numbers." ⚠ [A9](#a9). A path another category of the journal already has is refused with "The category path already exists. Please enter a unique path." A path that differs from another only in letter case is accepted ("ARTS" beside "arts"), and each address opens its own category. A path containing "/" is saved, and every link prints it ("sci%2Fphys"), but following one opens the page of the category whose path is the part before the "/" ("Slashed", path "sci/phys", opens "Science"), or the not-found page of Rule 13 when there is none ⚠ [A8](#a8). What the path does: Rule 5 <sup>d</sup> <sup>td2</sup> |
 | "Description" | no | Formatted text per language with the buttons "Bold", "Italic", "Superscript", "Subscript", "Insert/edit link" and "Blockquote". Shown on the category's page (Rule 9) <sup>d</sup> |
 | "Order of articles" ("Order of monographs" on a press, "Order of preprints" on a preprint server) | always has a value | A list under "Choose how to order articles in this category." ("…books…", "…preprints…"): "Title (A-Z)", "Title (Z-A)", "Publication date (oldest first)" and "Publication date (newest first)", the last preselected on a new category; a press adds "Series position (lowest first)" and "Series position (highest first)". What it changes: Rule 10 <sup>d</sup> |
-| "Cover Image" | no | An upload box for a .jpg, .png or .gif picture, with its "Alternate text" box once a picture is in; the box works as the upload boxes of [Appearance & theming](U10-appearance-and-theming.md) (Fields) describe. A file of another type is refused as it is dropped ("You can't upload files of this type."); a file named as a picture but holding none is refused at "Save" with "An invalid image was uploaded. Accepted formats are .png, .gif, or .jpg.", after leaving a broken preview ⚠ [A17](#a17). Shown on the category's page (Rule 12) <sup>d</sup> |
+| "Cover Image" | no | An upload box for a .jpg, .png or .gif picture, with its "Alternate text" box once a picture is in; the box works as the upload boxes of [Appearance & theming](U10-appearance-and-theming.md) (Fields) describe. A file of another type is refused as it is dropped ("You can't upload files of this type."); a file named as a picture but holding none is refused at "Save" with "An invalid image was uploaded. Accepted formats are .png, .gif, or .jpg.", after leaving a broken preview ⚠ [A17](#a17). A picture whose data is damaged uploads like a sound one, and "Save" then fails with "An unexpected error has occurred. Please reload the page and try again.": a new category is created without the picture ⚠ [A24](#a24). Shown on the category's page (Rule 12) <sup>d</sup> |
 | "Editorial Assignments" {OJS OMP} | no | A group under "Select the editorial users who should be assigned automatically to all new submissions to this category.", with one list of boxes per role that works on the Submission stage at the manager, Section Editor or assistant level and has at least one member (on a journal the lists "Journal editor", "Section editor", "Guest editor" and "Funding coordinator"; on a press "Press editor", "Series editor" and "Funding coordinator"; the Journal Manager, Production Editor and Copyeditor roles are not among them), each list headed by the role's name and each box reading "Assign {name} as {role}". What a tick does: Rule 18. With none of those roles held by anyone, the heading and sentence show with no box under them; a preprint server is always in that state ⚠ [OPS1](#ops1) <sup>k</sup> <sup>td3</sup> |
 
 **The delete dialog** (a row's "More Actions" › "Delete Category"). Headed
@@ -872,7 +872,15 @@ Left out of the scenarios above, by reason:
   - a category's "Path" refused with a message that names the characters
     a saved path may hold ([A9](#a9)): the guard the issue report
     proposes
-   - the guard for A22 (issue report `docs/issues/U16-A22-category-no-picture-address-never-loads.md`): once fixed, the small picture's address of a category with no picture answers "404 Not Found" on a journal and a preprint server.
+  - {OJS OPS} the small picture's address of a category with no picture
+    answering "404 Not Found" ([A22](#a22)): the guard the issue report
+    proposes
+  - a PNG whose picture data is cut short, which uploads like a sound
+    one (not a file holding no picture, [A17](#a17)), as a category's "Cover
+    Image" refused at "Save" with "An invalid image was uploaded.
+    Accepted formats are .png, .gif, or .jpg." under "Cover Image", and
+    no category created ([A24](#a24)): the guard the issue report
+    proposes
 - **Register carries it**:
   - A2 ("Order of articles" set to another choice, with no effect on the
     page; Rule 10; Settings bullet 3)
@@ -903,6 +911,8 @@ Left out of the scenarios above, by reason:
   - A22 (the small copy's address typed for a category with no picture;
     Rule 12a)
   - A23 (a page number typed past a category's last page; Rule 9a)
+  - A24 (a damaged PNG as a category's "Cover Image"; Fields, "Cover
+    Image")
   - OMP1 ("Cover Image Max Width" and "Cover Image Max Height" changed,
     with no picture shown to size; Settings bullet 6)
   - OMP3 (the press's "Browse" for a screen reader; Fields, the "Browse"
@@ -963,6 +973,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | With the "Browse" block in a journal's sidebar, every page's breadcrumb gets a grey bar | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A22](#a22) | The picture address of a category with no picture never finishes loading on a journal or preprint server | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A23](#a23) | A category page number typed past the last page opens a page with no articles, reading "26 - 1 of 1 items", instead of "404 Not Found" | 🐞 | minor | — |
+| [A24](#a24) | A damaged PNG as a category's "Cover Image" fails "Save" halfway, with "An unexpected error has occurred"; a new category is saved without the picture | 🐞 | medium · crash: server | — |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1243,6 +1254,22 @@ behind when the category lost articles or "Items per page" grew. It is
 the same fault as a preprint server's "Archives" page past its last one
 ([Sections](U17-sections.md#ops5), its OPS5). (Rule 9a)
 Basis: probe, 2026-10-02. <sup>f-a23</sup>
+
+<a id="a24"></a>
+**A24 — A damaged PNG as a category's "Cover Image" fails "Save" halfway, with "An unexpected error has occurred"** · 🐞 · medium · crash: server.
+A manager picks, as a category's "Cover Image", a PNG whose picture data
+is damaged (a broken download, a cut-off export). It uploads like any
+picture, but "Save" then fails on the server: the page shows "An
+unexpected error has occurred. Please reload the page and try again."
+and the window stays open. The save has stopped halfway: after a reload
+a new category is in the "Categories" tab without the picture, and an
+existing category keeps the picture it had. The manager should read "An
+invalid image was uploaded. Accepted formats are .png, .gif, or .jpg."
+under "Cover Image", with nothing saved. On 3.5 the window stays open
+with no message at all, and an existing category's picture is lost: the
+reopened category shows a broken picture. A press's series window fails from
+the same cause ([Sections](U17-sections.md#omp10), its OMP10).
+Basis: probe, 2026-10-13. <sup>f-a24</sup>
 
 ### OMP
 
@@ -2233,6 +2260,39 @@ end: OJS `IssueHandler::archive()` (pkp/pkp-lib#10596) and OPS
 does not (U17 OPS5), nor OMP's catalog and series pages (U68 A10, an open
 question there). No issue report covers the category page: U17 OPS5's
 report names it as not read.
+
+<a id="fn-f-a24"></a>
+**f-a24** — Note d. lib/pkp `Category\Repository::validate()` accepts the
+upload on `getimagesize()`, which reads only the picture's header;
+`CategoryCategoryController::saveCategory()` stores the category before
+`generateThumbnail()` decodes the picture: `imagecreatefrompng()` returns
+false on the damaged data and `imagecopyresampled()` throws. An existing
+cover survives on `main` only by accident: the controller reads the old
+cover only when no new file is sent, so it never deletes the old files.
+3.5's grid `CategoryForm` (lib/pkp
+`controllers/grid/settings/category/form/CategoryForm.php`) stores the
+category, deletes the old files, then fails the same way. Walked
+2026-10-13 on PKP's default test dataset as `rvaca`, `main` (OJS, OMP,
+OPS) and `stable-3_5_0` (the three; "History" on OPS 3.5), with a 2×3
+PNG whose image-data checksum is wrong. On `main`, "Add Category" with
+the damaged picture: `POST {context}/api/v1/categories` answered 500
+`{"error":"imagecopyresampled(): Argument #2 ($src_image) must be of
+type GdImage, false given"}`, the notice "An unexpected error has
+occurred. Please reload the page and try again.", the window open; after
+a reload the category listed, stored with no `image`. "Applied Science"
+given a sound PNG ("Category saved"), then the damaged one: the same 500,
+and after a reload its picture still answered 200 image/png. On 3.5 both
+saves answered 500 with an empty body, the window open with no notice;
+after the reload the new category listed without a picture, and
+"Applied Science"'s "Current Image" (`catalog/thumbnail?type=category&id=1`,
+`preprints/…` on OPS) answered 200 with an empty body where it had
+answered a 97-byte PNG. The server logged at each damaged save
+`imagecreatefrompng(): gd-png: fatal libpng error: IDAT: CRC error`, then
+the `TypeError` in `CategoryCategoryController.php` (`main`). A damaged
+JPG or GIF passes the same header check and fails the same decode
+(checked outside the app, not walked). Kept script:
+`shared/playwright/checks/issues/series-damaged-cover-save-hangs/walk.js`.
+Issue report: [docs/issues/U17-OMP10-series-damaged-cover-save-hangs.md](../issues/U17-OMP10-series-damaged-cover-save-hangs.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read

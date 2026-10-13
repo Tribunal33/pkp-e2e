@@ -1,0 +1,13 @@
+--- a/lib/pkp/classes/category/Repository.php
++++ b/lib/pkp/classes/category/Repository.php
+@@ -243,7 +243,9 @@
+                     !($temporaryFileManager->getImageExtension($temporaryFile->getFileType())) ||
+                     !($sizeArray = getimagesize($temporaryFile->getFilePath())) ||
+                     $sizeArray[0] <= 0 ||
+-                    $sizeArray[1] <= 0
++                    $sizeArray[1] <= 0 ||
++                    // getimagesize() reads only the header: check that the picture itself can be read before the category is stored
++                    !@imagecreatefromstring(file_get_contents($temporaryFile->getFilePath()))
+                 ) {
+                     $validator->errors()->add('image', __('form.invalidImage'));
+                 }

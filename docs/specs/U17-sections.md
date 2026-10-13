@@ -938,6 +938,10 @@ Left out of the scenarios above, by reason:
     server refuses answered with the "An invalid image was uploaded."
     notice, the series' other edits kept in the open window
     ([OMP3](#omp3)): the guard the issue report proposes
+  - {OMP} a damaged PNG as a series' "Cover Image" refused with "An
+    invalid image was uploaded. Accepted formats are .png, .gif, or
+    .jpg.", nothing stored and an existing cover kept ([OMP10](#omp10)):
+    the guard the issue report proposes
   - {OMP} the ISSN paragraph in the series window reading "which
     identifies" ([OMP7](#omp7)): the guard the issue report proposes
   - {OMP} the series list's "Inactive" box asking "…deactivate this
@@ -1103,7 +1107,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP7](#omp7) | The ISSN help in a press's series window reads "which identifying" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP8](#omp8) | The help under a series' "Path" shows an address ending in the word "Path", never the series' own | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP9](#omp9) | A series' public page shows no name, description or ISSN, and lists the books newest first whatever the series' order | 🐞 | user-visible | — |
-| [OMP10](#omp10) | A series "Save" with a damaged PNG as its cover never answers; the other changes are saved, and a cover the series had turns into a broken picture | 🐞 | minor · crash: server | — |
+| [OMP10](#omp10) | A damaged PNG as a series' cover leaves "Save" hanging, with half of it saved | 🐞 | medium · crash: server | issues (claude), 2026-10-13 — re-verified |
 | [OPS1](#ops1) | A preprint server with nothing posted shows a blank "Archives" page, with no message | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS2](#ops2) | Preprint server sections: the "Identify items posted in this section as a(n)" box has no examples and no effect | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS5](#ops5) | A typed "Archives" page number past the last page opens an empty page instead of "404 Not Found" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1389,20 +1393,21 @@ regression, not a choice.
 Since: 2026-08-26 (one month) · Basis: probe, 2026-09-25; its start, commit. <sup>f-omp9</sup>
 
 <a id="omp10"></a>
-**OMP10 — A damaged PNG as a series' cover leaves "Save" hanging, with half of it saved** · 🐞 · minor · crash: server.
-A manager editing a series picks, as its "Cover Image", a PNG whose
-picture data is damaged. It uploads like any picture and is listed by
-its name. "Save" then never answers: the application fails on the
-server, and the window stays open with "Save" greyed out and the
-progress wheel turning beside "Cancel", with no message anywhere;
-"Cancel" closes it. The save has stopped halfway. The window's other
-changes are stored (a subtitle typed in the same save is there after a
-reload), and a cover the series already had turns into a broken picture,
-in the window's "Current Image" and on the series' public page, until a
-sound picture is uploaded and saved. A series with no cover stays
-without one. The manager should get either the cover or a message that
-the picture cannot be read, with nothing half saved.
-Basis: probe, 2026-10-09. <sup>f-omp10</sup>
+**OMP10 — A damaged PNG as a series' cover leaves "Save" hanging, with half of it saved** · 🐞 · medium · crash: server.
+A press manager editing a series picks, as its "Cover Image", a PNG
+whose picture data is damaged. It uploads like any picture, but "Save"
+then fails on the server and never answers: the window stays open with
+"Save" greyed out and a spinner, and no message shows; "Cancel" closes
+it. The save has stopped halfway: the window's other changes are stored,
+and the files of a cover the series already had are deleted, so the
+window and the series' public page show a broken picture. The old cover
+cannot be restored from the app: saving a sound picture gives the series
+a cover again, and a press that no longer has the original file has lost
+that cover. A damaged JPG or GIF fails at the same point. The manager
+should get either the cover or a message that the picture cannot be
+read, with nothing half saved. A category's "Cover Image" fails from the
+same cause (*[Categories](U16-categories.md#a24)* A24).
+Basis: probe, 2026-10-13. <sup>f-omp10</sup>
 
 ### OPS
 
@@ -1726,6 +1731,7 @@ Issue report: [pkp-e2e#487](https://github.com/jardakotesovec/pkp-e2e/issues/487
 
 <a id="fn-f-omp10"></a>
 **f-omp10** — fn m: OMP `SeriesForm::validate()` accepts the file on `getimagesize()`, which reads only the picture's header; `SeriesForm::execute()` then stores the series' other fields (`Repo::section()->edit()`), deletes the old cover's two files (`ContextFileManager::deleteByPath()`), and fails where it builds the thumbnail: `imagecreatefrompng()` returns false on the damaged data and `imagecopyresampled()` throws, before the new files are written and before `setImage()`, so the stored cover record still names the deleted files. Live-probed 2026-10-09 (Fields "Cover Image"), OMP `main` (omp `57a9235110`, lib/pkp `27938abd4c`; the default dataset, as `rvaca`, three runs) and `stable-3_5_0` (omp `ddc6abf5a9`; scratch presses, as the press's manager, two runs), the same in all five, on series each run added itself, with a 2×3 PNG of 73 bytes whose IDAT checksum has its last byte flipped. "Upload File" took it (200, the box reading the file's name with "Change File"). On a series with no cover, with "Subtitle" typed in the same save: `POST {press}/$$$call$$$/grid/settings/series/series-grid/update-series?seriesId={id}` answered 500 with an empty body; the window stayed open with `button.submitFormButton` disabled and `.pkp_spinner.is_visible` beside "Cancel", no text under any box, no notice, no browser dialog; "Cancel" closed it with no question; after a reload "Edit" showed the subtitle and no cover. On a series whose sound PNG cover had been saved first (the control: the window closed, the reopened one showed the picture under "Current Image" with "Delete"): the same 500 and the same stuck window; after a reload "Edit" showed the new subtitle and a picture of no width under "Current Image", `catalog/thumbnail?type=series&id={id}` answering 200 with an empty body of type text/html where it had answered a 97-byte image/png, and the series' public page showed the same broken cover. A "Save" of that series with a subtitle and no file then answered 200 with "Your changes have been saved."; a sound PNG uploaded and saved brought the cover back (image/png, 97 bytes; four runs). The server logged at each damaged save `imagecreatefrompng(): gd-png: fatal libpng error: IDAT: CRC error`, `imagecreatefrompng(): "…" is not a valid PNG file`, then `PHP Fatal error: Uncaught TypeError: imagecopyresampled(): Argument #2 ($src_image) must be of type GdImage, false given` in `SeriesForm.php`. The test installs' PHP runs with `zend.assertions = -1`, so the `assert($image)` between the two calls is not compiled; where assertions run, the save fails one step earlier (a 3.5 install on 2026-10-02 answered the same 500 and logged `Uncaught AssertionError: assert($image)`). Not driven: "Delete" on the broken picture; the "Add Series" window; a damaged JPG. Kept script: `shared/playwright/checks/U17/I09/i09.js` (row L18).
+Issue report: [docs/issues/U17-OMP10-series-damaged-cover-save-hangs.md](../issues/U17-OMP10-series-damaged-cover-save-hangs.md).
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — fn f. Live-probed 2026-09-25 on a scratch server, three runs: note td13. The seeded server is not empty once other suites have posted to it.
