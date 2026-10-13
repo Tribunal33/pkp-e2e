@@ -349,7 +349,10 @@ page. Every row below assumes the journal has public comments switched on
 - **Deleting clears the tasks; approving and hiding do not.** Deleting a
   comment, by its writer or by a moderator, deletes every moderator's tasks
   about that comment and about its reports, and no other task [A11](#a11);
-  deleting a report deletes the tasks about that report. A comment
+  deleting a report deletes the tasks about that report. A request made
+  by hand, which no screen sends, can delete all of a comment's reports
+  at once; it fails and deletes nothing unless the comment has exactly
+  one report ⚠ [A19](#a19). A comment
   that goes with its submission or with its writer's account leaves its
   tasks behind [A10](#a10) (Rule 18).
   Approving or hiding a comment leaves the
@@ -865,6 +868,7 @@ Left out of the scenarios above, by reason:
   - A15 (the verified and the unverified ORCID icon under a comment sharing one name and no text; Rule 6b)
   - A17 (the reports on approved comments read by anyone through a request made by hand; Actors row 7)
   - A18 (a comment written by hand on a submission that is not published, with comments off; Actors row 2)
+  - A19 (all of a comment's reports deleted at once by a request made by hand; Side effects)
   - OMP1 and OPS1 (the Site Administrator holding no manager role: the Comments page open on a journal, refused on a press and a preprint server; Rules 17a, 17c)
 - **Owned by another feature**:
   - the Tasks panel's own controls on a comment task, Mark Read and Delete (Cross-feature interactions; *Notifications center & email preferences*, scenario 2)
@@ -892,6 +896,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
 | [A17](#a17) | Anyone, signed in or not, reads the reports on every approved comment, with the reporter's name and reason, by a request made by hand | 🐞 | latent | — |
 | [A18](#a18) | Any signed-in account comments by a request made by hand on a submission that is not published, with comments off, and learns its title and first author | 🐞 | latent | — |
+| [A19](#a19) | Deleting all of a comment's reports at once, by a request made by hand, fails with a server error unless the comment has exactly one report | 🐞 | latent · crash: server | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
 | [A2](#a2) | Approving or hiding a comment leaves every moderator's "pending review" task in place | ❓ | minor | — |
 | [A3](#a3) | The report dialog neither refuses an empty reason with a message nor confirms a filed report, and the same person can report the same comment again | ❓ | minor | — |
@@ -1169,6 +1174,21 @@ Security: unreleased.
 Since: 2025-08-28 · Basis: probe, 2026-10-13, on a journal; code for
 another journal's submission, the press and the preprint server.
 <sup>f-a18</sup>
+
+<a id="a19"></a>
+**A19 — The request that deletes all of a comment's reports at once fails** · 🐞 · latent · crash: server.
+No screen sends this request: the comment panel deletes one report at a
+time ("Delete Report", Rule 15). A Journal Manager who sends it by hand
+(`DELETE {journal}/api/v1/comments/{comment id}/reports`, signed in, with
+the page's CSRF token; not `DELETE …/comments/{id}`, which deletes the
+comment) for a comment with two or more reports, or with none, gets a server
+error, and nothing is deleted: the reports stay in the comment panel's
+"Reports" table, the comment stays on the "Reported" tab, and every
+moderator keeps the tasks about those reports. For a comment with
+exactly one report the request succeeds, and the report and its tasks
+go. Expected all of the comment's reports and their tasks deleted,
+whatever their number; observed a server error and nothing changed.
+Since: 2026-03-04 · Basis: probe, 2026-10-13. <sup>f-a19</sup>
 
 ### OMP
 
@@ -1666,7 +1686,9 @@ open panels. Deletion: `delete()` removes the comment's
 `ASSOC_TYPE_COMMENT_REPORT` ones (lib/pkp `26ae6431b5` on the three
 apps since 2026-09-29; footnote h, A11);
 `deleteReport()` removes the `ASSOC_TYPE_COMMENT_REPORT` ones of its
-report; `setApproval()` removes none (A2). Re-driven 2026-09-27 on the
+report; `deleteReports()` removes those of all the comment's reports,
+reached only for a comment with exactly one report (A19);
+`setApproval()` removes none (A2). Re-driven 2026-09-27 on the
 three apps (Side effects, A2, A10): the moderator's deletion of a comment
 cleared its own "pending review" row and its report's row, a report's
 deletion its own row only (the other report's and the comment's stayed),
@@ -1955,7 +1977,9 @@ Approval" tab listed it with the pending ones.
 <a id="fn-f-a2"></a>
 **f-a2 — A2.** `UserCommentController::setApproval()` saves the comment
 and returns; `delete()`, `deleteReport()` and `deleteReports()` are the
-only methods that touch `Notification`. Compare the "needs an editor" task,
+only methods that touch `Notification`, and `deleteReports()` reaches
+its `Notification` delete only for a comment with exactly one report
+(A19). Compare the "needs an editor" task,
 cleared by the assignment (the notifications spec's roster). Live-probed
 2026-09-16: the "pending review" row stayed in the Journal Manager's and
 the Editor's panels after "Approve Comment" and after "Hide Comment";
@@ -2326,6 +2350,38 @@ Availability Models to Focus on Specific Water Management Systems" /
 "Novak". No server error. Another journal's publication, OMP and OPS:
 read in the code (same lib/pkp commit in the three apps).
 
+<a id="fn-f-a19"></a>
+**f-a19 — A19.** `UserCommentController::deleteReports()` (the
+`DELETE api/v1/comments/{id}/reports` route, moderator-only) passes
+`[$reportIds]`, an array inside an array, to
+`UserCommentReport::withReportIds()`; Laravel's `Query\Builder::whereIn()`
+throws `InvalidArgumentException` ("Nested arrays may not be passed to
+whereIn method.") whenever the array and its one-level flattening differ
+in count, so for none or two and more ids, and the throw comes before
+both the report delete and the `Notification` delete. For one id the
+counts agree and `getBindings()` flattens the binding, so the one report
+and its tasks are deleted. The nested call came in with lib/pkp
+`677b737d20` (pkp/pkp-lib#12401, 2026-03-04, the change that made the
+deletes remove the notifications). Fix (read, not tried):
+`withReportIds($reportIds)`. ui-library's `userCommentStore.js` sends
+only `DELETE comments/{id}` and `DELETE comments/{id}/reports/{reportId}`,
+and the comment panel offers no "delete all reports" control.
+stable-3_5_0 has no `api/v1/comments/`. Live-probed 2026-10-13 on OJS,
+OMP and OPS `main` (lib/pkp `f4c2578c94`, the controller identical in
+the three), two runs each, under the one exception to screen-only
+driving (an API route no screen calls), as the scratch context's Journal
+Manager from a page of the context with its CSRF token, four approved
+comments on one published item with seeded reports: the comment with two
+reports answered 500 with that message, its reports 2 → 2 and their
+tasks 4 → 4 (both reports still in the comment panel's "Reports", the
+comment still on "Reported", the two rows still in the manager's Tasks
+panel); the comment with none answered 500; the comment with one
+answered 200, its report and its two task rows gone. Control: `DELETE
+…/reports/{reportId}` on a fourth comment's one report answered 200, the
+report and its tasks gone. The server log held one
+`[500]: DELETE …/api/v1/comments/{id}/reports` line per failing request
+and no other error.
+
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`
 assigns `ROLE_ID_SITE_ADMIN` the `access` op only, against OJS's
@@ -2361,7 +2417,7 @@ author's; no screen settles them.
 | Reports table row "…" › "Delete Report" (confirm dialog) | comment panel › Reports; report panel | AFFM-146 · VUE-083 |
 | Comments and reports paging | Comments page; comment panel › Reports | AFFM-147 |
 | Landing-page blocks: "Comments on this publication" (comment box, "Submit", "Log in to comment", "Show more", the "…" menu, the "Report Comment" and "Delete Comment" dialogs) and the sidebar "Comments" ("All Comments (N)", "Log in to comment") | a published article's landing page (`article/view/{id}`), OJS only | AFFR-058 |
-| Comments API | `api/v1/comments` (`public` list; POST; DELETE `{id}`; POST `{id}/reports`; moderator: list, GET `{id}`, PUT `{id}/setApproval`, reports list/get/delete) | API-012 |
+| Comments API | `api/v1/comments` (`public` list; POST; DELETE `{id}`; POST `{id}/reports`; moderator: list, GET `{id}`, PUT `{id}/setApproval`, reports list/get/delete one; DELETE `{id}/reports`, all of a comment's reports at once, sent by no screen, A19) | API-012 |
 | Task "A comment has been submitted and is pending review by a moderator." | the Tasks panel | NOTIF-052 |
 | Task "A report was submitted for a comment and requires review by a moderator." | the Tasks panel | NOTIF-053 |
 
