@@ -23,3 +23,14 @@
       * @param $params Map of name => value pairs for additional parameters
       * @param $anchor Name of desired anchor on the target page
       * @param $urlLocaleForPage Whether or not to override locale for this URL; Use '' to exclude.
+--- a/plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper.php
++++ b/plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper.php
+@@ -160,7 +160,7 @@
+                             null,
+                             'catalog',
+                             'book',
+-                            $urlParts[1],
++                            [$urlParts[1]],
+                             null,
+                             $anchor
+                         );

@@ -1302,7 +1302,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A visitor who signs in or registers to buy a book file lands on their home page, not the payment page | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | upstream sync (claude), 2026-10-05 — re-verified |
-| [A25](#a25) | A book's HTML file that links another book shows with every "omp://" link dead | 🐞 | user-visible | upstream sync (claude), 2026-10-05 — re-checked: the file now shows, its "omp://" links do nothing |
+| [A25](#a25) | A book's HTML file that links another book shows with every "omp://" link dead | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A26](#a26) | A review made public never shows on the published book's page | 🐞 | user-visible | — |
 | [A27](#a27) | A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
@@ -1642,18 +1642,21 @@ page that previews it.
 Basis: probe, 2026-10-05. <sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — A book's HTML file that links another book shows with every "omp://" link dead** · 🐞 · user-visible.
+**A25 — A book's HTML file that links another book shows with every "omp://" link dead** · 🐞 · medium.
 A book's HTML file holding a link written "omp://monograph/{number}",
 the "HTML Monograph File" plugin's shorthand for another book of the
-press, opens in the HTML view page and its text shows, but its links
-written "omp://…", that one and any "omp://press" link in the same
-file, keep their written address: pressing one does nothing. A
-visitor, a Reader and the Press manager get the same. The reader cannot
-follow the file's links to the other book or to the press. A file
-whose only such link is written "omp://press" shows, with that link
-opening the press's home page.
+press, opens in the HTML view page, but the app gives up preparing it
+and serves it as stored: its "omp://…" links, that one and any
+"omp://press" link in the same file, keep their written address and
+pressing one does nothing, its embedded figures do not load, and
+placeholders such as "{$pressTitle}" show as written. A visitor, a
+Reader and the Press manager get the same. A file whose only such link
+is written "omp://press" is prepared in full, with that link opening the
+press's home page. The same fault, an address built from a single value
+where a list is required, gives a book's old URL Path its blank error
+page ([A16](#a16)).
 Worked until a 2024 change to how the app builds its addresses, read from the code's history: a regression.
-Since: 2024-06-26 (two years), a date read from the code's history · Basis: probe, 2026-10-05. <sup>f-a25</sup>
+Since: 2024-06-26 (two years), a date read from the code's history · Basis: probe, 2026-10-13. <sup>f-a25</sup>
 
 <a id="a26"></a>
 **A26 — A review made public never shows on the published book's page** · 🐞 · user-visible.
@@ -1995,6 +1998,7 @@ Issue report: [pkp-e2e#283](https://github.com/jardakotesovec/pkp-e2e/issues/283
 
 <a id="fn-f-a25"></a>
 **f-a25** — OMP `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper::handleOmpUrl()` passes `$urlParts[1]` (a string) as the path of `PKPRequest::url()`, whose path is `?array` since lib/pkp bee9547b49 (2024-06-26, the change behind A16); `Hook::call()` logs the plugin's TypeError and carries on, and `CatalogBookHandler::download()` then serves the file as stored, its `omp://` links unrewritten (before omp `8c807c919` it failed on A9's line instead). OJS's `htmlArticleGalley` twin passes a list. 3.5 (code): the same call in `HtmlMonographFilePlugin.php` against the same signature and the same hook catch. Fix shape as A16's: `[$urlParts[1]]`. The A16 issue report (pkp-e2e#284) names this caller in its Cause and leaves it out of its fix. Live-probed 2026-10-05 before omp `8c807c919` (Fields, the HTML view page; two runs; a visitor, a Reader and the Press manager): the file holding `omp://monograph/{id}` opened the tab "HTML view of the file i05-monograph-link-r1-omp.html", whose frame `catalog/download/{id}/{format}/{file}?inline=1` answered 500 and stayed empty; the log read "TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159", then "Uncaught Error: Typed property APP\pages\catalog\CatalogBookHandler::$publication must not be accessed before initialization in …/CatalogBookHandler.php:533". Re-probed the same day at omp `8c807c919` (A25's symptom; two runs; the same three users): a file holding "See also the other book and the press." with links `omp://monograph/{id}` and `omp://press` opened its HTML view page, its frame `catalog/download/{id}/{format}/{file}?inline=1` answering 200 `text/html` with the text shown; both links kept their `omp://` addresses, and pressing either changed neither the frame's nor the page's address, opened no tab and raised no page error; the server logged the TypeError above at each opening, and no request answered an error. The file whose only link is `omp://press` still had it rewritten to the press's home page and followed there. Control: td26.
+Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284) ([docs/issues/U69-A16-earlier-url-path-server-error.md](../issues/U69-A16-earlier-url-path-server-error.md)), joined 2026-10-13.
 
 <a id="fn-f-a26"></a>
 **f-a26** — Note t: OMP never prepares or mounts the display; OJS's `ArticleHandler::view()` prepares it and its template never mounts it (U13 OJS12). The OJS12 issue report ([pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218), [docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md)) found the OMP twin in the code and proposes a fix for the article page's template only, which does not reach a book's page. OMP `stable-3_5_0`: not driven; OJS 3.5 has no "Publicly Show Reviewer Comments" (that report's Affects). Live-probed 2026-10-05 (two runs): note t.

@@ -1,19 +1,21 @@
-# A book's earlier URL Path, or an issue address with an unknown galley, shows a blank server error page
+# Old book URL Paths and unknown issue galleys show a blank error page; HTML book files linking another book lose links and figures
 
 - **Severity** medium
 - **Effort** small
 - **Kind** regression
 - **Crash** server
 - **Affects**
-  - main: OMP, OJS (an issue's address with a galley the issue lacks)
-  - 3.5: OMP (OJS 3.5 already has the fix)
+  - main: OMP (a book's old URL Path and its HTML files), OJS (an issue's address with a galley the issue lacks)
+  - 3.5: OMP (a book's old URL Path and its HTML files; OJS 3.5 already has the fix)
   - 3.4: none (code)
   - 3.3: none (code)
-- **Introduced** a pkp/pkp-lib commit without a PR · [bee9547b49](https://github.com/pkp/pkp-lib/commit/bee9547b491353e92e53e5ed2da2d197a24be972) · 2024-06-26 · Alec Smecher (asmecher)
-- **Upstream** none found (2026-10-01)
-- **Tracked in** spec U69 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a16); spec U50 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a14)
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Introduced** a pkp/pkp-lib commit without a PR · [bee9547b49](https://github.com/pkp/pkp-lib/commit/bee9547b491353e92e53e5ed2da2d197a24be972) · 2024-06-26 · Alec Smecher (asmecher), for all three symptoms
+- **Upstream** none found (2026-10-01; for the HTML file's links, 2026-10-13)
+- **Tracked in** spec U69 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a16); spec U69 [A25](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U69-monograph-landing-page.md#a25); spec U50 [A14](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U50-issues.md#a14)
+- **Checked** 2026-10-01, and 2026-10-13 for the HTML file's links, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-13: U69 A25 joined: the same fault makes a book's HTML file that links another book show as uploaded, its links, figures and placeholders unresolved.
 
 ## Summary
 
@@ -32,23 +34,41 @@ version's address, which keeps working throughout. On a journal, an
 issue's address that names a galley the issue does not have shows the
 same blank page instead of the issue.
 
+On a press, the app is meant to prepare a book's HTML file before a
+reader sees it: turn its "omp://…" shorthand links into the press's
+real addresses, point its embedded figures at their uploaded files and
+fill in placeholders such as "{$pressTitle}". When the file links
+another book ("omp://monograph/…"), the page opens normally but the
+app skips all of that. The reader gets the file as uploaded: no
+"omp://" link in it leads anywhere, its figures do not load and the
+placeholders show raw. The server logs an error each time; no error
+reaches the reader.
+
 ## Impact
 
 - **Lost.** Every visit through the old address: a blank page with no
   link onward, and nobody at the press is told. The same for a visit
-  through the address of an issue galley that is gone.
+  through the address of an issue galley that is gone. A book's HTML
+  file that links another book loses its press links, its figures and
+  its filled-in placeholders for every reader.
 - **Who.** Readers of a press that changed a published book's URL Path
   on a later version, and readers of a journal that removed or renamed
   an issue galley. Neither is an everyday action. Before the new
   version is published, the one who meets it is the editor who tries
-  the new address early.
+  the new address early. The HTML file's readers meet it on every
+  visit, but only at presses whose HTML files link another book this way.
 - **Way round.** The reader can find the book through the catalog, or
   the issue through the archive. The press can restore the old address
-  only by saving the old URL Path on a new version.
+  only by saving the old URL Path on a new version. The press can
+  write the HTML file's link to the other book as a full address, and
+  the file is then prepared as it should be.
 
 Medium: the book's current address keeps working and nothing stored is
 lost, but old links to it fail for every reader, in a state few presses
-reach. It would be high if the book's current address failed too.
+reach. The HTML file's text still reads, but without its figures and
+working links, and only in files that link another book. It would be
+high if the book's current address failed too, or if every HTML file
+lost its figures.
 
 ## Steps to reproduce
 
@@ -60,6 +80,22 @@ Preconditions:
 - The journal step uses PKP's default test dataset for OJS `main` as it
   is: issue 1, "Vol. 1 No. 2 (2014)", is published and has no issue
   galleys.
+- The HTML file's steps start again from the OMP dataset, freshly
+  loaded: published book 5, "Bomb Canada and Other Unkind Remarks in
+  the American Media", and "HTML Monograph File" on, as the dataset has
+  it. The dataset has no HTML book file, so steps 12 to 17 add one,
+  [`u69h13n-links.html`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/html-file-omp-links-dead/u69h13n-links.html),
+  with the figure it embeds,
+  [`u69h13n-figure.png`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/html-file-omp-links-dead/u69h13n-figure.png)
+  (any PNG serves). Its body holds the lines below. The attributes must
+  be in double quotes: the app rewrites only `omp://` addresses written
+  that way.
+
+  ```html
+  <p>See also <a id="book" href="omp://monograph/14">the other book</a> and <a id="press" href="omp://press">the press</a>.</p>
+  <p><img id="figure" src="u69h13n-figure.png" alt="Figure 1"></p>
+  <p id="placeholder">Published by {$pressTitle}.</p>
+  ```
 
 A book's earlier URL Path:
 
@@ -87,10 +123,40 @@ An issue's address with an unknown galley (OJS):
 
 11. Signed out, open `/index.php/publicknowledge/issue/view/1/999`.
 
+A book's HTML file that links another book (OMP):
+
+12. Sign in as `dbarnes` and open the workflow of "Bomb Canada and
+    Other Unkind Remarks in the American Media" by its address,
+    `/index.php/publicknowledge/en/dashboard/editorial?workflowSubmissionId=5`.
+    Press "Publication Formats" in the side menu.
+13. Press "Add publication format", type the name "HTML u69h13n" and
+    press "OK".
+14. In the row "HTML u69h13n" press "Change File". Choose the component
+    "Appendix", upload `u69h13n-links.html` and press "Continue". Under
+    "Dependent Files" press "Upload File", choose the component
+    "Image", upload `u69h13n-figure.png` and press "Continue",
+    "Continue" and "Complete". Back in the first window press
+    "Continue" and "Complete".
+15. In the row of `u69h13n-links.html` press "Set Terms", choose "Open
+    Access" and press "Save".
+16. In the format's row press "Awaiting Approval", then "OK".
+17. In the same row press "Not Available", then "OK". Sign out.
+18. Open the press's "Catalog", `/index.php/publicknowledge/en/catalog`,
+    and "Bomb Canada and Other Unkind Remarks in the American Media".
+19. Press "HTML u69h13n".
+20. Look at the figure and the last line, and inspect the address of
+    each link in the file.
+21. Press "the other book".
+
 **Expected:** step 10 lands on `…/en/catalog/book/u69r2-second`, the
 book's page. Step 8 lands on `…/en/catalog/book/u69r2-first`, the page
 of the published version. Step 11 lands on `…/en/issue/view/1`, the
-issue's page.
+issue's page. At step 20 the red figure shows, the last line reads
+"Published by Public Knowledge Press.", "the other book" points to
+`…/index.php/publicknowledge/en/catalog/book/14` and "the press" to
+`…/index.php/publicknowledge/en`. Step 21 opens the page of "From
+Bricks to Brains: The Embodied Cognitive Science of LEGO Robots" inside
+the frame that holds the file.
 
 **Observed:** steps 8, 10 and 11 each answer 500 with a blank page (no
 title, no text). Step 8 answers the same to `dbarnes`. [3.5: step 11
@@ -108,6 +174,29 @@ the book's page. `…/catalog/book/u69r2-first/version/19` opens the older
 version under "This is an outdated version published on …"; 19 is the
 ID of the version made in step 3 on a freshly loaded dataset.
 
+Step 19 opens the page "HTML u69h13n view of the file
+u69h13n-links.html", and the file answers 200. At step 20 the figure
+does not load (it asks for `u69h13n-figure.png` beside the file's own
+address), the last line reads "Published by {$pressTitle}.", and the
+links point to `omp://monograph/14` and `omp://press`, as written. Step
+21 changes nothing on the page, opens no tab and raises no error in the
+browser. Each opening of the file logs [3.5, walked with the two links
+alone: the same links and log, naming the plugin's
+`HtmlMonographFilePlugin.php` on line 264]:
+
+```
+Plugin generic/htmlMonographFile failed to handle the hook CatalogBookHandler::download
+TypeError: PKP\core\PKPRequest::url(): Argument #4 ($path) must be of type ?array, string given, called in …/plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper.php on line 159 and defined in …/lib/pkp/classes/core/PKPRequest.php:771
+```
+
+Control: on the same install, steps 12 to 21 again (signed in as
+`dbarnes` at step 12), with a format "HTML u69h13n press" and a file
+whose only link is `omp://press`, with the same placeholder line and no
+figure
+([`u69h13n-press.html`](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/html-file-omp-links-dead/u69h13n-press.html)). Its last line reads "Published by Public Knowledge Press.", its
+link points to the press's home address, and pressing it opens "Public
+Knowledge Press".
+
 ## Cause
 
 Up to 3.4 a page address's path could be handed over as a single value:
@@ -118,7 +207,8 @@ commits of the 3.5 cycle made the path a list everywhere:
 - [bee9547b49](https://github.com/pkp/pkp-lib/commit/bee9547b491353e92e53e5ed2da2d197a24be972)
   ("Self-documentation; clean up router delegation", 2024-06-26)
   declared `?array $path` on `PKPRequest::redirect()` and
-  `PKPRequest::url()` (`classes/core/PKPRequest.php` lines 718 and 773).
+  `PKPRequest::url()` (`classes/core/PKPRequest.php`, lines 720 and
+  771 on today's `main`).
 - [d9f093ea68](https://github.com/pkp/pkp-lib/commit/d9f093ea68d3ddab0b7eea554c989b9f078258a8)
   ("Clean up URL construction and array handling", 2024-06-28) declared
   it on `PKPPageRouter::url()` and removed the wrapping there.
@@ -155,6 +245,30 @@ the wrong thing since the lines were written (pkp/omp
 82) is the second: for a galley the issue does not have it calls
 `redirect(null, null, 'view', $issue->getId())`.
 
+`HtmlGalleyHelper::handleOmpUrl()` (omp
+`plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper.php` lines
+157–168) is the third, and it goes through `PKPRequest::url()`. The
+"HTML Monograph File" plugin answers the `CatalogBookHandler::download`
+hook with the file's HTML as `getHTMLContents()` prepares it: the
+references to embedded proof, dependent and media files rewritten to
+download addresses (lines 83–106), the `omp://…` links through a
+`preg_replace_callback()` on `handleOmpUrl()` (line 110), the galley
+styles of `loadHtmlGalleyStyles()` (line 116), then the
+`{$pressTitle}`, `{$siteTitle}` and `{$currentUrl}` placeholders. For
+`omp://monograph/{id}`, `handleOmpUrl()` passes `$urlParts[1]`, a
+string, as the path of `url()`; `omp://press` passes no path and works.
+
+The `TypeError` leaves `getHTMLContents()` before anything is echoed,
+so all of its work is lost, not only the `omp://` links.
+`Hook::run()` (lib/pkp `classes/plugins/Hook.php` line 165, which
+`Hook::call()` hands over to) catches a plugin's exception, logs it
+through `PluginFailureHandler::logIfPluginFailure()` ("failed to handle
+the hook") and carries on. `CatalogBookHandler::download()` then serves
+the file as stored (line 538), and the reader sees no error. The line is older
+than the typing (3.3 has it, when a single value was still accepted);
+on `main` it moved from the plugin class into the helper with pkp/omp
+[6ca4c09289](https://github.com/pkp/omp/commit/6ca4c092898843853367dc2d390f4df774451475), 2026-05-17.
+
 Reach:
 
 - A book whose current version has no URL Path, opened by an earlier
@@ -171,28 +285,33 @@ Reach:
   pkp-lib and their plugins, passes a list (code). OPS's
   `PreprintHandler::initialize()` forwards with a list it builds from
   the address's remaining parts.
+- `handleOmpUrl()` on 3.5 is the same call in
+  `plugins/generic/htmlMonographFile/HtmlMonographFilePlugin.php` line
+  264 (walked). On 3.4 and 3.3 `PKPRequest::url()` is untyped and the
+  page router wraps a single value into a list (code). OJS's
+  `htmlArticleGalley` twin passes `[$urlParts[1]]` for `ojs://article/`
+  and `ojs://issue/` links (code).
+- `getHTMLContents()` has no caller but the plugin on `main` (code),
+  though its docblock offers it to themes that show the file inline. A
+  theme calling it directly gets no hook's catch, so the same file
+  would answer 500 there.
 - The `->url(` calls on the request, the dispatcher and the routers
-  were read the same way (code). Two pass a single value and are not
-  covered by this report's fix; neither was walked:
-  - `AnnouncementNotificationManager::getNotificationUrl()` (pkp-lib
-    `classes/notification/managerDelegate/AnnouncementNotificationManager.php`
-    line 69, `main` and 3.5) passes the announcement's ID to
-    `Dispatcher::url()`. `PKPNotificationManager::getNotificationUrl()`
-    builds the same address itself with a list (line 83), and the
-    announcement job calls only the delegate's `notify()`; no screen
-    that reaches the delegate's own method was found.
-  - `HtmlGalleyHelper::handleOmpUrl()` (omp
-    `plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper.php`
-    line 162, `main`) passes `$urlParts[1]` to `PKPRequest::url()` for
-    an `omp://monograph/…` link inside an HTML book file. OJS's
-    `htmlArticleGalley` twin passes `[$urlParts[1]]`.
+  were read the same way (code). One more passes a single value and is
+  not covered by this report's fix; it was not walked:
+  `AnnouncementNotificationManager::getNotificationUrl()` (pkp-lib
+  `classes/notification/managerDelegate/AnnouncementNotificationManager.php`
+  line 69, `main` and 3.5) passes the announcement's ID to
+  `Dispatcher::url()`. `PKPNotificationManager::getNotificationUrl()`
+  builds the same address itself with a list (line 83), and the
+  announcement job calls only the delegate's `notify()`; no screen
+  that reaches the delegate's own method was found.
 - The Smarty `{url}` function wraps a single value into a list itself
   (`PKPTemplateManager::smartyUrl()`), so templates are not affected.
 
 ## Proposed fix
 
-Recommended: pass a list in both callers, and correct `redirect()`'s
-docblock
+Recommended: pass a list in the three callers, and correct
+`redirect()`'s docblock
 ([fix-omp.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/earlier-url-path-server-error/fix-omp.diff),
 [fix-ojs.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/earlier-url-path-server-error/fix-ojs.diff);
 each carries the same pkp-lib docblock line).
@@ -202,6 +321,9 @@ each carries the same pkp-lib docblock line).
 if (!ctype_digit((string) $submissionId) && $submissionId !== $this->publication->getData('urlPath') && !$subPath) {
     $request->redirect(null, $request->getRequestedPage(), $request->getRequestedOp(), [$submission->getBestId()]);
 }
+
+// omp plugins/generic/htmlMonographFile/classes/HtmlGalleyHelper.php, handleOmpUrl()
+$url = $request->url(null, 'catalog', 'book', [$urlParts[1]], null, $anchor);
 
 // ojs pages/issue/IssueHandler.php, initialize()
 $request->redirect(null, null, 'view', [$issue->getId()]);
@@ -223,11 +345,20 @@ with the fix in and out: the current URL Path and the number address
 open the book and keep their address; an older version under the old
 URL Path opens that version; an unknown URL Path and an unknown issue
 send a visitor to Login; another book's number opens that book.
+Tried on `main` for the HTML file (2026-10-13): at step 20 "the other
+book" read `…/en/catalog/book/14` and "the press" the press's home
+address, step 21 opened "From Bricks to Brains" in the file's frame,
+and nothing was logged. Neighbour check, the same with the fix in and
+out: a file whose only link is `omp://press` keeps its press link. The
+figure and the placeholder line came into the file after that trial
+and were not walked with the fix in; with `handleOmpUrl()` returning,
+`getHTMLContents()` runs to its end, as it does for the control's file
+on unpatched code.
 
-Left out: the two `url()` callers named in the Cause's reach. The same
-one-line change (`[$value]`) applies to each; neither was tried, since
-no screen was found that reaches the first and the second needs an HTML
-book file with an `omp://monograph/` link.
+Left out: the `url()` caller named last in the Cause's reach,
+`AnnouncementNotificationManager::getNotificationUrl()`. The same
+one-line change (`[$value]`) applies; it was not tried, since no screen
+was found that reaches it.
 
 **Alternatives:**
 
@@ -244,15 +375,19 @@ book file with an `omp://monograph/` link.
 
 **What goes with it:**
 
-- Backport: the OMP change applies as written to `stable-3_5_0`; OJS
-  needs it on `main` only. On 3.4 and 3.3 only the fallback's wrong ID
+- Backport: the book handler's change applies as written to
+  `stable-3_5_0`, and the plugin's goes into
+  `HtmlMonographFilePlugin::handleOmpUrl()` there (the helper class is
+  `main`'s only); OJS needs it on `main` only. On 3.4 and 3.3 only the fallback's wrong ID
   would be worth it.
 - The guard: an e2e scenario in U69 (a book with a URL Path changed on
   a later version, opened by the earlier one) and in U50 (an issue's
-  address with an unknown galley).
+  address with an unknown galley); in U69 also an HTML book file whose
+  `omp://monograph/` link opens the other book.
 
-Small: one line in each of two handlers and a docblock line, following
-the pattern their siblings use, with no data repair.
+Small: the same change in each of the three callers, a single value
+wrapped in a list, one line each, plus a docblock line; each follows
+the pattern its siblings use, and no data needs repair.
 
 ## Evidence
 
@@ -264,6 +399,37 @@ the pattern their siblings use, with no data repair.
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/earlier-url-path-server-error/walk.js`.
   The fix was tried with `node bin/try-fix.js apply …/fix-omp.diff omp`
   and `… apply …/fix-ojs.diff ojs`, the same script, then `revert`.
+- Kept script for the HTML file's steps (12 to 21, U69 A25):
+  [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/html-file-omp-links-dead/walk.js)
+  with its three files beside it, on OMP:
+  `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js omp shared/playwright/checks/issues/html-file-omp-links-dead/walk.js`
+  (`MODE=steps` the steps alone, `MODE=nb` the control alone; the
+  default both). Walked 2026-10-13 on `main` and `stable-3_5_0`,
+  PostgreSQL, datasets from pkp/datasets 384e28b (2026-10-12). The
+  figure and the placeholder line were added for a second walk on
+  `main`, which showed them unresolved (the Observed); 3.5 was walked
+  with the links alone, and its `_getHTMLContents()` does the same work
+  in the same order before the same call (code). The fix was tried with
+  `node bin/try-fix.js apply …/fix-omp.diff omp`, `MODE=steps` on a
+  fresh dataset, then `MODE=nb` with the fix in, and `MODE=nb` again
+  after `revert` on a fresh dataset.
+- Tips for the HTML file's walks and reads (2026-10-13): OMP `main`
+  eb9381314 (lib/pkp f4c2578c94); OMP `stable-3_5_0` 486cbf9eb (lib/pkp
+  8094f06bf5); OMP `stable-3_4_0` 0aec65441 and `stable-3_3_0`
+  8e72fc883, with lib/pkp read at its own branch tips, 55c8e406b3 and
+  5e84acd11b (the older line above names the apps' pointers). Code read: the
+  `case 'monograph'` branch of `handleOmpUrl()` on each, with
+  `PKPRequest::url()`'s signature; `Hook::run()`'s catch on `main` and
+  3.5; the callers of `getHTMLContents()` on `main` (only the plugin);
+  OJS `main`'s `htmlArticleGalley` helper.
+- Upstream search for the HTML file's links (2026-10-13), pkp/pkp-lib,
+  pkp/omp and pkp/ui-library: "omp://monograph", "omp://press", "html
+  monograph file links", "HTML book file links", "handleOmpUrl",
+  "HtmlGalleyHelper", "HtmlMonographFile", "htmlMonographFile
+  TypeError", "must be of type ?array" url. `pkp/pkp-lib#5977` (a 2020
+  fatal error on the HTML view page's template) and `pkp/pkp-lib#10501`
+  (another caller's single value, on password reset, fixed) are other
+  faults.
 - Where the walk differed from the Steps: it opens "Catalog Entry" by
   the workflow address the menu entry leads to, and takes step 8 in a
   second browser while `dbarnes` stays signed in.
@@ -292,7 +458,10 @@ the pattern their siblings use, with no data repair.
   urlPath", "issue galley redirect 500", "must be of type ?array",
   "PKPRequest redirect TypeError", "CatalogBookHandler",
   "IssueHandler redirect": nothing about this fault.
-- Not driven: the two `url()` callers left out of the fix; a journal
+- Crash: the header's `server` rests on the blank pages. The HTML
+  file's request answers 200; its error is logged and swallowed by the
+  hook, so it is a server failure no reader sees.
+- Not driven: the `url()` caller left out of the fix; a journal
   whose issue galley was removed after its address was shared (the
   Steps use a galley number the issue never had, which takes the same
   line).
