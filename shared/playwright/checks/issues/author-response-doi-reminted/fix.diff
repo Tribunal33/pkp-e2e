@@ -1,0 +1,11 @@
+--- a/classes/publication/Repository.php
++++ b/classes/publication/Repository.php
+@@ -392,7 +392,7 @@
+         if ($context->isDoiTypeEnabled(Repo::doi()::TYPE_AUTHOR_RESPONSE)) {
+             $authorResponses = $this->getReviewAuthorResponses([$publication->getId()]);
+             foreach ($authorResponses as $authorResponse) {
+-                if (empty($authorResponses->doiId)) {
++                if (empty($authorResponse->doiId)) {
+                     try {
+                         $doiId = Repo::doi()->mintDoi($context);
+                         $authorResponse->doiId = $doiId;

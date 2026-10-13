@@ -81,7 +81,7 @@ Rule 5). <sup>c</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | **DOIs** | No | One box: "Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal." (a press "…to work published by this press.", a preprint server "…to assigned to works published on this server." ⚠ [OPS1](#ops1)). Ticked on a new journal (Rule 2). <sup>c</sup> <sup>y</sup> |
-| **Items with DOIs** | No | Help: "Select which items will be assigned a DOI. Most journals assign DOIs to articles, but you may wish to assign DOIs to all of the published items." (a press and a preprint server word it for their own items). Boxes: journal "Articles", "Issues", "Article galleys, such as a published PDF", "Peer Review"; press "Monographs", "Chapters", "Publication Formats", "Files"; preprint server "Preprints", "Preprint galleys, such as a published PDF". The first box is ticked on a new journal, the others not. While a registration agency is chosen, only the kinds that agency accepts are listed (Rule 35). Effect: Rule 4. <sup>c</sup> |
+| **Items with DOIs** | No | Help: "Select which items will be assigned a DOI. Most journals assign DOIs to articles, but you may wish to assign DOIs to all of the published items." (a press and a preprint server word it for their own items). Boxes: journal "Articles", "Issues", "Article galleys, such as a published PDF", "Peer Review"; press "Monographs", "Chapters", "Publication Formats", "Files"; preprint server "Preprints", "Preprint galleys, such as a published PDF". The first box is ticked on a new journal, the others not. While a registration agency is chosen, only the kinds that agency accepts are listed (Rule 35). Effect: Rule 4. The settings also accept author responses, which no box offers ⚠ [OJS9](#ojs9). <sup>c</sup> |
 | **DOI Prefix** | Yes, while "DOIs" is ticked | Help: "The DOI Prefix is assigned by a registration agency, such as Crossref or DataCite. Example: 10.xxxx" (both names are links). Empty on a new journal. "10." followed by four to seven digits and nothing else ("10.1234", "10.1234567"); anything else ("10.123", "11.1234", "10.1234/") is refused under the box with "This is not formatted correctly.". Empty while "DOIs" is ticked, it is refused with "A DOI prefix is required" (Rule 3). On a journal upgraded from 3.3 the box can show an old leftover prefix instead of the one the journal used there ⚠ [A29](#a29). <sup>c</sup> <sup>q3</sup> |
 | **Automatic DOI Assignment** | Yes, one choice | Help: "When should a submission be assigned a DOI?". A list: "Immediately, when an item is created (only with the default DOI suffix)", "Upon reaching the copyediting stage" (a preprint server "Upon reaching the production stage"), "Upon publication", "Never". The second is selected on a new journal. "Immediately…" saves only with "DOI Format" "Default": with "None" or "Custom pattern" chosen, "Save" is refused with "Immediate DOI assignment is only possible with the default DOI suffix. Please choose the default suffix or a different time for automatic DOI assignment." under this list, whichever of the two was changed last. After that refusal "Save" stays greyed out until a choice is made again in this list; choosing "Default" alone leaves it greyed. Effect: Rule 5. <sup>c</sup> <sup>q39</sup> |
 | **DOI Format** | Yes, one choice | Help: "Select the format to use when the application generates a DOI." Radios: "Default - Automatically generates a unique eight-character suffix" (selected on a new journal), "None - Suffixes must be entered manually on the DOI management page and will not be generated automatically" (the words "DOI management page" link to the DOIs page), "Custom pattern - (not recommended)". "None" and "Custom pattern" cannot be saved with "Immediately…" (the row above). Effect: Rule 6. <sup>c</sup> |
@@ -2237,6 +2237,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
+| [OJS9](#ojs9) | With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2800,6 +2801,23 @@ Report: none — DataCite with a DOI per version is not implemented yet and is t
 > and DOI Versioning is still to be implemented", tracked upstream in
 > pkp/pkp-lib#11591 (open, milestone 3.6; pkp/ojs#5866). No fix comes
 > before it, and the statuses above stand until then.
+
+<a id="ojs9"></a>
+**OJS9 — With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI** · 🐞 · low.
+"Items with DOIs" offers no box for author responses, but a journal's
+settings accept the kind when sent through the API. Once it is on, each
+time an article's DOIs are assigned ("Assign DOIs", or the automatic
+assignment), every author response on its review rounds gets a fresh
+DOI, even one that already has a DOI, and the earlier DOI is left
+pointing at nothing. No screen turns the kind on, so no journal meets
+this through the app's own controls.
+
+The DOIs page shows the response's new DOI after each "Assign DOIs",
+with nothing to say that the earlier one was dropped. The dropped DOIs
+were never sent to Crossref or DataCite, whose deposits carry no author
+responses.
+Since: 2026-01-27 (pkp/pkp-lib#11332) · Basis: probe, 2026-10-13. <sup>f-ojs9</sup>
+
 
 ### OMP
 
@@ -5416,6 +5434,10 @@ review's Mattermost thread): "DataCite and DOI Versioning is still to be
 implemented, see https://github.com/pkp/pkp-lib/issues/11591"; that
 issue, "[Implementation] Consider different DOIs for different versions
 in DataCite", was open with milestone 3.6 that day.
+
+<a id="fn-f-ojs9"></a>
+**f-ojs9** — Note c: OJS `classes/publication/Repository.php` `createDois()`, the author-response block (`:392-404` at ojs `7c6fba2064`), tests `empty($authorResponses->doiId)`, the collection from `getReviewAuthorResponses()`, not the loop's `$authorResponse`. A Laravel collection has no `__isset`, so `empty()` is always true and `Repo::doi()->mintDoi()` runs for every response on every call, replacing its `doiId`. The peer-review block above it tests the item (`$reviewAssignment->getData('doiId')`). The kind is reachable only through the API: `schemas/context.json` `enabledDoiTypes` allows `authorResponse`, while `DoiSetupSettingsForm` and `Repository::getAllDepositableTypes()` comment it out. From `30e82d3876` (Erik Hanson, 2026-01-27, `pkp/pkp-lib#11332`); `stable-3_5_0` has no author responses. Reported by the maintainer from a code read, 2026-10-13; walked the same day on the default dataset (three assignments, three DOIs, two left with no item; the fix keeps the first).
+Issue report: [docs/issues/U45-OJS9-author-response-doi-reminted.md](../issues/U45-OJS9-author-response-doi-reminted.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`

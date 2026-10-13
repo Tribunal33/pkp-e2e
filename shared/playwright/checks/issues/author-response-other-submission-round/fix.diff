@@ -1,0 +1,50 @@
+--- a/lib/pkp/api/v1/reviews/PKPReviewController.php
++++ b/lib/pkp/api/v1/reviews/PKPReviewController.php
+@@ -942,12 +942,14 @@
+     {
+         $reviewRoundId = (int)$illuminateRequest->route('reviewRoundId');
+         $responseId = (int)$illuminateRequest->route('responseId');
++        $submission = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_SUBMISSION);
+ 
+         /** @var ReviewRoundDAO $reviewRoundDao */
+         $reviewRoundDao = DAORegistry::getDAO('ReviewRoundDAO');
+         $reviewRound = $reviewRoundDao->getById($reviewRoundId);
+ 
+-        if (!$reviewRound) {
++        // The round must belong to the submission the request was authorized for
++        if (!$reviewRound || (int)$reviewRound->getSubmissionId() !== $submission->getId()) {
+             return response()->json(
+                 [
+                     'error' => __('api.404.resourceNotFound')
+--- a/lib/pkp/api/v1/reviews/formRequests/ReviewRoundAuthorResponseCommonValidator.php
++++ b/lib/pkp/api/v1/reviews/formRequests/ReviewRoundAuthorResponseCommonValidator.php
+@@ -35,7 +35,12 @@
+                 'required',
+                 'integer',
+                 function (string $attribute, mixed $value, \Closure $fail) {
+-                    if (!$this->reviewRound || (int) $this->reviewRound->getId() !== (int) $value) {
++                    // The round must belong to the submission the request was authorized for
++                    if (
++                        !$this->reviewRound
++                        || (int) $this->reviewRound->getId() !== (int) $value
++                        || (int) $this->reviewRound->getSubmissionId() !== (int) $this->route('submissionId')
++                    ) {
+                         $fail(__('api.404.resourceNotFound'));
+                     }
+                 },
+--- a/lib/pkp/api/v1/reviews/formRequests/RequestAuthorResponse.php
++++ b/lib/pkp/api/v1/reviews/formRequests/RequestAuthorResponse.php
+@@ -58,7 +58,12 @@
+                 'required',
+                 'integer',
+                 function (string $attribute, mixed $value, \Closure $fail) {
+-                    if (!$this->reviewRound || (int)$this->reviewRound->getId() !== (int)$value) {
++                    // The round must belong to the submission the request was authorized for
++                    if (
++                        !$this->reviewRound
++                        || (int)$this->reviewRound->getId() !== (int)$value
++                        || (int)$this->reviewRound->getSubmissionId() !== (int)$this->route('submissionId')
++                    ) {
+                         $fail(__('api.404.resourceNotFound'));
+                     }
+                 }

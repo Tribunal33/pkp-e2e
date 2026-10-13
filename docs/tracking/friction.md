@@ -13,3 +13,4 @@ Facts only, the same quarantine as everywhere else (nothing
 security-shaped, no credentials).
 
 ## Entries
+2026-10-13 · issues · issue reporter u30r1 (U30 A11) · the OJS dataset users `jdoe`, `lvon` and `rsharif` carry `must_change_password`, so `signIn()` as `jdoe` stalls on the change-password page (LoginPage waits 15 s for a URL without `/login`) and two OJS walks aborted before the cause showed; `dataset.md` lists them as plain reviewers · a "must change password" note on those rows of `dataset.md` (`dataset-facts` could read `users.must_change_password`), or a `signIn()` error that names the change-password page
