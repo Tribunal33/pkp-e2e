@@ -1472,7 +1472,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A37](#a37) | After "Resend Review Request", the activity log prints "{$submissionid}" where the submission's number belongs | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A39](#a39) | The activity log's "View changes" reads "Competing Interests declared: YES" for a reviewer who declared none | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A43](#a43) | "Thank Reviewer" and "Unassign Reviewer" close without asking after a change to the message alone, and the change is lost | 🐞 | medium | — |
-| [A44](#a44) | The resend email names the request's old response date, not the one picked in the window | 🐞 | user-visible | — |
+| [A44](#a44) | The "Resend Review Request" email gives the reviewer the old response date, not the one the editor just picked | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A45](#a45) | The inverted-date notice says "adding the reviewer" in the "Edit" and "Resend Review Request" windows too, and misspells "response" as "responde" | 🐞 | minor | — |
 | [A46](#a46) | "Resend Review Request" with inverted dates raises a browser alert on top of the notice, and its window shows no date guidance | 🐞 | minor | — |
 | [A47](#a47) | A re-sent request whose response date has passed keeps reading "Request Resent": never "Overdue", no "Send Reminder" | 🐞 | user-visible | — |
@@ -2040,16 +2040,23 @@ Profile page and in a reviewer's own review is reported with it
 Basis: probe, 2026-10-01. <sup>[f-a43](#fn-a43)</sup>
 
 <a id="a44"></a>
-**A44 — The resend email names the request's old response date** · 🐞 · user-visible.
-"Resend Review Request" on a declined row offers fresh "Response Due
-Date" and "Review Due Date" pickers, and its email asks the reviewer to
-"accept or decline the request by {date}". That date is the response
-date the request had before the resend, not the one the editor picks in
-the same window: the message is filled in when the window opens, before
-the dates are chosen. With "Response Due Date" 2026-10-17 picked, the
-email read "by 2026-10-30". The reviewer is told to answer by a date the
-request no longer carries. Basis: probe, 2026-10-03.
-<sup>[f-a44](#fn-a44)</sup>
+**A44 — The "Resend Review Request" email gives the reviewer the old response date, not the one the editor just picked** · 🐞 · medium.
+"Resend Review Request" on a declined reviewer's row offers new
+"Response Due Date" and "Review Due Date" fields, preset to today plus
+the journal's or press's default response and review times. Its email
+asks the reviewer to "accept or decline the request by {date}", but that
+date is the response date the request had before the resend, not the one
+in the window. With "Response Due Date" set to 2026-10-20, the email
+read "by 2026-11-09".
+
+The preset dates are new ones, so even an editor who changes nothing
+sends a date the request no longer has. Nobody is warned. The default
+email names no review date, so only the response date is wrong.
+
+It happens on every resend of a declined request. When the old response
+date has already passed, as for a request declined long ago, the email
+asks for an answer by a date already gone.
+Basis: probe, 2026-10-13. <sup>[f-a44](#fn-a44)</sup>
 
 <a id="a45"></a>
 **A45 — The inverted-date notice speaks of "adding the reviewer" in every window, and misspells "response"** · 🐞 · minor.
@@ -3929,6 +3936,7 @@ lib/pkp form and template, with no override in OMP (read in the code
 ([docs/issues/U27-A2-request-resent-row-shows-review-deadline.md](../issues/U27-A2-request-resent-row-shows-review-deadline.md)),
 which names it as a separate fault; that walk read the stored dates
 (the two picked) on 3.5.
+Issue report: [docs/issues/U27-A44-resend-email-names-old-response-date.md](../issues/U27-A44-resend-email-names-old-response-date.md).
 
 <a id="fn-a45"></a>
 **f-a45** — Live-probed 2026-10-05 (OJS and OMP, main and

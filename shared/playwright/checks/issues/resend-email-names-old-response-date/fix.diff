@@ -1,0 +1,74 @@
+--- a/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
++++ b/lib/pkp/classes/controllers/grid/users/reviewer/PKPReviewerGridHandler.php
+@@ -647,7 +647,8 @@
+             $user = $request->getUser();
+             $context = $request->getContext();
+             $template = Repo::emailTemplate()->getByKey($context->getId(), ReviewerResendRequest::getEmailTemplateKey());
+-            $mailable = new ReviewerResendRequest($context, $submission, $reviewAssignment);
++            // The assignment as saved, so the message's due dates are the ones picked in the form
++            $mailable = new ReviewerResendRequest($context, $submission, Repo::reviewAssignment()->get($reviewAssignment->getId()));
+ 
+             if ($this->createMail($mailable, $request->getUserVar('personalMessage'), $template, $user, $reviewer)) {
+                 Repo::emailLogEntry()->logMailable(SubmissionEmailLogEventType::REVIEW_RESEND, $mailable, $submission, $user);
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ResendRequestReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ResendRequestReviewerForm.php
+@@ -81,6 +81,17 @@
+     }
+ 
+     /**
++     * @copydoc \PKP\controllers\grid\users\reviewer\form\ReviewerNotifyActionForm::getVariablesFilledOnSend()
++     */
++    protected function getVariablesFilledOnSend(): array
++    {
++        return [
++            'responseDueDate' => __('reviewer.submission.responseDueDate'),
++            'reviewDueDate' => __('reviewer.submission.reviewDueDate'),
++        ];
++    }
++
++    /**
+      * @copydoc \PKP\controllers\grid\users\reviewer\form\ReviewerNotifyActionForm::initData()
+      */
+     public function initData()
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerNotifyActionForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerNotifyActionForm.php
+@@ -100,13 +100,27 @@
+ 
+         $this->setData('templates', $templates->toArray());
+         $this->setData('defaultTemplateKey', $defaultTemplate->getData('key'));
++        // Variables the window itself changes stay in the message, shown as tags, and are filled in when it is sent
++        $variablesFilledOnSend = $this->getVariablesFilledOnSend();
++        $this->setData('emailVariables', $variablesFilledOnSend);
+         $this->setData('personalMessage', Mail::compileParams(
+             $defaultTemplate->getLocalizedData('body'),
+-            $mailable->getData(Locale::getLocale())
++            array_diff_key($mailable->getData(Locale::getLocale()), $variablesFilledOnSend)
+         ));
+     }
+ 
+     /**
++     * Email variables that depend on the values entered in this form, and so are left
++     * in the message for the mailable to fill in when it is sent.
++     *
++     * @return array<string,string> Variable name => its label in the message editor
++     */
++    protected function getVariablesFilledOnSend(): array
++    {
++        return [];
++    }
++
++    /**
+      * @copydoc Form::readInputData()
+      */
+     public function readInputData()
+--- a/lib/pkp/templates/controllers/grid/users/reviewer/form/resendRequestReviewerForm.tpl
++++ b/lib/pkp/templates/controllers/grid/users/reviewer/form/resendRequestReviewerForm.tpl
+@@ -26,7 +26,7 @@
+ 
+ 	<!--  Message to reviewer textarea -->
+ 	{fbvFormSection title="editor.review.personalMessageToReviewer" for="personalMessage"}
+-		{fbvElement type="textarea" name="personalMessage" id="personalMessage" value=$personalMessage rich=true}
++		{fbvElement type="textarea" name="personalMessage" id="personalMessage" value=$personalMessage variables=$emailVariables rich=true}
+ 	{/fbvFormSection}
+ 
+ 	<!-- Skip email checkbox -->
