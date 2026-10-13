@@ -6,7 +6,8 @@
  * in its own slot, a full clone of this repo with its own app checkouts
  * (PKP_E2E_SLOT in the clone's .env shifts its ports, DBs and Mailpit). This
  * script owns the slot registry the bot (claude-threads, patched) consults,
- * and the SessionStart hook that tells every Claude session where it is.
+ * and the SessionStart hook that tells every Claude session where it is (and
+ * puts bin/commit-msg.js in place as the clone's commit-msg hook).
  *
  * The rules, all decided by state:
  * - A new session takes a free slot, the one used longest ago first.
@@ -197,6 +198,17 @@ function git(dir, args) {
     } catch {
         return null;
     }
+}
+
+/** Puts bin/commit-msg.js in place as the clone's commit-msg hook; a different hook already there is left alone. */
+function installCommitMsgHook(dir) {
+    const rel = git(dir, ['rev-parse', '--git-path', 'hooks/commit-msg']);
+    if (!rel) return;
+    const target = path.resolve(dir, rel);
+    const shim = '#!/bin/sh\n# pkp-e2e: bin/commit-msg.js, put in place by bin/slot.js hook\nexec node "$(git rev-parse --show-toplevel)/bin/commit-msg.js" "$1"\n';
+    if (fs.existsSync(target) && fs.readFileSync(target, 'utf8') !== shim) return;
+    fs.mkdirSync(path.dirname(target), {recursive: true});
+    fs.writeFileSync(target, shim, {mode: 0o755});
 }
 
 /** Is this repo clone clean? Uncommitted, untracked, stashed or unpushed work is not. */
@@ -766,6 +778,9 @@ function main() {
             case 'claims':
                 return print(listClaims());
             case 'hook': {
+                try {
+                    installCommitMsgHook(path.resolve(__dirname, '..'));
+                } catch {}
                 let raw = '';
                 try {
                     raw = fs.readFileSync(0, 'utf8');

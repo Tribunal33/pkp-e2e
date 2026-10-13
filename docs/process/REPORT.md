@@ -432,7 +432,8 @@ file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
   and pkp-e2e's own files as
   `https://github.com/jardakotesovec/pkp-e2e/blob/main/<path>` (the
   spec's register entry with its anchor, the kept script).
-- Filing notifies no one outside pkp-e2e. A GitHub handle is written
+- Filing notifies no one outside pkp-e2e, and neither does the note that
+  closes an issue (MAINTENANCE "A report's life"). A GitHub handle is written
   without an `@`, and a pkp issue or PR as text in a code span
   (`pkp/pkp-lib#13288`), not as a link: GitHub would otherwise post a
   "mentioned this" line on pkp's own issue for every report. The team

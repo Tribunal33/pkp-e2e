@@ -605,6 +605,11 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   tells every session its slot, ports and checkout state, and a resumed one
   what moved since its pause. A manual `claude` started in a free slot
   registers itself, so the bot does not place a thread on top of it.
+  It also puts `bin/commit-msg.js` in place as the clone's commit-msg
+  hook, which writes a pkp issue or PR in a commit message without the
+  owner (`pkp-lib#13447`): GitHub turns `pkp/pkp-lib#13447` and the
+  issue's address into links, and each link from a pkp-e2e commit puts a
+  "referenced" line on pkp's issue, again from every fork that syncs it.
 - **Feature claims.** `node bin/slot.js claim U<nn>` (RUNBOOK step 1)
   refuses a feature another slot's session holds; a claim lapses when its
   session's slot is freed, and a session drops one early with `node

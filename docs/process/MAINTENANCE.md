@@ -436,7 +436,8 @@ with the team's ruling; not a bug, the entry is overturned and retires
 other issue. It runs the other way too: any session that retires an
 entry with a report (a sync, a housekeeping fold, a drift sweep) deletes
 the report and its script and closes the issue with a comment naming the
-change.
+change, a pkp issue or PR in it written as in the report, in a code span
+(REPORT.md "As a GitHub issue").
 
 **Keeping a report in step.** The register entry, its report and its
 issue say the same thing. A change to an entry that has a filed report,
