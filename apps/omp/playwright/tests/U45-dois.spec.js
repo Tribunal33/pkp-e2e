@@ -37,7 +37,7 @@
  *   log's warning is not a screen.
  * - A22 🐞: `DoisPage.chooseBulkAction` waits the "Bulk Actions" menu out
  *   before answering a window; the menu left open is not asserted.
- * - OMP2 🐞, A1, A2, A4–A7, A9–A13, A15–A20: not on these scenarios'
+ * - OMP2 🐞, A1, A2, A4–A7, A9–A12, A15–A20: not on these scenarios'
  *   press paths ("Immediately…" is only refused, in S8). A25–A27 are
  *   retired (a decline and "Revert Decline" under "Immediately…", a
  *   declined book carrying a DOI on the page); their paths are Planned

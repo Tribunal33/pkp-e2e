@@ -1,0 +1,16 @@
+--- a/CrossrefExportPlugin.php
++++ b/CrossrefExportPlugin.php
+@@ -217,8 +217,11 @@
+             // Supply an exportErrors array because otherwise exportXML() will echo out export errors
+             $exportErrors = [];
+             $exportXml = $this->exportXML([$object], $filter, $context, $noValidation, $exportErrors);
+-            if (!empty($exportErrors)) {
+-                $messages = array_unique(array_map(fn (\LibXMLError $error) => trim($error->message), $exportErrors));
++            // Only a schema validity error (libxml's XML_SCHEMAV_* codes) says the file is invalid; a schema that
++            // could not be fetched (XML_SCHEMAP_FAILED_LOAD) leaves the check to Crossref, as before
++            $validityErrors = array_filter($exportErrors, fn (\LibXMLError $error) => $error->code >= 1800 && $error->code < 1900);
++            if (!empty($validityErrors)) {
++                $messages = array_unique(array_map(fn (\LibXMLError $error) => trim($error->message), $validityErrors));
+                 $failedMsg = __('plugins.importexport.crossref.export.error.validation') . PHP_EOL . implode(PHP_EOL, $messages);
+                 $this->updateDepositStatus($context, $object, Doi::STATUS_ERROR, null, $failedMsg);
+                 $resultErrors[] = [['plugins.importexport.crossref.export.error.validation']];

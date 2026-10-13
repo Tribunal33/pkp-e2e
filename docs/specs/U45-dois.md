@@ -506,8 +506,11 @@ links under the list. <sup>g</sup>
     sure…?"), a button of the same name and "Cancel". The action applies
     to the ticked items; afterwards the list reloads and nothing stays
     ticked. With nothing ticked, the window still opens ("…for 0
-    item(s)…"); its button closes it and nothing else happens, with no
-    message ⚠ [A13](#a13). The menu closes when its item opens the
+    item(s)…"); its button gives way to an "Error" window with the
+    server's reason ("No valid publication objects were included with the
+    request."; for "Assign DOIs" "The requested resource was not found.")
+    and "OK", and nothing else happens. <sup>f-a13</sup> The
+    menu closes when its item opens the
     window. It stays open over the list when the mouse button is held
     on the item (such as "Assign DOIs") for more than a tenth of a
     second and the window is answered and gone within 1.1 seconds of
@@ -564,12 +567,22 @@ links under the list. <sup>g</sup>
       the reviews Rule 7 lets go) and show "Items successfully
       exported". The install
       checks that file against the agency's published format, which it
-      fetches from the agency's site; an install that cannot reach that
-      site downloads nothing and shows no message, as on the test
-      installs [A13](#a13). Any ticked item without a published DOI (an
+      fetches from the agency's site. A file that fails the check
+      downloads nothing: an "Error" window reads "An XML validation error
+      occurred and the XML could not be exported." over a list of what the
+      check found, such as, for a Crossref work whose first author has no
+      given name, "Element '{http://www.crossref.org/schema/5.4.0}surname':
+      [facet 'minLength'] The value has a length of '0'; this underruns the
+      allowed minimum length of '1'." and the same element's pattern. An
+      install that cannot reach the agency's site gets the same window,
+      listing "Failed to locate the main schema resource at
+      'https://www.crossref.org/schemas/crossref5.4.0.xsd'." for Crossref,
+      as on the test installs. Any ticked item without a published DOI (an
       unpublished work, a published work whose DOI was cleared, an
-      unpublished issue) makes the whole action fail the same silent way,
-      with nothing exported [A13](#a13). With DataCite, exporting a
+      unpublished issue) makes the whole action fail, nothing exported,
+      with an "Error" window: "One or more invalid publication objects
+      were included with the request.". <sup>f-a13</sup> With DataCite,
+      exporting a
       published issue fails on the server and shows nothing
       ⚠ [OJS2](#ojs2).
     - **"Deposit DOIs"** asks "You are about to send DOI metadata records
@@ -595,7 +608,8 @@ links under the list. <sup>g</sup>
       "Details" reads "DataCite export: no DOI assigned…"
       ⚠ [OJS5](#ojs5). A ticked
       unpublished item makes the whole action fail: nothing is marked,
-      the window closes and no message says why [A13](#a13).
+      and an "Error" window says "One or more invalid publication objects
+      were included with the request.". <sup>f-a13</sup>
     - **"Deposit All"** opens "Deposit all DOIs": "You are about to
       schedule all outstanding DOI metadata records to be deposited with
       {agency}. Only published items with a DOI will be deposited…",
@@ -689,13 +703,26 @@ links under the list. <sup>g</sup>
 33. **A deposit that fails.** When the agency answers a deposit with an
     error, the DOI reads "Error"; the row's "View Error" and the panel's
     "View Error" open the window "Registration Error Message": "The
-    following error was returned by {agency} and contains details about
-    the cause of the error:" over the agency's message. A deposit that
-    cannot reach the agency never gets there: its background job fails,
-    is tried twice more and is dropped, and the DOI stays "Submitted"
-    with nothing on the DOIs page to show it ⚠ [A18](#a18). The test
-    installs reach no agency, so every deposit there stays "Submitted".
-    <sup>r</sup> <sup>q22</sup>
+    deposit to {agency} failed. The details below explain the cause of
+    the error:" over the agency's message (from Crossref, the messages of
+    the records it did not take, then its whole answer). With Crossref, a
+    work whose file fails the check of Rule 29 is not sent: its DOI reads
+    "Error" once the background deposit has run, and the window reads
+    "The XML is not valid against the Crossref schema and was not
+    deposited. Validation errors:" over the check's list; a work deposited
+    in the same action whose file passes is sent as usual. An install
+    that cannot fetch Crossref's format gets the same for every work, its
+    list "Failed to locate the main schema resource at
+    'https://www.crossref.org/schemas/crossref5.4.0.xsd'.", and sends
+    nothing ⚠ [A30](#a30). A deposit that cannot reach the agency never
+    gets there: its background job fails, is tried twice more and is
+    dropped, and the DOI stays "Submitted" with nothing on the DOIs page
+    to show it ⚠ [A18](#a18); with Crossref, that is an install that can
+    fetch the format and cannot send (one that can do neither meets A30
+    first). The test installs reach no agency: a deposit there stays
+    "Submitted" while its job waits, and a Crossref one reads "Error" by
+    A30 once its job has run.
+    <sup>r</sup> <sup>q22</sup> <sup>f-a13</sup> <sup>f-a30</sup>
 
 <a id="agencies"></a>
 **Registration agencies**
@@ -976,7 +1003,7 @@ differs. <sup>z1</sup>
   [Citations & references](U42-citations-and-references.md), Side
   effects. <sup>r</sup>
 - **Downloads.** "Export DOIs" is meant to save the metadata file(s) to
-  the manager's computer (Rule 29 [A13](#a13)). <sup>p</sup>
+  the manager's computer (Rule 29). <sup>p</sup>
 - **Statuses change on other features' actions**: publishing and
   unpublishing versions and issues (Rule 32); under "Immediately, when
   an item is created", a decline of a work with no published version
@@ -1768,13 +1795,15 @@ throwaway accounts. <sup>sc</sup>
       memory" and "Moss regrowth" and choose "Export DOIs": the window
       asks "You are about to export DOI metadata records for 2 item(s)
       for Crossref. Are you sure you want to export these records?";
-      press "Export DOIs": nothing downloads [A13](#a13) (Rule 29).
+      press "Export DOIs": an "Error" window says "One or more invalid
+      publication objects were included with the request."; "OK" closes
+      it, and nothing downloads (Rule 29).
     - **"Deposit DOIs" with an unpublished work**: tick the same two and
       choose "Deposit DOIs": the window asks "You are about to send DOI
       metadata records for 2 item(s) to Crossref. Are you sure you want to
-      deposit these records?"; press "Deposit DOIs": nothing is marked,
-      and "Axolotl limb memory" still reads "Unregistered" [A13](#a13)
-      (Rule 29).
+      deposit these records?"; press "Deposit DOIs": the same "Error"
+      window; "OK" closes it, nothing is marked, and "Axolotl limb memory"
+      still reads "Unregistered" (Rule 29).
     - **"Deposit DOIs"**: tick "Axolotl limb memory" alone and run
       "Deposit DOIs": "Items successfully submitted for deposit"; its
       badge and its "Article" row read "Submitted" at once, and its
@@ -2020,10 +2049,6 @@ Left out of the scenarios above, by reason:
     `docs/issues/U45-A4-deposited-item-reads-manually-registered.md`):
     after "Deposit DOIs" the "Submitted" item's agency box reads "The
     metadata for this item has been submitted to {agency}." {OJS OPS}
-  - the guard for A13 (Rules 24, 29; issue report
-    `docs/issues/U45-A13-bulk-action-refusal-no-message.md`): "Deposit
-    DOIs" with an unpublished work among the ticked ones shows the "Error"
-    window with the server's reason
   - the guard for A8 (Fields, the DOIs page; issue report
     `docs/issues/U45-A8-doi-page-controls-unnamed.md`): the button beside
     "Filters" found by its role and the name "DOI Statuses", and a row's
@@ -2175,8 +2200,8 @@ Left out of the scenarios above, by reason:
   - A11 (searching by a DOI's start, on a press by a chapter's, format's or file's DOI while its kind is ticked; Rule 21)
   - A12 (clearing a "Registration" filter after "Unregistered"; Rule 22)
   - A8 (the unnamed "DOI Statuses" button and row tick boxes; Fields, the DOIs page)
-  - A13 (a bulk action confirmed with nothing ticked, and the silent refusals scenario 13 passes; Rules 24, 29)
   - A22 (the "Bulk Actions" menu left open over the list after "Assign DOIs"; Rule 24)
+  - A30 (a Crossref deposit refused when the format cannot be fetched; Rule 33; the suites never run a deposit's job)
   - A14 (the "Mark DOIs Needs Sync" question's "stale"; Rule 28; scenario 9 passes it)
   - A19 (choosing an agency unticking every kind; Rule 35)
   - A5 (a refused block field keeping the agency; Rule 35; scenario 16 passes it)
@@ -2221,7 +2246,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | A pattern symbol with nothing to fill it stays in the DOI | 🐞 | high | issues (claude), 2026-10-12 — re-verified |
 | [A11](#a11) | Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A12](#a12) | On the DOIs page, clearing a "Registration" filter chosen after "Unregistered" leaves only published works listed | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A14](#a14) | The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A15](#a15) | "Deposit DOIs" on a published work with no DOI reports success, and nothing is deposited | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
 | [A17](#a17) | With "DOI Versioning" "Yes", publishing a new major version leaves the earlier version's DOI "Registered" instead of "Needs Sync" | 🐞 | low | issues (claude), 2026-10-12 — re-verified |
@@ -2232,6 +2256,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | The DOIs page's rows show a title's italic word as `<i>…</i>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A29](#a29) | A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it | 🐞 | user-visible | — |
+| [A30](#a30) | With Crossref, a deposit is refused as "not valid" whenever Crossref's format cannot be fetched, and nothing is sent | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
@@ -2254,6 +2279,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS2](#ops2) | A preprint server offers "Automatic Deposit" but nothing runs it | ❓ | user-visible | — |
 | [OPS5](#ops5) | A preprint server's DOIs page lists drafts nobody has submitted | ❓ | minor | — |
 | [OJS7](#ojs7) | A review that loses its "Unregistered" DOI and qualifies again gets a new DOI under "Immediately…" and none under the other settings; intended | ✅ | minor | @bozana 2026-10-07 · ruled intended |
+| [A13](#a13) | A bulk action the server refuses on the DOIs page closes its window and shows no message | ✅ | retired | — |
 | [A25](#a25) | Under "Immediately", declining a submission deletes the DOI its published version shows | ✅ | retired | — |
 | [A26](#a26) | Under "Immediately", "Revert Decline" does not give the work its DOIs back | ✅ | retired | — |
 | [A27](#a27) | The DOIs page no longer lists a declined submission that carries a DOI | ✅ | retired | — |
@@ -2426,22 +2452,6 @@ manager looks at "Unregistered", switches to any other filter of the
 "Registration" group ("Submitted", "Registered", "Has Error", "Needs
 Sync") and then clears that filter.
 Basis: probe, 2026-10-01. <sup>f-a12</sup>
-
-<a id="a13"></a>
-**A13 — A bulk action the server refuses on the DOIs page closes its window and shows no message** · 🐞 · medium.
-A manager confirms a bulk action on the DOIs page and the server refuses
-the request. The confirmation window closes, the list reloads with
-nothing ticked, and no "Error" window says that the action was refused
-or why. The case a manager meets is "Deposit DOIs" or "Export DOIs" with
-an unpublished work among the ticked ones. The DOIs list shows
-unpublished works beside published ones, so "Select All" ticks them. The
-server then refuses the whole selection: nothing is deposited or
-exported, for the published works either. The same silence follows any
-action confirmed with nothing ticked, and an "Export DOIs" whose file
-does not pass the registration agency's format check. For an unpublished
-work the way round is to untick it and run the action again, once the
-manager has guessed that this is the reason.
-Basis: probe, 2026-10-01. <sup>f-a13</sup>
 
 <a id="a14"></a>
 **A14 — The "Mark DOIs Needs Sync" window on the DOIs page asks to mark the records "as stale"** · 🐞 · low.
@@ -2657,6 +2667,21 @@ DOIs page any DOI made with the wrong one.
 That is `main`, and 3.5 since 3.5.0-2. An upgrade from 3.3 to 3.4
 stops on such an install with a database error instead.
 Since: 2026-10-09 (pkp/pkp-lib#13481; on 3.5 pkp/pkp-lib#12082) · Basis: probe, 2026-10-09. <sup>f-a29</sup>
+
+<a id="a30"></a>
+**A30 — With Crossref, a deposit is refused as "not valid" whenever Crossref's format cannot be fetched, and nothing is sent** · 🐞 · user-visible.
+A journal or preprint server manager deposits works with Crossref
+("Deposit DOIs", "Deposit All" or the automatic deposit). Before sending
+a work the install checks its file against Crossref's published format,
+which it fetches from www.crossref.org each time. When that fetch fails
+(the site down or slow, or a server allowed to reach only Crossref's
+deposit service), every work is turned "Error" and nothing is sent, and
+"View Error" says "The XML is not valid against the Crossref schema and
+was not deposited." over "Failed to locate the main schema resource at
+'https://www.crossref.org/schemas/crossref5.4.0.xsd'." The files are
+valid; Crossref would have taken them, and checks them itself. Depositing
+again once the site answers gets them registered.
+Since: the PR heads of pkp/pkp-lib#13507 (pkp/crossref-ojs#114, pkp/crossref-ops#73; not merged) · Basis: probe, 2026-10-13. <sup>f-a30</sup>
 
 ### OJS
 
@@ -2917,6 +2942,9 @@ leave drafts out.
 Basis: probe, 2026-09-26. <sup>f-ops5</sup>
 
 ### Retired
+
+<a id="a13"></a>
+**A13 — A bulk action the server refuses on the DOIs page closes its window and shows no message** · ✅ · retired. Fixed by `pkp/ui-library#1016` (for `pkp/pkp-lib#13507`, with `pkp/pkp-lib#13508`), verified 2026-10-13 at the PR heads before their merge on OJS, OMP and OPS: a refused bulk action leaves an "Error" window with the server's reason, and an "Export DOIs" whose file fails the agency's check lists what the check found (Rules 24, 29). <sup>f-a13</sup>
 
 <a id="a25"></a>
 **A25 — Under "Immediately", declining a submission deletes the DOI its published version shows** · ✅ · retired. Fixed 2026-10-07 at the PR heads of `pkp/pkp-lib#13447` round 2 (`pkp/pkp-lib#13460` `1aa1973c66`, `pkp/ojs#5903` `0375b98bde`, `pkp/omp#2495` `c9e1c8a521`, `pkp/ops#1435` `db0f597851`); merged 2026-10-09; this page describes the fixed behavior: once a version is published, a "Published Manuscript Under Review" one included, a decline keeps every DOI of the work, and the published page its "DOI:" line (Rule 5b). <sup>f-a25</sup>
@@ -4838,7 +4866,27 @@ answered 400 `api.dois.400.invalidPubObjectIncluded`; exports answered
 400 "An XML validation error occurred and the XML could not be
 exported.". In each case the confirm window closed, no other window or
 notice appeared, and the list reloaded with nothing ticked.
-Issue report: [pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234) ([docs/issues/U45-A13-bulk-action-refusal-no-message.md](../issues/U45-A13-bulk-action-refusal-no-message.md)).
+Issue report: [pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234) (the report, deleted at the PR review below, is in git).
+PR review 2026-10-13, at the PR heads (`pkp/ui-library#1016` `47b565cb42`,
+`pkp/pkp-lib#13508` `cbaf79526c`, `pkp/crossref-ojs#114` `12574dea5f`,
+`pkp/crossref-ops#73` `b8d107ef10`, through `pkp/ojs#5928` `2458eead21`,
+`pkp/omp#2506` `18f197514e` and `pkp/ops#1447` `bd864266eb`), before their
+merge: `DoiListPanel.vue` `onBulkActionComplete()` closes the dialog only
+while the modal store's dialog is still the confirmation (`name`
+"bulkActions"), so an "Error" window `ajaxErrorCallback()` opened in its
+place stays; `PKPDoiController` (and OJS's `DoiController` for issues)
+answers a failed export with the libxml messages as an HTML list after
+`api.dois.400.xmlExportFailed`. On PKP's default dataset
+(`checks/issues/bulk-action-refusal-no-message/walk.js` and
+`checks/sync/pkp-lib-13508/walk.js`, `side.sh base|head`): at the head
+"Mark DOIs Unregistered" with nothing ticked (OJS, OMP, OPS) and "Deposit
+DOIs" and "Export DOIs" with an unpublished work ticked (OJS, OPS) leave
+the "Error" window with the server's reason until "OK"; "Export DOIs" on
+a work whose first author has no given name lists the two `surname`
+messages (Crossref's format served by the stand-in `crossref-stub.js`)
+and on the plain test install the schema message; "Mark DOIs Registered"
+with an unpublished work still shows "DOI Updates Failed". At the base
+every one of these closed with no window.
 
 <a id="fn-f-a14"></a>
 **f-a14** — Live-probed 2026-09-26 (Rule 28), all three apps: the
@@ -5032,6 +5080,34 @@ suites' reach (an install is never upgraded in a test run).
 Written up for the team in
 [docs/reports/2026-10-09-pkp-lib-13481.md](../reports/2026-10-09-pkp-lib-13481.md)
 (the PR review of pkp/pkp-lib#13481, posted in the channel on 2026-10-09).
+
+<a id="fn-f-a30"></a>
+**f-a30** — `CrossrefExportPlugin::exportAndDeposit()` at
+`pkp/crossref-ojs#114` `12574dea5f` and `pkp/crossref-ops#73`
+`b8d107ef10` (not merged) stops a work's deposit on any error
+`exportXML()` hands back, sets "Error" with
+`plugins.importexport.crossref.export.error.validation` and the messages,
+and sends nothing. `exportXML()` keeps libxml's ERROR and FATAL entries;
+`XMLTypeDescription::checkType()` validates against the filter's
+`xml::schema(https://www.crossref.org/schemas/crossref5.4.0.xsd)`, which
+libxml fetches through PHP's default stream context (the `[proxy]` keys
+apply, `PKPContainer::settingProxyForStreamContext()`). A schema that
+cannot be fetched gives level ERROR, code 1757 (`XML_SCHEMAP_FAILED_LOAD`,
+"Failed to locate the main schema resource…"); a file that fails the
+schema gives the 18xx `XML_SCHEMAV_*` codes (the empty `surname`:
+`minLength` and `pattern`); an imported schema that cannot be fetched is
+a warning only (3083), not kept. Before the PR the deposit ignored these
+errors and sent the file. Live-probed 2026-10-13 on PKP's default dataset
+(`checks/sync/pkp-lib-13508/walk.js` step 10, OJS work 1, OPS work 5, with
+the Crossref stand-in answering 503 for the schema and taking deposits):
+at the head the work read "Error" with the window quoted and the
+stand-in received nothing; at the base, with no outbound connection at
+all (`checks/issues/deposit-unreachable-agency-stays-submitted/walk.js`),
+the schema check failed the same way and the file was still sent
+(cURL error 7 to api.crossref.org, the failed job of A18). On the plain
+test installs (the dead `[proxy]`) the head's deposit reads "Error"
+with the schema message. Written up in the PR review's report on the
+companion branch `13507`, `docs/reports/2026-10-13-pkp-lib-13508.md`.
 
 <a id="fn-f-a25"></a>
 **f-a25** — At the PR heads of `pkp/pkp-lib#13460` (`246e5387f6`, with

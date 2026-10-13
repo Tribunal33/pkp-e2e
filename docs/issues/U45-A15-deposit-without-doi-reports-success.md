@@ -252,13 +252,16 @@ still accepted, marked "Submitted" and queued, with the fix in and out,
 and so was a DataCite journal's work with only a galley's DOI, with the
 fix in.
 
-**What the manager sees after the fix.** Nothing: the window closes, the
-list reloads, and no message says the deposit was refused, because the
-DOIs page drops the reason of every refused bulk action (tracked apart as
-U45 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a13),
-[its report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-A13-bulk-action-refusal-no-message.md)).
-That trades a false success for silence. We recommend shipping this fix
-together with the fix that shows those messages, or after it.
+**What the manager sees after the fix.** The refusal's reason in an
+"Error" window, as for every refused bulk action once `pkp/ui-library#1016`
+(for `pkp/pkp-lib#13507`) is in (read in the code, not driven with this
+fix). Without it the window closes, the list reloads and no message says
+the deposit was refused, because the DOIs page drops the reason of every
+refused bulk action (U45
+[A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a13),
+[pkp-e2e#234](https://github.com/jardakotesovec/pkp-e2e/issues/234)).
+That would trade a false success for silence, so this fix should not
+land on a branch without that one.
 
 **Alternatives:**
 

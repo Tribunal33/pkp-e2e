@@ -184,6 +184,7 @@ async function startStub({dir, port = DEFAULT_PORT, answer = '200-ok', logFile, 
     fs.mkdirSync(depositDir, {recursive: true});
     let deposits = fs.readdirSync(depositDir).length;
     let current = answer;
+    let schemas = true;
     const log = (line) => {
         const stamped = `${new Date().toISOString()} ${line}`;
         lines.push(stamped);
@@ -207,7 +208,10 @@ async function startStub({dir, port = DEFAULT_PORT, answer = '200-ok', logFile, 
             const {pathname} = new URL(address);
             let said = {status: 404, type: 'text/plain', body: 'the Crossref stand-in answers GET /schemas/… and POST /v2/deposits only\n'};
             let note = '';
-            if (req.method === 'GET' && pathname.startsWith('/schemas/')) {
+            if (req.method === 'GET' && pathname.startsWith('/schemas/') && !schemas) {
+                said = {status: 503, type: 'text/plain', body: 'Service Unavailable\n'};
+                note = ' (schemas switched off)';
+            } else if (req.method === 'GET' && pathname.startsWith('/schemas/')) {
                 const file = cachePath(dir, address);
                 if (fs.existsSync(file)) said = {status: 200, type: 'application/xml', body: fs.readFileSync(file)};
                 else note = ' (not in the schema copy)';
@@ -296,6 +300,11 @@ async function startStub({dir, port = DEFAULT_PORT, answer = '200-ok', logFile, 
         iniDir: ca.iniDir,
         depositDir,
         setAnswer,
+        /** Serve the schema copy (true) or answer 503 for it, as a crossref.org that cannot be reached while the deposit service can. */
+        setSchemas: (on) => {
+            schemas = !!on;
+            log(`[stub] schemas ${schemas ? 'served' : 'switched off (503)'}`);
+        },
         mark: () => lines.length,
         since: (from = 0) => lines.slice(from),
         close: () => new Promise((resolve) => {

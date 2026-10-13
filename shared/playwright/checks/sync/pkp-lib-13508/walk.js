@@ -19,13 +19,15 @@
 //   8.  the stand-in answers the next deposit with Crossref's failure_count 1 (a valid file Crossref
 //       does not take); "Deposit DOIs" on REFUSED; its badge and "View Error" window
 //   9.  buffer.php: exportXML() on INVALID then VALID in one PHP process
+//   10. (run before 9) the stand-in answers 503 for the schema while it takes deposits, as when
+//       www.crossref.org cannot be reached and the deposit service can: "Deposit DOIs" on VALID again
 // Run (side.sh does all of it):
 //   PROBE_FEATURE=pr-13507 PROBE_AGENT=pr PROBE_RUN=<side> node bin/probe.js all <this file>
 // Facts: .reports/pr-13507/pr/walk-<side>-<app>.json; the stand-in's log and the deposited files
 // under .reports/pr-13507/stub-<side>-<app>/.
 const fs = require('fs');
 const path = require('path');
-const {execFileSync} = require('child_process');
+const {spawn} = require('child_process');
 const {forEachApp, launch, signIn, screen, shot, record, sql} = require('../../../probe');
 const {watchDialogs, takeDialogs, watchDoiAnswers} = require('../../issues/bulk-action-refusal-no-message/lib.js');
 const {startStub} = require('./crossref-stub.js');
@@ -204,16 +206,40 @@ forEachApp(async (app) => {
         });
         stub.setAnswer('200-ok');
 
+        // 10: the schema cannot be fetched (503) while the deposit service answers: "Deposit DOIs" on VALID again
+        stub.setSchemas(false);
+        const m10 = stub.mark();
+        const d10 = await bulk('10-deposit-no-schema', 'Deposit DOIs', [valid]);
+        const reloads10 = await drain();
+        fact('10 deposit VALID, schema unreachable', {
+            ...d10, reloads: reloads10,
+            schemaAnswers: stub.since(m10).filter((l) => /GET .*schemas/.test(l)).map((l) => flat(l.replace(/^\S+ /, ''), 160)).slice(0, 2),
+            received: stub.since(m10).filter((l) => / POST /.test(l)).map((l) => flat(l.replace(/^\S+ /, ''), 300)),
+            dois: [valid].map(doi),
+            row: await viewError(valid, '10-view-error-no-schema'),
+        });
+        stub.setSchemas(true);
+
         // 9
         const iniDir = path.join(REPO, '.reports/pr-13507/stub/php');
-        try {
-            const out = execFileSync('php', [path.join(__dirname, 'buffer.php'), app.root, app.contextPath, String(invalid), String(valid)], {
-                cwd: app.root, encoding: 'utf8', env: {...process.env, PKP_CONFIG_FILE: app.configFile, PHP_INI_SCAN_DIR: `:${iniDir}`}, timeout: 120_000,
+        // PHP's warnings (an author with no given name) go to stderr; the answer is stdout's last JSON line.
+        // Asynchronous: the stand-in serving the schema runs in this process.
+        const run9 = await new Promise((resolve) => {
+            const child = spawn('php', [path.join(__dirname, 'buffer.php'), app.root, app.contextPath, String(invalid), String(valid)], {
+                cwd: app.root, env: {...process.env, PKP_CONFIG_FILE: app.configFile, PHP_INI_SCAN_DIR: `:${iniDir}`},
             });
-            fact('9 one process: exportXML INVALID then VALID', JSON.parse(out.trim().split('\n').pop()));
-        } catch (e) {
-            fact('9 one process: exportXML INVALID then VALID', {failed: flat(String(e.stdout || '') + String(e.stderr || e.message), 900)});
-        }
+            let stdout = '';
+            let stderr = '';
+            child.stdout.on('data', (c) => (stdout += c));
+            child.stderr.on('data', (c) => (stderr += c));
+            const timer = setTimeout(() => child.kill(), 120_000);
+            child.on('close', (status) => {
+                clearTimeout(timer);
+                resolve({status, stdout, stderr});
+            });
+        });
+        const line9 = run9.stdout.trim().split('\n').reverse().find((l) => l.startsWith('{'));
+        fact('9 one process: exportXML INVALID then VALID', line9 ? {...JSON.parse(line9), exit: run9.status} : {failed: flat(`${run9.stdout} ${run9.stderr}`, 900), exit: run9.status});
         fact('deposits received in all', deposits().length);
     } finally {
         record(`walk-${side}-${app.name}`, facts);

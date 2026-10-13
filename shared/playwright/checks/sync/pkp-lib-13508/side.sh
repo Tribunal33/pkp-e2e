@@ -5,6 +5,8 @@
 #         crossref-ops#73)
 #   base: the three apps' main at the PRs' bases, lib/pkp at pkp-lib#13508's base, the other submodules as
 #         the apps' main points them
+#   fix:  head, with fix-crossref-<app>.diff applied to the Crossref plugin (the tried fix of the review's
+#         finding: only schema validity errors stop a deposit); reverted at the end
 # then the build and mount, and per script a freshly reset dataset fleet:
 #   walk  this folder's walk.js (OJS, OPS), with the fleet's [proxy] on the Crossref stand-in
 #   a13   ../../issues/bulk-action-refusal-no-message/walk.js (OJS, OMP, OPS), the U45 A13 issue walk
@@ -19,12 +21,16 @@ PKPLIB_BASE=a4f625a068625d1d848a096fd58fb87e438247a8
 declare -A HEAD=([ojs]=2458eead21ab7beead689c41b6831459aa0e66d4 [omp]=18f197514ec8e506ae1bfe75af4705559a295375 [ops]=bd864266eb9ee3ec80e2c11c15332b8da0bc7c68)
 declare -A BASE=([ojs]=5c056f34b7 [omp]=eb93813147 [ops]=1bc3f78888)
 for a in ojs omp ops; do
-  (cd checkouts/$a && git checkout -q --detach "$([ "$side" = head ] && echo "${HEAD[$a]}" || echo "${BASE[$a]}")" \
+  (cd checkouts/$a && git checkout -q --detach "$([ "$side" = base ] && echo "${BASE[$a]}" || echo "${HEAD[$a]}")" \
     && git submodule update -q lib/pkp lib/ui-library && { [ ! -e plugins/generic/crossref/.git ] || git submodule update -q plugins/generic/crossref; } \
-    && { [ "$side" = head ] || git -C lib/pkp checkout -q --detach $PKPLIB_BASE; }) || { echo "checkout failed $a"; exit 1; }
+    && { [ "$side" != base ] || git -C lib/pkp checkout -q --detach $PKPLIB_BASE; }) || { echo "checkout failed $a"; exit 1; }
   echo "$side $a $(git -C checkouts/$a rev-parse --short HEAD) lib/pkp $(git -C checkouts/$a/lib/pkp rev-parse --short HEAD) ui $(git -C checkouts/$a/lib/ui-library rev-parse --short HEAD) crossref $(git -C checkouts/$a/plugins/generic/crossref rev-parse --short HEAD 2>/dev/null || echo -)"
   (cd checkouts/$a && npm run build > /dev/null 2>&1) || { echo "build failed $a"; exit 1; }
 done
+if [ "$side" = fix ]; then
+  for a in ojs ops; do git -C checkouts/$a/plugins/generic/crossref apply "$PWD/$S/fix-crossref-$a.diff" || { echo "fix did not apply on $a"; exit 1; }; done
+  trap 'for a in ojs ops; do git -C checkouts/$a/plugins/generic/crossref checkout -- CrossrefExportPlugin.php; done; echo "fix reverted"' EXIT
+fi
 npm run -s mount > $R/mount-$side.log 2>&1 || { echo "mount failed"; tail -3 $R/mount-$side.log; exit 1; }
 for m in $scripts; do
   case $m in

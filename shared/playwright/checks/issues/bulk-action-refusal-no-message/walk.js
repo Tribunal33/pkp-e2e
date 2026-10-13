@@ -1,5 +1,6 @@
 // Issue report docs/issues/U45-A13-bulk-action-refusal-no-message.md (U45
-// A13): a bulk action on the DOIs page that the server refuses closes its
+// A13; the report, deleted at the PR review of pkp/pkp-lib#13507, which
+// fixes it in pkp/ui-library#1016, is in git): a bulk action on the DOIs page that the server refuses closes its
 // window and shows no message. Takes the report's Steps through the screens
 // on a dataset fleet freshly reset to PKP's default test dataset, as the
 // dataset's `dbarnes` on `publicknowledge`. The kit builds nothing.
@@ -31,7 +32,8 @@
 // Run (main):   PROBE_FEATURE=<feature> PROBE_AGENT=ir10 node bin/probe.js all shared/playwright/checks/issues/bulk-action-refusal-no-message/walk.js
 // Run (3.5):    PKP_E2E_LINE=stable-3_5_0 in front of both, the line fleet's
 //               feature, and PROBE_RUN=r35 in front of the run.
-// PROBE_RUN=fix names the run with fix.diff applied.
+// PROBE_RUN=<name> names the run (side.sh of ../../sync/pkp-lib-13508 runs base
+// and head).
 // Facts: .reports/<feature>/ir10/bulk-facts[-<run>]-<app>.json
 const {forEachApp, launch, signIn, screen, shot, record, idle} = require('../../../probe');
 const {watchDialogs, takeDialogs, takeNotices, watchDoiAnswers} = require('./lib.js');
