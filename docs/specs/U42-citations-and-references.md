@@ -1104,7 +1104,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | A book with no references shows an empty "References" heading | ✅ | retired | — |
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | ✅ | retired | — |
 | [A21](#a21) | Retired: in French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | ✅ | retired | Jarda 2026-10-08 · overturned |
-| [A22](#a22) | Retired: a reference author's "ORCID iD" took any web address, and editors' ORCID icon linked to it; fixed by pkp/pkp-lib#13502 | ✅ | retired | PR review (claude), 2026-10-13 — fixed at pkp/pkp-lib#13502's head |
+| [A22](#a22) | Retired: a reference author's "ORCID iD" took any web address, and editors' ORCID icon linked to it; fixed by pkp/pkp-lib#13502 | ✅ | retired | PR review (claude), 2026-10-13 — fixed by pkp/pkp-lib#13502, merged |
 
 ### All apps
 
@@ -1396,7 +1396,7 @@ Basis: probe, 2026-10-07. <sup>f-a27</sup>
 **A21 — In French the References page shows raw codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · ✅ · retired. Fixed by `pkp/pkp-lib#13502` (for `pkp/pkp-lib#13501`, the team's copy of the issue report), verified 2026-10-13 at the PR's head before its merge on OJS, OMP and OPS: "Edit citation" refuses a reference author's ORCID iD that is not an ORCID address, a `javascript:` link included, and saves a full, a sandbox or an empty one as before ([Fields & validation](#fields)). <sup>f-a22</sup>
+**A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · ✅ · retired. Fixed by `pkp/pkp-lib#13502` (for `pkp/pkp-lib#13501`, the team's copy of the issue report), merged 2026-10-13 (pkp-lib `3608f5e200`; OJS's `lib/pkp` carries it since ojs `5c056f34b7`, OMP's and OPS's not yet), reviewed at the PR's head before the merge and walked at the merge the same day on OJS, OMP and OPS: "Edit citation" refuses a reference author's ORCID iD that is not an ORCID address, a `javascript:` link included, and saves a full, a sandbox or an empty one as before ([Fields & validation](#fields)). <sup>f-a22</sup>
 
 ---
 
@@ -2736,7 +2736,13 @@ report's alternative: a value stored before the fix on an install running
 `main` keeps its link, and the lookup's own writes are not validated
 (OpenAlex gives `https://orcid.org/…` iDs, which the rule accepts, so a
 reference the lookup structured can still be saved).
-Issue report: [pkp-e2e#927](https://github.com/jardakotesovec/pkp-e2e/issues/927), to close with the fix; the report, its `fix.diff` and its place under `checks/issues/` deleted at the PR review (git keeps them).
+Merged 2026-10-13 14:41 UTC as pkp-lib `3608f5e200`, a merge of the
+reviewed head `fd2b199c3c` on its base (`git diff` of the two trees
+empty), and pkp/ojs#5925 as ojs `5c056f34b7` (OJS's `lib/pkp` at
+`fd2b199c3c`). `walk.js` again on the default dataset, OJS at its tip and
+OMP and OPS with `lib/pkp` at the merge (`side.sh merge`): every mode
+reads as at the head.
+Issue report: [pkp-e2e#927](https://github.com/jardakotesovec/pkp-e2e/issues/927), closed 2026-10-13 with the fix; the report, its `fix.diff` and its place under `checks/issues/` deleted at the PR review (git keeps them).
 
 <a id="fn-f-a23"></a>
 **f-a23 — A23 evidence.** `PKP\citation\Repository::copyCitations()`
