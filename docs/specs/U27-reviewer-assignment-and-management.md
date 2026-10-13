@@ -1475,7 +1475,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A44](#a44) | The "Resend Review Request" email gives the reviewer the old response date, not the one the editor just picked | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A45](#a45) | Inverted review due dates: the refusal says "adding the reviewer" in Edit and Resend, and misspells "response" everywhere | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A46](#a46) | "Resend Review Request" with the review due date before the response date shows a "Please try again" alert, and the window never states the date rule | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
-| [A47](#a47) | A re-sent request whose response date has passed keeps reading "Request Resent": never "Overdue", no "Send Reminder" | 🐞 | user-visible | — |
+| [A47](#a47) | A late, unanswered re-sent review request is not marked "Overdue" and offers no "Send Reminder" | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -2085,16 +2085,21 @@ date.", so the editor learns the rule only when the request is refused.
 Basis: probe, 2026-10-13. <sup>[f-a46](#fn-a46)</sup>
 
 <a id="a47"></a>
-**A47 — A re-sent request whose response date has passed never turns "Overdue"** · 🐞 · user-visible.
-After "Resend Review Request", a reviewer who lets the new response date
-pass without answering still reads "Request Resent", in normal text,
-with no "Send Reminder" button. A first request in the same state reads
-"Overdue" in red with "Send Reminder". The row stays "Request Resent"
-whether the past date was picked in the Resend window or set later
-through "Edit", and also once the review date has passed. Its "More
-Actions" menu offers no reminder either. The editor is not shown that
-the reviewer is late and cannot send them the reminder form. Basis:
-probe, 2026-10-05. <sup>[f-a47](#fn-a47)</sup>
+**A47 — A late, unanswered re-sent review request is not marked "Overdue" and offers no "Send Reminder"** · 🐞 · medium.
+An editor resends a review request that the reviewer declined, and the
+reviewer then lets the new response date pass without answering. The
+reviewer's row in "Reviewers" still reads "Request Resent", in plain
+text, with no "Send Reminder" on the row or in its "More Actions" menu.
+The round's status still reads "Awaiting responses from reviewers." A
+request that was never re-sent and is late in the same way reads
+"Overdue" in red and offers "Send Reminder".
+
+So the editor is not told that this reviewer is late, and has to write
+to them with "Email Reviewer" instead of sending the reminder.
+
+Once the reviewer accepts, the row behaves normally again: a missed
+review date shows "Overdue" as for any other request.
+Basis: probe, 2026-10-13. <sup>[f-a47](#fn-a47)</sup>
 
 <a id="a48"></a>
 **A48 — A review-form answer written as markup may run as script when "View changes" opens the review-form change** · ❓ · user-visible.
@@ -3980,6 +3985,7 @@ Notes", "Log Response". Control: a first request moved to yesterday
 through "Edit" read "Overdue" in red with "Response due: {date}" and
 "Send Reminder". First read in the code 2026-10-03, while tracing
 finding A2.
+Issue report: [docs/issues/U27-A47-resent-request-never-overdue.md](../issues/U27-A47-resent-request-never-overdue.md).
 
 <a id="fn-a48"></a>
 **f-a48** — Code read 2026-10-13, lib/pkp `f4c2578c94` (OJS `7c6fba2064`

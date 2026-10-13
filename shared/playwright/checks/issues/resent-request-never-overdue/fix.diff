@@ -1,0 +1,22 @@
+--- a/lib/pkp/classes/submission/reviewAssignment/ReviewAssignment.php
++++ b/lib/pkp/classes/submission/reviewAssignment/ReviewAssignment.php
+@@ -695,10 +695,6 @@
+             return self::REVIEW_ASSIGNMENT_STATUS_CANCELLED;
+         }
+ 
+-        if (!$this->getDeclined() && !$this->getDateConfirmed() && $this->getRequestResent()) {
+-            return self::REVIEW_ASSIGNMENT_STATUS_REQUEST_RESEND;
+-        }
+-
+         if (!$this->getDateCompleted()) {
+             $dueTimes = array_map(function ($dateTime) {
+                 // If no due time, set it to the end of the day
+@@ -714,6 +710,8 @@
+                     return self::REVIEW_ASSIGNMENT_STATUS_RESPONSE_OVERDUE;
+                 } elseif ($reviewDueTime < strtotime('tomorrow')) { // review overdue but not response
+                     return self::REVIEW_ASSIGNMENT_STATUS_REVIEW_OVERDUE;
++                } elseif ($this->getRequestResent()) { // request resent after a decline, response not due yet
++                    return self::REVIEW_ASSIGNMENT_STATUS_REQUEST_RESEND;
+                 } else { // response not due yet
+                     return self::REVIEW_ASSIGNMENT_STATUS_AWAITING_RESPONSE;
+                 }
