@@ -3985,7 +3985,7 @@ Notes", "Log Response". Control: a first request moved to yesterday
 through "Edit" read "Overdue" in red with "Response due: {date}" and
 "Send Reminder". First read in the code 2026-10-03, while tracing
 finding A2.
-Issue report: [docs/issues/U27-A47-resent-request-never-overdue.md](../issues/U27-A47-resent-request-never-overdue.md).
+Issue report: [pkp-e2e#961](https://github.com/jardakotesovec/pkp-e2e/issues/961) ([docs/issues/U27-A47-resent-request-never-overdue.md](../issues/U27-A47-resent-request-never-overdue.md)).
 
 <a id="fn-a48"></a>
 **f-a48** — Code read 2026-10-13, lib/pkp `f4c2578c94` (OJS `7c6fba2064`
