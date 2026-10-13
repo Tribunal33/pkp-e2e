@@ -2605,7 +2605,7 @@ after `ANALYZE author_affiliations`, would settle it. `stable-3_5_0`
 not driven: its `Collector` has no ordering either, and its article
 template prints the list the same way (code read). The contributors'
 own order had the same kind of fault until 2026-09-03 (A15, retired).
-Issue report: [docs/issues/U41-A26-affiliations-print-out-of-order.md](../issues/U41-A26-affiliations-print-out-of-order.md).
+Issue report: [pkp-e2e#956](https://github.com/jardakotesovec/pkp-e2e/issues/956) ([docs/issues/U41-A26-affiliations-print-out-of-order.md](../issues/U41-A26-affiliations-print-out-of-order.md)).
 
 <a id="fn-f-a27"></a>
 **f-a27 — A27 evidence.** Live-probed 2026-10-07 (Rule 14; the OJS
@@ -2620,7 +2620,7 @@ template line of its own between the entries, outside any `{strip}`, so
 the line break before it shows as a space; the contributor-role loop
 under it wraps the same separator in `{strip}`. `stable-3_5_0`'s
 article template has the same loop (code read, not driven).
-Issue report: [docs/issues/U41-A27-affiliations-space-before-comma.md](../issues/U41-A27-affiliations-space-before-comma.md).
+Issue report: [pkp-e2e#957](https://github.com/jardakotesovec/pkp-e2e/issues/957) ([docs/issues/U41-A27-affiliations-space-before-comma.md](../issues/U41-A27-affiliations-space-before-comma.md)).
 
 <a id="fn-f-a28"></a>
 **f-a28 — A28 evidence.** Live-probed 2026-10-08 (Fields
