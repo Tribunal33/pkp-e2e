@@ -1024,7 +1024,8 @@ Left out of the scenarios above, by reason:
     ([A14](#a14); Rule 14): the guard the issue report
     (`docs/issues/U03-A14-site-profile-privacy-link-not-found.md`)
     proposes, once fixed
-  - a journal closed to registrations not listed in another journal's
+  - a journal closed to registrations, or open with no self-registering
+    role, not listed in another journal's
     "Register with other journals", on the site-level profile or on the
     site-wide Register page, and "Save" on the Roles tab of the closed
     journal's profile keeping the user's roles in the one open journal
@@ -1093,7 +1094,7 @@ unless its Basis line says otherwise.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A2](#a2) | A .gif too large for the profile image is refused, yet the user's current picture is removed | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A4](#a4) | Saving Roles in a journal closed to registrations ends the user's roles in another journal; the closed one stays listed | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
+| [A4](#a4) | Saving Roles in a journal closed to registrations ends the user's roles in another journal, and journals that offer no role are still listed | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | An email change asked for on the site-wide Profile page sends a message signed "Kind regards, Array" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | After a successful password change the Password tab keeps the typed passwords, and after a refused attempt the hint under "New password" does not come back | 🐞 | minor | issues (claude), 2026-10-03 — rescoped |
@@ -1135,16 +1136,20 @@ A .jpg or .png never meets this, because the browser shrinks it to
 Basis: probe, 2026-10-03. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a4"></a>
-**A4 — Saving Roles in a journal closed to registrations ends the user's roles in another journal; the closed one stays listed** · 🐞 · medium.
+**A4 — Saving Roles in a journal closed to registrations ends the user's roles in another journal, and journals that offer no role are still listed** · 🐞 · medium.
 When a journal's manager closes it to registrations ("The Journal
-Manager will register all user accounts…" under Site Access Options)
-and exactly one other journal on the site accepts registrations, a user
-who presses "Save" on the Roles tab of their profile opened in the
-closed journal is told "Your changes have been saved.", and their
-Reader, Author and Reviewer roles in the open journal end silently.
+Manager will register all user accounts…" under Site Access Options) and
+exactly one other journal on the site accepts registrations, a user who
+presses "Save" on the Roles tab of their profile opened in the closed
+journal is told "Your changes have been saved.", and their Reader,
+Author and Reviewer roles in the open journal end silently, those a
+manager gave them included. A reviewer then can no longer open a review
+they were asked for there.
+
 That tab has no "Register with other journals", so the open journal is
-not offered there. The user can tick the roles again on the open
-journal's own profile, once they notice.
+not offered there; with two or more other journals open it is, and
+nothing ends. The user can tick the roles again on the open journal's
+own profile, once they notice.
 
 On any site where the closed journal sits beside other journals, it is
 also still listed by name with nothing to tick under it: on other
@@ -1154,8 +1159,13 @@ site-level profile's Roles tab, and on the site-wide Register page under
 visitor or a user reads it as a journal they could join, and finds no
 way to.
 
-Both come from the same code, and one fix covers both.
-Basis: probe, 2026-10-04. <sup>[f-a4](#fn-a4)</sup>
+A journal that keeps registrations open but has "Allow user
+self-registration" off on its roles is listed the same way. The Register
+page, which offers only Reader and Reviewer, lists it empty once those
+two have self-registration off; the profiles, which also offer Author,
+once Author has it off too. Saving the Roles tab in such a journal ends
+nothing.
+Basis: probe, 2026-10-13. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — The scheduled-role banner ignores which journal is open** · ❓ · minor.

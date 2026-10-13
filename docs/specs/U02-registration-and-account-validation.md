@@ -757,8 +757,9 @@ Left out of the scenarios above, by reason:
     issue report
     (`docs/issues/U02-OMP2-press-site-register-consent-shown-early.md`)
     proposes, once fixed
-  - a journal closed to registrations left out of the site-wide Register
-    page's list ([A4](#a4); Rule 8): the guard the issue report
+  - a journal closed to registrations, or open with no self-registering
+    Reader or Reviewer role, left out of the site-wide Register page's
+    list ([A4](#a4); Rule 8): the guard the issue report
     (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`)
     proposes, once fixed
   - a preprint server's site-wide Register page showing no
@@ -824,7 +825,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | Account activation links stop working after 3 days, not the 14 days the configuration file sets | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | A new user activating their account sees two pages with no heading and no Login link | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A3](#a3) | Registering on the site-wide Register page ignores an unticked "notify me" box: announcement emails stay on | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A4](#a4) | The site-level page lists journals that closed registration, with no roles under them | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
+| [A4](#a4) | Journals closed to registration, or offering no role, listed with nothing to tick | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A6](#a6) | With validation required and no technical support contact on the journal, "Register" ends on an empty page and leaves a disabled account nobody can activate | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | On a press site's site-wide Register page, the two privacy consent refusals show raw codes | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP2](#omp2) | On a press site's site-wide Register page, each press's privacy consent box shows before any role is ticked | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
@@ -894,22 +895,23 @@ page is reached only by typing its address.
 Basis: probe, 2026-10-04. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
-**A4 — Closed journals listed with nothing to tick** · 🐞 · medium.
+**A4 — Journals closed to registration, or offering no role, listed with nothing to tick** · 🐞 · medium.
 Under "Which journals on this site would you like to register with?" every
 enabled journal is listed by name, including one that closed registration.
 Such a journal shows its name with no role to tick under it (a screen
 reader also reads "Request the following roles."), an invitation the page
 cannot honor; on a press site its privacy consent box shows there too,
 with nothing above it to consent for ([OMP2](#omp2)). The same shows for
-a journal that keeps registration open but has no self-registering Reader
-or Reviewer role. A disabled journal, by contrast, is left out. Expected:
+a journal that keeps registration open but has "Allow user
+self-registration" off on its Reader and Reviewer roles, the only two
+this page offers. A disabled journal, by contrast, is left out. Expected:
 journals with closed registration, and journals with no role to offer,
-are left out the same way. The profile's Roles tab shows the same list,
-and the fault is rated medium for what happens there: the *User profile*
-finding
+are left out the same way. The profiles' Roles tabs list the same
+journals (one open to registration once its Author role has
+self-registration off too), and the fault is rated medium for what
+happens there: the *User profile* finding
 [saving Roles in a closed journal ends the user's roles in another](U03-user-profile.md#a4).
-Basis: probe, 2026-10-04. <sup>[f-a4](#fn-a4)</sup>
-Report: refresh owed — the drift sweep of 2026-10-12 (claim check SW1, block SW1-9, the sweep's kept check) added a case the report (`docs/issues/U03-A4-closed-journal-listed-on-roles-tab.md`) does not have: an open journal whose Reader and Reviewer roles are all closed to self-registration is listed on the site-level Register page by name with nothing to tick, and the entry's Expected now leaves such a journal out too; whether the profile's Roles tabs list it the same way, and whether the proposed fix covers it, is for the walk (2026-10-12)
+Basis: probe, 2026-10-13. <sup>[f-a4](#fn-a4)</sup>
 
 <a id="a5"></a>
 **A5 — The "Login" link's destination is dropped** · ❓ · minor.

@@ -201,4 +201,26 @@ async function usersRow(page, app, contextPath, email) {
     return {rows: rows.map((r) => flat(r, 400))};
 }
 
-module.exports = {WORDS, scratchNames, createJournal, closeRegistration, openRoles, readRoles, openFold, readSiteRegister, registerAndTakeAuthor, saveRolesUnchanged, ownRoleBoxes, usersRow, flat};
+/**
+ * Steps 17 and 21 (a journal that offers no role): as the signed-in `admin`, the context's
+ * Settings › Users & Roles › "Roles", each named role's "Edit", "Allow user self-registration"
+ * unticked, "OK". Returns, per role, whether the box was ticked before and the save's status.
+ */
+async function turnOffSelfRegistration(page, app, contextPath, roleNames) {
+    const {RolesTab} = require('../../../pages/RolesConfigurationPages.js');
+    const loc = app.line && /3_[34]/.test(app.line) ? '' : '/en';
+    const roles = new RolesTab(page, `${contextPath}${loc}`, {stages: []});
+    await roles.goto();
+    const out = [];
+    for (const name of roleNames) {
+        const win = await roles.openEdit(name);
+        const box = win.optionBox('Allow user self-registration');
+        const before = await box.isChecked();
+        if (before) await box.uncheck();
+        const r = await win.save();
+        out.push({name, before, status: r && typeof r.status === 'function' ? r.status() : r});
+    }
+    return out;
+}
+
+module.exports = {WORDS, scratchNames, createJournal, closeRegistration, openRoles, readRoles, openFold, readSiteRegister, registerAndTakeAuthor, saveRolesUnchanged, ownRoleBoxes, usersRow, turnOffSelfRegistration, flat};
