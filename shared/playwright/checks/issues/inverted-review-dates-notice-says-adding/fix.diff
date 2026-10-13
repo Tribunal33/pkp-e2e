@@ -1,0 +1,33 @@
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ReviewerForm.php
+@@ -89,7 +89,7 @@
+                 Carbon::parse(Application::get()->getRequest()->getUserVar('responseDueDate')),
+                 \PKP\validation\enums\DateComparisonRule::GREATER_OR_EQUAL,
+                 'required',
+-                'editor.review.errorAddingReviewer.dateValidationFailed'
++                'editor.review.importantDates.notice'
+             )
+         );
+ 
+--- a/lib/pkp/controllers/grid/users/reviewer/form/EditReviewForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/EditReviewForm.php
+@@ -70,7 +70,7 @@
+                 \Carbon\Carbon::parse(Application::get()->getRequest()->getUserVar('responseDueDate')),
+                 \PKP\validation\enums\DateComparisonRule::GREATER_OR_EQUAL,
+                 'optional',
+-                'editor.review.errorAddingReviewer.dateValidationFailed'
++                'editor.review.importantDates.notice'
+             )
+         );
+ 
+--- a/lib/pkp/controllers/grid/users/reviewer/form/ResendRequestReviewerForm.php
++++ b/lib/pkp/controllers/grid/users/reviewer/form/ResendRequestReviewerForm.php
+@@ -59,7 +59,7 @@
+                 \Carbon\Carbon::parse(Application::get()->getRequest()->getUserVar('responseDueDate')),
+                 \PKP\validation\enums\DateComparisonRule::GREATER_OR_EQUAL,
+                 'required',
+-                'editor.review.errorAddingReviewer.dateValidationFailed'
++                'editor.review.importantDates.notice'
+             )
+         );
+     }

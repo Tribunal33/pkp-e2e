@@ -1473,8 +1473,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A39](#a39) | The activity log's "View changes" reads "Competing Interests declared: YES" for a reviewer who declared none | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A43](#a43) | "Thank Reviewer" and "Unassign Reviewer" close without asking after a change to the message alone, and the change is lost | 🐞 | medium | — |
 | [A44](#a44) | The "Resend Review Request" email gives the reviewer the old response date, not the one the editor just picked | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
-| [A45](#a45) | The inverted-date notice says "adding the reviewer" in the "Edit" and "Resend Review Request" windows too, and misspells "response" as "responde" | 🐞 | minor | — |
-| [A46](#a46) | "Resend Review Request" with inverted dates raises a browser alert on top of the notice, and its window shows no date guidance | 🐞 | minor | — |
+| [A45](#a45) | Inverted review due dates: the refusal says "adding the reviewer" in Edit and Resend, and misspells "response" everywhere | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
+| [A46](#a46) | "Resend Review Request" with the review due date before the response date shows a "Please try again" alert, and the window never states the date rule | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A47](#a47) | A re-sent request whose response date has passed keeps reading "Request Resent": never "Overdue", no "Send Reminder" | 🐞 | user-visible | — |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
@@ -2059,28 +2059,30 @@ asks for an answer by a date already gone.
 Basis: probe, 2026-10-13. <sup>[f-a44](#fn-a44)</sup>
 
 <a id="a45"></a>
-**A45 — The inverted-date notice speaks of "adding the reviewer" in every window, and misspells "response"** · 🐞 · minor.
-An editor who sets the review due date before the response due date and
-presses the window's button reads the notice "There was an error adding
+**A45 — Inverted review due dates: the refusal says "adding the reviewer" in Edit and Resend, and misspells "response" everywhere** · 🐞 · low.
+An editor picks a review due date earlier than the response due date,
+then presses "Add Reviewer" in the "Add Reviewer" window, "OK" in
+"Edit", or "Resend Review Request" in the "Resend Review Request"
+window. Each refuses with the same notice: "There was an error adding
 the reviewer as review due date must be equal or greater than responde
-due date." in all three windows that carry the dates. In "Edit" and
-"Resend Review Request" nothing is being added, so the notice describes
-another action, and "responde" is a typo in the shipped text. The
-refusal itself is right. Basis: probe, 2026-10-05.
-<sup>[f-a45](#fn-a45)</sup>
+due date." In "Add Reviewer" the only fault is the typo "responde". In
+"Edit" and "Resend Review Request" the reviewer is already on the round
+and nothing is being added, so the notice also names the wrong action.
+The refusal itself is right.
+Basis: probe, 2026-10-13. <sup>[f-a45](#fn-a45)</sup>
 
 <a id="a46"></a>
-**A46 — "Resend Review Request" refuses inverted dates with a browser alert as well, and states no date rule** · 🐞 · minor.
-In the "Resend Review Request" window, with the review due date before
-the response due date, pressing "Resend Review Request" raises a browser
-alert, "There was an error requesting the reviewer to reconsider the
-review invitation. Please try again.", besides the notice of
-[A45](#a45). The window stays open. The alert's "try again" suggests a
-passing failure, while only the dates are wrong. Unlike "Add Reviewer"
-and "Edit", the window never shows the guidance "Review due date must be
-greater or equal to response due date.", so the editor learns the rule
-only from the refusal. Basis: probe, 2026-10-05.
-<sup>[f-a46](#fn-a46)</sup>
+**A46 — "Resend Review Request" with the review due date before the response date shows a "Please try again" alert, and the window never states the date rule** · 🐞 · low.
+In the "Resend Review Request" window, an editor who sets the review due
+date before the response due date and presses "Resend Review Request"
+gets two messages. A short-lived notice at the top right of the page
+refuses the dates. A browser alert also opens: "There was an error
+requesting the reviewer to reconsider the review invitation. Please try
+again." "Try again" suggests a temporary failure, but the only problem
+is the dates. Unlike "Add Reviewer" and "Edit", this window never shows
+the guidance "Review due date must be greater or equal to response due
+date.", so the editor learns the rule only when the request is refused.
+Basis: probe, 2026-10-13. <sup>[f-a46](#fn-a46)</sup>
 
 <a id="a47"></a>
 **A47 — A re-sent request whose response date has passed never turns "Overdue"** · 🐞 · user-visible.
@@ -3945,6 +3947,7 @@ quoted in the entry is `editor.review.errorAddingReviewer.dateValidationFailed`
 (note f), shown unchanged by "Add Reviewer", "Edit" and "Resend Review
 Request" after an inverted pair; the misspelling is in the shipped en
 locale on both lines.
+Issue report: [docs/issues/U27-A45-inverted-review-dates-notice-says-adding.md](../issues/U27-A45-inverted-review-dates-notice-says-adding.md).
 
 <a id="fn-a46"></a>
 **f-a46** — Live-probed 2026-10-05 (OJS and OMP, main and
@@ -3957,6 +3960,7 @@ date-validation notice (note f-a45). The window reads "Email to be sent
 to reviewer", "Do not send email to Reviewer.", "Important Dates" with the
 two pickers, and "Cancel" / "Resend Review Request", with no guidance
 sentence; "Add Reviewer" and "Edit" show it in the same runs.
+Issue report: [docs/issues/U27-A46-resend-inverted-dates-try-again-alert.md](../issues/U27-A46-resend-inverted-dates-try-again-alert.md).
 
 <a id="fn-a47"></a>
 **f-a47** — Mechanism: `ReviewAssignment::getStatus()` returns
