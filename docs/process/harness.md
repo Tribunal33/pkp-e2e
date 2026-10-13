@@ -137,7 +137,11 @@ No suite is meant to run on any of the three lines.
   the system Node. `checkouts/` is gitignored, runtimes included. A new
   machine or slot without `php8.2` needs those packages (or a PHP 8.2
   build at `checkouts/runtimes/php8.2/bin/php`, which the lookup takes
-  when there is no `php8.2` on `PATH`).
+  when there is no `php8.2` on `PATH`). A Mac downloads no Node: it
+  builds the old lines on the system Node with
+  `NODE_OPTIONS=--openssl-legacy-provider`, and its PHP 8.2 is
+  Homebrew's keg-only `php@8.2`, linked at
+  `checkouts/runtimes/php8.2/bin/php`.
 - **`PKP_CONFIG_FILE`.** None of the three branches honours it, so
   `fetch-apps` makes the one-line change `main` carries in the line's
   working tree, re-applied after every `--update`: 3.5 and 3.4 in

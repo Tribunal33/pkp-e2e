@@ -102,11 +102,17 @@ const CONFIG_EDITS = [
 /**
  * The line's Node for its JS build (LINES `node`), downloaded once from
  * nodejs.org into checkouts/runtimes/. Returns the env for npm, or the
- * caller's env when the line builds on the system Node.
+ * caller's env when the line builds on the system Node. Off Linux (a Mac)
+ * there is no download: the old line builds on the system Node with
+ * --openssl-legacy-provider, which its old webpack needs there.
  */
 function buildEnv() {
     if (!line || !line.node) {
         return process.env;
+    }
+    if (process.platform !== 'linux') {
+        const options = [process.env.NODE_OPTIONS, '--openssl-legacy-provider'].filter(Boolean).join(' ');
+        return {...process.env, NODE_OPTIONS: options};
     }
     const dist = `node-v${line.node}-linux-x64`;
     const binDir = path.join(RUNTIMES_DIR, dist, 'bin');

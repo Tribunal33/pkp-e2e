@@ -32,12 +32,13 @@ const APPS = {
 // checkouts/runtimes/php<version>/bin/php. resolveLine() puts a shim dir
 // holding `php` for it first on PATH, so every child the harness spawns (the
 // php -S servers, installTest, jobs.php, composer) runs on it. `node` names
-// the Node release fetch-apps builds the line's JS with (downloaded once to
-// checkouts/runtimes/node-v<version>-linux-x64); the harness itself, Playwright
-// included, stays on the system Node. `overlays` says which PHP overlays
-// mount copies: 'main' (the full set, guarded for 3.5) or 'install' (only
-// tools/installTest.php from shared/php-lines/<line>/, harness.md "The stable
-// lines").
+// the Node release fetch-apps builds the line's JS with on Linux (downloaded
+// once to checkouts/runtimes/node-v<version>-linux-x64); on a Mac it builds on
+// the system Node with --openssl-legacy-provider instead. The harness itself,
+// Playwright included, stays on the system Node. `overlays` says which PHP
+// overlays mount copies: 'main' (the full set, guarded for 3.5) or 'install'
+// (only tools/installTest.php from shared/php-lines/<line>/, harness.md "The
+// stable lines").
 const LINES = {
     'stable-3_5_0': {branch: 'stable-3_5_0', portShift: 1000, dbSuffix: '_3_5', overlays: 'main'},
     'stable-3_4_0': {branch: 'stable-3_4_0', portShift: 2000, dbSuffix: '_3_4', overlays: 'install', php: '8.2', node: '16.20.2'},
