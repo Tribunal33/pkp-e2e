@@ -654,7 +654,7 @@ key, `mail` the shared Mailpit (`find`, `count` and `expectNone` take a
 `since`, a Date taken before the action, for an address other walks on
 the slot also mail), `fleetMail` the same reads kept to the messages that
 name this fleet's own host (a dataset user's address is mailed by every
-fleet of the slot, both lines', within the same minute), `baseURL` the probe server (base port + 50),
+fleet of the slot, both lines', within the same minute; so an email whose text names no address of the install, an unassign or cancel notice, is read with `mail` and a `since`), `baseURL` the probe server (base port + 50),
 `variant('validation')` the +90 server with email validation and ALTCHA on,
 `db` the fleet's database, which `sql(app, query)` queries through psql
 (one string: rows as lines, so `.split('\n')` for several, columns
