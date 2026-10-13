@@ -67,7 +67,7 @@ Accept wizard (new invitee):
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| Username | yes | Must not be taken <sup>o</sup> |
+| Username | yes | Must not be taken. A username already in use is refused on "Create OJS account": "There is already an existing user with the username {username}. Try another one." shows under the field, and the step stays. One taken after that step, by another newcomer who accepts first, is refused only when "Accept And Continue to OJS" is pressed, and nothing on screen says so ⚠ [A13](#a13) <sup>o</sup> |
 | Password | yes | At least six characters, the minimum the field states on screen <sup>o</sup> |
 | Privacy consent ("Yes, I agree to have my data collected…") | yes | Unchecked blocks the step with "Please confirm that you have read and agree privacy statement". The label links to the journal's Privacy Statement <sup>o</sup> |
 | Given Name / Family Name / Country / Affiliation | given name, country | Collected on the "Enter details" step, which arrives holding the given and family name the manager entered. A name the manager entered only in another of the journal's form languages sits in that language's boxes, behind the button named for it ("French"), and Given Name arrives empty. Editable again from the review step via its Edit button <sup>k</sup> |
@@ -194,7 +194,10 @@ Accept wizard (new invitee):
     Invitations table gains no row. The final button reads "Invite user to
     the role", and a success dialog ("Invitation Sent") confirms. ⚠ [A5](#a5)
     That dialog promises updates about the recipient's decision. Its only
-    button, "View All Users", returns the browser to Users & Roles. <sup>g</sup>
+    button, "View All Users", returns the browser to Users & Roles. Each
+    opening of the wizard, whether by "Invite to a role", "Edit
+    Invitation" or a member's Edit in the users list, leaves warnings in
+    the server's error log, which no screen shows ⚠ [A14](#a14). <sup>g</sup>
 16. Cancelling a pending invitation (from its row, behind a confirmation
     listing the invitee's details) deactivates the emailed links immediately.
     The recipient then sees the "Invitation Unavailable" page (Rule 4). <sup>q</sup>
@@ -215,7 +218,9 @@ Accept wizard (new invitee):
     - the manager's Invitations row still reads "Invited {date}", and an
       existing user's roles are unchanged;
     - with ORCID off, the emailed link reopens "Create OJS account" (an
-      existing user's review step), and accepting there still works.
+      existing user's review step), and accepting there still works. A
+      newcomer who cancelled from "Enter details" finds the username
+      chosen on "Create OJS account" still in its box.
 
     Leaving "Create OJS account" by typing another address asks nothing and
     keeps nothing: the Username typed there is empty when the link reopens.
@@ -683,6 +688,13 @@ Left out of the scenarios above, by reason:
     site's, "invited by {name}" naming a manager whose account carries a
     name only in the journal's language while their screens are in the
     site's (Side effects; the rest of A10 retired by pkp/pkp-lib#13429)
+  - a newcomer's username already in use refused on "Create OJS account"
+    with "There is already an existing user with the username {username}.
+    Try another one." under the field, the step staying (Fields, accept
+    wizard)
+  - a newcomer who pressed "Save and continue" on "Create OJS account",
+    then cancelled from "Enter details", finding the chosen username
+    still in its box when the emailed link reopens that step (Rule 17)
 - **Rarely met**:
   - a past start date taking effect as the acceptance day (Rule 8): a
     manager rarely backdates a start date, and the body names no screen
@@ -737,6 +749,11 @@ Left out of the scenarios above, by reason:
     masthead does not list; Side effects)
   - A12 (the send wizard's address with a made-up word in place of
     "userRoleAssignment" failing on the server; Actors row 2)
+  - A13 (a username taken by another newcomer before "Accept And
+    Continue to OJS", refused with nothing on screen; Fields, accept
+    wizard)
+  - A14 (the warnings each opening of the send wizard leaves in the
+    server's error log; Rule 15)
 - **No seed**:
   - a pending invitation past its deadline, the link stopped and no role
     granted (Rules 1, 2, 4): the test tooling cannot backdate a deadline
@@ -780,6 +797,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Role invitation wizard: a screen reader hears no field names in role rows after the first | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
+| [A13](#a13) | A newcomer whose chosen username was taken in the meantime presses "Accept And Continue to OJS" and nothing happens | 🐞 | minor | — |
+| [A14](#a14) | Each opening of the invitation wizard leaves PHP warnings in the server's error log | 🐞 | invisible | — |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
@@ -948,6 +967,29 @@ get that page too. The button always opens the wizard, and no email or link
 the app sends points at this address with another type, so only an address
 typed or pasted by hand reaches the empty page.
 Basis: probe, issue report walk, 2026-10-02. <sup>[f-a12](#fn-a12)</sup>
+
+<a id="a13"></a>
+**A13 — A newcomer whose chosen username was taken in the meantime presses "Accept And Continue to OJS" and nothing happens** · 🐞 · minor.
+A newcomer chooses a free username on "Create OJS account" and walks on
+to "Review & create account". If another newcomer accepts with the same
+username first, pressing "Accept And Continue to OJS" changes nothing on
+the page: no message, no error under any field, and the button stays as
+it was. Pressing it again does the same. The newcomer should be told the
+username is taken, as "Create OJS account" tells them when it is taken
+there. The review step offers no Edit for the username; "Back" twice
+reaches "Create OJS account", where the box still holds the taken name
+with no error under it. Another username entered there goes through,
+and the role is granted.
+Basis: probe, 2026-10-13. <sup>[f-a13](#fn-a13)</sup>
+
+<a id="a14"></a>
+**A14 — Each opening of the invitation wizard leaves PHP warnings in the server's error log** · 🐞 · invisible.
+Each time the send wizard opens, whether by "Invite to a role", by a
+pending invitation's "Edit Invitation" or by Edit on a member in the
+users list, the server's error log gains four PHP warnings
+`Undefined array key "invitation_id"` (note f-a14 says where the log
+is read). No screen shows them, and the wizard works. Sending, accepting and declining leave no warning.
+Basis: probe, 2026-10-13. <sup>[f-a14](#fn-a14)</sup>
 
 ### OMP and OPS
 
@@ -1384,7 +1426,13 @@ privacy consent enforced client-side
 (`acceptInvitation.privacyStatement.validation`), auto-satisfied for existing
 users; `givenName` (primary locale) + `userCountry` required at
 finalize/refine; existing-user invitations prohibit personal-detail overrides
-(`ProhibitedIncludingNull`).
+(`ProhibitedIncludingNull`). Claim check 2026-10-13, OJS, OMP and OPS
+on `main` and `stable-3_5_0`, two runs each: on "Create OJS account" a
+username held by a dataset user (`rvaca`), and one a newcomer had taken
+a minute before, were refused (`refine` 422) with "There is already an
+existing user with the username rvaca. Try another one." under Username
+and the step staying; a free one advanced to "Enter details". The same
+refusal at the last step is finding A13 (f-a13).
 
 <a id="fn-p"></a>
 **p** — Listing: `GET invitations/userRoleAssignment`
@@ -1496,6 +1544,14 @@ listed Author only, and the link reopened the review step with its accept
 button. Accepting from it, signed out, showed "You've been assigned a new
 role in OJS" (the app's acronym on OMP and OPS); the row left the
 Invitations table and the user's row listed Author and the offered role.
+Claim check 2026-10-13, OJS, OMP and OPS on `main` and `stable-3_5_0`,
+two runs each, default dataset (`rvaca` inviting): the same "Cancel"
+on every step, the same dialog and buttons, and the same landings for a
+signed-out newcomer, a member signed out and a member signed in. A
+newcomer who pressed "Save and continue" on "Create OJS account" and
+then "Cancel Invitation Process" on "Enter details" found the chosen
+username in the Username box when the link reopened "Create OJS
+account"; one typed there and left by address was empty again.
 
 <a id="fn-a1"></a>
 **f-a1** — Role assignment vs screen gate: note b vs note a. The atlas route
@@ -1729,6 +1785,50 @@ on `publicknowledge` answered 500 with an empty page, the server log reading
 …/lib/pkp/classes/invitation/core/InvitationFactory.php:42";
 `invitation/create` with no type answered 404 with "404 Not Found".
 Issue report: [pkp-e2e#518](https://github.com/jardakotesovec/pkp-e2e/issues/518) ([docs/issues/U06-A12-invitation-address-made-up-kind-empty-page.md](../issues/U06-A12-invitation-address-made-up-kind-empty-page.md)).
+
+<a id="fn-a13"></a>
+**f-a13** — `UsernameExistsRule` (note o) runs at `PUT
+invitations/{id}/key/{key}/refine` and again at `…/finalize`.
+`AcceptInvitationPageStore.submit()` reads only `data` from its
+`finalize` fetch (`expectValidationError: true`), so the 422's
+validation errors never reach `store.errors`; the page's error notice
+(`invitation.wizard.errors`, a key with no text yet, pkp/pkp-lib#13497
+open) draws only when `store.errors` is non-empty, and the username's
+field error belongs to the earlier step. Same code on 3.5. Claim check
+2026-10-13, OJS, OMP and OPS on `main` (lib/pkp `f4c2578c94`) and
+`stable-3_5_0` (`f4f8fcdbc0`), two runs each, default dataset, invited
+by `rvaca`: two signed-out newcomers chose the same free username and
+both reached "Review & create account"; the first's accept opened "You've
+been assigned a new role in OJS" (the app's acronym on OMP and OPS); the
+second's press got `finalize` 422 `{"errors":{"username":["There is
+already an existing user with the username …. Try another one."]}}`, and
+the page read the same 1.5 s and 5 s later, with no notice, no field
+error, no `##…##` text, no dialog and the button visible; a second press
+repeated the 422. "Back" twice showed the taken name in the Username box
+with no error; a new name there led to `finalize` 200 and the new-role
+dialog. Control: a username held by a dataset user (`rvaca`) or taken a
+minute earlier by a newcomer was refused at `refine` (422) on "Create
+OJS account" with the message under the field. First seen 2026-10-10 on
+OJS during the review of pkp/pkp-lib#13497.
+
+<a id="fn-a14"></a>
+**f-a14** — `PHP Warning: Undefined array key "invitation_id" in
+lib/pkp/classes/invitation/models/InvitationModel.php`: the getter of
+`InvitationModel::id()` reads `$attributes['invitation_id']` on the
+wizard's page load, before the invitation is first saved. Claim check
+2026-10-13, OJS, OMP and OPS on `main` (lib/pkp `f4c2578c94`) and
+`stable-3_5_0` (`f4f8fcdbc0`), two runs each, the server log marked
+around every step: four warnings per page load of `…/invitation/create/userRoleAssignment`,
+`…/invitation/edit/{id}` and `…/management/settings/user/{id}`, 20 per
+run of five wizard opens; none on the search step, "Save And Continue",
+"Invite user to the role", any load or step of the accept page (its
+422s included), the decline page or "Confirm Decline Invitation". No
+request failed. The `Undefined property …$emailSubject/$emailBody`
+warnings first seen beside them on 2026-10-02 did not appear
+(pkp/pkp-lib#13216, closed 2026-10-09).
+Where the warnings are read: the test install's PHP server output,
+`apps/<app>/playwright/.server-logs/server-<port>.log` (harness.md
+"Server output"; a probe server's is `server-<port>-probe.log`).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two
