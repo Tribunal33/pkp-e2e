@@ -1,0 +1,12 @@
+--- a/lib/pkp/classes/affiliation/Collector.php
++++ b/lib/pkp/classes/affiliation/Collector.php
+@@ -114,6 +114,9 @@
+             $qb->whereIn('a.author_id', $this->authorIds);
+         }
+ 
++        // Affiliations are listed in the order they were added
++        $qb->orderBy('a.author_affiliation_id');
++
+         // Add app-specific query statements
+         Hook::call('Affiliation::Collector', [&$qb, $this]);
+ 

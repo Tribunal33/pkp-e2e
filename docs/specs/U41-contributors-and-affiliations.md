@@ -846,6 +846,12 @@ Left out of the scenarios above, by reason:
     "Conceptualization" with no degree picked, and a role a row shows
     grayed out in every row's list (Fields "CRediT roles and the degrees
     of contribution")
+  - an article, book or preprint page with four contributors listing a
+    contributor's two affiliations in the order "Edit" lists them
+    ([A26](#a26)): the guard the issue report proposes
+  - a contributor's two affiliations reading "First, Second", with no
+    space before the comma, on the article, book, chapter and preprint
+    pages ([A27](#a27)): the guard the issue report proposes
   - a contributor's CRediT table with two rows, each row's two
     drop-downs named once by their own labels ([A25](#a25)): the guard
     the issue report proposes
@@ -962,8 +968,8 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | The button that deletes a contributor role is labelled with a warning question, not the action | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the contributor form labels "Competing Interests" with raw link markup | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A25](#a25) | A contributor's later CRediT rows have unnamed drop-downs, and a click on their labels edits the first row | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
-| [A26](#a26) | On the landing page a contributor's affiliations can print in another order than "Edit" lists them | 🐞 | minor | — |
-| [A27](#a27) | On the landing page several affiliations print with a space before each comma ("First Univ , Second Univ") | 🐞 | minor | — |
+| [A26](#a26) | On an article, book or preprint page with several contributors, a contributor's affiliations print in reverse order | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
+| [A27](#a27) | A contributor's affiliations on an article, book or preprint page read "First Univ , Second Univ" | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
 | [A4](#a4) | The organization contributor's "ROR ID" box accepts any text without a shape check | ❓ | minor | — |
@@ -1367,34 +1373,36 @@ submission wizard's "Add Contributor".
 Basis: probe, 2026-10-13. <sup>f-a25</sup>
 
 <a id="a26"></a>
-**A26 — A contributor's affiliations can print in another order than "Edit" lists them** · 🐞 · minor.
-A contributor's affiliations join the form's list in the order they are
-added, and "Edit" on the contributor lists them that way on every
-read. The published item's landing page does not always follow: once
-the item has two or more contributors, a contributor's second
-affiliation can print before the first ("University of Ljubljana ,
-First Univ" where "Edit" lists "First Univ" first). While the item had
-one contributor the page printed them as added. Adding a second
-contributor, with the first one's affiliations untouched, was enough to
-turn the printed order round. A second affiliation picked from the
-registry and one entered by hand behave alike, and the form has no
-control to set the order.
+**A26 — On an article, book or preprint page with several contributors, a contributor's affiliations print in reverse order** · 🐞 · low.
+On a published item with several contributors, a contributor's
+affiliations print on the article, book or preprint page in the reverse
+of the order the contributor's "Edit" window lists them: the institution
+added last comes first. Nobody is told, and the form has no control to
+set the order.
 
-The turn is not predictable: on one install the same steps turned the
-order round in one run and left it as added in the next. What decides
-it is not settled. The likely cause is that nothing fixes the order in
-which the page reads the list, so it can differ between installs and
-between loads.
-Basis: probe + code reading, 2026-10-07. <sup>f-a26</sup>
+The reversed order also reaches the page's Google Scholar tags, the REST
+API and, by the code, the DOI deposits (Crossref, DataCite), the JATS
+and MARC records served over OAI-PMH, and the DOAJ, PubMed, ONIX and
+native XML exports. Every affiliation is still there.
+
+It shows on PostgreSQL, on PKP's test dataset from three contributors on
+a journal and by four on a press or a preprint server, and a page that
+shows it shows it on every load. It is on `main` only, so it ships in
+the next release if left alone.
+Basis: probe + code reading, 2026-10-13. <sup>f-a26</sup>
 
 <a id="a27"></a>
-**A27 — Several affiliations print with a space before each comma** · 🐞 · minor.
-On a published item's landing page (the article, book and preprint
-pages alike), a contributor's affiliations are joined as "First Univ ,
-Second Univ", with a space before the comma, where "First Univ, Second
-Univ" is expected. After an affiliation picked from the registry, the
-ROR mark sits between the name and that comma.
-Basis: probe, 2026-10-07. <sup>f-a27</sup>
+**A27 — A contributor's affiliations on an article, book or preprint page read "First Univ , Second Univ"** · 🐞 · low.
+On a published article's, book's or preprint's page, a contributor with
+two or more affiliations has them joined with a space before each comma:
+"University of Tehran , Second Institute" where "University of Tehran,
+Second Institute" is expected.
+
+Every affiliation is shown; only the punctuation of the public byline is
+wrong, on every item where a contributor has more than one affiliation.
+Nothing outside the page carries the space: the citation tags and the
+exports list each affiliation on its own.
+Basis: probe, 2026-10-13. <sup>f-a27</sup>
 
 <a id="a28"></a>
 **A28 — Once a journal stops taking a language for metadata, a contributor whose institution is named in it cannot be saved, and the form shows no reason** · 🐞 · medium.
@@ -2597,6 +2605,7 @@ after `ANALYZE author_affiliations`, would settle it. `stable-3_5_0`
 not driven: its `Collector` has no ordering either, and its article
 template prints the list the same way (code read). The contributors'
 own order had the same kind of fault until 2026-09-03 (A15, retired).
+Issue report: [docs/issues/U41-A26-affiliations-print-out-of-order.md](../issues/U41-A26-affiliations-print-out-of-order.md).
 
 <a id="fn-f-a27"></a>
 **f-a27 — A27 evidence.** Live-probed 2026-10-07 (Rule 14; the OJS
@@ -2611,6 +2620,7 @@ template line of its own between the entries, outside any `{strip}`, so
 the line break before it shows as a space; the contributor-role loop
 under it wraps the same separator in `{strip}`. `stable-3_5_0`'s
 article template has the same loop (code read, not driven).
+Issue report: [docs/issues/U41-A27-affiliations-space-before-comma.md](../issues/U41-A27-affiliations-space-before-comma.md).
 
 <a id="fn-f-a28"></a>
 **f-a28 — A28 evidence.** Live-probed 2026-10-08 (Fields
