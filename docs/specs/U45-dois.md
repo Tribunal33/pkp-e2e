@@ -82,7 +82,7 @@ Rule 5). <sup>c</sup>
 |------------------|-----------|-------|
 | **DOIs** | No | One box: "Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal." (a press "…to work published by this press.", a preprint server "…to assigned to works published on this server." ⚠ [OPS1](#ops1)). Ticked on a new journal (Rule 2). <sup>c</sup> <sup>y</sup> |
 | **Items with DOIs** | No | Help: "Select which items will be assigned a DOI. Most journals assign DOIs to articles, but you may wish to assign DOIs to all of the published items." (a press and a preprint server word it for their own items). Boxes: journal "Articles", "Issues", "Article galleys, such as a published PDF", "Peer Review"; press "Monographs", "Chapters", "Publication Formats", "Files"; preprint server "Preprints", "Preprint galleys, such as a published PDF". The first box is ticked on a new journal, the others not. While a registration agency is chosen, only the kinds that agency accepts are listed (Rule 35). Effect: Rule 4. <sup>c</sup> |
-| **DOI Prefix** | Yes, while "DOIs" is ticked | Help: "The DOI Prefix is assigned by a registration agency, such as Crossref or DataCite. Example: 10.xxxx" (both names are links). Empty on a new journal. "10." followed by four to seven digits and nothing else ("10.1234", "10.1234567"); anything else ("10.123", "11.1234", "10.1234/") is refused under the box with "This is not formatted correctly.". Empty while "DOIs" is ticked, it is refused with "A DOI prefix is required" (Rule 3). <sup>c</sup> <sup>q3</sup> |
+| **DOI Prefix** | Yes, while "DOIs" is ticked | Help: "The DOI Prefix is assigned by a registration agency, such as Crossref or DataCite. Example: 10.xxxx" (both names are links). Empty on a new journal. "10." followed by four to seven digits and nothing else ("10.1234", "10.1234567"); anything else ("10.123", "11.1234", "10.1234/") is refused under the box with "This is not formatted correctly.". Empty while "DOIs" is ticked, it is refused with "A DOI prefix is required" (Rule 3). On a journal upgraded from 3.3 the box can show an old leftover prefix instead of the one the journal used there ⚠ [A29](#a29). <sup>c</sup> <sup>q3</sup> |
 | **Automatic DOI Assignment** | Yes, one choice | Help: "When should a submission be assigned a DOI?". A list: "Immediately, when an item is created (only with the default DOI suffix)", "Upon reaching the copyediting stage" (a preprint server "Upon reaching the production stage"), "Upon publication", "Never". The second is selected on a new journal. "Immediately…" saves only with "DOI Format" "Default": with "None" or "Custom pattern" chosen, "Save" is refused with "Immediate DOI assignment is only possible with the default DOI suffix. Please choose the default suffix or a different time for automatic DOI assignment." under this list, whichever of the two was changed last. After that refusal "Save" stays greyed out until a choice is made again in this list; choosing "Default" alone leaves it greyed. Effect: Rule 5. <sup>c</sup> <sup>q39</sup> |
 | **DOI Format** | Yes, one choice | Help: "Select the format to use when the application generates a DOI." Radios: "Default - Automatically generates a unique eight-character suffix" (selected on a new journal), "None - Suffixes must be entered manually on the DOI management page and will not be generated automatically" (the words "DOI management page" link to the DOIs page), "Custom pattern - (not recommended)". "None" and "Custom pattern" cannot be saved with "Immediately…" (the row above). Effect: Rule 6. <sup>c</sup> |
 | **Custom DOI Suffix Pattern** | Only with "Custom pattern" | A group shown only while "Custom pattern - (not recommended)" is selected. Its help opens "Enter a custom suffix pattern for each publication type." and lists the symbols the app offers (Rule 6c). One box per kind: journal "Submissions", "Article Galleys", "Issues", and under "Peer Review" the words "Custom pattern not supported" instead of a box; press "Submissions", "Chapters", "Publication Formats", "Files"; preprint server "Submissions", "Preprint Galleys". The box of a ticked kind left empty is refused with "A DOI suffix pattern is required." under that box; the box of an unticked kind may stay empty. After that refusal, unticking the kind leaves "Save" greyed out until something is typed in the flagged box (typing and then emptying it is enough); the save then passes. <sup>c</sup> <sup>q4</sup> |
@@ -508,8 +508,10 @@ links under the list. <sup>g</sup>
     ticked. With nothing ticked, the window still opens ("…for 0
     item(s)…"); its button closes it and nothing else happens, with no
     message ⚠ [A13](#a13). The menu closes when its item opens the
-    window, but stays open over the list after a held press on "Assign
-    DOIs" whose window is answered at once ⚠ [A22](#a22).
+    window. It stays open over the list when the mouse button is held
+    on the item (such as "Assign DOIs") for more than a tenth of a
+    second and the window is answered and gone within 1.1 seconds of
+    that press ⚠ [A22](#a22).
     <sup>p</sup> <sup>q19</sup>
 25. **"Assign DOIs".** Offered only while a prefix is set. For each
     ticked item it makes every missing DOI of the current version for the
@@ -586,9 +588,14 @@ links under the list. <sup>g</sup>
       [OJS6](#ojs6). With DataCite under "DOI Versioning" "Yes" only
       the current version is sent [OJS8](#ojs8). A ticked
       published work that has no DOI gets the same notice, yet stays
-      "Needs DOI" and nothing is sent ⚠ [A15](#a15). A ticked unpublished
-      item makes the whole action fail: nothing is marked, the window
-      closes and no message says why [A13](#a13).
+      "Needs DOI" and nothing is sent ⚠ [A15](#a15). On a DataCite
+      journal, a ticked article with no DOI whose galley has one gets
+      the same notice and the galley's row "Submitted", but the
+      galley's DOI is never sent: Administration › "Failed Jobs" ›
+      "Details" reads "DataCite export: no DOI assigned…"
+      ⚠ [OJS5](#ojs5). A ticked
+      unpublished item makes the whole action fail: nothing is marked,
+      the window closes and no message says why [A13](#a13).
     - **"Deposit All"** opens "Deposit all DOIs": "You are about to
       schedule all outstanding DOI metadata records to be deposited with
       {agency}. Only published items with a DOI will be deposited…",
@@ -625,7 +632,7 @@ links under the list. <sup>g</sup>
       galleys' rows turn "Submitted". With "Articles" ticked, a work
       whose "Article" row has no DOI while its galley's has one gets the
       galley's row "Submitted", but its deposit fails on the server and
-      the galley's DOI is never sent ⚠ [OJS5](#ojs5).
+      the galley's DOI is never sent [OJS5](#ojs5).
     - **A review's DOI** {OJS} is taken while the review counts as read
       (Rule 7) and Rule 7c lets it go, also when its article's DOI
       already reads "Registered", which keeps that status.
@@ -2031,7 +2038,8 @@ Left out of the scenarios above, by reason:
   - the guard for A21 (Fields, the Registration tab; issue report
     `docs/issues/U45-A21-registration-save-without-agency-logs-warning.md`):
     scenarios 12 and 19's "Save" without an agency plugin leaving no
-    warning in the server log
+    PHP warning in the test install's server log
+    ([note f-a21](#fn-f-a21) says where)
   - the guard for A22 (Rule 24; issue report
     `docs/issues/U45-A22-bulk-actions-menu-stays-open.md`): after "Assign
     DOIs" confirmed at once, the "Bulk Actions" menu closed and the first
@@ -2175,8 +2183,8 @@ Left out of the scenarios above, by reason:
   - OJS3 (the ISSN publish warning listed twice; Rule 39; scenario 14 passes it)
   - OJS1 ("Never" not stopping an issue's DOI at "Publish Issue"; Rule 8)
   - OJS2 (a DataCite issue export or deposit; Rule 29)
-  - A15 ("Deposit DOIs" on a published work without a DOI, and on one whose article DOI was cleared while its galley kept one; Rule 29)
-  - OJS5 ("Deposit All" on a DataCite journal marking "Submitted" the galley DOI of a work whose article has none, its deposit failing; Rules 29a, 41)
+  - A15 ("Deposit DOIs" on a published work with no DOI, its own or a galley's; Rule 29)
+  - OJS5 ("Deposit All" or "Deposit DOIs" on a DataCite journal marking "Submitted", and never sending, the galley DOI of a work whose article DOI was cleared; Rules 29, 29a, 41)
   - OJS8 ("Deposit All" and "Deposit DOIs" on a DataCite journal under "DOI Versioning" "Yes" marking an earlier major version's DOIs "Submitted"; Rules 29, 29a)
   - A24 (a formatted title's codes in a row's name; Rule 16)
   - OJS4 ("Deposit DOIs" on the "Issues" tab leaving the issues' status; Rules 29, 32)
@@ -2190,6 +2198,7 @@ Left out of the scenarios above, by reason:
   - OPS3 (a preprint server's "Username" help; Fields, the Crossref block)
   - A21 (the server log's warning on a "Registration" tab "Save" without an agency; Fields, the Registration tab; scenarios 12 and 19 pass it)
   - A23 (a journal's or a preprint server's galley given its DOI alone at a publish; Side effects)
+  - A29 (an install upgraded from 3.3 keeping an old leftover prefix, an upgrade no test runs; Fields, "DOI Prefix")
 - **No seed**:
   - the "Export DOIs" download and "Items successfully exported": the test installs cannot reach the agency's site (Rule 29; Side effects)
   - a deposit the agency answers with an error: "Error", "View Error" and the "Registration Error Message" window (Rules 17, 33)
@@ -2222,6 +2231,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | "Save" on the DOI "Registration" tab with no agency plugin enabled logs a PHP "Undefined array key" warning | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | The DOIs page's rows show a title's italic word as `<i>…</i>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
+| [A29](#a29) | A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
@@ -2628,6 +2638,24 @@ a quotation mark in the "Title" itself reads right.
 Nothing is lost: the row is only harder to read, and the workflow page
 shows the title right.
 Basis: probe, 2026-10-09. <sup>f-a24</sup>
+
+<a id="a29"></a>
+**A29 — A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it** · 🐞 · user-visible.
+A manager who upgrades a journal, press or preprint server from 3.3
+expects it to keep the DOI prefix set in 3.3's DOI plugin settings
+(Settings › Website › "Plugins" › "Public Identifier Plugins" › "DOI"
+› "Settings"). When the journal's own settings already hold another,
+older prefix value, which no 3.3 screen shows or uses, the upgrade
+keeps that value and drops the plugin's. The upgrade reports success,
+"DOI Prefix" on the "Setup" tab shows the old value, and "Assign DOIs"
+makes every new DOI with it, with no message. DOIs made before the
+upgrade keep their prefix. Where such a leftover value comes from is
+not known, nor how many installs hold one. The way round is to type
+the right prefix into "DOI Prefix", save, and correct by hand on the
+DOIs page any DOI made with the wrong one.
+That is `main`, and 3.5 since 3.5.0-2. An upgrade from 3.3 to 3.4
+stops on such an install with a database error instead.
+Since: 2026-10-09 (pkp/pkp-lib#13481; on 3.5 pkp/pkp-lib#12082) · Basis: probe, 2026-10-09. <sup>f-a29</sup>
 
 ### OJS
 
@@ -4906,6 +4934,10 @@ footnote d) posts no such key, so PHP logs `Undefined array key
 tab on OMP, in each app's green run): the screen showed "Saved" and the
 server log held the warning for that save. Live-probed 2026-09-26
 (Fields, the Registration tab, OJS): the same line at the tab's "Save".
+Where the warning is read: the test install's PHP server output,
+`apps/<app>/playwright/.server-logs/server-<port>.log` (harness.md
+"Server output"; a probe server's is `server-<port>-probe.log`, which
+the probe kit's `serverLog(app)` reads from a mark).
 Issue report: [pkp-e2e#245](https://github.com/jardakotesovec/pkp-e2e/issues/245) ([docs/issues/U45-A21-registration-save-without-agency-logs-warning.md](../issues/U45-A21-registration-save-without-agency-logs-warning.md)).
 
 <a id="fn-f-a22"></a>
@@ -4949,6 +4981,39 @@ census &amp;amp; tapir`); a plain title read as typed. The work's
 page's `h1` rendered the italic word and the "&"; the "DOI Updates
 Failed" line printed the unpublished title plain.
 Issue report: [pkp-e2e#942](https://github.com/jardakotesovec/pkp-e2e/issues/942) ([docs/issues/U45-A24-doi-row-title-formatting-codes.md](../issues/U45-A24-doi-row-title-formatting-codes.md)).
+
+<a id="fn-f-a29"></a>
+**f-a29** — `PKPI7014_DoiMigration::_migrateDoiSettingsToContext()`
+(`lib/pkp/classes/migration/upgrade/v3_4_0/`, run only on an upgrade
+from before 3.4) copies the DOI plugin's `plugin_settings` rows
+(`doiPrefix`, the suffix settings, the enabled kinds) into the context's
+settings table with `insertOrIgnore()` and then deletes the plugin's
+rows; a context row of the same name already there (`doiPrefix` in
+`journal_settings`, `press_settings`) is kept, and the plugin's value,
+the only prefix 3.3 read (`DOIPubIdPlugin::getSetting()`), is gone.
+`pkp/pkp-lib#12082` (2025-11-28, released in 3.5.0-2) turned the plain
+`insert()`, which stopped the upgrade on that row with a unique-key
+error (`pkp/pkp-lib#11663`), into `insertOrIgnore()`; its port to
+`main`, `pkp/pkp-lib#13481`, merged 2026-10-09 (`0513e22cf4`).
+`stable-3_4_0` still calls `insert()`. Live-probed 2026-10-09 with the
+kept check `shared/playwright/checks/sync/pkp-lib-13481/upgrade-from-3_3.js`
+on PKP's 3.3 default datasets (PostgreSQL), the plugin's prefix
+10.1234 and a context-level leftover: OJS, OMP and OPS at the PR's
+head, and OPS again at its final commit (`03b9a78d8f`, the tree merged
+as `0513e22cf4`), case `leftover-different`
+(leftover 10.9999): "Successfully upgraded to version 3.6.0.0",
+"DOI Prefix" 10.9999 and the DOI "Assign DOIs" made `10.9999/…`; with
+the leftover equal to the plugin's prefix or absent, 10.1234 both
+times; a DOI stored before the upgrade (`10.1234/existing.1`)
+unchanged in every case. A fix tried on all three apps (`upsert()`,
+as `_transferDefaultPatterns()` in the same class does) kept 10.1234:
+`fix.diff` beside the check. MySQL and MariaDB not run. Where a
+leftover context-level `doiPrefix` comes from was not found (3.3's
+code neither reads nor writes one). The upgrader is outside the
+suites' reach (an install is never upgraded in a test run).
+Written up for the team in
+[docs/reports/2026-10-09-pkp-lib-13481.md](../reports/2026-10-09-pkp-lib-13481.md)
+(the PR review of pkp/pkp-lib#13481, posted in the channel on 2026-10-09).
 
 <a id="fn-f-a25"></a>
 **f-a25** — At the PR heads of `pkp/pkp-lib#13460` (`246e5387f6`, with

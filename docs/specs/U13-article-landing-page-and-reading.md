@@ -247,12 +247,13 @@ Top to bottom: <sup>j</sup>
    version's title, but the browser tab reads the current version's
    title ⚠ [A6](#a6).
    <sup>f</sup> <sup>q4</sup>
-6. **Empty parts are left out.** Every part of the page's tables appears
-   only when the version has something to put in it: an article with only
-   a title, one contributor and an abstract shows the breadcrumb, the
-   title, the contributor, "Abstract", "Published" and "Versions", on a
-   journal also "Section" (and "Issue", with the issue's cover, when it is
-   in an issue that has one), and no other heading.
+6. **Empty parts are left out.** No part of the landing page (Fields)
+   appears unless the version has content for it: on the seeded journal
+   (preprint server), an article with only a title, one contributor and
+   an abstract shows the breadcrumb, title, contributor, "Abstract",
+   "Published" and "Versions", on a journal also "Section" (and "Issue"
+   in an issue, with the issue's cover when that issue has one), and no
+   other heading.
    <sup>c</sup> <sup>q6</sup>
 7. **The date line.** Under "Published" ("Posted"): the first
    version's page, its date; a later version's, "{first date} —
@@ -2144,7 +2145,10 @@ holds `preprint.subject` with an empty translation (OPS7). Abstract: OJS
 `publication.coverImage`, else (OJS only) the issue's cover linked to
 `issue/view/{bestIssueId}`. Issue block (OJS): `issue.issue` "Issue",
 `section.section` "Section", `category.category` "Categories" (lib/pkp),
-`submission.articleNumber` "Article Number". Categories: OJS
+`submission.articleNumber` "Article Number". The two conditions are
+apart in `templates/frontend/objects/article_details.tpl`: the "Issue"
+heading under `{if $issue}`, the issue's cover under
+`$issue->getLocalizedCoverImage()` (read 2026-10-13). Categories: OJS
 `Repo::category()->getCollector()->filterByPublicationIds()`, each
 `getLocalizedTitle()`, linked to `catalog/category/{path}`; OPS builds
 "{parent} > {title}" in `PreprintHandler::view()`, linked to
@@ -2163,8 +2167,8 @@ prefix was set on screen, "DOI: https://doi.org/10.1234/…" as a link;
 "Keywords: alpha, beta" as plain text; the abstract, the plain language
 summary and "References" with their headings. An article with a title,
 one contributor and an abstract showed the title, "Abstract",
-"Published", "Versions" and on a journal "Section" (plus "Issue" and the
-issue's cover in an issue with one); on a preprint server the title,
+"Published", "Versions" and on a journal "Section" (plus "Issue" in an
+issue, and the issue's cover when that issue had one); on a preprint server the title,
 "Abstract", "References", "Posted" and "Versions". An older version's
 page showed "Keywords: vone" and "Arts" where the current one showed
 "Keywords: vtwo", "Arts" and "Science". On a journal's French page every

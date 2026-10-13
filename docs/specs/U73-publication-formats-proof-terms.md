@@ -1368,11 +1368,12 @@ Since: 2023-01-20 (pkp/pkp-lib#8554) · Basis: probe, 2026-10-04. <sup>f-a15</su
 In a format's "Metadata" tab, the window's close arrow and the tab's
 "Cancel" close at once and drop a changed field; only switching to the
 "Edit" tab asks "The data on this form has changed. Do you wish to
-continue without saving?". The same window's close arrow does ask for a
-changed field of the "Edit" tab (Rule 4a), and so does the terms
-window's.
+continue without saving?". The window's close arrow asks only about its
+first tab, "Edit" (Rule 4a): a change on "Metadata", or on "Identifiers"
+([Identifiers, its A17](U44-identifiers.md#a17)), is dropped without the
+question. The terms window's close arrow does ask.
 Question: should the close arrow ask for a changed catalog field too?
-Lean: yes; the window asks for its other tab, so a lost catalog field is the odd one out.
+Lean: yes; the arrow asks about "Edit" only because it is the window's first tab, and *Identifiers* records the same loss from its own tab as a defect.
 Basis: probe. <sup>f-a16</sup>
 
 <a id="a17"></a>
@@ -2531,7 +2532,21 @@ Issue report: [pkp-e2e#806](https://github.com/jardakotesovec/pkp-e2e/issues/806
 
 <a id="fn-f-a16"></a>
 **f-a16** — Note f (`trackFormChanges`). Live-probed 2026-09-28: note
-td12.
+td12. Read in the code 2026-10-09, the same on `main` and
+`stable-3_5_0`: the header close of a legacy side-modal window runs
+ui-library `AjaxModalWrapper.vue`'s close callback, which sends
+`containerClose` to the window's first `<form>` alone
+(`.find('form').first()`), and lib/pkp `FormHandler.js`
+`containerCloseHandler` confirms `form.dataHasChanged` only when that
+form's own `formChangesTracked` is set; `editFormat.tpl`'s tabs are
+"Edit", "Metadata", "Identifiers". Live-probed 2026-10-09 on scratch
+presses, OMP `main` and `stable-3_5_0`, a format's "Edit" ›
+"Identifiers", a URN suffix typed, header "Close": with the "Edit"
+tab's form on screen first, nothing asked on either line and the next
+reload raised the browser's leave-page box; with the "Edit" tab's
+request cancelled by pressing "Identifiers" at once (jQuery UI aborts
+it), `publicIdentifiersForm` was the window's only form and "Close"
+asked. Nothing was stored either way.
 
 <a id="fn-f-a17"></a>
 **f-a17** — Note f: `pageCounts` and the `productDimensions` boxes have

@@ -1263,8 +1263,9 @@ has changed. Do you wish to continue without saving?", and so does
 chapter's title). After the silent close the page still counts the
 change as unsaved: opening another address or reloading raises the
 browser's own leave-page box, although no window is open. A press's
-publication format window and "Edit a file" close the same way; an
-issue's window asks the question.
+publication format window and "Edit a file" close the same way, once
+their first tab has appeared before "Identifiers" is opened; an issue's
+window asks the question.
 Basis: probe, 2026-10-09. <sup>f-a17</sup>
 
 ### OJS
@@ -2022,7 +2023,8 @@ changed galley label or chapter title. After the silent close, with the
 page read again 2 seconds later, opening the page by its address and a
 reload each raised the browser's leave-page box (`beforeunload`). On
 OMP `main` the format's "Edit" and "Edit a file" closed the same way
-with a URN suffix typed; the OJS issue window asked on "Close", as on
+with a URN suffix typed, and so they do on `stable-3_5_0` once their
+first tab has arrived (note f-a17); the OJS issue window asked on "Close", as on
 2026-09-24 (note f). Not driven that day: a tab switch in the format's
 and the file's window, and "Close" from their first tabs.
 
@@ -2177,11 +2179,24 @@ report names this fault as out of its scope
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-10-09 (note q26). On `stable-3_5_0` the
-galley's and the chapter's window close the same silent way; the
-format's "Edit" and "Edit a file" ask the question there (two runs) and
-close without it on `main` (two runs), so for those two windows the
-silent close came after 3.5. The leave-page box followed each silent
-close in a second pair of runs on each line as well.
+galley's and the chapter's window close the same silent way. A press's
+format "Edit" and "Edit a file" behave the same on both lines
+(re-read 2026-10-09, each window driven three ways on OMP `main` and
+`stable-3_5_0`, scratch presses): once the window's first tab ("Edit",
+"Edit Metadata") has arrived, a URN suffix typed on "Identifiers" and
+the header "Close" ask nothing, the reopened "URN Suffix" box is empty
+and the next reload raises the leave-page box. "Close" asks only when
+"Identifiers" was pressed before the first tab arrived: that cancels the
+first tab's request (jQuery UI aborts it), and the "Identifiers" form is
+then the window's only form. The header "Close" (ui-library
+`AjaxModalWrapper.vue`) sends `containerClose` to the window's first
+`<form>` alone, and lib/pkp `FormHandler.js` `containerCloseHandler`
+asks only when that form has changed; the code is the same on both
+lines. Nothing was stored for a format or a file either way. An earlier
+pair of reads that had these two windows ask on 3.5 and not on `main`
+came from a check that pressed "Identifiers" as soon as the tabs were
+drawn and so raced the first tab's request. The leave-page box followed
+each silent close in a second pair of runs on each line as well.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls

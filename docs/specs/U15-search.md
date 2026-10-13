@@ -225,8 +225,7 @@ shared. <sup>b</sup>
     moments, on a test install only after the site's background jobs have
     been run (the scenarios' footnote says how). Unpublishing an article removes it from the results at
     once; so does unpublishing the issue that holds it {OJS}, and so does
-    deleting it (a published article is deleted only after being returned
-    to the workflow and declined, [Submission stage](U25-submission-stage.md#delete)).
+    deleting it (Side effects).
     Publishing an issue again {OJS} lists its articles only once the
     background job has run, like publishing an article. When an article
     has an older published version, unpublishing the newest version
@@ -234,13 +233,16 @@ shared. <sup>b</sup>
     stays public on the landing page and, once the background job has run,
     the article is listed again under that version's title; the words of
     the unpublished newer version still find it ⚠ [A7](#a7).
-    Changes made to an already-published article without republishing it
-    (a corrected title or abstract, an added contributor, a changed
-    published date) do not reach the index: the result shows the new title,
-    contributors and date at once, but search keeps finding the old words and not the
-    new ones until the article is unpublished and published again, a new
-    version is published, or the administrator rebuilds the index
-    ⚠ [A3](#a3). When an article has several versions, the words of every
+    Changes saved on an already-published article without republishing it
+    (a corrected title or abstract, an added contributor) do not reach the
+    index: the result shows the new title and contributors at once, but
+    search still finds the old words, not the new ones, until the article
+    is unpublished and published again, a new version is published, or the
+    index is rebuilt from the command line (Side effects) ⚠ [A3](#a3). A
+    published date saved the same way (Publication Settings › "Publication
+    Date"; a press's Catalog Entry › "Date Published"; a server's Preprint
+    Entry › "Date Posted") shows in the result, and the date filters
+    (Rule 9) follow it, at once. When an article has several versions, the words of every
     version, superseded ones included, find it ⚠ [A7](#a7). <sup>k</sup>
 13. **A journal that does not publish online** {OJS}. When the journal's
     Distribution settings set the publishing mode to "OJS will not be used
@@ -675,6 +677,7 @@ Left out of the scenarios above, by reason:
   - a word that is only in a published HTML galley finds the article, book or preprint once the queue has run (Rule 3; A11)
   - a title corrected and a contributor added on a published article, book or preprint are found by their new words once the queue has run, and the old title word no longer finds it (Rule 12; A3)
   - a Year alone under "Published Before", and a Year and Month without a Day, limit the results and come back showing the date applied (Rule 9; A1)
+  - a published article's or preprint's date saved a week later (Rule 12): the result shows the new date and "Published After" the day after the old date finds it, at once with no queue run (Rules 9, 12)
   - on the site-wide Search page, a journal chosen under "By Journal" stays selected after the search and its page 2 lists that journal's articles only (Rule 10; OJS2)
   - on a press and a server, a published book or preprint returned to the workflow keeps its page, its place in the catalog or preprint list and its search result for a visitor (Rule 2; OMP3, OPS4)
   - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
@@ -1550,7 +1553,10 @@ published. Editing it may impact the published content.") → the result
 showed the new title at once, the old word found it and the new word did
 not, before and after a queue run; "Create New Version" and publishing 1.1
 → both words found it once the queue ran. A published date changed through
-the workflow's date field showed in the result at once. OJS: "Unpublish
+the workflow's date field showed in the result at once; the date
+filters match the publication's own `date_published`, not
+`submissions_fulltext` (`DatabaseEngine::buildQuery()`, read in the code
+2026-10-03; the filters were not driven after a date edit). OJS: "Unpublish
 Issue" on the issue holding a found article → "No Results" at once, the
 control article still found. Delete path: "Return to Workflow" → "Decline
 Submission" → "Delete" ("Are you sure you want to permanently delete this
