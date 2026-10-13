@@ -1726,6 +1726,35 @@ step runs by itself, and with the job runner run by hand only step 1
 does (the 2026-10-07 probe below). The chain's steps 2–5, the requests,
 their pacing and retries, and the failed mark are unreachable on a test
 install and rest on the code above.
+`reprocessCitation()` takes the context as an optional second argument
+and loads the citation's own only without one; `importCitations()`,
+`importAdditionalCitations()` and
+`PKPCitationController::reprocessCitationsByPublicationId()` hand over the
+one they hold (the request's, which the publication policies tie to the
+submission's), the row "Reprocess" and `copyCitations()` hand over none
+(`pkp/pkp-lib#13504`, issue `pkp/pkp-lib#13503`). Driven 2026-10-13 at its
+base `f4c2578c94` and at the PR head `cee5d58168` before its merge, all
+three apps, PKP's default dataset with lookup on
+(`checks/sync/pkp-lib-13504/paths.js`): "Add", "Reprocess all", a row's
+"Reprocess" and the References box saved queued one chain per reference
+with the context's ID and contact email, the same rows on both sides, no
+PHP warning. The same PR adds `lib/pkp/tools/citationLookup.php`, which
+queues this chain for references already stored, in contexts with lookup
+on (the others are named and skipped): `status` (references and
+publications per status, the submissions still pending, the job and
+failed-job counts, a warning when references are queued or running and
+the job table is empty), `queue [--limit=N]` (NOT_PROCESSED and no status,
+whole publications, newest submission first; N bounds the publications
+queued or running), `repair --status=failed|queued|processed [--force]`
+(`queued` refused while the job table holds any job, unless `--force`),
+each scoped to `context <id> …` or `submission <id> …`. It deletes and
+imports nothing. Walked the same day at the PR head on all three apps
+(`checks/sync/pkp-lib-13504/cli.sh`), on references stored with lookup
+off and one submission's without a status: a second `queue` queued
+nothing, one job row per reference throughout, `--limit` held, the
+emptied job table brought the warning and `repair --status=queued` one
+chain each. A re-lookup of a PROCESSED reference keeps its DOI: the
+Crossref step returns at once when there is one.
 Live-probed 2026-09-24 (Rule 11), all three apps: a reference added
 through "Add" with a DOI and an arXiv ID in its text showed its text alone,
 with no identifier link, after the Add and after a reload. Structured by
@@ -2880,6 +2909,7 @@ the finding continues as A20.
 | Landing-page "References" block | article, preprint and book pages (*Article landing page & reading*, *Monograph landing page*) | AFFR-057 |
 | Settings "References", "References Metadata Lookup", "Data Citations" | Settings › Workflow › Submission › "Metadata" (*Publication metadata* owns the screen) | — |
 | `lib/pkp/tools/parseCitations.php` ("Parse and save submission(s) citations.") | command line, no screen | waived: not a screen (*System administration & jobs*) |
+| `lib/pkp/tools/citationLookup.php` ("Queue the metadata lookup of existing citations in bulk, and monitor it."; `status`, `queue`, `repair`) | command line, no screen | (not in the atlas: after the sweep) · waived: not a screen (*System administration & jobs*); note h |
 | Unreached pieces: the unused lookup-toggle component, the legacy author dashboard's references form | none | recorded in `docs/tracking/UNASSIGNED.md` item 25 |
 
 ## Reference — code anchors
@@ -2899,4 +2929,4 @@ the finding continues as A20.
 - `lib/pkp/classes/publication/DAO.php` (`citationsRaw`, `insert()`, `update()`) · `publication/Repository.php::version()` · `publication/maps/Schema.php` · `lib/pkp/classes/submission/Repository.php::validateSubmit()` · `lib/pkp/classes/context/Context.php::getRequiredMetadata()` · `lib/pkp/api/v1/submissions/AnonymizeData.php`
 - `ojs/templates/frontend/objects/article_details.tpl` · `ops/templates/frontend/objects/preprint_details.tpl` · `omp/templates/frontend/objects/monograph_full.tpl` · `ojs/pages/article/ArticleHandler.php` · `ops/pages/preprint/PreprintHandler.php` · `omp/pages/catalog/CatalogBookHandler.php`
 - `ojs/plugins/generic/crossref/filter/ArticleCrossrefXmlFilter.php` · `CrossrefCitationDoiCheckTask.php` · `plugins/generic/datacite/filter/DataciteXmlFilter.php` · `plugins/generic/jatsTemplate/classes/ArticleBack.php`
-- `lib/pkp/pages/authorDashboard/PKPAuthorDashboardHandler.php::setupTemplate()` (the unreached references form) · `lib/pkp/tools/parseCitations.php`
+- `lib/pkp/pages/authorDashboard/PKPAuthorDashboardHandler.php::setupTemplate()` (the unreached references form) · `lib/pkp/tools/parseCitations.php` · `lib/pkp/tools/citationLookup.php`
