@@ -2555,7 +2555,7 @@ per-row `formId`, so every row gets the same ids, as A10's name boxes
 do (f-a10); A10's issue report names this component in its Reach, read
 in the code and left out of its fix. `main` only: `stable-3_5_0` has no
 CRediT roles (f-a23).
-Issue report: [docs/issues/U41-A25-credit-role-rows-labels-first-row.md](../issues/U41-A25-credit-role-rows-labels-first-row.md).
+Issue report: [pkp-e2e#955](https://github.com/jardakotesovec/pkp-e2e/issues/955) ([docs/issues/U41-A25-credit-role-rows-labels-first-row.md](../issues/U41-A25-credit-role-rows-labels-first-row.md)).
 
 <a id="fn-f-a26"></a>
 **f-a26 — A26 evidence.** Live-probed 2026-10-07 (Rule 14; Fields

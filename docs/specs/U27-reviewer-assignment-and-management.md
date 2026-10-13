@@ -713,7 +713,9 @@ under the prompt "Record the response on behalf of the reviewer". Submit
   row it shows "Updated Competing Interests" over "Previous Competing
   Interests", each "Competing Interests declared: YES" over "Competing
   Interests: {statement}", even for an answer of "I do not have any
-  competing interests", whose statement is empty ⚠ [A39](#a39). A file added through the window's "Upload"
+  competing interests", whose statement is empty ⚠ [A39](#a39). What
+  "View changes" shows for a changed review-form answer is open
+  ⚠ [A48](#a48). A file added through the window's "Upload"
   is logged at once, saved or not, as 'Revision "{file}" was uploaded for
   file {N}.' under the editor's name. {OJS} Changing the recommendation on
   the reviewer's behalf runs through this window. <sup>i</sup>
@@ -1417,6 +1419,7 @@ Left out of the scenarios above, by reason:
   - A45 (the inverted-date notice speaking of "adding the reviewer" in the "Edit" and "Resend Review Request" windows, and misspelling "response"; Fields)
   - A46 (the "Resend Review Request" refusal adding a browser alert, with no guidance sentence in its window; Fields)
   - A47 (a re-sent request past its response date never reading "Overdue", with no "Send Reminder"; Rule 2)
+  - A48 (a review-form answer written as markup in the "View changes" window of a review-form change; Side effects)
 - **No seed**:
   - the automatic reminder emails from the principal contact at the configured day-offsets, with their "Reviewer Reminded" and log stamps (Rule 13, Side effects, Settings)
   - a section's default "Review Form" preselected in the Add Reviewer window (Rule 10, Settings): the seed sets no default review form on a section
@@ -1482,6 +1485,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A38](#a38) | Whether a request only sent, a completed review or {OMP} a request on the other review stage keeps a cancelled or unassigned reviewer in the submission's discussions is unsettled | ❓ | minor | — |
 | [A41](#a41) | Which activity-log rows a review submitted for the reviewer with no comment leaves is unsettled | ❓ | minor | — |
 | [A42](#a42) | What the Review Details window shows on a "Request Resent" row, its dated line included, is unsettled | ❓ | minor | — |
+| [A48](#a48) | A review-form answer written as markup may run as script when "View changes" opens the review-form change | ❓ | user-visible | — |
 | [OMP1](#omp1) | A press's review runs without reviewer recommendations, and with a per-stage reviewer pool (Internal vs External Reviewers) | ✅ | — | — |
 | [A8](#a8) | Retired: inverted due dates are refused with a notice at the top right, not silently; the earlier probe missed the notice | ✅ | retired | claim check (claude), 2026-10-05 — overturned |
 | [A24](#a24) | Retired: a modification save on a request with no review completes it because it submits the review on the reviewer's behalf, the behavior upstream designed (pkp/pkp-lib#13337); screens do reach it (Rule 14d) | ✅ | retired | upstream change + claim check (claude), 2026-09-17 — overturned by design |
@@ -2082,6 +2086,24 @@ through "Edit", and also once the review date has passed. Its "More
 Actions" menu offers no reminder either. The editor is not shown that
 the reviewer is late and cannot send them the reminder form. Basis:
 probe, 2026-10-05. <sup>[f-a47](#fn-a47)</sup>
+
+<a id="a48"></a>
+**A48 — A review-form answer written as markup may run as script when "View changes" opens the review-form change** · ❓ · user-visible.
+When an editor changes a reviewer's review-form answer in "Modify
+Review", the change is logged with its own "View changes". Its window
+lists the form's questions under "Updated Form Responses" and again
+under "Previous Form Responses", each with its answer in a read-only
+field. Expected: each answer shows as the text that was typed. The
+window turns tags typed as character references (an answer typed as
+`&lt;b&gt;x&lt;/b&gt;`, not `<b>x</b>`) back into real tags and prints
+them unescaped: in an answer, a question or a checkbox's label. So an
+answer written that way could leave its field and run a script in the
+browser of the Journal Manager or Section Editor who opens the window.
+The reviewer writes the previous answer and the editor the new one.
+Question: does such an answer's script run when the window opens?
+Lean: yes; nothing between the saved answer and the window escapes it.
+Security: unreleased.
+Since: 2026-08-20 · Basis: code, 2026-10-13. <sup>[f-a48](#fn-a48)</sup>
 
 ### OMP
 
@@ -3946,6 +3968,37 @@ Notes", "Log Response". Control: a first request moved to yesterday
 through "Edit" read "Overdue" in red with "Response due: {date}" and
 "Send Reminder". First read in the code 2026-10-03, while tracing
 finding A2.
+
+<a id="fn-a48"></a>
+**f-a48** — Code read 2026-10-13, lib/pkp `f4c2578c94` (OJS `7c6fba2064`
+and OMP `eb93813147` share it); the review-form path not walked:
+`ReviewAssignmentController` logs
+`SUBMISSION_LOG_REVIEW_REVIEWER_FORM_RESPONSE_MODIFIED` (message
+`submission.event.review.field.modified.formResponse`, "The following
+was modified in this review: Review Form. …") with the old and new
+answers as JSON when "Modify Review" changes a form answer;
+`EventLogGridRow` gives that row the `ReviewChangeLinkAction` ("View
+changes", window "View Review").
+`SubmissionReviewEventLogGridHandler::formatReviewFormText()` puts
+`PKPString::html2text($answer)` straight into
+`<textarea readonly …>…</textarea>` or an input's `value="…"`;
+`formatReviewFormOptions()` does the same for checkbox and radio labels,
+and `formatReviewFormResponses()` for the question text (twice).
+`html2text()` is `html_entity_decode(strip_tags(…), ENT_COMPAT)`, so
+real tags are dropped but `&lt;`, `&gt;` and `&quot;` come back as
+`<`, `>` and `"`, enough to close the textarea or the attribute. The
+comments and competing-interests windows pass `stripUnsafeHtml()`
+instead; dropdown labels do too. Live 2026-10-13 (OJS and OMP, two runs
+each): a Journal Manager's and a Section Editor's "View changes" windows
+render the op's returned text as HTML, but the dataset's reviews carry no
+review form, so no review-form change was made. Settled by: a review form
+with a text field and a textarea on a review, the reviewer's answer
+holding entity-spelled markup with a harmless console marker, an editor's
+"Modify Review" changing it, a Journal Manager opening "View changes",
+read twice. Since: the review-change log, pkp/pkp-lib#13192 (2026-08-20).
+`stable-3_5_0` has no `SubmissionReviewEventLogGridHandler` and no
+`ReviewChangeLinkAction`, so no release carries it. OPS has no review
+stage.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only
