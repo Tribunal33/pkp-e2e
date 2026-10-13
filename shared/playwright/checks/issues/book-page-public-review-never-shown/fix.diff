@@ -1,0 +1,75 @@
+--- a/js/load_frontend.js
++++ b/js/load_frontend.js
+@@ -1,5 +1,12 @@
+-import * as vue from 'vue';
++import PkpLoad from '../lib/pkp/js/load_frontend.js';
++window.pkp = Object.assign(PkpLoad, window.pkp || {});
+ 
+-window.pkp = {
+-	modules: {vue},
+-};
++document.addEventListener('DOMContentLoaded', () => {
++	// pkp-modal-manager:
++	const div = document.createElement('div');
++	div.setAttribute('data-vue-root', '');
++	const modalManager = document.createElement('pkp-modal-manager');
++	div.appendChild(modalManager);
++	document.body.prepend(div);
++	pkp.registry.initVueFromAttributes();
++});
+--- a/package.json
++++ b/package.json
+@@ -20,6 +20,7 @@
+     "postinstall": "copyfiles -f node_modules/swiper/swiper-bundle*.{js,css} plugins/themes/default/js/lib/swiper && copyfiles -f node_modules/altcha/dist/altcha.i18n.js lib/pkp/js/lib/altcha"
+   },
+   "dependencies": {
++    "@fastify/deepmerge": "^3.2.0",
+     "@atlaskit/pragmatic-drag-and-drop": "^1.7.7",
+     "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.1.0",
+     "@headlessui/vue": "^1.7.23",
+--- a/pages/catalog/CatalogBookHandler.php
++++ b/pages/catalog/CatalogBookHandler.php
+@@ -30,6 +30,7 @@
+ use APP\security\authorization\OmpPublishedSubmissionAccessPolicy;
+ use APP\submission\Submission;
+ use APP\template\TemplateManager;
++use PKP\components\OpenReviewComponent;
+ use PKP\context\Context;
+ use PKP\core\Core;
+ use PKP\core\PKPApplication;
+@@ -337,6 +338,16 @@
+             'creditRoleTerms' => Repo::CreditRole()->getTerms(),
+         ]);
+ 
++        // Open peer review: the reviews made public, shown on the book's page
++        if (!$this->isChapterRequest) {
++            $templateMgr->requiresVueRuntime();
++            $openReviewComponent = new OpenReviewComponent($submission);
++            $templateMgr->setLocaleKeys($openReviewComponent->getLocaleKeys());
++            $templateMgr->addSvgIcons($openReviewComponent->getSvgIcons());
++            $templateMgr->assign('openReviewConfig', $openReviewComponent->getConfig());
++            $templateMgr->setConstants($openReviewComponent->getConstants());
++        }
++
+         // Ask robots not to index outdated versions and point to the canonical url for the latest version
+         if ($this->publication->getId() != $submission->getData('currentPublicationId')) {
+             $templateMgr->addHeader('noindex', '<meta name="robots" content="noindex">');
+--- a/templates/frontend/objects/monograph_full.tpl
++++ b/templates/frontend/objects/monograph_full.tpl
+@@ -300,6 +300,16 @@
+ 				</div>
+ 			{/if}
+ 
++			{* Open peer review: shown once a review made public is confirmed by an editor *}
++			{if $openReviewConfig.submissionPeerReviews.reviewRounds}
++				<section id="open-review" class="item open_review" data-vue-root>
++					<h2 class="label">
++						{translate key="openReview.title"}
++					</h2>
++					<pkp-open-review v-bind='{$openReviewConfig|json_encode_html_attribute}'></pkp-open-review>
++				</section>
++			{/if}
++
+ 		</div><!-- .main_entry -->
+ 
+ 		<div class="entry_details">

@@ -1303,7 +1303,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | A chapter with its own date reads "June 1, 2024 — Updated on June 1, 2024" in a book's later version | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A press's PDF view page fails in its own script, "PDFJS is not defined", every time it opens | 🐞 | low · crash: script | upstream sync (claude), 2026-10-05 — re-verified |
 | [A25](#a25) | A book's HTML file that links another book shows with every "omp://" link dead | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
-| [A26](#a26) | A review made public never shows on the published book's page | 🐞 | user-visible | — |
+| [A26](#a26) | A review made public never shows on the published book's page | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A27](#a27) | A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A24](#a24) | On a preview, every file link of the book opens "404 Not Found" | 🐞 | minor | — |
 | [A11](#a11) | A buyer who pays by hand never gets the file | ❓ | user-visible | — |
@@ -1659,19 +1659,24 @@ Worked until a 2024 change to how the app builds its addresses, read from the co
 Since: 2024-06-26 (two years), a date read from the code's history · Basis: probe, 2026-10-13. <sup>f-a25</sup>
 
 <a id="a26"></a>
-**A26 — A review made public never shows on the published book's page** · 🐞 · user-visible.
-The Press manager ticks "Publicly Show Reviewer Comments" on an "Open"
-review and presses "Mark as Complete", whose dialog says "This review
-will be made publicly visible alongside the article." Once the book is
+**A26 — A review made public never shows on the published book's page** · 🐞 · medium.
+An editor ticks "Publicly Show Reviewer Comments" on an "Open" review
+and presses "Mark as Complete", whose dialog says "This review will be
+made publicly visible alongside the article." Once the book is
 published, its page shows no review at all: no comments, no reviewer's
-name, no review heading, for a visitor, a Reader or the Press manager.
+name, no review heading, for a visitor or for the editor.
+
 The press believes its reviews are public, and nobody learns that
-readers never see them. No setting puts the review on the page, and a
-press that makes every new review public under Settings › Workflow ›
-Review › "Setup" gets the same.
-A journal's article page has the same fault
-([→ Article landing page & reading, OJS12](U13-article-landing-page-and-reading.md#ojs12)).
-Basis: probe, 2026-10-05. <sup>f-a26</sup>
+readers never see them.
+
+It concerns presses that publish reviews. An editor ticks the box on
+each review. A press can also have it ticked on every new review: the
+setting "Make reviewer comments publicly visible with published content"
+(Settings › Workflow › Review › "Setup") does that, and it is off until
+the press turns it on. A journal's article page has the same fault, with
+a different fix
+([pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218)).
+Basis: probe, 2026-10-13. <sup>f-a26</sup>
 
 <a id="a27"></a>
 **A27 — A Series editor or assistant role not assigned to a book reads its unpublished page at every stage, declined books included** · 🐞 · medium.
@@ -2002,6 +2007,7 @@ Issue report: [pkp-e2e#284](https://github.com/jardakotesovec/pkp-e2e/issues/284
 
 <a id="fn-f-a26"></a>
 **f-a26** — Note t: OMP never prepares or mounts the display; OJS's `ArticleHandler::view()` prepares it and its template never mounts it (U13 OJS12). The OJS12 issue report ([pkp-e2e#218](https://github.com/jardakotesovec/pkp-e2e/issues/218), [docs/issues/U13-OJS12-public-review-never-shown.md](../issues/U13-OJS12-public-review-never-shown.md)) found the OMP twin in the code and proposes a fix for the article page's template only, which does not reach a book's page. OMP `stable-3_5_0`: not driven; OJS 3.5 has no "Publicly Show Reviewer Comments" (that report's Affects). Live-probed 2026-10-05 (two runs): note t.
+Issue report: [docs/issues/U69-A26-book-page-public-review-never-shown.md](../issues/U69-A26-book-page-public-review-never-shown.md).
 
 <a id="fn-f-a27"></a>
 **f-a27** — Note c: the same `canPreview()` role shortcut as U13 A16, with no stage check on `main` since pkp/pkp-lib#12245 (`768b0a3991`, Alec Smecher, 2026-02-18); the fix, the release check (3.5, 3.4 and 3.3 do not have it) and the evidence are there. Live-probed 2026-09-30, OMP `main`, seeded data: unassigned `mfritz` (Copyeditor) and `cturner` (Proofreader) opened books 3, 6 and 18, before copyediting. Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
