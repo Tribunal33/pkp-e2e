@@ -302,6 +302,8 @@ core page in Eidos's header and footer.
 <a name="finding-8"></a>
 ## Finding 8: only four plugin hooks are fired
 
+> **Notes from Jarda:** Given that we have now the blocks, Article::Details and Article::Main are not relevant.. But for others keeping them backward compatible seems as good idea?
+
 - **Severity** high · **Effort** medium · Code
 
 Eidos's templates call `Templates::Search::SearchResults::AdditionalFilters`,
@@ -323,28 +325,6 @@ The PR's replacement is the metadata and homepage block interface, which
 only Crossref implements so far (Crossmark as a block). So either Eidos
 fires the legacy hooks in matching places, or each plugin is ported.
 Cited by is a 3.6 feature that ORE shows in its Metrics tab.
-
-**Notes from Jarda.** With the metadata blocks in place,
-`Templates::Article::Details` and `Templates::Article::Main` are not
-needed in Eidos: plugins that write into the article page should move
-to blocks. The other hooks look worth keeping for backward
-compatibility, fired at the matching places in Eidos's templates.
-
-What that means for the table above:
-
-- **Ported to blocks instead of hooks:** Crossref "Cited by" and PFL.
-  crossref-ojs#107 adds only the Crossmark block (`CrossrefPlugin.php:730`).
-  Cited by still appends itself through `Templates::Article::Details`, so
-  it needs a block of its own for Eidos to show it.
-- **Kept as hooks:**
-  - `Templates::Article::Footer::PageFooter` (the two recommendation
-    plugins)
-  - `Templates::Common::Footer::PageFooter`, in the page layout and the
-    galley layout
-  - `Templates::User::Login::BeforeForm` / `AfterForm` and
-    `Templates::User::Register::BeforeForm` / `AfterForm`. OpenID's
-    sign-in buttons depend on the login pair.
-  - `Templates::Index::journal` and `Templates::Issue::Issue::Article`
 
 <a name="finding-9"></a>
 ## Finding 9: the site home page answers 500 without a site title, and is empty with one
