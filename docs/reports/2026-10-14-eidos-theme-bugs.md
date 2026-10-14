@@ -44,44 +44,44 @@ categories, announcements, the About pages, login and registration.
    - Peer review appears on articles that were never reviewed.
    - Every OJS article's date reads "Posted".
 
-| # | Finding | Severity | Effort | Seen |
-|---|---|---|---|---|
-| [1](#finding-1) | Search page prints the query as HTML: a link runs script (security) | high | small | Driven |
-| [2](#finding-2) | Author's response to reviewers printed as HTML on the public article page (security) | high | small | Driven |
-| [3](#finding-3) | HTML galleys lose their images and stylesheets (404) | high | small | Driven |
-| [4](#finding-4) | Registration fails silently with a captcha on, or at site level with the site-wide privacy statement on | high | small | Driven |
-| [5](#finding-5) | Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD | high | small | Driven |
-| [6](#finding-6) | Every masthead and history person shows a fake, verified ORCID iD | high | small | Driven |
-| [7](#finding-7) | Site home page: 500 without a site title, empty with one | medium | small | Driven |
-| [8](#finding-8) | "Outdated version" notice inverted in the PDF and HTML viewers | medium | small | Driven |
-| [9](#finding-9) | Full-issue PDF crashes the viewer template and downloads instead | medium | small | Driven |
-| [10](#finding-10) | Peer review shown per journal, not per article; metrics block inverted | medium | small | Driven |
-| [11](#finding-11) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
-| [12](#finding-12) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
-| [13](#finding-13) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
-| [14](#finding-14) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | low | small | Driven |
-| [15](#finding-15) | Every OJS article's date is labelled "Posted" | low | small | Driven |
-| [16](#finding-16) | "Version history" is offered when there is only one version | low | small | Driven |
-| [17](#finding-17) | Page titles are escaped twice | low | small | Driven |
-| [18](#finding-18) | Three raw translation keys | low | small | Driven |
-| [19](#finding-19) | No `<main>` landmark on the home, article and sign-in pages | low | small | Driven |
-| [20](#finding-20) | Two `<h1>` on every page when a logo is set | low | small | Driven |
-| [21](#finding-21) | The header logo has no alternative text | low | small | Driven |
-| [22](#finding-22) | The login password field has an invalid `autocomplete` value | low | small | Driven |
-| [23](#finding-23) | The search field's label is the text `{$label}` | low | small | Code |
-| [24](#finding-24) | The search form reads a variable nothing assigns | low | small | Driven |
-| [25](#finding-25) | The search date pickers show English month names in every language | low | small | Code |
-| [26](#finding-26) | Supplementary galleys are never found in listings | low | small | Code |
-| [27](#finding-27) | An article galley shows the issue's price | low | small | Code |
-| [28](#finding-28) | Share links put the article address in unencoded | low | small | Code |
-| [29](#finding-29) | The account menu's `aria-label` is unquoted | low | small | Code |
-| [30](#finding-30) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
-| [31](#finding-31) | Comment dates are always shown as "… ago" | low | small | Code |
-| [32](#finding-32) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
-| [33](#finding-33) | PHP warnings on nearly every page | low | small | Driven |
-| [34](#finding-34) | Colour options go unchecked into the page's styles (manager-entered) (security) | low | small | Driven |
-| [35](#finding-35) | The issue summary decodes escaped text into markup (manager-entered) (security) | low | small | Driven |
-| [36](#finding-36) | `npm ci` fails on the theme | low | small | Driven |
+| # | Finding | Security | Severity | Effort | Seen |
+|---|---|---|---|---|---|
+| [1](#finding-1) | Search page prints the query as HTML: a link runs script | yes | high | small | Driven |
+| [2](#finding-2) | Author's response to reviewers printed as HTML on the public article page | yes | high | small | Driven |
+| [3](#finding-3) | HTML galleys lose their images and stylesheets (404) | — | high | small | Driven |
+| [4](#finding-4) | Registration fails silently with a captcha on, or at site level with the site-wide privacy statement on | — | high | small | Driven |
+| [5](#finding-5) | Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD | — | high | small | Driven |
+| [6](#finding-6) | Every masthead and history person shows a fake, verified ORCID iD | — | high | small | Driven |
+| [7](#finding-7) | Site home page: 500 without a site title, empty with one | — | medium | small | Driven |
+| [8](#finding-8) | "Outdated version" notice inverted in the PDF and HTML viewers | — | medium | small | Driven |
+| [9](#finding-9) | Full-issue PDF crashes the viewer template and downloads instead | — | medium | small | Driven |
+| [10](#finding-10) | Peer review shown per journal, not per article; metrics block inverted | — | medium | small | Driven |
+| [11](#finding-11) | Editorial History shows no dates; contact page prints template source | — | medium | small | Driven |
+| [12](#finding-12) | Side effect on the Default theme: the comments sign-in link lost its anchor | — | low | small | Driven |
+| [13](#finding-13) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | — | low | small | Driven |
+| [14](#finding-14) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | — | low | small | Driven |
+| [15](#finding-15) | Every OJS article's date is labelled "Posted" | — | low | small | Driven |
+| [16](#finding-16) | "Version history" is offered when there is only one version | — | low | small | Driven |
+| [17](#finding-17) | Page titles are escaped twice | — | low | small | Driven |
+| [18](#finding-18) | Three raw translation keys | — | low | small | Driven |
+| [19](#finding-19) | No `<main>` landmark on the home, article and sign-in pages | — | low | small | Driven |
+| [20](#finding-20) | Two `<h1>` on every page when a logo is set | — | low | small | Driven |
+| [21](#finding-21) | The header logo has no alternative text | — | low | small | Driven |
+| [22](#finding-22) | The login password field has an invalid `autocomplete` value | — | low | small | Driven |
+| [23](#finding-23) | The search field's label is the text `{$label}` | — | low | small | Code |
+| [24](#finding-24) | The search form reads a variable nothing assigns | — | low | small | Driven |
+| [25](#finding-25) | The search date pickers show English month names in every language | — | low | small | Code |
+| [26](#finding-26) | Supplementary galleys are never found in listings | — | low | small | Code |
+| [27](#finding-27) | An article galley shows the issue's price | — | low | small | Code |
+| [28](#finding-28) | Share links put the article address in unencoded | — | low | small | Code |
+| [29](#finding-29) | The account menu's `aria-label` is unquoted | — | low | small | Code |
+| [30](#finding-30) | The Comments and Metrics tabs break on an apostrophe in their data | — | low | small | Code |
+| [31](#finding-31) | Comment dates are always shown as "… ago" | — | low | small | Code |
+| [32](#finding-32) | The "Latest Announcement" block stays empty without saying why | — | low | small | Driven |
+| [33](#finding-33) | PHP warnings on nearly every page | — | low | small | Driven |
+| [34](#finding-34) | Colour options go unchecked into the page's styles (manager-entered) | yes (manager-entered) | low | small | Driven |
+| [35](#finding-35) | The issue summary decodes escaped text into markup (manager-entered) | yes (manager-entered) | low | small | Driven |
+| [36](#finding-36) | `npm ci` fails on the theme | — | low | small | Driven |
 
 Findings 1 and 2 carry the `security` label. Eidos is unreleased, so per
 the security policy they are ordinary findings. Two manager-only
