@@ -924,7 +924,7 @@ press and version; the editor can guess the reason here.
 A book whose contributor has an unauthenticated ORCID iD is not refused
 this way: "Add Entry" adds it (Rule 12c).
 Basis: probe, 2026-10-03. <sup>f-a5</sup>
-Report: refresh owed — pkp/pkp-lib#13493 (PR head e29a720de0, before its merge) moves the ORCID check out of the publish requirements: "Add Entry" now adds a book whose contributor has an unauthenticated iD, so the report's walked case no longer shows; the refusal with no book chosen is left (2026-10-09)
+Report: refresh owed — pkp/pkp-lib#13493 (merged 2026-10-13; `36271ccef3`, "Fix unauthenticated ORCID to be a warning instead of blocking publication") moves the ORCID check from `Repo::publication()->validatePublish()` to `validatePublishWarnings()` (`classes/publication/Repository.php`; the report's other names, `OrcidManager::removeOrcidAccessToken()` and `VerifyIdentityWithOrcid::setIdentityData()`, untouched): "Add Entry" now adds a book whose contributor has an unauthenticated iD, so the report's walked case no longer shows; the refusal with no book chosen is left (2026-10-09; merged 2026-10-14)
 
 <a id="a6"></a>
 **A6 — On a press, an unpublished book's Production stage still says the monograph has been approved** · 🐞 · low.
