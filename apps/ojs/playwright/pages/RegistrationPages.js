@@ -186,6 +186,19 @@ exports.RegisterPage = class RegisterPage extends BasePage {
     }
 
     /**
+     * Bring a whole site-level block, its name and every role box under it,
+     * into the viewport: the block is centred, so a journal near the foot
+     * of the list does not leave its boxes below the fold the way
+     * scrolling only the name line did (OMP's twin flaked on CI with
+     * "viewport ratio 0" on the second journal's boxes).
+     *
+     * @param {import('@playwright/test').Locator} block
+     */
+    async scrollBlockIntoView(block) {
+        await block.evaluate((li) => li.scrollIntoView({block: 'center', inline: 'nearest'}));
+    }
+
+    /**
      * A journal is listed by its name with exactly these role boxes under
      * the name, name and boxes on screen (scenario 6).
      *
@@ -196,7 +209,7 @@ exports.RegisterPage = class RegisterPage extends BasePage {
     async expectContextListed(block, journalName, roleNames) {
         const name = this.contextName(block);
         await expect(name).toHaveText(journalName);
-        await name.scrollIntoViewIfNeeded();
+        await this.scrollBlockIntoView(block);
         await expect(name).toBeInViewport();
         await expect(this.contextRoleLabels(block)).toHaveText(roleNames);
         for (const roleName of roleNames) {
@@ -233,7 +246,7 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         await expect(legend).toHaveText(prompt);
         await expect(group).toHaveCount(1);
         const name = this.contextName(block);
-        await name.scrollIntoViewIfNeeded();
+        await this.scrollBlockIntoView(block);
         await expect(name).toBeInViewport();
         for (const roleName of roleNames) {
             await expect(group.getByRole('checkbox', {name: roleName, exact: true})).toBeInViewport();
@@ -345,8 +358,13 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
         this.form = page.locator('form#rolesForm');
         this.tab = page.locator('#profileTabs').getByRole('tab', {name: 'Roles', exact: true});
         this.interestChips = this.form.locator('#interests ul.interests .tagit-label');
-        // The label under the interests list ("Reviewing interests").
+        // The interests field's label, "Reviewing interests" (a sub-label:
+        // the theme draws it below the chips).
         this.interestsLabel = this.form.locator('label[for="interests"]');
+        // The form section the label captions: the interests field and its label.
+        this.interestsSection = this.interestsLabel.locator(
+            'xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " section ")][1]'
+        );
     }
 
     /** Open the profile and switch to the Roles tab (jQuery UI tabs, AJAX-loaded). */
@@ -394,13 +412,17 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
     }
 
     /**
-     * "Reviewing interests" lists exactly these interests, each once. In
-     * either order: the interests are read with no ORDER BY (fix list B).
+     * "Reviewing interests" lists exactly these interests, each once: the
+     * label is the one of the field holding the chips, and the chips are
+     * read inside the section it captions. In either order: the interests
+     * are read with no ORDER BY (fix list B).
      *
      * @param {string[]} interests
      */
     async expectInterests(interests) {
         await expect(this.interestsLabel).toHaveText('Reviewing interests');
+        await expect(this.interestsSection).toHaveCount(1);
+        await expectTextsInAnyOrder(this.interestsSection.locator('#interests ul.interests .tagit-label'), interests);
         await expectTextsInAnyOrder(this.interestChips, interests);
     }
 };

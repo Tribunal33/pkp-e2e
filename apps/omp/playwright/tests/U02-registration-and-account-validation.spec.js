@@ -22,7 +22,8 @@
  * changes no setting; the roster users are only read). S4–S7 use a scratch
  * press with a throwaway Press Manager, because they change a setting
  * (privacy statement, registration, technical support contact); S5 seeds a
- * second scratch press disabled since its creation. Every registrant has a
+ * second scratch press disabled since its creation and a third with
+ * `restrictSiteAccess: true`, registration left open (fn-s). Every registrant has a
  * unique username and mailbox naming app + test (Mailpit is shared across
  * the three fleets — never cleared). S6's two reviewing interests carry the
  * test's tag: a word two accounts typed on the site-level page is stored
@@ -45,7 +46,6 @@ const {
     loginFormRegisterLink,
     ACCESS_DENIED,
 } = require('../pages/RegistrationPages.js');
-const {expectTextsInAnyOrder} = require('../../../../shared/playwright/support/order.js');
 
 const PK = 'publicknowledge';
 const PK_NAME = 'Public Knowledge Press';
@@ -111,13 +111,16 @@ async function signInAndLand(page, username, password) {
 
 /**
  * Scratch press with a throwaway Press Manager (scenarios 4–7). The
- * default privacy statement and open registration come with it.
+ * default privacy statement and open registration come with it;
+ * `restrictSiteAccess` seeds "Users must be registered and log in to view
+ * the press site." ticked (S5's press that requires sign-in, fn-s).
  */
-async function seedPress(ompApi, tag, {enabled = true} = {}) {
+async function seedPress(ompApi, tag, {enabled = true, restrictSiteAccess = false} = {}) {
     const manager = `mgr${tag}`;
     await ompApi.createContext({
         tag,
         context: {name: {en: `U02 Press ${tag}`}, ...(enabled ? {} : {enabled: false})},
+        ...(restrictSiteAccess ? {restrictSiteAccess: true} : {}),
         users: [
             {
                 username: manager,
@@ -370,14 +373,15 @@ test.describe('Registration & account validation (U02)', () => {
             page.getByRole('heading', {name: /Action Required by me/})
         ).toBeVisible({timeout: 20_000});
 
-        // Roles: External Reviewer ticked, Reader not; two separate interests.
+        // Roles: External Reviewer ticked, Reader not; both interests listed
+        // separately under the field's label "Reviewing interests" (read in
+        // the chips' own block; in either order, no ORDER BY, fix list B).
         const roles = new ProfileRolesTab(page);
         await roles.open(PK);
         await expect(roles.currentContextBox('External Reviewer')).toBeChecked();
         await expect(roles.currentContextBox('Reader')).not.toBeChecked();
         await expect(roles.checkedBoxes).toHaveCount(1);
-        // In either order: the interests are read with no ORDER BY (fix list B).
-        await expectTextsInAnyOrder(roles.interestChips, interests);
+        await roles.expectInterests(interests);
     });
 
     test('S4: privacy consent is required when a statement exists', async ({ompApi, asUser, freshPage}, testInfo) => {
@@ -451,8 +455,12 @@ test.describe('Registration & account validation (U02)', () => {
     test('S5: closed registration', async ({ompApi, asUser, freshPage}, testInfo) => {
         const tag = makeTag(testInfo, 'u02s5');
         const press = await seedPress(ompApi, tag);
-        // The second scratch press, disabled since its creation (fn-s).
+        // The second scratch press, disabled since its creation, and the
+        // third, which requires sign-in to view its pages (fn-s).
         const disabled = await seedPress(ompApi, makeTag(testInfo, 'u02s5d'), {enabled: false});
+        const restricted = await seedPress(ompApi, makeTag(testInfo, 'u02s5r'), {
+            restrictSiteAccess: true,
+        });
 
         // Press Manager: Settings › Users & Roles › Site Access Options →
         // "The Press Manager will register all user accounts…" → Save.
@@ -519,6 +527,43 @@ test.describe('Registration & account validation (U02)', () => {
         await expect(page).toHaveURL(disabledLogin);
         await expect(page.locator('form#register')).toHaveCount(0);
         await expect(page.getByText(/disabled/i)).toHaveCount(0);
+
+        // The press that requires sign-in: its homepage answers the visitor
+        // with that press's Login page; its typed Register address still
+        // renders the full form, never the closed message, with "Register"
+        // beside "Login" in the header (Rule 3).
+        const restrictedLogin = new RegExp(`/index.php/${restricted.path}/login`);
+        await page.goto(`/index.php/${restricted.path}`);
+        await expect(page.locator('form#login')).toBeVisible();
+        await expect(page).toHaveURL(restrictedLogin);
+        await expect(page.getByRole('heading', {name: 'Login', exact: true})).toBeVisible();
+        await expect(page.locator('form#register')).toHaveCount(0);
+        await page.goto(RegisterPage.contextUrl(restricted.path));
+        const restrictedRegister = new RegisterPage(page);
+        await expect(restrictedRegister.heading).toBeVisible();
+        await expect(page).toHaveURL(new RegExp(`/index.php/${restricted.path}/user/register`));
+        await expect(restrictedRegister.form).toBeVisible();
+        for (const field of [
+            restrictedRegister.givenName,
+            restrictedRegister.familyName,
+            restrictedRegister.affiliation,
+            restrictedRegister.country,
+            restrictedRegister.email,
+            restrictedRegister.username,
+            restrictedRegister.password,
+            restrictedRegister.password2,
+            restrictedRegister.privacyConsent,
+            restrictedRegister.emailConsent,
+            restrictedRegister.submitButton,
+        ]) {
+            await expect(field).toBeVisible();
+        }
+        await expect(page.locator('form#login')).toHaveCount(0);
+        await expect(page.getByText(MSG.registrationClosed)).toHaveCount(0);
+        const restrictedHeader = headerNav(page);
+        await expect(restrictedHeader.getByRole('link', {name: 'Register', exact: true})).toBeVisible();
+        await expect(restrictedHeader.getByRole('link', {name: 'Login', exact: true})).toBeVisible();
+        await expect(restrictedHeader.getByRole('link')).toHaveCount(2);
 
         // The site homepage's "Register" still opens the site-level form,
         // because the seeded press is still open.
@@ -838,14 +883,19 @@ test.describe('Registration & account validation (U02)', () => {
             editorPage.getByRole('heading', {name: /Assigned to me/})
         ).toBeVisible({timeout: 20_000});
 
-        // The site-level address: "Edit My Profile" and "Continue Browsing"
-        // only, for the Series Editor too.
-        await editorPage.goto(RegisterPage.siteUrl());
-        const siteComplete = new RegistrationCompletePage(editorPage);
-        await expect(siteComplete.heading).toBeVisible();
-        await expect(siteComplete.editProfile).toBeVisible();
-        await expect(siteComplete.continueBrowsing).toBeVisible();
-        await expect(siteComplete.newSubmission).toHaveCount(0);
-        await expect(siteComplete.viewSubmissions).toHaveCount(0);
+        // Control: the Author, then the Series Editor, at the site-level
+        // address: for each alike "Edit My Profile" and "Continue Browsing"
+        // only (Rule 10).
+        for (const sitePage of [authorPage, editorPage]) {
+            await sitePage.goto(RegisterPage.siteUrl());
+            const siteComplete = new RegistrationCompletePage(sitePage);
+            await expect(siteComplete.heading).toBeVisible();
+            await expect(sitePage.locator('form#register')).toHaveCount(0);
+            await expect(siteComplete.editProfile).toBeVisible();
+            await expect(siteComplete.continueBrowsing).toBeVisible();
+            await expect(siteComplete.actions.getByRole('link')).toHaveCount(2);
+            await expect(siteComplete.newSubmission).toHaveCount(0);
+            await expect(siteComplete.viewSubmissions).toHaveCount(0);
+        }
     });
 });

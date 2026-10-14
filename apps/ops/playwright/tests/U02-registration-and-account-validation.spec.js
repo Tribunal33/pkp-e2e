@@ -29,7 +29,8 @@
  * storage state; "a second browser" is a second such context, and S7's
  * browser without JavaScript is one created with `javaScriptEnabled: false`
  * (fn-s). S5's disabled server is a second scratch context seeded with
- * `enabled: false`.
+ * `enabled: false`, and its server that requires sign-in a third, seeded
+ * with `restrictSiteAccess: true` and registration left open (fn-s).
  */
 const {test, expect} = require('../support/fixtures.js');
 const {LoginPage} = require('../../../../shared/playwright/pages/LoginPage.js');
@@ -387,6 +388,10 @@ test.describe('registration & account validation (U2) — OPS', () => {
         // The second scratch server, disabled since its creation (fn-s).
         const disabled = makeTag('u02s5d');
         await opsApi.createContext({tag: disabled, context: {enabled: false}});
+        // The third, requiring sign-in to view its pages, registration left
+        // open (fn-s).
+        const restricted = makeTag('u02s5r');
+        await opsApi.createContext({tag: restricted, restrictSiteAccess: true});
 
         // The Server Manager closes registration on Site Access Options.
         const managerPage = await (await asUser(manager)).newPage();
@@ -455,6 +460,47 @@ test.describe('registration & account validation (U2) — OPS', () => {
         await expect(page).toHaveURL(disabledLoginUrl);
         await expect(register.form).toHaveCount(0);
         await expect(page.getByText(/disabled/i)).toHaveCount(0);
+
+        // The server that requires sign-in: its homepage shows that server's
+        // Login page instead (Rule 3, fn-s)…
+        const restrictedLogin = new LoginPage(page);
+        await page.goto(`/index.php/${restricted}`);
+        await expect(page).toHaveURL(new RegExp(`/index\\.php/${restricted}/login\\?source=`));
+        await restrictedLogin.expectForm();
+        await expect(page.getByRole('heading', {name: 'Login', exact: true})).toBeVisible();
+        await expect(register.form).toHaveCount(0);
+        // …while its typed Register address shows the full form, not the
+        // closed message, and the header there offers "Register" beside
+        // "Login" (Rules 1 and 3).
+        await register.goto(restricted);
+        await expect(page).toHaveURL(new RegExp(`/index\\.php/${restricted}/user/register$`));
+        await expect(register.heading).toBeVisible();
+        await expect(register.form).toBeVisible();
+        for (const field of [
+            register.givenNameInput,
+            register.affiliationInput,
+            register.countrySelect,
+            register.emailInput,
+            register.usernameInput,
+            register.passwordInput,
+            register.password2Input,
+            register.privacyConsentBox,
+            register.emailConsentBox,
+            register.registerButton,
+        ]) {
+            await expect(field).toBeVisible();
+        }
+        await expect(page.getByText(CLOSED_MESSAGE)).toHaveCount(0);
+        await expect(restrictedLogin.form).toHaveCount(0);
+        await expect(userNav(page).getByRole('link')).toHaveText(['Register', 'Login']);
+        await expect(userNav(page).getByRole('link', {name: 'Register', exact: true})).toHaveAttribute(
+            'href',
+            new RegExp(`/index\\.php/${restricted}/user/register$`)
+        );
+        await expect(userNav(page).getByRole('link', {name: 'Login', exact: true})).toHaveAttribute(
+            'href',
+            new RegExp(`/index\\.php/${restricted}/login$`)
+        );
 
         // The site homepage's "Register" still opens the site-level page,
         // because the seeded server is open.
@@ -742,8 +788,9 @@ test.describe('registration & account validation (U2) — OPS', () => {
         await moderatorPage.waitForURL(/\/dashboard\/editorial/, {waitUntil: 'commit'});
         await expect(moderatorPage.getByRole('heading', {name: /^Assigned to me/})).toBeVisible({timeout: 20_000});
 
-        // The site-level address: "Edit My Profile" and "Continue Browsing"
-        // only, for the Moderator too (Control).
+        // Control: the Author, then the Moderator, types the site-level
+        // Register address: for each of them alike "Registration complete"
+        // offers "Edit My Profile" and "Continue Browsing" only (Rule 10).
         await authorPage.goto('/index.php/index/user/register');
         await complete.expectShown();
         await complete.expectActions(['Edit My Profile', 'Continue Browsing']);

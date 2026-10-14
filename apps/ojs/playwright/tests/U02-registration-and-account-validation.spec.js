@@ -9,7 +9,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
- * A2 🐞, A3 🐞, A4 🐞, A5 ❓, A6 🐞, A7 ❓. Where a test passes through one
+ * A2 🐞, A3 🐞, A4 🐞, A5 ❓, A6 🐞, A7 ❓, A8 ❓. Where a test passes through one
  * (S7 walks the two activation pages, S5 opens the site-level page beside a
  * closed journal, S7 sets the support contact first) it asserts the effect
  * the spec states and leaves the finding's own claim unasserted either way.
@@ -17,7 +17,9 @@
  *
  * Isolation: every registration uses a throwaway username (`u02<scenario>ojs…`)
  * on the seeded journal or on a scratch journal; settings change only on
- * scratch journals, through the manager's own screens. Every registration,
+ * scratch journals, through the manager's own screens, or as a scenario
+ * key at creation (S5's journal that requires sign-in, `restrictSiteAccess`,
+ * scenarios.md). Every registration,
  * and every sign-in that follows one, happens in a browser context the test
  * opens itself, never through the shared .auth cache. S6's two reviewing
  * interests carry the test's tag: a word two accounts typed on the
@@ -40,7 +42,6 @@ const {
     loginFormRegisterLink,
 } = require('../pages/RegistrationPages.js');
 const {waitForContextSettingsSave} = require('../pages/PublicationMetadataPages.js');
-const {expectTextsInAnyOrder} = require('../../../../shared/playwright/support/order.js');
 
 const JOURNAL = 'publicknowledge';
 const JOURNAL_NAME = 'Journal of Public Knowledge';
@@ -347,13 +348,15 @@ test.describe('registration & account validation', () => {
             timeout: 30_000,
         });
 
-        // Roles: Reviewer ticked, Reader not, both interests listed separately.
+        // Roles: Reviewer ticked, Reader not, both interests listed
+        // separately under "Reviewing interests", the label of the field
+        // that holds them; in either order, the interests being read with
+        // no ORDER BY (fix list B).
         const roles = new ProfileRolesTab(page, JOURNAL);
         await roles.goto();
         await expect(roles.roleBox('Reviewer')).toBeChecked();
         await expect(roles.roleBox('Reader')).not.toBeChecked();
-        // In either order: the interests are read with no ORDER BY (fix list B).
-        await expectTextsInAnyOrder(roles.interestChips, ['ethics', 'statistics']);
+        await roles.expectInterests(['ethics', 'statistics']);
     });
 
     test('S4: privacy consent is required when a statement exists', async ({page, context, browser, baseURL, ojsApi, asUser}, testInfo) => {
@@ -431,10 +434,15 @@ test.describe('registration & account validation', () => {
         test.slow();
         const tag = makeTag('s5', testInfo);
         const disabledTag = `${tag}d`;
+        const restrictedTag = `${tag}r`;
         const manager = `mgr${tag}`;
         await ojsApi.createContext({tag, users: [{username: manager, roles: ['manager']}]});
         // A second scratch journal, disabled since its creation.
         await ojsApi.createContext({tag: disabledTag, context: {enabled: false}});
+        // A third, requiring users to sign in to view its pages ("Users must
+        // be registered and log in to view the journal site."), registration
+        // left open.
+        await ojsApi.createContext({tag: restrictedTag, restrictSiteAccess: true});
 
         // The Journal Manager closes registration (Settings › Users & Roles ›
         // Site Access Options).
@@ -507,6 +515,43 @@ test.describe('registration & account validation', () => {
         await loginPage.expectForm();
         await expect(page.locator('form#register')).toHaveCount(0);
         await expect(page.getByRole('main')).not.toContainText(/disabled/i);
+
+        // The journal that requires sign-in: its homepage shows that
+        // journal's Login page instead (Rule 3).
+        await page.goto(`/index.php/${restrictedTag}`);
+        await expect(page).toHaveURL(
+            new RegExp(`/index\\.php/${restrictedTag}/(en/)?login\\?source=`)
+        );
+        await loginPage.expectForm();
+        await expect(page.locator('form#register')).toHaveCount(0);
+
+        // Its typed Register address (Rule 1): the full "Register" form, not
+        // the closed message (the form's boxes are the positive control of
+        // that read), and the header there offers "Register" beside "Login"
+        // (Rule 3).
+        const restrictedRegister = new RegisterPage(page, restrictedTag);
+        await restrictedRegister.goto();
+        await expect(page).toHaveURL(new RegExp(`/index\\.php/${restrictedTag}/(en/)?user/register`));
+        await restrictedRegister.expectForm();
+        for (const box of [
+            restrictedRegister.givenName,
+            restrictedRegister.familyName,
+            restrictedRegister.affiliation,
+            restrictedRegister.country,
+            restrictedRegister.email,
+            restrictedRegister.username,
+            restrictedRegister.password,
+            restrictedRegister.password2,
+            restrictedRegister.privacyConsent,
+            restrictedRegister.emailConsent,
+            restrictedRegister.submitButton,
+        ]) {
+            await expect(box).toBeVisible();
+        }
+        await expect(page.getByText(CLOSED_MESSAGE)).toHaveCount(0);
+        await expect(page.locator('form#login')).toHaveCount(0);
+        await expect(siteHeader(page).getByRole('link', {name: 'Register', exact: true})).toBeVisible();
+        await expect(siteHeader(page).getByRole('link', {name: 'Login', exact: true})).toBeVisible();
 
         // The site homepage's "Register" still opens the site-level page: the
         // seeded journal is still open.
@@ -858,10 +903,19 @@ test.describe('registration & account validation', () => {
             timeout: 30_000,
         });
 
-        // The site-level address answers with two links, for the Section
-        // Editor too.
+        // Control: the site-level address (Rule 1), typed by the Author and
+        // then by the Section Editor, answers each of them alike with "Edit
+        // My Profile" and "Continue Browsing" only (Rule 10).
+        await alexPage.goto('/index.php/index/user/register');
+        await alexComplete.expectOpen();
+        await expect(alexPage.locator('form#register')).toHaveCount(0);
+        await alexComplete.expectLinks(['Edit My Profile', 'Continue Browsing']);
+        await expect(alexComplete.link('View Submissions')).toHaveCount(0);
+        await expect(alexComplete.link('Make a New Submission')).toHaveCount(0);
+
         await anaPage.goto('/index.php/index/user/register');
         await anaComplete.expectOpen();
+        await expect(anaPage.locator('form#register')).toHaveCount(0);
         await anaComplete.expectLinks(['Edit My Profile', 'Continue Browsing']);
         await expect(anaComplete.link('View Submissions')).toHaveCount(0);
         await expect(anaComplete.link('Make a New Submission')).toHaveCount(0);

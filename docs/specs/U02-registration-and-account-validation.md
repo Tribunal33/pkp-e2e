@@ -86,7 +86,7 @@ except the two password boxes, which come back empty and must be retyped.
 | "Yes, I agree to have my data collected and stored according to the privacy statement." | yes, when shown | Shown only when the journal has a Privacy Statement (a fresh install gives every journal one); "privacy statement" opens the journal's "Privacy Statement" page in a new tab. Left unticked: "You must agree to the terms of the privacy statement." (Rule 5) <sup>d</sup> |
 | "Yes, I would like to be notified of new publications and announcements." | no | Arrives unticked. Left unticked, the new account starts with the journal's public notification emails switched off (Rule 6) <sup>e</sup> |
 | "Yes, I would like to be contacted with requests to review submissions to this journal." | no | Shown when exactly one reviewer role of the journal is self-registering. With several, the block is headed "Would you be willing to review submissions to this journal?" and offers one "Yes, request the {role} role." box per role {OJS OMP} (Rule 7) <sup>c</sup> |
-| "Reviewing interests" | no | Appears under the reviewer offer once one of its boxes is ticked, as a plain text box; commas separate interests, and each becomes a separate interest on the profile's Roles tab (Rule 7) <sup>k</sup> |
+| "Reviewing interests" | no | Appears under the reviewer offer once one of its boxes is ticked, as a plain text box; commas separate interests, and each becomes a separate interest on the profile's Roles tab, listed in a "Reviewing interests" field whose label sits below the interests (Rule 7) <sup>k</sup> |
 
 *Site-level page only:*
 
@@ -447,7 +447,8 @@ except the two password boxes, which come back empty and must be retyped.
 Scenarios 1–3 register throwaway accounts on the seeded journal (scenario 1
 three of them, the second from the Login page's link and the third on the
 journal's French page, each in a browser of its own); scenarios 4–6 run on
-a scratch journal (5 on two, one of them disabled; 6 on the seeded journal
+a scratch journal (5 on three, one of them disabled and one that
+requires sign-in to view its pages; 6 on the seeded journal
 as well, with a second throwaway account registered with nothing ticked);
 scenario 7 runs on an install that requires email validation and runs the
 ALTCHA spam check, its first attempt from a browser without JavaScript and
@@ -541,7 +542,8 @@ in the footnote. <sup>s</sup>
      Required by me".
    - **The profile's Roles tab**: "Edit My Profile" › Roles shows the
      Reviewer role ticked, "Reader" not ticked, and both interests listed
-     separately under "Reviewing interests".
+     separately in the "Reviewing interests" field, whose label sits below
+     them.
    - **Control**: on a preprint server this scenario does not run; check
      its absence instead: the server's "Register" shows no reviewer box,
      while the notification box that sits beside it on a journal is
@@ -570,9 +572,10 @@ in the footnote. <sup>s</sup>
 5. **Closed registration**
 
    Given: Journal Manager, signed in on a scratch journal, on a site that
-   also hosts the seeded journal and a second scratch journal, disabled
-   since its creation; a visitor, signed out, in a second browser.
-   <sup>s</sup>
+   also hosts the seeded journal, a second scratch journal, disabled since
+   its creation, and a third that requires users to sign in to view its
+   pages ("Users must be registered and log in to view the journal
+   site."); a visitor, signed out, in a second browser. <sup>s</sup>
 
    - **Site Access Options**: under Settings › Users & Roles › Site Access
      Options choose "The Journal Manager will register all user accounts…"
@@ -594,6 +597,11 @@ in the footnote. <sup>s</sup>
      journal's Register address: the journal's Login page shows instead,
      and its own "Register" links lead straight back to that Login page,
      with no word that the journal is disabled (Rule 2).
+   - **The journal that requires sign-in**: the visitor opens the third
+     scratch journal's homepage: that journal's Login page shows instead.
+     Type its Register address (Rule 1) into the address bar: the full
+     "Register" form shows, not the closed message, and the header there
+     offers "Register" beside "Login" (Rule 3).
    - **Control**: the site homepage's "Register" still opens the site-level
      page, because the seeded journal is still open.
 
@@ -634,8 +642,8 @@ in the footnote. <sup>s</sup>
      complete" appears with "Edit My Profile" and "Continue Browsing" only.
    - **The profile's Roles tab**: "Edit My Profile" › Roles shows exactly
      the ticked roles in their journals and, on a journal or press,
-     "glacier" and "ethics" under "Reviewing interests", each listed once
-     (Rule 8).
+     "glacier" and "ethics" in the "Reviewing interests" field, each listed
+     once (Rule 8).
    - **The second visitor, nothing ticked**: opens the site-level page
      (Rule 1), ticks nothing, fills the form with a fresh username and
      email and presses "Register": no consent line is on the page (every
@@ -713,8 +721,9 @@ in the footnote. <sup>s</sup>
    - **A Section Editor at the same address**: the Section Editor, holding
      a role Rule 10 lists, sees "View Submissions" as well; pressing it
      opens the list headed "Assigned to me".
-   - **Control**: the site-level address (Rule 1) answers with "Edit My
-     Profile" and "Continue Browsing" only, for the Section Editor too
+   - **Control**: the Author, then the Section Editor, types the site-level
+     Register address (Rule 1): for each of them alike "Registration
+     complete" offers "Edit My Profile" and "Continue Browsing" only
      (Rule 10).
 
 ## Coverage
@@ -773,16 +782,6 @@ Left out of the scenarios above, by reason:
     ([A1](#a1); Rule 14): the guard the issue report
     (`docs/issues/U02-A1-activation-link-expires-before-validation-timeout.md`)
     proposes, once fixed
-  - a scratch journal that requires sign-in to view its pages: its
-    homepage sending a signed-out visitor to Login while its Register
-    address still shows the full form and its header offers "Register"
-    beside "Login" (Rule 3; Settings "Site Access")
-  - scenario 8, "Control": the site-level address read as the Author
-    too, offering "Edit My Profile" and "Continue Browsing" only
-    (Rule 10); the OJS and OMP suites read it as the Section Editor only
-  - scenario 3, "The profile's Roles tab": the label "Reviewing
-    interests" over the two interests (*Fields & validation*, "Reviewing
-    interests"); the OJS and OMP suites read the two interests without it
 - **Nothing new to test**:
   - the "Register" link on the Login and lost-password pages (Rule 1; scenario 1's header entry opens the same page)
   - the header's "Register" on the Login page carrying no destination (Rule 9; scenario 1's link below the form)
@@ -1734,8 +1733,13 @@ element; site-level `.reviewer_nocontext_interests` with
 `!$currentContext`, OPS included — finding OPS1);
 `Repo::userInterest()->setInterestsForUser()` splits on commas into the
 site-wide interest vocabulary — live-probed 2026-09-02: "ethics, statistics"
-typed at journal level became two chips "ethics" and "statistics" under
-"Reviewing interests" on the OJS and OMP Roles tab; two comma-separated
+typed at journal level became two chips "ethics" and "statistics" in the
+"Reviewing interests" field on the OJS and OMP Roles tab (test run
+2026-10-14, scenario 3: the field's label, `label.sub_label[for="interests"]`,
+is drawn below the chips inside the same field, on OJS chips at 432 px and
+label at 460–484 px, on OMP chips at 454 px and label at 484 px, at
+1280×900; the suite reads the label as the field's label holding both
+chips, not its position); two comma-separated
 interests typed on the site-level page became two chips on OJS and OMP,
 while the OPS Roles tab has no "Reviewing interests" field (OPS1).
 The split does not trim (Rule 8): `setInterestsForUser()`
@@ -1818,10 +1822,15 @@ scratch context from `POST scenarios/context` (Journal Manager
 the rich-text field on Settings › Website › Setup › "Privacy Statement" and
 saves ("Saved"; the save echoes an empty `privacyStatement`) before the
 visitor reloads Register; the closed-registration option (scenario 5) is
-on Settings › Users & Roles › Site Access Options. Scenario 5 seeds two
+on Settings › Users & Roles › Site Access Options. Scenario 5 seeds three
 scratch contexts, the second with `context.enabled: false` (the disabled
 journal; `admin` is enrolled as a manager in every scratch context, and
-Rule 4 holds for any signed-in user); the manager's session stays signed
+Rule 4 holds for any signed-in user), the third with `restrictSiteAccess:
+true` and registration left open (the journal that requires sign-in; its
+homepage answers a signed-out visitor with `{context}/login?source=…`,
+`scenarios.md`, and the visitor then reads
+`{restricted context}/user/register`, with the header's "Register" and
+"Login" there); the manager's session stays signed
 in for the two completion-page reads at `{closed context}/user/register`
 and `{disabled context}/user/register`, the visitor's reads run in a fresh
 browser context, where the disabled context's Register address, its Login
@@ -1869,7 +1878,8 @@ i). Scenario 8: `author.alex` and `sectioneditor.ana` (a Section Editor on
 OJS and OMP, a Moderator on OPS; `editor.diana` is not seeded on OPS, where
 Login answers "Invalid username/email or password. Please try again.");
 "View Submissions" for the Section Editor opens `dashboard/editorial`,
-heading "Assigned to me (N)" (note h). Coverage's two "No seed" items on
+heading "Assigned to me (N)" (note h); the "Control" reads
+`index/user/register` signed in as each of the two in turn. Coverage's two "No seed" items on
 "Allow user self-registration" (Rules 7 and 8): what is missing is a
 per-role passthrough for that box on `POST scenarios/context` (a
 `userGroups[]` key).

@@ -147,7 +147,10 @@ exports.RegisterPage = class RegisterPage extends BasePage {
      * visible, so "not on screen" is a viewport read, taken with the name
      * above and every role box below in the viewport (the positive control:
      * a legend drawn in place would sit between them). Geometry needs the
-     * theme's stylesheet in (patterns.md parallel lesson 16).
+     * theme's stylesheet in (patterns.md parallel lesson 16). The whole
+     * press block is centred in the viewport first: scrolling the name line
+     * alone left a lower press's boxes below the fold (viewport ratio 0 on
+     * CI, 2026-10-12 to 14).
      *
      * @param {string} name the press's name
      * @param {string[]} roles the labels of its role boxes
@@ -164,8 +167,9 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         await expect(group.getByRole('checkbox')).toHaveCount(roles.length);
         const boxes = roles.map((role) => group.getByRole('checkbox', {name: role, exact: true}));
 
-        // On screen: the name and, under it, the role boxes.
-        await nameLine.scrollIntoViewIfNeeded();
+        // On screen: the name and, under it, the role boxes. The block
+        // (name, boxes, consent line) is brought into view whole.
+        await this.contextBlock(name).evaluate((el) => el.scrollIntoView({block: 'center'}));
         await expect(nameLine).toBeInViewport();
         for (const box of boxes) {
             await expect(box).toBeVisible();
@@ -282,9 +286,13 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
         // Every role box on the tab, the current press's and the folded
         // presses' alike (the positive control of a "no role ticked" read).
         this.allBoxes = this.userGroups.locator('input[type="checkbox"]');
-        this.interestChips = this.form.locator('#interests li.tagit-choice .tagit-label');
-        // The label under the interests list ("Reviewing interests").
-        this.interestsLabel = this.form.locator('label[for="interests"]');
+        // The interests field: the tag-it list and its label, one block
+        // (`#interests`), so the label read is the one the chips sit under.
+        this.interestsBlock = this.form.locator('#interests');
+        this.interestChips = this.interestsBlock.locator('li.tagit-choice .tagit-label');
+        // The field's label ("Reviewing interests"), a sub-label the legacy
+        // form draws beneath the chips inside the same block.
+        this.interestsLabel = this.interestsBlock.locator('label[for="interests"]');
     }
 
     /** Open the tab from the profile at `contextPath` (`index` = site level). */
@@ -317,13 +325,17 @@ exports.ProfileRolesTab = class ProfileRolesTab extends BasePage {
     }
 
     /**
-     * "Reviewing interests" lists exactly these interests, each once. In
-     * either order: the interests are read with no ORDER BY (fix list B).
+     * "Reviewing interests" lists exactly these interests, each once: the
+     * field labelled "Reviewing interests" (one such label on the tab, in
+     * the chips' own block) holds them as separate chips. In either order:
+     * the interests are read with no ORDER BY (fix list B).
      *
      * @param {string[]} interests
      */
     async expectInterests(interests) {
+        await expect(this.form.getByText('Reviewing interests', {exact: true})).toHaveCount(1);
         await expect(this.interestsLabel).toHaveText('Reviewing interests');
+        await expect(this.interestsLabel).toBeVisible();
         await expectTextsInAnyOrder(this.interestChips, interests);
     }
 };

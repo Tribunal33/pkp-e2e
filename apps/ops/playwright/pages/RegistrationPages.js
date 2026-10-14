@@ -124,6 +124,27 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         });
     }
 
+    /**
+     * Bring a site-level server block into view whole, its name line and
+     * every role box under it, before a read that needs them on screen.
+     * Scrolling only the name line left a block near the bottom of the
+     * list with its boxes below the fold (OMP's twin, CI "viewport ratio
+     * 0", 2026-10-12 on); the block is centred instead, the way a reader
+     * scrolls to it. A block taller than the viewport is a failure here,
+     * not a partial read.
+     *
+     * @param {string} name the server's name
+     */
+    async scrollContextBlockIntoView(name) {
+        const block = this.contextBlock(name);
+        await expect(block).toHaveCount(1);
+        const fits = await block.evaluate((el) => {
+            el.scrollIntoView({block: 'center', inline: 'nearest'});
+            return el.getBoundingClientRect().height <= window.innerHeight;
+        });
+        expect(fits, `the "${name}" block fits in the viewport`).toBe(true);
+    }
+
     /** The server's name, the line that heads its site-level block (`li.context > .name`). */
     contextName(name) {
         return this.contextBlock(name).locator('.name');
@@ -172,7 +193,7 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         const boxes = roles.map((role) =>
             this.contextBlock(name).getByRole('checkbox', {name: role, exact: true})
         );
-        await nameLine.scrollIntoViewIfNeeded();
+        await this.scrollContextBlockIntoView(name);
         await expect(nameLine).toBeInViewport();
         for (const box of boxes) await expect(box).toBeInViewport();
         // Under the name: no box starts above the name's lower edge.
@@ -221,7 +242,7 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         ).toBe(true);
 
         const nameLine = this.contextName(name);
-        await nameLine.scrollIntoViewIfNeeded();
+        await this.scrollContextBlockIntoView(name);
         await expect(nameLine).toBeInViewport();
         for (const role of roles) {
             await expect(group.getByRole('checkbox', {name: role, exact: true})).toBeInViewport();

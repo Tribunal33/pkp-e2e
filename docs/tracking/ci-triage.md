@@ -1361,7 +1361,15 @@ trips.
   `toBeInViewport()` on the second press's reader box
   (`readerGroup[76]`) read "viewport ratio 0" for 10 s; the trace was not
   read. The PR changes ORCID classes and the publish warnings, nothing the
-  Register page runs. **Watch condition**: a second sighting.
+  Register page runs. Not once: the CI tally of 2026-10-14 counts it
+  flaky in 42 OMP runs since 2026-10-12, the day the drift sweep added
+  `expectContextListed()`. **Fixed 2026-10-14** (the U02 revision): the
+  method scrolled only the press's name line into view, so a press low on
+  the page kept its role boxes below the fold; it now centres the whole
+  `li.context` block before the viewport reads, and the OJS and OPS twins
+  do the same. Branch run 38505248989: OMP U02 S6 green on its first
+  attempt, no flaky line. **Watch condition**: a role box read out of the
+  viewport again.
 
 - **OMP U28 S15's "submit this review?" dialog not shown in 30 s** (OMP,
   once, pkp-e2e dispatch run 37915669207 from `main` at `12e6e1d0` with
