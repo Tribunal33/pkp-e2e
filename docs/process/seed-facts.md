@@ -115,6 +115,16 @@ seen (with the pointer). A line without a dated observation in the repo says
 so; it is not a guess. A `.reports/…` pointer names the session evidence
 behind a line; that scratch is deleted after review.
 
+- A `users[]` account keeps its cost-4 seed hash (`$2y$04$`) until its
+  first sign-in, which rehashes it to cost 12 and ends every other session
+  of that account, an impersonation of it included (the impersonating
+  manager lands on the Login page). Sign such an account in once before
+  impersonating it or opening a second browser for it. Three apps,
+  2026-10-14 (U03 drift sweep, `.reports/U03/cc-SW1.md` SW1-9).
+- The Login page's "Keep me logged in" arrives ticked, so a sign-in through
+  the form is a remembered one unless the box is unticked. Three apps,
+  2026-10-14 (U03 drift sweep, `.reports/U03/cc-SW1.md`).
+
 - OJS overrides several lib/pkp event-log strings in its own
   `locale/en/locale.po` (the wizard's submit entry reads "Article
   submitted" where lib/pkp says "Initial submission completed."); grep the
@@ -636,9 +646,10 @@ behind a line; that scratch is deleted after review.
   directory's filesystem path appended to the origin, so the picture never
   loaded (404); a suite asserts the "Delete" control and the stored file,
   never the rendered picture. Since the relative value the address is
-  `/public/site/…` (the logo and editor pictures were driven loading; the
-  profile image not re-driven). Profile › Public. Live-probed 2026-09-03/04,
-  all three apps (`.reports/U03/pF` P27; `.reports/U03/cc-K5.md`).
+  `/public/site/…`: the profile picture loads on Profile › Public at
+  `/public/site/profileImage-<id>.<ext>` at its stored size. Live-probed
+  2026-09-03/04, re-driven 2026-10-14, all three apps (U03 drift sweep,
+  `.reports/U03/cc-SW2.md`).
 - `POST scenarios/submission` with `submitted: true` raises the "needs an
   editor" task for every manager-level member of the context (Journal
   manager, Journal editor and Production editor; {OMP} Press manager, Press

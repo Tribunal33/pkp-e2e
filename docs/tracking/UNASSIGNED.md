@@ -54,19 +54,28 @@ if real, their specs' own probes will resurface them.)
 - Resolves: maintainer confirmation as dead code (removal candidates; the
   two handlers still serve, so removal takes their routes too).
 
-### AFFW-076 — sectionPolicy.tpl start-submission block
-- What: OJS template block offering "start a submission" from the section
-  policy display; marked deprecated 3.4 — the current Start Submission is the
-  Vue form.
-- Why parked: liveness unknown; claiming it in U17 or U21 would document a
-  possibly-dead surface.
-- Resolves: Phase-1 liveness probe (is the block reachable in the current UI?).
+### AFFW-076 — sectionPolicy.tpl section-policy block
+- What: OJS template block that wraps a section's policy text under a
+  "Section Policy" heading (it offers no start of a submission itself);
+  marked deprecated 3.4 — the current Start Submission is the Vue form.
+- Why parked: dead — nothing includes it and no screen shows it.
 - Evidence (U17 spec author, code read 2026-09-25, ojs `d9b567efec`): no
   template, handler, Vue component or JS file of OJS or its lib/pkp names
   `sectionPolicy.tpl`; its only reference is its own header. The live
   start form shows the section policy through `StartSubmission`'s
-  `FieldHTML` instead (the Sections spec, Rule 11). Dead-code candidate;
-  resolves on maintainer confirmation.
+  `FieldHTML` instead (the Sections spec, Rule 11).
+- Evidence (housekeeping, U17 check UA1, live drive 2026-10-14, OJS `main`,
+  two runs; OMP and OPS as controls): About › Submissions, "Make a
+  Submission" (before a pick and with each section picked), the page the
+  per-section link opens, the issue page and the archive, each as a
+  signed-out visitor, an Author and a Journal Manager, on a journal with a
+  section that has a policy and one that has none: the template's markup
+  (`.section-policy`, `section-id-`) and its "Section Policy" heading never
+  appear. The only start offer beside a policy is the signed-in "Make a new
+  submission to the … section." link on About › Submissions (OJS, OPS),
+  already the Sections spec's A1. Rerun:
+  `shared/playwright/checks/U17/UA1/ua1.js`.
+- Resolves: maintainer confirmation as dead code (removal candidate).
 
 ### AFFM-170 — OMP statisticsSettingsForm.tpl
 - What: OMP-only settings template that posts to an op no PHP handler declares.
