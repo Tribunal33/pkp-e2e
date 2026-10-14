@@ -88,4 +88,21 @@ async function pressDashboard(page) {
     };
 }
 
-module.exports = {readBell, openPublic, readUserMenu, readUserMenuNarrow, pressDashboard};
+/**
+ * Settings › Website › "Setup" › "Languages" (U57's page object): press French's box in the "Forms"
+ * column once, as the journal's manager; the box before, the list's answer, the box after a fresh load.
+ * The page object is required here, inside the walk, because it reads the app's environment.
+ */
+async function untickFrenchForms(page, ctx) {
+    const {JournalLanguagesTab} = require('../../../pages/LanguagesPages.js');
+    const tab = new JournalLanguagesTab(page, ctx, {locale: 'en'});
+    await tab.goto();
+    const box = () => tab.website.cell('fr_CA', 'formLocale');
+    const before = await box().isChecked();
+    const {response, alerts} = await tab.pressWebsite('fr_CA', 'formLocale');
+    await tab.goto();
+    const after = await box().isChecked();
+    return {before, status: response ? response.status() : null, url: rel(response && response.url()), alerts, after};
+}
+
+module.exports = {readBell, openPublic, readUserMenu, readUserMenuNarrow, pressDashboard, untickFrenchForms};

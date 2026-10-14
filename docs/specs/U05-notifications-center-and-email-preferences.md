@@ -879,7 +879,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OPS3](#ops3) | On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | A Section Editor's menu on the public pages never shows their unread count, while the other roles' menus do | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A3](#a3) | A Section Editor never sees their unread count on the public pages, beside their name or in the narrow-window menu, while the other roles do | 🐞 | low | issues (claude), 2026-10-14 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | On a journal with French under "Forms", no name on the public pages carries the unread count, and a window 992 px or wider shows it nowhere | 🐞 | minor | — |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
@@ -937,19 +937,19 @@ Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 <a id="a3"></a>
 **A3 — No reader-side count for a Section Editor** · 🐞 · low.
 On the public pages of a journal whose only "Forms" language is English,
-the menu under the signed-in user's name shows a Journal Manager, a
-Journal editor, an assistant, a Reviewer or an Author their number of
-unread tasks (Rule 4a); with French under "Forms" no role sees it there
+a Journal Manager, a Journal editor, an assistant, a Reviewer or an Author
+sees their number of unread tasks beside their name in the header, and in
+a narrow window after "Dashboard" in the "Open Menu" list (Rule 4a); with
+French under "Forms" the number beside the name is gone for every role
 ([A15](#a15)). A Section Editor
 (Series Editor on a press, Moderator on a preprint server) who holds
-none of those roles in the journal never sees the number there, even
-while the bell shows "1", and learns of new tasks only from the bell on
-the editorial pages. The same cause sends their "Dashboard" to the
+none of those roles in the journal never sees the number in either place,
+even while the bell shows "1", and learns of new tasks only from the bell
+on the editorial pages. The same cause sends their "Dashboard" to the
 Profile page
 ([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a2)).
 It worked in 3.0 and broke in 3.1.
-Basis: probe, 2026-10-03. <sup>[f-a3](#fn-a3)</sup>
-Report: refresh owed — the housekeeping claim check of 2026-10-13 (claim check C05 and its kept script, new entry [A15](#a15)) found that the other roles see the count only on a journal whose only "Forms" language is English: with French under "Forms" no role sees it, and at 992 px or wider the number shows nowhere; the report's contrast ("while the other roles' menus do") and its Steps rest on the dataset journal, whose "Forms" languages were not stated; and the report says "the menu under the name" where Rule 4a puts the number beside the name in the header (2026-10-13)
+Basis: probe, 2026-10-14. <sup>[f-a3](#fn-a3)</sup>
 
 <a id="a4"></a>
 **A4 — The site-level tab governs nothing** · ❓ · latent.

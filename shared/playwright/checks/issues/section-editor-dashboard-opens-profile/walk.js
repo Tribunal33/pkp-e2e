@@ -5,14 +5,16 @@
 // context `publicknowledge`. Helpers: lib.js. The kit builds nothing.
 //
 // WALK_MODE=steps (default):
+//   0. dbarnes unticks French under "Forms" (Settings › Website › Setup › Languages; the dataset journal has
+//      English and French there, and with French no name carries the count, U05 A15), then signs out
 //   1. dbuskins signs in on the journal's login page: where it lands, the "Tasks" bell
 //   2. the journal's home page
 //   3n. the same page in an 800 px window, "Open Menu": the user menu's entries as displayed
 //       (below 992 px the theme shows the count after "Dashboard" and hides the one after the name)
-//   3. back at full width: the name in the header's user menu (and its count, if any), pressed open
+//   3. back at full width: the name in the header's user menu (and its count beside it, Rule 4a), pressed open
 //   4. press the name, then "Dashboard": where it lands
 //   5. control: dbarnes, steps 1-4
-// WALK_MODE=neighbour (runs alone; the fix must leave these as they are):
+// WALK_MODE=neighbour (runs alone, French left under "Forms"; the fix must leave these as they are):
 //   N1 an Author (ccorino; aclark on OMP): steps 1-4, the count after "Dashboard" and My Submissions
 //   N2 jjanssen (Reviewer; OJS and OMP, the OPS dataset has no reviewer): steps 1-4, the count and the
 //      review assignments
@@ -20,13 +22,13 @@
 //      address, /index.php/index/en/about/aboutThisPublishingSystem; with one journal the site's home page
 //      redirects to it): the page loads, the user menu, "Dashboard" opens the Profile page for both (Rule 19c)
 //
-// Reset first:  PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH npm run fleet-prep -- --feature issues-u08c --dataset 3 --reset
-// Run (main):   PROBE_FEATURE=issues-u08c PROBE_AGENT=u08c node bin/probe.js all shared/playwright/checks/issues/section-editor-dashboard-opens-profile/walk.js
-// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 … fleet-prep -- --feature issues-u08c-3_5 --dataset 3 --reset
-//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-u08c-3_5 PROBE_AGENT=u08c node bin/probe.js all <this file>
+// Reset first:  npm run fleet-prep -- --feature issues-u05r1 --dataset 1 --reset
+// Run (main):   PROBE_FEATURE=issues-u05r1 PROBE_AGENT=u05r1 node bin/probe.js all shared/playwright/checks/issues/section-editor-dashboard-opens-profile/walk.js
+// Run (3.5):    PKP_E2E_LINE=stable-3_5_0 … fleet-prep -- --feature issues-u05r1-3_5 --dataset 1 --reset
+//               PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-u05r1-3_5 PROBE_AGENT=u05r1 node bin/probe.js all <this file>
 // Neighbour:    WALK_MODE=neighbour PROBE_RUN=nb-out … (and nb-in with the fix applied)
-// Facts: .reports/<feature>/u08c/facts[-<run>]-<app>.json
-const {forEachApp, launch, signIn, screen, shot, record} = require('../../../probe');
+// Facts: .reports/<feature>/<agent>/facts[-<run>]-<app>.json
+const {forEachApp, launch, signIn, signOut, screen, shot, record} = require('../../../probe');
 const L = require('./lib');
 
 const MODE = process.env.WALK_MODE || 'steps';
@@ -78,7 +80,12 @@ forEachApp(async (app) => {
     };
     try {
         if (MODE === 'steps') {
+            await signIn(page, 'dbarnes', {contextPath: ctx});
+            fact('0 untick French under Forms', await step('0 untick French under Forms', () => L.untickFrenchForms(page, ctx)));
+            await snap(page, '0-languages-after');
+            await signOut(page, {origin: app.baseURL});
             await walkUser('dbuskins', 'dbuskins');
+            await signOut(page, {origin: app.baseURL});
             await walkUser('control dbarnes', 'dbarnes');
         } else {
             const author = app.name === 'omp' ? 'aclark' : 'ccorino';

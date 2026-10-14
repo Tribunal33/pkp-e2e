@@ -9,10 +9,14 @@
   - 3.4: OJS, OMP, OPS (code)
   - 3.3: OJS, OMP, OPS (code)
 - **Introduced** `pkp/pkp-lib#2917` for `pkp/pkp-lib#2910` · [39912fe](https://github.com/pkp/pkp-lib/commit/39912fe17912b83edfedb7897fb28a686a85e1c4) (the Profile address) and [03f1cbe](https://github.com/pkp/pkp-lib/commit/03f1cbea007f65c59ebf8812c66f3287ce46dd38) (the count) · 2017-10-23 · Dimitris Efstathiou (defstat)
-- **Upstream** none found (2026-10-03)
+- **Upstream** none found (2026-10-14)
 - **Tracked in** U08 [A2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U08-navigation-menus-and-site-chrome.md#a2), U05 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#a3)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-14, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-14: the report now says where the task count shows, and
+the Steps take French out of the journal's "Forms" languages first.
+Walked again on `main` and 3.5, and the fix tried again.
 
 ## Summary
 
@@ -22,9 +26,11 @@ Reviewer or an Author to the page they work from. A Section Editor is taken
 to their Profile page instead, although signing in put them on the
 Dashboard.
 
-The same menu never shows a Section Editor their number of unread tasks.
-The other roles see theirs after "Dashboard" when the menu is opened in a
-narrow window or on a phone.
+On any journal, a Section Editor never sees their number of unread tasks
+on its public pages. It is missing beside their name in the header. In a narrow window or on a phone, the header collapses into an
+"Open Menu" list, and its "Dashboard" entry has no number either. The
+other roles see theirs in both places (beside the name only when English
+is the journal's one "Forms" language, [U05 A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#a15)).
 
 The Profile page's side menu leads back to the Dashboard in one press. It
 happens to every Section Editor (Series Editor on a press, Moderator on a
@@ -33,8 +39,7 @@ the journal. It worked in 3.0 and broke in 3.1.
 
 ## Impact
 
-- **Lost**: nothing. The Section Editor reaches the wrong page and sees no
-  task count in that menu.
+- **Lost**: nothing.
 - **Who**: a Section Editor who holds no other working role in the journal,
   using the menu under their name on its public pages. One who is also an
   Author or a Reviewer there gets the Dashboard and the count through that
@@ -49,31 +54,42 @@ Dashboard one press away.
 
 Preconditions:
 
-- PKP's default test dataset, OJS `main` (OMP and OPS the same). Nothing is
-  created.
+- PKP's default test dataset, OJS `main` (OMP and OPS the same).
+- The journal's languages are English and French, both ticked in the
+  "Forms" column of Settings › Website › "Setup" › "Languages". With French
+  there, no user's name in the header carries the count, whatever their
+  role. That is a separate fault
+  ([U05 A15](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#a15)),
+  so step 1 takes French out of "Forms".
 - `dbuskins` (David Buskins) is a Section editor of `publicknowledge`
   (a Series editor on OMP, a Moderator on OPS), holds no other role there,
-  and has unread tasks. The control is `dbarnes` (Daniel Barnes, Journal
-  editor).
+  and has unread tasks. `dbarnes` (Daniel Barnes, Journal editor; Press
+  editor on OMP, Preprint Server manager on OPS) is compared with them.
 
 Steps:
 
-1. Sign in as `dbuskins` (password `dbuskinsdbuskins`) on the journal's login
-   page. The Dashboard opens
+1. Sign in as `dbarnes` (password `dbarnesdbarnes`). Open "Settings" ›
+   "Website" › "Setup" › "Languages" and untick the box in the "Forms"
+   column of the French row; the change saves at once. Then "Logout".
+2. Sign in as `dbuskins` (password `dbuskinsdbuskins`) on the journal's
+   login page. The Dashboard opens
    (`/index.php/publicknowledge/en/dashboard/editorial`), and the bell at the
    top right reads "Tasks 2" (OMP and OPS: "Tasks 1").
-2. Open the journal's home page (`/index.php/publicknowledge/en`).
-3. Make the browser window narrower than 992 px (or open the page on a
+3. Open the journal's home page (`/index.php/publicknowledge/en`) and read
+   the name at the top right.
+4. Make the browser window narrower than 992 px (or open the page on a
    phone), press "Open Menu" and read the list under "dbuskins".
-4. Back at full width, press "dbuskins" at the top right, then "Dashboard".
-5. Control: sign in as `dbarnes` and repeat steps 2 to 4.
+5. Back at full width, press "dbuskins" at the top right, then "Dashboard".
+6. "Logout", sign in as `dbarnes` and repeat steps 3 to 5.
 
-**Expected:** the list under "dbuskins" reads "Dashboard 2" (OMP and OPS:
-"Dashboard 1"), the Section Editor's own count, the number the bell shows.
-"Dashboard" opens the Dashboard, the page they landed on after signing in.
+**Expected:** the name reads "dbuskins 2" (OMP and OPS: "dbuskins 1"), the
+number the bell shows, and the list in the narrow window reads
+"Dashboard 2" ("Dashboard 1"). "Dashboard" opens the Dashboard, the page
+they landed on after signing in.
 
-**Observed:** the list reads "Dashboard", "View Profile", "Logout", with no
-number. "Dashboard" opens the Profile page:
+**Observed:** the name reads "dbuskins", with no number, and the list reads
+"Dashboard", "View Profile", "Logout", with no number. "Dashboard" opens the
+Profile page:
 
 ```
 /index.php/publicknowledge/en/user/profile
@@ -81,8 +97,9 @@ Profile | Journal of Public Knowledge
 ```
 
 The same happens on OMP ("Profile | Public Knowledge Press") and OPS
-("Profile | Public Knowledge Preprint Server"). For `dbarnes` the list reads
-"Dashboard 2" (OMP "Dashboard 13", OPS "Dashboard 0"), and "Dashboard" opens
+("Profile | Public Knowledge Preprint Server"). For `dbarnes` the name reads
+"dbarnes 2" (OMP "dbarnes 13", OPS "dbarnes 0"), the list in the narrow
+window "Dashboard 2" ("Dashboard 13", "Dashboard 0"), and "Dashboard" opens
 the Dashboard.
 
 ## Cause
@@ -104,7 +121,11 @@ if ($currentUser->hasRole([Role::ROLE_ID_MANAGER, Role::ROLE_ID_ASSISTANT, Role:
 `Role::ROLE_ID_SUB_EDITOR` is missing from the list. A user whose only
 working role in the journal is Section Editor fails both checks. Their title
 stays the bare name or "Dashboard", and their address falls through to
-`user/profile`. Yet `PKPPageRouter::getHomeUrl()`, which picks the page a
+`user/profile`. For the roles in the list, line 215 replaces the title with
+`dashboardMenuItem.tpl`, which writes the title and then the count in a
+`span.task_count`. The default theme shows the count beside the name in a
+window 992 px or wider. In a narrower window it hides that count and shows
+the one after "Dashboard" instead. Yet `PKPPageRouter::getHomeUrl()`, which picks the page a
 user lands on after signing in, sends `ROLE_ID_SUB_EDITOR` to
 `dashboard/editorial` with the managers and assistants. The editorial menu
 built in `PKPTemplateManager` (line 1221) also counts Section Editors among
@@ -129,6 +150,10 @@ The PR was merged on 2017-10-23 (da7ee3a3a2) and released in 3.1.
 
 Reach:
 
+- On a journal with French under "Forms", the roles in the list see the
+  count only after "Dashboard" in a narrow window, since the theme hides
+  that entry's count at full width (on screen; the name's count is the
+  separate fault in the Preconditions).
 - Any menu a journal adds with an item of type "Dashboard" follows the same
   check (in the code).
 - A Section Editor who also holds Manager, an assistant role, Reviewer or
@@ -166,8 +191,8 @@ Tried on `main` in all three apps:
 +    }
 ```
 
-With the fix in, the walk showed the Expected on all three apps. An Author
-and a Reviewer kept their count and their pages (My Submissions, the review
+With the fix in, the walk showed the Expected on all three apps. In a
+neighbour check with the same diff, an Author and a Reviewer kept their count and their pages (My Submissions, the review
 assignments). A site-level public page ("About this Publishing System" at
 `/index.php/index/en/about/aboutThisPublishingSystem`) loaded for the
 Section Editor and the Journal editor, whose "Dashboard" still opened the
@@ -189,8 +214,10 @@ Profile page. All of it was the same with the fix in and out.
   runs after the decision.
 - Backport: on 3.5 the diff applies as it stands. 3.4 and 3.3 need
   `PKPApplication::CONTEXT_SITE` (3.3: the global `CONTEXT_SITE`,
-  `ROLE_ID_SUB_EDITOR` and `array()` syntax). Both send the qualifying roles
-  to the `submissions` page.
+  `ROLE_ID_SUB_EDITOR` and `array()` syntax). There `getHomeUrl()` sends
+  every role but Reader to the `submissions` page, with no split by role,
+  so the method's comment should not name `getHomeUrl()`; the role set is
+  still the right one.
 - Guard: an end-to-end check that a Section Editor's "Dashboard" on the
   journal's home page opens the Dashboard and carries the count, or a unit
   test of the service's display status per role, the site-level case
@@ -206,30 +233,43 @@ test.
   [walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/section-editor-dashboard-opens-profile/walk.js)
   with its
   [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/section-editor-dashboard-opens-profile/lib.js).
-  It takes the Steps as `dbuskins` and `dbarnes` on an install freshly
-  loaded from the default dataset (pkp/datasets e8dafbc, 2026-10-02,
+  It takes the Steps as `dbarnes` and `dbuskins` on an install freshly
+  loaded from the default dataset (pkp/datasets 47833f0, 2026-10-13,
   PostgreSQL). From a pkp-e2e checkout:
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/section-editor-dashboard-opens-profile/walk.js`;
   `WALK_MODE=neighbour` walks the Author (`ccorino`, `aclark` on OMP), the
-  Reviewer (`jjanssen`; the OPS dataset has none) and the site-level page.
+  Reviewer (`jjanssen`; the OPS dataset has none) and the site-level page,
+  with French left under "Forms" (walked 2026-10-03 with the fix in and
+  out; the diff has not changed since).
+- Walks on 2026-10-14: the Steps on `main` and 3.5, three apps each, and
+  on `main` again with
+  [fix.diff](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/section-editor-dashboard-opens-profile/fix.diff)
+  applied (`node bin/try-fix.js apply <fix.diff> ojs omp ops`, reverted
+  after). The 3.5 walk is the same command with
+  `PKP_E2E_LINE=stable-3_5_0` in front, on that line's dataset
+  (`ojs/stable-3_5_0/pgsql` and the others), with the same result as
+  `main`.
   No request failed and no page script failed, with the fix in or out.
-- Tips: `main` OJS b84f8e2e44 (lib/pkp ddd8ab243a), OMP 3b0ecf794c and OPS
-  c8af945bb7 (lib/pkp 3dc90c81a6); `stable-3_5_0` OJS 091fb65453, OMP
-  9c5e24246c, OPS 38b61882d3 (lib/pkp cf3f984335); `stable-3_4_0` lib/pkp
-  9e41f10273; `stable-3_3_0` lib/pkp ac3fa73402.
+- Tips (2026-10-14): `main` OJS 9f18cd1d46 (lib/pkp 266505ecd8), OMP
+  119211f223 and OPS 35e128e878 (lib/pkp 1836046394); `stable-3_5_0` OJS
+  0b02f7c01a (lib/pkp 2196fa2775), OMP 044228c00b and OPS 61125ebca4
+  (lib/pkp b1f342476a); `stable-3_4_0` lib/pkp 55c8e406b3; `stable-3_3_0`
+  lib/pkp 5e84acd11b.
 - Code reads: `PKPNavigationMenuService.php` on `main` (lines 215 and 305)
   and on 3.5 (213 and 303), the same lists; 3.4
   `classes/services/PKPNavigationMenuService.php` lines 210 and 300 and 3.3
   `classes/services/PKPNavigationMenuService.inc.php` lines 190 and 280, the
   same lists, with the `submissions` page as the address. `getHomeUrl()` in
   `PKPPageRouter.php` on `main`. The file is shared by the three apps through
-  pkp-lib, and no app overrides it.
+  pkp-lib, and no app overrides it. `dashboardMenuItem.tpl` and the
+  `{$loggedInUsername}` item in each app's `registry/navigationMenus.xml`
+  on `main`. All re-read on the 2026-10-14 tips: the lines and lists are
+  unchanged.
 - Not driven: a user holding only Reader (the dataset has none; in the code
   Reader is not in the list, before or after the fix), a Section Editor who
   also holds Author or Reviewer (in the code), and themes other than the
   default.
-- Seen on the way, a separate fault: at full width on the default dataset
-  no user's name carries the task count, the Journal editor's included.
+- Not walked: the fix on a journal with French under "Forms".
 - Upstream: `pkp/pkp-lib#8971` ("Dashboard link goes to user Profile",
   closed) is the same link, but for an Author signed in at the site's
   address, not a Section Editor; not this fault.

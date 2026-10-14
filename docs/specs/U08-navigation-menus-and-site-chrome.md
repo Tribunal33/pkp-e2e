@@ -1280,7 +1280,7 @@ an entry notes otherwise; the team settles them on spec review.
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [A1](#a1) | Screen readers announce the editorial header's "i" (help) icon as "##common.help##" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A2](#a2) | A Section Editor's "Dashboard" in the public header opens the Profile page | 🐞 | low | issues (claude), 2026-10-14 — re-verified |
 | [A3](#a3) | The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Site Settings › "Navigation": "Add Menu" and a menu's "Edit" open nothing and leave the page dimmed | 🐞 | medium · crash: script | issues (claude), 2026-10-03 — re-verified |
 | [A6](#a6) | The "Privacy Statement" and "Contact" notices send the manager to the wrong Settings tab | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1339,10 +1339,11 @@ on a press, Moderator on a preprint server) who holds no Author,
 Reviewer, assistant or manager role in the journal is taken to the
 Profile page instead, although signing in put them on the Dashboard;
 "Editor Dashboard" in the Profile page's side menu leads back. The same
-cause leaves them without their task count in that menu
+cause leaves them without their task count, beside their name in the
+header and after "Dashboard" in a narrow window
 ([Notifications center & email preferences](U05-notifications-center-and-email-preferences.md#a3)).
 It worked in 3.0 and broke in 3.1.
-Basis: probe, 2026-10-03. <sup>f-a2</sup>
+Basis: probe, 2026-10-14. <sup>f-a2</sup>
 
 <a id="a3"></a>
 **A3 — The access-denied page a signed-in user gets has an empty heading and an unnamed browser tab** · 🐞 · low.
