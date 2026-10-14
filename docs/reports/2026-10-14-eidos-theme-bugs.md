@@ -64,25 +64,24 @@ categories, announcements, the About pages, login and registration.
 | [18](#finding-18) | The header logo has no alternative text | low | small | Driven |
 | [19](#finding-19) | The login password field has an invalid `autocomplete` value | low | small | Driven |
 | [20](#finding-20) | The search field's label is the text `{$label}` | low | small | Code |
-| [21](#finding-21) | Search breaks on installs without path info (the form drops its address's query string) | low | small | Driven / Code |
-| [22](#finding-22) | The search date pickers show English month names in every language | low | small | Code |
-| [23](#finding-23) | Supplementary galleys are never found in listings | low | small | Code |
-| [24](#finding-24) | An article galley shows the issue's price | low | small | Code |
-| [25](#finding-25) | Share links put the article address in unencoded | low | small | Code |
-| [26](#finding-26) | The account menu's `aria-label` is unquoted | low | small | Code |
-| [27](#finding-27) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
-| [28](#finding-28) | Comment dates are always shown as "… ago" | low | small | Code |
-| [29](#finding-29) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
-| [30](#finding-30) | PHP warnings on nearly every page | low | small | Driven |
-| [31](#finding-31) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
-| [32](#finding-32) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
-| [33](#finding-33) | `npm ci` fails on the theme | low | small | Driven |
+| [21](#finding-21) | The search date pickers show English month names in every language | low | small | Code |
+| [22](#finding-22) | Supplementary galleys are never found in listings | low | small | Code |
+| [23](#finding-23) | An article galley shows the issue's price | low | small | Code |
+| [24](#finding-24) | Share links put the article address in unencoded | low | small | Code |
+| [25](#finding-25) | The account menu's `aria-label` is unquoted | low | small | Code |
+| [26](#finding-26) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
+| [27](#finding-27) | Comment dates are always shown as "… ago" | low | small | Code |
+| [28](#finding-28) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
+| [29](#finding-29) | PHP warnings on nearly every page | low | small | Driven |
+| [30](#finding-30) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
+| [31](#finding-31) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
+| [32](#finding-32) | `npm ci` fails on the theme | low | small | Driven |
 
 **Security-related:** four findings.
 - [1](#finding-1): a search link runs script.
 - [2](#finding-2): an author's response to reviewers runs script on the
   public article page.
-- [31](#finding-31) and [32](#finding-32): manager-entered colour values
+- [30](#finding-30) and [31](#finding-31): manager-entered colour values
   and issue descriptions can inject script. They are low because only a
   manager can enter them.
 
@@ -572,45 +571,7 @@ A Smarty leftover, printed as text.
 callers.
 
 <a name="finding-21"></a>
-## Finding 21: search breaks on installs without path info
-
-- **Severity** low · **Effort** small · Driven (the warnings), Code (the consequence)
-
-**What happens.**
-- **With the default setup, nothing is lost.** The query and the date
-  filters are ordinary form fields and survive a new search; the
-  maintainer confirmed it on another instance. Each search logs two
-  warnings: "Undefined variable $formUrlParameters" and "foreach()
-  argument must be of type array|object".
-- **On an install with `disable_path_info = On`**, the search form's
-  address carries the journal and page in its query string
-  (`index.php?journal=…&page=search&op=search`). A GET form drops that
-  query string when it submits, so the search leaves the journal. The
-  hidden fields the loop was meant to write are what keeps those
-  parameters. Not driven.
-
-**Where.** `components/search-form.blade:6-8` loops `$formUrlParameters`,
-which nothing assigns. The Default theme builds it from the form's own
-address (`templates/frontend/pages/search.tpl:35-38`):
-
-```smarty
-{assign var=formUrlParameters value=[]}
-{$smarty.capture.searchFormUrl|parse_url:$smarty.const.PHP_URL_QUERY|default:""|parse_str:$formUrlParameters}
-{foreach from=$formUrlParameters key=paramKey item=paramValue}
-```
-
-ORE does the same in `searchComponent.blade:19-20,130`.
-
-**Fix.** Build the variable before the loop, as ORE does:
-
-```php
-$searchFormUrl = ViewHelper::url(['page' => 'search', 'op' => 'search']);
-$formUrlParameters = [];
-parse_str(parse_url($searchFormUrl, PHP_URL_QUERY) ?? '', $formUrlParameters);
-```
-
-<a name="finding-22"></a>
-## Finding 22: the search date pickers show English month names in every language
+## Finding 21: the search date pickers show English month names in every language
 
 - **Severity** low · **Effort** small · Code
 
@@ -626,8 +587,8 @@ English.
 `\Carbon\Carbon::create(2020, $i)->locale(Locale::getLocale())->isoFormat('MMM')`,
 or the same source the Default theme's date picker uses.
 
-<a name="finding-23"></a>
-## Finding 23: supplementary galleys are never found in listings
+<a name="finding-22"></a>
+## Finding 22: supplementary galleys are never found in listings
 
 - **Severity** low · **Effort** small · Code
 
@@ -645,8 +606,8 @@ a file.
 **Fix.** `in_array($galley->getFile()?->getGenreId(), $supplementaryFileGenreIds)`,
 as line 75 does for primary files.
 
-<a name="finding-24"></a>
-## Finding 24: an article galley shows the issue's price
+<a name="finding-23"></a>
+## Finding 23: an article galley shows the issue's price
 
 - **Severity** low · **Effort** small · Code
 
@@ -662,8 +623,8 @@ line 18), so today the price never shows at all.
 `purchaseIssueFee` for issue galleys, as the Default theme's
 `galley_link.tpl` does, and assign the context.
 
-<a name="finding-25"></a>
-## Finding 25: share links put the article address in unencoded
+<a name="finding-24"></a>
+## Finding 24: share links put the article address in unencoded
 
 - **Severity** low · **Effort** small · Code
 
@@ -677,8 +638,8 @@ is. An address carrying its own query or `&` breaks the share link.
 **Fix.** `$urlEncodedUrl = urlencode($url);` next to the title, and use it
 in every link.
 
-<a name="finding-26"></a>
-## Finding 26: the account menu's `aria-label` is unquoted
+<a name="finding-25"></a>
+## Finding 25: the account menu's `aria-label` is unquoted
 
 - **Severity** low · **Effort** small · Code
 
@@ -691,8 +652,8 @@ attributes.
 
 **Fix.** `aria-label="{{ __('plugins.themes.eidos.account') }}"`.
 
-<a name="finding-27"></a>
-## Finding 27: the Comments and Metrics tabs break on an apostrophe in their data
+<a name="finding-26"></a>
+## Finding 26: the Comments and Metrics tabs break on an apostrophe in their data
 
 - **Severity** low · **Effort** small · Code
 
@@ -715,8 +676,8 @@ The `{{`/`}}` replacements alter the data too.
 already does (`components/article/sidebar.blade:42`). Blade's `@json`
 escapes the apostrophe.
 
-<a name="finding-28"></a>
-## Finding 28: comment dates are always shown as "… ago"
+<a name="finding-27"></a>
+## Finding 27: comment dates are always shown as "… ago"
 
 - **Severity** low · **Effort** small · Code
 
@@ -736,8 +697,8 @@ always false. A week is also 604800000 ms.
 
 **Fix.** `Date.now() - dateTime.getTime() > 604800000`.
 
-<a name="finding-29"></a>
-## Finding 29: the "Latest Announcement" block stays empty without saying why
+<a name="finding-28"></a>
+## Finding 28: the "Latest Announcement" block stays empty without saying why
 
 - **Severity** low · **Effort** small · Driven
 
@@ -756,8 +717,8 @@ shows the block only when some were loaded.
 is ticked, or say in the option's description that it needs "Display
 on homepage".
 
-<a name="finding-30"></a>
-## Finding 30: PHP warnings on nearly every page
+<a name="finding-29"></a>
+## Finding 29: PHP warnings on nearly every page
 
 - **Severity** low · **Effort** small · Driven
 
@@ -781,6 +742,7 @@ Seen in the walk:
 | `$error`, `$altchaEnabled`, `$source` | `frontend/pages/userLostPassword.blade` |
 | `privacyConsent` | `frontend/pages/userRegister.blade` |
 | `dateEnd` | `frontend/pages/editorialMasthead.blade` |
+| `$formUrlParameters` (plus a `foreach()` warning) | `components/search-form.blade` |
 
 **Where.** The components declare no `@props`, so an attribute a caller
 leaves out is simply undefined.
@@ -789,8 +751,16 @@ leaves out is simply undefined.
 `@props(['description' => null, 'head' => null])`, or read them with
 `?? null`.
 
-<a name="finding-31"></a>
-## Finding 31: colour options go unchecked into the page's styles (manager-entered)
+`search-form.blade:6-8` loops `$formUrlParameters` into hidden fields,
+but nothing assigns it; it warns twice on every search. The loop copies
+the Default theme's `search.tpl:35-38`, which kept the form address's
+query string for installs with `disable_path_info` on. That option was
+removed in 3.4 (`pkp-lib#8706`), so the address never has a query
+string any more: drop the loop. Search loses nothing meanwhile, since
+the query and the date filters are ordinary form fields.
+
+<a name="finding-30"></a>
+## Finding 30: colour options go unchecked into the page's styles (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -809,8 +779,8 @@ this reason (pkp-lib#11974).
 accept only `/^#[0-9a-fA-F]{3,8}$/` on save and on output, and fall back
 to the default colour otherwise.
 
-<a name="finding-32"></a>
-## Finding 32: the issue summary decodes escaped text into markup (manager-entered)
+<a name="finding-31"></a>
+## Finding 31: the issue summary decodes escaped text into markup (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -828,8 +798,8 @@ raw.
 **Fix.** Print the plain text escaped:
 `{{ ViewHelper::html2text($issue->getLocalizedDescription()) }}`.
 
-<a name="finding-33"></a>
-## Finding 33: `npm ci` fails on the theme
+<a name="finding-32"></a>
+## Finding 32: `npm ci` fails on the theme
 
 - **Severity** low · **Effort** small · Driven
 
@@ -854,7 +824,7 @@ A release or CI build that uses `npm ci` cannot build Eidos.
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (finding 33).
+    build`; `npm ci` fails (finding 32).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
@@ -885,7 +855,7 @@ A release or CI build that uses `npm ci` cannot build Eidos.
   - `[captcha] altcha` (finding 3)
   - `sitewide_privacy_statement` and the site privacy statement (finding 3)
   - the site's theme and title (finding 6)
-  - `primaryColor` and the issue description (findings 31, 32)
+  - `primaryColor` and the issue description (findings 30, 31)
 - **Each page on both themes.** About 40 reader pages were opened at
   1280 px and 390 px on Eidos, and at 1280 px on the Default theme, with
   axe-core 4.10.2 (WCAG 2.1 A/AA plus best practice). The console, failed
