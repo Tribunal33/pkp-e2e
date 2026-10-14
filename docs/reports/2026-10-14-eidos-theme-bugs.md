@@ -64,7 +64,7 @@ categories, announcements, the About pages, login and registration.
 | [18](#finding-18) | The header logo has no alternative text | low | small | Driven |
 | [19](#finding-19) | The login password field has an invalid `autocomplete` value | low | small | Driven |
 | [20](#finding-20) | The search field's label is the text `{$label}` | low | small | Code |
-| [21](#finding-21) | Search breaks on installs without path info (the form drops its address's query string) | low | small | Driven |
+| [21](#finding-21) | Search breaks on installs without path info (the form drops its address's query string) | low | small | Driven / Code |
 | [22](#finding-22) | The search date pickers show English month names in every language | low | small | Code |
 | [23](#finding-23) | Supplementary galleys are never found in listings | low | small | Code |
 | [24](#finding-24) | An article galley shows the issue's price | low | small | Code |
