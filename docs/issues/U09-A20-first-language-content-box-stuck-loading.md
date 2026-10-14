@@ -10,7 +10,7 @@
   - 3.4: none (code; no loading spinner there)
   - 3.3: none (code; no loading spinner there)
 - **Introduced** `pkp/pkp-lib#10773` for `pkp/pkp-lib#9366` · [1165ce9aff](https://github.com/pkp/pkp-lib/commit/1165ce9affb75b913ff6847bc12a2504a8b7b1d3) · 2025-01-27 · Blesilda Ramirez (blesildaramirez)
-- **Upstream** none found for the spinner (2026-10-01). `pkp/pkp-lib#13180` (open) is a review form whose save fails with the same script error; its open PRs `pkp/pkp-lib#13381` (main) and `pkp/pkp-lib#13380` (3.5) make the second of this report's two changes, not the one that removes the spinner
+- **Upstream** `pkp/pkp-lib#13489` (opened 2026-10-09 by an outside reporter, Safari users on 3.5.0-4) for the spinner: its open PRs `pkp/pkp-lib#13490` (main) and `pkp/pkp-lib#13491` (3.5) make the first of this report's two changes, which reaches an install that loads the minified script (`enable_minified = On`, 3.5's default) only once each app's `js/pkp.min.js` is rebuilt (PR review 2026-10-14, ci-triage Companion row). `pkp/pkp-lib#13180` (open) is a review form whose save fails with the same script error; its open PRs `pkp/pkp-lib#13381` (main) and `pkp/pkp-lib#13380` (3.5) make the second of this report's two changes, not the one that removes the spinner
 - **Tracked in** spec U09 [A20](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U09-custom-pages-and-blocks.md#a20)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
