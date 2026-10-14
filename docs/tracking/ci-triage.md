@@ -1051,8 +1051,17 @@ trips.
   site the fix does not cover: the favicon's `choose()`
   (`AppearancePages.js:241`) returns on the `temporaryFiles` answer, the
   save then went out without the file and the home page had no favicon
-  link (spec :430); lead: `UploadBox.choose()` waits for the box's own
-  preview before returning.
+  link (spec :430). Again twice 2026-10-13 (pkp-e2e 38459885243 on
+  `main`, 38387808192), the same line. **Fixed 2026-10-14**
+  (housekeeping; `.reports/flake-1014/u10s2-favicon/diagnosis.md`):
+  `UploadBox.choose()` and `chooseByKeyboard()` return only once dropzone
+  marks the upload done (`.dz-preview.dz-complete`, set with `success`,
+  when the form takes the file); a lever holding the page's handling of
+  the answer 1.5 s reds S2 5 of 5 before and 0 of 8 after; U10 whole file
+  `--repeat-each 5` at eight workers green on OJS 50/50, OMP and OPS 40/40,
+  U60 S9 and S11 green (patterns.md "Waiting strategy"). **Watch
+  condition**: a favicon, logo or style-sheet save read empty after the
+  fix.
 
 - **The OJS publish panel confirmed before its "Issue Assignment" is
   filled** (U13 S3 "an older version beside the current one"; CI's top

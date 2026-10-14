@@ -319,6 +319,15 @@ wait on `animationend`, and a true 0 can mean the event never fires.
   under 1 KB), since a press under load misses a 0.3 s window. The page's
   upload progress reaches 100% when the browser has taken the body, so it
   is no clock for the wire (U36 S9, 2026-09-28).
+- **An upload's answer is not the form taking the file.** A Vue upload
+  box (`FieldUpload`, dropzone) puts the file into its form only in
+  dropzone's `success`, after the request has finished, a moment after
+  `waitForResponse` sees the answer and longer on a loaded runner; a
+  "Save" pressed on the answer alone posts the form without the file. A
+  page object that uploads returns once the box has handled the answer:
+  dropzone's `.dz-preview.dz-complete` on the new preview
+  (`UploadBox.uploadHandled()`), or a preview that exists only while the
+  form holds a file (OJS U10 S2's favicon, 2026-10-14).
 
 ## Parallel-load lessons
 

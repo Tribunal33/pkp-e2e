@@ -230,21 +230,45 @@ class UploadBox extends BasePage {
         // screen-reader-only part.
         this.restoreButton = this.control.locator('button:not(.-screenReader button)').filter({hasText: /^\s*Restore Original\s*$/});
         this.refusal = this.field.getByText(WRONG_TYPE, {exact: true});
+        // Dropzone's file previews in the box whose upload the page has
+        // handled: dropzone marks one `dz-complete` right after its
+        // `success` (or `error`) handlers ran, in the same task, and the
+        // box's `success` is what puts the uploaded file into the form.
+        this.handledUploads = this.dropzone.locator('.dz-preview.dz-complete');
+    }
+
+    /**
+     * Wait for an upload's answer and for the page to have handled it.
+     * Playwright sees the answer when its headers arrive; the box takes the
+     * file only later, when the browser's request finishes and dropzone runs
+     * `success` (FieldUpload.vue), so a "Save" pressed on the answer alone
+     * can go out without the file (U10 S2's favicon on CI;
+     * .reports/flake-1014/u10s2-favicon/diagnosis.md). Returns the status.
+     *
+     * @param {Promise<import('@playwright/test').Response>} answered
+     * @param {number} handledBefore `handledUploads` counted before the press
+     */
+    async uploadHandled(answered, handledBefore) {
+        const r = await answered;
+        await expect(this.handledUploads).toHaveCount(handledBefore + 1, {timeout: T});
+        return r.status();
     }
 
     /**
      * Press "Upload File" and choose a file in the browser's file chooser;
-     * waits for the upload's answer and returns its status.
+     * waits for the upload's answer and for the box to have taken it (the
+     * form holds the file, or the box shows the refusal), and returns the
+     * answer's status.
      *
      * @param {{name: string, mimeType: string, buffer: Buffer}} file
      */
     async choose(file) {
+        const handledBefore = await this.handledUploads.count();
         const answered = this.page.waitForResponse((r) => /\/temporaryFiles/.test(r.url()) && r.request().method() === 'POST', {timeout: T});
         const chooser = this.page.waitForEvent('filechooser', {timeout: T});
         await this.uploadButton.click();
         await (await chooser).setFiles(file);
-        const r = await answered;
-        return r.status();
+        return this.uploadHandled(answered, handledBefore);
     }
 
     /**
@@ -295,8 +319,8 @@ class UploadBox extends BasePage {
      * Choose a file with the keyboard: a box holding a picture keeps its
      * "Upload File" in its screen-reader-only part, where the preview covers
      * it from the mouse but the keyboard reaches it; Enter opens the
-     * browser's file chooser. Waits for the upload's answer and returns its
-     * status.
+     * browser's file chooser. Waits for the upload's answer and for the box
+     * to have taken it (as `choose()`), and returns the answer's status.
      *
      * With `{tab: true}` the focus reaches "Upload File" by Tab presses
      * (`tabToUpload`) instead of being put there.
@@ -310,11 +334,12 @@ class UploadBox extends BasePage {
         // A round trip to the page, so the interception armed with this box
         // has reached the browser before Enter.
         await this.page.evaluate(() => 0);
+        const handledBefore = await this.handledUploads.count();
         const answered = this.page.waitForResponse((r) => /\/temporaryFiles/.test(r.url()) && r.request().method() === 'POST', {timeout: T});
         const chooser = this.page.waitForEvent('filechooser', {timeout: T});
         await this.page.keyboard.press('Enter');
         await (await chooser).setFiles(file);
-        return (await answered).status();
+        return this.uploadHandled(answered, handledBefore);
     }
 
     /**
