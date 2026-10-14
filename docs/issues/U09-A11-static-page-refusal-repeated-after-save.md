@@ -592,7 +592,7 @@ Small: a few lines in one shared pkp-lib file, tried.
     script failed, once, on OJS 3.5 with the static page window open:
     "Cannot read properties of undefined (reading 'serialize')", the
     fault of
-    [U09 A20's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U09-A20-first-language-content-box-stuck-loading.md).
+    U09 A20 ([pkp-e2e#376](https://github.com/jardakotesovec/pkp-e2e/issues/376)).
     The steps went on unchanged.
 - The fix was tried on `main` only, with `enable_minified = Off`, so the
   sources were served without a build, each walk on a freshly loaded

@@ -28,9 +28,9 @@
 //   bundle.sh <line> <pointer> <PR sha>              head with bundle-main.diff / bundle-3_5.diff
 //                                                    through bin/try-fix.js, enable_minified = On
 //   src35.sh <pointer> <PR sha>                      3.5 base and head with enable_minified = Off
-//   a20.sh <line> <PR sha>                           U09 A20's issue walk (checks/issues/
-//                                                    first-language-content-box-stuck-loading/)
-//                                                    on OJS, OMP, OPS at the pointers, then the PR
+// a20.sh ran U09 A20's issue walk on OJS, OMP, OPS the same way; both were deleted with A20's
+// report when pkp-e2e#376 closed at the merge (2026-10-14; in git at c194e6a7).
+// Merged 2026-10-14: #13490 as 689e7ec1a5, #13491 as 4045d9241e (each diff identical to the head).
 // bundle-*.diff stand in for a rebuilt js/pkp.min.js (no Java for Closure on the VM): the same
 // guard written into the committed bundle's handler, `!d.target.initialized||`.
 //

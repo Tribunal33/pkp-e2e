@@ -22,6 +22,9 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-14 — Merge: pkp/pkp-lib#13491 squash-merged 18:26 UTC as `4045d9241e` on `17711b1864`, its diff the reviewed head `a6dd49f958`'s byte for byte (entry below). No 3.5 app pointer or `js/pkp.min.js` carries it yet. Baselines not advanced.**
+  - `4045d9241e` → `=main 689e7ec1a5` (merged the same minute).
+
 - **2026-10-14 — PR review, pkp/pkp-lib#13489 on `stable-3_5_0` (asked in the channel by @jarda.kotesovec): pkp/pkp-lib#13491 (jomeridi `fix/13489-tinymce-placeholder-uninitialized-3_5_0`, head `a6dd49f958`, one commit on `d702d012dd`; the line tip is 5 commits past it, none touching `SiteHandler.js`), no app PRs. VM s1. Not merged; baselines not advanced.**
   - pkp-lib `a6dd49f958` → `=main 65f1315455` (pkp/pkp-lib#13490, PR review today, `upstream-sync.md`): the same patch (`git diff` of each against its base, `+`/`-` lines identical).
   - The line ships with `enable_minified = On` (`config.TEMPLATE.inc.php`, the 3.5 dataset's own config), which loads the apps' committed `js/pkp.min.js`: with the PR cherry-picked on the pointers (ojs lib/pkp `2196fa2775`, omp and ops `b1f342476a`) A20's issue walk is still stuck under "Loading..." in OJS, OMP and OPS, as at the pointers. With `enable_minified = Off` (`src35.sh`, OJS) the head is fixed and the pointer stuck; with `bundle-3_5.diff` (the guard in the bundle, a stand-in for a rebuild) and `On` it is fixed. The fix reaches 3.5 installs only through each app's rebuilt `pkp.min.js` and a pointer bump (asked on the issue by @blesildaramirez). The ci-triage Companion row carries the rest.

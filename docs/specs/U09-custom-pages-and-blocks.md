@@ -1261,6 +1261,7 @@ pkp-e2e's test runs it came up once on its own, in a full suite run on
 a loaded machine. Run 35 times per app without anything holding the
 second box back, the same tests passed every time.
 Basis: probe, 2026-10-01. <sup>f-a20</sup>
+Report: none — pkp-e2e#376 closed 2026-10-14 at the merge of the fix, `pkp/pkp-lib#13490` (`689e7ec1a5`; 3.5 `pkp/pkp-lib#13491`, `4045d9241e`); the entry retires when the apps' `js/pkp.min.js` carries the guard and `checks/sync/pkp-lib-13490/stuck-editors.js` reads fixed at the tips with `enable_minified = On` (ci-triage Flake watch, "U09 S6's formatted box stuck") (2026-10-14)
 
 ---
 
@@ -2298,7 +2299,8 @@ passed 35 of 35 runs per app. Not driven: the static page window, whose
 language boxes are built the same way, and whether closing and
 reopening the window clears it. The suites take no workaround; a stuck
 box fails its test with a message naming it.
-Issue report: [pkp-e2e#376](https://github.com/jardakotesovec/pkp-e2e/issues/376) ([docs/issues/U09-A20-first-language-content-box-stuck-loading.md](../issues/U09-A20-first-language-content-box-stuck-loading.md)).
+Fixed in pkp-lib by `pkp/pkp-lib#13490` (`689e7ec1a5`, `main`) and `pkp/pkp-lib#13491` (`4045d9241e`, 3.5), merged 2026-10-14 for `pkp/pkp-lib#13489`: the `deactivate` handler skips an editor whose `initialized` is false. Driven at the PR heads on the default dataset (PR review 2026-10-14, `checks/sync/pkp-lib-13490/`): fixed with the source scripts in OJS, OMP and OPS; still stuck with `enable_minified = On` until each app rebuilds its committed `js/pkp.min.js`. `isIncomplete_()` keeps its throw (`pkp/pkp-lib#13180`).
+Issue report: [pkp-e2e#376](https://github.com/jardakotesovec/pkp-e2e/issues/376), closed 2026-10-14 at that merge; the report and its walk were deleted then (in git before that commit).
 
 ## Reference — entry points & surfaces
 
