@@ -60,6 +60,7 @@ categories, announcements, the About pages, login and registration.
 | [12](#finding-12) | Smaller bugs (dates, labels, raw keys, escaping, accessibility, warnings, build) | low | small | Driven / Code |
 | [13](#finding-13) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
 | [14](#finding-14) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
+| [15](#finding-15) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | low | small | Driven |
 
 Findings 1 and 2 carry the `security` label. Eidos is unreleased, so per
 the security policy they are ordinary findings. Two manager-only
@@ -432,6 +433,39 @@ length. The fade only belongs when the text reaches `max-height`
 **Fix.** Draw the fade only when the text overflows. For example, add a
 class from JavaScript when `scrollHeight > clientHeight`, or replace the
 fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
+
+<a name="finding-15"></a>
+## Finding 15: the Highlights image is cropped to fit its box
+
+- **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
+
+**What happens.**
+- On the home page's Highlights slider, the image does not fit its box.
+  It is scaled to fill the box and cut at the edges, so an image with
+  text loses its first letters ("Two versions, two rounds of open
+  review" reads "wo versions, wo rounds of pen review").
+- On the same slide, the "previous" arrow and the slide dots sit on the
+  image in the block text colour (dark by default), so on a dark image
+  they are barely visible.
+
+![A highlight image cut at the left edge](img/2026-10-14-eidos-theme/15-highlights-crop.png)
+
+**Cause.** `plugins/themes/eidos/src/css/components/homepage-blocks/highlights.css`.
+- `.swiper-slide-image` has `object-fit: cover` and `aspect-ratio: 1.5 / 1`.
+- From 1280 px the slide is a `3fr 2fr` grid capped at `max-height: 32rem`,
+  and the image gets `align-self: stretch`. So the image fills a box
+  whose shape changes with the window width, and cover crops whatever
+  does not match. Nothing tells the manager what shape the image should
+  be: the Highlights form only says "Image".
+- The arrows and dots take `--swiper-theme-color: var(--color-block-text)`
+  and sit over the image half of the slide.
+
+**Fix.**
+- Keep the image's own shape: `object-fit: contain`, or a fixed
+  `aspect-ratio` without `stretch`. Otherwise state the expected aspect
+  ratio and size next to the upload field.
+- Give the arrows and dots a contrasting background, or place them
+  outside the image.
 
 ## Evidence
 
