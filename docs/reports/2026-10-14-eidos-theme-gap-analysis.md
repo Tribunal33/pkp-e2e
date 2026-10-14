@@ -44,6 +44,7 @@ heading):
   lose their journal and date
 - [16](#finding-16): review recommendations use the journal's wording,
   not the normalized label
+- [18](#finding-18): anonymous reviews in the by-reviewer view
 
 - Pages Eidos has no template for render unstyled (1), and only four
   plugin hooks are fired (2).
@@ -82,7 +83,7 @@ heading):
 | [15](#finding-15) | Footer no longer links to About this Publishing System | Default | — | Driven | |
 | [16](#finding-16) | Review recommendations use the journal's wording, not the normalized label | ORE | — | Driven | 🔴 |
 | [17](#finding-17) | A registered review DOI does not open its review | ORE | — | Driven | |
-| [18](#finding-18) | Anonymous reviews in the by-reviewer view (ORE breaks too) | ORE | — | Driven | |
+| [18](#finding-18) | Anonymous reviews in the by-reviewer view (ORE breaks too) | ORE | — | Driven | 🔴 |
 | [19](#finding-19) | No Crossref "Cited by" | ORE | — | Code | |
 
 ## How it looks
@@ -460,7 +461,7 @@ writes the address. ui-library `usePkpOpenReviewStore.js`
 <a name="finding-18"></a>
 ## Finding 18: anonymous reviews in the by-reviewer view
 
-- **Compared with** the ORE theme · Driven
+- **Compared with** the ORE theme · Driven · 🔴 **Before merging**
 
 **Eidos.** Sorted by reviewer, every anonymous review falls into one
 group whose heading is empty (an empty `<h3>`). Two anonymous reviews in
