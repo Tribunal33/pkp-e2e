@@ -64,7 +64,7 @@ categories, announcements, the About pages, login and registration.
 | [18](#finding-18) | The header logo has no alternative text | low | small | Driven |
 | [19](#finding-19) | The login password field has an invalid `autocomplete` value | low | small | Driven |
 | [20](#finding-20) | The search field's label is the text `{$label}` | low | small | Code |
-| [21](#finding-21) | The search form reads a variable nothing assigns | low | small | Driven |
+| [21](#finding-21) | Search breaks on installs without path info (the form drops its address's query string) | low | small | Driven |
 | [22](#finding-22) | The search date pickers show English month names in every language | low | small | Code |
 | [23](#finding-23) | Supplementary galleys are never found in listings | low | small | Code |
 | [24](#finding-24) | An article galley shows the issue's price | low | small | Code |
@@ -572,20 +572,42 @@ A Smarty leftover, printed as text.
 callers.
 
 <a name="finding-21"></a>
-## Finding 21: the search form reads a variable nothing assigns
+## Finding 21: search breaks on installs without path info
 
-- **Severity** low · **Effort** small · Driven (warnings on every search)
+- **Severity** low · **Effort** small · Driven (the warnings), Code (the consequence)
 
-**What happens.** Every search page logs "Undefined variable
-$formUrlParameters" and "foreach() argument must be of type
-array|object". The hidden fields the loop was meant to keep across a new
-search are never written.
+**What happens.**
+- **With the default setup, nothing is lost.** The query and the date
+  filters are ordinary form fields and survive a new search; the
+  maintainer confirmed it on another instance. Each search logs two
+  warnings: "Undefined variable $formUrlParameters" and "foreach()
+  argument must be of type array|object".
+- **On an install with `disable_path_info = On`**, the search form's
+  address carries the journal and page in its query string
+  (`index.php?journal=…&page=search&op=search`). A GET form drops that
+  query string when it submits, so the search leaves the journal. The
+  hidden fields the loop was meant to write are what keeps those
+  parameters. Not driven.
 
-**Where.** `components/search-form.blade:6-8` loops
-`$formUrlParameters`, which no handler or template assigns.
+**Where.** `components/search-form.blade:6-8` loops `$formUrlParameters`,
+which nothing assigns. The Default theme builds it from the form's own
+address (`templates/frontend/pages/search.tpl:35-38`):
 
-**Fix.** Remove the loop, or loop the filters the page already has
-(`$dateFrom…`, `$dateTo…`) if they are meant to survive a new query.
+```smarty
+{assign var=formUrlParameters value=[]}
+{$smarty.capture.searchFormUrl|parse_url:$smarty.const.PHP_URL_QUERY|default:""|parse_str:$formUrlParameters}
+{foreach from=$formUrlParameters key=paramKey item=paramValue}
+```
+
+ORE does the same in `searchComponent.blade:19-20,130`.
+
+**Fix.** Build the variable before the loop, as ORE does:
+
+```php
+$searchFormUrl = ViewHelper::url(['page' => 'search', 'op' => 'search']);
+$formUrlParameters = [];
+parse_str(parse_url($searchFormUrl, PHP_URL_QUERY) ?? '', $formUrlParameters);
+```
 
 <a name="finding-22"></a>
 ## Finding 22: the search date pickers show English month names in every language
