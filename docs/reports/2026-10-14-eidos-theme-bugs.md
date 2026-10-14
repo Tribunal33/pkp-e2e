@@ -57,14 +57,35 @@ categories, announcements, the About pages, login and registration.
 | [9](#finding-9) | Full-issue PDF crashes the viewer template and downloads instead | medium | small | Driven |
 | [10](#finding-10) | Peer review shown per journal, not per article; metrics block inverted | medium | small | Driven |
 | [11](#finding-11) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
-| [12](#finding-12) | Smaller bugs (dates, labels, raw keys, escaping, accessibility, warnings, build) | low | small | Driven / Code |
-| [13](#finding-13) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
-| [14](#finding-14) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
-| [15](#finding-15) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | low | small | Driven |
+| [12](#finding-12) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
+| [13](#finding-13) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
+| [14](#finding-14) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | low | small | Driven |
+| [15](#finding-15) | Every OJS article's date is labelled "Posted" | low | small | Driven |
+| [16](#finding-16) | "Version history" is offered when there is only one version | low | small | Driven |
+| [17](#finding-17) | Page titles are escaped twice | low | small | Driven |
+| [18](#finding-18) | Three raw translation keys | low | small | Driven |
+| [19](#finding-19) | No `<main>` landmark on the home, article and sign-in pages | low | small | Driven |
+| [20](#finding-20) | Two `<h1>` on every page when a logo is set | low | small | Driven |
+| [21](#finding-21) | The header logo has no alternative text | low | small | Driven |
+| [22](#finding-22) | The login password field has an invalid `autocomplete` value | low | small | Driven |
+| [23](#finding-23) | The search field's label is the text `{$label}` | low | small | Code |
+| [24](#finding-24) | The search form reads a variable nothing assigns | low | small | Driven |
+| [25](#finding-25) | The search date pickers show English month names in every language | low | small | Code |
+| [26](#finding-26) | Supplementary galleys are never found in listings | low | small | Code |
+| [27](#finding-27) | An article galley shows the issue's price | low | small | Code |
+| [28](#finding-28) | Share links put the article address in unencoded | low | small | Code |
+| [29](#finding-29) | The account menu's `aria-label` is unquoted | low | small | Code |
+| [30](#finding-30) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
+| [31](#finding-31) | Comment dates are always shown as "… ago" | low | small | Code |
+| [32](#finding-32) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
+| [33](#finding-33) | PHP warnings on nearly every page | low | small | Driven |
+| [34](#finding-34) | Colour options go unchecked into the page's styles (manager-entered) (security) | low | small | Driven |
+| [35](#finding-35) | The issue summary decodes escaped text into markup (manager-entered) (security) | low | small | Driven |
+| [36](#finding-36) | `npm ci` fails on the theme | low | small | Driven |
 
 Findings 1 and 2 carry the `security` label. Eidos is unreleased, so per
 the security policy they are ordinary findings. Two manager-only
-injections are in finding 12.
+injections are in findings 34 and 35.
 
 <a name="finding-1"></a>
 ## Finding 1: the search page prints the query as HTML
@@ -364,37 +385,7 @@ and default both variables to 0 in `classes/MetadataBlocks.php:38-41`.
 ![Contact page](img/2026-10-14-eidos-theme/10-contact.png)
 
 <a name="finding-12"></a>
-## Finding 12: smaller bugs
-
-All low, small effort.
-
-| What | Where | Seen |
-|---|---|---|
-| Every OJS article's date is labelled "Posted" (OPS wording) instead of "Published". `getData('versionStage')` is the string `'VoR'`, compared with the enum, so the comparison is never true | `lib/pkp/templates/components/metadata-blocks/date-published.blade:5` | Driven |
-| "Version history" dropdown on articles with one version | `lib/pkp/templates/components/metadata-blocks/version.blade:10` (`count(...)`, should be `> 1`) | Driven |
-| Page titles double-escaped: "Neural networks &amp;amp; species…" in the browser tab | `components/layout/index.blade:40`, `galley.blade:16`, `system/layout.blade:16` | Driven |
-| Raw translation keys: `##plugins.themes.eidos.menu##` (the mobile menu button's screen-reader text, every page), `##plugins.themes.individualizeTheme.backToTitle##` (subcategory page), `plugins.themes.individualizeTheme.announcements.none` (copied from another theme) | `header/mobile.blade:32`, `catalogCategory.blade:40`, `announcements.blade:9` | Driven (first two) |
-| No `<main>` landmark on the home, article, login, register and lost-password pages (axe `landmark-one-main`; the Default theme passes) | layouts | Driven |
-| Two `<h1>` on every page when a logo is set (a hidden site name plus the page's) | `header/mobile.blade:11` | Driven |
-| Logo without alt text: the desktop `<img>` has none, and the mobile one reads `['alt']` where the key is `altText` | `header/desktop.blade:50-51`, `mobile.blade:15` | Driven |
-| Login password field `autocomplete="password"` (invalid; axe) | `userLogin.blade:56` | Driven |
-| Search field's label is the Smarty leftover `{$label}` | `components/search-form.blade:12` | Code |
-| Search form loops `$formUrlParameters`, which nothing assigns (warning on every search) | `components/search-form.blade:6` | Driven |
-| Date pickers on Search show English month names in every language (`date('M')`) | `lib/pkp/templates/components/date-select.blade:22` | Code |
-| Supplementary galleys never found in listings (galley id compared with genre ids) | `components/article-summary.blade:77` | Code |
-| Article galleys show the issue fee (`purchaseIssueFee`) as their price | `components/galley-link.blade:49-53` | Code |
-| Share links put the page address in query strings without URL-encoding | `components/share-links.blade:22-50` | Code |
-| Account menu `aria-label={{ … }}` unquoted (breaks on multi-word translations) | `header/utility-menu.blade:15` | Code |
-| Comments and Metrics tabs put `json_encode` output in single-quoted `v-bind='…'` (a `'` in a translation breaks them; use `@json`) | `tab-comments.blade:7`, `tab-metrics.blade:7` | Code |
-| Comment dates: `new Date().getTime() - dateTime.toTimeString()` is NaN, so comments always show a relative date; `msWeek = 605800000` | ui-library `src/frontend/components/PkpComments/usePkpCommentsStore.js:131-133` | Code |
-| "Latest Announcement" block, on by default, stays empty until "Display on homepage" has a number (silent) | `homepage-blocks/announcement.blade` | Driven |
-| PHP warnings from undefined Blade props on nearly every page (`$class`, `$labelledBy`, `$description`, `$head`, `$pubIdPlugins`, `$error`, `$altchaEnabled`, `privacyConsent`, `$primaryFileGenreIds`, …): logs fill on production | many components | Driven |
-| **Manager-entered (low by rule):** colour options go raw into an inline `<style>`. A stored `…</style><script>` runs (the Default theme validates, pkp-lib#11974) | `classes/Options.php:170-273` → `EidosTheme.php:45` | Driven |
-| **Manager-entered:** the issue summary's `html2text` decodes entities, so an issue description containing `&lt;img onerror…&gt;` runs on the home page | `templates/components/issue-summary.blade:36` (OJS) | Driven |
-| `npm ci` fails: `package-lock.json` is out of step with `package.json` (`@emnapi/*`). `npm install` works | `plugins/themes/eidos/package-lock.json` | Driven |
-
-<a name="finding-13"></a>
-## Finding 13: side effect on the Default theme, the comments sign-in link
+## Finding 12: side effect on the Default theme, the comments sign-in link
 
 - **Severity** low · **Effort** small · Driven
 
@@ -410,8 +401,8 @@ the PR (was `:141`, `'#public-comments'`).
 **Fix.** Let the theme supply the return anchor, or keep both, as in
 `?section=comments#public-comments`.
 
-<a name="finding-14"></a>
-## Finding 14: a short issue description is faded out almost completely
+<a name="finding-13"></a>
+## Finding 13: a short issue description is faded out almost completely
 
 - **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
 
@@ -434,8 +425,8 @@ length. The fade only belongs when the text reaches `max-height`
 class from JavaScript when `scrollHeight > clientHeight`, or replace the
 fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 
-<a name="finding-15"></a>
-## Finding 15: the Highlights image is cropped to fit its box
+<a name="finding-14"></a>
+## Finding 14: the Highlights image is cropped to fit its box
 
 - **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
 
@@ -467,6 +458,432 @@ fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 - Give the arrows and dots a contrasting background, or place them
   outside the image.
 
+<a name="finding-15"></a>
+## Finding 15: every OJS article's date is labelled "Posted"
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** In the sidebar and in the Metadata tab, the
+publication date of every article is headed "Posted", the word preprint
+servers use. The Default theme says "Published".
+
+**Where.** `lib/pkp/templates/components/metadata-blocks/date-published.blade:4-8`:
+
+```blade
+$publication->getData('versionStage') === APP\publication\enums\VersionStage::VERSION_OF_RECORD
+    ? __('submissions.published')
+    : __('announcement.posted')
+```
+
+`getData('versionStage')` returns the stored string (`'VoR'`), not the
+enum, so the strict comparison is never true.
+
+**Fix.** Compare with the enum's value:
+`$publication->getData('versionStage') === VersionStage::VERSION_OF_RECORD->value`.
+
+<a name="finding-16"></a>
+## Finding 16: "Version history" is offered when there is only one version
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** Every article shows a "Version history" dropdown under
+its version, even when only one version is published. The dropdown then
+lists just the version already shown.
+
+**Where.** `lib/pkp/templates/components/metadata-blocks/version.blade:10`:
+`@if (count($submission->getPublishedPublications()))` is true for one
+version.
+
+**Fix.** `@if (count($submission->getPublishedPublications()) > 1)`.
+
+<a name="finding-17"></a>
+## Finding 17: page titles are escaped twice
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** A title holding `&` shows as "Neural networks
+&amp;amp; species identification" in the browser tab, in bookmarks and in
+search engines' results. The same happens to `<`, `>` and quotes, and to
+the h1 of pages built on the basic layout (About, Contact and others).
+
+**Where.** Pages pass the title as an attribute,
+`<x-layout.index title="{{ … }}">`, which escapes it once, and the
+layout prints it with `{{ }}` again:
+- `components/layout/index.blade:40`, `<title>{{ $title }}</title>`
+- `components/layout/galley.blade:16`
+- `components/system/layout.blade:16`
+- `components/layout/basic.blade:22`, the h1
+- `components/system/form-input.blade:15`, the form labels (a French
+  label with an apostrophe would show `&#039;`)
+
+**Fix.** Pass the raw value with a bound attribute,
+`:title="$article->getLocalizedFullTitle()"`, so it is escaped once when
+printed.
+
+<a name="finding-18"></a>
+## Finding 18: three raw translation keys
+
+- **Severity** low · **Effort** small · Driven (first two)
+
+**What happens.**
+- **Every page:** the mobile menu button's hidden label is
+  `##plugins.themes.eidos.menu##`, which screen readers read aloud.
+- **A subcategory's page:** the "back to the parent category" link's
+  `aria-label` is `##plugins.themes.individualizeTheme.backToTitle##`.
+- **Announcements with none published:** the notice text is the key
+  `plugins.themes.individualizeTheme.announcements.none`.
+
+**Where.** `components/header/mobile.blade:32`,
+`frontend/pages/catalogCategory.blade:40`,
+`frontend/pages/announcements.blade:9`. The last two keys come from
+another theme ("Individualize") and are in no locale file.
+
+**Fix.** Add `plugins.themes.eidos.menu` to `locale/en/locale.po`, and
+give the other two Eidos keys (or reuse core ones such as
+`announcement.noneExist`).
+
+<a name="finding-19"></a>
+## Finding 19: no `<main>` landmark on the home, article and sign-in pages
+
+- **Severity** low · **Effort** small · Driven (axe `landmark-one-main`)
+
+**What happens.** Screen-reader users cannot jump to the main content
+with the landmark shortcut on the home page, article pages, login,
+register and lost-password pages. The Default theme passes this check on
+all of them, and so do Eidos's About and category pages.
+
+**Where.**
+- `frontend/pages/indexJournal.blade:5` uses
+  `<div class="page-container page-homepage" id="skip-to-main">`.
+- `frontend/pages/article.blade:11` uses `<article … id="skip-to-main">`.
+- `components/system/layout.blade` (login, register, lost password) has
+  no `<main>`.
+
+`components/layout/basic.blade:16` and `catalogCategory.blade:17` do use
+`<main>`.
+
+**Fix.** Wrap each page's content in
+`<main id="skip-to-main">`, with the `<article>` inside it.
+
+<a name="finding-20"></a>
+## Finding 20: two `<h1>` on every page when a logo is set
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** With a header logo, every page has a hidden `<h1>`
+with the site's name before the page's own `<h1>`, so screen readers
+announce two top headings. On a journal page it even reads the site
+name, not the journal's.
+
+**Where.** `components/header/mobile.blade:11-13`:
+`<h1 class="sr-only">{{ $siteName }}</h1>`. The desktop header uses a
+`<div class="sr-only">` with `$contextName` (`desktop.blade:47-49`).
+
+**Fix.** Use the desktop header's markup: a `<div>` or `<span>` with
+`$contextName`.
+
+<a name="finding-21"></a>
+## Finding 21: the header logo has no alternative text
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** The logo's alt text, entered by the manager when
+uploading it, is never used. The desktop logo has no `alt` at all, and
+the mobile logo's `alt` is always empty.
+
+**Where.**
+- `components/header/desktop.blade:50-51`: `<img class="header-desktop-logo" src="…">`,
+  with no `alt`.
+- `components/header/mobile.blade:15` reads
+  `$displayPageHeaderLogo['alt']`, but the stored key is `altText` (the
+  Default theme's `header.tpl:55` reads `altText`).
+
+**Fix.** On both images:
+`alt="{{ $displayPageHeaderLogo['altText'] ?? $contextName }}"`.
+
+<a name="finding-22"></a>
+## Finding 22: the login password field has an invalid `autocomplete` value
+
+- **Severity** low · **Effort** small · Driven (axe `autocomplete-valid`)
+
+**What happens.** Password managers and browsers may not offer to fill
+the saved password on Eidos's login page.
+
+**Where.** `frontend/pages/userLogin.blade:53`: `autocomplete="password"`.
+
+**Fix.** `autocomplete="current-password"`. The username field takes
+`autocomplete="username"`.
+
+<a name="finding-23"></a>
+## Finding 23: the search field's label is the text `{$label}`
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** Screen readers announce the search box on the search
+page and in the header as "{$label}".
+
+**Where.** `components/search-form.blade:11-13`:
+
+```blade
+<label for="search-input" class="sr-only">
+    {$label}
+</label>
+```
+
+A Smarty leftover, printed as text.
+
+**Fix.** `{{ __('common.search') }}`, or a `label` prop passed by the
+callers.
+
+<a name="finding-24"></a>
+## Finding 24: the search form reads a variable nothing assigns
+
+- **Severity** low · **Effort** small · Driven (warnings on every search)
+
+**What happens.** Every search page logs "Undefined variable
+$formUrlParameters" and "foreach() argument must be of type
+array|object". The hidden fields the loop was meant to keep across a new
+search are never written.
+
+**Where.** `components/search-form.blade:6-8` loops
+`$formUrlParameters`, which no handler or template assigns.
+
+**Fix.** Remove the loop, or loop the filters the page already has
+(`$dateFrom…`, `$dateTo…`) if they are meant to survive a new query.
+
+<a name="finding-25"></a>
+## Finding 25: the search date pickers show English month names in every language
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** In "Published After" and "Published Before" the month
+list reads Jan, Feb, … whatever the reader's language. The Default
+theme's pickers are translated.
+
+**Where.** `lib/pkp/templates/components/date-select.blade:22`:
+`date('M', strtotime('2020-' . $i . '-01'))`. PHP's `date()` is always
+English.
+
+**Fix.** Use the locale's month names, for example
+`\Carbon\Carbon::create(2020, $i)->locale(Locale::getLocale())->isoFormat('MMM')`,
+or the same source the Default theme's date picker uses.
+
+<a name="finding-26"></a>
+## Finding 26: supplementary galleys are never found in listings
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** With article galleys shown in the table of contents
+(the theme's "Issue Table of Contents" option), a supplementary galley,
+such as a dataset uploaded as a supplementary file, is never listed as
+supplementary.
+
+**Where.** `components/article-summary.blade:77`:
+`in_array($galley->getId(), $supplementaryFileGenreIds)` compares a
+**galley id** with **genre ids**. Line 75 also calls
+`$galley->getFile()->getGenreId()` without checking that the galley has
+a file.
+
+**Fix.** `in_array($galley->getFile()?->getGenreId(), $supplementaryFileGenreIds)`,
+as line 75 does for primary files.
+
+<a name="finding-27"></a>
+## Finding 27: an article galley shows the issue's price
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** On a subscription journal with per-article purchase,
+a locked article galley shows the price set for buying a whole issue.
+
+**Where.** `components/galley-link.blade:49-53`:
+`$galleyContext->getSetting('purchaseIssueFee')` for every galley.
+`$galleyContext` itself is never assigned (only `$galleyContextPath` is,
+line 18), so today the price never shows at all.
+
+**Fix.** Use `purchaseArticleFee` for article galleys and
+`purchaseIssueFee` for issue galleys, as the Default theme's
+`galley_link.tpl` does, and assign the context.
+
+<a name="finding-28"></a>
+## Finding 28: share links put the article address in unencoded
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** The Facebook, X, Reddit, LinkedIn, Telegram and email
+share links put the article's address into their own query string as
+is. An address carrying its own query or `&` breaks the share link.
+
+**Where.** `components/share-links.blade:8-50`: the title is
+`urlencode()`d (`$urlEncodedTitle`), the address `{$url}` is not.
+
+**Fix.** `$urlEncodedUrl = urlencode($url);` next to the title, and use it
+in every link.
+
+<a name="finding-29"></a>
+## Finding 29: the account menu's `aria-label` is unquoted
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** In a language whose word for "Account" has a space,
+the button's label is cut at the first word, and the rest becomes stray
+attributes.
+
+**Where.** `components/header/utility-menu.blade:15`:
+`aria-label={{ __('plugins.themes.eidos.account') }}`.
+
+**Fix.** `aria-label="{{ __('plugins.themes.eidos.account') }}"`.
+
+<a name="finding-30"></a>
+## Finding 30: the Comments and Metrics tabs break on an apostrophe in their data
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** The Comments and Metrics tabs hand their data to Vue
+inside a single-quoted attribute. An apostrophe anywhere in that data (a
+translated text such as French "d'un", or a version name) ends the
+attribute early, and the tab fails to render.
+
+**Where.** `components/article/tab-comments.blade:3-7` and
+`tab-metrics.blade:3-7`:
+
+```blade
+$json = json_encode($userCommentsInitConfig);
+<pkp-comments v-bind='{!! $json !!}'></pkp-comments>
+```
+
+The `{{`/`}}` replacements alter the data too.
+
+**Fix.** `v-bind='@json($userCommentsInitConfig)'`, as the Cite button
+already does (`components/article/sidebar.blade:42`). Blade's `@json`
+escapes the apostrophe.
+
+<a name="finding-31"></a>
+## Finding 31: comment dates are always shown as "… ago"
+
+- **Severity** low · **Effort** small · Code
+
+**What happens.** A comment from last year still shows "11 months ago"
+instead of switching to a short date after a week, as intended.
+
+**Where.** ui-library `src/frontend/components/PkpComments/usePkpCommentsStore.js:131-133`
+(new in ui-library#972):
+
+```js
+const msWeek = 605800000;
+const moreThanWeekOld = new Date().getTime() - dateTime.toTimeString() > msWeek;
+```
+
+`toTimeString()` is text, so the subtraction is `NaN` and the test is
+always false. A week is also 604800000 ms.
+
+**Fix.** `Date.now() - dateTime.getTime() > 604800000`.
+
+<a name="finding-32"></a>
+## Finding 32: the "Latest Announcement" block stays empty without saying why
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** "Latest Announcement" is the first home page block
+Eidos turns on by default. With announcements enabled and published, it
+shows nothing until the manager also fills in Settings › Website ›
+Announcements › "Display on homepage" with a number. Nothing on the
+theme's options says so.
+
+**Where.** `lib/pkp/pages/index/PKPIndexHandler.php:42` loads
+announcements only when `numAnnouncementsHomepage` is set, and
+`lib/pkp/templates/components/homepage-blocks/announcement.blade:1`
+shows the block only when some were loaded.
+
+**Fix.** Either load the latest announcement for the block whenever it
+is ticked, or say in the option's description that it needs "Display
+on homepage".
+
+<a name="finding-33"></a>
+## Finding 33: PHP warnings on nearly every page
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** Eidos's templates read variables that their callers
+do not always pass, so most pages write "Undefined variable" or
+"Undefined array key" warnings to the server log. Production logs fill
+up, and real errors are harder to see.
+
+Seen in the walk:
+
+| Variable | Template |
+|---|---|
+| `$description` | `components/layout/index.blade`, `layout/basic.blade`, `layout/galley.blade`, `system/layout.blade` |
+| `$head`, `$downloadUrl` | `components/layout/galley.blade`, `system/layout.blade` |
+| `$subtitle` | `components/layout/basic.blade` |
+| `$class`, `$labelledBy` | `components/galley-link.blade` |
+| `$pubIdPlugins` | `components/issue-toc.blade` |
+| `$primaryFileGenreIds` | `components/article-summary.blade` |
+| `$citation` | `components/article/sidebar.blade` |
+| `$error`, `$recaptchaPublicKey`, `$altchaEnabled` | `frontend/pages/userLogin.blade` |
+| `$error`, `$altchaEnabled`, `$source` | `frontend/pages/userLostPassword.blade` |
+| `privacyConsent` | `frontend/pages/userRegister.blade` |
+| `dateEnd` | `frontend/pages/editorialMasthead.blade` |
+
+**Where.** The components declare no `@props`, so an attribute a caller
+leaves out is simply undefined.
+
+**Fix.** Declare optional props with defaults, as in
+`@props(['description' => null, 'head' => null])`, or read them with
+`?? null`.
+
+<a name="finding-34"></a>
+## Finding 34: colour options go unchecked into the page's styles (manager-entered)
+
+- **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
+
+**What happens.** The theme's colour values are written into an inline
+`<style>` on every page without checking that they are colours. A stored
+value such as `#F4F1EA;}</style><script>…</script>` ran its script on the
+home page. The colour picker sends only colours, but the settings API
+accepts any text. The Default theme validates its colour for exactly
+this reason (pkp-lib#11974).
+
+**Where.** `plugins/themes/eidos/classes/Options.php:170-273`
+(`getCssVariables`) feeds `getCssVariablesString()`, added inline at
+`EidosTheme.php:45`.
+
+**Fix.** As the Default theme does (`DefaultThemePlugin.php:170,246`):
+accept only `/^#[0-9a-fA-F]{3,8}$/` on save and on output, and fall back
+to the default colour otherwise.
+
+<a name="finding-35"></a>
+## Finding 35: the issue summary decodes escaped text into markup (manager-entered)
+
+- **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
+
+**What happens.** An issue description holding escaped markup as text,
+such as `&lt;img src=x onerror=…&gt;`, is turned back into a real tag by
+the home page's issue summary block, and its script runs. The issue
+page itself prints the same description safely.
+
+**Where.** `templates/components/issue-summary.blade:36` (OJS):
+`{!! ViewHelper::html2text($issue->getLocalizedDescription()) !!}`.
+`html2text()` strips tags, then decodes entities
+(`lib/pkp/classes/core/PKPString.php:192`), and the result is printed
+raw.
+
+**Fix.** Print the plain text escaped:
+`{{ ViewHelper::html2text($issue->getLocalizedDescription()) }}`.
+
+<a name="finding-36"></a>
+## Finding 36: `npm ci` fails on the theme
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** In `plugins/themes/eidos`, `npm ci` stops with "npm ci
+can only install packages when your package.json and package-lock.json
+… are in sync", listing `@emnapi/core`, `@emnapi/runtime` and
+`@emnapi/wasi-threads`. `npm install` works but rewrites the lock file.
+A release or CI build that uses `npm ci` cannot build Eidos.
+
+**Fix.** Run `npm install` in the theme and commit the updated
+`package-lock.json`.
+
 ## Evidence
 
 - **Heads.**
@@ -479,7 +896,7 @@ fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (finding 12).
+    build`; `npm ci` fails (finding 36).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
@@ -510,7 +927,7 @@ fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
   - `[captcha] altcha` (finding 4)
   - `sitewide_privacy_statement` and the site privacy statement (finding 4)
   - the site's theme and title (finding 7)
-  - `primaryColor` and the issue description (finding 12)
+  - `primaryColor` and the issue description (findings 34, 35)
 - **Each page on both themes.** About 40 reader pages were opened at
   1280 px and 390 px on Eidos, and at 1280 px on the Default theme, with
   axe-core 4.10.2 (WCAG 2.1 A/AA plus best practice). The console, failed
