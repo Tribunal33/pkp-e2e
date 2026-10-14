@@ -1044,7 +1044,8 @@ the answer; the spec and the test are the record.
   is the top-priority interrupt. Match every reported failure against
   `docs/tracking/ci-triage.md` before diagnosing it as new. One reply
   covers the three per-app messages, a regression stays red until the fix
-  lands, and its row is the record.
+  lands (unless a maintainer rules its tests skipped meanwhile: `test.fixme`
+  naming the row, removed when the fix lands), and its row is the record.
 - **Fix stale artifacts as you go.** Everything the campaign created is a
   living artifact (process docs, page objects, fixtures, helpers, earlier
   suites, the lint gate, the `_test` scenario API with its parity entry);

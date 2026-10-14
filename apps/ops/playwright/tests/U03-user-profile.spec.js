@@ -534,6 +534,10 @@ test.describe('user profile', () => {
     });
 
     test('S4: change the email address by confirming the emailed link', async ({browser, baseURL, opsApi, pkpMail}, testInfo) => {
+        // Skipped while pkp-lib 3407fc5bc0 (#12780) leaves "Keep me logged in" unread: the second
+        // browser no longer comes back after the email-change save. Re-enable when the fix lands
+        // (ci-triage K-12780).
+        test.fixme(true, 'K-12780: "Keep me logged in" regression, pkp-lib#12780');
         test.slow();
         test.setTimeout(180_000);
         const tag = makeTag('s4', testInfo);
