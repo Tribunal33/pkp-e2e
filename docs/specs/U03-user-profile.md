@@ -39,16 +39,19 @@ user's.
 | **Open the Profile page** | • Any signed-in user, whatever their roles, including a user with no role anywhere and the Site Administrator (Rule 1)<br>• Signed out, the profile address shows the Login page and continues to the profile after sign-in (the *Login & sessions* interrupted-visit rule) <sup>a</sup> |
 | **Edit Identity, Contact, Public, Password, Notifications** | • The account holder, for their own account only (Rules 4–11) <sup>a</sup> |
 | **Request an email-address change** | • The account holder, while no other change of theirs is pending (Rule 6) <sup>d</sup> |
-| **Confirm or reject an email-address change** | • Whoever opens the emailed link, signed in or not; the link alone decides, and a signed-out visitor is asked to sign in only afterwards (Rules 6c–6d) <sup>d</sup> |
+| **Confirm or reject an email-address change** | • Whoever opens the emailed link, signed in or not; the link alone decides, and a signed-out visitor is asked to sign in only afterwards (Rules 6c–6d). Opened in a browser signed in as another account, "confirm" still switches the requesting account's address, and that other account lands on its own Contact tab with no message saying whose address changed ⚠ [A21](#a21) <sup>d</sup> |
 | **Take or give up a role on the Roles tab** | • Any signed-in user, from a Reader to the Site Administrator, sees the same boxes: the roles a journal marks as open to self-registration, in journals that accept registrations (Rule 8). A role without a box on this tab can be neither taken nor dropped here, and a box that is there ends the role whoever granted it ⚠ [A6](#a6) <sup>e</sup> |
 | **Create or delete an API key** | • The account holder, when the installation has an API secret configured (Rule 12d) <sup>h</sup> |
 
 ## Fields & validation
 
-Every tab ends with the sentence "Your data is stored in accordance with our
-privacy statement." (the link opens the journal's Privacy Statement page in a
-new tab; on the site-level profile it opens an error page instead
-[A14](#a14)). Every tab except Password and API Key also carries the legend
+Every tab carries the sentence "Your data is stored in accordance with our
+privacy statement." (the link opens the journal's Privacy Statement page in
+a new tab; on the site-level profile it opens an error page instead
+[A14](#a14)). It sits below the tab's fields: on Identity, Contact, Roles,
+Public and Notifications above the legend and "Save", on Password above
+"Cancel" and "Save", and last on API Key, under its button. Every tab
+except Password and API Key also carries the legend
 "Required fields are marked with an asterisk: *". Every tab has a "Save"
 button (the API Key tab has its own button instead); only the Password tab
 also has a "Cancel" link (Rule 10c). Fields marked *multilingual* show one
@@ -112,11 +115,20 @@ change the password for your account."):
 | "New password" | yes | Under the hint "The password must be at least {N} characters." (6 on a default install). Shorter: that same sentence as an error, which also replaces the hint. Equal to the current password: "Your new password is the same as your old password." A known-breached password is refused with "This password has appeared in data leaks. Please choose a different, strong password." when the site's compromised-password check is on (see *Settings*). Same 32-character cap [A7](#a7) <sup>g</sup> |
 | "Repeat new password" | yes | Must match: "The passwords do not match." (shown in the notice and repeated under "New password"). Same cap [A7](#a7). At most one sentence about the new password is reported per attempt (Rule 10a) <sup>g</sup> |
 
+Saved with all three boxes empty, the tab sends nothing and shows "This field is
+required." under "Current password" and "New password" (not under "Repeat
+new password"), with no "Errors occurred processing this form" notice;
+nothing on the tab marks them as required. The labels do not name the boxes for a screen reader: "Current
+password" has no name, "New password" is announced by its hint, and "Repeat
+new password" is the line under the third box rather than a label above it
+⚠ [A22](#a22). <sup>g</sup>
+
 **Notifications tab:** a description sentence, then one group per category
 with, for every event type, the two checkboxes "Enable these types of
 notifications." and "Do not send me an email for these types of
-notifications." Unticking the first greys out the second, unticked, and
-both survive a Save (Rule 11). The types and what the boxes do belong to
+notifications." Unticking the first greys out the second; a tick already in
+the second stays on screen, greyed, and a Save drops it (Rule 11). The
+types and what the boxes do belong to
 [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md). <sup>i</sup>
 
 **API Key tab:**
@@ -152,8 +164,9 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
    - 2b. **Refusals.** A check the browser makes stops the save before
      anything is sent and puts its sentence directly under the box (Fields
      above). A check the server makes comes back with the tab re-rendered:
-     the Password tab in an in-tab notice headed "Errors occurred
-     processing this form" (Rule 10a), the Contact tab as the top-right
+     the Password and Identity tabs in an in-tab notice headed "Errors
+     occurred processing this form" (Rule 10a; on Identity the sentence is
+     repeated under "Given Name"), the Contact tab as the top-right
      message plus the box's label (Fields above). Whichever check fails,
      nothing on the tab is saved.
    - 2c. **Another tab, with changes unsent.** Pressing another tab while
@@ -178,9 +191,8 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      leaving discards the change, and the tab shows the saved value again.
      With only rich text typed, the reload asks nothing and the text is
      gone [A19](#a19).
-   - 2f. **Opening a tab.** Each tab reloads its content when opened, so
-     a change saved on one tab shows on another only once that tab is
-     reopened. The address "…/user/profile/" plus a tab's name (in tab
+   - 2f. **Opening a tab.** Each tab reloads its content when opened.
+     The address "…/user/profile/" plus a tab's name (in tab
      order "identity", "contact", "roles", "publicProfile",
      "changePassword", "notificationSettings", "apiSettings") opens the
      page on that tab; any other name opens Identity without comment.
@@ -195,22 +207,22 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
    Site Administrator counts as holding every journal). A user with exactly
    one is sent to that journal's profile, and a tab named in the site-level
    address opens there ("…/index/user/profile/roles" ends on the journal's
-   profile with "Roles" open). Whether a Site Administrator on
-   a site with a single journal is forwarded the same way is not settled:
-   it is read from the code, not seen (every site checked had several
-   journals). Any other user (a role in two or more journals, or in none,
-   or the Site Administrator of a site with several journals) gets a
-   site-level profile: the Roles tab lists every journal inline with no
-   fold (Rule 8c), the Identity tab shows no ORCID block, the Notifications
-   tab's choices are kept apart from every journal's, and each tab's
-   privacy link opens an error page [A14](#a14). <sup>b</sup>
+   profile with "Roles" open). Any other user (a role in two or more
+   journals, or in none, or the Site Administrator of a site with several
+   journals) gets a site-level profile: the Roles tab lists every journal
+   inline with no fold (Rule 8c), the Identity tab shows no ORCID block,
+   the Notifications tab's choices are kept apart from every journal's,
+   and each tab's privacy link opens an error page [A14](#a14).
+   Whether a Site Administrator on a site with a single journal is forwarded like a one-journal user is not settled: it is read from the code, not seen (every site checked had several journals). <sup>b</sup>
 4. **Names and the display name.** Where the user's name is listed (Users &
    Roles, emails) it is "Given Name Family Name" in the current language,
    unless "Preferred Public Name" is set in that language, in which case
    that text is shown instead. A preferred name typed in one language does
    not carry to a screen shown in another, which lists "Given Name Family
    Name" again. A language with no given name falls back to the site's
-   primary language's names. The editorial top bar and the reader-facing header never show
+   primary language's names. One email does not follow this: the
+   email-change message of Rule 6b shows the preferred name in its From
+   line but greets the user by given and family name ⚠ [A23](#a23). The editorial top bar and the reader-facing header never show
    the name: both show the username, beside the avatar's initials (Rule 5).
    Saving the Identity tab refreshes the tab with the saved values. A new
    submission's first contributor is given the given-plus-family name, not
@@ -227,7 +239,13 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      tab shows "You have requested a change of your email to "{new address}".
      We have already sent you an email with directions on how to validate the
      changed email." with a "Cancel" button, and the "Email address" box is
-     read-only. The account's other signed-in sessions carry on unaffected.
+     read-only. On the site-level profile (Rule 3) the page's own script
+     sometimes fails just after this save; the request is kept and its
+     message sent ⚠ [A24](#a24). The
+     account's other signed-in sessions carry on unaffected; until the
+     regression
+     [Login & sessions A14](U01-login-and-sessions.md#a14) is fixed, they
+     are signed out instead.
    - 6b. **The email.** One message, subject "Confirm account contact email
      change request", is sent to the account's **current** address, not the
      new one ⚠ [A8](#a8); a later request goes to whichever address is
@@ -264,10 +282,9 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
      the top right.
    - 6f. **One at a time, three days.** While a request is pending no second
      address can be entered. A request not answered within the invitation
-     lifetime (3 days by default; see *Settings*) is expected to lapse by
-     itself, the tab returning to its ordinary state; that lapse is
-     read from the code and has not been watched on a screen. A link that
-     was already used,
+     lifetime (3 days by default; see *Settings*) lapses by itself: the
+     Contact tab shows no notice and "Email address" is editable again,
+     and both emailed links show "Invitation Unavailable". A link that was already used,
      cancelled or lapsed shows the "Invitation Unavailable" page described
      in [User invitations](U06-user-invitations.md#invitation-landing).
 7. **The other contact details** save immediately. "Working Languages"
@@ -372,8 +389,10 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
       processing this form". It holds the current-password sentence when
       that check fails, and at most one sentence about the new password
       (Fields above): "Your new password is the same as your old password."
-      is reported before "The passwords do not match.", and that before the
-      too-short sentence; the same-as-current check runs only once the
+      is reported before "The passwords do not match.", that before the
+      too-short sentence, and that before "This password has appeared in
+      data leaks. Please choose a different, strong password."; the
+      same-as-current check runs only once the
       current password is right. The new-password sentence is also shown
       under "New password", in place of the hint. The three boxes are
       emptied and nothing changes. The notice stays about six seconds,
@@ -387,10 +406,12 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
       still hold the passwords just typed, and after a refused attempt the
       line under "New password" stays empty instead of showing the hint
       again ⚠ [A11](#a11). The session that made the
-      change stays signed in; every other session of the account is ended:
-      in that other browser, the next press on any tab leaves the tab's
-      content area empty, with no message, and the next full page load
-      reaches the Login page. No email is sent. The old
+      change stays signed in; every other session of the account is ended.
+      In that other browser the next full page load reaches the Login
+      page, but a press on any tab does not: the tab's content area keeps
+      what it last showed there (empty for a tab not opened there before),
+      with no message, and the page's own script fails ⚠ [A25](#a25).
+      No email is sent. The old
       password stops working immediately, and any outstanding password-reset
       link dies with it: opened, it says "Sorry, the link you clicked on has
       expired or is not valid. Please try resetting your password again."
@@ -405,8 +426,11 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
     email." It then lists groups ("Public Announcements", "Submission Events",
     "Reviewing Events", "Editors") with one event type per row and the two
     checkboxes named in Fields, then "Save". Unticking "Enable these types
-    of notifications." greys out its email box, unticked; a Save keeps both
-    as set and the pairing is applied again when the tab is reopened. The
+    of notifications." greys out its email box; a tick already in it
+    stays, greyed, but is not saved: reopened, the email box is unticked
+    (what that does to the emails is Rule 5c of
+    [Notifications center & email preferences](U05-notifications-center-and-email-preferences.md)).
+    The pairing is applied again when the tab is reopened. The
     choices are kept per journal: the tab saves for the journal it was
     opened in, and the site-level profile keeps a separate set (Rule 3).
     Which types are listed, what each box does, and the one-click
@@ -441,7 +465,8 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
     it), a banner above the heading reads "Your role is scheduled to begin on {date}" and "Until
     then, you can review and update your profile. If you believe this is an
     error, please contact the administrator." The waiting role may sit in
-    any journal, not only the one being viewed ⚠ [A5](#a5). <sup>j</sup>
+    any journal, not only the one being viewed, and the date is the
+    earliest start of any waiting role on the site ⚠ [A5](#a5). <sup>j</sup>
 14. **The privacy link** on each tab opens the Privacy Statement of the
     journal the profile was opened in, in a new browser tab. On the
     site-level profile (Rule 3) the same link opens a "404 Not Found" page
@@ -459,12 +484,14 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
   request please confirm the email change. You can always reject this email
   change." with the two links, then an unrelated sentence, "Please feel free
   to contact me with any questions about the submission or the review
-  process.", and closes "Kind regards," with the site contact's name, not the
-  sender's; a request made from the site-level profile closes with the word
-  "Array" instead ⚠ [A10](#a10). The template is editable as "Change Email
+  process.", and closes "Kind regards," with the name of the journal's
+  principal contact (Settings › Journal › Contact), not the sender's; a
+  request made from the site-level profile closes with the word "Array"
+  instead ⚠ [A10](#a10). The template is editable as "Change Email
   Address Invitation" under *Emails management* on a journal and a press; a
   preprint server sends the same email but does not list the template
-  ⚠ [OPS2](#ops2). No other session of the account is affected. <sup>d</sup>
+  ⚠ [OPS2](#ops2). For the account's other sessions, see Rule 6a.
+  <sup>d</sup>
 - **On confirming an email change** (Rule 6c): the account's sign-in address
   changes; no further email is sent.
 - **On a password change** (Rule 10b): the account's other sessions end; no
@@ -473,16 +500,14 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
   The roles this tab offers do not put a person on the public "Editorial
   Masthead" (its reviewer list is built from completed reviews), so taking
   or ending one changes nothing there. <sup>e</sup>
-- **On creating or deleting an API key** (Rule 12): applications using the
-  old key lose access at once; no screen shows an application's access, so
-  this is read from the code. <sup>h</sup>
-- **Audit lines.** When the installation's audit log is switched on (see
-  *Settings*), an email-change request, a password change and an API key
-  creation or deletion each write one line to the server log, recording who
-  acted (and, while impersonating, whose account). No screen shows any of
-  this; the lines are read from the code. <sup>g</sup>
+- **On deleting an API key** (Rule 12c): an API request made with it <sup>h</sup> is
+  refused at once, with "You are not authorized to access the requested
+  resource."; until then, and after a cancelled "Delete", the key works.
+  Creating a key revokes nothing: "Create API Key" is offered only
+  without a key.
+- **Audit lines** (no screen shows them; read from the code). When the installation's audit log is switched on (see *Settings*), an email-change request, a password change and an API key creation or deletion each write one line to the server log, recording who acted (and, while impersonating, whose account). <sup>g</sup>
 - **No submission or activity-log entry** is written by anything on this
-  page (read from the code; the log itself is the workflow's). <sup>g</sup>
+  page (the log itself is the workflow's). <sup>g</sup>
 
 ## Settings that modify behavior
 
@@ -591,10 +616,9 @@ both survive a Save (Rule 11). The types and what the boxes do belong to
 
 ## Canonical scenarios
 
-Scenarios 2–9, 11 and 12 change an account, so each runs as a throwaway
-account on a scratch journal (scenario 6 on two), never as a ready account;
-scenarios 1 and 10, which leave the account as they found it, use ready
-accounts on the seeded journal. Read an email in the mailbox of the address it was sent to. The
+Scenario 1, which leaves the accounts as it found them, uses ready
+accounts on the seeded journal; every other scenario runs as throwaway
+accounts on a scratch journal (scenario 6 on two). Read an email in the mailbox of the address it was sent to. The
 ready accounts and their passwords, the mail catcher's address and the
 tooling recipe are in the footnote. <sup>s</sup>
 
@@ -611,7 +635,7 @@ tooling recipe are in the footnote. <sup>s</sup>
    - **The seven tabs**: press each tab in turn: "Contact", "Roles",
      "Public", "Password", "Notifications" and "API Key" each open with a
      "Save" button (the API Key tab with its own button instead), and every
-     tab ends with the sentence "Your data is stored in accordance with our
+     tab carries the sentence "Your data is stored in accordance with our
      privacy statement.".
    - **The privacy link**: press "privacy statement" on any tab: the
      journal's "Privacy Statement" page opens in a new browser tab
@@ -699,7 +723,7 @@ tooling recipe are in the footnote. <sup>s</sup>
 4. **Change the email address by confirming the emailed link**
 
    Given: an Author, signed in on a scratch journal in two browsers, on
-   the profile's "Contact" tab in the first, with a fresh throwaway address
+   the profile's "Contact" tab in both, with a fresh throwaway address
    at hand. <sup>s</sup>
 
    - **The request**: type the throwaway address into "Email address" and
@@ -708,8 +732,10 @@ tooling recipe are in the footnote. <sup>s</sup>
      how to validate the changed email." with a "Cancel" button, and the
      "Email address" box is read-only, still showing the old address.
    - **The second browser**: in the second browser, signed in as the same
-     account, press "Identity": the tab opens with the account's names; the
-     session carries on unaffected (Rule 6a).
+     account, press "Identity": the tab opens with the account's names (Rule 6a);
+     until the regression
+     [Login & sessions A14](U01-login-and-sessions.md#a14) is fixed, the
+     press raises a browser alert instead.
    - **The mailbox**: the mailbox of the account's old address now holds a
      message "Confirm account contact email change request", from the
      account holder's own name, naming the new address; the new address
@@ -910,8 +936,8 @@ tooling recipe are in the footnote. <sup>s</sup>
 
 10. **The Notifications tab is a form of paired boxes**
 
-    Given: a Journal Manager, signed in on the seeded journal, on the
-    profile's "Notifications" tab. <sup>s</sup>
+    Given: a throwaway Journal Manager of a scratch journal, signed in
+    there, on the profile's "Notifications" tab. <sup>s</sup>
 
     - **The description and the groups**: the tab opens with "Select the
       system events that you wish to be notified about. Unchecking an item
@@ -1040,7 +1066,23 @@ Left out of the scenarios above, by reason:
     proposes, once fixed
   - "Please enter a valid URL." gone from under "Homepage URL" once the
     corrected address is typed, and still gone after "Save" (Rule 9c;
-    scenario 7, "The homepage corrected")
+    scenario 7, "The homepage corrected"): the bullet states it, and no
+    suite asserts it yet
+  - "Save" on the Password tab with the three boxes empty: nothing sent,
+    "This field is required." under "Current password" and "New password"
+    (Fields, Password tab): scenario 8 can take it as a first bullet
+  - the site's "Check passwords against compromised password databases"
+    ticked: "password1234" refused on the Password tab, after the
+    other new-password sentences (Rule 10a; *Settings* "Site password
+    policy"), asking Have I Been Pwned
+    ([Site settings](U60-site-settings.md) Rule 11): a site-wide setting,
+    so a serial test that puts it back
+  - an application using a deleted API key refused at once, and the key
+    working until then and after a cancelled "Delete" (*Side effects*):
+    scenario 9 can take it beside "Delete", then Cancel and OK
+  - a scratch journal with French among its form languages showing the
+    "(French)" boxes on Identity, Contact and Public, and one box on a
+    journal with English alone (Fields intro; *Settings* "Languages")
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -1048,6 +1090,7 @@ Left out of the scenarios above, by reason:
   - the Password tab's "Errors occurred processing this form" notice fading by itself with no further save (Rule 10a; scenario 8 watches the same notice fade after the valid save, which does not remove it)
   - "reject" on a request made on the site-level profile itself (Rule 6d; the same "Decline Invitation" page and button as scenario 5's request made inside a journal)
   - "View Profile" in the menu under the username on the journal's public pages (Rule 1; scenario 1's "Edit Profile" opens the same page)
+  - a "Minimum password length (characters)" other than the default: the hint's and the refusal's number (*Settings* "Site password policy"; scenario 8 reads both at the default, and another number only re-words them)
 - **Register carries it**:
   - A10 (a site-level request's message signing off "Array"; *Side effects*)
   - A11 (the typed passwords kept, and the hint not shown again after a refused attempt, once a password change is saved; Rule 10b; scenario 8 marks it)
@@ -1062,25 +1105,27 @@ Left out of the scenarios above, by reason:
   - A9 (the profile image and homepage shown on no reader-facing page; Rule 9d)
   - A13 (a new submission's first contributor getting the given-plus-family name, not the preferred one; Rule 4; scenario 12 marks it)
   - A16 (a verified ORCID not reaching the first contributor; Rule 7; scenario 12 marks it)
+  - A21 ("confirm" opened in another account's browser switching the requesting account's address without a word; Actors row "Confirm or reject an email-address change")
+  - A22 (the Password tab's boxes not named by their labels for a screen reader; Fields, Password tab)
+  - A23 (the email-change message greeting by given and family name; Rule 4)
+  - A24 (the page's script failing after a Contact save on the site-level profile; Rule 6a)
+  - A25 (another browser's tab press failing after a password change; Rule 10b)
 - **No seed**:
   - no API secret configured: the API Key tab without its button (Rule 12d; `api_key_secret`)
   - a Site Administrator on a site with a single journal at the site-level address (Rule 3)
   - a request lapsing after 3 days (Rule 6f; `expiration_days`)
-  - a site with a single language hiding "Working Languages" (Rule 7)
-  - the compromised-password check on: a leaked password refused (Rule 10a; *Settings* "Site password policy")
-  - a non-default "Minimum password length (characters)": the hint's number (*Settings* "Site password policy")
-  - applications using a deleted key losing access (*Side effects*)
+  - a site with a single language: "Working Languages" hidden, and one box per multilingual field on the site-level profile (Rule 7; *Settings* "Languages"): changing the site's languages re-saves every journal on the install
   - audit lines in the server log with `log_audit` on (*Side effects*)
   - the "Your role is scheduled to begin on {date}" banner (Rule 13): a dated, accepted role invitation
   - "User Registration" closed: no boxes anywhere on the Roles tab (*Settings*, Rule 8a): what is missing is a passthrough for the Site Access Options choice on `POST scenarios/context`; a Journal Manager's choice would be set-up for the Reader's read, not a step
   - "Allow user self-registration" off for a role: its box gone (*Settings*, Rule 8a): the same missing per-role passthrough (a `userGroups[]` key)
-  - the journal's form languages deciding the multilingual boxes, and the site's languages the site-level ones (*Settings* "Languages"): a `supportedFormLocales` passthrough
 - **Owned by another feature**:
   - "Affiliation" beside a team member's name on the "Editorial Masthead" (Rule 7; *Journal identity & about pages*)
   - the bio statement under "Author Biography" on a published item's page (Rule 9d; *Article landing page & reading*)
   - an outstanding password-reset link dying with a password change (Rule 10b; *Login & sessions*)
   - the ORCID block on the Identity tab (*Settings*; *ORCID integration*)
   - the "Statistics report summary." row disappearing when the editorial-report email is off (*Settings*; *Notifications center & email preferences*)
+  - a tick in "Do not send me an email for these types of notifications." dropped by the save that unticks its "Enable these types of notifications." box (Rule 11; *Notifications center & email preferences*, its Rule 5c)
 
 ## Findings register
 
@@ -1104,14 +1149,19 @@ unless its Basis line says otherwise.
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | An interest the site holds twice is listed twice for the account once its Roles tab is saved, though the tab shows it once | 🐞 | minor | — |
+| [A24](#a24) | On the site-level profile, the page's script sometimes fails just after an email change is saved on the Contact tab | 🐞 | minor · crash: script | — |
+| [A25](#a25) | After a password change, a tab pressed in the account's other browser fails in the page's script, keeps its old content and never shows the Login page | 🐞 | minor · crash: script | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | On a preprint server, "Save" on the Roles tab, which has no interests box, empties the account's stored reviewing interests | 🐞 | minor | — |
-| [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere | ❓ | minor | — |
+| [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere, and gives the earliest waiting date on the site | ❓ | minor | claim check (claude), 2026-10-14 — widened |
 | [A6](#a6) | A user can drop a Reader, Author or Reviewer role a manager gave them by unticking it; an Author is then locked out of My Submissions without warning | ❓ | user-visible | — |
 | [A8](#a8) | The email-change confirmation goes to the old address; the new address is never checked to exist | ❓ | user-visible | — |
 | [A9](#a9) | The "Public" tab's image is shown nowhere; only the bio statement reaches readers, on a published item's page | ❓ | latent | — |
 | [A13](#a13) | A new submission's first contributor gets the given-plus-family name, not the "Preferred Public Name" the hint promises for published work | ❓ | minor | — |
 | [A16](#a16) | A verified ORCID on the profile does not reach a new submission's first contributor, which is offered "Request verification" instead | ❓ | minor | — |
+| [A21](#a21) | "confirm" opened in a browser signed in as another account switches the requesting account's address, and the person there is told nothing | ❓ | minor | — |
+| [A22](#a22) | The Password tab's boxes are not named by their labels for a screen reader | ❓ | minor | — |
+| [A23](#a23) | The email-change message greets a user who has a "Preferred Public Name" by given and family name, unlike the other emails | ❓ | minor | — |
 | [A1](#a1) | Retired: for a user with a role in exactly one journal, a site-level profile address naming a tab landed on the Identity tab with a stray "?0=…" in the address; it now opens the named tab of the journal's profile (Rule 3) | ✅ | retired | upstream change + claim check (claude), 2026-09-18 — fixed upstream |
 | [A3](#a3) | Retired: the emailed "reject" link of an email change requested from the site-level profile answered a blank server error; it now shows the "Decline Invitation" page and the request can be discarded (Rule 6d) | ✅ | retired | upstream change + claim check (claude), 2026-09-18 — fixed upstream |
 | [A15](#a15) | Retired: "Please enter a valid URL." was recorded staying under "Homepage URL" after the corrected address was saved; it goes as soon as a valid address is typed, or with the save (Rule 9c) | ✅ | retired | claim check (claude), 2026-10-07 — withdrawn |
@@ -1173,11 +1223,15 @@ The banner "Your role is scheduled to begin on {date}" (Rule 13) is shown on
 the profile of any journal where the user holds no active role, as long as a
 dated role is waiting to start somewhere on the site. A user invited to start
 in journal B next month, who opens their profile in journal A where they were
-never given anything, reads that "your role" in A is scheduled.
+never given anything, reads that "your role" in A is scheduled. The date
+is the earliest start of any waiting role on the site: a user waiting to
+start in journal F on 2026-10-23 and in journal G on 2026-11-13 reads
+"Your role is scheduled to begin on 2026-10-23" on G's profile too.
 Question: should the banner be limited to the journal the waiting role
 belongs to? Lean: yes; the wording reads as being about the journal on
-screen, and a one-journal site never shows the difference.
-Basis: probe, 2026-09-03; re-checked 2026-09-04. <sup>[f-a5](#fn-a5)</sup>
+screen, the date can belong to another journal's role, and a one-journal
+site never shows the difference.
+Basis: probe, 2026-09-03; re-checked 2026-09-04 and 2026-10-14. <sup>[f-a5](#fn-a5)</sup>
 
 <a id="a6"></a>
 **A6 — A self-service box also revokes a manager's assignment** · ❓ · user-visible.
@@ -1399,6 +1453,66 @@ the account's "View more details" under Users & Roles › "Edit" reads
 further copy. Expected: each interest listed once.
 Basis: probe, 2026-10-07. <sup>[f-a20](#fn-a20)</sup>
 
+<a id="a21"></a>
+**A21 — "confirm" opened in another account's browser switches the address without a word** · ❓ · minor.
+A person signed in as one account who opens the "confirm" link of another
+account's pending email change (on a shared computer, say, or from a
+forwarded message) switches that other account to its new address at
+once, since the link alone decides (Rule 6c). They land on their own
+profile's Contact tab, showing their own address, with no message at all:
+nothing says that an address has changed, or whose.
+Question: should a link opened by a different signed-in account say whose
+address it changed, or ask to sign in as that account? Lean: yes, a
+message naming the account; the switch itself is as designed.
+Basis: probe, 2026-10-14. <sup>[f-a21](#fn-a21)</sup>
+
+<a id="a22"></a>
+**A22 — The Password tab's boxes are not named by their labels** · ❓ · minor.
+On the Password tab a screen reader does not hear the boxes by the words
+on screen: "Current password" has no name at all, and "New password" is
+announced as its hint, "The password must be at least {N} characters.";
+the third box is named by the line under it, "Repeat new password". The
+boxes of the other tabs are named by their labels. A user who relies on a
+screen reader cannot tell which box wants the current password.
+Question: should the three boxes be labelled as the other tabs' boxes
+are? Lean: yes.
+Basis: probe, 2026-10-14. <sup>[f-a22](#fn-a22)</sup>
+
+<a id="a23"></a>
+**A23 — The email-change message greets a preferred name by given and family name** · ❓ · minor.
+For an account with a "Preferred Public Name", the "Confirm account
+contact email change request" message shows the preferred name in its
+From line, but its To line and its greeting use the given and family
+name ("Dear {given name} {family name},"). The editorial decision
+emails greet the same account by the preferred name (Rule 4).
+Question: should the email-change message greet by the preferred name,
+as the other emails do? Lean: yes; the field exists so the user is
+addressed that way.
+Basis: probe, 2026-10-14. <sup>[f-a23](#fn-a23)</sup>
+
+<a id="a24"></a>
+**A24 — On the site-level profile, saving an email change sometimes fails in the page's script** · 🐞 · minor · crash: script.
+On the site-level profile's Contact tab (Rule 3), saving a new email
+address made the page's own script fail in three of six tries, once on
+each app, just after "Your changes have been saved." appeared. The save
+itself goes through: the new address is pending and the confirmation
+message is sent. What the tab shows the user after the failure has not
+been read. The same failure was seen once on a journal's Contact tab,
+opened again after a save while impersonating. Expected: no failure.
+Basis: probe, 2026-10-14. <sup>[f-a24](#fn-a24)</sup>
+
+<a id="a25"></a>
+**A25 — After a password change, a tab press in the other browser fails instead of reaching the Login page** · 🐞 · minor · crash: script.
+A password change signs the account out of its other browsers (Rule
+10b). In such a browser, still on the Profile page, a press on a tab
+fails in the page's own script: the tab keeps what it last showed there
+(or stays empty if it was never opened there), and nothing says that the
+session has ended. Only the next full page load shows the Login page.
+Expected: the tab press takes the user to the Login page, as a page
+load does. Until they reload, the user is left on a page that no longer
+answers, with no reason given.
+Basis: probe, 2026-10-14. <sup>[f-a25](#fn-a25)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1617,7 +1731,19 @@ wording is the browser's), answered to leave, and Contact then showed the
 saved, empty phone; with only "Signature" typed the reload raised no dialog
 and the text was gone. Mechanism: `SiteHandler.pageUnloadHandler_` asks
 for any form that has raised `formChanged`. Leaving by a link to another
-page was not driven.
+page was not driven. Live-probed 2026-10-14 (drift sweep), all three
+apps, two runs each (Rules 2b, 2f; the kept script
+`shared/playwright/checks/U03/SW1/sw1.js`): a French "Family Name"
+("Famille") saved with the French "Given Name" empty came back with the
+in-tab `.pkp_notification` "Errors occurred processing this form" holding
+"You have added a family name for a language that is missing the given
+name. Please add a given name for this language.", the same sentence
+again under "Given Name", and nothing saved (empty after a reload), as
+the Password tab answers; each tab press sent its own `GET
+…/profile-tab/<op>`, and a "Roles" box ticked and saved left the
+"Notifications" tab's groups and rows as they were (no tab shows a value
+another tab saves, so the 2026-09-03 clause about a change showing on
+another tab once reopened is withdrawn).
 
 <a id="fn-c"></a>
 **c** — `PKP\user\form\IdentityForm` (`user/identityForm.tpl`): username as
@@ -1759,9 +1885,32 @@ signed-in "confirm" and "reject" landings both carry the saved toast, while
 "Cancel" answers the in-tab block only. Not driven: "Working Languages" on
 a one-language site (the `count > 1` guard; a site-wide change — settle by
 unticking `fr_CA` under Administration › Site Settings › Languages and
-reopening any Contact tab), and the three-day lapse (settle with a request
-older than `expiration_days`: no notice on Contact, both links answering
-"Invitation Unavailable"). Since pkp/pkp-lib#13181 (lib/pkp `4d9ec3cbd0`
+reopening any Contact tab). Live-probed 2026-10-14 (drift sweep), all
+three apps, three runs each (Rule 6f; the kept script
+`shared/playwright/checks/U03/SW1/sw1.js`): the lapse, with a pending
+request's `invitations.expiry_date` moved one hour into the past on
+scratch data: Contact showed no notice and an editable box with the
+current address, a new address could be typed, and both emailed links
+showed "Invitation Unavailable" ("This invitation is no longer available.
+It may have already been accepted, declined, or expired. Please contact
+the journal manager for further assistance."); the invitation row still
+read PENDING. Live-probed 2026-10-14 (drift sweep), all three apps, two
+runs each (Side effects; the kept script
+`shared/playwright/checks/U03/SW3/sw3.js`): a scratch journal seeded with
+the principal contact "Ursula Contactacdi" (`context.contactName`) mailed
+a text body ending "Kind regards," then "Ursula Contactacdi", while the
+site's own contact read "Open Journal Systems" / "Open Monograph Press" /
+"Open Preprint Systems" (the closing name is the context's, which the
+earlier "Site Admin" readings did not tell apart). Seen 2026-10-14, all three
+apps, while pkp/pkp-lib `3407fc5bc0` (2026-10-06, the open regression
+*Login & sessions* A14) stands: after the email-change save the second
+browser's reload showed the Login page, and its tab press either raised
+a browser alert reading "##user.authorization.userRequired##" or opened a
+tab already opened there, "Keep me logged in" ticked or not alike. The
+save ends the other sessions by design (`invalidateOtherSessions()`
+above); the 2026-09-03 reading that both still worked is diagnosed
+(2026-10-07) as the remembered sign-in bringing that browser back, which
+the regression stopped, so Rule 6a and scenario 4 wait on its ruling. Since pkp/pkp-lib#13181 (lib/pkp `4d9ec3cbd0`
 "Respect Invitation's context rather than request's" and `aeac6f75cf` "Fix
 redirect to profile/contact after needed login", both 2026-09-16; on OJS
 since lib/pkp `efbba94ae7`, 2026-09-17, and on OMP and OPS since lib/pkp
@@ -1887,9 +2036,13 @@ Editors or Section Editors may register user accounts for reviewers." (OMP
 "The Press Manager will register all user accounts. Editors or Section
 Editors may register user accounts for reviewers."; OPS "The Server Manager
 will register all user accounts.") in place of "Visitors can register a
-user account with the journal." (OJS wording; the press and server variants
-were not recorded), after which the journal's public Register page reads
-"This journal is currently not accepting user registrations." (OJS). A
+user account with the journal." (OMP "…with the press.", OPS "…with the
+server.", recorded 2026-10-14), after which the journal's public Register
+page reads "This journal is currently not accepting user registrations."
+(OMP "This press is currently not accepting user registrations.", OPS
+"This server is currently not accepting user registrations.", live-probed
+2026-10-14, two runs per app, the kept script
+`shared/playwright/checks/U03/SW2/sw2.js`). A
 scratch user holding the self-service reviewer role was not on
 `about/editorialMasthead` before or after unticking it (the masthead's
 "Peer Reviewers" block is built from completed reviews of the previous
@@ -1935,8 +2088,14 @@ answers "The file could not be uploaded or revised." in `#plupload
 .pkpUploaderError` with no reload, and after a reload the previous picture
 and "Delete" are gone (A2); a text file named `.png` gets the same sentence
 and the picture survives. On the test installs the uploaded picture did not
-display in the tab (the stored file was measured on disk instead), so the
-rendered size is unobserved there. `example.org` as homepage: no request,
+display in the tab that day (the stored file was measured on disk
+instead). Live-probed 2026-10-14 (drift sweep), all three apps, two runs
+each (the kept script `shared/playwright/checks/U03/SW2/sw2.js`): the
+picture loads on the "Public" tab at `/public/site/profileImage-<id>.<ext>`
+and renders at its stored size (150 × 150 for a 400 × 400 .png and a
+300 × 200 .jpg, 100 × 100 and 120 × 120 for a .jpg and a .jpeg of those
+sizes), since the test installs' public files directory became relative
+(2026-09-24). `example.org` as homepage: no request,
 "Please enter a valid URL." under the box; `https://example.org` saves with
 the toast only. "Delete": no dialog, reload, bio and homepage kept. Reader
 side: the masthead lives at `about/editorialMasthead` ("Editorial
@@ -1990,8 +2149,11 @@ Settings › Site Setup › Security › "Compromised Password Check", the box
 "Check passwords against compromised password databases", unticked on a
 fresh install; `PKPSiteSecurityForm`); on, `LocalPasswordBlacklistVerifier`
 reads `lib/pkp/registry/blacklistedPasswords.txt` when present and falls
-back to the Have I Been Pwned k-anonymity service, so the refusal
-reproduces on the test fleets with no outbound HTTP (re-read 2026-09-04).
+back to the Have I Been Pwned k-anonymity service (`NotPwnedVerifier`,
+which refuses nothing when the service cannot be reached). The file is
+gitignored in lib/pkp and absent from the test checkouts, so the refusal
+needs the service (re-read 2026-10-14; the 2026-09-04 reading that it
+reproduced with no outbound HTTP did not hold).
 `execute()`:
 `setPassword(encryptCredentials(...))`, `PKPSessionGuard::updateUser()`,
 `Auth::logoutOtherDevices($password)`, `Repo::user()->edit()`,
@@ -2043,7 +2205,32 @@ account's submission's "Activity Log & Notes" modal rendered blank for 30 s
 on all three apps, so the no-entry claim rests on the code: the profile
 forms call `AuditLog::log()` only and no event-log repository (grep of
 `lib/pkp/classes/user/form/`, `controllers/tab/user/` and `pages/user/`,
-2026-09-04).
+2026-09-04). Live-probed 2026-10-14 (drift sweep), all three apps, two
+runs each (Rules 10a–10b; Fields Password; Side effects; the kept script
+`shared/playwright/checks/U03/SW3/sw3.js`, the site's Security settings
+set to a minimum of 8 and the compromised check ticked for about 30 s per
+run, then put back to 6 and unticked): "Save" with the three boxes empty
+sent no request and put "This field is required." under "Current
+password" and "New password" only, with no notice; the hint and the
+refusal read "…at least 8 characters." under a minimum of 8; with the
+check ticked, `password1234` typed twice was refused with "This password
+has appeared in data leaks. Please choose a different, strong
+password.", while a leaked password with a mismatching repeat gave "The
+passwords do not match.", a six-character leaked one under a minimum of
+8 the too-short sentence, and the current (leaked) password typed twice
+"Your new password is the same as your old password.", each alone; the
+notice was gone 6.2–7.0 s after the press that raised it. The accessible
+names (A22): the first box a `textbox` with no name (no `label[for]` on
+`oldPassword`), the second `textbox "The password must be at least 6
+characters."`, the third `textbox "Repeat new password"`. The other
+browser (A25): with Contact never opened there, a tab press was answered
+302 → the Login page 200 and the panel stayed empty; with Contact opened
+there before, the same press left the Contact form showing; its next full
+load reached the Login page. The activity log of the author's submission,
+read by the journal's manager, listed the same events before and after
+the author saved Password, Identity, Public, Notifications and Roles,
+created and deleted an API key and requested an email change (Side
+effects, "No submission or activity-log entry").
 
 <a id="fn-h"></a>
 **h** — `PKP\user\form\APIProfileForm` (`user/apiProfileForm.tpl`):
@@ -2071,9 +2258,16 @@ Create differs. Live-probed 2026-09-04 (claim check), all three apps (Rule 12; F
 Key): holds; the in-tab block "Your changes have been saved."
 (`#apiProfileNotification`) was present as soon as the tab re-rendered,
 after every Create and Delete (9 of 9), so the earlier absence was a
-timing miss. An application's loss of access after "Delete" is shown by no
-page (a REST request with the old key answered 401/403 after "Delete",
-and 200 before, would settle it).
+timing miss. Live-probed 2026-10-14 (drift sweep), all three apps, two
+runs each (Side effects; the kept script
+`shared/playwright/checks/U03/SW3/sw3.js`; `GET {context}/api/v1/submissions`
+as the author, with no cookie): with no key, 401 "You are not authorized to
+access the requested resource."; with the key, as a bearer token or a
+query parameter, 200, and 200 again after a cancelled "Delete"; after
+"Delete", 401 with the same message; a second key 200 and the first still
+401; a tampered key 400 "The API token could not be validated. This may
+indicate an error in the API token or that the API token is no longer
+valid.".
 
 <a id="fn-i"></a>
 **i** — `APP\notification\form\NotificationSettingsForm` extends
@@ -2102,7 +2296,15 @@ context (`editorialStatsEmail` on by default) and only the first once
 Settings › Workflow › Emails › "Editorial statistics" is set to "Do not send
 the email to editors."; the site-level tab shows the first only; a journal's
 choices and the site's stay apart. Live-probed 2026-09-04 (claim check), all three apps
-(Rule 11; Fields Notifications; Settings): holds.
+(Rule 11; Fields Notifications; Settings): holds. Live-probed 2026-10-14
+(drift sweep), all three apps, two runs each (Rule 11; Fields
+Notifications; the kept script `shared/playwright/checks/U03/SW3/sw3.js`):
+a row's "Do not send me an email for these types of notifications." ticked
+and saved, then its "Enable these types of notifications." unticked: the
+email box stayed ticked and `disabled`; after "Save" the reopened tab (a
+tab press and a reload alike) showed it unticked, and re-ticking "Enable…"
+left it unticked (a disabled box is not submitted; *Notifications center &
+email preferences* Rule 5c).
 
 <a id="fn-j"></a>
 **j** — Banner: `ProfileHandler::profile()` — when a context is open and
@@ -2150,7 +2352,13 @@ address wrapped in three tabs before it and a newline and two tabs after
 it (`apiProfileForm.tpl` writes the `{url …}` inside its `{capture}` on
 its own indented line; the other six templates keep it on one line); the
 browser strips them, and the link opens the same page as on the other
-tabs.
+tabs. Live-probed 2026-10-14 (drift sweep), all three apps, two runs each
+(Fields intro; scenario 1; the kept script
+`shared/playwright/checks/U03/SW1/sw1.js`, `author.alex`): the sentence
+does not end the tab: on Identity, Contact, Roles, Public and
+Notifications the legend "Required fields are marked with an asterisk: *"
+and "Save" follow it, on Password "Cancel" and "Save", and only on API
+Key, below "Create API Key", is it last.
 
 <a id="fn-k"></a>
 **k** — No screen; read from the code (the 2026-09-04 claim check declared
@@ -2213,9 +2421,9 @@ under its own `.txt` name (refused by the uploader's extension filter before
 any request) and under a `.png` name (sent, refused by the server); the
 server's refusal raises a browser alert, so the test registers a dialog
 handler, and the accepted .png's reload and that alert are the controls for
-"no reload" and "no alert" on the `.txt`; the profile picture
-does not render on the test installs, so suites assert the "Delete" button,
-never the picture (seed-facts). Scenario 8: a scratch author in two browser
+"no reload" and "no alert" on the `.txt`; suites assert the "Delete"
+button, never the picture, which the test installs did not render
+before 2026-09-24 (it renders since, note f). Scenario 8: a scratch author in two browser
 contexts; never change a roster password; the minimum is 6 on the fleets; the
 32-character cap (A7) is avoided by keeping scratch passwords short; the
 site's "Check passwords against compromised password databases" box is
@@ -2226,9 +2434,9 @@ bounded by a message the test itself triggers to that address afterwards (an
 email-change request, scenario 4's, whose message arrives). Scenario 9: the
 fleets' `config.test.inc.php` sets `api_key_secret`
 (`shared/playwright/make-test-config.js`), so the button is present.
-Scenario 10: `manager.maya` on `publicknowledge` (enrolled on all three apps;
-OPS seeds no editor), restoring the box afterwards; the Roles save with
-nothing changed is the only write, and Rule 8b says it changes nothing; the
+Scenario 10: a scratch `manager` in `users[]` on a scratch context (the
+seeded accounts are read-only; the three suites run it so, read
+2026-10-14), restoring the box afterwards; the
 Users & Roles read expects the role as that screen prints it, "Journal
 manager" / "Press manager" / "Preprint Server manager" per app (each app's
 default manager group name, `default.groups.name.manager` in its
@@ -2386,7 +2594,15 @@ journal with start date 2026-10-15 and accepted showed the banner on that
 journal's profile and, identically, on `publicknowledge` where the user
 holds nothing; the journal where they are a manager showed none.
 Live-probed 2026-09-04 (claim check), all three apps: holds (no banner on the site-level
-profile either).
+profile either). Live-probed 2026-10-14 (drift sweep), all three apps, two
+runs each (Rule 13; the kept script `shared/playwright/checks/U03/SW2/sw2.js`,
+waiting roles inserted as an accepted dated invitation leaves them): a user
+waiting to start in journal F on 2026-10-23 and in journal G on 2026-11-13
+read "Your role is scheduled to begin on 2026-10-23" on G's profile as on
+F's, and the same on the seeded journal, where they hold nothing; no
+banner where they hold a role, none on the site-level profile, none for a
+control account with no waiting role (`pluck('date_start')->first()`
+takes the earliest).
 
 <a id="fn-a6"></a>
 **f-a6** — `UserFormHelper::saveRoleContent()`: for every self-registrable
@@ -2628,8 +2844,15 @@ Monograph Press", "Profile | Open Preprint Systems" under "Servers" and "Open
 Preprint Systems"; the one-context control ended on
 `{context}/user/profile#contact`, titled "Profile | {the context's name}".
 The same account type, asking at the site level, landed there again twice per
-app that day (note f-a3). Not driven: the signed-out "confirm" of a
-two-journal account. Passing the request's context id to `initialize()`, or falling back to
+app that day (note f-a3). Live-probed 2026-10-14 (drift sweep), all three
+apps, three runs each (the kept script
+`shared/playwright/checks/U03/SW1/sw1.js`): the signed-out "confirm" of a
+two-journal account showed the site's Login page
+(`index/en/login?source=…/index/en/user/profile/contact`), and after
+sign-in landed on `index/en/user/profile#contact`, titled "Profile | Open
+Journal Systems" / "Profile | Open Monograph Press" / "Profile | Open
+Preprint Systems", the new address editable, with the toast "Your changes
+have been saved.". Passing the request's context id to `initialize()`, or falling back to
 the request's journal when the invitation has none, would restore the
 landing. Written up for the team in
 `docs/reports/2026-09-17-pkp-lib-13181.md` (a temporary report, deleted once
@@ -2688,6 +2911,63 @@ glacier…, ethics…, ethics…" (before the save: "glacier…, ethics…"). Tw
 earlier runs that reused fixed words across runs showed the growth: three
 copies, and "ethics" three times on OJS. OPS registers the copies the
 same way; its save erases instead (OPS3).
+
+<a id="fn-a21"></a>
+**f-a21** — `ChangeProfileEmailInviteRedirectController::acceptHandle()`
+finalizes the request on the link's key alone (note d), then redirects to
+`user/profile/contact`, which shows the session's own account (note a).
+Live-probed 2026-10-14 (drift sweep), all three apps, three runs each (the
+kept script `shared/playwright/checks/U03/SW1/sw1.js`): the "confirm" link
+of one scratch author's pending request, opened in a browser signed in as
+another scratch author, switched the first account's address (read in the
+database before and after) and landed on the second account's own
+`{context}/user/profile#contact`, its own address in the box, with no
+toast and no in-tab message.
+
+<a id="fn-a22"></a>
+**f-a22** — `user/changePassword.tpl` (labels and sublabel as in note g).
+Live-probed 2026-10-14 (drift sweep), all three apps, two runs each, every
+roster level (the kept script `shared/playwright/checks/U03/SW3/sw3.js`):
+the accessibility snapshot of the Password tab read a `textbox` with no
+name for "Current password" (no `label[for]` on `oldPassword`), `textbox
+"The password must be at least 6 characters."` for "New password" and
+`textbox "Repeat new password"` for the third box, whose words sit on the
+line under it.
+
+<a id="fn-a23"></a>
+**f-a23** — Live-probed 2026-10-14 (drift sweep), all three apps, three
+runs each (the kept script `shared/playwright/checks/U03/SW1/sw1.js`): a
+scratch account with "Preferred Public Name" "Dr. Pia Preferred" (given
+name "Pia", family name "Plain") requested an email change; the message
+read From "Dr. Pia Preferred", To "Pia Plain", and opened "Dear Pia
+Plain,". A "Decline Submission" message composed for an author whose
+preferred name was "Dr. Wren Preferred" read "To: Dr. Wren Preferred" and
+opened "Dear Dr. Wren Preferred," (two runs per app).
+
+<a id="fn-a24"></a>
+**f-a24** — Run records of 2026-10-14 (drift sweep), all three apps: the
+uncaught page error "Cannot read properties of undefined (reading
+'serialize')" at `index/en/user/profile#contact`, about 0.2 s after `POST
+index/$$$call$$$/tab/user/profile-tab/save-contact` answered 200 and the
+notice "Your changes have been saved." showed, in three of six
+site-level email-change saves (OJS r2, OMP r1, OPS r1; the kept script
+`shared/playwright/checks/U03/SW3/sw3.js`, phase `email`); and once on OJS,
+in one of nine impersonation runs (`shared/playwright/checks/U03/SW1/sw1.js`,
+phase `imperson`), at the load of `{context}/user/profile#contact` after a
+reload that followed a Contact save. The message arrived each time. Not
+read: the tab a second after the save (settle by reading the site-level
+Contact tab 1 s after the save over several runs).
+
+<a id="fn-a25"></a>
+**f-a25** — The tab press fetches the tab with `GET
+{context}/$$$call$$$/tab/user/profile-tab/<op>`, answered 302 →
+`{context}/login?source=…` 200, an HTML page the tab's script reads as
+data. Run records of 2026-10-14 (drift sweep), all three apps, seven runs
+(the kept script `shared/playwright/checks/U03/SW3/sw3.js`, phase
+`password`): every such press logged the uncaught page error "Unexpected
+token '<', "<!DOCTYPE "... is not valid JSON", and the page's script stayed
+busy for 30 s after it; the panel stayed empty for a tab not opened
+before and kept the Contact form for a tab opened before (note g).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
