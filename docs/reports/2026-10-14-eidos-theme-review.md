@@ -28,8 +28,15 @@ Each item is marked **Driven** (seen on the live install) or **Code**
 
 Eidos is a complete, polished design for the pages it covers: the home
 page blocks, the issue pages, the article page with its tabs, search,
-categories, announcements, the About pages, login and registration. The
-problems fall into four groups:
+categories, announcements, the About pages, login and registration.
+
+The report has two parts. **Part 1** lists the bugs: things that are
+broken or wrong in what Eidos already does. **Part 2** lists what is
+possibly still outstanding: pages, hooks and features Eidos does not have
+yet, against the Default and ORE themes. Part 2 holds the points still
+to discuss.
+
+### Part 1: bugs
 
 1. **Two script injections.** A search link runs script for whoever opens
    it, and an author's response to reviewers runs script on the public
@@ -42,8 +49,6 @@ problems fall into four groups:
    - The site home page answers 500 on a fresh install, and is empty once
      it renders.
    - A full-issue PDF downloads instead of opening in the viewer.
-   - Every page Eidos has no template for renders unstyled: static
-     pages, the Information pages, the subscription pages and others.
 3. **Wrong information on public pages.**
    - Every masthead person gets a fake, verified ORCID iD.
    - Editorial History has no dates.
@@ -52,13 +57,6 @@ problems fall into four groups:
    - The metrics block shows only when a count is zero.
    - Peer review appears on articles that were never reviewed.
    - Every OJS article's date reads "Posted".
-4. **Missing pieces.**
-   - Only four plugin hooks are fired, so Crossref "Cited by", the two
-     recommendation plugins and OpenID sign-in disappear.
-   - Usage statistics cannot be hidden.
-   - Funders and contributor roles are never shown.
-   - A registered review DOI does not open its review.
-   - There are a dozen smaller gaps against the Default theme.
 
 | # | Finding | Severity | Effort | Seen |
 |---|---|---|---|---|
@@ -68,21 +66,35 @@ problems fall into four groups:
 | [4](#finding-4) | Registration fails silently with a captcha on, or at site level with the site-wide privacy statement on | high | small | Driven |
 | [5](#finding-5) | Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD | high | small | Driven |
 | [6](#finding-6) | Every masthead and history person shows a fake, verified ORCID iD | high | small | Driven |
-| [7](#finding-7) | Pages without an Eidos template render unstyled (static pages, Information, subscriptions, …) | medium | medium | Driven |
-| [8](#finding-8) | Only four plugin hooks are fired: Cited by, recommendations, OpenID, footer plugins disappear | high | medium | Code |
-| [9](#finding-9) | Site home page: 500 without a site title, empty with one | medium | small | Driven |
-| [10](#finding-10) | "Outdated version" notice inverted in the PDF and HTML viewers | medium | small | Driven |
-| [11](#finding-11) | Full-issue PDF crashes the viewer template and downloads instead | medium | small | Driven |
-| [12](#finding-12) | Peer review shown per journal, not per article; metrics block inverted | medium | small | Driven |
-| [13](#finding-13) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
-| [14](#finding-14) | Smaller bugs (dates, labels, raw keys, escaping, accessibility, warnings, build) | low | small | Driven / Code |
-| [15](#finding-15) | Missing against the Default theme | — | — | Driven / Code |
-| [16](#finding-16) | Missing against the ORE theme (general features, and the two the maintainer chose) | — | — | Code |
-| [17](#finding-17) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
+| [7](#finding-7) | Site home page: 500 without a site title, empty with one | medium | small | Driven |
+| [8](#finding-8) | "Outdated version" notice inverted in the PDF and HTML viewers | medium | small | Driven |
+| [9](#finding-9) | Full-issue PDF crashes the viewer template and downloads instead | medium | small | Driven |
+| [10](#finding-10) | Peer review shown per journal, not per article; metrics block inverted | medium | small | Driven |
+| [11](#finding-11) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
+| [12](#finding-12) | Smaller bugs (dates, labels, raw keys, escaping, accessibility, warnings, build) | low | small | Driven / Code |
+| [13](#finding-13) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
 
 Findings 1 and 2 carry the `security` label. Eidos is unreleased, so per
 the security policy they are ordinary findings. Two manager-only
-injections are in finding 14.
+injections are in finding 12.
+
+### Part 2: possibly outstanding
+
+- Every page Eidos has no template for renders unstyled: static pages,
+  the Information pages, the subscription pages and others.
+- Only four plugin hooks are fired, so Crossref "Cited by", the two
+  recommendation plugins and OpenID sign-in disappear.
+- Usage statistics cannot be hidden.
+- Funders and contributor roles are never shown.
+- A registered review DOI does not open its review.
+- There are a dozen smaller gaps against the Default theme.
+
+| # | Item | Severity | Effort | Seen |
+|---|---|---|---|---|
+| [14](#finding-14) | Pages without an Eidos template render unstyled (static pages, Information, subscriptions, …) | medium | medium | Driven |
+| [15](#finding-15) | Only four plugin hooks are fired: Cited by, recommendations, OpenID, footer plugins disappear | high | medium | Code |
+| [16](#finding-16) | Missing against the Default theme | — | — | Driven / Code |
+| [17](#finding-17) | Missing against the ORE theme (general features, and the two the maintainer chose) | — | — | Code |
 
 ## How it looks
 
@@ -93,6 +105,8 @@ second:
 ![Default home page](img/2026-10-14-eidos-theme/00-home-default.png)
 ![Eidos article page](img/2026-10-14-eidos-theme/00-article-eidos.png)
 ![Default article page](img/2026-10-14-eidos-theme/00-article-default.png)
+
+# Part 1: Bugs
 
 <a name="finding-1"></a>
 ## Finding 1: the search page prints the query as HTML
@@ -264,7 +278,184 @@ for verified ones.
 `:hasVerifiedOrcid`, and show the icon only when both are set.
 
 <a name="finding-7"></a>
-## Finding 7: pages without an Eidos template render unstyled
+## Finding 7: the site home page answers 500 without a site title, and is empty with one
+
+- **Severity** medium · **Effort** small · **Crash** server · Driven
+
+**What happens.**
+- With Eidos as the site's theme, the site home page answers 500 while
+  the site has no title. That is the state a fresh install is in: neither
+  PKP's test dataset nor the campaign's own install stores a site title.
+  The admin can fix it by saving a Site Name.
+- Once a title exists, the page renders a header, an empty body and the
+  footer, with no list of journals, although two journals are enabled.
+
+![Site home page with Eidos](img/2026-10-14-eidos-theme/05-site-home.png)
+
+**Cause.**
+- `EidosTheme.php:218-224` `contextName(): string` returns
+  `getSite()->getLocalizedTitle()`, which is null. The resulting
+  TypeError aborts `addTemplateData`, so `$getBlocks` is never shared and
+  `homepage-blocks/index.blade` fails.
+- The site uses `Options::HOMEPAGE_BLOCKS_DEFAULT` (announcement, about,
+  how-to-submit, issue-toc), which holds nothing a site can show. The
+  journals block `homepage-blocks.contexts` is never on by default.
+
+**Fix.** Return `?? ''` in `contextName()`, and give the site its own
+default block list starting with `homepage-blocks.contexts`.
+
+<a name="finding-8"></a>
+## Finding 8: the "outdated version" notice is the wrong way round in the galley viewers
+
+- **Severity** medium · **Effort** small · Driven
+
+**What happens.** With two published versions:
+- The **latest** version's PDF and HTML galleys say "This is an outdated
+  version published on October 14, 2026. Read the most recent version."
+- The **old** version's galleys say nothing.
+
+The article pages themselves are right, and so is the Default theme in
+both places.
+
+![Latest version's PDF called outdated](img/2026-10-14-eidos-theme/08-pdf-latest-eidos.png)
+![Old version's PDF, no notice](img/2026-10-14-eidos-theme/08-pdf-old-eidos.png)
+![Default: old version's PDF with the notice](img/2026-10-14-eidos-theme/08-pdf-old-default.png)
+
+**Cause.** `!$isLatestPublication ? '' : notice` in
+`templates/plugins/generic/pdfJsViewer/templates/display.blade:7-14` and
+`htmlArticleGalley/templates/display.blade:24-31`.
+
+**Fix.** Swap the two branches.
+
+<a name="finding-9"></a>
+## Finding 9: a full-issue PDF crashes the viewer template
+
+- **Severity** medium · **Effort** small · Driven
+
+**What happens.** On an issue with a full-issue PDF galley, the galley
+link downloads the file instead of opening the PDF viewer, as it does on
+the Default theme.
+
+**Server log.**
+
+```
+Call to a member function getLocalizedFullTitle() on null
+  (View: …/eidos/templates/plugins/generic/pdfJsViewer/templates/display.blade)
+Plugin APP\plugins\generic\pdfJsViewer\PdfJsViewerPlugin failed to handle the hook IssueHandler::view::galley
+```
+
+**Cause.** The template reads `$publication` and `$galleyPublication`,
+which the plugin's issue callback does not assign.
+
+**Fix.** Branch on `$issue` in the template, or add an issue variant of
+the template.
+
+<a name="finding-10"></a>
+## Finding 10: peer review shown per journal, not per article; metrics block inverted
+
+- **Severity** medium · **Effort** small · Driven
+
+**Peer review on every article.**
+- **What happens.** The Peer Review tab and the sidebar's "Reviewer
+  Recommendations" show whenever the journal's default review visibility
+  is on, even for an article that was never reviewed. That article
+  reads "Peer review has not been completed yet" and offers a "full peer
+  review record" that says "Peer review data is not yet available". ORE
+  hides all of it for an item with no public review activity.
+- **Cause.** `components/article/tabs.blade:12` and core
+  `metadata-blocks/peer-review.blade:1` test
+  `$currentContext->getData('defaultReviewPublicVisibility')`.
+
+**Metrics block inverted.**
+- **What happens.** With "Metrics" in the sidebar, an article with 103
+  views and 54 downloads shows no metrics block, while articles with no
+  usage show "0 views and 0 downloads".
+- **Cause.** `components/metadata-blocks/metrics.blade:1` reads
+  `@if (!$metricsViews || !$metricsDownloads)`.
+
+![Reviewed article: no metrics block](img/2026-10-14-eidos-theme/09-sidebar-reviewed.png)
+![Never-reviewed article: review block, and metrics at 0](img/2026-10-14-eidos-theme/09-sidebar-unreviewed.png)
+
+**Fix.** Gate the peer-review UI on the article's public review rounds.
+Invert the metrics condition to `@if ($metricsViews || $metricsDownloads)`,
+and default both variables to 0 in `classes/MetadataBlocks.php:38-41`.
+
+<a name="finding-11"></a>
+## Finding 11: Editorial History shows no dates; the contact page prints template source
+
+- **Severity** medium · **Effort** small · Driven
+
+**Editorial History has no dates.**
+- **What happens.** A board member who served 2023–2025 is listed with no
+  years. The Default theme shows "2023 – 2025" (screenshots under finding
+  6 and below).
+- **Cause.** `editorialHistory.blade:24-25` reads
+  `$mastheadUser['dateStart' | 'dateEnd']`, but the handler supplies
+  `services => [[dateStart, dateEnd], …]`
+  (`lib/pkp/pages/about/AboutContextHandler.php:180-193`). Each person
+  also logs two "Undefined array key" warnings.
+
+**The contact page prints template source.**
+- **What happens.** With a principal contact affiliation set, the page
+  prints the literal text `{!! ViewHelper::sanitizeHtml($contactAffiliation) }}`
+  instead of the affiliation.
+- **Cause.** `frontend/pages/contact.blade:25` opens with `{!!` and closes
+  with `}}`.
+
+![Default: History with dates](img/2026-10-14-eidos-theme/07-history-default.png)
+![Contact page](img/2026-10-14-eidos-theme/10-contact.png)
+
+<a name="finding-12"></a>
+## Finding 12: smaller bugs
+
+All low, small effort.
+
+| What | Where | Seen |
+|---|---|---|
+| Every OJS article's date is labelled "Posted" (OPS wording) instead of "Published". `getData('versionStage')` is the string `'VoR'`, compared with the enum, so the comparison is never true | `lib/pkp/templates/components/metadata-blocks/date-published.blade:5` | Driven |
+| "Version history" dropdown on articles with one version | `lib/pkp/templates/components/metadata-blocks/version.blade:10` (`count(...)`, should be `> 1`) | Driven |
+| Page titles double-escaped: "Neural networks &amp;amp; species…" in the browser tab | `components/layout/index.blade:40`, `galley.blade:16`, `system/layout.blade:16` | Driven |
+| Raw translation keys: `##plugins.themes.eidos.menu##` (the mobile menu button's screen-reader text, every page), `##plugins.themes.individualizeTheme.backToTitle##` (subcategory page), `plugins.themes.individualizeTheme.announcements.none` (copied from another theme) | `header/mobile.blade:32`, `catalogCategory.blade:40`, `announcements.blade:9` | Driven (first two) |
+| No `<main>` landmark on the home, article, login, register and lost-password pages (axe `landmark-one-main`; the Default theme passes) | layouts | Driven |
+| Two `<h1>` on every page when a logo is set (a hidden site name plus the page's) | `header/mobile.blade:11` | Driven |
+| Logo without alt text: the desktop `<img>` has none, and the mobile one reads `['alt']` where the key is `altText` | `header/desktop.blade:50-51`, `mobile.blade:15` | Driven |
+| Login password field `autocomplete="password"` (invalid; axe) | `userLogin.blade:56` | Driven |
+| Search field's label is the Smarty leftover `{$label}` | `components/search-form.blade:12` | Code |
+| Search form loops `$formUrlParameters`, which nothing assigns (warning on every search) | `components/search-form.blade:6` | Driven |
+| Date pickers on Search show English month names in every language (`date('M')`) | `lib/pkp/templates/components/date-select.blade:22` | Code |
+| Supplementary galleys never found in listings (galley id compared with genre ids) | `components/article-summary.blade:77` | Code |
+| Article galleys show the issue fee (`purchaseIssueFee`) as their price | `components/galley-link.blade:49-53` | Code |
+| Share links put the page address in query strings without URL-encoding | `components/share-links.blade:22-50` | Code |
+| Account menu `aria-label={{ … }}` unquoted (breaks on multi-word translations) | `header/utility-menu.blade:15` | Code |
+| Comments and Metrics tabs put `json_encode` output in single-quoted `v-bind='…'` (a `'` in a translation breaks them; use `@json`) | `tab-comments.blade:7`, `tab-metrics.blade:7` | Code |
+| Comment dates: `new Date().getTime() - dateTime.toTimeString()` is NaN, so comments always show a relative date; `msWeek = 605800000` | ui-library `src/frontend/components/PkpComments/usePkpCommentsStore.js:131-133` | Code |
+| "Latest Announcement" block, on by default, stays empty until "Display on homepage" has a number (silent) | `homepage-blocks/announcement.blade` | Driven |
+| PHP warnings from undefined Blade props on nearly every page (`$class`, `$labelledBy`, `$description`, `$head`, `$pubIdPlugins`, `$error`, `$altchaEnabled`, `privacyConsent`, `$primaryFileGenreIds`, …): logs fill on production | many components | Driven |
+| **Manager-entered (low by rule):** colour options go raw into an inline `<style>`. A stored `…</style><script>` runs (the Default theme validates, pkp-lib#11974) | `classes/Options.php:170-273` → `EidosTheme.php:45` | Driven |
+| **Manager-entered:** the issue summary's `html2text` decodes entities, so an issue description containing `&lt;img onerror…&gt;` runs on the home page | `templates/components/issue-summary.blade:36` (OJS) | Driven |
+| `npm ci` fails: `package-lock.json` is out of step with `package.json` (`@emnapi/*`). `npm install` works | `plugins/themes/eidos/package-lock.json` | Driven |
+
+<a name="finding-13"></a>
+## Finding 13: side effect on the Default theme, the comments sign-in link
+
+- **Severity** low · **Effort** small · Driven
+
+On the Default theme, "Sign in to leave a comment" now returns the
+reader to `…/article/view/21?section=comments`, where it used to return
+to `…#public-comments`. The Default theme has no `section` tab, so after
+signing in the reader lands at the top of the article instead of at the
+comments.
+
+**Cause.** `lib/pkp/classes/components/UserCommentComponent.php:153` in
+the PR (was `:141`, `'#public-comments'`).
+
+**Fix.** Let the theme supply the return anchor, or keep both, as in
+`?section=comments#public-comments`.
+
+# Part 2: Possibly outstanding
+
+<a name="finding-14"></a>
+## Finding 14: pages without an Eidos template render unstyled
 
 - **Severity** medium · **Effort** medium · Driven
 
@@ -299,8 +490,8 @@ Static pages are in wide use, which is what would raise it.
 versions of `frontend/components/header.tpl` and `footer.tpl` that wrap a
 core page in Eidos's header and footer.
 
-<a name="finding-8"></a>
-## Finding 8: only four plugin hooks are fired
+<a name="finding-15"></a>
+## Finding 15: only four plugin hooks are fired
 
 > **Notes from Jarda:** Given that we have now the blocks, Article::Details and Article::Main are not relevant.. But for others keeping them backward compatible seems as good idea?
 
@@ -326,166 +517,8 @@ only Crossref implements so far (Crossmark as a block). So either Eidos
 fires the legacy hooks in matching places, or each plugin is ported.
 Cited by is a 3.6 feature that ORE shows in its Metrics tab.
 
-<a name="finding-9"></a>
-## Finding 9: the site home page answers 500 without a site title, and is empty with one
-
-- **Severity** medium · **Effort** small · **Crash** server · Driven
-
-**What happens.**
-- With Eidos as the site's theme, the site home page answers 500 while
-  the site has no title. That is the state a fresh install is in: neither
-  PKP's test dataset nor the campaign's own install stores a site title.
-  The admin can fix it by saving a Site Name.
-- Once a title exists, the page renders a header, an empty body and the
-  footer, with no list of journals, although two journals are enabled.
-
-![Site home page with Eidos](img/2026-10-14-eidos-theme/05-site-home.png)
-
-**Cause.**
-- `EidosTheme.php:218-224` `contextName(): string` returns
-  `getSite()->getLocalizedTitle()`, which is null. The resulting
-  TypeError aborts `addTemplateData`, so `$getBlocks` is never shared and
-  `homepage-blocks/index.blade` fails.
-- The site uses `Options::HOMEPAGE_BLOCKS_DEFAULT` (announcement, about,
-  how-to-submit, issue-toc), which holds nothing a site can show. The
-  journals block `homepage-blocks.contexts` is never on by default.
-
-**Fix.** Return `?? ''` in `contextName()`, and give the site its own
-default block list starting with `homepage-blocks.contexts`.
-
-<a name="finding-10"></a>
-## Finding 10: the "outdated version" notice is the wrong way round in the galley viewers
-
-- **Severity** medium · **Effort** small · Driven
-
-**What happens.** With two published versions:
-- The **latest** version's PDF and HTML galleys say "This is an outdated
-  version published on October 14, 2026. Read the most recent version."
-- The **old** version's galleys say nothing.
-
-The article pages themselves are right, and so is the Default theme in
-both places.
-
-![Latest version's PDF called outdated](img/2026-10-14-eidos-theme/08-pdf-latest-eidos.png)
-![Old version's PDF, no notice](img/2026-10-14-eidos-theme/08-pdf-old-eidos.png)
-![Default: old version's PDF with the notice](img/2026-10-14-eidos-theme/08-pdf-old-default.png)
-
-**Cause.** `!$isLatestPublication ? '' : notice` in
-`templates/plugins/generic/pdfJsViewer/templates/display.blade:7-14` and
-`htmlArticleGalley/templates/display.blade:24-31`.
-
-**Fix.** Swap the two branches.
-
-<a name="finding-11"></a>
-## Finding 11: a full-issue PDF crashes the viewer template
-
-- **Severity** medium · **Effort** small · Driven
-
-**What happens.** On an issue with a full-issue PDF galley, the galley
-link downloads the file instead of opening the PDF viewer, as it does on
-the Default theme.
-
-**Server log.**
-
-```
-Call to a member function getLocalizedFullTitle() on null
-  (View: …/eidos/templates/plugins/generic/pdfJsViewer/templates/display.blade)
-Plugin APP\plugins\generic\pdfJsViewer\PdfJsViewerPlugin failed to handle the hook IssueHandler::view::galley
-```
-
-**Cause.** The template reads `$publication` and `$galleyPublication`,
-which the plugin's issue callback does not assign.
-
-**Fix.** Branch on `$issue` in the template, or add an issue variant of
-the template.
-
-<a name="finding-12"></a>
-## Finding 12: peer review shown per journal, not per article; metrics block inverted
-
-- **Severity** medium · **Effort** small · Driven
-
-**Peer review on every article.**
-- **What happens.** The Peer Review tab and the sidebar's "Reviewer
-  Recommendations" show whenever the journal's default review visibility
-  is on, even for an article that was never reviewed. That article
-  reads "Peer review has not been completed yet" and offers a "full peer
-  review record" that says "Peer review data is not yet available". ORE
-  hides all of it for an item with no public review activity.
-- **Cause.** `components/article/tabs.blade:12` and core
-  `metadata-blocks/peer-review.blade:1` test
-  `$currentContext->getData('defaultReviewPublicVisibility')`.
-
-**Metrics block inverted.**
-- **What happens.** With "Metrics" in the sidebar, an article with 103
-  views and 54 downloads shows no metrics block, while articles with no
-  usage show "0 views and 0 downloads".
-- **Cause.** `components/metadata-blocks/metrics.blade:1` reads
-  `@if (!$metricsViews || !$metricsDownloads)`.
-
-![Reviewed article: no metrics block](img/2026-10-14-eidos-theme/09-sidebar-reviewed.png)
-![Never-reviewed article: review block, and metrics at 0](img/2026-10-14-eidos-theme/09-sidebar-unreviewed.png)
-
-**Fix.** Gate the peer-review UI on the article's public review rounds.
-Invert the metrics condition to `@if ($metricsViews || $metricsDownloads)`,
-and default both variables to 0 in `classes/MetadataBlocks.php:38-41`.
-
-<a name="finding-13"></a>
-## Finding 13: Editorial History shows no dates; the contact page prints template source
-
-- **Severity** medium · **Effort** small · Driven
-
-**Editorial History has no dates.**
-- **What happens.** A board member who served 2023–2025 is listed with no
-  years. The Default theme shows "2023 – 2025" (screenshots under finding
-  6 and below).
-- **Cause.** `editorialHistory.blade:24-25` reads
-  `$mastheadUser['dateStart' | 'dateEnd']`, but the handler supplies
-  `services => [[dateStart, dateEnd], …]`
-  (`lib/pkp/pages/about/AboutContextHandler.php:180-193`). Each person
-  also logs two "Undefined array key" warnings.
-
-**The contact page prints template source.**
-- **What happens.** With a principal contact affiliation set, the page
-  prints the literal text `{!! ViewHelper::sanitizeHtml($contactAffiliation) }}`
-  instead of the affiliation.
-- **Cause.** `frontend/pages/contact.blade:25` opens with `{!!` and closes
-  with `}}`.
-
-![Default: History with dates](img/2026-10-14-eidos-theme/07-history-default.png)
-![Contact page](img/2026-10-14-eidos-theme/10-contact.png)
-
-<a name="finding-14"></a>
-## Finding 14: smaller bugs
-
-All low, small effort.
-
-| What | Where | Seen |
-|---|---|---|
-| Every OJS article's date is labelled "Posted" (OPS wording) instead of "Published". `getData('versionStage')` is the string `'VoR'`, compared with the enum, so the comparison is never true | `lib/pkp/templates/components/metadata-blocks/date-published.blade:5` | Driven |
-| "Version history" dropdown on articles with one version | `lib/pkp/templates/components/metadata-blocks/version.blade:10` (`count(...)`, should be `> 1`) | Driven |
-| Page titles double-escaped: "Neural networks &amp;amp; species…" in the browser tab | `components/layout/index.blade:40`, `galley.blade:16`, `system/layout.blade:16` | Driven |
-| Raw translation keys: `##plugins.themes.eidos.menu##` (the mobile menu button's screen-reader text, every page), `##plugins.themes.individualizeTheme.backToTitle##` (subcategory page), `plugins.themes.individualizeTheme.announcements.none` (copied from another theme) | `header/mobile.blade:32`, `catalogCategory.blade:40`, `announcements.blade:9` | Driven (first two) |
-| No `<main>` landmark on the home, article, login, register and lost-password pages (axe `landmark-one-main`; the Default theme passes) | layouts | Driven |
-| Two `<h1>` on every page when a logo is set (a hidden site name plus the page's) | `header/mobile.blade:11` | Driven |
-| Logo without alt text: the desktop `<img>` has none, and the mobile one reads `['alt']` where the key is `altText` | `header/desktop.blade:50-51`, `mobile.blade:15` | Driven |
-| Login password field `autocomplete="password"` (invalid; axe) | `userLogin.blade:56` | Driven |
-| Search field's label is the Smarty leftover `{$label}` | `components/search-form.blade:12` | Code |
-| Search form loops `$formUrlParameters`, which nothing assigns (warning on every search) | `components/search-form.blade:6` | Driven |
-| Date pickers on Search show English month names in every language (`date('M')`) | `lib/pkp/templates/components/date-select.blade:22` | Code |
-| Supplementary galleys never found in listings (galley id compared with genre ids) | `components/article-summary.blade:77` | Code |
-| Article galleys show the issue fee (`purchaseIssueFee`) as their price | `components/galley-link.blade:49-53` | Code |
-| Share links put the page address in query strings without URL-encoding | `components/share-links.blade:22-50` | Code |
-| Account menu `aria-label={{ … }}` unquoted (breaks on multi-word translations) | `header/utility-menu.blade:15` | Code |
-| Comments and Metrics tabs put `json_encode` output in single-quoted `v-bind='…'` (a `'` in a translation breaks them; use `@json`) | `tab-comments.blade:7`, `tab-metrics.blade:7` | Code |
-| Comment dates: `new Date().getTime() - dateTime.toTimeString()` is NaN, so comments always show a relative date; `msWeek = 605800000` | ui-library `src/frontend/components/PkpComments/usePkpCommentsStore.js:131-133` | Code |
-| "Latest Announcement" block, on by default, stays empty until "Display on homepage" has a number (silent) | `homepage-blocks/announcement.blade` | Driven |
-| PHP warnings from undefined Blade props on nearly every page (`$class`, `$labelledBy`, `$description`, `$head`, `$pubIdPlugins`, `$error`, `$altchaEnabled`, `privacyConsent`, `$primaryFileGenreIds`, …): logs fill on production | many components | Driven |
-| **Manager-entered (low by rule):** colour options go raw into an inline `<style>`. A stored `…</style><script>` runs (the Default theme validates, pkp-lib#11974) | `classes/Options.php:170-273` → `EidosTheme.php:45` | Driven |
-| **Manager-entered:** the issue summary's `html2text` decodes entities, so an issue description containing `&lt;img onerror…&gt;` runs on the home page | `templates/components/issue-summary.blade:36` (OJS) | Driven |
-| `npm ci` fails: `package-lock.json` is out of step with `package.json` (`@emnapi/*`). `npm install` works | `plugins/themes/eidos/package-lock.json` | Driven |
-
-<a name="finding-15"></a>
-## Finding 15: missing against the Default theme
+<a name="finding-16"></a>
+## Finding 16: missing against the Default theme
 
 Breadcrumbs are left out on the maintainer's word.
 
@@ -507,8 +540,8 @@ Breadcrumbs are left out on the maintainer's word.
 | Footer link to About this Publishing System. Eidos links to pkp.sfu.ca | `footer.tpl:43` | Driven |
 | Print styles and RTL. Neither theme has print styles. Default has a full `rtl.less`, while Eidos has scattered `[dir=rtl]` rules with about 65 physical left/right properties | — | Code |
 
-<a name="finding-16"></a>
-## Finding 16: missing against the ORE theme
+<a name="finding-17"></a>
+## Finding 17: missing against the ORE theme
 
 These are the features the maintainer chose, plus ORE features that are
 general rather than ORE-specific (they use core data or core plugins).
@@ -521,30 +554,13 @@ general rather than ORE-specific (they use core data or core plugins).
 | Peer-review "in progress" state. Eidos shows "data not available" whenever no round is public, even while review is under way (the `review-in-progress` icon exists unused) | `PkpOpenReviewInProgress` | Code |
 | Summary fields: the in-progress date, current version, reviewer count, and the "how decisions are summarized" note | `PkpOpenReviewSummary` | Code |
 | Review ordering: newest first within a round; reviewer groups sorted by name. In the by-reviewer view, anonymous reviews merge into one group with an empty heading | `usePkpOpenReviewStore.js` | Code |
-| Crossref "Cited by" count and list (see finding 8) | `components/crossrefCitedBy.blade` | Code |
+| Crossref "Cited by" count and list (see finding 15) | `components/crossrefCitedBy.blade` | Code |
 | Search filters core already accepts: article type (section), author, funder; search inside a category | `components/searchComponent.blade`, `catalogCategory.blade:96-167` | Code |
 | Metrics summary with a link to the Metrics tab | `articleTabs/_metrics.blade` | Code |
 
 The ORE-only features (Frascati fields, WordPress news, Gateways and
 Collections, funder and collection category groups, branding) are left
 out.
-
-<a name="finding-17"></a>
-## Finding 17: side effect on the Default theme, the comments sign-in link
-
-- **Severity** low · **Effort** small · Driven
-
-On the Default theme, "Sign in to leave a comment" now returns the
-reader to `…/article/view/21?section=comments`, where it used to return
-to `…#public-comments`. The Default theme has no `section` tab, so after
-signing in the reader lands at the top of the article instead of at the
-comments.
-
-**Cause.** `lib/pkp/classes/components/UserCommentComponent.php:153` in
-the PR (was `:141`, `'#public-comments'`).
-
-**Fix.** Let the theme supply the return anchor, or keep both, as in
-`?section=comments#public-comments`.
 
 ## Evidence
 
@@ -558,7 +574,7 @@ the PR (was `:141`, `'#public-comments'`).
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (finding 14).
+    build`; `npm ci` fails (finding 12).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
@@ -588,8 +604,8 @@ the PR (was `:141`, `'#public-comments'`).
 - **Settings flipped for single findings and put back afterwards:**
   - `[captcha] altcha` (finding 4)
   - `sitewide_privacy_statement` and the site privacy statement (finding 4)
-  - the site's theme and title (finding 9)
-  - `primaryColor` and the issue description (finding 14)
+  - the site's theme and title (finding 7)
+  - `primaryColor` and the issue description (finding 12)
 - **Each page on both themes.** About 40 reader pages were opened at
   1280 px and 390 px on Eidos, and at 1280 px on the Default theme, with
   axe-core 4.10.2 (WCAG 2.1 A/AA plus best practice). The console, failed
