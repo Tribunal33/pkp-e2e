@@ -67,18 +67,17 @@ categories, announcements, the About pages, login and registration.
 | [20](#finding-20) | The search field's label is the text `{$label}` | low | small | Driven |
 | [21](#finding-21) | A locked galley never shows its price | low | small | Driven |
 | [22](#finding-22) | Comment dates are always shown as "… ago" | low | small | Driven |
-| [23](#finding-23) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
-| [24](#finding-24) | PHP warnings on nearly every page | low | small | Driven |
-| [25](#finding-25) | `npm ci` fails on the theme | low | small | Driven |
-| [26](#finding-26) | Four template mistakes with no visible effect today | low | small | Code |
-| [27](#finding-27) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
-| [28](#finding-28) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
+| [23](#finding-23) | PHP warnings on nearly every page | low | small | Driven |
+| [24](#finding-24) | `npm ci` fails on the theme | low | small | Driven |
+| [25](#finding-25) | Four template mistakes with no visible effect today | low | small | Code |
+| [26](#finding-26) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
+| [27](#finding-27) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
 
 **Security-related:** four findings.
 - [1](#finding-1): a search link runs script.
 - [2](#finding-2): an author's response to reviewers runs script on the
   public article page.
-- [27](#finding-27) and [28](#finding-28): manager-entered colour values
+- [26](#finding-26) and [27](#finding-27): manager-entered colour values
   and issue descriptions can inject script. They are low because only a
   manager can enter them.
 
@@ -611,27 +610,7 @@ always false. A week is also 604800000 ms.
 **Fix.** `Date.now() - dateTime.getTime() > 604800000`.
 
 <a name="finding-23"></a>
-## Finding 23: the "Latest Announcement" block stays empty without saying why
-
-- **Severity** low · **Effort** small · Driven
-
-**What happens.** "Latest Announcement" is the first home page block
-Eidos turns on by default. With announcements enabled and published, it
-shows nothing until the manager also fills in Settings › Website ›
-Announcements › "Display on homepage" with a number. Nothing on the
-theme's options says so.
-
-**Where.** `lib/pkp/pages/index/PKPIndexHandler.php:42` loads
-announcements only when `numAnnouncementsHomepage` is set, and
-`lib/pkp/templates/components/homepage-blocks/announcement.blade:1`
-shows the block only when some were loaded.
-
-**Fix.** Either load the latest announcement for the block whenever it
-is ticked, or say in the option's description that it needs "Display
-on homepage".
-
-<a name="finding-24"></a>
-## Finding 24: PHP warnings on nearly every page
+## Finding 23: PHP warnings on nearly every page
 
 - **Severity** low · **Effort** small · Driven
 
@@ -672,8 +651,8 @@ removed in 3.4 (`pkp-lib#8706`), so the address never has a query
 string any more: drop the loop. Search loses nothing meanwhile, since
 the query and the date filters are ordinary form fields.
 
-<a name="finding-25"></a>
-## Finding 25: `npm ci` fails on the theme
+<a name="finding-24"></a>
+## Finding 24: `npm ci` fails on the theme
 
 - **Severity** low · **Effort** small · Driven
 
@@ -686,8 +665,8 @@ A release or CI build that uses `npm ci` cannot build Eidos.
 **Fix.** Run `npm install` in the theme and commit the updated
 `package-lock.json`.
 
-<a name="finding-26"></a>
-## Finding 26: four template mistakes with no visible effect today
+<a name="finding-25"></a>
+## Finding 25: four template mistakes with no visible effect today
 
 - **Severity** low · **Effort** small · Code (each was driven: none shows)
 
@@ -715,8 +694,8 @@ the templates are open.
   language. One would end the attribute and break the tab. Fix:
   `v-bind='@json(…)'`, as the Cite button does (`components/article/sidebar.blade:42`).
 
-<a name="finding-27"></a>
-## Finding 27: colour options go unchecked into the page's styles (manager-entered)
+<a name="finding-26"></a>
+## Finding 26: colour options go unchecked into the page's styles (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -736,8 +715,8 @@ this reason (pkp-lib#11974).
 accept only `/^#[0-9a-fA-F]{3,8}$/` on save and on output, and fall back
 to the default colour otherwise.
 
-<a name="finding-28"></a>
-## Finding 28: the issue summary decodes escaped text into markup (manager-entered)
+<a name="finding-27"></a>
+## Finding 27: the issue summary decodes escaped text into markup (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -767,7 +746,7 @@ raw.
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (finding 25).
+    build`; `npm ci` fails (finding 24).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
@@ -798,11 +777,11 @@ raw.
   - `[captcha] altcha` (finding 3)
   - `sitewide_privacy_statement` and the site privacy statement (finding 3)
   - the site's theme and title (finding 6)
-  - `primaryColor` and the issue description (findings 27, 28)
+  - `primaryColor` and the issue description (findings 26, 27)
   - subscription publishing with article and issue fees (finding 21)
   - French and Arabic as journal languages, a highlight image, a comment
-    dated last year, `numAnnouncementsHomepage`, expired announcements,
-    and the theme's Issue Table of Contents option (findings 13 to 26)
+    dated last year, expired announcements,
+    and the theme's Issue Table of Contents option (findings 13 to 25)
 - **Reproduced.** Every finding was driven again on a freshly reset
   dataset, at the same heads, after the maintainer's first review:
   - The first version's pagination claim under finding 1 did not hold
@@ -815,7 +794,10 @@ raw.
   - The galley price finding was rewritten: the price never shows; the
     issue fee would show only once that is fixed.
   - Four code-only findings that change nothing visible today were folded
-    into finding 26.
+    into finding 25.
+  - The "Latest Announcement" block finding was left out: the Default
+    theme also shows no announcements on the home page until "Display on
+    homepage" is set; Eidos only adds a second switch for it.
   - Side observation, not a finding: Eidos answers 500 on every page while
     its options have never been saved (`getLocalizedOption()` gets null),
     for example when the theme is set without the theme form.
