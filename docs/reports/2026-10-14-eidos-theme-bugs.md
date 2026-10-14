@@ -16,7 +16,8 @@
 - **Model** claude-opus-5-5
 
 Each item is marked **Driven** (seen on the live install) or **Code**
-(read in the code only).
+(read in the code only). Every finding was reproduced on a fresh install
+at the same heads before this version (see Evidence).
 
 ## Summary
 
@@ -63,25 +64,21 @@ categories, announcements, the About pages, login and registration.
 | [17](#finding-17) | Two `<h1>` on every page when a logo is set | low | small | Driven |
 | [18](#finding-18) | The header logo has no alternative text | low | small | Driven |
 | [19](#finding-19) | The login password field has an invalid `autocomplete` value | low | small | Driven |
-| [20](#finding-20) | The search field's label is the text `{$label}` | low | small | Code |
-| [21](#finding-21) | The search date pickers show English month names in every language | low | small | Code |
-| [22](#finding-22) | Supplementary galleys are never found in listings | low | small | Code |
-| [23](#finding-23) | An article galley shows the issue's price | low | small | Code |
-| [24](#finding-24) | Share links put the article address in unencoded | low | small | Code |
-| [25](#finding-25) | The account menu's `aria-label` is unquoted | low | small | Code |
-| [26](#finding-26) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
-| [27](#finding-27) | Comment dates are always shown as "… ago" | low | small | Code |
-| [28](#finding-28) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
-| [29](#finding-29) | PHP warnings on nearly every page | low | small | Driven |
-| [30](#finding-30) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
-| [31](#finding-31) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
-| [32](#finding-32) | `npm ci` fails on the theme | low | small | Driven |
+| [20](#finding-20) | The search field's label is the text `{$label}` | low | small | Driven |
+| [21](#finding-21) | A locked galley never shows its price | low | small | Driven |
+| [22](#finding-22) | Comment dates are always shown as "… ago" | low | small | Driven |
+| [23](#finding-23) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
+| [24](#finding-24) | PHP warnings on nearly every page | low | small | Driven |
+| [25](#finding-25) | `npm ci` fails on the theme | low | small | Driven |
+| [26](#finding-26) | Four template mistakes with no visible effect today | low | small | Code |
+| [27](#finding-27) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
+| [28](#finding-28) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
 
 **Security-related:** four findings.
 - [1](#finding-1): a search link runs script.
 - [2](#finding-2): an author's response to reviewers runs script on the
   public article page.
-- [30](#finding-30) and [31](#finding-31): manager-entered colour values
+- [27](#finding-27) and [28](#finding-28): manager-entered colour values
   and issue descriptions can inject script. They are low because only a
   manager can enter them.
 
@@ -107,13 +104,10 @@ matching the phrase …". The Default theme prints the query as text.
 **Cause.** `plugins/themes/eidos/templates/frontend/pages/search.blade:61`
 and `:76` print `__('plugins.themes.eidos.search.noMatches' | …showing…,
 ['phrase' => $query])` with `{!! !!}`. `$query` is the raw request value.
-`:23` also builds `$urlPattern` from raw `$_SERVER['REQUEST_URI']`, and
-`components/pagination-custom.blade:75` prints it unescaped in an `href`.
 
 **Fix.** Escape the phrase before it goes into the translation, as in
 `['phrase' => e($query)]`, and keep `{!! !!}` only for the markup the locale
-adds. Print `$urlPattern` with `{{ }}`, and build it from the route rather
-than `REQUEST_URI`.
+adds.
 
 <a name="finding-2"></a>
 ## Finding 2: an author's response to reviewers runs on the public article page
@@ -340,7 +334,7 @@ and default both variables to 0 in `classes/MetadataBlocks.php:38-41`.
 **Editorial History has no dates.**
 - **What happens.** A board member who served 2023–2025 is listed with no
   years. The Default theme shows "2023 – 2025" (screenshots under finding
-  6 and below).
+  5 and below).
 - **Cause.** `editorialHistory.blade:24-25` reads
   `$mastheadUser['dateStart' | 'dateEnd']`, but the handler supplies
   `services => [[dateStart, dateEnd], …]`
@@ -377,13 +371,14 @@ the PR (was `:141`, `'#public-comments'`).
 <a name="finding-12"></a>
 ## Finding 12: a short issue description is faded out almost completely
 
-- **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
+- **Severity** low · **Effort** small · Driven
 
 **What happens.** On the home page's "Current Issue (Summary)" block,
 the issue description fades into the background at its bottom edge, to
 hint that longer text is cut off. The fade is always drawn, so a
 one-line description ("The current issue of the Journal of Public
-Knowledge.") sits entirely inside it and is barely readable.
+Knowledge.") sits entirely inside it and is barely readable. Reproduced at 1280, 1440 and 390 px: the text is
+24 px high and the fade starts right below it.
 
 ![A one-line issue description almost invisible](img/2026-10-14-eidos-theme/14-issue-summary-fade.png)
 
@@ -401,13 +396,15 @@ fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 <a name="finding-13"></a>
 ## Finding 13: the Highlights image is cropped to fit its box
 
-- **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
+- **Severity** low · **Effort** small · Driven
 
 **What happens.**
 - On the home page's Highlights slider, the image does not fit its box.
   It is scaled to fill the box and cut at the edges, so an image with
   text loses its first letters ("Two versions, two rounds of open
-  review" reads "wo versions, wo rounds of pen review").
+  review" reads "wo versions, wo rounds of pen review"). Reproduced with
+  a 1600 × 600 image: the box is 1.5 : 1 at 1280 px, so a third of the
+  image's width is cut away, half on each side.
 - On the same slide, the "previous" arrow and the slide dots sit on the
   image in the block text colour (dark by default), so on a dark image
   they are barely visible.
@@ -439,7 +436,10 @@ fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 **What happens.** A title holding `&` shows as "Neural networks
 &amp;amp; species identification" in the browser tab, in bookmarks and in
 search engines' results. The same happens to `<`, `>` and quotes, and to
-the h1 of pages built on the basic layout (About, Contact and others).
+the h1 of pages built on the basic layout (About, Contact, an announcement
+and others). An announcement titled "News & Events <2026>" shows the h1
+"News &amp; Events &lt;2026&gt;", and its browser tab reads
+"News &amp;amp; Events …". French form labels read "Nom d&#039;utilisateur".
 
 **Where.** Pages pass the title as an attribute,
 `<x-layout.index title="{{ … }}">`, which escapes it once, and the
@@ -458,7 +458,7 @@ printed.
 <a name="finding-15"></a>
 ## Finding 15: three raw translation keys
 
-- **Severity** low · **Effort** small · Driven (first two)
+- **Severity** low · **Effort** small · Driven
 
 **What happens.**
 - **Every page:** the mobile menu button's hidden label is
@@ -507,8 +507,8 @@ all of them, and so do Eidos's About and category pages.
 
 **What happens.** With a header logo, every page has a hidden `<h1>`
 with the site's name before the page's own `<h1>`, so screen readers
-announce two top headings. On a journal page it even reads the site
-name, not the journal's.
+announce two top headings. On the home page both are the journal's
+name.
 
 **Where.** `components/header/mobile.blade:11-13`:
 `<h1 class="sr-only">{{ $siteName }}</h1>`. The desktop header uses a
@@ -552,7 +552,7 @@ the saved password on Eidos's login page.
 <a name="finding-20"></a>
 ## Finding 20: the search field's label is the text `{$label}`
 
-- **Severity** low · **Effort** small · Code
+- **Severity** low · **Effort** small · Driven
 
 **What happens.** Screen readers announce the search box on the search
 page and in the header as "{$label}".
@@ -571,118 +571,31 @@ A Smarty leftover, printed as text.
 callers.
 
 <a name="finding-21"></a>
-## Finding 21: the search date pickers show English month names in every language
+## Finding 21: a locked galley never shows its price
 
-- **Severity** low · **Effort** small · Code
+- **Severity** low · **Effort** small · Driven
 
-**What happens.** In "Published After" and "Published Before" the month
-list reads Jan, Feb, … whatever the reader's language. The Default
-theme's pickers are translated.
+**What happens.** On a subscription journal with an article fee, the
+Default theme labels a locked galley "PDF (CAD 5)". Eidos shows the lock
+icon but no price, so the reader is not told what the article costs.
 
-**Where.** `lib/pkp/templates/components/date-select.blade:22`:
-`date('M', strtotime('2020-' . $i . '-01'))`. PHP's `date()` is always
-English.
+**Where.** `components/galley-link.blade:49-53` reads the price from
+`$galleyContext`, which is never assigned (only `$galleyContextPath` is,
+line 18), so `$price` stays empty. Once that is fixed, the same lines
+would show the issue fee (`purchaseIssueFee`) on article galleys too.
 
-**Fix.** Use the locale's month names, for example
-`\Carbon\Carbon::create(2020, $i)->locale(Locale::getLocale())->isoFormat('MMM')`,
-or the same source the Default theme's date picker uses.
+**Fix.** Assign the context, and use `purchaseArticleFee` for article
+galleys and `purchaseIssueFee` for issue galleys, as the Default theme's
+`galley_link.tpl` does.
 
 <a name="finding-22"></a>
-## Finding 22: supplementary galleys are never found in listings
+## Finding 22: comment dates are always shown as "… ago"
 
-- **Severity** low · **Effort** small · Code
-
-**What happens.** With article galleys shown in the table of contents
-(the theme's "Issue Table of Contents" option), a supplementary galley,
-such as a dataset uploaded as a supplementary file, is never listed as
-supplementary.
-
-**Where.** `components/article-summary.blade:77`:
-`in_array($galley->getId(), $supplementaryFileGenreIds)` compares a
-**galley id** with **genre ids**. Line 75 also calls
-`$galley->getFile()->getGenreId()` without checking that the galley has
-a file.
-
-**Fix.** `in_array($galley->getFile()?->getGenreId(), $supplementaryFileGenreIds)`,
-as line 75 does for primary files.
-
-<a name="finding-23"></a>
-## Finding 23: an article galley shows the issue's price
-
-- **Severity** low · **Effort** small · Code
-
-**What happens.** On a subscription journal with per-article purchase,
-a locked article galley shows the price set for buying a whole issue.
-
-**Where.** `components/galley-link.blade:49-53`:
-`$galleyContext->getSetting('purchaseIssueFee')` for every galley.
-`$galleyContext` itself is never assigned (only `$galleyContextPath` is,
-line 18), so today the price never shows at all.
-
-**Fix.** Use `purchaseArticleFee` for article galleys and
-`purchaseIssueFee` for issue galleys, as the Default theme's
-`galley_link.tpl` does, and assign the context.
-
-<a name="finding-24"></a>
-## Finding 24: share links put the article address in unencoded
-
-- **Severity** low · **Effort** small · Code
-
-**What happens.** The Facebook, X, Reddit, LinkedIn, Telegram and email
-share links put the article's address into their own query string as
-is. An address carrying its own query or `&` breaks the share link.
-
-**Where.** `components/share-links.blade:8-50`: the title is
-`urlencode()`d (`$urlEncodedTitle`), the address `{$url}` is not.
-
-**Fix.** `$urlEncodedUrl = urlencode($url);` next to the title, and use it
-in every link.
-
-<a name="finding-25"></a>
-## Finding 25: the account menu's `aria-label` is unquoted
-
-- **Severity** low · **Effort** small · Code
-
-**What happens.** In a language whose word for "Account" has a space,
-the button's label is cut at the first word, and the rest becomes stray
-attributes.
-
-**Where.** `components/header/utility-menu.blade:15`:
-`aria-label={{ __('plugins.themes.eidos.account') }}`.
-
-**Fix.** `aria-label="{{ __('plugins.themes.eidos.account') }}"`.
-
-<a name="finding-26"></a>
-## Finding 26: the Comments and Metrics tabs break on an apostrophe in their data
-
-- **Severity** low · **Effort** small · Code
-
-**What happens.** The Comments and Metrics tabs hand their data to Vue
-inside a single-quoted attribute. An apostrophe anywhere in that data (a
-translated text such as French "d'un", or a version name) ends the
-attribute early, and the tab fails to render.
-
-**Where.** `components/article/tab-comments.blade:3-7` and
-`tab-metrics.blade:3-7`:
-
-```blade
-$json = json_encode($userCommentsInitConfig);
-<pkp-comments v-bind='{!! $json !!}'></pkp-comments>
-```
-
-The `{{`/`}}` replacements alter the data too.
-
-**Fix.** `v-bind='@json($userCommentsInitConfig)'`, as the Cite button
-already does (`components/article/sidebar.blade:42`). Blade's `@json`
-escapes the apostrophe.
-
-<a name="finding-27"></a>
-## Finding 27: comment dates are always shown as "… ago"
-
-- **Severity** low · **Effort** small · Code
+- **Severity** low · **Effort** small · Driven
 
 **What happens.** A comment from last year still shows "11 months ago"
-instead of switching to a short date after a week, as intended.
+instead of switching to a short date after a week, as intended. Driven
+with a comment dated November 2025.
 
 **Where.** ui-library `src/frontend/components/PkpComments/usePkpCommentsStore.js:131-133`
 (new in ui-library#972):
@@ -697,8 +610,8 @@ always false. A week is also 604800000 ms.
 
 **Fix.** `Date.now() - dateTime.getTime() > 604800000`.
 
-<a name="finding-28"></a>
-## Finding 28: the "Latest Announcement" block stays empty without saying why
+<a name="finding-23"></a>
+## Finding 23: the "Latest Announcement" block stays empty without saying why
 
 - **Severity** low · **Effort** small · Driven
 
@@ -717,8 +630,8 @@ shows the block only when some were loaded.
 is ticked, or say in the option's description that it needs "Display
 on homepage".
 
-<a name="finding-29"></a>
-## Finding 29: PHP warnings on nearly every page
+<a name="finding-24"></a>
+## Finding 24: PHP warnings on nearly every page
 
 - **Severity** low · **Effort** small · Driven
 
@@ -759,8 +672,51 @@ removed in 3.4 (`pkp-lib#8706`), so the address never has a query
 string any more: drop the loop. Search loses nothing meanwhile, since
 the query and the date filters are ordinary form fields.
 
-<a name="finding-30"></a>
-## Finding 30: colour options go unchecked into the page's styles (manager-entered)
+<a name="finding-25"></a>
+## Finding 25: `npm ci` fails on the theme
+
+- **Severity** low · **Effort** small · Driven
+
+**What happens.** In `plugins/themes/eidos`, `npm ci` stops with "npm ci
+can only install packages when your package.json and package-lock.json
+… are in sync", listing `@emnapi/core`, `@emnapi/runtime` and
+`@emnapi/wasi-threads`. `npm install` works but rewrites the lock file.
+A release or CI build that uses `npm ci` cannot build Eidos.
+
+**Fix.** Run `npm install` in the theme and commit the updated
+`package-lock.json`.
+
+<a name="finding-26"></a>
+## Finding 26: four template mistakes with no visible effect today
+
+- **Severity** low · **Effort** small · Code (each was driven: none shows)
+
+Each is a real mistake in the code, but none changes what a reader sees
+with today's data, settings and shipped translations. Worth fixing while
+the templates are open.
+
+- **Supplementary galleys in listings.** `components/article-summary.blade:77`
+  compares a galley id with genre ids
+  (`in_array($galley->getId(), $supplementaryFileGenreIds)`), so its
+  supplementary list never fills. A supplementary galley is left out of
+  the issue listing, which is what the Default theme does too. Fix:
+  `in_array($galley->getFile()?->getGenreId(), $supplementaryFileGenreIds)`.
+- **Share links.** `components/share-links.blade:8-50` puts the article
+  address into the share services' query strings without `urlencode()`.
+  Article addresses carry no query string, so every share link works
+  today. Fix: `urlencode($url)`, like the title.
+- **Account menu label.** `components/header/utility-menu.blade:15` has
+  `aria-label={{ … }}` without quotes. The only shipped language is
+  English, where "Account" is one word. A translation with a space would
+  cut the label. Fix: quote it.
+- **Comments and Metrics tab data.** `components/article/tab-comments.blade:3-7`
+  and `tab-metrics.blade:3-7` put JSON into a single-quoted `v-bind='…'`.
+  No string in that data holds an apostrophe today, in any shipped
+  language. One would end the attribute and break the tab. Fix:
+  `v-bind='@json(…)'`, as the Cite button does (`components/article/sidebar.blade:42`).
+
+<a name="finding-27"></a>
+## Finding 27: colour options go unchecked into the page's styles (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -768,7 +724,8 @@ the query and the date filters are ordinary form fields.
 `<style>` on every page without checking that they are colours. A stored
 value such as `#F4F1EA;}</style><script>…</script>` ran its script on the
 home page. The colour picker sends only colours, but the settings API
-accepts any text. The Default theme validates its colour for exactly
+accepts any text: a manager's `PUT …/api/v1/contexts/2/theme` with that
+value answered 200 and stored it. The Default theme validates its colour for exactly
 this reason (pkp-lib#11974).
 
 **Where.** `plugins/themes/eidos/classes/Options.php:170-273`
@@ -779,8 +736,8 @@ this reason (pkp-lib#11974).
 accept only `/^#[0-9a-fA-F]{3,8}$/` on save and on output, and fall back
 to the default colour otherwise.
 
-<a name="finding-31"></a>
-## Finding 31: the issue summary decodes escaped text into markup (manager-entered)
+<a name="finding-28"></a>
+## Finding 28: the issue summary decodes escaped text into markup (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -798,20 +755,6 @@ raw.
 **Fix.** Print the plain text escaped:
 `{{ ViewHelper::html2text($issue->getLocalizedDescription()) }}`.
 
-<a name="finding-32"></a>
-## Finding 32: `npm ci` fails on the theme
-
-- **Severity** low · **Effort** small · Driven
-
-**What happens.** In `plugins/themes/eidos`, `npm ci` stops with "npm ci
-can only install packages when your package.json and package-lock.json
-… are in sync", listing `@emnapi/core`, `@emnapi/runtime` and
-`@emnapi/wasi-threads`. `npm install` works but rewrites the lock file.
-A release or CI build that uses `npm ci` cannot build Eidos.
-
-**Fix.** Run `npm install` in the theme and commit the updated
-`package-lock.json`.
-
 ## Evidence
 
 - **Heads.**
@@ -824,7 +767,7 @@ A release or CI build that uses `npm ci` cannot build Eidos.
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (finding 32).
+    build`; `npm ci` fails (finding 25).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
@@ -855,7 +798,27 @@ A release or CI build that uses `npm ci` cannot build Eidos.
   - `[captcha] altcha` (finding 3)
   - `sitewide_privacy_statement` and the site privacy statement (finding 3)
   - the site's theme and title (finding 6)
-  - `primaryColor` and the issue description (findings 30, 31)
+  - `primaryColor` and the issue description (findings 27, 28)
+  - subscription publishing with article and issue fees (finding 21)
+  - French and Arabic as journal languages, a highlight image, a comment
+    dated last year, `numAnnouncementsHomepage`, expired announcements,
+    and the theme's Issue Table of Contents option (findings 13 to 26)
+- **Reproduced.** Every finding was driven again on a freshly reset
+  dataset, at the same heads, after the maintainer's first review:
+  - The first version's pagination claim under finding 1 did not hold
+    (the address is escaped once and a quote comes out as `&quot;`) and
+    was removed.
+  - Finding 17's claim that the hidden heading reads the site's name was
+    wrong: on a journal page `$siteName` is the journal's name.
+  - The English month names in the search date pickers were dropped: the
+    Default theme shows English names too, in French and in Arabic.
+  - The galley price finding was rewritten: the price never shows; the
+    issue fee would show only once that is fixed.
+  - Four code-only findings that change nothing visible today were folded
+    into finding 26.
+  - Side observation, not a finding: Eidos answers 500 on every page while
+    its options have never been saved (`getLocalizedOption()` gets null),
+    for example when the theme is set without the theme form.
 - **Each page on both themes.** About 40 reader pages were opened at
   1280 px and 390 px on Eidos, and at 1280 px on the Default theme, with
   axe-core 4.10.2 (WCAG 2.1 A/AA plus best practice). The console, failed

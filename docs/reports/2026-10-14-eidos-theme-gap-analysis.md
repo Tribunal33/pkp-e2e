@@ -516,7 +516,7 @@ install cannot reach.
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (the bug report's finding 32).
+    build`; `npm ci` fails (the bug report's finding 25).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for the bug report's finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
