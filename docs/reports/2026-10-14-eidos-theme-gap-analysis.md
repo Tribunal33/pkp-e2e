@@ -31,9 +31,23 @@ Eidos is a complete, polished design for the pages it covers: the home
 page blocks, the issue pages, the article page with its tabs, search,
 categories, announcements, the About pages, login and registration.
 
+🔴 **To address before merging** (marked in the table and under each
+heading):
+- [1](#finding-1): pages without an Eidos template render unstyled
+- [4](#finding-4): funders are not shown
+- [6](#finding-6): the issue page has no issue DOI
+- [7](#finding-7): listings drop page numbers and ignore "hide author"
+- [9](#finding-9): an announcement's page has no date
+- [10](#finding-10): no "Edit" links for managers
+- [11](#finding-11): no ORCID button at registration
+- [12](#finding-12): site-wide search has no journal filter, and results
+  lose their journal and date
+- [16](#finding-16): review recommendations use the journal's wording,
+  not the normalized label
+
 - Pages Eidos has no template for render unstyled (1), and only four
   plugin hooks are fired (2).
-- Against the Default theme (3 to 16):
+- Against the Default theme (3 to 15):
   - usage statistics cannot be hidden
   - funders and contributor roles are not shown
   - the issue page has no issue DOI
@@ -43,35 +57,33 @@ categories, announcements, the About pages, login and registration.
   - site-wide search and the site's journal list lose details
   - sidebar blocks move to the footer, and the footer drops its link to
     About this Publishing System
-  - right-to-left languages hold up at a glance
-- Against the ORE theme (17 to 20):
+- Against the ORE theme (16 to 19):
   - the recommendation wording
   - review DOIs that don't open their review
   - anonymous reviews in the by-reviewer view
   - Crossref "Cited by"
 
-| # | Item | Compared with | Severity | Seen |
-|---|---|---|---|---|
-| [1](#finding-1) | Pages without an Eidos template render unstyled (static pages, Information, subscriptions, …) | — | medium | Driven |
-| [2](#finding-2) | Only four plugin hooks are fired: Cited by, recommendations, OpenID, footer plugins disappear | — | high | Code |
-| [3](#finding-3) | Usage statistics cannot be hidden | Default | — | Driven |
-| [4](#finding-4) | Funders are not shown | Default | — | Driven |
-| [5](#finding-5) | Contributor roles are not shown | Default | — | Driven |
-| [6](#finding-6) | The issue page has no issue DOI | Default | — | Driven |
-| [7](#finding-7) | Listings drop page numbers and ignore "hide author" | Default | — | Driven |
-| [8](#finding-8) | No "View All Issues" under the home page's current issue | Default | — | Driven |
-| [9](#finding-9) | An announcement's page has no date | Default | — | Driven |
-| [10](#finding-10) | No "Edit" links for managers | Default | — | Driven |
-| [11](#finding-11) | No ORCID button at registration | Default | — | Driven |
-| [12](#finding-12) | Site-wide search: no journal filter; results lose journal and date | Default | — | Driven |
-| [13](#finding-13) | Site journal list: no thumbnails or "Current Issue" links | Default | — | Driven |
-| [14](#finding-14) | Sidebar blocks move to the footer | Default | — | Driven |
-| [15](#finding-15) | Footer no longer links to About this Publishing System | Default | — | Driven |
-| [16](#finding-16) | Right-to-left languages and print: nothing missing seen | Default | — | Driven / Code |
-| [17](#finding-17) | Review recommendations use the journal's wording, not the normalized label | ORE | — | Driven |
-| [18](#finding-18) | A registered review DOI does not open its review | ORE | — | Driven |
-| [19](#finding-19) | Anonymous reviews in the by-reviewer view (ORE breaks too) | ORE | — | Driven |
-| [20](#finding-20) | No Crossref "Cited by" | ORE | — | Code |
+| # | Item | Compared with | Severity | Seen | Before merging |
+|---|---|---|---|---|---|
+| [1](#finding-1) | Pages without an Eidos template render unstyled (static pages, Information, subscriptions, …) | — | medium | Driven | 🔴 |
+| [2](#finding-2) | Only four plugin hooks are fired: Cited by, recommendations, OpenID, footer plugins disappear | — | high | Code | |
+| [3](#finding-3) | Usage statistics cannot be hidden | Default | — | Driven | |
+| [4](#finding-4) | Funders are not shown | Default | — | Driven | 🔴 |
+| [5](#finding-5) | Contributor roles are not shown | Default | — | Driven | |
+| [6](#finding-6) | The issue page has no issue DOI | Default | — | Driven | 🔴 |
+| [7](#finding-7) | Listings drop page numbers and ignore "hide author" | Default | — | Driven | 🔴 |
+| [8](#finding-8) | No "View All Issues" under the home page's current issue | Default | — | Driven | |
+| [9](#finding-9) | An announcement's page has no date | Default | — | Driven | 🔴 |
+| [10](#finding-10) | No "Edit" links for managers | Default | — | Driven | 🔴 |
+| [11](#finding-11) | No ORCID button at registration | Default | — | Driven | 🔴 |
+| [12](#finding-12) | Site-wide search: no journal filter; results lose journal and date | Default | — | Driven | 🔴 |
+| [13](#finding-13) | Site journal list: no thumbnails or "Current Issue" links | Default | — | Driven | |
+| [14](#finding-14) | Sidebar blocks move to the footer | Default | — | Driven | |
+| [15](#finding-15) | Footer no longer links to About this Publishing System | Default | — | Driven | |
+| [16](#finding-16) | Review recommendations use the journal's wording, not the normalized label | ORE | — | Driven | 🔴 |
+| [17](#finding-17) | A registered review DOI does not open its review | ORE | — | Driven | |
+| [18](#finding-18) | Anonymous reviews in the by-reviewer view (ORE breaks too) | ORE | — | Driven | |
+| [19](#finding-19) | No Crossref "Cited by" | ORE | — | Code | |
 
 ## How it looks
 
@@ -83,8 +95,8 @@ second:
 ![Eidos article page](img/2026-10-14-eidos-theme/00-article-eidos.png)
 ![Default article page](img/2026-10-14-eidos-theme/00-article-default.png)
 
-The findings below compare Eidos with the Default theme (3 to 16) and
-the ORE theme (17 to 20). Each shows the reference first and Eidos
+The findings below compare Eidos with the Default theme (3 to 15) and
+the ORE theme (16 to 19). Each shows the reference first and Eidos
 second, on the same journal and content. Breadcrumbs, and the ORE
 features the maintainer ruled out (see the scope at the top), are left
 out.
@@ -92,7 +104,7 @@ out.
 <a name="finding-1"></a>
 ## Finding 1: pages without an Eidos template render unstyled
 
-- **Severity** medium · **Effort** medium · Driven
+- **Severity** medium · **Effort** medium · Driven · 🔴 **Before merging**
 
 **What happens.** A page Eidos has no `.blade` for falls back to the core
 Smarty page with the core header and footer markup, which Eidos's CSS
@@ -177,7 +189,7 @@ option is missing (`lib/pkp/classes/plugins/ThemePlugin.php:963-967`).
 <a name="finding-4"></a>
 ## Finding 4: funders are not shown
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** A "Funders" block lists each funder with its ROR
 link, and under it each grant's name, number and DOI.
@@ -217,7 +229,7 @@ never prints it.
 <a name="finding-6"></a>
 ## Finding 6: the issue page has no issue DOI
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** The issue page shows "DOI: https://doi.org/…" above
 the published date.
@@ -237,7 +249,7 @@ variable" warning on every issue page).
 <a name="finding-7"></a>
 ## Finding 7: listings drop page numbers and ignore "hide author"
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** In the issue's table of contents each article shows
 its pages (12-14). The "Reviews" section is set to hide authors in
@@ -274,7 +286,7 @@ All Issues".
 <a name="finding-9"></a>
 ## Finding 9: an announcement's page has no date
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** The announcement's date (2026-10-14) sits under its
 title.
@@ -291,7 +303,7 @@ Eidos `frontend/pages/announcement.blade`.
 <a name="finding-10"></a>
 ## Finding 10: no "Edit" links for managers
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** A signed-in manager sees "Edit" on About the Journal
 (also on Contact, Submissions, Editorial History and the Information
@@ -310,7 +322,7 @@ does (grep `goToEditPage` / `common.edit`).
 <a name="finding-11"></a>
 ## Finding 11: no ORCID button at registration
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** With ORCID enabled for the journal, the register page
 starts with "Create or Connect your ORCID iD" and "What is ORCID?".
@@ -328,7 +340,7 @@ equivalent.
 <a name="finding-12"></a>
 ## Finding 12: site-wide search has no journal filter, and results lose their journal and date
 
-- **Compared with** the Default theme · Driven
+- **Compared with** the Default theme · Driven · 🔴 **Before merging**
 
 **Default theme.** Searching from the site (all journals) offers a "By
 Journal" filter. Each result names its journal and shows its published
@@ -403,28 +415,9 @@ this Publishing System, which itself renders unstyled (finding 1).
 **Where.** Default `footer.tpl:43`. Eidos `components/footer/btm.blade:2,15`.
 
 <a name="finding-16"></a>
-## Finding 16: right-to-left languages and print
+## Finding 16: review recommendations use the journal's wording, not the normalized label
 
-- **Compared with** the Default theme · Driven (RTL), Code (print)
-
-**Default theme.** In Arabic the whole page mirrors through the theme's
-`rtl.less`.
-
-![Default: article in Arabic](img/2026-10-14-eidos-theme/p2-rtl-article-default.png)
-
-**Eidos.** The page mirrors as well: header, tabs, sidebar and text run
-right to left. The raw `##…##` keys are Eidos texts with no Arabic
-translation yet, which is not a finding. At a glance nothing is missing.
-The code has scattered `[dir=rtl]` rules and about 65 physical
-left/right properties, so other pages may still have spots. Neither
-theme has print styles.
-
-![Eidos: article in Arabic](img/2026-10-14-eidos-theme/p2-rtl-article-eidos.png)
-
-<a name="finding-17"></a>
-## Finding 17: review recommendations use the journal's wording, not the normalized label
-
-- **Compared with** the ORE theme · Driven · the maintainer's choice
+- **Compared with** the ORE theme · Driven · the maintainer's choice · 🔴 **Before merging**
 
 **ORE theme.** Each review in the Peer Review Record is headed by the
 normalized recommendation: "Approved", "Revisions Requested".
@@ -442,8 +435,8 @@ screen.
 `reviewerRecommendationDisplayText`. ORE and the ui-library open-review
 components use the type label (`reviewerRecommendationTypeLabel`).
 
-<a name="finding-18"></a>
-## Finding 18: a registered review DOI does not open its review
+<a name="finding-17"></a>
+## Finding 17: a registered review DOI does not open its review
 
 - **Compared with** the ORE theme · Driven
 
@@ -464,8 +457,8 @@ writes the address. ui-library `usePkpOpenReviewStore.js`
 (`scrollToReviewFromUrl`) handles it for ORE. Eidos
 `components/article/tabs.blade:15,49`.
 
-<a name="finding-19"></a>
-## Finding 19: anonymous reviews in the by-reviewer view
+<a name="finding-18"></a>
+## Finding 18: anonymous reviews in the by-reviewer view
 
 - **Compared with** the ORE theme · Driven
 
@@ -487,8 +480,8 @@ which Eidos does not.
 **Where.** Eidos `components/article/tab-peer-review.blade:8-27,169-188`.
 ui-library `usePkpOpenReviewStore.js` (`reviewerGroups`).
 
-<a name="finding-20"></a>
-## Finding 20: no Crossref "Cited by"
+<a name="finding-19"></a>
+## Finding 19: no Crossref "Cited by"
 
 - **Compared with** the ORE theme · Code
 
@@ -543,11 +536,10 @@ install cannot reach.
   - a masthead editor, a section editor, a board member whose role ended
     in 2025, and a reviewer with an ORCID iD whose review is dated last
     year
-- **Comparisons** (findings 3 to 20) were taken on a re-seeded copy
+- **Comparisons** (findings 3 to 19) were taken on a re-seeded copy
   of the same journal, with these additions:
   - DOIs for articles and issues
   - ORCID enabled with test credentials
-  - Arabic as a second language
   - a funder with a grant, page numbers, and a section set to hide authors
   - a journal thumbnail and the Information block in the sidebar
   - one review set to double-anonymous, and one backdated
