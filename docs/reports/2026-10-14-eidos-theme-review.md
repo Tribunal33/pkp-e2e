@@ -548,7 +548,6 @@ general rather than ORE-specific (they use core data or core plugins).
 |---|---|---|
 | **Normalized recommendation label** (maintainer's choice). Eidos prints the journal's own `reviewerRecommendationDisplayText`; ORE and the Vue components use the type label | `tab-peer-review.blade:78,191` | Code |
 | Deep link to a review. Crossref registers review DOIs as `?tab=peer-review-record&reviewId=N` (`crossref-ojs PeerReviewCrossrefXmlFilter.php:118-131`); Eidos uses `?section=peer-review` and ignores `reviewId`, so a registered review DOI opens the Article tab with nothing expanded | `usePkpOpenReviewStore.js` `scrollToReviewFromUrl` | Code |
-| Summary fields: the in-progress date, current version, reviewer count, and the "how decisions are summarized" note | `PkpOpenReviewSummary` | Code |
 | Review ordering: newest first within a round; reviewer groups sorted by name. In the by-reviewer view, anonymous reviews merge into one group with an empty heading | `usePkpOpenReviewStore.js` | Code |
 | Crossref "Cited by" count and list (see finding 15) | `components/crossrefCitedBy.blade` | Code |
 | Search filters core already accepts: article type (section), author, funder; search inside a category | `components/searchComponent.blade`, `catalogCategory.blade:96-167` | Code |
