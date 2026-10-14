@@ -11,8 +11,13 @@
 - **Introduced** `pkp/pkp-lib#6374` and `pkp/ui-library#129` for `pkp/pkp-lib#4017` · [eda42e5626](https://github.com/pkp/ui-library/commit/eda42e56265399f875ff64353a9a159bee6630a1) · 2020-11-25 · Nate Wright (NateWr)
 - **Upstream** `pkp/pkp-lib#12548` (open), covering the double count, reported on 3.3; this report adds the left-out copy, steps on today's code and a tried fix
 - **Tracked in** spec U55 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U55-notify-users.md#a3)
-- **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Checked** main and 3.5 on 2026-10-14, 3.4 and 3.3 on 2026-10-04, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-14: ticking "Copy" and then unticking it before "Save"
+still sends the manager a copy; that is a separate fault, spec U55
+[A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U55-notify-users.md#a5), with its own report to come. The
+Steps were walked again on `main` and 3.5 with the same result.
 
 ## Summary
 
@@ -32,8 +37,8 @@ Author is also a Reader, so "Author" and "Reader" together read 40 for
 
 - **Lost**: nothing; the manager confirms a send on a wrong number.
 - **Who**: managers and the Site Administrator who send a bulk email to
-  roles that share members, on a journal, press or server where the
-  site allows bulk email.
+  roles that share members, or with "Copy" ticked (one short), on a
+  journal, press or server where the site allows bulk email.
 - **Way round**: none on screen; the manager can only guess the overlap.
 
 Low: a wrong number in a confirmation, on a send that does what it
@@ -211,6 +216,16 @@ current role does not have access to this operation.").
   changes the same `nextPage()` and `PKPNotifyUsersForm`: it adds a
   `validate()` call before the window opens. Merged, `nextPage()`
   validates, then asks for the count, then opens the window.
+- Overlap: spec U55 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U55-notify-users.md#a5): "Copy"
+  ticked and then unticked before "Save" still sends the manager a
+  copy, because the form posts `copy=false` and the `(bool) $val` cast
+  on `copy` in `create()` reads it as true. This fix moves that cast
+  into `getParams()` unchanged, so with this fix alone the window counts
+  the copy that still goes out. If A5 is fixed on the server, in
+  `getParams()`, the count and the send are corrected together. A fix
+  in the browser alone could change only one of them: the send posts
+  through `Form.vue`'s `$.ajax` and the count through `useFetch()`,
+  which serialize the value differently.
 - Failure and busy state, not in the tried diff: when the count request
   fails, `useFetch()` opens its own "Error" window instead of the
   confirmation, with the answer's `error` text (a context no longer
@@ -255,22 +270,27 @@ Medium: two repositories, pkp-lib and ui-library, and a new API route.
   fix out, the typed address answers the app's usual 500 for an unknown
   API route. The Author's check ran on OJS and OPS.
 - Walked on `main` and `stable-3_5_0`, OJS, OMP and OPS, each on an
-  install freshly loaded from pkp/datasets 1a5552c (2026-10-04),
-  PostgreSQL. The count does not depend on the database. No request
-  failed and no page script failed on any walk. On 3.5 the walk saved
-  the window's text at step 6: 40 [34, 38] for 21 [18, 20] emails. Its
-  reads at steps 3 to 5 missed 3.5's window markup, which the script
-  now handles.
+  install freshly loaded from pkp/datasets 47833f0 (2026-10-13),
+  PostgreSQL; first on 2026-10-04 (pkp/datasets 1a5552c). The count does
+  not depend on the database. No request failed and no page script
+  failed on any walk. Both versions read the same at every step: 20
+  [17, 19] at step 3, 40 [34, 38] at steps 4 to 6, and 21 [18, 20]
+  emails, one to each address. On 3.5, the Site Settings save in step 1
+  logs the PHP warning that
+  [U60-A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U60-A3-site-settings-save-logs-redirect-warning.md)
+  covers, which has nothing to do with this fault.
 - Branch tips:
-  - main: OJS ff004d0973 (pkp-lib 987776cd04, ui-library 64d67363); OMP
-    3b0ecf794 and OPS c8af945bb7 (pkp-lib 3dc90c81a6, ui-library
-    280f98c5). The three files the fix touches are identical in all
-    three.
-  - stable-3_5_0: OJS c1cee76b95 (pkp-lib 771474347e); OMP 9c5e24246 and
-    OPS 38b61882d3 (pkp-lib cf3f984335); ui-library d4e01883.
-  - stable-3_4_0: OJS d68934d0d1, OMP 0aec65441, OPS acd8ae704b,
+  - main (2026-10-14): OJS 9f18cd1d46 (pkp-lib 266505ecd8); OMP
+    119211f223 and OPS 35e128e878 (pkp-lib 1836046394); ui-library
+    c9889f00. The three files the fix touches are identical in all
+    three, unchanged since 2026-10-04, and the fix applies to each.
+  - stable-3_5_0 (2026-10-14): OJS 0b02f7c01a (pkp-lib 2196fa2775); OMP
+    044228c00b and OPS 61125ebca4 (pkp-lib b1f342476a); ui-library
+    2576e00a. `PKPEmailController` and `NotifyUsersForm.vue` are the
+    same as on `main`.
+  - stable-3_4_0 (read 2026-10-04): OJS d68934d0d1, OMP 0aec65441, OPS acd8ae704b,
     pkp-lib 767353f4fe, ui-library ee684b34.
-  - stable-3_3_0: OJS ac77c9fb35, OMP 8e72fc883, OPS c5532e2161, pkp-lib
+  - stable-3_3_0 (read 2026-10-04): OJS ac77c9fb35, OMP 8e72fc883, OPS c5532e2161, pkp-lib
     ac3fa73402, ui-library 96959f9e.
 - Code reads:
   - main and 3.5: `NotifyUsersForm.vue` `nextPage()`,
@@ -293,9 +313,11 @@ Medium: two repositories, pkp-lib and ui-library, and a new API route.
 - Upstream: pkp/pkp-lib, pkp/ojs and pkp/ui-library searched for the
   notify users count, the bulk email count, "send an email to" with
   count, bulk email duplicates, `NotifyUsersForm`, `userGroupCounts` and
-  `withActiveUserCount`. Besides the issue in the header,
+  `withActiveUserCount`, and again on 2026-10-14 (the notify users
+  count, `NotifyUsersForm`, bulk email copy). Besides the issue in the header,
   `pkp/pkp-lib#13184` (closed) fixed the per-role counts and left the
   double count to that issue.
-- Unverified, not driven: a "Copy" box ticked and then unticked goes out
-  as the string "false", which PHP reads as true, so the send would
-  still send a copy and the fix's count would count it.
+- "Copy" ticked and then unticked: spec U55
+  [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U55-notify-users.md#a5), walked on OJS, OMP and OPS on
+  2026-10-13 (the manager got a copy). Not walked with this report's fix
+  applied.

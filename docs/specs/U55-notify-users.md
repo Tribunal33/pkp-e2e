@@ -471,7 +471,7 @@ an entry notes otherwise; the team settles them on spec review.
 |----|-----------------------------|------|--------|--------|
 | [A1](#a1) | Users & Roles › "Notify": the button that emails whole roles reads "Save" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Users & Roles › "Notify": no field is marked required, and an empty form asks to email "0 users" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | Notify users: the "Send Email" window counts a person once per ticked role and leaves out the copy | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
+| [A3](#a3) | Notify users: the "Send Email" window counts a person once per ticked role and leaves out the copy | 🐞 | low | issues (claude), 2026-10-14 — re-verified |
 | [A4](#a4) | Users & Roles › "Notify": an email to roles nobody holds is accepted with "Saved" and sent to no one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | Users & Roles › "Notify": "Copy" ticked and then unticked before "Save" still sends the manager a copy | 🐞 | minor | — |
 
@@ -514,8 +514,7 @@ The emails themselves reach the right people, once each; only the
 number the manager confirms is wrong. In PKP's default test data every
 Author is also a Reader, so "Author" and "Reader" together read 40 for
 20 people.
-Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-04. <sup>f-a3</sup>
-Report: refresh owed — the housekeeping claim check of 2026-10-13 (C55) drove the case the report lists as unverified: a Copy box ticked then unticked still sends the manager a copy (new entry A5); the report's Unverified bullet should take the result (2026-10-13)
+Since: 2020-11-25 (the tab's first version) · Basis: probe, 2026-10-14. <sup>f-a3</sup>
 
 <a id="a4"></a>
 **A4 — Users & Roles › "Notify": an email to roles nobody holds is accepted with "Saved" and sent to no one** · 🐞 · low.
