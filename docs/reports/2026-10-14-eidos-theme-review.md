@@ -12,8 +12,8 @@
   at the PR heads.
 - **References** the Default theme (OJS `main`) and the ORE theme
   (`ore/plugins/themes/oreTheme`, `16b821e`). For the ORE-only grey areas
-  the maintainer decided: the corresponding-author block and the
-  normalized recommendation label are in scope. Awaiting-review states,
+  the maintainer decided: the normalized recommendation label is in
+  scope. A corresponding-author block, awaiting-review states,
   review status, reviewer names and funders in listings, the reviewer
   search filter, first-and-latest version dates, inline HTML full text,
   category images, breadcrumbs, a header Submit button, a comments
@@ -94,7 +94,7 @@ injections are in finding 12.
 | [14](#finding-14) | Pages without an Eidos template render unstyled (static pages, Information, subscriptions, …) | medium | medium | Driven |
 | [15](#finding-15) | Only four plugin hooks are fired: Cited by, recommendations, OpenID, footer plugins disappear | high | medium | Code |
 | [16](#finding-16) | Missing against the Default theme | — | — | Driven / Code |
-| [17](#finding-17) | Missing against the ORE theme (general features, and the two the maintainer chose) | — | — | Code |
+| [17](#finding-17) | Missing against the ORE theme (general features, and the one the maintainer chose) | — | — | Code |
 
 ## How it looks
 
@@ -541,12 +541,11 @@ Breadcrumbs are left out on the maintainer's word.
 <a name="finding-17"></a>
 ## Finding 17: missing against the ORE theme
 
-These are the features the maintainer chose, plus ORE features that are
+This is the feature the maintainer chose, plus ORE features that are
 general rather than ORE-specific (they use core data or core plugins).
 
 | Missing in Eidos | ORE reference | Seen |
 |---|---|---|
-| **Corresponding-author block** (maintainer's choice): primary contact with ORCID and email, funding statement, copyright and license, Crossmark | `articleTabs/articleTab.blade:338-453` | Code |
 | **Normalized recommendation label** (maintainer's choice). Eidos prints the journal's own `reviewerRecommendationDisplayText`; ORE and the Vue components use the type label | `tab-peer-review.blade:78,191` | Code |
 | Deep link to a review. Crossref registers review DOIs as `?tab=peer-review-record&reviewId=N` (`crossref-ojs PeerReviewCrossrefXmlFilter.php:118-131`); Eidos uses `?section=peer-review` and ignores `reviewId`, so a registered review DOI opens the Article tab with nothing expanded | `usePkpOpenReviewStore.js` `scrollToReviewFromUrl` | Code |
 | Peer-review "in progress" state. Eidos shows "data not available" whenever no round is public, even while review is under way (the `review-in-progress` icon exists unused) | `PkpOpenReviewInProgress` | Code |
