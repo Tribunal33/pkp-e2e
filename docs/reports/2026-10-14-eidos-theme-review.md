@@ -534,7 +534,6 @@ Breadcrumbs are left out on the maintainer's word.
 | Edit links for managers on About, Contact, Submissions and other pages | core `.tpl` pages | Code |
 | ORCID button at registration | `userRegister.tpl:30-31` | Code |
 | Journal selector on site-wide search; journal thumbnails and current-issue links on the site home page | `search.tpl:68-80`, `indexSite.tpl` | Code |
-| Font choice without the Google Fonts plugin. Eidos offers fonts only when that plugin is on | `typography` option | Code |
 | Sidebar blocks in a side column. Eidos renders them in a footer strip | `footer.tpl:22-26` | Driven |
 | Footer link to About this Publishing System. Eidos links to pkp.sfu.ca | `footer.tpl:43` | Driven |
 | Print styles and RTL. Neither theme has print styles. Default has a full `rtl.less`, while Eidos has scattered `[dir=rtl]` rules with about 65 physical left/right properties | — | Code |
