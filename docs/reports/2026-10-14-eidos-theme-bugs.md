@@ -59,6 +59,7 @@ categories, announcements, the About pages, login and registration.
 | [11](#finding-11) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
 | [12](#finding-12) | Smaller bugs (dates, labels, raw keys, escaping, accessibility, warnings, build) | low | small | Driven / Code |
 | [13](#finding-13) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
+| [14](#finding-14) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
 
 Findings 1 and 2 carry the `security` label. Eidos is unreleased, so per
 the security policy they are ordinary findings. Two manager-only
@@ -407,6 +408,30 @@ the PR (was `:141`, `'#public-comments'`).
 
 **Fix.** Let the theme supply the return anchor, or keep both, as in
 `?section=comments#public-comments`.
+
+<a name="finding-14"></a>
+## Finding 14: a short issue description is faded out almost completely
+
+- **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
+
+**What happens.** On the home page's "Current Issue (Summary)" block,
+the issue description fades into the background at its bottom edge, to
+hint that longer text is cut off. The fade is always drawn, so a
+one-line description ("The current issue of the Journal of Public
+Knowledge.") sits entirely inside it and is barely readable.
+
+![A one-line issue description almost invisible](img/2026-10-14-eidos-theme/14-issue-summary-fade.png)
+
+**Cause.** `plugins/themes/eidos/src/css/components/issue-summary.css:44-59`.
+`.issue-summary-description:after` is placed at `top: 100%`, right
+under the text, with `box-shadow: 0 -2rem 2rem var(--color-page-background)`.
+The shadow covers the bottom 3 to 4 rem of the description whatever its
+length. The fade only belongs when the text reaches `max-height`
+(16 rem, or 9.5 rem from 1024 px).
+
+**Fix.** Draw the fade only when the text overflows. For example, add a
+class from JavaScript when `scrollHeight > clientHeight`, or replace the
+fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 
 ## Evidence
 
