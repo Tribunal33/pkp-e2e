@@ -599,9 +599,9 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   thread and the bot mentions the owner there; the slot frees when the
   thread resumes and finishes, or with `node bin/slot.js free <n>`. A
   session that cannot leave this clone or `../pkp-e2e-sec` clean at its
-  end says in its thread what is left and why, tagging @jarda.kotesovec
-  and @blessie (@blessie added while @jarda.kotesovec is away,
-  2026-10-14). A
+  end says in its thread what is left and why, tagging the thread's
+  owner, as the bot does, and also @blessie while @jarda.kotesovec is
+  away (2026-10-14). A
   resumed thread returns to its own slot, or, when another session holds
   it, starts fresh in a free one with the thread's messages. `node
   bin/slot.js status` shows all of it.
