@@ -18,7 +18,9 @@
  *     against the XML entry;
  *   - clones the homepage repository at the release's tag, symlinks as
  *     plain files, and lists what the package has that the source does
- *     not, and the reverse;
+ *     not, and the reverse, against the source's plugin folder (the
+ *     folder whose version.xml names the same application) and with
+ *     files that differ only in line endings listed apart;
  *   - for an update, lists what changed since the previous gallery release;
  *   - runs `composer audit` on a bundled composer.lock (the lock file
  *     alone, no plugins, no scripts, none of the package's composer.json);
@@ -154,8 +156,8 @@ function walk(dir, base = dir, out = []) {
 }
 
 /** `diff -rq` between two trees, as lists. */
-function treeDiff(a, b, excludes = ['.git', '.github']) {
-    const args = ['-rq', ...excludes.flatMap((e) => ['--exclude', e]), a, b];
+function treeDiff(a, b, excludes = ['.git', '.github'], extra = []) {
+    const args = ['-rq', ...extra, ...excludes.flatMap((e) => ['--exclude', e]), a, b];
     const out = spawnSync('diff', args, {encoding: 'utf8', maxBuffer: 64 * 1024 * 1024}).stdout || '';
     const onlyA = [];
     const onlyB = [];
@@ -170,6 +172,35 @@ function treeDiff(a, b, excludes = ['.git', '.github']) {
         }
     }
     return {onlyA, onlyB, differ};
+}
+
+/**
+ * The folder of a source checkout that holds the plugin: the root, or the
+ * first folder (three levels down at most) whose version.xml names the
+ * package's application, for a repository that keeps the plugin under a
+ * subfolder such as plugin/ (pg-485).
+ */
+function sourcePluginDir(src, root) {
+    const app = (file) => {
+        try {
+            const m = fs.readFileSync(file, 'utf8').match(/<application>\s*([^<\s]+)\s*<\/application>/);
+            return m && m[1];
+        } catch {
+            return null;
+        }
+    };
+    const want = app(path.join(root, 'version.xml'));
+    if (!want || app(path.join(src, 'version.xml')) === want) return src;
+    const queue = [[src, 0]];
+    while (queue.length) {
+        const [d, depth] = queue.shift();
+        if (depth > 0 && app(path.join(d, 'version.xml')) === want) return d;
+        if (depth >= 3) continue;
+        for (const e of fs.readdirSync(d, {withFileTypes: true})) {
+            if (e.isDirectory() && !e.isSymbolicLink() && e.name !== '.git' && e.name !== 'node_modules') queue.push([path.join(d, e.name), depth + 1]);
+        }
+    }
+    return src;
 }
 
 const HOT_SPOTS = [
@@ -346,11 +377,18 @@ function main() {
                         .split('\n')
                         .filter((l) => l.startsWith('120000 '))
                         .map((l) => l.split('\t')[1]);
-                    const d = treeDiff(root, src);
+                    const base = sourcePluginDir(src, root);
+                    const sub = path.relative(src, base);
+                    const d = treeDiff(root, base);
+                    // Files that differ only in line endings are listed apart.
+                    const crlf = new Set(treeDiff(root, base, undefined, ['--strip-trailing-cr']).differ);
+                    const eol = d.differ.filter((f) => !crlf.has(f));
+                    d.differ = d.differ.filter((f) => crlf.has(f));
                     if (links.length) md.push(`- **Symlinks in the source** (checked out as plain files): ${links.slice(0, 30).join(', ')}`);
                     md.push(
-                        `- Source at tag ${tagMatch[1]} (${repoName}): ${d.differ.length} file(s) differ, ${d.onlyA.length} only in the package, ${d.onlyB.length} only in the source`,
+                        `- Source at tag ${tagMatch[1]} (${repoName}${sub ? `, plugin folder \`${sub}/\`` : ''}): ${d.differ.length} file(s) differ, ${eol.length} in line endings only, ${d.onlyA.length} only in the package, ${d.onlyB.length} only in the source`,
                         ...(d.differ.length ? [`  - **Differ:** ${d.differ.slice(0, 30).join(', ')}`] : []),
+                        ...(eol.length ? [`  - Line endings only: ${eol.slice(0, 30).join(', ')}${eol.length > 30 ? ' …' : ''}`] : []),
                         ...(d.onlyA.length ? [`  - Only in the package: ${d.onlyA.slice(0, 30).join(', ')}${d.onlyA.length > 30 ? ' …' : ''}`] : []),
                         ...(d.onlyB.length ? [`  - Only in the source: ${d.onlyB.slice(0, 30).join(', ')}${d.onlyB.length > 30 ? ' …' : ''}`] : []),
                     );
