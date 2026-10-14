@@ -1,6 +1,9 @@
-# The Eidos theme itself: bugs, and what it lacks against the Default and ORE themes
+# The Eidos theme: bugs
 
-- **Scope** the Eidos theme with Eidos enabled. The first report,
+- **Scope** bugs in the Eidos theme with Eidos enabled: things that are
+  broken or wrong in what it already does. What Eidos lacks against the
+  Default and ORE themes is in the companion report,
+  `2026-10-14-eidos-theme-gap-analysis.md`. The first report,
   `2026-10-08-pkp-lib-13260.md`, covered what the same PRs break on
   installs that never switch to Eidos.
 - **PRs** `pkp-lib#13260`, `ojs#5784`, `ui-library#972` and `crossref-ojs#107`,
@@ -10,15 +13,6 @@
   from its own `package.json` and driven live in Chromium at 1280 px and
   390 px, on the Default theme as well for comparison. The code was read
   at the PR heads.
-- **References** the Default theme (OJS `main`) and the ORE theme
-  (`ore/plugins/themes/oreTheme`, `16b821e`). For the ORE-only grey areas
-  the maintainer decided: the normalized recommendation label is in
-  scope. A corresponding-author block, awaiting-review states,
-  review status, reviewer names and funders in listings, the reviewer
-  search filter, first-and-latest version dates, inline HTML full text,
-  category images, breadcrumbs, a header Submit button, a comments
-  shortcut, sharing the DOI link, a PDF-plus-JATS download count and
-  pages for gallery plugins are not required.
 - **Model** claude-opus-5-5
 
 Each item is marked **Driven** (seen on the live install) or **Code**
@@ -29,14 +23,6 @@ Each item is marked **Driven** (seen on the live install) or **Code**
 Eidos is a complete, polished design for the pages it covers: the home
 page blocks, the issue pages, the article page with its tabs, search,
 categories, announcements, the About pages, login and registration.
-
-The report has two parts. **Part 1** lists the bugs: things that are
-broken or wrong in what Eidos already does. **Part 2** lists what is
-possibly still outstanding: pages, hooks and features Eidos does not have
-yet, against the Default and ORE themes. Part 2 holds the points still
-to discuss.
-
-### Part 1: bugs
 
 1. **Two script injections.** A search link runs script for whoever opens
    it, and an author's response to reviewers runs script on the public
@@ -77,36 +63,6 @@ to discuss.
 Findings 1 and 2 carry the `security` label. Eidos is unreleased, so per
 the security policy they are ordinary findings. Two manager-only
 injections are in finding 12.
-
-### Part 2: possibly outstanding
-
-- Every page Eidos has no template for renders unstyled: static pages,
-  the Information pages, the subscription pages and others.
-- Only four plugin hooks are fired, so Crossref "Cited by", the two
-  recommendation plugins and OpenID sign-in disappear.
-- Usage statistics cannot be hidden.
-- Funders and contributor roles are never shown.
-- A registered review DOI does not open its review.
-- There are a dozen smaller gaps against the Default theme.
-
-| # | Item | Severity | Effort | Seen |
-|---|---|---|---|---|
-| [14](#finding-14) | Pages without an Eidos template render unstyled (static pages, Information, subscriptions, …) | medium | medium | Driven |
-| [15](#finding-15) | Only four plugin hooks are fired: Cited by, recommendations, OpenID, footer plugins disappear | high | medium | Code |
-| [16](#finding-16) | Missing against the Default theme | — | — | Driven / Code |
-| [17](#finding-17) | Missing against the ORE theme (general features, and the one the maintainer chose) | — | — | Code |
-
-## How it looks
-
-The same journal, the same content, Eidos first and the Default theme
-second:
-
-![Eidos home page](img/2026-10-14-eidos-theme/00-home-eidos.png)
-![Default home page](img/2026-10-14-eidos-theme/00-home-default.png)
-![Eidos article page](img/2026-10-14-eidos-theme/00-article-eidos.png)
-![Default article page](img/2026-10-14-eidos-theme/00-article-default.png)
-
-# Part 1: Bugs
 
 <a name="finding-1"></a>
 ## Finding 1: the search page prints the query as HTML
@@ -452,109 +408,6 @@ the PR (was `:141`, `'#public-comments'`).
 **Fix.** Let the theme supply the return anchor, or keep both, as in
 `?section=comments#public-comments`.
 
-# Part 2: Possibly outstanding
-
-<a name="finding-14"></a>
-## Finding 14: pages without an Eidos template render unstyled
-
-- **Severity** medium · **Effort** medium · Driven
-
-**What happens.** A page Eidos has no `.blade` for falls back to the core
-Smarty page with the core header and footer markup, which Eidos's CSS
-does not style. The result is a bare list of links followed by the
-content: no header, no layout, and a large "Platform & workflow by OJS /
-PKP" image.
-
-Pages affected (Driven for the first three):
-- static pages (Static Pages plugin)
-- the Information pages for readers, authors and librarians (also linked
-  from the Information block)
-- About this Publishing System
-- the subscription pages: about/subscriptions, user subscriptions, and
-  purchasing individual and institutional subscriptions
-- the manual payment form
-- ORCID verify and ORCID about
-- notification unsubscribe
-- the LOCKSS and CLOCKSS pages
-- the masthead-disabled page
-
-![Eidos: a static page](img/2026-10-14-eidos-theme/06-static-eidos.png)
-![Eidos: Information For Readers](img/2026-10-14-eidos-theme/06-info-eidos.png)
-![Default: the same static page](img/2026-10-14-eidos-theme/06-static-default.png)
-
-**Why medium.** The content can still be read, so it sits below high.
-Static pages are in wide use, which is what would raise it.
-
-**Fix.** Either Blade templates for these pages (ORE has `information`,
-`aboutThisPublishingSystem`, `orcidVerify` and static pages), or Eidos
-versions of `frontend/components/header.tpl` and `footer.tpl` that wrap a
-core page in Eidos's header and footer.
-
-<a name="finding-15"></a>
-## Finding 15: only four plugin hooks are fired
-
-> **Notes from Jarda:** Given that we have now the blocks, Article::Details and Article::Main are not relevant.. But for others keeping them backward compatible seems as good idea?
-
-- **Severity** high · **Effort** medium · Code
-
-Eidos's templates call `Templates::Search::SearchResults::AdditionalFilters`,
-`::PreResults`, `Templates::Common::Sidebar` and
-`Templates::Article::Details::Reference`, and nothing else (grep for
-`@callHook`).
-
-| Hook not fired | What disappears |
-|---|---|
-| `Templates::Article::Details` | Crossref "Cited by" (`CrossrefCitedBy.php:54`), PFL |
-| `Templates::Article::Main` | third-party article plugins |
-| `Templates::Article::Footer::PageFooter` | Recommend by Author, Recommend Similar Articles (both bundled) |
-| `Templates::Common::Footer::PageFooter` (pages and galley viewer) | footer injectors |
-| `Templates::User::Login::BeforeForm` / `AfterForm` | OpenID sign-in buttons, SSO plugins |
-| `Templates::User::Register::BeforeForm` / `AfterForm` | registration add-ons |
-| `Templates::Index::journal`, `Templates::Issue::Issue::Article` | home page and issue listing plugins |
-
-The PR's replacement is the metadata and homepage block interface, which
-only Crossref implements so far (Crossmark as a block). So either Eidos
-fires the legacy hooks in matching places, or each plugin is ported.
-Cited by is a 3.6 feature that ORE shows in its Metrics tab.
-
-<a name="finding-16"></a>
-## Finding 16: missing against the Default theme
-
-Breadcrumbs are left out on the maintainer's word.
-
-| Missing in Eidos | Default has | Seen |
-|---|---|---|
-| A way to hide usage statistics. The Metrics tab is always there and always draws a chart. Default's "displayStats" defaults to none, so Eidos publishes every journal's download figures | `DefaultThemePlugin.php:118-135` | Driven |
-| Funders (3.6 `submission.funders` with ROR and grant numbers). No block exists | `article_details.tpl:479-500` | Code |
-| Contributor roles. Counted to decide whether "Author details" shows, never printed | `article_details.tpl:129` | Driven (absent) |
-| Issue DOI on the issue page (Eidos loops `$pubIdPlugins`, which no longer includes DOIs and is not assigned: warning) | `issue_toc.tpl:82-90` | Driven (warning) / Code |
-| Page numbers in article listings; the section's "hide author" setting is ignored | `article_summary.tpl:27,61-73` | Code |
-| "View All Issues" under the home page's current issue | `indexJournal.tpl` | Driven |
-| Date posted on a single announcement | `announcement_full.tpl:18-19` | Code |
-| Edit links for managers on About, Contact, Submissions and other pages | core `.tpl` pages | Code |
-| ORCID button at registration | `userRegister.tpl:30-31` | Code |
-| Journal selector on site-wide search; journal thumbnails and current-issue links on the site home page | `search.tpl:68-80`, `indexSite.tpl` | Code |
-| Sidebar blocks in a side column. Eidos renders them in a footer strip | `footer.tpl:22-26` | Driven |
-| Footer link to About this Publishing System. Eidos links to pkp.sfu.ca | `footer.tpl:43` | Driven |
-| Print styles and RTL. Neither theme has print styles. Default has a full `rtl.less`, while Eidos has scattered `[dir=rtl]` rules with about 65 physical left/right properties | — | Code |
-
-<a name="finding-17"></a>
-## Finding 17: missing against the ORE theme
-
-This is the feature the maintainer chose, plus ORE features that are
-general rather than ORE-specific (they use core data or core plugins).
-
-| Missing in Eidos | ORE reference | Seen |
-|---|---|---|
-| **Normalized recommendation label** (maintainer's choice). Eidos prints the journal's own `reviewerRecommendationDisplayText`; ORE and the Vue components use the type label | `tab-peer-review.blade:78,191` | Code |
-| Deep link to a review. Crossref registers review DOIs as `?tab=peer-review-record&reviewId=N` (`crossref-ojs PeerReviewCrossrefXmlFilter.php:118-131`); Eidos uses `?section=peer-review` and ignores `reviewId`, so a registered review DOI opens the Article tab with nothing expanded | `usePkpOpenReviewStore.js` `scrollToReviewFromUrl` | Code |
-| Review ordering: newest first within a round; reviewer groups sorted by name. In the by-reviewer view, anonymous reviews merge into one group with an empty heading | `usePkpOpenReviewStore.js` | Code |
-| Crossref "Cited by" count and list (see finding 15) | `components/crossrefCitedBy.blade` | Code |
-
-The ORE-only features (Frascati fields, WordPress news, Gateways and
-Collections, funder and collection category groups, branding) are left
-out.
-
 ## Evidence
 
 - **Heads.**
@@ -603,7 +456,5 @@ out.
   1280 px and 390 px on Eidos, and at 1280 px on the Default theme, with
   axe-core 4.10.2 (WCAG 2.1 A/AA plus best practice). The console, failed
   requests and the server log were captured for each.
-- **Code.** The comparison with the Default theme and ORE was read at the
-  heads above.
 - **Not kept.** The walk scripts were throwaway, and no checks were added
   to the suite.
