@@ -596,8 +596,11 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   ago. A pausing session's slot is freed only when its clone is clean:
   nothing uncommitted, untracked, stashed or unpushed in this repo (the
   app checkouts do not count). Otherwise it stays **blocked** for that
-  thread and the bot mentions the owner there; the slot frees when the
-  thread resumes and finishes, or with `node bin/slot.js free <n>`. A
+  thread and the bot mentions the owner there, with every username
+  `~/.pkp-e2e-slots/blocked-mentions` lists (one per line, read at each
+  release; @blessie while @jarda.kotesovec is away, 2026-10-14); the
+  slot frees when the thread resumes and finishes, or with `node
+  bin/slot.js free <n>`. A
   resumed thread returns to its own slot, or, when another session holds
   it, starts fresh in a free one with the thread's messages. `node
   bin/slot.js status` shows all of it.
