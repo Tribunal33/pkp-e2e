@@ -28,7 +28,6 @@ categories, announcements, the About pages, login and registration.
    it, and an author's response to reviewers runs script on the public
    article page.
 2. **Pages and flows that break.**
-   - Images and stylesheets inside HTML galleys answer 404.
    - Registration fails silently when a captcha or the site-wide privacy
      statement is on.
    - The masthead answers 500 when it lists a reviewer with an ORCID iD.
@@ -48,46 +47,45 @@ categories, announcements, the About pages, login and registration.
 |---|---|---|---|---|
 | [1](#finding-1) | Search page prints the query as HTML: a link runs script | high | small | Driven |
 | [2](#finding-2) | Author's response to reviewers printed as HTML on the public article page | high | small | Driven |
-| [3](#finding-3) | HTML galleys lose their images and stylesheets (404) | high | small | Driven |
-| [4](#finding-4) | Registration fails silently with a captcha on, or at site level with the site-wide privacy statement on | high | small | Driven |
-| [5](#finding-5) | Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD | high | small | Driven |
-| [6](#finding-6) | Every masthead and history person shows a fake, verified ORCID iD | high | small | Driven |
-| [7](#finding-7) | Site home page: 500 without a site title, empty with one | medium | small | Driven |
-| [8](#finding-8) | "Outdated version" notice inverted in the PDF and HTML viewers | medium | small | Driven |
-| [9](#finding-9) | Full-issue PDF crashes the viewer template and downloads instead | medium | small | Driven |
-| [10](#finding-10) | Peer review shown per journal, not per article; metrics block inverted | medium | small | Driven |
-| [11](#finding-11) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
-| [12](#finding-12) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
-| [13](#finding-13) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
-| [14](#finding-14) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | low | small | Driven |
-| [15](#finding-15) | Every OJS article's date is labelled "Posted" | low | small | Driven |
-| [16](#finding-16) | "Version history" is offered when there is only one version | low | small | Driven |
-| [17](#finding-17) | Page titles are escaped twice | low | small | Driven |
-| [18](#finding-18) | Three raw translation keys | low | small | Driven |
-| [19](#finding-19) | No `<main>` landmark on the home, article and sign-in pages | low | small | Driven |
-| [20](#finding-20) | Two `<h1>` on every page when a logo is set | low | small | Driven |
-| [21](#finding-21) | The header logo has no alternative text | low | small | Driven |
-| [22](#finding-22) | The login password field has an invalid `autocomplete` value | low | small | Driven |
-| [23](#finding-23) | The search field's label is the text `{$label}` | low | small | Code |
-| [24](#finding-24) | The search form reads a variable nothing assigns | low | small | Driven |
-| [25](#finding-25) | The search date pickers show English month names in every language | low | small | Code |
-| [26](#finding-26) | Supplementary galleys are never found in listings | low | small | Code |
-| [27](#finding-27) | An article galley shows the issue's price | low | small | Code |
-| [28](#finding-28) | Share links put the article address in unencoded | low | small | Code |
-| [29](#finding-29) | The account menu's `aria-label` is unquoted | low | small | Code |
-| [30](#finding-30) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
-| [31](#finding-31) | Comment dates are always shown as "… ago" | low | small | Code |
-| [32](#finding-32) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
-| [33](#finding-33) | PHP warnings on nearly every page | low | small | Driven |
-| [34](#finding-34) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
-| [35](#finding-35) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
-| [36](#finding-36) | `npm ci` fails on the theme | low | small | Driven |
+| [3](#finding-3) | Registration fails silently with a captcha on, or at site level with the site-wide privacy statement on | high | small | Driven |
+| [4](#finding-4) | Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD | high | small | Driven |
+| [5](#finding-5) | Every masthead and history person shows a fake, verified ORCID iD | high | small | Driven |
+| [6](#finding-6) | Site home page: 500 without a site title, empty with one | medium | small | Driven |
+| [7](#finding-7) | "Outdated version" notice inverted in the PDF and HTML viewers | medium | small | Driven |
+| [8](#finding-8) | Full-issue PDF crashes the viewer template and downloads instead | medium | small | Driven |
+| [9](#finding-9) | Peer review shown per journal, not per article; metrics block inverted | medium | small | Driven |
+| [10](#finding-10) | Editorial History shows no dates; contact page prints template source | medium | small | Driven |
+| [11](#finding-11) | Side effect on the Default theme: the comments sign-in link lost its anchor | low | small | Driven |
+| [12](#finding-12) | A short issue description is faded out almost completely (home page "Current Issue (Summary)" block) | low | small | Driven |
+| [13](#finding-13) | Home page Highlights: the image is cropped to fit its box; the previous arrow and the dots are hard to see on it | low | small | Driven |
+| [14](#finding-14) | Every OJS article's date is labelled "Posted" | low | small | Driven |
+| [15](#finding-15) | "Version history" is offered when there is only one version | low | small | Driven |
+| [16](#finding-16) | Page titles are escaped twice | low | small | Driven |
+| [17](#finding-17) | Three raw translation keys | low | small | Driven |
+| [18](#finding-18) | No `<main>` landmark on the home, article and sign-in pages | low | small | Driven |
+| [19](#finding-19) | Two `<h1>` on every page when a logo is set | low | small | Driven |
+| [20](#finding-20) | The header logo has no alternative text | low | small | Driven |
+| [21](#finding-21) | The login password field has an invalid `autocomplete` value | low | small | Driven |
+| [22](#finding-22) | The search field's label is the text `{$label}` | low | small | Code |
+| [23](#finding-23) | The search form reads a variable nothing assigns | low | small | Driven |
+| [24](#finding-24) | The search date pickers show English month names in every language | low | small | Code |
+| [25](#finding-25) | Supplementary galleys are never found in listings | low | small | Code |
+| [26](#finding-26) | An article galley shows the issue's price | low | small | Code |
+| [27](#finding-27) | Share links put the article address in unencoded | low | small | Code |
+| [28](#finding-28) | The account menu's `aria-label` is unquoted | low | small | Code |
+| [29](#finding-29) | The Comments and Metrics tabs break on an apostrophe in their data | low | small | Code |
+| [30](#finding-30) | Comment dates are always shown as "… ago" | low | small | Code |
+| [31](#finding-31) | The "Latest Announcement" block stays empty without saying why | low | small | Driven |
+| [32](#finding-32) | PHP warnings on nearly every page | low | small | Driven |
+| [33](#finding-33) | Colour options go unchecked into the page's styles (manager-entered) | low | small | Driven |
+| [34](#finding-34) | The issue summary decodes escaped text into markup (manager-entered) | low | small | Driven |
+| [35](#finding-35) | `npm ci` fails on the theme | low | small | Driven |
 
 **Security-related:** four findings.
 - [1](#finding-1): a search link runs script.
 - [2](#finding-2): an author's response to reviewers runs script on the
   public article page.
-- [34](#finding-34) and [35](#finding-35): manager-entered colour values
+- [33](#finding-33) and [34](#finding-34): manager-entered colour values
   and issue descriptions can inject script. They are low because only a
   manager can enter them.
 
@@ -157,35 +155,7 @@ prints "Array". So the Eidos fix must pick the localized value as well
 as sanitize it.
 
 <a name="finding-3"></a>
-## Finding 3: HTML galleys lose their images and stylesheets
-
-- **Severity** high · **Effort** small · Driven
-
-**What happens.** An HTML galley opens in Eidos's viewer, but every file
-the HTML refers to (stylesheet, figures) answers 404. Readers see broken
-images and unstyled text. On the Default theme the same galley loads
-them.
-
-**Steps.** Publish an HTML galley with a dependent image and stylesheet,
-then open it from the article page.
-- Eidos requests `…/article/download/21/figure.png` and gets 404.
-- Default requests `…/article/download/21/11/figure.png` and gets 200.
-
-![Eidos: broken figure](img/2026-10-14-eidos-theme/03-html-galley-eidos.png)
-![Default: the same galley](img/2026-10-14-eidos-theme/03-html-galley-default.png)
-
-**Cause.**
-`plugins/themes/eidos/templates/plugins/generic/htmlArticleGalley/templates/display.blade:5-16`
-builds the iframe address as `article/download/<id>/<galleyId>?inline=1`,
-without the file id. The plugin's own `display.tpl:41,45` passes
-`<galleyId>/<fileId>`. Relative links inside the HTML therefore resolve
-one level too high, where nothing serves them.
-
-**Fix.** Append `$submissionFile->getId()` to the path, as the plugin's
-template does.
-
-<a name="finding-4"></a>
-## Finding 4: registration fails silently under two common settings
+## Finding 3: registration fails silently under two common settings
 
 - **Severity** high · **Effort** small · Driven
 
@@ -219,8 +189,8 @@ errors.
   as core `userRegister.tpl:136-148` does.
 - Print the form's error list at the top.
 
-<a name="finding-5"></a>
-## Finding 5: the Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD
+<a name="finding-4"></a>
+## Finding 4: the Editorial Masthead answers 500 when it lists a reviewer with an ORCID iD
 
 - **Severity** high · **Effort** small · **Crash** server · Driven
 
@@ -241,8 +211,8 @@ is a string.
 **Fix.** Use `$reviewer->getData('orcid')` directly, and
 `$reviewer->hasVerifiedOrcid()` for the badge.
 
-<a name="finding-6"></a>
-## Finding 6: every masthead and history person shows a fake, verified ORCID iD
+<a name="finding-5"></a>
+## Finding 5: every masthead and history person shows a fake, verified ORCID iD
 
 - **Severity** high · **Effort** small · Driven
 
@@ -263,8 +233,8 @@ for verified ones.
 **Fix.** Pass the user's iD (`:orcid="$user->getData('orcid')"`), bind
 `:hasVerifiedOrcid`, and show the icon only when both are set.
 
-<a name="finding-7"></a>
-## Finding 7: the site home page answers 500 without a site title, and is empty with one
+<a name="finding-6"></a>
+## Finding 6: the site home page answers 500 without a site title, and is empty with one
 
 - **Severity** medium · **Effort** small · **Crash** server · Driven
 
@@ -290,8 +260,8 @@ for verified ones.
 **Fix.** Return `?? ''` in `contextName()`, and give the site its own
 default block list starting with `homepage-blocks.contexts`.
 
-<a name="finding-8"></a>
-## Finding 8: the "outdated version" notice is the wrong way round in the galley viewers
+<a name="finding-7"></a>
+## Finding 7: the "outdated version" notice is the wrong way round in the galley viewers
 
 - **Severity** medium · **Effort** small · Driven
 
@@ -313,8 +283,8 @@ both places.
 
 **Fix.** Swap the two branches.
 
-<a name="finding-9"></a>
-## Finding 9: a full-issue PDF crashes the viewer template
+<a name="finding-8"></a>
+## Finding 8: a full-issue PDF crashes the viewer template
 
 - **Severity** medium · **Effort** small · Driven
 
@@ -336,8 +306,8 @@ which the plugin's issue callback does not assign.
 **Fix.** Branch on `$issue` in the template, or add an issue variant of
 the template.
 
-<a name="finding-10"></a>
-## Finding 10: peer review shown per journal, not per article; metrics block inverted
+<a name="finding-9"></a>
+## Finding 9: peer review shown per journal, not per article; metrics block inverted
 
 - **Severity** medium · **Effort** small · Driven
 
@@ -366,8 +336,8 @@ the template.
 Invert the metrics condition to `@if ($metricsViews || $metricsDownloads)`,
 and default both variables to 0 in `classes/MetadataBlocks.php:38-41`.
 
-<a name="finding-11"></a>
-## Finding 11: Editorial History shows no dates; the contact page prints template source
+<a name="finding-10"></a>
+## Finding 10: Editorial History shows no dates; the contact page prints template source
 
 - **Severity** medium · **Effort** small · Driven
 
@@ -391,8 +361,8 @@ and default both variables to 0 in `classes/MetadataBlocks.php:38-41`.
 ![Default: History with dates](img/2026-10-14-eidos-theme/07-history-default.png)
 ![Contact page](img/2026-10-14-eidos-theme/10-contact.png)
 
-<a name="finding-12"></a>
-## Finding 12: side effect on the Default theme, the comments sign-in link
+<a name="finding-11"></a>
+## Finding 11: side effect on the Default theme, the comments sign-in link
 
 - **Severity** low · **Effort** small · Driven
 
@@ -408,8 +378,8 @@ the PR (was `:141`, `'#public-comments'`).
 **Fix.** Let the theme supply the return anchor, or keep both, as in
 `?section=comments#public-comments`.
 
-<a name="finding-13"></a>
-## Finding 13: a short issue description is faded out almost completely
+<a name="finding-12"></a>
+## Finding 12: a short issue description is faded out almost completely
 
 - **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
 
@@ -432,8 +402,8 @@ length. The fade only belongs when the text reaches `max-height`
 class from JavaScript when `scrollHeight > clientHeight`, or replace the
 fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 
-<a name="finding-14"></a>
-## Finding 14: the Highlights image is cropped to fit its box
+<a name="finding-13"></a>
+## Finding 13: the Highlights image is cropped to fit its box
 
 - **Severity** low · **Effort** small · Driven (screenshot from the maintainer)
 
@@ -465,8 +435,8 @@ fade with `line-clamp`, which cuts and adds an ellipsis only when needed.
 - Give the arrows and dots a contrasting background, or place them
   outside the image.
 
-<a name="finding-15"></a>
-## Finding 15: every OJS article's date is labelled "Posted"
+<a name="finding-14"></a>
+## Finding 14: every OJS article's date is labelled "Posted"
 
 - **Severity** low · **Effort** small · Driven
 
@@ -488,8 +458,8 @@ enum, so the strict comparison is never true.
 **Fix.** Compare with the enum's value:
 `$publication->getData('versionStage') === VersionStage::VERSION_OF_RECORD->value`.
 
-<a name="finding-16"></a>
-## Finding 16: "Version history" is offered when there is only one version
+<a name="finding-15"></a>
+## Finding 15: "Version history" is offered when there is only one version
 
 - **Severity** low · **Effort** small · Driven
 
@@ -503,8 +473,8 @@ version.
 
 **Fix.** `@if (count($submission->getPublishedPublications()) > 1)`.
 
-<a name="finding-17"></a>
-## Finding 17: page titles are escaped twice
+<a name="finding-16"></a>
+## Finding 16: page titles are escaped twice
 
 - **Severity** low · **Effort** small · Driven
 
@@ -527,8 +497,8 @@ layout prints it with `{{ }}` again:
 `:title="$article->getLocalizedFullTitle()"`, so it is escaped once when
 printed.
 
-<a name="finding-18"></a>
-## Finding 18: three raw translation keys
+<a name="finding-17"></a>
+## Finding 17: three raw translation keys
 
 - **Severity** low · **Effort** small · Driven (first two)
 
@@ -549,8 +519,8 @@ another theme ("Individualize") and are in no locale file.
 give the other two Eidos keys (or reuse core ones such as
 `announcement.noneExist`).
 
-<a name="finding-19"></a>
-## Finding 19: no `<main>` landmark on the home, article and sign-in pages
+<a name="finding-18"></a>
+## Finding 18: no `<main>` landmark on the home, article and sign-in pages
 
 - **Severity** low · **Effort** small · Driven (axe `landmark-one-main`)
 
@@ -572,8 +542,8 @@ all of them, and so do Eidos's About and category pages.
 **Fix.** Wrap each page's content in
 `<main id="skip-to-main">`, with the `<article>` inside it.
 
-<a name="finding-20"></a>
-## Finding 20: two `<h1>` on every page when a logo is set
+<a name="finding-19"></a>
+## Finding 19: two `<h1>` on every page when a logo is set
 
 - **Severity** low · **Effort** small · Driven
 
@@ -589,8 +559,8 @@ name, not the journal's.
 **Fix.** Use the desktop header's markup: a `<div>` or `<span>` with
 `$contextName`.
 
-<a name="finding-21"></a>
-## Finding 21: the header logo has no alternative text
+<a name="finding-20"></a>
+## Finding 20: the header logo has no alternative text
 
 - **Severity** low · **Effort** small · Driven
 
@@ -608,8 +578,8 @@ the mobile logo's `alt` is always empty.
 **Fix.** On both images:
 `alt="{{ $displayPageHeaderLogo['altText'] ?? $contextName }}"`.
 
-<a name="finding-22"></a>
-## Finding 22: the login password field has an invalid `autocomplete` value
+<a name="finding-21"></a>
+## Finding 21: the login password field has an invalid `autocomplete` value
 
 - **Severity** low · **Effort** small · Driven (axe `autocomplete-valid`)
 
@@ -621,8 +591,8 @@ the saved password on Eidos's login page.
 **Fix.** `autocomplete="current-password"`. The username field takes
 `autocomplete="username"`.
 
-<a name="finding-23"></a>
-## Finding 23: the search field's label is the text `{$label}`
+<a name="finding-22"></a>
+## Finding 22: the search field's label is the text `{$label}`
 
 - **Severity** low · **Effort** small · Code
 
@@ -642,8 +612,8 @@ A Smarty leftover, printed as text.
 **Fix.** `{{ __('common.search') }}`, or a `label` prop passed by the
 callers.
 
-<a name="finding-24"></a>
-## Finding 24: the search form reads a variable nothing assigns
+<a name="finding-23"></a>
+## Finding 23: the search form reads a variable nothing assigns
 
 - **Severity** low · **Effort** small · Driven (warnings on every search)
 
@@ -658,8 +628,8 @@ search are never written.
 **Fix.** Remove the loop, or loop the filters the page already has
 (`$dateFrom…`, `$dateTo…`) if they are meant to survive a new query.
 
-<a name="finding-25"></a>
-## Finding 25: the search date pickers show English month names in every language
+<a name="finding-24"></a>
+## Finding 24: the search date pickers show English month names in every language
 
 - **Severity** low · **Effort** small · Code
 
@@ -675,8 +645,8 @@ English.
 `\Carbon\Carbon::create(2020, $i)->locale(Locale::getLocale())->isoFormat('MMM')`,
 or the same source the Default theme's date picker uses.
 
-<a name="finding-26"></a>
-## Finding 26: supplementary galleys are never found in listings
+<a name="finding-25"></a>
+## Finding 25: supplementary galleys are never found in listings
 
 - **Severity** low · **Effort** small · Code
 
@@ -694,8 +664,8 @@ a file.
 **Fix.** `in_array($galley->getFile()?->getGenreId(), $supplementaryFileGenreIds)`,
 as line 75 does for primary files.
 
-<a name="finding-27"></a>
-## Finding 27: an article galley shows the issue's price
+<a name="finding-26"></a>
+## Finding 26: an article galley shows the issue's price
 
 - **Severity** low · **Effort** small · Code
 
@@ -711,8 +681,8 @@ line 18), so today the price never shows at all.
 `purchaseIssueFee` for issue galleys, as the Default theme's
 `galley_link.tpl` does, and assign the context.
 
-<a name="finding-28"></a>
-## Finding 28: share links put the article address in unencoded
+<a name="finding-27"></a>
+## Finding 27: share links put the article address in unencoded
 
 - **Severity** low · **Effort** small · Code
 
@@ -726,8 +696,8 @@ is. An address carrying its own query or `&` breaks the share link.
 **Fix.** `$urlEncodedUrl = urlencode($url);` next to the title, and use it
 in every link.
 
-<a name="finding-29"></a>
-## Finding 29: the account menu's `aria-label` is unquoted
+<a name="finding-28"></a>
+## Finding 28: the account menu's `aria-label` is unquoted
 
 - **Severity** low · **Effort** small · Code
 
@@ -740,8 +710,8 @@ attributes.
 
 **Fix.** `aria-label="{{ __('plugins.themes.eidos.account') }}"`.
 
-<a name="finding-30"></a>
-## Finding 30: the Comments and Metrics tabs break on an apostrophe in their data
+<a name="finding-29"></a>
+## Finding 29: the Comments and Metrics tabs break on an apostrophe in their data
 
 - **Severity** low · **Effort** small · Code
 
@@ -764,8 +734,8 @@ The `{{`/`}}` replacements alter the data too.
 already does (`components/article/sidebar.blade:42`). Blade's `@json`
 escapes the apostrophe.
 
-<a name="finding-31"></a>
-## Finding 31: comment dates are always shown as "… ago"
+<a name="finding-30"></a>
+## Finding 30: comment dates are always shown as "… ago"
 
 - **Severity** low · **Effort** small · Code
 
@@ -785,8 +755,8 @@ always false. A week is also 604800000 ms.
 
 **Fix.** `Date.now() - dateTime.getTime() > 604800000`.
 
-<a name="finding-32"></a>
-## Finding 32: the "Latest Announcement" block stays empty without saying why
+<a name="finding-31"></a>
+## Finding 31: the "Latest Announcement" block stays empty without saying why
 
 - **Severity** low · **Effort** small · Driven
 
@@ -805,8 +775,8 @@ shows the block only when some were loaded.
 is ticked, or say in the option's description that it needs "Display
 on homepage".
 
-<a name="finding-33"></a>
-## Finding 33: PHP warnings on nearly every page
+<a name="finding-32"></a>
+## Finding 32: PHP warnings on nearly every page
 
 - **Severity** low · **Effort** small · Driven
 
@@ -838,8 +808,8 @@ leaves out is simply undefined.
 `@props(['description' => null, 'head' => null])`, or read them with
 `?? null`.
 
-<a name="finding-34"></a>
-## Finding 34: colour options go unchecked into the page's styles (manager-entered)
+<a name="finding-33"></a>
+## Finding 33: colour options go unchecked into the page's styles (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -858,8 +828,8 @@ this reason (pkp-lib#11974).
 accept only `/^#[0-9a-fA-F]{3,8}$/` on save and on output, and fall back
 to the default colour otherwise.
 
-<a name="finding-35"></a>
-## Finding 35: the issue summary decodes escaped text into markup (manager-entered)
+<a name="finding-34"></a>
+## Finding 34: the issue summary decodes escaped text into markup (manager-entered)
 
 - **Severity** low (manager-entered) · **Effort** small · **Security** unreleased · Driven
 
@@ -877,8 +847,8 @@ raw.
 **Fix.** Print the plain text escaped:
 `{{ ViewHelper::html2text($issue->getLocalizedDescription()) }}`.
 
-<a name="finding-36"></a>
-## Finding 36: `npm ci` fails on the theme
+<a name="finding-35"></a>
+## Finding 35: `npm ci` fails on the theme
 
 - **Severity** low · **Effort** small · Driven
 
@@ -903,7 +873,7 @@ A release or CI build that uses `npm ci` cannot build Eidos.
 - **Install.**
   - OJS was checked out at ojs#5784 with its submodules and built.
   - Eidos was built in `plugins/themes/eidos` with `npm install && npm run
-    build`; `npm ci` fails (finding 36).
+    build`; `npm ci` fails (finding 35).
   - The first report's fix diffs for the shared code were applied, so its
     findings would not get in the way. One exception: for finding 2,
     `ReviewRoundAuthorResponseResource.php` was put back to the PR head.
@@ -931,10 +901,10 @@ A release or CI build that uses `npm ci` cannot build Eidos.
     in 2025, and a reviewer with an ORCID iD whose review is dated last
     year
 - **Settings flipped for single findings and put back afterwards:**
-  - `[captcha] altcha` (finding 4)
-  - `sitewide_privacy_statement` and the site privacy statement (finding 4)
-  - the site's theme and title (finding 7)
-  - `primaryColor` and the issue description (findings 34, 35)
+  - `[captcha] altcha` (finding 3)
+  - `sitewide_privacy_statement` and the site privacy statement (finding 3)
+  - the site's theme and title (finding 6)
+  - `primaryColor` and the issue description (findings 33, 34)
 - **Each page on both themes.** About 40 reader pages were opened at
   1280 px and 390 px on Eidos, and at 1280 px on the Default theme, with
   axe-core 4.10.2 (WCAG 2.1 A/AA plus best practice). The console, failed
