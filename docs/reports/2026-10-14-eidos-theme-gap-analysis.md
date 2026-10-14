@@ -44,7 +44,7 @@ heading):
   lose their journal and date
 - [16](#finding-16): review recommendations use the journal's wording,
   not the normalized label
-- [18](#finding-18): anonymous reviews in the by-reviewer view
+- [17](#finding-17): a registered review DOI does not open its review
 
 - Pages Eidos has no template for render unstyled (1), and only four
   plugin hooks are fired (2).
@@ -82,8 +82,8 @@ heading):
 | [14](#finding-14) | Sidebar blocks move to the footer | Default | — | Driven | |
 | [15](#finding-15) | Footer no longer links to About this Publishing System | Default | — | Driven | |
 | [16](#finding-16) | Review recommendations use the journal's wording, not the normalized label | ORE | — | Driven | 🔴 |
-| [17](#finding-17) | A registered review DOI does not open its review | ORE | — | Driven | |
-| [18](#finding-18) | Anonymous reviews in the by-reviewer view (ORE breaks too) | ORE | — | Driven | 🔴 |
+| [17](#finding-17) | A registered review DOI does not open its review | ORE | — | Driven | 🔴 |
+| [18](#finding-18) | Anonymous reviews in the by-reviewer view (ORE breaks too) | ORE | — | Driven | |
 | [19](#finding-19) | No Crossref "Cited by" | ORE | — | Code | |
 
 ## How it looks
@@ -439,7 +439,7 @@ components use the type label (`reviewerRecommendationTypeLabel`).
 <a name="finding-17"></a>
 ## Finding 17: a registered review DOI does not open its review
 
-- **Compared with** the ORE theme · Driven
+- **Compared with** the ORE theme · Driven · 🔴 **Before merging**
 
 **ORE theme.** Crossref registers each review's DOI with the address
 `…/article/view/<id>?tab=peer-review-record&reviewId=<n>`. Opening it
@@ -461,7 +461,7 @@ writes the address. ui-library `usePkpOpenReviewStore.js`
 <a name="finding-18"></a>
 ## Finding 18: anonymous reviews in the by-reviewer view
 
-- **Compared with** the ORE theme · Driven · 🔴 **Before merging**
+- **Compared with** the ORE theme · Driven
 
 **Eidos.** Sorted by reviewer, every anonymous review falls into one
 group whose heading is empty (an empty `<h3>`). Two anonymous reviews in
