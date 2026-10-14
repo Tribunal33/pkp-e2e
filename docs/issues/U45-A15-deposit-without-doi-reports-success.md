@@ -253,9 +253,10 @@ and so was a DataCite journal's work with only a galley's DOI, with the
 fix in.
 
 **What the manager sees after the fix.** The refusal's reason in an
-"Error" window, as for every refused bulk action once `pkp/ui-library#1016`
-(for `pkp/pkp-lib#13507`) is in (read in the code, not driven with this
-fix). Without it the window closes, the list reloads and no message says
+"Error" window, as for every refused bulk action on `main` since
+`pkp/ui-library#1016` (for `pkp/pkp-lib#13507`, merged 2026-10-14; read
+in the code, not driven with this fix). Without it (3.5 and older) the
+window closes, the list reloads and no message says
 the deposit was refused, because the DOIs page drops the reason of every
 refused bulk action (U45
 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#a13),

@@ -2922,7 +2922,7 @@ Basis: probe, 2026-09-26. <sup>f-ops5</sup>
 ### Retired
 
 <a id="a13"></a>
-**A13 — A bulk action the server refuses on the DOIs page closes its window and shows no message** · ✅ · retired. Fixed by `pkp/ui-library#1016` (for `pkp/pkp-lib#13507`, with `pkp/pkp-lib#13508`), verified 2026-10-13 at the PR heads before their merge on OJS, OMP and OPS: a refused bulk action leaves an "Error" window with the server's reason, and an "Export DOIs" whose file fails the agency's check lists what the check found (Rules 24, 29). <sup>f-a13</sup>
+**A13 — A bulk action the server refuses on the DOIs page closes its window and shows no message** · ✅ · retired. Fixed by `pkp/ui-library#1016` (for `pkp/pkp-lib#13507`, with `pkp/pkp-lib#13508`), verified 2026-10-13 at the PR heads before their merge on OJS, OMP and OPS; merged 2026-10-14; this page describes the fixed behavior: a refused bulk action leaves an "Error" window with the server's reason, and an "Export DOIs" whose file fails the agency's check lists what the check found (Rules 24, 29). <sup>f-a13</sup>
 
 <a id="a25"></a>
 **A25 — Under "Immediately", declining a submission deletes the DOI its published version shows** · ✅ · retired. Fixed 2026-10-07 at the PR heads of `pkp/pkp-lib#13447` round 2 (`pkp/pkp-lib#13460` `1aa1973c66`, `pkp/ojs#5903` `0375b98bde`, `pkp/omp#2495` `c9e1c8a521`, `pkp/ops#1435` `db0f597851`); merged 2026-10-09; this page describes the fixed behavior: once a version is published, a "Published Manuscript Under Review" one included, a decline keeps every DOI of the work, and the published page its "DOI:" line (Rule 5b). <sup>f-a25</sup>
@@ -4850,7 +4850,9 @@ PR review 2026-10-13, at the PR heads of round 2 (`pkp/ui-library#1016`
 `477eec29d0`, `pkp/crossref-ops#73` `8e82eda7cc`, through `pkp/ojs#5928`
 `12a0ae5bfb`, `pkp/omp#2506` `602f236674` and `pkp/ops#1447`
 `ce4b5111d7`; round 1 at `cbaf79526c`, `12574dea5f`, `b8d107ef10`,
-`2458eead21`, `18f197514e`, `bd864266eb`), before their merge: `DoiListPanel.vue` `onBulkActionComplete()` closes the dialog only
+`2458eead21`, `18f197514e`, `bd864266eb`; round 3 of 2026-10-14 at
+`b17fadae59`, `a49e612525`, `4b10e07fbf`, `a8c4ba6055`, `d90f3d275d`,
+the same results; merged 2026-10-14 with those trees), before their merge: `DoiListPanel.vue` `onBulkActionComplete()` closes the dialog only
 while the modal store's dialog is still the confirmation (`name`
 "bulkActions"), so an "Error" window `ajaxErrorCallback()` opened in its
 place stays; `PKPDoiController` (and OJS's `DoiController` for issues)
