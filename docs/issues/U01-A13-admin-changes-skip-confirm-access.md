@@ -10,7 +10,7 @@
   - 3.4: none (code; no Confirm Access gate)
   - 3.3: none (code; no Confirm Access gate)
 - **Introduced** `pkp/pkp-lib#12505` for `pkp/pkp-lib#12338` · [cf5798f06e](https://github.com/pkp/pkp-lib/commit/cf5798f06e9a410709c13509b2e36782c8681e4f) · 2026-04-09 · Taslan A. Graham (taslangraham)
-- **Upstream** none found (2026-10-05)
+- **Upstream** `pkp/pkp-lib#13520` (open, opened 2026-10-14 with this report's Summary): its PRs `pkp/pkp-lib#13521` and `pkp/ojs#5936` fix every route listed here, and leave an API key made in the browser past the period and two grids (site Navigation Menu items, site Plugin Gallery) without the gate (PR review 2026-10-14, `docs/reports/2026-10-14-pkp-lib-13521.md`)
 - **Tracked in** spec U01 [A13](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U01-login-and-sessions.md#a13)
 - **Checked** 2026-10-05, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
