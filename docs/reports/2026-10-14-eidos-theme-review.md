@@ -527,7 +527,6 @@ Breadcrumbs are left out on the maintainer's word.
 | A way to hide usage statistics. The Metrics tab is always there and always draws a chart. Default's "displayStats" defaults to none, so Eidos publishes every journal's download figures | `DefaultThemePlugin.php:118-135` | Driven |
 | Funders (3.6 `submission.funders` with ROR and grant numbers). No block exists | `article_details.tpl:479-500` | Code |
 | Contributor roles. Counted to decide whether "Author details" shows, never printed | `article_details.tpl:129` | Driven (absent) |
-| Keywords, license, issue, section and categories on the Article tab. Eidos puts them in the Metadata tab under the default options; license visibility matters to DOAJ | landing page | Driven |
 | Issue DOI on the issue page (Eidos loops `$pubIdPlugins`, which no longer includes DOIs and is not assigned: warning) | `issue_toc.tpl:82-90` | Driven (warning) / Code |
 | Page numbers in article listings; the section's "hide author" setting is ignored | `article_summary.tpl:27,61-73` | Code |
 | "View All Issues" under the home page's current issue | `indexJournal.tpl` | Driven |
