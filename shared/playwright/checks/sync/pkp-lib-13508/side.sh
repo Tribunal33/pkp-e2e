@@ -1,5 +1,5 @@
 #!/bin/bash
-# side.sh <base|head> [scripts]: PR review pkp/pkp-lib#13507 (round 2, the heads after the author's amend) on PKP's
+# side.sh <base|head> [scripts]: PR review pkp/pkp-lib#13507 (round 3, the heads after the code-review changes) on PKP's
 # default dataset, at one side.
 #   head: ojs pkp/ojs#5928, omp pkp/omp#2506, ops pkp/ops#1447 (each with its submodule bumps: lib/pkp
 #         pkp-lib#13508, lib/ui-library ui-library#1016, plugins/generic/crossref crossref-ojs#114 /
@@ -16,10 +16,11 @@ side=$1; scripts=${2:-walk a13 a18}
 cd "$(dirname "$0")/../../../../.." || exit 1
 R=.reports/pr-13507; S=shared/playwright/checks/sync/pkp-lib-13508; mkdir -p $R
 SLOT=$(sed -n 's/^PKP_E2E_SLOT=//p' .env); export PKP_E2E_SLOT=${SLOT:-0}
-PKPLIB_BASE=5d962d743e
+PKPLIB_BASE=266505ecd8
+# round 2 (2026-10-13): ojs 12a0ae5bfb, omp 602f236674, ops ce4b5111d7, lib/pkp base 5d962d743e, bases ojs 55914e80d4 omp eb93813147 ops 1bc3f78888
 # round 1 (2026-10-13): ojs 2458eead21, omp 18f197514e, ops bd864266eb, lib/pkp base a4f625a068, ojs base 5c056f34b7
-declare -A HEAD=([ojs]=12a0ae5bfb1108114107cef8db241921252792de [omp]=602f236674c77cc3b230322029592e76290aa234 [ops]=ce4b5111d7c2f034619ffb0e5f827e6849747047)
-declare -A BASE=([ojs]=55914e80d4 [omp]=eb93813147 [ops]=1bc3f78888)
+declare -A HEAD=([ojs]=4b10e07fbfd2bb98fc27a9b90629c528296c808b [omp]=a8c4ba605539dcad3178d70e187c3fea5cc90249 [ops]=d90f3d275d3119e7b8caa50f070d2f81bc6e9794)
+declare -A BASE=([ojs]=9f18cd1d46 [omp]=119211f223 [ops]=35e128e878)
 for a in ojs omp ops; do
   (cd checkouts/$a && git checkout -q --detach "$([ "$side" = base ] && echo "${BASE[$a]}" || echo "${HEAD[$a]}")" \
     && git submodule update -q lib/pkp lib/ui-library && { [ ! -e plugins/generic/crossref/.git ] || git submodule update -q plugins/generic/crossref; } \
