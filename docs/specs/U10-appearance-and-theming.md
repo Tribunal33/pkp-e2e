@@ -85,7 +85,11 @@ holds a "Remove file" link that shows only under the pointer; pressing
 it brings "Upload File" back, but "Save" stays disabled ⚠ [A15](#a15).
 A picture that is sent and then fails on the server (A16 names the
 server and the size) leaves a red warning sign under the box with no
-message ⚠ [A16](#a16). An upload counts only once
+message ⚠ [A16](#a16). A picture of a type the box takes but the
+server does not store (a BMP, for one), or a style sheet the server
+reads as some other kind of text, is sent and "Saved" shows, but
+nothing is stored and the earlier logo or style sheet is gone
+⚠ [A21](#a21). An upload counts only once
 the tab is saved. <sup>d</sup> <sup>td3</sup>
 
 **"Theme"** (Settings › Website › "Appearance" › "Theme"; the page opens
@@ -1223,7 +1227,7 @@ Left out of the scenarios above, by reason:
 ## Findings register
 
 Verdicts are the author's judgment (claude, 2026-09-24; A10–A12
-2026-09-28; A13, A14 2026-09-29; A15–A20 2026-10-05), unreviewed unless an entry notes
+2026-09-28; A13, A14 2026-09-29; A15–A20 2026-10-05; A21 2026-10-14), unreviewed unless an entry notes
 otherwise; the team settles them on spec review.
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
@@ -1242,6 +1246,7 @@ otherwise; the team settles them on spec review.
 | [A17](#a17) | Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&" | 🐞 | minor | — |
 | [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
 | [A20](#a20) | A removed journal thumbnail stays online at its old address | 🐞 | minor | — |
+| [A21](#a21) | A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had | 🐞 | user-visible | — |
 | [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | On a journal's home page, each "Latest Publications" title is a heading at the section's own level | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1564,6 +1569,22 @@ Nothing on screen shows that the thumbnail is still there, and no
 screen can delete it; as with a removed style sheet ([A5](#a5)), it
 matters when the picture was meant to be withdrawn. Basis: probe,
 2026-10-05. <sup>f-a20</sup>
+
+<a id="a21"></a>
+**A21 — A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had** · 🐞 · user-visible.
+A manager uploads a "Logo", "Homepage Image" or thumbnail as a BMP
+picture, which the box takes, and presses "Save". "Saved" shows and
+no message, but nothing is stored: a logo the journal already had is
+gone from every public page, whose header shows the journal's name
+instead, and after a reload the box is an empty frame with "Remove"
+and "Restore Original". A CSS file the server reads as some other kind
+of text (one that opens with a comment block and a `:root` rule, for
+one) does the same under "Journal style sheet": "Saved", and the
+journal's earlier style sheet stops loading on every page. Until
+2026-10-13 both were saved and shown. The change meant to refuse a
+non-image uploaded as the favicon or logo; it also refuses these, and
+silently wipes what the setting held: regression, not choice.
+Since: 2026-10-13 (pkp/pkp-lib#13512) · Basis: probe, 2026-10-14. <sup>f-a21</sup>
 
 ### OJS
 
@@ -2474,6 +2495,40 @@ cleared in the database; the logo's address then answered 404 and its
 file was gone, while the thumbnail's still answered 200 `image/png`
 (in a freshly launched browser too) and its file stayed on disk. The
 site's list of journals after the removal was not read.
+
+<a id="fn-f-a21"></a>
+**f-a21** — pkp-lib `266505ecd8` ("Check settings file types before
+uploading", pkp/pkp-lib#13512, Alec Smecher, 2026-10-13, a direct
+commit; on `stable-3_5_0` as `2196fa2775`) makes
+`PKPContextService::moveTemporaryFile()` take an image setting's
+extension from `getImageExtension()` alone and return `false` for a
+type neither `getDocumentExtension()` nor `getImageExtension()` knows.
+`_saveFileParam()` hands that `false` to `edit()` (and, for the
+thumbnail, to each app's `ContextService::afterEditContext()`), which
+stores it over the setting; it reads back as `[]` and the save answers
+200. The issue's intention: "Expected Result: The file should be
+rejected." The picture boxes take `image/*` (`FieldUploadImage`), and
+`getImageExtension()` has no `image/bmp`; `PKPString::getAmbiguousExtensionsMap()`
+turns only `css:text/plain` and `css:text/x-c` into `text/css`, so a
+CSS file `finfo` reads as `text/x-asm`, `text/troff`, `text/x-algol68`
+or `application/x-empty` is refused. Live-probed 2026-10-14 on PKP's
+default dataset as `rvaca`, OJS `main` (lib/pkp `266505ecd8`) and
+`stable-3_5_0` (`2196fa2775`): a PNG "Logo" shown in the header, then
+"Remove", a BMP, "Save": "Saved", the save answering
+`"pageHeaderLogoImage":{"en":[],"fr_CA":null}`, the header reading
+"Journal of Public Knowledge", `pageHeaderLogoImage_en.png` left on
+disk; a BMP "Homepage Image" stored as `[]`; `ok.css` (page green),
+then `asm.css` (pkp-lib's symfony `exception.css` with one red
+background rule added, `text/x-asm`): "Saved", `"styleSheet":[]`, no
+journal style sheet linked, the page white; a BMP thumbnail sent
+through the settings route stored as `[]`. Before, OMP `main` at
+lib/pkp `1836046394` (the parent's tree): each stored and shown,
+`asm.css` as `styleSheet`, linked and applied. Kept check
+`shared/playwright/checks/sync/pkp-lib-13512/refused-uploads.js`; fix
+tried (`fix.diff`, `fix-ojs.diff` in the same folder). Tracked in
+ci-triage "Open regressions". Written up for the team in
+`docs/reports/2026-10-14-pkp-lib-13512.md` (a temporary report,
+deleted once acted on; git history keeps it).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's

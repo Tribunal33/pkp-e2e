@@ -1,0 +1,151 @@
+--- a/lib/pkp/classes/services/PKPContextService.php
++++ b/lib/pkp/classes/services/PKPContextService.php
+@@ -379,6 +379,28 @@
+             $user ? $user->getId() : null
+         );
+ 
++        // If a new file has been uploaded, check that it is of a type the setting
++        // takes (the same rule moveTemporaryFile() applies), so a refusal is a
++        // field error on the form rather than a setting stored empty.
++        $validator->after(function ($validator) use ($props, $allowedLocales, $user) {
++            $temporaryFileManager = new TemporaryFileManager();
++            $check = function (string $errorKey, $value, bool $isImage) use ($validator, $temporaryFileManager, $user) {
++                if (empty($value['temporaryFileId']) || $validator->errors()->get($errorKey)) {
++                    return;
++                }
++                $temporaryFile = $temporaryFileManager->getFile((int) $value['temporaryFileId'], $user?->getId());
++                if ($temporaryFile && $this->getFileExtension($temporaryFile, $isImage) === false) {
++                    $validator->errors()->add($errorKey, __($isImage ? 'form.invalidImage' : 'manager.setup.styleSheet.invalid'));
++                }
++            };
++            foreach (['favicon', 'homepageImage', 'pageHeaderLogoImage'] as $prop) {
++                foreach ($allowedLocales as $localeKey) {
++                    $check($prop . '.' . $localeKey, $props[$prop][$localeKey] ?? null, true);
++                }
++            }
++            $check('styleSheet', $props['styleSheet'] ?? null, false);
++        });
++
+         // If sidebar blocks are passed, ensure the block plugin exists and is
+         // enabled
+         $validator->after(function ($validator) use ($props) {
+@@ -680,10 +702,17 @@
+                     continue;
+                 }
+                 $params[$fileUploadParam][$localeKey] = $this->_saveFileParam($context, $params[$fileUploadParam][$localeKey], $fileUploadParam, $userId, $localeKey, true);
++                // A refused file never replaces what the setting held.
++                if ($params[$fileUploadParam][$localeKey] === false) {
++                    $params[$fileUploadParam][$localeKey] = $context->getData($fileUploadParam, $localeKey);
++                }
+             }
+         }
+         if (array_key_exists('styleSheet', $params)) {
+             $params['styleSheet'] = $this->_saveFileParam($context, $params['styleSheet'], 'styleSheet', $userId);
++            if ($params['styleSheet'] === false) {
++                $params['styleSheet'] = $context->getData('styleSheet');
++            }
+         }
+ 
+         $newContext = $contextDao->newDataObject();
+@@ -826,10 +855,9 @@
+             $fileName .= '_' . $localeKey;
+         }
+ 
+-        $extension = $publicFileManager->getDocumentExtension($temporaryFile->getFileType());
+-        if (!$extension || $isImage) {
+-            $extension = $publicFileManager->getImageExtension($temporaryFile->getFileType());
+-            if (!$extension) return false;
++        $extension = $this->getFileExtension($temporaryFile, $isImage);
++        if ($extension === false) {
++            return false;
+         }
+         $fileName .= $extension;
+ 
+@@ -849,6 +877,21 @@
+     }
+ 
+     /**
++     * The extension a context file setting stores an uploaded file under, or
++     * false when the setting does not take a file of that type (the rule
++     * moveTemporaryFile() applies, shared with validate()).
++     *
++     * @param bool $isImage True iff the setting stores an image (logo/icon).
++     */
++    public function getFileExtension(TemporaryFile $temporaryFile, bool $isImage = false): string|false
++    {
++        $publicFileManager = new PublicFileManager();
++        $type = $temporaryFile->getFileType();
++        $extension = $isImage ? false : $publicFileManager->getDocumentExtension($type);
++        return $extension ?: $publicFileManager->getImageExtension($type);
++    }
++
++    /**
+      * Checks if a context exists
+      */
+     public function exists(int $id): bool
+--- a/lib/pkp/classes/components/forms/FieldUploadImage.php
++++ b/lib/pkp/classes/components/forms/FieldUploadImage.php
+@@ -39,7 +39,8 @@
+     public function getConfig()
+     {
+         if (!array_key_exists('acceptedFiles', $this->options)) {
+-            $this->options['acceptedFiles'] = 'image/*';
++            // The picture types the server stores (FileManager::getImageExtension(), its image/* part).
++            $this->options['acceptedFiles'] = 'image/gif,image/jpeg,image/png,image/webp';
+         }
+         $config = parent::getConfig();
+         $config['baseUrl'] = $this->baseUrl;
+--- a/lib/pkp/classes/core/PKPString.php
++++ b/lib/pkp/classes/core/PKPString.php
+@@ -134,6 +134,9 @@
+             'xhtml:text/xml' => 'text/html',
+             'css:text/x-c' => 'text/css',
+             'css:text/plain' => 'text/css',
++            'css:text/x-asm' => 'text/css',
++            'css:text/troff' => 'text/css',
++            'css:text/x-algol68' => 'text/css',
+             'csv:text/plain' => 'text/csv',
+             'js:text/plain' => 'text/javascript',
+             'xlsx:application/zip' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+--- a/lib/pkp/locale/en/manager.po
++++ b/lib/pkp/locale/en/manager.po
+@@ -1380,6 +1380,10 @@
+ "Examples: scholarly associations, university departments, cooperatives, etc. "
+ "Sponsors are displayed publicly."
+ 
++msgid "manager.setup.styleSheet.invalid"
++msgstr ""
++"The file could not be read as a style sheet. Please upload a CSS file."
++
+ msgid "manager.setup.styleSheetDescription"
+ msgstr ""
+ "Experienced web developers can upload a CSS file to further customize the "
+--- a/classes/services/ContextService.php
++++ b/classes/services/ContextService.php
+@@ -119,6 +119,10 @@
+                     $localeKey,
+                     true
+                 );
++                // A refused file never replaces the thumbnail the journal had.
++                if ($localeValue === false) {
++                    $localeValue = $currentContext->getData('journalThumbnail', $localeKey);
++                }
+                 $newContext->setData('journalThumbnail', $localeValue, $localeKey);
+             }
+         }
+@@ -223,11 +227,12 @@
+                 if (empty($props['journalThumbnail'][$localeKey]) || empty($props['journalThumbnail'][$localeKey]['temporaryFileId'])) {
+                     continue;
+                 }
+-                if (!$temporaryFileManager->getFile($props['journalThumbnail'][$localeKey]['temporaryFileId'], $userId)) {
+-                    if (!is_array($errors['journalThumbnail'])) {
++                $temporaryFile = $temporaryFileManager->getFile($props['journalThumbnail'][$localeKey]['temporaryFileId'], $userId);
++                if (!$temporaryFile || $this->getFileExtension($temporaryFile, true) === false) {
++                    if (!is_array($errors['journalThumbnail'] ?? null)) {
+                         $errors['journalThumbnail'] = [];
+                     }
+-                    $errors['journalThumbnail'][$localeKey] = [__('common.noTemporaryFile')];
++                    $errors['journalThumbnail'][$localeKey] = [__($temporaryFile ? 'form.invalidImage' : 'common.noTemporaryFile')];
+                 }
+             }
+         }
