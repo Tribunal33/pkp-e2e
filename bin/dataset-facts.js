@@ -107,16 +107,18 @@ function readFacts(name, line) {
         const active = hasColumn('user_user_groups', 'date_end') ? 'AND (uug.date_end IS NULL OR uug.date_end > now())' : '';
         const userName = (alias, key) => `(SELECT setting_value FROM user_settings WHERE user_id = ${alias}.user_id AND setting_name = '${key}' AND setting_value <> '' ${preferEn})`;
         const users = q(`
-            SELECT u.username, coalesce(${userName('u', 'givenName')}, ''), coalesce(${userName('u', 'familyName')}, ''), u.disabled::int,
+            SELECT u.username, coalesce(${userName('u', 'givenName')}, ''), coalesce(${userName('u', 'familyName')}, ''), u.disabled::int, u.must_change_password::int,
                 coalesce((SELECT string_agg(coalesce(
                         (SELECT setting_value FROM user_group_settings s WHERE s.user_group_id = ug.user_group_id AND s.setting_name = 'name' ${preferEn}),
                         CASE ug.role_id WHEN 1 THEN 'Site administrator' ELSE 'role ' || ug.role_id END), ', ' ORDER BY ug.role_id, ug.user_group_id)
                     FROM user_user_groups uug JOIN user_groups ug ON ug.user_group_id = uug.user_group_id
                     WHERE uug.user_id = u.user_id ${active}), '')
-            FROM users u ORDER BY u.user_id`).map(([username, given, family, disabled, roles]) => ({
+            FROM users u ORDER BY u.user_id`).map(([username, given, family, disabled, mustChange, roles]) => ({
             username,
             name: `${given} ${family}`.trim(),
             disabled: disabled === '1',
+            // signIn() as such a user lands on the change-password page, not past Login (friction 2026-10-13)
+            mustChange: mustChange === '1',
             roles,
         }));
         const reviewState = `CASE WHEN ra.cancelled = 1 THEN 'cancelled' WHEN ra.declined = 1 THEN 'declined'
@@ -165,7 +167,7 @@ function renderApp(name, facts) {
     out.push('| Username | Name | Roles |');
     out.push('|---|---|---|');
     for (const u of users) {
-        out.push(`| \`${u.username}\` | ${cell(u.name)}${u.disabled ? ' (disabled)' : ''} | ${cell(u.roles) || '(none)'} |`);
+        out.push(`| \`${u.username}\` | ${cell(u.name)}${u.disabled ? ' (disabled)' : ''}${u.mustChange ? ' (must change password)' : ''} | ${cell(u.roles) || '(none)'} |`);
     }
     out.push('');
     out.push('| ID | Title | Stage, status | Editors | Author accounts | Other participants | Reviewers (round, state) |');
