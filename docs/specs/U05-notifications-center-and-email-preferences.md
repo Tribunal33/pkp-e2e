@@ -824,6 +824,7 @@ Left out of the scenarios above, by reason:
   - unticking a box on the "Unsubscribe" page leaving the emails switched off before still off (Rule 8c; the guard [A2](#a2)'s issue report proposes)
   - a preprint server's new-preprint row on the Notifications tab reading "A new preprint, "Title", has been submitted." (*Fields & validation*; the guard [OPS2](#ops2)'s issue report proposes)
   - in a window narrower than 992 px, after "Open Menu", the name bare and the unread count after "Dashboard", on a journal's home page and for the Site Administrator on the site's (Rules 4b, 4d)
+  - a ticked "Do not send me an email for these types of notifications." with its "Enable these types of notifications." unticked: greyed with its tick, unticked on the tab's next load after "Save", and the event's emails coming again once "Enable…" is ticked back (Rule 5c)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week

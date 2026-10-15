@@ -258,7 +258,9 @@ class UploadBox extends BasePage {
      * Press "Upload File" and choose a file in the browser's file chooser;
      * waits for the upload's answer and for the box to have taken it (the
      * form holds the file, or the box shows the refusal), and returns the
-     * answer's status.
+     * answer's status. The box must be empty: on a box that already holds
+     * a file, "Upload File" is hidden and the press fails (press "Remove"
+     * first).
      *
      * @param {{name: string, mimeType: string, buffer: Buffer}} file
      */
@@ -266,6 +268,9 @@ class UploadBox extends BasePage {
         const handledBefore = await this.handledUploads.count();
         const answered = this.page.waitForResponse((r) => /\/temporaryFiles/.test(r.url()) && r.request().method() === 'POST', {timeout: T});
         const chooser = this.page.waitForEvent('filechooser', {timeout: T});
+        // A failed press throws below; the two waits must not then reject unhandled and end the process.
+        answered.catch(() => {});
+        chooser.catch(() => {});
         await this.uploadButton.click();
         await (await chooser).setFiles(file);
         return this.uploadHandled(answered, handledBefore);

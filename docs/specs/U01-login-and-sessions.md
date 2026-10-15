@@ -255,6 +255,16 @@ Login, the site's name stands in for the journal's), but after a refused
     already active. To see this, impersonate a user who can themselves open
     one of those screens, a Journal Manager, say. Using it starts a second
     impersonation that replaces the first ⚠ [A4](#a4). <sup>i</sup> <sup>j</sup>
+15a. **A sign-in that re-saves the account's password ends an impersonation
+    of it.** At sign-in the application re-saves a password stored in an
+    older form: an account created by an earlier version or imported, or
+    one the test tooling created, until its first sign-in. A Journal
+    Manager has used "Login As" on such an Author. The Author then signs
+    in, in another browser. The manager's next page is the Login page: the
+    impersonation is over and the manager's own sign-in with it, where
+    "Logout as" should have led back ⚠ [A15](#a15). An Author whose
+    password is already in the current form (one who has signed in since)
+    can sign in elsewhere without ending the impersonation. <sup>j</sup>
 16. **The Confirm Access gate.** When the installation's configuration sets a
     re-authentication window (in minutes), every Administration screen first
     shows the "Confirm Access" form (Fields above). The correct password
@@ -668,6 +678,11 @@ Left out of the scenarios above, by reason:
     flag ([A10](#a10)): the guard the issue report
     (`docs/issues/U01-A10-edit-user-hides-clears-change-password.md`)
     proposes, once fixed
+  - a Journal Manager logged in as an Author while the Author signs in
+    in another browser: for an Author who had signed in before, the
+    manager's next page still shows the Author's account and "Logout as"
+    leads back to the manager's own (Rule 15a); for a sign-in that
+    re-saves the Author's password, the guard owed once [A15](#a15) is fixed
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -719,6 +734,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
+| [A15](#a15) | A sign-in that re-saves an account's password, while a manager is logged in as it, sends the manager to the Login page, signed out of both accounts | 🐞 | minor | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
@@ -994,6 +1010,21 @@ sessions short and rely on that window, feel it most. From July 2026
 until this change the box did keep them signed in, if only in part
 ([A8](#a8)); regression, not choice.
 Since: 2026-10-06 (pkp/pkp-lib#12780) · Basis: probe, 2026-10-07. <sup>[f-a14](#fn-a14)</sup>
+
+<a id="a15"></a>
+**A15 — A sign-in that re-saves an account's password ends an impersonation of it and signs the impersonator out too** · 🐞 · minor.
+A Journal Manager logged in as an Author expects to keep acting as the
+Author until they choose "Logout as {username}", and then to be back in
+their own account (Rule 15). When the Author signs in meanwhile, in
+another browser, and that sign-in re-saves the Author's password in its
+current form (Rule 15a: an account created by an earlier version or
+imported, or a test account never signed in), the manager's next page is
+the Login page instead: signed out of the Author's account and of their
+own, with nothing on screen saying why. The manager has to sign in
+again. An Author whose password is already in the current form does not
+end the impersonation. Driven only with test accounts at their first
+sign-in.
+Basis: probe, 2026-10-14. <sup>[f-a15](#fn-a15)</sup>
 
 ### Retired
 
@@ -1343,7 +1374,8 @@ view of the same submission, with a plain "Logout" in the menu again.
 Re-probed 2026-10-06 (Rule 13; OJS, OMP, OPS; two runs each; `admin`
 wearing `author.alex` and a scratch Journal Manager): the menu's two
 "Logout as {username}" entries, before and after "Edit Profile", both
-lead to `login/signOutAsUser`.
+lead to `login/signOutAsUser`. The impersonation a sign-in that
+re-saves the account's password ends (Rule 15a): finding A15, note f-a15.
 
 <a id="fn-k"></a>
 **k** — Gate: `[security] password_timeout` (minutes; commented out/0 =
@@ -1796,6 +1828,39 @@ checks `shared/playwright/checks/sync/pkp-lib-12780/remember-me.js` and
 `disabled.js`. Tracked in ci-triage "Open regressions". Written up for
 the team in `docs/reports/2026-10-07-pkp-lib-12780.md` (a temporary
 report, deleted once acted on; git history keeps it).
+
+<a id="fn-a15"></a>
+**f-a15** — Live-probed 2026-10-14 (Rule 15a; OJS, OMP, OPS on `main`;
+OMP and OPS two runs each, OJS one run plus two earlier sightings the
+same morning; scratch contexts, a scratch Journal Manager and a scratch
+Author created through `users[]` and never signed in; kept script
+`shared/playwright/checks/U03/SW1/sw1-more.js`, phase `imperson`,
+section `firstSignIn`): the manager's "Login As" from Settings › Users &
+Roles impersonated the Author (both sets of initials in the top bar); the
+Author's sign-in in a second browser context landed on
+`dashboard/mySubmissions`, and the Author's stored hash went from
+`$2y$04$` (the test seed's cost 4) to `$2y$12$`; the manager's reload
+then answered `login?source=…dashboard/mySubmissions…`, the plain Login
+page ("Login | {journal name}"), no message, the header offering
+"Register" and "Login". The OJS sightings (server log, 04:35:27 and
+04:37:33) were the manager pressing "Logout as" after the Author's first
+sign-in: `signOutAsUser` → `login?source=…`. Four variants with an Author
+who had signed in before kept the impersonation (three apps, two runs
+each): the Author signing in elsewhere, then the manager's reload; a
+Contact save as the Author, then the Author's sign-in, then "Logout as",
+with and without a reload between; and the Author signing in and opening
+their Contact tab elsewhere, then "Logout as". Each "Logout as" returned
+the manager to their own account. Cause, code read: `PKPAuthenticateSession`
+extends Laravel's `AuthenticateSession`, which compares the password hash
+kept in the session (`PKPSessionGuard::signInAs()` stores the target's)
+with the account's on every request and logs the whole session out on a
+mismatch; at sign-in `PKPUserProvider::rehashPasswordIfRequired()` saves
+a fresh hash (`Validation::encryptCredentials()`, cost 12 since
+pkp/pkp-lib#11933, 2025-10-19) whenever the stored one `needsRehash()`.
+So any account whose stored hash has another cost (PHP's default 10
+before 8.4, an import, the test seed's 4) meets it once, at its next
+sign-in; not driven outside the test seed. The same check is what ends
+the account's other sessions on a reset or a forced change (Rules 9, 11).
 
 ## Reference — entry points & surfaces
 

@@ -570,7 +570,10 @@ no cleanup fixture.
   this, 2026-10-09).
 - **Server-rendered TinyMCE values never reach the backing textarea.** There
   is deliberately no helper. Read the editor directly:
-  `page.evaluate((id) => window.tinymce?.get(id)?.getContent(), fieldId)`.
+  `page.evaluate((id) => window.tinymce?.get(id)?.getContent(), fieldId)`,
+  with the id read off the form's live textarea: a tab loaded again keeps
+  its earlier load's editor registered, with that load's text (U03 SW2,
+  2026-10-14).
 - **The reader-side menus are plain links until the theme's script runs.**
   The default theme's `js/main.js` turns the user menu's name and the
   primary menu's parents into drop-downs on document ready
