@@ -129,8 +129,12 @@ forEachApp(async (app) => {
                 await idle(page);
                 const s = await screen(page);
                 record(`${label}-after-export`, s);
+                // Since pkp-lib#13507 (b17fadae59) a failed export opens an "Error" window that stays until "OK"
+                const errorWindow = dois.dialog('Error');
+                const errorText = (await errorWindow.isVisible()) ? flat(await errorWindow.innerText()) : null;
+                if (errorText) await errorWindow.getByRole('button', {name: 'OK', exact: true}).click();
                 const out = {url: res.url().replace(/^https?:\/\/[^/]+/, ''), status: res.status(), body, question, download: file,
-                    windowStillOpen: await dialog.isVisible(), notices: s.notices, log: logSince(from)};
+                    windowStillOpen: await dialog.isVisible(), errorWindow: errorText, notices: s.notices, log: logSince(from)};
                 fact(label, out);
                 // untick for the next action
                 if (await dois.rowCheckbox(row).isChecked()) await dois.rowCheckbox(row).uncheck();

@@ -10,7 +10,7 @@
   - 3.4: none (code)
   - 3.3: none (code)
 - **Introduced** `pkp/ojs#5378` for `pkp/pkp-lib#12392` · [f396c7da65](https://github.com/pkp/ojs/commit/f396c7da651358fbfbd2102c3e37bdf638ad1816) · 2026-06-17 · Antti-Jussi Nygård (ajnyga)
-- **Upstream** `pkp/pkp-lib#13519` (open, opened 2026-10-14), the team's copy of this issue
+- **Upstream** `pkp/pkp-lib#13519` (open, opened 2026-10-14), the team's copy of this issue: its PR `pkp/ojs#5935` takes the recommended fix with a unit test and fixes the export and the deposit (PR review 2026-10-15; the issue's record then passes DataCite's kernel-4 schema)
 - **Tracked in** spec U45 [OJS2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#ojs2)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
