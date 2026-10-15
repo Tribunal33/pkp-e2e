@@ -2752,6 +2752,7 @@ Kept walk:
 `shared/playwright/checks/issues/preprint-posted-acknowledgement/walk.js`.
 Not reported; noted under "What goes with it" in
 [docs/issues/U49-OPS4-first-post-thanked-for-new-version.md](../issues/U49-OPS4-first-post-thanked-for-new-version.md).
+Issue report: [pkp-e2e#989](https://github.com/jardakotesovec/pkp-e2e/issues/989) ([docs/issues/U49-OPS6-posted-ack-preprint-url-opens-workflow.md](../issues/U49-OPS6-posted-ack-preprint-url-opens-workflow.md)).
 
 <a id="fn-s1"></a>
 **s1 — scenario 1 seeding.** A scratch submission moved to Production
