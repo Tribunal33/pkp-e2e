@@ -1,0 +1,67 @@
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -1271,6 +1271,7 @@
+             ->filterByPublicationIds($publicationIds)
+             ->filterByIsConfirmedByEditor(true)
+             ->filterByIsPubliclyVisible(true)
++            ->filterByIsAccepted(true)
+             ->getMany();
+     }
+ 
+@@ -1333,6 +1334,7 @@
+             ->filterByIsConfirmedByEditor(true)
+             ->filterByReviewRoundIds($roundIds)
+             ->filterByIsPubliclyVisible(true)
++            ->filterByIsAccepted(true)
+             ->getMany();
+ 
+         foreach ($assignments as $assignment) {
+--- a/lib/pkp/classes/submission/reviewAssignment/DAO.php
++++ b/lib/pkp/classes/submission/reviewAssignment/DAO.php
+@@ -204,6 +204,10 @@
+             ->where(fn (Builder $q) => $q->whereNotNull('review_assignments.date_considered')->orWhereNotNull('review_assignments.date_acknowledged'))
+             ->where('submissions.context_id', $contextId)
+             ->where('is_review_publicly_visible', true)
++            // Only accepted reviews (not declined or cancelled) are public, see Collector::filterByIsAccepted()
++            ->whereNotNull('review_assignments.date_confirmed')
++            ->where('review_assignments.declined', '<>', 1)
++            ->where('review_assignments.cancelled', '<>', 1)
+             // The review's page only exists once the publication it is linked with has been published
+             ->join('review_rounds', 'review_rounds.review_round_id', '=', 'review_assignments.review_round_id')
+             ->join('publications as review_publications', 'review_publications.publication_id', '=', 'review_rounds.publication_id')
+--- a/lib/pkp/classes/submission/reviewAssignment/Repository.php
++++ b/lib/pkp/classes/submission/reviewAssignment/Repository.php
+@@ -243,12 +243,15 @@
+     }
+ 
+     /**
+-     * Whether the review is confirmed by an editor and publicly visible, see
+-     * Collector::filterByIsConfirmedByEditor() and Collector::filterByIsPubliclyVisible()
++     * Whether the review is accepted (not declined or cancelled), confirmed by an editor and publicly visible, see
++     * Collector::filterByIsAccepted(), Collector::filterByIsConfirmedByEditor() and Collector::filterByIsPubliclyVisible()
+      */
+     protected function canHaveDoi(ReviewAssignment $reviewAssignment): bool
+     {
+-        return ($reviewAssignment->getDateConsidered() || $reviewAssignment->getDateAcknowledged())
++        return $reviewAssignment->getDateConfirmed()
++            && !$reviewAssignment->getDeclined()
++            && !$reviewAssignment->getCancelled()
++            && ($reviewAssignment->getDateConsidered() || $reviewAssignment->getDateAcknowledged())
+             && $reviewAssignment->getIsReviewPubliclyVisible();
+     }
+ 
+--- a/classes/doi/DAO.php
++++ b/classes/doi/DAO.php
+@@ -81,7 +81,11 @@
+                                 // Peer reviews should be public to be considered
+                                 ->where('ra.is_review_publicly_visible', '=', 1)
+                                 // Only reviews confirmed by an editor are deposited, see getExportableDOIsPeerReviewIds()
+-                                ->where(fn (Builder $q) => $q->whereNotNull('ra.date_considered')->orWhereNotNull('ra.date_acknowledged'));
++                                ->where(fn (Builder $q) => $q->whereNotNull('ra.date_considered')->orWhereNotNull('ra.date_acknowledged'))
++                                // Only accepted reviews (not declined or cancelled) are public, see Collector::filterByIsAccepted()
++                                ->whereNotNull('ra.date_confirmed')
++                                ->where('ra.declined', '<>', 1)
++                                ->where('ra.cancelled', '<>', 1);
+                         });
+                     })
+                     // Author Response DOIs

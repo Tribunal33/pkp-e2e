@@ -2309,7 +2309,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-15 — re-verified |
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
 | [OJS9](#ojs9) | With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
-| [OJS10](#ojs10) | A review whose reviewer was cancelled keeps its DOI on the DOIs page and in every export and deposit | 🐞 | user-visible | — |
+| [OJS10](#ojs10) | A cancelled reviewer's review stays on the DOIs page and is still deposited with Crossref | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2913,22 +2913,26 @@ responses.
 Since: 2026-01-27 (pkp/pkp-lib#11332) · Basis: probe, 2026-10-13. <sup>f-ojs9</sup>
 
 <a id="ojs10"></a>
-**OJS10 — A review whose reviewer was cancelled keeps its DOI on the DOIs page and in every export and deposit** · 🐞 · user-visible.
-An editor presses "Cancel Reviewer" on a review that counts as read
-(its row read "Reviewer Thanked" and now reads "Request Cancelled").
-The journal's public review data stops listing the review, and the
-manager expects its DOI to leave the deposits with it, as the DOI of a
-review taken out of public view does (Rule 7b). Instead the DOI keeps
-its status: the DOIs page still lists "Peer Review {number}", moved to
-the end of the work's rows with nothing to say it was cancelled; "Mark
-DOIs Needs Sync", "Deposit DOIs" and "Deposit All" still change it; and
-the reviews file of "Export DOIs" and the deposits (Rule 29b) still
-holds it, with an address on the article's page for that review. A
-review DOI not yet sent is sent after the cancel, and one already registered stays so and
-is sent again once the work's DOIs are marked "Needs Sync" and
-deposited, so Crossref keeps a review the journal no longer shows.
-What goes out is the anonymous review's title, date and the article's
-DOI. Peer-review DOIs are new on `main` and in no release.
+**OJS10 — A cancelled reviewer's review stays on the DOIs page and is still deposited with Crossref** · 🐞 · medium.
+An editor presses "Cancel Reviewer" on a completed review that the
+editor has already marked complete or thanked the reviewer for (its row
+read "Complete" or "Reviewer Thanked", and now reads "Request
+Cancelled"). The journal's public review data stops listing the review,
+and the manager expects its DOI to stop going to Crossref, as it does
+once the review's "Publicly Show Reviewer Comments" box is unticked.
+Instead the DOI keeps its status: the DOIs page still lists "Peer Review
+{number}", moved to the end of the work's rows with nothing to say it
+was cancelled, and the deposits and the "Mark DOIs …" actions still
+take it.
+
+A review DOI not yet sent goes to Crossref with the work's next deposit,
+whether a manager presses "Deposit DOIs" or "Deposit All" or the
+journal's automatic deposit runs. One already registered goes again
+once the work's DOIs are marked "Needs Sync" and deposited. Nothing on
+screen says so.
+
+Neither the fix nor any way round removes a record Crossref already
+holds; they stop the review being sent, or sent again.
 Basis: probe, 2026-10-15. <sup>f-ojs10</sup>
 
 
