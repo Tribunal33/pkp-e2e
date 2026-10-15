@@ -1,0 +1,49 @@
+--- a/lib/pkp/classes/middleware/PKPAuthenticateSession.php
++++ b/lib/pkp/classes/middleware/PKPAuthenticateSession.php
+@@ -14,10 +14,14 @@
+ 
+ namespace PKP\middleware;
+ 
++use APP\core\Application;
+ use Closure;
+ use Illuminate\Http\Request;
++use Illuminate\Http\Response;
+ use Illuminate\Support\Facades\Auth;
+ use PKP\config\Config;
++use PKP\core\APIRouter;
++use PKP\core\PKPApplication;
+ use PKP\security\AuditEvent;
+ use PKP\security\AuditLog;
+ use PKP\security\Validation;
+@@ -76,6 +80,31 @@
+      */
+     protected function redirectTo(Request $request)
+     {
++        // A request whose answer a page's script reads as JSON (a tab, a grid, a
++        // form's save, an API call asking for JSON) cannot follow a redirect to the
++        // login page's HTML. Answer it in JSON; a browser navigation (a page, a file
++        // link) keeps the redirect.
++        if ($request->expectsJson()) {
++            $pkpRequest = Application::get()->getRequest();
++            $pkpRequest->getSessionGuard()->sendCookies();
++
++            // The REST API: its answer to any request without a signed-in user (HasUser)
++            if ($pkpRequest->getRouter() instanceof APIRouter) {
++                response()->json([
++                    'error' => __('api.403.unauthorized'),
++                ], Response::HTTP_UNAUTHORIZED)->send();
++                exit;
++            }
++
++            // A legacy component: ask the page to go to the login page, as other
++            // components ask for a redirect (PKPRequest::redirectUrlJson())
++            header('Content-Type: application/json');
++            echo $pkpRequest->redirectUrlJson(
++                $pkpRequest->getDispatcher()->url($pkpRequest, PKPApplication::ROUTE_PAGE, null, 'login')
++            )->getString();
++            exit;
++        }
++
+         Validation::redirectLogin();
+     }
+ }

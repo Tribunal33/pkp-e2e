@@ -1,0 +1,25 @@
+--- a/lib/pkp/js/controllers/form/MultilingualInputHandler.js
++++ b/lib/pkp/js/controllers/form/MultilingualInputHandler.js
+@@ -167,13 +167,16 @@
+ 		// Track current values in the tinyMCE control
+ 		if (this.getHtmlElement().find('.richContent').length) {
+ 			$popover.find('textarea').each(function() {
+-				var id = $(this).attr('id'),
+-						tinymce;
++				// An editor still starting up has no serializer yet, and
++				// getContent() throws: read its textarea, which holds the same value.
++				var $textarea = $(this),
++						editor = tinyMCE.EditorManager.get(/** @type {string} */(
++								$textarea.attr('id'))),
++						content = editor && editor.initialized ?
++								editor.getContent() : $textarea.val();
+ 
+-				$inputs.push($(this));
+-				tinymce = tinyMCE.EditorManager.get(/** @type {string} */(
+-						$(this).attr('id')));
+-				if (tinymce.getContent()) {
++				$inputs.push($textarea);
++				if (content) {
+ 					valuesCount++;
+ 				}
+ 			});

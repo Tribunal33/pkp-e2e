@@ -1049,6 +1049,16 @@ Left out of the scenarios above, by reason:
     details" ([OPS3](#ops3)): the guard the issue report
     (`docs/issues/U03-OPS3-server-roles-save-erases-interests.md`)
     proposes, once fixed
+  - the Contact tab opened, saved and an email change cancelled while the
+    French "Signature" box is slow to start, with no script error and the
+    globe beside "Signature" right ([A24](#a24)): the regression test the
+    issue report (`docs/issues/U03-A24-profile-contact-save-script-error.md`)
+    proposes, once fixed
+  - after a password change in one browser, a tab press and a "Save" in
+    the other browser's Profile page landing on the Login page with no
+    script error ([A25](#a25); Rule 10b): the check the issue report
+    (`docs/issues/U03-A25-stale-session-tab-press-script-error.md`)
+    proposes, once fixed
   - a 40-character password chosen while accepting a role invitation
     then signing in on the Login page, and the Password tab's boxes
     taking all 40 characters ([A7](#a7)): the guard the issue report
@@ -1164,8 +1174,8 @@ unless its Basis line says otherwise.
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | After a newcomer registers with an existing reviewing interest, accounts that save their Roles tab list it twice | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
-| [A24](#a24) | On the site-level profile, the page's script sometimes fails just after an email change is saved on the Contact tab | 🐞 | minor · crash: script | — |
-| [A25](#a25) | After a password change, a tab pressed in the account's other browser fails in the page's script, keeps its old content and never shows the Login page | 🐞 | minor · crash: script | — |
+| [A24](#a24) | The Profile page's Contact tab sometimes logs a script error on opening or saving; the save still works | 🐞 | low · crash: script | issues (claude), 2026-10-15 — re-verified |
+| [A25](#a25) | After a password change, the other browser's Profile page stops answering instead of going to the Login page | 🐞 | medium · crash: script | issues (claude), 2026-10-15 — re-verified |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere, and gives the earliest waiting date on the site | ❓ | minor | claim check (claude), 2026-10-14 — widened |
@@ -1511,27 +1521,46 @@ addressed that way.
 Basis: probe, 2026-10-14. <sup>[f-a23](#fn-a23)</sup>
 
 <a id="a24"></a>
-**A24 — On the site-level profile, saving an email change sometimes fails in the page's script** · 🐞 · minor · crash: script.
-On the site-level profile's Contact tab (Rule 3), saving a new email
-address made the page's own script fail in three of six tries, once on
-each app, just after "Your changes have been saved." appeared. The save
-itself goes through: the new address is pending and the confirmation
-message is sent. What the tab shows the user after the failure has not
-been read. The same failure was seen once on a journal's Contact tab,
-opened again after a save while impersonating. Expected: no failure.
-Basis: probe, 2026-10-14. <sup>[f-a24](#fn-a24)</sup>
+**A24 — The Profile page's Contact tab sometimes logs a script error on opening or saving; the save still works** · 🐞 · low · crash: script.
+When the Profile page's Contact tab opens, and again after its "Save"
+or the "Cancel" of an email-change request, the page's own script
+sometimes fails in the browser. The save and the cancel still go
+through, every box takes typing, and nothing on screen says anything
+went wrong.
+
+It happens when one language box of the "Signature" field is slow to
+start, as on a loaded browser or computer: never in 96 ordinary saves on
+the default dataset, now and then on a busier test install. Only sites
+with two or more languages meet it; one language has no language marker
+and logs nothing.
+
+What is lost is the globe beside "Signature", which tells whether the
+signature is filled in every language: after the failure it may show
+the wrong state.
+Basis: probe, 2026-10-15. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a25"></a>
-**A25 — After a password change, a tab press in the other browser fails instead of reaching the Login page** · 🐞 · minor · crash: script.
-A password change signs the account out of its other browsers (Rule
-10b). In such a browser, still on the Profile page, a press on a tab
-fails in the page's own script: the tab keeps what it last showed there
-(or stays empty if it was never opened there), and nothing says that the
-session has ended. Only the next full page load shows the Login page.
-Expected: the tab press takes the user to the Login page, as a page
-load does. Until they reload, the user is left on a page that no longer
-answers, with no reason given.
-Basis: probe, 2026-10-14. <sup>[f-a25](#fn-a25)</sup>
+**A25 — After a password change, the other browser's Profile page stops answering instead of going to the Login page** · 🐞 · medium · crash: script.
+A password change signs the account out of its other browsers. In such a
+browser, still on the Profile page, the first press on a tab throws a
+JavaScript error: the tab is marked as open, its area stays empty, and
+nothing says that the session has ended. The next press raises a browser
+alert reading "##user.authorization.userRequired##". A "Save" pressed
+there instead keeps its spinner turning, and what was typed is not
+stored. A reload shows the Login page.
+
+By the code, every back-office page that loads tabs, lists, side windows
+or forms in the older style does the same with the first such request
+after the change: a tab throws the error, a list or a save does
+nothing.
+
+The other ways an account's password changes behave the same: changing
+one's own password under Users & Roles, "Reset Password" from the email,
+and the change asked for at sign-in. Signing out in another browser, a
+session that expires, and an administrator setting the user's password
+do not: the page's next request arrives signed out and gets the alert
+above (code).
+Basis: probe, 2026-10-15. <sup>[f-a25](#fn-a25)</sup>
 
 ### OMP
 
@@ -2985,6 +3014,7 @@ phase `imperson`), at the load of `{context}/user/profile#contact` after a
 reload that followed a Contact save. The message arrived each time. Not
 read: the tab a second after the save (settle by reading the site-level
 Contact tab 1 s after the save over several runs).
+Issue report: [docs/issues/U03-A24-profile-contact-save-script-error.md](../issues/U03-A24-profile-contact-save-script-error.md).
 
 <a id="fn-a25"></a>
 **f-a25** — The tab press fetches the tab with `GET
@@ -2996,6 +3026,7 @@ data. Run records of 2026-10-14 (drift sweep), all three apps, seven runs
 token '<', "<!DOCTYPE "... is not valid JSON", and the page's script stayed
 busy for 30 s after it; the panel stayed empty for a tab not opened
 before and kept the Contact form for a tab opened before (note g).
+Issue report: [docs/issues/U03-A25-stale-session-tab-press-script-error.md](../issues/U03-A25-stale-session-tab-press-script-error.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
