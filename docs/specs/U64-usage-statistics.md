@@ -2633,6 +2633,7 @@ date can not be earlier than 2001-01-01."), which `ajaxError.js` shows
 before `error`; the port to Laravel routing (pkp/pkp-lib#9176) dropped
 it, so this is a regression, not a choice. Named in A1's issue report
 (f-a1) and left out of its fix.
+Issue report: [pkp-e2e#982](https://github.com/jardakotesovec/pkp-e2e/issues/982) ([docs/issues/U64-A14-stats-refusal-raw-code.md](../issues/U64-A14-stats-refusal-raw-code.md)).
 
 <a id="fn-f-a15"></a>
 **f-a15** — `IR::getTSVReportItems()` (OJS and OPS `classes/sushi/IR.php`;
