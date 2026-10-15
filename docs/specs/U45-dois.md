@@ -323,11 +323,23 @@ links under the list. <sup>g</sup>
     Rule 16). Its row then leaves the DOIs page, and:
     - a DOI reading "Unregistered" is deleted, so a review that
       qualifies again starts without one (Rule 7a) [OJS7](#ojs7);
-    - a DOI reading "Submitted" or "Registered" stays with its status,
-      and the row shows it again once the review qualifies again.
+    - a DOI reading "Submitted", "Registered", "Needs Sync" or "Error"
+      stays with its status, and the row shows it again once the review
+      qualifies again; until then "Deposit All" leaves it alone
+      (Rule 29a). <sup>q49</sup>
 
     "Revert Decision" on a row reading "Reviewer Thanked" changes
-    nothing here: the review still counts as read. <sup>q46</sup>
+    nothing here: the review still counts as read. <sup>q46</sup> <sup>q49</sup>
+
+    "Cancel Reviewer" on a review that counts as read
+    ([→ Unassign vs Cancel](U27-reviewer-assignment-and-management.md#unassign);
+    the row then reads "Request Cancelled") does not take the review
+    out of Rule 7's conditions. The journal's public review data (no
+    screen shows it) stops listing the review, yet
+    "Peer Review {number}" stays on the DOIs page, moved to the end of
+    the work's rows with nothing to show the cancel; its DOI keeps its
+    status; the "Mark DOIs …" actions and the deposits still change it,
+    and the reviews file (Rule 29b) holds it ⚠ [OJS10](#ojs10). <sup>q49</sup>
 
 7c. **Exporting and depositing a review's DOI** {OJS}. A review's DOI is
     exported and deposited with its work (Rule 29) only once the
@@ -377,9 +389,11 @@ links under the list. <sup>g</sup>
     "Minor Revision" keeps its source's DOI, its galleys too: a family of
     versions whose names differ only after the dot ("Version of Record
     2.0", "2.1") shares them. Changing a DOI on the DOIs page then
-    changes it for that family only; the others keep theirs. "Deposit
-    All" takes the DOIs of every family with a published version
-    (Rule 29a).
+    changes it for that family only; the others keep theirs. A minor
+    version made while its source had no DOI does not take the one the
+    source is given later: it gets its own when it is published
+    [A10](#a10). "Deposit All" takes the DOIs of every family with a
+    published version (Rule 29a).
     While any journal of the install is set to "Yes", every journal's
     OAI requests fail ([→ OAI-PMH, A22](U19-oai-pmh.md#a22)). <sup>k</sup> <sup>q16</sup>
 13. **Switching versioning later.** A change of "DOI Versioning" affects
@@ -450,16 +464,18 @@ links under the list. <sup>g</sup>
 19. **A deposited item cannot be edited.** While the item's status is
     "Submitted" or "Registered", "Edit" is greyed out; "Mark DOIs
     Unregistered" (Rule 27) makes it editable again. <sup>m</sup>
-20. **Other versions' DOIs.** With "DOI Versioning" "Yes" and more than
-    one version, the expanded view reads "There are {count} versions."
-    with a "View all" button; it opens the side window "DOIs for all
+20. **Other versions' DOIs.** With "DOI Versioning" "Yes" and versions
+    in more than one family (Rule 12), the expanded view reads "There
+    are {count} versions." with a "View all" button; a work whose
+    versions are all of one family (1.0 and 1.1) shows neither. The
+    button opens the side window "DOIs for all
     versions", one block per version, headed "{version} ({date
     published})" or "{version} Unpublished" as a link to that version's
     page, each with the table of Rule 17. Only each family's newest
     version (Rule 12) gets a block, and {count} counts the blocks:
     with 1.0, 2.0 and 2.1 it reads "There are 2 versions.". One "Edit" at
     the foot of the window makes every block's boxes editable, and one
-    "Save" stores them. <sup>m</sup> <sup>q16</sup>
+    "Save" stores them. <sup>m</sup> <sup>q16</sup> <sup>q50</sup>
 21. **Search.** The phrase applies once Enter is pressed. Words match
     the works' titles and contributors' names. A phrase beginning with
     digits and a dot ("10.1234/a7k") is read as the start of a DOI, and
@@ -578,10 +594,15 @@ links under the list. <sup>g</sup>
       listing "Failed to locate the main schema resource at
       'https://www.crossref.org/schemas/crossref5.4.0.xsd'." for Crossref,
       as on the test installs. Any ticked item without a published DOI (an
-      unpublished work, a published work whose DOI was cleared, an
-      unpublished issue) makes the whole action fail, nothing exported,
-      with an "Error" window: "One or more invalid publication objects
-      were included with the request.". <sup>f-a13</sup> With DataCite,
+      unpublished work, a published work whose DOI was cleared and whose
+      galleys carry none, an unpublished issue) makes the whole action
+      fail, nothing exported, with an "Error" window: "One or more
+      invalid publication objects were included with the request.".
+      <sup>f-a13</sup> On a DataCite journal a published work whose
+      "Article" DOI was cleared while its galley keeps one is not
+      refused: the action goes on to the format check as for any work,
+      and the file it builds holds the article's record with an empty
+      DOI beside the galley's [OJS5](#ojs5). <sup>q51</sup> With DataCite,
       exporting a
       published issue fails on the server and shows nothing
       ⚠ [OJS2](#ojs2).
@@ -597,7 +618,7 @@ links under the list. <sup>g</sup>
       round was opened on a published version turn "Submitted" too, and
       the deposit sends those of them Rule 7c lets go; the kept
       DOI of a review no longer shown publicly (Rule 7b) keeps its
-      status, and the deposit leaves the review out
+      status, and the reviews file (Rule 29b) leaves the review out
       [OJS6](#ojs6). With DataCite under "DOI Versioning" "Yes" only
       the current version is sent [OJS8](#ojs8). A ticked
       published work that has no DOI gets the same notice, yet stays
@@ -648,10 +669,27 @@ links under the list. <sup>g</sup>
       galley's row "Submitted", but its deposit fails on the server and
       the galley's DOI is never sent [OJS5](#ojs5).
     - **A review's DOI** {OJS} is taken while the review counts as read
-      (Rule 7) and Rule 7c lets it go, also when its article's DOI
-      already reads "Registered", which keeps that status.
+      and is shown publicly (Rule 7) and Rule 7c lets it go, also when
+      its article's DOI already reads "Registered", which keeps that
+      status. <sup>q49</sup>
 
     "Automatic Deposit" (Rule 41) takes the same DOIs.
+
+29b. **What a Crossref file holds** {OJS OPS}. The files "Export DOIs"
+    downloads are the ones a deposit sends (Rule 33). A test install
+    downloads none (Rule 29): there they are read on the server,
+    without the format check. A work's file holds: <sup>q51</sup>
+    - **Its versions**: on a journal one record per family (Rule 12),
+      the newest published version's: with 1.0 and 1.1 published,
+      1.1's. On a preprint server one record per posted version that
+      carries a DOI, the newest first, so a DOI that two posted versions
+      share (1.0 and 1.1, or 2.0 and 2.1) is listed twice
+      ⚠ [OPS6](#ops6); a posted version without a DOI is left out.
+    - **Its title and subtitle**, as plain text: an "&" or a word in
+      italics typed into the "Title" or "Subtitle" box reaches Crossref
+      as the codes `&amp;` and `<i>…</i>` ⚠ [A30](#a30). A preprint
+      server's file puts the title again where the subtitle belongs
+      ⚠ [OPS7](#ops7).
 30. **The agency panel.** With an agency configured, an item's expanded
     view ends with a box naming the agency, a sentence and buttons:
     <sup>m</sup> <sup>q20</sup>
@@ -1078,9 +1116,10 @@ differs. <sup>z1</sup>
    pattern boxes (Fields). <sup>h</sup>
 
 6. **"DOI Versioning"** (same tab; "No" on a journal and press, "Yes" on
-   a preprint server). The other end changes what a new version starts
+   a preprint server). Its value decides what a new version starts
    with (Rules 11, 12) and which versions' DOIs "Deposit All" takes
-   (Rule 29a), and adds "View all" (Rule 20); "Yes" also shows
+   (Rule 29a); "Yes" adds "View all" to a work whose versions span more
+   than one family (Rule 20) and shows
    Crossref's "Update Policy DOI" {OJS} (Rule 38). <sup>k</sup>
 
 7. **"Registration Agency"** (Settings › Distribution › "DOIs" ›
@@ -2009,7 +2048,7 @@ throwaway accounts. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
-  - A review taken out of public view whose DOI reads "Registered" or "Submitted": "Deposit DOIs" and the "Mark DOIs …" actions on its work leave that DOI's status, and the deposit leaves the review out (OJS6 retired; Rules 7b, 29)
+  - A review taken out of public view whose DOI reads "Registered" or "Submitted": "Deposit DOIs" and the "Mark DOIs …" actions on its work leave that DOI's status, seen on its row once public again, and the reviews file (Rule 29b) leaves the review out (OJS6 retired; Rules 7b, 29)
   - A review that qualifies again after losing its "Unregistered" DOI (OJS7, ruled intended): under "Immediately…" a new, different DOI at once; under "Upon reaching the copyediting stage" its row reads "Needs DOI" until "Assign DOIs" or the next publication (Rules 7a, 7b; scenario 17 stops at the untick)
   - the guard for A19 (Rule 35; issue report
     `docs/issues/U45-A19-agency-choice-unticks-every-doi-kind.md`): a
@@ -2030,8 +2069,12 @@ Left out of the scenarios above, by reason:
     version whose DOI reads "Registered" turns that DOI "Needs Sync" in
     the "View all" window
   - under "DOI Versioning" "Yes", a preprint's "Minor Revision" keeping
-    its galley's DOI in the "View all" window {OPS} (Rule 12; OPS4
+    its galley's DOI: once 2.1 made from 2.0 is posted, its block in the
+    "View all" window holds 2.0's galley DOI {OPS} (Rules 12, 20; OPS4
     retired)
+  - under "DOI Versioning" "Yes", a work whose 1.0 and a minor 1.1 are
+    published showing no "There are … versions." line and no "View
+    all" (Rule 20)
   - the guard for OMP2 (Rule 45; issue report
     `docs/issues/U45-OMP2-file-row-doi-save-error.md`): a DOI typed into a
     book's empty file row and saved answers "DOI(s) successfully updated"
@@ -2111,6 +2154,11 @@ Left out of the scenarios above, by reason:
     changing nothing; a "Registered" or "Submitted" review DOI kept
     through "Public Visibility" unticked, its row hidden and shown again
     with that status once the box is ticked {OJS} (Rule 7b)
+  - a review DOI reading "Needs Sync" (after "Mark DOIs Registered" and
+    "Mark DOIs Needs Sync") kept through "Public Visibility" unticked:
+    its row hidden, and "Deposit All" turning the work's other rows
+    "Submitted" while the review's stays "Needs Sync" {OJS} (Rules 7b,
+    29a)
   - "Deposit DOIs" on a work whose new major version is not yet
     published: the published versions' DOIs reading "Submitted", the new
     version's "Unregistered", and "Deposit All" sending them once it is
@@ -2189,7 +2237,7 @@ Left out of the scenarios above, by reason:
   - A2 (a made DOI under "None", and a peer review's under "Custom pattern", reading the prefix and a bare "/", a press's chapters and formats included; Rules 6b, 49)
   - A9 (a pattern symbol with nothing to fill it, such as "%c" in a press's "Publication Formats" box; Rules 6c, 49)
   - A7 (a typed DOI outside the journal's prefix; Rule 18)
-  - A10 ("Assign DOIs" under "No" while a newer version is unpublished; Rules 11, 17)
+  - A10 ("Assign DOIs" while a newer version is unpublished, and under "Yes" the minor version's own DOI at its publication; Rules 11, 12, 17)
   - A17 (a new major version leaving the earlier DOI's status; Rule 32)
   - OPS5 (a preprint server listing unfinished drafts; Rule 15)
   - A11 (searching by a DOI's start, on a press by a chapter's, format's or file's DOI while its kind is ticked; Rule 21)
@@ -2203,9 +2251,13 @@ Left out of the scenarios above, by reason:
   - OJS1 ("Never" not stopping an issue's DOI at "Publish Issue"; Rule 8)
   - OJS2 (a DataCite issue export or deposit; Rule 29)
   - A15 ("Deposit DOIs" on a published work with no DOI, its own or a galley's; Rule 29)
-  - OJS5 ("Deposit All" or "Deposit DOIs" on a DataCite journal marking "Submitted", and never sending, the galley DOI of a work whose article DOI was cleared; Rules 29, 29a, 41)
+  - OJS5 ("Deposit All" or "Deposit DOIs" on a DataCite journal marking "Submitted", and never sending, the galley DOI of a work whose article DOI was cleared, and "Export DOIs" not refusing that work; Rules 29, 29a, 41)
   - OJS8 ("Deposit All" and "Deposit DOIs" on a DataCite journal under "DOI Versioning" "Yes" marking an earlier major version's DOIs "Submitted"; Rules 29, 29a)
   - A24 (a formatted title's codes in a row's name; Rule 16)
+  - A30 (a typed "&" or italic word reaching Crossref as codes; Rule 29b)
+  - OJS10 (a cancelled review's DOI kept on the DOIs page and in the exports and deposits; Rule 7b)
+  - OPS6 (a DOI listed once per posted version that shares it in a preprint server's Crossref file; Rule 29b)
+  - OPS7 (the title in a preprint's subtitle place in the Crossref file; Rule 29b)
   - OJS4 ("Deposit DOIs" on the "Issues" tab leaving the issues' status; Rules 29, 32)
   - A18 (a deposit that cannot reach the agency staying "Submitted"; Rule 33)
   - A4 (a deposited item's agency panel; Rule 30; scenario 13 passes it)
@@ -2219,8 +2271,8 @@ Left out of the scenarios above, by reason:
   - A23 (a journal's or a preprint server's galley given its DOI alone at a publish; Side effects)
   - A29 (an install upgraded from 3.3 keeping an old leftover prefix, an upgrade no test runs; Fields, "DOI Prefix")
 - **No seed**:
-  - the "Export DOIs" download and "Items successfully exported": the test installs cannot reach the agency's site (Rule 29; Side effects)
-  - a deposit the agency answers with an error: "Error", "View Error" and the "Registration Error Message" window (Rules 17, 33)
+  - the "Export DOIs" download, "Items successfully exported" and what the file holds: the test installs cannot reach the agency's site (Rules 29, 29b; Side effects)
+  - a deposit the agency answers with an error: "Error", "View Error" and the "Registration Error Message" window, and a review's "Error" DOI kept through "Public Visibility" unticked (Rules 7b, 17, 33)
   - a deposit the agency accepted: the panel's "Registered" through the agency and "View Record" (Rules 30, 33)
 - **Owned by another feature**:
   - an unsaved change on the "Setup" or "Registration" tab lost on leaving the page (Fields; *Journal identity & about pages*, Rule 5)
@@ -2250,21 +2302,25 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | The DOIs page's rows show a title's italic word as `<i>…</i>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A29](#a29) | A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it | 🐞 | user-visible | — |
+| [A30](#a30) | A title or subtitle typed with "&" or an italic word goes to Crossref with the codes `&amp;` and `<i>…</i>` as text | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
 | [OJS9](#ojs9) | With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
+| [OJS10](#ojs10) | A review whose reviewer was cancelled keeps its DOI on the DOIs page and in every export and deposit | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server's Crossref "Username" help reads "see the advise above" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
+| [OPS6](#ops6) | A preprint server's Crossref file lists a DOI once for every posted version that shares it | 🐞 | minor | — |
+| [OPS7](#ops7) | A preprint server's Crossref file puts the preprint's title where its subtitle belongs | 🐞 | user-visible | — |
 | [A1](#a1) | A new journal arrives in a DOI state its own Setup tab refuses to save | ❓ | minor | — |
 | [A5](#a5) | The Registration tab keeps a new agency even when its fields are refused | ❓ | minor | — |
 | [A6](#a6) | Choosing an agency silently unticks the kinds it does not accept | ❓ | minor | — |
 | [A7](#a7) | A DOI typed by hand need not begin with the journal's prefix | ❓ | minor | — |
-| [A10](#a10) | Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only | ❓ | user-visible | — |
+| [A10](#a10) | "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only | ❓ | user-visible | — |
 | [A16](#a16) | A "Needs Sync" item's agency panel says its metadata "has not been submitted" | ❓ | minor | — |
 | [A23](#a23) | A journal's or a preprint server's galley given its DOI alone at a publish: its Activity Log line untried | ❓ | minor | — |
 | [OJS1](#ojs1) | "Never" does not stop an issue's DOI at "Publish Issue" | ❓ | minor | — |
@@ -2403,17 +2459,24 @@ cause with [A2](#a2).
 Basis: probe, 2026-10-12. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — Under "DOI Versioning" "No", "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only** · ❓ · user-visible.
+**A10 — "Assign DOIs" while a newer version is unpublished gives the DOI to the published version only** · ❓ · user-visible.
 With "DOI Versioning" "No" and an article published without a DOI, a
 manager presses "Create New Version", then "Assign DOIs" for the
 article on the DOIs page, which lists "Version of Record 1.0". Once 1.1
 is published, its page shows no "DOI:" line, while the 1.0 page shows
 the DOI.
-Question: under "No", should a DOI assigned while a newer version is
-unpublished reach that version too?
-Lean: yes; "No, all versions of an article should have the same DOI."
-is what the manager chose.
-Basis: probe, 2026-09-26. <sup>f-a10</sup>
+With "Yes" the same order splits a family: 1.1, a "Minor Revision"
+made before 1.0 had a DOI, gets a DOI of its own when it is published,
+though a minor version shares its source's (Rule 12). The DOIs page
+then shows only 1.1's DOI, with no "View all" (one family, Rule 20),
+and "Deposit All" and the Crossref file (Rule 29b) take only 1.1's, so 1.0's DOI
+shows nowhere on the DOIs page and is never deposited.
+Question: should a DOI assigned while a newer version is unpublished
+reach that version too?
+Lean: yes; under "No" the manager chose "No, all versions of an
+article should have the same DOI.", and under "Yes" a minor version is
+meant to share its source's DOI.
+Basis: probe, 2026-09-26 and 2026-10-15. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — Searching the DOIs page by a DOI misses some DOIs on each app, and fails on a preprint server** · 🐞 · medium · crash: server.
@@ -2661,6 +2724,20 @@ That is `main`, and 3.5 since 3.5.0-2. An upgrade from 3.3 to 3.4
 stops on such an install with a database error instead.
 Since: 2026-10-09 (pkp/pkp-lib#13481; on 3.5 pkp/pkp-lib#12082) · Basis: probe, 2026-10-09. <sup>f-a29</sup>
 
+<a id="a30"></a>
+**A30 — A title or subtitle typed with "&" or an italic word goes to Crossref with the codes `&amp;` and `<i>…</i>` as text** · 🐞 · user-visible.
+A manager expects Crossref to register a work's title as the work's
+page shows it. A title saved in the "Title" box as "hkrb forest trees &
+*shrubs*", with the subtitle "rocks & sand", goes into the Crossref file
+(Rule 29b) as the text
+`hkrb forest trees &amp; <i>shrubs</i>` and `rocks &amp; sand`, so
+Crossref, and every service that shows its records, reads the
+codes as part of the title. The "Title" and "Subtitle" boxes keep
+every typed "&" this way, so any title or subtitle with one is hit, not
+only a formatted one. The work's own page shows the title right. The DOIs page's rows show the same codes ([A24](#a24)). A press
+sends nothing to an agency.
+Basis: probe, 2026-10-15. <sup>f-a30</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -2749,12 +2826,19 @@ It takes an article whose own DOI was emptied on the DOIs page while its
 galley kept one. A journal with "Articles" unticked is not hit: its
 galley DOIs are deposited. The other articles the same "Deposit All"
 takes are deposited too.
+"Export DOIs" on such an article is not refused either, as one with no
+DOI at all is: it goes on to DataCite's format check, and the file it
+builds holds the article's record with an empty DOI beside the
+galley's (Rule 29). Whether that check then stops it with an "Error"
+window or the file downloads with the empty DOI could not be seen,
+since the test installs cannot fetch the format.
 That is `main`. On 3.5 and 3.4 "Deposit All" also has an older and wider
 fault, which `main` no longer has: it marks a galley DOI "Submitted" and
 starts no deposit unless the article's own DOI goes out with it. So it also leaves galley DOIs unsent when the article's DOI is
 already "Registered" (galley DOIs turned on after the articles were
 registered) and when "Articles" is unticked.
 Basis: probe, 2026-10-12. <sup>f-ojs5</sup>
+Report: refresh owed — the housekeeping claim check of 2026-10-15 found that "Export DOIs" on the article whose "Article" DOI was emptied while its galley kept one is not refused with "One or more invalid publication objects were included with the request.": the work passes `publication\DAO::getExportableDOIsSubmissionIds()` (`whereHasDoi()`, a galley's DOI counts) and `DataciteExportPlugin` builds the article's record with an empty `identifier` beside the galley's; the report should add the export side and its open end (what DataCite's schema check does with the empty identifier) (2026-10-15)
 
 <a id="ojs7"></a>
 **OJS7 — A review that loses its "Unregistered" DOI and qualifies again gets a new DOI under "Immediately…" and none under the other settings** · ✅ · minor.
@@ -2820,6 +2904,25 @@ with nothing to say that the earlier one was dropped. The dropped DOIs
 were never sent to Crossref or DataCite, whose deposits carry no author
 responses.
 Since: 2026-01-27 (pkp/pkp-lib#11332) · Basis: probe, 2026-10-13. <sup>f-ojs9</sup>
+
+<a id="ojs10"></a>
+**OJS10 — A review whose reviewer was cancelled keeps its DOI on the DOIs page and in every export and deposit** · 🐞 · user-visible.
+An editor presses "Cancel Reviewer" on a review that counts as read
+(its row read "Reviewer Thanked" and now reads "Request Cancelled").
+The journal's public review data stops listing the review, and the
+manager expects its DOI to leave the deposits with it, as the DOI of a
+review taken out of public view does (Rule 7b). Instead the DOI keeps
+its status: the DOIs page still lists "Peer Review {number}", moved to
+the end of the work's rows with nothing to say it was cancelled; "Mark
+DOIs Needs Sync", "Deposit DOIs" and "Deposit All" still change it; and
+the reviews file of "Export DOIs" and the deposits (Rule 29b) still
+holds it, with an address on the article's page for that review. A
+review DOI not yet sent is sent after the cancel, and one already registered stays so and
+is sent again once the work's DOIs are marked "Needs Sync" and
+deposited, so Crossref keeps a review the journal no longer shows.
+What goes out is the anonymous review's title, date and the article's
+DOI. Peer-review DOIs are new on `main` and in no release.
+Basis: probe, 2026-10-15. <sup>f-ojs10</sup>
 
 
 ### OMP
@@ -2918,6 +3021,27 @@ Question: should the DOIs page list a draft nobody has submitted?
 Lean: no; a manager has nothing to register for it, and the other apps
 leave drafts out.
 Basis: probe, 2026-09-26. <sup>f-ops5</sup>
+
+<a id="ops6"></a>
+**OPS6 — A preprint server's Crossref file lists a DOI once for every posted version that shares it** · 🐞 · minor.
+On a preprint server a "Minor Revision" shares its source's DOI
+(Rule 12). Once both versions are posted, the Crossref file (Rule 29b)
+carries that DOI twice, one record per version: first the newer one, with its own version page as
+the page the DOI leads to, then the older one, with its page. 1.0 and
+1.1 give two records, and so do 2.0 and 2.1. A journal's file names the
+family's newest version alone. What Crossref does with one file that
+names a DOI twice was not tried; if it takes the records in order, the
+DOI ends up leading to the older version's page.
+Basis: probe, 2026-10-15. <sup>f-ops6</sup>
+
+<a id="ops7"></a>
+**OPS7 — A preprint server's Crossref file puts the preprint's title where its subtitle belongs** · 🐞 · user-visible.
+A preprint's "Subtitle" is missing from the Crossref file (Rule 29b),
+its title standing in its place: for "hkrb forest trees & *shrubs*"
+with the subtitle "rocks & sand", the file's subtitle reads "hkrb forest trees & *shrubs*". A
+journal's file carries the subtitle. A preprint without a subtitle gets
+no subtitle in the file.
+Basis: probe, 2026-10-15. <sup>f-ops7</sup>
 
 ### Retired
 
@@ -3459,6 +3583,46 @@ export accepts on a leftover galley DOI: note f-a15. What an agency is sent rest
 here on the statuses, the queued jobs and the code: the test installs
 hold no agency credentials.
 
+<a id="fn-q51"></a>
+**q51** — Live-probed 2026-10-15 (Rules 29, 29b), two runs as note q49,
+files built read-only with validation off. Versions (phase `versions`):
+OPS preprint 3, 1.0 without a DOI and 2.0 and 2.1 posted on one DOI,
+gave two `posted_content` records with that DOI, 2.1's first (its
+version page as `resource`), then 2.0's; preprint 2, 1.0 and 1.1 on one
+DOI, two records; one posted version, one record. OPS
+`PreprintCrossrefXmlFilter` writes a record for every published
+publication with a DOI, newest first (`array_reverse()`, commented as
+keeping Crossref's relations in order). OJS work 1, "Yes", 1.0 and 1.1
+published: one `journal_article` record, 1.1's (note q48 for the
+families a journal sends). Titles (phase `titles`): OJS work 5 and OPS
+preprint 1 at Production, "Title" retyped `hkrb forest trees & shrubs`
+with "shrubs" set in italics by Ctrl+I and "Subtitle" `rocks & sand`,
+"Save" (stored `hkrb forest trees &amp; <i>shrubs</i>` and
+`rocks &amp; sand`), published and given a DOI: the OJS file read
+`<title>hkrb forest trees &amp;amp; &lt;i&gt;shrubs&lt;/i&gt;</title>
+<subtitle>rocks &amp;amp; sand</subtitle>`, the OPS file the same
+`<title>` and the title again in `<subtitle>`; the dataset's own
+"Hansen & Pinto: Reason Reclaimed" (stored with a bare "&"; OJS work 9,
+OPS preprint 8) read `<title>Hansen &amp; Pinto: Reason
+Reclaimed</title>` and, on OPS, no `<subtitle>`. The workflow heading
+and the reader page showed the title formatted. The filters pass the
+stored HTML (`getLocalizedTitle(…, 'html')`) to `createTextNode()`,
+which escapes it; OPS's subtitle line calls
+`getLocalizedTitle($subtitle, 'html')`, the subtitle in the locale's
+place. DataCite (phase `datacite`): OJS work 17, both DOIs given by
+"Assign DOIs", its "Article" DOI emptied with "Edit" › "Save" ("DOI(s)
+successfully updated"; the row "Article: Needs DOI", "PDF:
+Unregistered"): "Export DOIs" asked "You are about to export DOI
+metadata records for 1 item(s) for DataCite…" and answered the
+standing schema window ("Failed to locate the main schema resource at
+'http://schema.datacite.org/meta/kernel-4/metadata.xsd'."), as with both
+DOIs kept; the work passed `publication\DAO::getExportableDOIsSubmissionIds()`;
+the file held the article's record with an empty
+`<identifier identifierType="DOI"/>` and a `relatedIdentifier` "HasPart"
+naming the galley's DOI, then the galley's record. Work 9 with its only
+DOI emptied: "One or more invalid publication objects were included
+with the request." in an "Error" window.
+
 <a id="fn-m"></a>
 **m** — `components/ListPanel/doi/DoiListItem.vue`: tick box, title link
 (`target="_blank"`), `{{ item.id }}`, the badge (`publicationStatusLabel`
@@ -3854,6 +4018,37 @@ replaces the behavior it asserted (note q46), so the cause was not
 pursued. The suite at the round-6 heads reads the row empty and "Needs
 DOI", then the DOI after "Assign DOIs".
 
+<a id="fn-q49"></a>
+**q49** — Live-probed 2026-10-15 (Rules 7b, 29a; OJS10), OJS, two runs,
+each from a fresh reset of PKP's default dataset on `main`
+(`publicknowledge`, signed in as `dbarnes`), Crossref chosen with the
+prefix 10.1234 and "Peer Review" ticked, each review made public in its
+row's "Edit" window; kept script
+`shared/playwright/checks/U45/H15/h15.js` (phases `setup`, `reviewA`,
+`errorEnd`, `reviewB`). What a file holds was built read-only with the
+agency's own export plugin, validation off (`xml-read.php` beside the
+script), because every "Export DOIs" on the test installs answers the
+schema window of Rule 29 (seen on screen in both runs); what "Deposit
+All" takes was read from `doi\DAO::getAllDepositableSubmissionIds()`'s
+list. "Needs Sync": work 13 (reviews 19–21, published in "Vol. 1 No. 2
+(2014)"), "Mark DOIs Registered" then "Mark DOIs Needs Sync" on screen;
+unticking review 20's "Public Visibility" kept its DOI "Needs Sync",
+took "Peer Review 20" off the page, the depositable list and the
+reviews file, and the "Deposit All" pressed next turned the work's
+other rows "Submitted" and left 20 "Needs Sync". "Error": a test-install
+deposit never reaches an agency (Rule 33; here too the job failed at
+connection and Administration › "Failed Jobs" listed it), so review
+16's DOI on work 10 was set to error in the database (`dois.status` 4),
+the one step not taken on screen; the row read "Peer Review 16: Error"
+and the depositable list held it; unticked, the DOI kept "Error", the
+row left the page and the list and file left it out; ticked again, the
+row came back reading "Error" and the list took it again. A "Needs
+Sync" review ticked again was not driven: the row follows the review's
+visibility (note j), not its DOI's status. "Revert Decision" on review
+21's "Reviewer Thanked" row (DOI "Needs Sync") kept the row, the DOI,
+its place in the public review data and in "Deposit All"; the reviewer
+row turned "Review Viewed" with "Read Review".
+
 <a id="fn-i"></a>
 **i** — `ojs/classes/controllers/grid/issues/IssueGridHandler.php`
 `publishIssue()`: on the confirmed first publish
@@ -3905,6 +4100,21 @@ Original …") as links opening in a new tab, and one "Edit" beside
 "Close". While a journal of the install was on "Yes", `publicknowledge`'s
 OAI answered a server error, and again 200 once it was set back to "No";
 the press and preprint-server installs answered 200.
+
+<a id="fn-q50"></a>
+**q50** — Live-probed 2026-10-15 (Rule 20), two runs as note q49 (phase
+`versions`), "DOI Versioning" "Yes" saved on screen on a journal and a
+press (a preprint server's default), "Assign DOIs" on the work: one
+family, 1.0 and 1.1 both published (OJS work 1, the dataset's 1.1;
+OMP book 14 and OPS preprint 2, each with a "Minor Revision" made and
+published on screen), the expanded view held no "There are …
+versions." and no "View all" on all three apps, the press's and the
+preprint's two versions sharing the DOI. Two families (OPS preprint 3,
+1.0 and 2.0 posted, then 2.1 made with "Minor Revision" and posted):
+"There are 2 versions." with "View all" before and after 2.1, the
+window's blocks "Author's Original 1.0 ({date})" ("Needs DOI": "Assign
+DOIs" gave only the current version a DOI, Rule 25) and "Author's
+Original 2.0 ({date})", then "… 2.1 ({date})".
 
 <a id="fn-l"></a>
 **l** — `onDoiPage` → `Collector::filterByOnDoiPage()`; app
@@ -4816,6 +5026,14 @@ DOIs" and the publish of 1.1, the article page (1.1) had no "DOI:" line
 and the 1.0 page had it. Not driven on a press or a preprint server.
 Rule 17's half (the published version shown while a newer one is
 unpublished) was seen on all three apps.
+Live-probed 2026-10-15 (Rule 12; two runs as note q49, phase
+`versions`), OJS work 1, whose dataset 1.1 was made before 1.0 had a
+DOI: "DOI Versioning" "Yes" saved, "Assign DOIs" gave 1.0 its DOI and
+1.1 none; 1.1 published got a DOI of its own. The DOIs page then showed
+1.1's alone, with no "View all"; `getAllDepositableSubmissionIds()` and
+the Crossref file held only 1.1's; 1.0's stayed "Unregistered". On a
+press and a preprint server the minor versions were made after "Assign
+DOIs" and shared the DOI (note q50); this order was not driven there.
 
 <a id="fn-f-a11"></a>
 **f-a11** — Live-probed 2026-09-26 (q18, which gives the cause), all
@@ -5068,6 +5286,12 @@ Written up for the team in
 [docs/reports/2026-10-09-pkp-lib-13481.md](../reports/2026-10-09-pkp-lib-13481.md)
 (the PR review of pkp/pkp-lib#13481, posted in the channel on 2026-10-09).
 
+<a id="fn-f-a30"></a>
+**f-a30** — Live-probed 2026-10-15, OJS and OPS, two runs (note q51,
+titles). A press has no
+agency plugin. The DOIs page's own rendering of the same title is
+[A24](#a24).
+
 <a id="fn-f-a25"></a>
 **f-a25** — At the PR heads of `pkp/pkp-lib#13460` (`246e5387f6`, with
 `pkp/ojs#5903` `2f8c53b706` and `pkp/omp#2495` `e1464b9228`), before
@@ -5302,6 +5526,12 @@ S2). That DataCite's deposit holds the galley rests on the plugin's
 code and on which failure the job met: no agency credentials. The issue
 report below still describes `main` and all three cases; it, its kept
 script and its issue stay until the entry's refresh after the merge.
+Live-probed 2026-10-15 ("Export DOIs"; note q51, DataCite): the
+work whose "Article" DOI was emptied while its galley kept one passed
+the export list and was not refused; the file held the article's record
+with an empty identifier beside the galley's. DataCite's schema check
+is unreachable on the test installs, so its verdict on the empty
+identifier is open.
 Issue report:
 [pkp-e2e#931](https://github.com/jardakotesovec/pkp-e2e/issues/931) ([docs/issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md](../issues/U45-OJS5-deposit-all-marks-galley-doi-submitted-unsent.md)).
 
@@ -5473,6 +5703,31 @@ in DataCite", was open with milestone 3.6 that day.
 <a id="fn-f-ojs9"></a>
 **f-ojs9** — Note c: OJS `classes/publication/Repository.php` `createDois()`, the author-response block (`:392-404` at ojs `7c6fba2064`), tests `empty($authorResponses->doiId)`, the collection from `getReviewAuthorResponses()`, not the loop's `$authorResponse`. A Laravel collection has no `__isset`, so `empty()` is always true and `Repo::doi()->mintDoi()` runs for every response on every call, replacing its `doiId`. The peer-review block above it tests the item (`$reviewAssignment->getData('doiId')`). The kind is reachable only through the API: `schemas/context.json` `enabledDoiTypes` allows `authorResponse`, while `DoiSetupSettingsForm` and `Repository::getAllDepositableTypes()` comment it out. From `30e82d3876` (Erik Hanson, 2026-01-27, `pkp/pkp-lib#11332`); `stable-3_5_0` has no author responses. Reported by the maintainer from a code read, 2026-10-13; walked the same day on the default dataset (three assignments, three DOIs, two left with no item; the fix keeps the first).
 Issue report: [pkp-e2e#965](https://github.com/jardakotesovec/pkp-e2e/issues/965) ([docs/issues/U45-OJS9-author-response-doi-reminted.md](../issues/U45-OJS9-author-response-doi-reminted.md)).
+
+<a id="fn-f-ojs10"></a>
+**f-ojs10** — Live-probed 2026-10-15, two runs as note q49 (phases
+`reviewA`, `reviewB`). Work 10 ("Condensing Water Availability Models…",
+reviews 15 Aisla McCrae and 16 Adela Gallego), each review made public
+and marked complete, accepted, sent to production and published:
+"Cancel Reviewer" from the row's "More Actions" ("Do not send email to
+Reviewer." ticked) was offered on McCrae's "Reviewer Thanked" row and
+turned it "Request Cancelled"; the DOI stayed "Unregistered", "Peer
+Review 15" stayed listed, last of the work's rows; "Deposit DOIs" on the
+work turned it "Submitted" with the rest; the reviews list behind
+"Export DOIs"' second file and the deposit
+(`reviewAssignment\DAO::getExportableDOIsPeerReviewIds()`) held 15, and
+the reviews file carried its DOI with the `resource`
+`article/view/10?tab=peer-review-record&reviewId=15`. Work 13 (reviews
+19–21): after "Mark DOIs Registered", the cancel of Julie Janssen's
+review 19 left it "Registered" and listed; "Mark DOIs Needs Sync" turned
+it "Needs Sync", "Deposit All" "Submitted", and the file kept it. The
+public review data (`GET
+/index.php/publicknowledge/api/v1/peerReviews/open/submissions/{id}`,
+signed out) left the cancelled review out at once. Neither that list
+nor the DOIs page's rows (`filterByIsConfirmedByEditor()`,
+`filterByIsPubliclyVisible()`, note j) test the cancel; the deposit jobs
+failed at connection, as every test-install deposit does (Rule 33).
+3.5 has no peer-review DOIs.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
@@ -5672,6 +5927,17 @@ closed.
 <a id="fn-f-ops5"></a>
 **f-ops5** — See l for the listing rule. Live-probed 2026-09-26 (q17):
 a journal and a press listed no draft.
+
+<a id="fn-f-ops6"></a>
+**f-ops6** — Live-probed 2026-10-15, OPS, two runs (note q51,
+versions). What Crossref answers to one file
+naming a DOI twice was not tried: the test installs reach no agency.
+
+<a id="fn-f-ops7"></a>
+**f-ops7** — Live-probed 2026-10-15, OPS, two runs (note q51,
+titles): OPS `PreprintCrossrefXmlFilter`
+`createPostedContentNode()`; OJS `ArticleCrossrefXmlFilter` writes the
+subtitle itself.
 
 ## Reference — entry points & surfaces
 
