@@ -2793,6 +2793,7 @@ the editor's "More Information" on another stage's file in "Upload/Select
 Files" (A19's walk), each time the refusal's alert and then "undefined".
 The same two alerts follow every refused load of this kind in the code;
 only these two were driven.
+Issue report: [pkp-e2e#1001](https://github.com/jardakotesovec/pkp-e2e/issues/1001) ([docs/issues/U36-A27-refused-history-second-alert-undefined.md](../issues/U36-A27-refused-history-second-alert-undefined.md)).
 
 <a id="fn-a28"></a>
 **f-a28** — Notes k and d22. `SubmissionFilesListPanel.vue` `remove()` and
