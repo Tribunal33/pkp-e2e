@@ -80,8 +80,9 @@ list of completed reviews appears is owned by
 **Add Reviewer window** (title "Add Reviewer"; opened by the panel's "Add
 Reviewer" button). Its upper half is the reviewer search (Rules 5–8). Once a
 reviewer is chosen, the name and email address are shown with a "Change" link
-back to the search. The window's "Cancel" closes it at once, even with a
-reviewer chosen: nothing asks and no reviewer is added.
+back to the search. The window's "Cancel", and the "Close" in its top
+bar, close it at once, even with a reviewer chosen: nothing asks and no
+reviewer is added.
 The lower half holds the request form shared by all three add modes:
 
 | Field (UI label) | Required? | Rules |
@@ -570,11 +571,18 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     none of this: it keeps the reviewer's own submission date.
     <sup>i</sup>
 15. **Downloading a review.** The Review Details window's "Download Review
-    Form" menu offers the same four exports as ever: "Author-Only Sections
-    Displayed" and "Editor Form Shows All Review Sections", each as PDF or
-    XML. The author-only variants omit the editor-only comments and also
-    hide the reviewer's identity; the reviewer is presented anonymized. The
-    file downloads through the browser. <sup>i</sup>
+    Form" menu offers four exports: "Author-Only Sections Displayed" and
+    "Editor Form Shows All Review Sections", each as PDF or XML. The
+    author-only variants omit the editor-only comments and show the
+    reviewer anonymized. The file downloads through the browser. On an
+    install where no file has yet been uploaded through a form and no PDF
+    review form downloaded (a fresh install, or PKP's default test dataset
+    as loaded), both XML entries fail every time instead: the browser
+    leaves the workflow for a page reading
+    `{"error":"You are not authorized to access the requested resource."}`
+    and no file arrives ⚠ [A49](#a49). The first PDF download, by anyone
+    on any review, makes both XML entries work for the whole install; by
+    the code an upload through any form does the same. <sup>i</sup>
 16. **Thanking, and taking it back.** "Thank Reviewer" sends the
     acknowledgement, or only records it when the skip box is ticked. The row
     turns "Reviewer Thanked" and the on-screen notice reads "Thank you email
@@ -1361,6 +1369,7 @@ Left out of the scenarios above, by reason:
     reviewer
   - the inverted-date refusal's notice: in "Add Reviewer" and in "Edit", the window open and the notice "There was an error adding the reviewer as review due date must be equal or greater than responde due date." at the top right (Fields, Rule 9): likely the inverted-date bullets of scenarios 5 and 6, which already press the refusal
   - "Resend Review Request" refusing inverted dates with the window kept open, and accepting equal ones (Fields, Rule 9): likely a bullet in scenario 12, before its send
+  - the Add Reviewer window's top-bar "Close" with a reviewer picked closing at once, nothing asked and no reviewer added (Fields): likely a bullet in scenario 1, after its "Change"
   - the "Thank Reviewer" window's "Close" asking "The data on this form has changed. Do you wish to continue without saving?" after a changed message with "Do not send email to Reviewer." ticked as well, and "Cancel" keeping the window with the change (Fields): likely a bullet in scenario 9, which thanks the reviewer
 - **Rarely met**:
   - submitting a review for the reviewer: "Save Changes" in "Modify Review" on an unanswered, an accepted or a "Request Resent" row, with the row, its menu, the reviewer's side and the missing acceptance email after it, and {OJS} the save refused without a "Recommendation" (Rule 14d, Side effects): an editor enters a review on a reviewer's behalf in a rare week
@@ -1420,6 +1429,7 @@ Left out of the scenarios above, by reason:
   - A46 (the "Resend Review Request" refusal adding a browser alert, with no guidance sentence in its window; Fields)
   - A47 (a re-sent request past its response date never reading "Overdue", with no "Send Reminder"; Rule 2)
   - A48 (a review-form answer written as markup in the "View changes" window of a review-form change; Side effects)
+  - A49 (both XML exports leading to an error page and no file on an install where no file has been uploaded through a form or downloaded as a PDF review form yet; Rule 15)
 - **No seed**:
   - the automatic reminder emails from the principal contact at the configured day-offsets, with their "Reviewer Reminded" and log stamps (Rule 13, Side effects, Settings)
   - a section's default "Review Form" preselected in the Add Reviewer window (Rule 10, Settings): the seed sets no default review form on a section
@@ -1476,6 +1486,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A45](#a45) | Inverted review due dates: the refusal says "adding the reviewer" in Edit and Resend, and misspells "response" everywhere | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A46](#a46) | "Resend Review Request" with the review due date before the response date shows a "Please try again" alert, and the window never states the date rule | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A47](#a47) | A late, unanswered re-sent review request is not marked "Overdue" and offers no "Send Reminder" | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
+| [A49](#a49) | On an install where nothing has been uploaded or downloaded as a PDF yet, both XML entries of "Download Review Form" lead to an error page and no file until a PDF has been downloaded | 🐞 | user-visible | — |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -2119,6 +2130,24 @@ Lean: yes; nothing between the saved answer and the window escapes it.
 Security: unreleased.
 Since: 2026-08-20 · Basis: code, 2026-10-13. <sup>[f-a48](#fn-a48)</sup>
 
+<a id="a49"></a>
+**A49 — On an install where nothing has been uploaded or downloaded as a PDF yet, both XML entries of "Download Review Form" lead to an error page and no file until a PDF has been downloaded** · 🐞 · user-visible.
+An editor opens a review's Review Details window, opens "Download
+Review Form" and picks "Editor Form Shows All Review Sections (XML)" or
+"Author-Only Sections Displayed (XML)". Expected: the file downloads, as
+the PDF entries' files do. On an install where no file has been
+uploaded through a form or downloaded as a PDF review form yet (a fresh
+install, or PKP's default test dataset as loaded), the browser leaves the workflow instead for a page reading
+`{"error":"You are not authorized to access the requested resource."}`,
+and no file arrives, however often the entry is pressed. The editor has
+done nothing unauthorized, and nothing says that a PDF download first
+would help. The state is the whole install's: the first PDF review form
+downloaded by anyone, on any review, makes both XML entries download from
+then on, and by the code so does the first file uploaded through any
+form (the submission wizard, a reviewer's upload), which is why an
+install in use rarely meets it.
+Basis: probe, 2026-10-15. <sup>[f-a49](#fn-a49)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -2506,7 +2535,14 @@ selection (search), or name/email/affiliation (create), or user (enroll) —
 and OMP, two runs each, on a journal with an active review form and on
 one without): "Cancel" pressed with a reviewer selected closed the window
 with no browser or window dialog and no request sent; the same drive
-timed the request letter's fill (note f-a18).
+timed the request letter's fill (note f-a18). Driven 2026-10-15 (OJS, PKP's
+default test dataset, the Journal editor, two runs): a reviewer searched
+and picked with "Select Reviewer", nothing typed in the letter, then the
+window's top-bar "Close" closed it at once, with no browser dialog, no
+question and no notice. OMP was not driven (the searched reviewer was
+already on the round); both apps run the same lib/pkp and ui-library
+commits (`b17fadae59`, `47b565cb`) for this window. Kept script
+`shared/playwright/checks/U27/H15/h15.js`, phase `rawkey`.
 
 <a id="fn-e"></a>
 **e** — `CreateReviewerForm`: validators quoted in Fields (username unique +
@@ -2731,7 +2767,14 @@ reviewer — "Reviewer: C" in the PDF, `<anonymous/>` in the JATS XML (all
 four variants fetched on OJS, one on OMP; every variant saves under the
 same filename; the menu renders for free-form reviews too — not gated on
 a review form). Re-checked 2026-08-29 from the new window: the same four
-exports offered under the same menu button. Live probe 2026-08-29 (OJS
+exports offered under the same menu button. Live-probed 2026-10-15 (OJS
+and OMP, PKP's default test dataset, the Journal editor or Press editor,
+two runs each): the four entries read "Author-Only Sections Displayed
+(PDF)", "Author-Only Sections Displayed (XML)", "Editor Form Shows All
+Review Sections (PDF)", "Editor Form Shows All Review Sections (XML)";
+the PDF saves as `submission_review_{submission}-{review}.pdf`, the XML
+as `….xml`; the XML entries' failure before the first temporary file is
+finding A49 (note f-a49). Live probe 2026-08-29 (OJS
 scratch journal + OMP publicknowledge press, manager role; apps ojs
 0471e029b9 / omp d34542e83, lib/pkp 13b621e42): window contents, dialog
 and toast texts, the live row flips (Viewed on open, Complete on
@@ -4017,6 +4060,38 @@ read twice. Since: the review-change log, pkp/pkp-lib#13192 (2026-08-20).
 `stable-3_5_0` has no `SubmissionReviewEventLogGridHandler` and no
 `ReviewChangeLinkAction`, so no release carries it. OPS has no review
 stage.
+
+<a id="fn-a49"></a>
+**f-a49** — Live-probed 2026-10-15 (OJS and OMP, PKP's default test
+dataset for `main` as loaded, the Journal editor or Press editor, two
+runs each, each order on a freshly reset install; lib/pkp `b17fadae59`
+in both apps). The files folder held no `temp` folder at the start. With
+none, "Editor Form Shows All Review Sections (XML)" pressed twice and
+then "Author-Only Sections Displayed (XML)": `GET
+…/api/v1/reviews/{submission}/{review}/export-xml?authorFriendly=0|1`
+answered 200 with a temporary file id, then the page navigated to
+`…/api/v1/reviews/{submission}/exports/{id}`, which answered 403 with
+`api.403.unauthorized`; no download event, and still no `temp` folder.
+The server log at each press: `PHP Warning: DOMDocument::save(<files>/temp/submission_review_10-15.xml):
+Failed to open stream: No such file or directory` (in
+`PKPReviewController`) and `filesize(): stat failed …` (in
+`TemporaryFileManager`). "Editor Form Shows All Review Sections (PDF)"
+then downloaded `submission_review_{submission}-{review}.pdf` and the
+`temp` folder existed; the XML entry then downloaded
+`submission_review_{submission}-{review}.xml`. Control, PDF first on a
+fresh reset: the PDF downloaded and both XML entries after it. No
+response of 500 or more and no page error in any run. Mechanism:
+`PKPReviewController::generatePDF()` writes through
+`FileManager::writeFile()`, which creates the missing folder;
+`generateXML()` calls `DOMDocument::save()` on
+`TemporaryFileManager::getBasePath()` directly, which does not, and both
+then register the path with `createTempFileFromExisting()` whatever was
+written; `getExportedFile()` answers 403 when
+`TemporaryFileManager::downloadById()` fails. The XML export arrived
+with the review download (pkp-lib `d5d08a789a`, 2024-07-01);
+`stable-3_5_0` has the same `$xml->save()` call (read in the code, not
+walked). Kept script `shared/playwright/checks/U27/H15/h15.js`,
+`PHASES=dl`, `ORDER=xml-first|pdf-first`.
 
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only

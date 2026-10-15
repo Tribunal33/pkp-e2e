@@ -381,9 +381,10 @@ give no access to any screen in this spec. <sup>l</sup>
 
 ## Side effects
 
-- **Accepting** → the assigned editors of the stage (Journal Manager or
-  Section Editor assigned to the submission; the journal's principal contact
-  when nobody is assigned) receive the email "Review accepted: {reviewer}
+- **Accepting** → the assigned editors of the stage (each Editor and
+  Section Editor on its Participants panel, on a press each Press Editor
+  and Series Editor; the journal's principal contact when nobody is
+  assigned) receive the email "Review accepted: {reviewer}
   accepted review assignment for #{id} {authors} — "{title}"", sent under
   the reviewer's name with their address as reply-to. The submission's
   activity log records the acceptance, the editor's row turns "Request
@@ -396,16 +397,27 @@ give no access to any screen in this spec. <sup>l</sup>
   its body the window's message, sent the same way. The activity log
   records the decline, the editor's row turns "Request Declined", and a
   one-click link for the assignment stops working. <sup>n</sup>
-- **Submitting** → every Journal Manager and Section Editor assigned to the
-  stage receives the email "Review complete: {reviewer} recommends
+- **Submitting** → every Editor and Section Editor on the stage's
+  Participants panel (on a press, every Press Editor and Series Editor),
+  whether assigned when the submission came in or added later with
+  "Assign", receives the email "Review complete: {reviewer} recommends
   {recommendation} for #{id} {authors} — "{title}"", sent from the
   journal's principal contact, its body naming the recommendation and the
   review type with a link to the submission, unless they opted out of it in
   their notification preferences (*Notifications center & email
-  preferences*). On a press the subject reads "recommends None" and the
-  body "Recommendation: None" ⚠ [OMP2](#omp2). The editors' header "Tasks"
-  panel gains no entry; any other notice of the review on their screens is
-  *Notifications center & email preferences*'s. The reviewer's own "Review
+  preferences*). "Assign" never offers the Journal Manager role
+  ([→ stage participants](U35-stage-participants.md#assign-window)), so a
+  Journal Manager receives the email only when also assigned there in one
+  of those roles. On a press the subject reads "recommends None" and the
+  body "Recommendation: None" ⚠ [OMP2](#omp2). The email is written in
+  the language of the reviewer's interface when they press "Submit
+  Review": a reviewer working in French sends "Évaluation terminée:
+  {reviewer} recommande {recommendation} pour #{id} {authors} — {title}",
+  its body reading "{reviewer} a terminé son évaluation : …" and its links
+  opening the French pages, to editors who work in English. The editors'
+  header "Tasks" panel gains no entry; any other notice of the review on
+  their screens is *Notifications center & email preferences*'s. The
+  reviewer's own "Review
   pending." task is cleared, the activity log records "The round {N} review
   assigned to {reviewer} for submission {id} has been completed.", the
   editor's row turns "Review Submitted" ({OJS}: with the recommendation
@@ -1011,6 +1023,8 @@ Left out of the scenarios above, by reason:
     fixed
   - an unanswered request, response due today and review later, reading "Please accept or decline this request by {date}" with "Respond to request", and "Deadline for responding to this request has passed." from the next day (Rule 3): likely a bullet in scenario 10, beside "Response overdue"
   - {OPS} a user invited to a home-made "Reviewer"-level role beside Author landing on "Active submissions" after sign-in, with no "My Assignments as Reviewer" group and the typed reviewer-list address refused ([OPS1](#ops1); Purpose, scenario 17): the guard the issue report proposes, once fixed
+  - an editor added to the stage with "Assign" receiving "Review complete: …" beside the editors assigned when the submission came in, and a Journal Manager not on the Participants panel receiving none (Side effects "Submitting"): likely a bullet in scenario 6
+  - a review submitted from the French interface reaching editors who work in English as "Évaluation terminée: …", with links to the French pages (Side effects "Submitting"): likely a bullet in scenario 6
 - **Rarely met**:
   - the "Read Round {N} Review" window of a round declined with an empty message, showing the "Decline Review Request" window's prefilled text in place of a typed reason (Rule 14)
 - **Nothing new to test**:
@@ -2129,6 +2143,36 @@ notification was not seen anywhere; the editor's workflow page right
 after the submit was not opened and is where to look. The reviewer's
 "Review pending." line left their Tasks panel; the editor's row read
 "Review Submitted", with "Revisions Required" under it on OJS.
+Recipients and language: the submit reads the MANAGER/SUB_EDITOR stage
+assignments of the submission's current stage, and the manager-level
+"Journal manager" / "Press manager" group has no stage in its
+`user_group_stage` rows, so "Assign" never lists it (the dataset's
+"Journal editor" is the GLOSSARY's Editor); subject and body come from
+`$template->getLocalizedData()`, i.e. the request's locale, the
+submitting reviewer's. Live-probed 2026-10-15 on OJS submission 12 and
+OMP submission 17 (Internal Review), PKP's default test dataset, two
+runs per app (Side effects "Accepting", "Submitting"): `dbarnes` assigned
+`minoue` through the stage's "Assign" (OJS as "Section editor"; OMP as
+"Series editor", and `dbarnes` as "Press editor"); the role list offered
+OJS "Journal editor", "Section editor", "Guest editor", "Funding
+coordinator", "Translator", "Author", OMP "Press editor", "Series
+editor", "Funding coordinator", "Author", "Translator", "Volume editor",
+never the manager role, so `rvaca` (Journal / Press manager, the
+principal contact) could not be assigned and received nothing. `jjanssen`
+accepted and submitted in English, `phudson` accepted in English and
+submitted step 3 in the French interface. On OJS "Review accepted" and
+"Review complete" reached `dbarnes` (Journal editor) and `dbuskins`,
+`sberardo`, `minoue` (Section editors); on OMP `dbarnes` and `minoue`
+only, not the unassigned `dbuskins`, `sberardo`, `rvaca`; From "Ramiro
+Vaca" <rvaca@mailinator.com>. The French submit's email: subject
+"Évaluation terminée: Paul Hudson recommande Accepter la soumission pour
+#12 Christopher — {title}" (OMP "recommande Aucun-e", the French OMP2),
+body "Daniel Barnes, Paul Hudson a terminé son évaluation : …",
+"*Recommandation :*", "*Type :*", every link under
+`/publicknowledge/fr_CA/…`, sent to the same editors, who work in
+English. `users.locales` read `[]` for every editor and reviewer before
+and after the language switch: the app stores no editor language for
+the email to follow.
 
 <a id="fn-o"></a>
 **o** — Settings: `restrictReviewerFileAccess` (label
