@@ -5226,7 +5226,7 @@ Argument #2 ($publication) must be of type APP\publication\Publication,
 null given"); after "Deposit All" the issue's deposit job failed with the
 same error. On a Crossref journal the issue export answers the 400 of
 A13 instead.
-Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204) ([docs/issues/U45-OJS2-datacite-issue-export-fails.md](../issues/U45-OJS2-datacite-issue-export-fails.md)).
+Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204) ([docs/issues/U45-OJS2-datacite-issue-export-fails.md](../issues/U45-OJS2-datacite-issue-export-fails.md)); the team's copy is `pkp/pkp-lib#13519` (open, 2026-10-14).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two

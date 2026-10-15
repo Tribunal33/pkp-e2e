@@ -10,7 +10,7 @@
   - 3.3: none (code; the link's "Author Guidelines" tab holds the box there)
 - **Introduced** on 3.4, all apps: `pkp/pkp-lib#8495` for `pkp/pkp-lib#7191` · [e79fc21e20](https://github.com/pkp/pkp-lib/commit/e79fc21e20f7c47c194d87e25b23897bbc036e77) · 2022-12-14 · Alec Smecher (asmecher), which moved the box to "Author Guidance" and left the link behind;
   on `main` and 3.5, OMP: `pkp/omp#1671` for `pkp/pkp-lib#10195` · [05672bbb2e](https://github.com/pkp/omp/commit/05672bbb2e6cffcc2d5524126e623a68c843a78d) · 2024-08-12 · Kaitlin Newson (kaitlinnewson), whose copy of the shared template kept the old link after pkp-lib had fixed it
-- **Upstream** none found (2026-10-04)
+- **Upstream** `pkp/pkp-lib#13516` (open, opened 2026-10-14), the team's copy of this issue
 - **Tracked in** spec U58 [OMP2](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U58-submission-intake-configuration.md#omp2)
 - **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5

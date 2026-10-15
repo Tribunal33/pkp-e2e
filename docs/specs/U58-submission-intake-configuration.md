@@ -1960,7 +1960,7 @@ copyright notice's `editLink.tpl` include passes
 `submission/instructions`; `workflow.tpl` has no side tab `authorGuidelines`.
 Live-probed 2026-09-27, OMP with journal and server controls (note
 td10).
-Issue report: [pkp-e2e#823](https://github.com/jardakotesovec/pkp-e2e/issues/823) ([docs/issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md](../issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md)).
+Issue report: [pkp-e2e#823](https://github.com/jardakotesovec/pkp-e2e/issues/823) ([docs/issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md](../issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md)); the team's copy is `pkp/pkp-lib#13516` (open, 2026-10-14).
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — OMP `registry/genres.xml` (note f); OMP `schemas/context.json`
