@@ -1180,7 +1180,7 @@ unless its Basis line says otherwise.
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A20](#a20) | After a newcomer registers with an existing reviewing interest, accounts that save their Roles tab list it twice | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A24](#a24) | The Profile page's Contact tab sometimes logs a script error on opening or saving; the save still works | 🐞 | low · crash: script | issues (claude), 2026-10-15 — re-verified |
-| [A25](#a25) | After a password change, the other browser's Profile page stops answering instead of going to the Login page | 🐞 | medium · crash: script | issues (claude), 2026-10-15 — re-verified |
+| [A25](#a25) | After a password change, a page left open in another browser drops its next save or tab press instead of going to the Login page | 🐞 | medium · crash: script | issues (claude), 2026-10-15 — re-verified |
 | [A26](#a26) | A Profile page whose session has ended answers each tab press and "Save" with the alert "##user.authorization.userRequired##" instead of a sentence | 🐞 | user-visible | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
@@ -1546,35 +1546,31 @@ the wrong state.
 Basis: probe, 2026-10-15. <sup>[f-a24](#fn-a24)</sup>
 
 <a id="a25"></a>
-**A25 — After a password change, the other browser's Profile page stops answering instead of going to the Login page** · 🐞 · medium · crash: script.
+**A25 — After a password change, a page left open in another browser drops its next save or tab press instead of going to the Login page** · 🐞 · medium · crash: script.
 A password change signs the account out of its other browsers. In such a
-browser, still on the Profile page, the first press on a tab throws a
-JavaScript error: the tab is marked as open, its area keeps what it
-last showed there (empty for a tab not opened there before), and
-nothing says that the session has ended. The next press raises a browser
-alert reading "##user.authorization.userRequired##" ([A26](#a26)). A "Save" pressed
-there instead keeps its spinner turning, and what was typed is not
-stored. A reload shows the Login page.
+browser, a back-office page left open fails on the first thing it loads
+or saves without a reload, and nothing says that the session has ended:
 
-By the code, every back-office page does the same with the first tab,
-list, side window or form it loads without a full page reload after the
-change: a tab throws the error, a list or a save does nothing. A list was seen doing it: on Settings › Website › Plugins, a
-"Search" sent as that first request leaves the search box open with a
-spinner beside "Search" and the list unchanged, with no message. A later
-"Search" there is refused with the alert "The current role does not
-have access to this operation.", which does not say that the session
-has ended either.
+- "Save" on a settings form, such as Settings › Journal › "Masthead",
+  shows "Saved", but nothing is stored.
+- On the Profile page, a tab press throws a JavaScript error: the tab is
+  marked open and its area keeps what it last showed there (empty for a
+  tab not opened there before). A "Save" there keeps its spinner turning
+  and stores nothing.
+- A list's "Search", such as on Settings › Website › Plugins, keeps its
+  spinner turning and the list does not change.
 
-The other ways an account's password changes behave the same: changing
-one's own password under Users & Roles, "Reset Password" from the email,
-and the change asked for at sign-in. A session that ends another way
-(it expires, or a Site Administrator's "Expire User Sessions") does
-not: the page's next request arrives signed out and gets the alert
-above; an administrator setting the user's password is read the same
-way in the code. Signing out in another browser ends only that
-browser's session, so this page keeps working.
+What was typed in that first save is not stored; a reload shows the
+Login page. Later presses get alerts that do not say the session has
+ended either ([A26](#a26),
+[→ Login & sessions A16](U01-login-and-sessions.md#a16)).
+
+By the code, the longer forms do the same: the submission wizard's
+first autosave and a decision's "Record Decision" are taken as done, and
+a reviewer's review form saves nothing. Every way an account's own
+password changes does this: on the Profile page, under Users & Roles,
+through "Reset Password" from the email, and at sign-in when asked to.
 Basis: probe, 2026-10-15. <sup>[f-a25](#fn-a25)</sup>
-Report: refresh owed — the list case is now seen: on Settings › Website › Plugins a first "Search" does nothing, and a later one gets the alert "The current role does not have access to this operation."; the raw-key alert of the later presses is now its own entry, A26; and the first tab press leaves the area as it last showed there (empty only for a tab not opened there before), not always empty (housekeeping claim check J15, 2026-10-15); and a sign-out in another browser does not end this page's session at all, so the last paragraph no longer lists it (the Login & sessions claim check J15, 2026-10-15)
 
 <a id="a26"></a>
 **A26 — A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##"** · 🐞 · user-visible.

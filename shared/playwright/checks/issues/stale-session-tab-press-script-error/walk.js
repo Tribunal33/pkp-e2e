@@ -15,6 +15,15 @@
 //                             own tabs keep opening (fix in and out)
 //   H15E_MODE=save            reach: B types a phone number on Contact before the change and presses
 //                             "Save" after it; then signs in again and reads the phone back
+//   H15E_FIRST=<tab>          with walk: step 5 presses that tab instead of Roles (contact: a tab opened in
+//                             step 2, whose area keeps its form)
+//   H15E_MODE=list            the list group: B holds Settings › Website › Plugins (no Profile page); after
+//                             the change B presses the list's "Search" with "hkk7" typed (the first request),
+//                             then "Search" again, then reloads (U01 A16 is the later Search's alert)
+//   H15E_MODE=vue             a newer (Vue) form: B holds Settings › Journal (Press, Server) › Masthead with
+//                             "hkk7" typed over the initials; after the change B presses its "Save" (the
+//                             first request, an API call by $.ajax); then B reloads, signs in with the new
+//                             password and reads the initials back
 //   H15E_MODE=nbdl            neighbour: B holds submission 7's workflow (Review) open; after the change
 //                             B presses the review file's name (a link that opens a new tab), a plain
 //                             browser navigation that must still reach the Login page (fix in and out)
@@ -29,6 +38,7 @@ const USER = 'dbarnes';
 const CURRENT = 'dbarnesdbarnes';
 const NEXT = 'h15eNewPass1';
 const MODE = process.env.H15E_MODE || 'walk';
+const FIRST = process.env.H15E_FIRST || 'roles';
 const REACH = (MODE === 'walk' && process.env.H15E_REACH === '1') || MODE === 'nb';
 
 async function step(out, name, fn) {
@@ -57,6 +67,33 @@ async function dashSearch(dash) {
         dialog: L.flat(await dash.locator('[role="dialog"]:visible').first().innerText({timeout: 2000}).catch(() => null), 300)};
 }
 
+/** B's Plugins list: show the filter if hidden, type "hkk7", press "Search"; what follows in `ms`. */
+async function listSearch(page, plugins, ms = 6000) {
+    const errs = L.errorWatch(page);
+    const dialogs = [];
+    const onDialog = (d) => { dialogs.push(L.flat(d.message(), 200)); d.accept().catch(() => {}); };
+    page.on('dialog', onDialog);
+    const requests = await L.traffic(page, async () => {
+        if (!(await plugins.list.filterForm.isVisible().catch(() => false))) await plugins.list.searchLink.click({timeout: 5000});
+        await plugins.list.nameBox.waitFor({timeout: 5000});
+        const box = plugins.list.nameBox;
+        await box.click();
+        await box.fill('');
+        await box.pressSequentially('hkk7', {delay: 20});
+        await plugins.list.filterButton.click({timeout: 5000});
+        await L.sleep(ms);
+    }).catch((e) => [{error: L.flat(String(e), 300)}]);
+    page.off('dialog', onDialog);
+    errs.stop();
+    return {requests, errors: errs.list, dialogs, url: page.url(),
+        loginForm: await page.locator('form#login').count().catch(() => null),
+        filterVisible: await plugins.list.filterForm.isVisible().catch(() => null),
+        nameBox: await plugins.list.nameBox.inputValue({timeout: 1000}).catch(() => null),
+        spinners: await page.locator('.pkp_spinner:visible').count().catch(() => null),
+        rows: await plugins.list.pluginRows.count().catch(() => null),
+        toast: await L.toastNow(page)};
+}
+
 forEachApp(async (app) => {
     const T = app.contextPath;
     const out = {line: app.line || 'main', mode: MODE};
@@ -83,7 +120,26 @@ forEachApp(async (app) => {
             await L.sleep(2000);
             return {url: B.page.url(), link: L.flat(await link.innerText(), 120), href: (await link.getAttribute('href')).replace(/^https?:\/\/[^/]+/, ''), target: await link.getAttribute('target')};
         });
-        if (MODE !== 'nbdl') await step(out, 'B-open', async () => {
+        let plugins = null;
+        if (MODE === 'list') await step(out, 'list-B-plugins', async () => {
+            const {WebsitePluginsPage} = require('../../../pages/PluginsPages.js');
+            plugins = new WebsitePluginsPage(B.page, T);
+            await plugins.goto();
+            return {url: B.page.url(), rows: await plugins.list.pluginRows.count(), snap: await L.snap(B.page, 'list-B-before')};
+        });
+        const mastheadUrl = `/index.php/${T}/en/management/settings/context`;
+        const initials = B.page.locator('input[id^="masthead-acronym-control-en"]').first();
+        const masthead = B.page.locator('form.pkpForm').filter({has: initials}).first();
+        if (MODE === 'vue') await step(out, 'vue-B-typed', async () => {
+            await B.page.goto(mastheadUrl);
+            await initials.waitFor({timeout: 30000});
+            const before = await initials.inputValue();
+            await initials.click();
+            await initials.fill('');
+            await initials.pressSequentially('hkk7', {delay: 20});
+            return {url: B.page.url(), before, typed: await initials.inputValue(), snap: await L.snap(B.page, 'vue-B-typed')};
+        });
+        if (MODE !== 'nbdl' && MODE !== 'list' && MODE !== 'vue') await step(out, 'B-open', async () => {
             await pB.goto('identity');
             return L.profileState(B.page, pB);
         });
@@ -97,7 +153,7 @@ forEachApp(async (app) => {
             });
         }
         // Step 2: B presses Contact, then Identity
-        if (MODE !== 'save' && MODE !== 'nbdl') await step(out, 'B-contact-then-identity', async () => {
+        if (MODE !== 'save' && MODE !== 'nbdl' && MODE !== 'list' && MODE !== 'vue') await step(out, 'B-contact-then-identity', async () => {
             await pB.open('contact');
             await pB.open('identity');
             return L.profileState(B.page, pB);
@@ -112,7 +168,65 @@ forEachApp(async (app) => {
             return {...r, snap: await L.snap(A.page, `${MODE}-A-saved`)};
         });
 
-        if (MODE === 'nbdl') {
+        if (MODE === 'vue') {
+            await step(out, 'vue-B-save', async () => {
+                await B.page.bringToFront();
+                const errs = L.errorWatch(B.page);
+                const dialogs = [];
+                const onDialog = (d) => { dialogs.push(L.flat(d.message(), 200)); d.accept().catch(() => {}); };
+                B.page.on('dialog', onDialog);
+                const statuses = new Set();
+                const requests = await L.traffic(B.page, async () => {
+                    await masthead.getByRole('button', {name: 'Save', exact: true}).first().click({timeout: 5000});
+                    for (let i = 0; i < 20; i++) {
+                        const t = L.flat(await masthead.locator('.pkpFormPage__status').first().innerText({timeout: 200}).catch(() => ''), 80);
+                        if (t) statuses.add(t);
+                        const n = await L.toastNow(B.page);
+                        if (n) statuses.add(`notice: ${n}`);
+                        await L.sleep(300);
+                    }
+                });
+                B.page.off('dialog', onDialog);
+                errs.stop();
+                return {requests, errors: errs.list, dialogs, url: B.page.url(),
+                    loginForm: await B.page.locator('form#login').count().catch(() => null),
+                    initials: await initials.inputValue({timeout: 1000}).catch(() => null),
+                    statuses: [...statuses],
+                    toast: await L.toastNow(B.page),
+                    windows: L.flat(await B.page.locator('[role="dialog"]:visible, [role="alertdialog"]:visible').first().innerText({timeout: 1000}).catch(() => null), 300),
+                    snap: await L.snap(B.page, 'vue-B-save', 6000)};
+            });
+            await step(out, 'vue-B-reread', async () => {
+                await B.page.goto(mastheadUrl, {timeout: 15000}).catch(() => {});
+                const atLogin = await B.page.locator('form#login').count();
+                if (atLogin) {
+                    await B.page.locator('input#username').fill(USER);
+                    await B.page.locator('input#password').fill(NEXT);
+                    await B.page.locator('form#login button[type="submit"]').click();
+                    await B.page.waitForURL(/settings\/context/, {timeout: 20000}).catch(() => {});
+                }
+                await initials.waitFor({timeout: 30000}).catch(() => {});
+                return {atLogin, url: B.page.url(), initials: await initials.inputValue({timeout: 5000}).catch(() => null)};
+            });
+        } else if (MODE === 'list') {
+            // B's first request after the change: the list's Search
+            await step(out, 'list-B-search1', async () => {
+                const r = await listSearch(B.page, plugins);
+                r.snap = await L.snap(B.page, 'list-B-search1', 6000);
+                return r;
+            });
+            // a second Search (the session has ended by now: U01 A16)
+            await step(out, 'list-B-search2', async () => {
+                const r = await listSearch(B.page, plugins);
+                r.snap = await L.snap(B.page, 'list-B-search2', 6000);
+                return r;
+            });
+            await step(out, 'list-B-reload', async () => {
+                await B.page.goto(plugins.url(), {timeout: 15000}).catch(() => {});
+                await B.page.waitForLoadState('load', {timeout: 15000}).catch(() => {});
+                return {url: B.page.url(), loginForm: await B.page.locator('form#login').count(), snap: await L.snap(B.page, 'list-B-reload')};
+            });
+        } else if (MODE === 'nbdl') {
             await step(out, 'dl-B-press', async () => {
                 const errs = L.errorWatch(B.page);
                 let popup = null;
@@ -155,16 +269,21 @@ forEachApp(async (app) => {
                 return {url: B.page.url(), phone: await B.page.locator('form#contactForm input[name="phone"]').inputValue({timeout: 5000}).catch(() => null)};
             });
         } else if (MODE === 'walk') {
-            // Step 5: B presses Roles (never opened in B)
-            await step(out, 'B-roles', async () => {
-                const r = await L.pressTabBounded(B.page, pB, 'roles', 5000);
-                r.snap = await L.snap(B.page, 'walk-B-roles');
+            // Step 5: B presses Roles (never opened in B), or H15E_FIRST's tab
+            await step(out, `B-${FIRST}`, async () => {
+                const r = await L.pressTabBounded(B.page, pB, FIRST, 5000);
+                r.snap = await L.snap(B.page, `walk-B-${FIRST}`);
                 return r;
             });
-            // Step 6: B presses Contact (opened in step 2)
-            await step(out, 'B-contact', async () => {
-                const r = await L.pressTabBounded(B.page, pB, 'contact', 5000);
-                r.snap = await L.snap(B.page, 'walk-B-contact', 5000);
+            // Step 6: B presses Contact (opened in step 2), or Roles when step 5 pressed Contact
+            const second = FIRST === 'contact' ? 'roles' : 'contact';
+            const dialogs = [];
+            const onDialog = (d) => { dialogs.push(L.flat(d.message(), 200)); d.accept().catch(() => {}); };
+            B.page.on('dialog', onDialog);
+            await step(out, `B-${second}-2`, async () => {
+                const r = await L.pressTabBounded(B.page, pB, second, 5000);
+                r.dialogs = [...dialogs];
+                r.snap = await L.snap(B.page, `walk-B-${second}-2`, 5000);
                 return r;
             });
             // reach: B's dashboard page, a search typed in its sidebar box (the list's own fetch)
@@ -216,7 +335,9 @@ forEachApp(async (app) => {
     const short = (r) => r && (r.error ? {error: r.error} : {
         url: (r.state || r).url, selected: (r.state || {}).selectedTab, panelForms: (r.state || {}).panelForms,
         login: (r.state || r).loginForm, toast: (r.state || {}).toast,
-        errors: (r.errors || []).map((e) => e.text).slice(0, 3),
+        errors: (r.errors || []).map((e) => e.text).slice(0, 3), dialogs: r.dialogs,
+        filterVisible: r.filterVisible, spinners: r.spinners, rows: r.rows,
+        initials: r.initials, statuses: r.statuses, windows: r.windows, atLogin: r.atLogin,
         requests: (r.requests || []).filter((q) => /\$\$\$call|login|\/api\//.test(q.url)).slice(0, 4),
     });
     const summary = {};
