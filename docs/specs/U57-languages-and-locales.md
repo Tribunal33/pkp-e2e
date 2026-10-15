@@ -59,7 +59,7 @@ headed "Languages", one row per installed language. <sup>a</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | "Enable" | — | A tick box per row, ticked for an enabled language (Rule 3) <sup>a</sup> |
-| "Locale" | — | The language's name in the interface language, a slash, and its name in itself, such as "French/français" ("anglais/English" in the French interface); a country is added when two installed languages share one ("French/français (Canada)" beside "French/français"). An asterisk after the name refers to the line under the list, "Marked locales may be incomplete." [OMP1](#omp1) (Rule 6) <sup>a</sup> |
+| "Locale" | — | The language's name in the interface language, a slash, and its name in itself, such as "French/français" ("anglais/English" in the French interface); a country or a script is added only when two installed languages share one ("French/français (Canada)" beside "French/français"; two scripts: the paragraph after "Change Language" below). An asterisk after the name refers to the line under the list, "Marked locales may be incomplete." [OMP1](#omp1) (Rule 6) <sup>a</sup> |
 | "Code" | — | The language's code, such as "en" or "fr_CA" <sup>a</sup> |
 | "Primary locale" | — | A radio button per row, grayed out on a language that is not enabled (Rule 4) <sup>a</sup> |
 | "Install Locale" | — | Above the list; opens the window below (Rule 2) <sup>a</sup> |
@@ -125,9 +125,24 @@ site's languages, named the same way. On "Site Settings" they are named
 in the language being read instead: "English", "French" in English,
 "anglais", "français" in French ⚠ [A12](#a12). <sup>o</sup>
 
-In the block and in "Change Language" alike, two scripts of one language
-carry the same name: Chinese in simplified and in traditional characters
-both read "中文" ⚠ [A9](#a9). <sup>n</sup>
+Two scripts of one language on the same list are told apart: a language
+whose code names a script ("uz_Latn", "zh_Hans", "zh_Hant") carries the
+script's name. <sup>a</sup>
+
+- **The site's list**, with Uzbek and Uzbek (Latin) installed:
+  "Uzbek/o‘zbek *" and "Uzbek (Latin)/o‘zbek (lotin) *"; with Chinese in
+  simplified and in traditional characters: "Chinese (Simplified)/中文（简体） *"
+  and "Chinese (Traditional)/中文（繁體） *". <sup>a</sup>
+- **"Website Languages"**: the same names, without the asterisk. <sup>a</sup>
+- **"Change Language"**, on a journal with the four of them ticked under
+  "UI": "o‘zbek", "o‘zbek (lotin)", "中文（简体）", "中文（繁體）". <sup>a</sup>
+- **The sidebar "Language" block**: not yet seen with two scripts ticked
+  ⚠ [A15](#a15). <sup>[f-a15](#fn-a15)</sup>
+
+One script installed without the other takes the plain name: Uzbek
+(Latin) alone reads "Uzbek/o‘zbek" on the site's list (with the
+asterisk) and on "Website Languages", although "Install Locale" offers it
+as "Uzbek (Latin)/o‘zbek (lotin) (uz_Latn)". <sup>a</sup>
 
 ## Rules & state
 
@@ -893,6 +908,12 @@ Left out of the scenarios above, by reason:
     `docs/issues/U57-A1-site-language-change-unticks-submission-languages.md`): a language the site does not enable, ticked under "Submissions" and made the "Default", keeping both ticks and its place on "Make a Submission" after the Site Administrator installs another language
   - the guard for A8 (issue report
     `docs/issues/U57-A8-french-default-texts-stored-as-codes.md`): a press and a server created with French under "UI", and French "Reload defaults", leaving no "##" code on the French "Submissions", "Privacy Statement" and "Editorial Masthead" pages {OMP OPS}
+  - two scripts of one language named apart (A9 retired): "Uzbek/o‘zbek"
+    beside "Uzbek (Latin)/o‘zbek (lotin)" and "Chinese (Simplified)/中文（简体）"
+    beside "Chinese (Traditional)/中文（繁體）" on the site's list and
+    "Website Languages", the four in "Change Language", and Uzbek (Latin)
+    installed alone named "Uzbek/o‘zbek" (Fields, the paragraph after
+    "Change Language")
 - **Rarely met**:
   - the Site Administrator's "Reload defaults" on a journal's "Website
     Languages" row, which puts the default texts back over the
@@ -921,8 +942,6 @@ Left out of the scenarios above, by reason:
   - A7 (a journal created on a one-language site; Rule 8)
   - A8 (a press's and a preprint server's French "Author Guidelines" and
     checklist; Rule 10a)
-  - A9 (two scripts of one language named alike in the block and in
-    "Change Language"; Fields)
   - A10 (the site's home naming a journal in another of its languages
     under a new site primary language; Rule 4; scenario 3 passes it)
   - A11 (a browser listing only a regional code, such as "en-US";
@@ -931,6 +950,8 @@ Left out of the scenarios above, by reason:
     the language being read; Fields)
   - A13 (a form language that is not an interface language getting
     empty email template boxes; Side effects; scenario 1 passes it)
+  - A15 (the sidebar "Language" block with two scripts of one
+    language ticked under "UI"; Fields)
   - OMP1 (the press's line under the site's list opening with an
     asterisk; Fields; scenario 1 names it)
 - **Owned by another feature**:
@@ -973,13 +994,14 @@ an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A press's or preprint server's French (Canada) guidelines, checklist, privacy statement, role and component names show internal text codes | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | Norwegian (Bokmål) is no longer offered to install, and a site that has it installed fails on its settings pages | 🐞 | high | — |
 | [A2](#a2) | "Reload defaults" is offered to the Site Administrator alone | ❓ | minor | — |
-| [A9](#a9) | Two scripts of one language carry the same name, so a reader cannot tell their links apart | ❓ | minor | — |
 | [A10](#a10) | With German the site's primary, the site's home once named a press in French | ❓ | minor | — |
 | [A11](#a11) | A browser that lists only "en-US" opened a French-primary journal in French, not English | ❓ | minor | — |
 | [A12](#a12) | "Change Language" on "Site Settings" names the languages in the language being read, not each in its own | ❓ | minor | — |
 | [A13](#a13) | A form language that is not an interface language gets empty email template boxes, not the default texts | ❓ | minor | — |
+| [A15](#a15) | The sidebar "Language" block is not yet seen with two scripts of one language | ❓ | minor | — |
 | [OMP1](#omp1) | A press's site "Languages" list prints its own asterisk before "Marked locales may be incomplete." | ✅ | — | — |
 | [A4](#a4) | Retired: a text missing from a translation shows as its internal name, not in the primary language | ✅ | retired | Jarda 2026-10-08 · overturned |
+| [A9](#a9) | Retired: two scripts of one language carried the same name on the language lists and in "Change Language" | ✅ | retired | claim check (claude), 2026-10-15 — fixed upstream |
 
 ### All apps
 
@@ -1111,20 +1133,6 @@ twenty on a journal (the list under Cause).
 The same fault: [Journal identity & about pages](U07-journal-identity-and-about-pages.md#ops3), [OPS4](U07-journal-identity-and-about-pages.md#ops4); [Users management](U53-users-management.md#ops1); [Submission intake configuration](U58-submission-intake-configuration.md#a9).
 Basis: probe, 2026-10-04. <sup>[f-a8](#fn-a8)</sup>
 
-<a id="a9"></a>
-**A9 — Two scripts of one language carry the same name** · ❓ · minor.
-Chinese written in simplified and in traditional characters (codes
-"zh_Hans" and "zh_Hant") both read "Chinese/中文" on the site's and the
-journal's "Languages" lists, where only "Code" tells them apart, and both
-read "中文" in the sidebar "Language" block and in "Change Language",
-where nothing does. Bosnian ("Bosnian/bosanski"), Serbian
-("Serbian/српски") and Uzbek ("Uzbek/o‘zbek") are the same on the site's
-list. A reader of a journal that offers both scripts cannot tell which
-link is which.
-Question: should each script's name say which script it is? Lean: yes; a
-defect for readers.
-Basis: probe. <sup>[f-a9](#fn-a9)</sup>
-
 <a id="a10"></a>
 **A10 — The site's home once named a press in French** · ❓ · minor.
 With German made the site's primary language, a first visit to the site's
@@ -1197,6 +1205,18 @@ offered. It began on 2026-09-30, when the list of languages the apps
 download on install began naming Norwegian Bokmål "nb".
 Basis: probe, 2026-10-13. <sup>[f-a14](#fn-a14)</sup>
 
+<a id="a15"></a>
+**A15 — The sidebar "Language" block is not yet seen with two scripts of one language** · ❓ · minor.
+Since the language lists and "Change Language" began naming each of two
+scripts of one language (Fields, the paragraph after "Change Language"),
+the sidebar "Language" block has not been read on a journal with both
+scripts ticked under "UI". Before that change it read "中文" twice for
+Chinese in simplified and in traditional characters.
+Question: does the block name each script, "中文（简体）" and "中文（繁體）",
+as "Change Language" does? Lean: yes; it names the journal's interface
+languages the same way "Change Language" does.
+Basis: code. <sup>[f-a15](#fn-a15)</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1212,6 +1232,9 @@ Basis: probe. <sup>[f-omp1](#fn-omp1)</sup>
 <a id="a4"></a>
 **A4 — Missing translations show internal names** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>[f-a4](#fn-a4)</sup>
 
+<a id="a9"></a>
+**A9 — Two scripts of one language carry the same name** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13366), 2026-09-27, on `main` and 3.5: the language lists and "Change Language" name each script, seen 2026-10-15; the sidebar block is [A15](#a15). <sup>[f-a9](#fn-a9)</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1226,7 +1249,7 @@ locale texts the notes name. Every live probe below ran 2026-09-27 on
 OJS, OMP and OPS unless its note names fewer apps.
 
 <a id="fn-a"></a>
-**a** — The site's list is `PKP\controllers\grid\admin\languages\AdminLanguageGridHandler`, mounted by `lib/pkp/templates/admin/settings.tpl` as the side tab `languages` (`common.languages` "Languages"), which `AdminHandler::siteSettingsAvailability()` shows whatever the number of journals (`'languages' => true`; a one-journal site was not driven, the test installs host dozens). Only `Role::ROLE_ID_SITE_ADMIN` is role-assigned, and `AdminHandler::authorize()` refuses any request made at a journal's address, so the list always runs at the site. Columns: `enable` (`common.enable` "Enable", `selectStatusCell.tpl`), `locale` (`grid.columns.locale` "Locale", `localeNameCell.tpl`, which appends `<span class="pkp_form_error">*</span>` when `incomplete`), `code` (`grid.columns.locale.code` "Code"), `sitePrimary` (`locale.primary` "Primary locale"); foot note `admin.locale.maybeIncomplete`; grid title `common.languages`. Names: `Site::getInstalledLocaleNames()` with `LocaleMetadata::LANGUAGE_LOCALE_WITH`, i.e. the name in the interface language, `common.withForwardSlash` "{$item}/{$afterSlash}", the name in itself (a country is added only when two installed locales share a language; a script never is, A9). "Incomplete" is `LocaleMetadata::isComplete()`, a completeness ratio below 0.9 against English. The branch of `_canManage()` (one journal on the site, a journal in the request, a manager role) that would add "UI" and "Forms" columns to this list is unreachable for the reason above (UNASSIGNED item 44). The test installs are installed with `installed_locales = en,fr_CA` (`shared/playwright/make-test-config.js`), both supported, English primary (seed-facts). "Working Languages": [User profile](U03-user-profile.md) Rule 7. Live-probed 2026-09-27 (Purpose; Actors rows 1–3; Fields, the site's list; Rules 1, 6): the list headed "Languages" with the columns "Enable", "Locale", "Code", "Primary locale", no button of its own, the rows "English/English" (enabled, primary) and "French/français *" (enabled); in the French interface "Langues", "anglais/English", "français/français *"; "French/français (Canada)" beside "French/français" once both were installed; with every offered language installed (81 rows on OJS, 71 on OMP and OPS) every row but English carried the asterisk; the English row had no arrow, every other row's arrow offered "Remove"; every roster account and a Production Editor typing the site's Settings address got "The current role does not have access to this operation."; an enabled German showed on a journal's "Website Languages", on the site's pages at `index/de`, as a "German" button on the site's forms and among "Working Languages", a disabled German in none of them.
+**a** — The site's list is `PKP\controllers\grid\admin\languages\AdminLanguageGridHandler`, mounted by `lib/pkp/templates/admin/settings.tpl` as the side tab `languages` (`common.languages` "Languages"), which `AdminHandler::siteSettingsAvailability()` shows whatever the number of journals (`'languages' => true`; a one-journal site was not driven, the test installs host dozens). Only `Role::ROLE_ID_SITE_ADMIN` is role-assigned, and `AdminHandler::authorize()` refuses any request made at a journal's address, so the list always runs at the site. Columns: `enable` (`common.enable` "Enable", `selectStatusCell.tpl`), `locale` (`grid.columns.locale` "Locale", `localeNameCell.tpl`, which appends `<span class="pkp_form_error">*</span>` when `incomplete`), `code` (`grid.columns.locale.code` "Code"), `sitePrimary` (`locale.primary` "Primary locale"); foot note `admin.locale.maybeIncomplete`; grid title `common.languages`. Names: `Site::getInstalledLocaleNames()` with `LocaleMetadata::LANGUAGE_LOCALE_WITH`, i.e. the name in the interface language, `common.withForwardSlash` "{$item}/{$afterSlash}", the name in itself; `Locale::getFormattedDisplayNames()` counts the language codes of the list it is naming and, when two share one, passes `$qualified` to `LocaleMetadata::getDisplayName()`, which adds the country and, since pkp/pkp-lib#13366 (merged 2026-09-27 into `main` and `stable-3_5_0`; code read 2026-10-15), the script (`_getLanguageDisplayName()`, ICU's name for language plus script); a locale whose language is on the list once keeps the plain name (A9). "Incomplete" is `LocaleMetadata::isComplete()`, a completeness ratio below 0.9 against English. The branch of `_canManage()` (one journal on the site, a journal in the request, a manager role) that would add "UI" and "Forms" columns to this list is unreachable for the reason above (UNASSIGNED item 44). The test installs are installed with `installed_locales = en,fr_CA` (`shared/playwright/make-test-config.js`), both supported, English primary (seed-facts). "Working Languages": [User profile](U03-user-profile.md) Rule 7. Live-probed 2026-09-27 (Purpose; Actors rows 1–3; Fields, the site's list; Rules 1, 6): the list headed "Languages" with the columns "Enable", "Locale", "Code", "Primary locale", no button of its own, the rows "English/English" (enabled, primary) and "French/français *" (enabled); in the French interface "Langues", "anglais/English", "français/français *"; "French/français (Canada)" beside "French/français" once both were installed; with every offered language installed (81 rows on OJS, 71 on OMP and OPS) every row but English carried the asterisk; the English row had no arrow, every other row's arrow offered "Remove"; every roster account and a Production Editor typing the site's Settings address got "The current role does not have access to this operation."; an enabled German showed on a journal's "Website Languages", on the site's pages at `index/de`, as a "German" button on the site's forms and among "Working Languages", a disabled German in none of them. Live-probed 2026-10-15 on PKP's default dataset, OJS, OMP and OPS, on `main` (two runs) and `stable-3_5_0` (two runs), as `admin` (Fields, the paragraph on two scripts; A9, A15): with `uz_Latn` installed alone, the site's row "Uzbek/o‘zbek *" (code `uz_Latn`) and a journal's "Website Languages" row "Uzbek/o‘zbek", after "Install Locale" had offered "Uzbek (Latin)/o‘zbek (lotin) (uz_Latn)" beside "Uzbek/o‘zbek (uz)"; with `uz` installed too, "Uzbek (Latin)/o‘zbek (lotin) *" and "Uzbek/o‘zbek *" on the site's list and the same without asterisks on "Website Languages"; with `zh_Hans` and `zh_Hant` installed, "Chinese (Simplified)/中文（简体） *" and "Chinese (Traditional)/中文（繁體） *", and the same without asterisks on "Website Languages"; with the four ticked under "UI" on a scratch journal (Czech ticked earlier in the same run), its "Change Language" read "čeština", "English" (ticked), "o‘zbek", "o‘zbek (lotin)", "中文（简体）", "中文（繁體）". The sidebar block was not read.
 
 <a id="fn-b"></a>
 **b** — `AdminLanguageGridHandler::installLocale()` opens `PKP\controllers\grid\languages\form\InstallLanguageForm` (`templates/controllers/grid/languages/installLanguageForm.tpl`: `admin.languages.availableLocales` "Available Locales", `admin.languages.installNewLocalesInstructions`, overridden per app with "hosted journals"/"OJS", "hosted presses"/"OMP", "hosted servers"/"OPS", `admin.languages.noLocalesAvailable`, `common.save`). The offered list is `Locale::getFormattedDisplayNames(null, null, LANGUAGE_LOCALE_WITH, false)` (every locale folder the installation ships, the code appended in brackets) minus the installed ones. `saveInstallLocale()`: the form's `validate()` has no rule of its own, `execute()` adds each valid, not yet installed locale to the site's installed and supported lists, runs `Locale::installLocale()` and `Repo::editorialTask()->installTaskTemplates()`; then `_updateContextLocaleSettings()` re-saves every journal (Rule 3c) and the notice `notification.localeInstalled` shows, also after an empty "Save". A journal's "Website Languages" rows are `$site->getSupportedLocales()` (`ManageLanguageGridHandler::loadData()`), ticked from the journal's own lists. The leave question is the form handler's unsaved-changes check. Live-probed 2026-09-27 (Fields, the window; Rule 2): the window with the per-app sentence, boxes such as "German/Deutsch (de)", "Spanish/español (es)", "Arabic/العربية (ar)", no English or French (Canada), "Cancel" and "Save"; 79 boxes on OJS (among them "Unknown language/Unknown language (und)"), 69 on OMP and OPS; German ticked and saved: the window closed, "All selected locale(s) installed and activated.", the row enabled and not primary, a scratch journal's "Website Languages" with a German row, "UI" and "Forms" unticked; an empty "Save": the same notice, the list unchanged after a reload; with every language installed, the heading, the sentence and "No additional locales are available for installation." with no "Save"; closing the window with German ticked asked the leave question and installed nothing. On the test installs, hosting dozens of journals each, a "Save" took 13–27 s.
@@ -1265,7 +1288,7 @@ OJS, OMP and OPS unless its note names fewer apps.
 **m** — Addresses: `PKPPageRouter::url()` adds `_getLocaleForUrl()` after the journal's path when `_getContextAndLocales()` lists more than one locale (the site's list for the site's own pages). `PKPPageRouter::_setLocale()` redirects a bare address, an address whose language the journal does not support and, on a one-language journal, an address with a language to the same path with the language `Locale::getLocale()` picks (or none), and stores the language of a well-formed address in the session and the `currentLocale` cookie; a segment that is no known locale code is not read as a language at all, so the page handler gets it and answers 404. `Locale::getLocale()` picks, in order: the address's language when supported, the session's, the `currentLocale` cookie, `getPreferredLocale()` (the browser's Accept-Language matched against the journal's languages, the primary first); `setLocale()` falls back to the primary language for anything unsupported. Live-probed 2026-09-27 (Rules 17, 18; Settings bullet 5): on a two-language journal every public and editorial address carried `/en/`, the site's pages `/index/en/…`; a bare address landed on `/en/` in a fresh English browser and on `/fr_CA/` after a French visit; `…/fr_CA/about` switched the visit, on another journal of the site and the site's home too; `/de/`, `/es/`, `/ja/` forwarded to the same page in the Rule 18 language; `/fr_FR/` and `/xx/` showed "404 Not Found"; a one-language journal forwarded `/en/`, `/fr_CA/` and `/de/` to the bare address; `/en/about` with French remembered read English; a French choice held across signing in and out, a new tab and a browser reopened with only its lasting cookies (the choice rides the 30-day session cookie; a fresh browser signing in as the same account read the primary language); browsers preferring English, French (Canada), Japanese, "ja, fr-CA, en" and "de, en" read English, French, the primary, French and English; "fr-FR, fr" read French (Canada); a one-language journal read English whatever the browser. A remembered language the journal does not offer was driven at the one-language end only.
 
 <a id="fn-n"></a>
-**n** — `plugins/blocks/languageToggle/templates/block.tpl` (identical in the three apps): shown when `enableLanguageToggle` (more than one locale), heading `common.language` "Language", one `<li>` per locale with the class `current` on the language being read (it changes nothing on screen), each link `user/setLocale/{code}?source={server name}{request address}`. `LanguageToggleBlockPlugin::getContents()` names the journal's (or, at the site, the site's) supported locales with `LANGUAGE_LOCALE_ONLY`, each in its own language; OMP's copy differs only in the installer's session-less branch. `PKPPageRouter::_setLocale()` rebuilds the return address from `source` and falls back to the site's `/index/{code}` when that address does not start with the installation's own base address (A3). Live-probed 2026-09-27 (Fields; Rule 19): the heading "Language" ("Langue"), the links "English" then "français", the two entries alike in every computed style; the block on the home, About, Search, Login and Register pages and the Archive (OJS) or Catalog (OMP), signed out and as a Reader; nothing on a one-language journal or where the block is not placed; the seeded journal has none placed; Chinese installed in both scripts and ticked under "UI" on a scratch journal: "中文" twice in the block and in "Change Language", "Chinese/中文" twice on the journal's list.
+**n** — `plugins/blocks/languageToggle/templates/block.tpl` (identical in the three apps): shown when `enableLanguageToggle` (more than one locale), heading `common.language` "Language", one `<li>` per locale with the class `current` on the language being read (it changes nothing on screen), each link `user/setLocale/{code}?source={server name}{request address}`. `LanguageToggleBlockPlugin::getContents()` names the journal's (or, at the site, the site's) supported locales with `LANGUAGE_LOCALE_ONLY`, each in its own language; OMP's copy differs only in the installer's session-less branch. `PKPPageRouter::_setLocale()` rebuilds the return address from `source` and falls back to the site's `/index/{code}` when that address does not start with the installation's own base address (A3). Live-probed 2026-09-27 (Fields; Rule 19): the heading "Language" ("Langue"), the links "English" then "français", the two entries alike in every computed style; the block on the home, About, Search, Login and Register pages and the Archive (OJS) or Catalog (OMP), signed out and as a Reader; nothing on a one-language journal or where the block is not placed; the seeded journal has none placed; Chinese installed in both scripts and ticked under "UI" on a scratch journal: "中文" twice in the block and in "Change Language", "Chinese/中文" twice on the journal's list (before pkp/pkp-lib#13366; A9, A15).
 
 <a id="fn-o"></a>
 **o** — `lib/ui-library/src/components/TopNavActions/TopNavActions.vue`: when `getSupportedLocalesList()` has more than one entry, the menu opens with `common.changeLanguage` "Change Language" and one link per locale, the `Complete` icon beside `currentLocale`; each link is `user/setLocale/{code}?source=` followed by the page's own address, not encoded. The list is `pkp.context.supportedLocales`, which `PKPTemplateManager` fills with the journal's `getSupportedLocaleNames(LANGUAGE_LOCALE_ONLY)`, or the site's on the site's pages, named there in the interface language. [Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md) Rule 28 lists the menu. The Website Settings page turns `#setup/languages` into `#languages` on a reload, and `…/website#languages` opens on "Appearance". Live-probed 2026-09-27 (Fields; Rule 20; Actors row 6): for the Journal Manager, the Section Editor, an assistant, the Reviewer, the Author and the Site Administrator on a journal, the menu opened with "Change Language" ("Changer la langue"), "English", "français", the tick beside the language being read; on Site Settings "English", "French" in English and "anglais", "français" in French (the French reading on OMP and OPS); choosing reopened the same Dashboard view, the same workflow, Profile and Site Settings in the chosen language; from Settings › Website › "Setup" › "Languages" the page reopened on "Appearance" › "Theme"; a one-language journal's menu opened with "Edit Profile"; a Reader signed in onto the public home, was refused the Dashboard's "My Submissions", and found "Change Language" in Profile's menu. Test runs 2026-09-27 (Fields; Rules 20, 20a; A12): on Administration (`index/en/admin`) the menu read "Change Language", "English" (ticked), "français", and after "français" was chosen (`index/fr_CA/admin`) "Changer la langue", "English", "français" (ticked), on the three apps; "Hosted Journals" the same, Site Settings "English", "French" (three apps), in French "anglais", "français" (OPS). On OPS, three runs and a by-hand read: the menu's link carries the page's address with its fragment; chosen after "Setup" was pressed (`…/website#setup`) the page reopened on "Configuration" › "Langues", after "Languages" was pressed (`…/website#languages`) or before any fragment on "Apparence" › "Thème". The mechanism is the shared Website page, so OJS and OMP read alike (not driven with "#setup" there).
@@ -1315,7 +1338,7 @@ Issue report: [pkp-e2e#364](https://github.com/jardakotesovec/pkp-e2e/issues/364
 Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360) ([docs/issues/U57-A8-french-default-texts-stored-as-codes.md](../issues/U57-A8-french-default-texts-stored-as-codes.md)).
 
 <a id="fn-a9"></a>
-**f-a9** — Names: note a (a country is added when two installed locales share a language, a script never is) and note n (`LANGUAGE_LOCALE_ONLY`). Live-probed 2026-09-27: Chinese installed in both scripts and ticked under "UI" on a scratch journal: "Chinese/中文" twice on the journal's list (codes `zh_Hans`, `zh_Hant`), "中文" twice in the block and in "Change Language"; the site's list with every language installed: "Bosnian/bosanski" (`bs`, `bs_Latn`), "Serbian/српски" (`sr`, `sr_Cyrl`), "Uzbek/o‘zbek" (`uz`, `uz_Latn`).
+**f-a9** — Live-probed 2026-09-27 (before the fix): Chinese installed in both scripts and ticked under "UI" on a scratch journal: "Chinese/中文" twice on the journal's list (codes `zh_Hans`, `zh_Hant`), "中文" twice in the block and in "Change Language"; the site's list with every language installed: "Bosnian/bosanski" (`bs`, `bs_Latn`), "Serbian/српски" (`sr`, `sr_Cyrl`), "Uzbek/o‘zbek" (`uz`, `uz_Latn`). Fixed by pkp/pkp-lib#13366 "Fix ui-locale lists distinguish by script for same locale" (merged 2026-09-27, `903e210d71` on `main`, `e7e8deed73` on `stable-3_5_0`): the script joins the name when two listed locales share a language (note a). Live-probed 2026-10-15, three apps, `main` and `stable-3_5_0`, two runs each: Uzbek and Chinese named apart on both lists and in "Change Language" (note a); Bosnian and Serbian not read again; the block is A15.
 
 <a id="fn-a10"></a>
 **f-a10** — Live-probed 2026-09-27, once, on OMP: with German the site's primary language, a fresh browser preferring Japanese opened the site's home at `index/de`, which named the seeded press "Presse de la connaissance du public" (the press holds English and French names, primary English); OJS and OPS showed their English names. Not repeated; a second reading of the site's home with German primary would settle it.
@@ -1331,6 +1354,9 @@ Issue report: [pkp-e2e#360](https://github.com/jardakotesovec/pkp-e2e/issues/360
 
 <a id="fn-a14"></a>
 **f-a14** — `ComposerScript::weblateFilesDownload()` (a `post-install-cmd` of lib/pkp's `composer.json`) builds `lib/pkp/lib/weblateLanguages/languages.json` from WeblateOrg/language-data's `main` `languages.csv`; `Locale::getLocales()` keeps a locale folder only when `isLocaleValid()` finds its name in that file, and `LocaleMetadata::_parse()` throws `DomainException: Invalid locale "nb_NO"` for an installed one that is not. language-data [`1d5b84f67d`](https://github.com/WeblateOrg/language-data/commit/1d5b84f67d) (2026-09-30, "fix: prefer nb for Norwegian Bokmål", first in its tag 2026.11) renamed `nb_NO` to `nb`; the apps' folders stay `nb_NO`, the name 3.5's `I9707_WeblateUILocales` gave them to match Weblate. Code read 2026-10-13. Live-probed 2026-10-13 on PKP's default dataset, OJS `main` and `stable-3_5_0` (`checks/sync/weblate-nb/norwegian.js`): with the file as built before that change, "Install Locale" offered "Norwegian Bokmål/norsk bokmål (nb_NO)", the install and enabling worked and `/publicknowledge/nb_NO` served `lang="nb-NO"`; with today's file, on the same install, GET `/index.php/index/en/admin/settings` and `/publicknowledge/en/management/settings/website` answered 500 with that exception and `/publicknowledge/nb_NO` 404. OMP and OPS by code (the same lib/pkp code and `nb_NO` folders). Report: `docs/reports/2026-10-13-pkp-lib-weblate-nb.md`.
+
+<a id="fn-a15"></a>
+**f-a15** — `LanguageToggleBlockPlugin::getContents()` names the journal's (or, at the site, the site's) `getSupportedLocales()` with `Locale::getFormattedDisplayNames(…, LocaleMetadata::LANGUAGE_LOCALE_ONLY)`, the call `Context::getSupportedLocaleNames()` makes for "Change Language" (note o), so it takes the script since pkp/pkp-lib#13366 (note a); the three apps' copies make the same call (OMP's differs only in the session-less branch). Code read 2026-10-15. Not driven since the fix: "Language Toggle Block" placed in a scratch journal's "Sidebar", with `zh_Hans` and `zh_Hant` ticked under "UI", and the block's links read, would settle it. Before the fix: "中文" twice (note n, 2026-09-27).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `admin.locale.maybeIncomplete`: `omp/locale/en/admin.po` "* Marked locales may be incomplete.", `ojs/locale/en/admin.po` and `ops/locale/en/admin.po` "Marked locales may be incomplete.". Code read 2026-09-27. Live-probed 2026-09-27: the lines as quoted under the site's list, the asterisks beside the languages the same; OMP's French line also opens with one ("*Les paramètres marqués pourraient être incomplets.").

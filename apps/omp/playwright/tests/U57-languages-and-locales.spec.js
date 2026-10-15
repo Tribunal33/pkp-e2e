@@ -11,7 +11,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
- * A2 ❓, A6 🐞, A7 🐞, A8 🐞, A9 ❓, A10 ❓, A12 ❓, A13 ❓, OMP1 (the
+ * A2 ❓, A6 🐞, A7 🐞, A8 🐞, A10 ❓, A12 ❓, A13 ❓, OMP1 (the
  * serial file).
  * Passed through with their own claim left unasserted: A3 🐞 (S8 reads the
  * language "français" lands in, not whether it is the site's home or the

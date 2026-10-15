@@ -9,7 +9,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A2 ❓,
- * A6 🐞, A7 🐞, A8 🐞 (OMP OPS), A9 ❓, A12 ❓, A13 ❓ (the serial file's
+ * A6 🐞, A7 🐞, A8 🐞 (OMP OPS), A12 ❓, A13 ❓ (the serial file's
  * scenario 1). Passed through with their own
  * claim left unasserted: A3 🐞 (S8 reads the language "français" lands in,
  * not whether it is the site's home or the page the reader was on), A5 🐞
