@@ -408,10 +408,14 @@ types and what the boxes do belong to
       again ⚠ [A11](#a11). The session that made the
       change stays signed in; every other session of the account is ended.
       In that other browser the next full page load reaches the Login
-      page, but a press on any tab does not: the tab's content area keeps
-      what it last showed there (empty for a tab not opened there before),
-      with no message, and the page's own script fails ⚠ [A25](#a25).
-      No email is sent. The old
+      page; presses on a Profile page still open there do not. The first press
+      on a tab leaves the tab's content area as it last was there (empty
+      for a tab not opened there before), with no message, and the page's
+      own script fails ⚠ [A25](#a25). Every later press, on a tab or on
+      "Save", is refused with a browser alert reading
+      "##user.authorization.userRequired##" ⚠ [A26](#a26); after OK the
+      pressed tab is marked open, showing what it last showed there, and
+      nothing is saved. No email is sent. The old
       password stops working immediately, and any outstanding password-reset
       link dies with it: opened, it says "Sorry, the link you clicked on has
       expired or is not valid. Please try resetting your password again."
@@ -1135,6 +1139,7 @@ Left out of the scenarios above, by reason:
   - A23 (the email-change message greeting by given and family name; Rule 4)
   - A24 (the page's script failing after a Contact save on the site-level profile; Rule 6a)
   - A25 (another browser's tab press failing after a password change; Rule 10b)
+  - A26 (a Profile page whose session ended elsewhere answering each tab press and "Save" with "##user.authorization.userRequired##"; Rules 6a and 10b)
 - **No seed**:
   - no API secret configured: the API Key tab without its button (Rule 12d; `api_key_secret`)
   - a Site Administrator on a site with a single journal at the site-level address (Rule 3)
@@ -1176,6 +1181,7 @@ unless its Basis line says otherwise.
 | [A20](#a20) | After a newcomer registers with an existing reviewing interest, accounts that save their Roles tab list it twice | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A24](#a24) | The Profile page's Contact tab sometimes logs a script error on opening or saving; the save still works | 🐞 | low · crash: script | issues (claude), 2026-10-15 — re-verified |
 | [A25](#a25) | After a password change, the other browser's Profile page stops answering instead of going to the Login page | 🐞 | medium · crash: script | issues (claude), 2026-10-15 — re-verified |
+| [A26](#a26) | A Profile page whose session has ended answers each tab press and "Save" with the alert "##user.authorization.userRequired##" instead of a sentence | 🐞 | user-visible | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere, and gives the earliest waiting date on the site | ❓ | minor | claim check (claude), 2026-10-14 — widened |
@@ -1543,16 +1549,21 @@ Basis: probe, 2026-10-15. <sup>[f-a24](#fn-a24)</sup>
 **A25 — After a password change, the other browser's Profile page stops answering instead of going to the Login page** · 🐞 · medium · crash: script.
 A password change signs the account out of its other browsers. In such a
 browser, still on the Profile page, the first press on a tab throws a
-JavaScript error: the tab is marked as open, its area stays empty, and
+JavaScript error: the tab is marked as open, its area keeps what it
+last showed there (empty for a tab not opened there before), and
 nothing says that the session has ended. The next press raises a browser
-alert reading "##user.authorization.userRequired##". A "Save" pressed
+alert reading "##user.authorization.userRequired##" ([A26](#a26)). A "Save" pressed
 there instead keeps its spinner turning, and what was typed is not
 stored. A reload shows the Login page.
 
-By the code, every back-office page that loads tabs, lists, side windows
-or forms in the older style does the same with the first such request
-after the change: a tab throws the error, a list or a save does
-nothing.
+By the code, every back-office page does the same with the first tab,
+list, side window or form it loads without a full page reload after the
+change: a tab throws the error, a list or a save does nothing. A list was seen doing it: on Settings › Website › Plugins, a
+"Search" sent as that first request leaves the search box open with a
+spinner beside "Search" and the list unchanged, with no message. A later
+"Search" there is refused with the alert "The current role does not
+have access to this operation.", which does not say that the session
+has ended either.
 
 The other ways an account's password changes behave the same: changing
 one's own password under Users & Roles, "Reset Password" from the email,
@@ -1561,6 +1572,22 @@ session that expires, and an administrator setting the user's password
 do not: the page's next request arrives signed out and gets the alert
 above (code).
 Basis: probe, 2026-10-15. <sup>[f-a25](#fn-a25)</sup>
+Report: refresh owed — the list case is now seen: on Settings › Website › Plugins a first "Search" does nothing, and a later one gets the alert "The current role does not have access to this operation."; the raw-key alert of the later presses is now its own entry, A26; and the first tab press leaves the area as it last showed there (empty only for a tab not opened there before), not always empty (housekeeping claim check J15, 2026-10-15)
+
+<a id="a26"></a>
+**A26 — A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##"** · 🐞 · user-visible.
+When the account's session has ended while its Profile page is open in
+a browser, a press there on a tab or on "Save" raises a browser alert
+reading "##user.authorization.userRequired##", a code in every language,
+where a sentence should say that the user has been signed out. After a
+password change made in another browser this is every press after the
+first ([A25](#a25)); after an email change made in another browser,
+which for now also signs that browser out (Rule 6a), every press. After
+OK the pressed tab is marked open with what it last showed there (empty
+for a tab never opened there), and a "Save" stores nothing; only a
+reload reaches the Login page. A session that expired or was signed out
+in another browser gets the same alert (code).
+Since: 2012-05-07 (14 years) · Basis: probe, 2026-10-15. <sup>[f-a26](#fn-a26)</sup>
 
 ### OMP
 
@@ -1956,9 +1983,14 @@ site's own contact read "Open Journal Systems" / "Open Monograph Press" /
 earlier "Site Admin" readings did not tell apart). Seen 2026-10-14, all three
 apps, while pkp/pkp-lib `3407fc5bc0` (2026-10-06, the open regression
 *Login & sessions* A14) stands: after the email-change save the second
-browser's reload showed the Login page, and its tab press either raised
-a browser alert reading "##user.authorization.userRequired##" or opened a
-tab already opened there, "Keep me logged in" ticked or not alike. The
+browser's reload showed the Login page, "Keep me logged in" ticked or not
+alike. Live-probed 2026-10-15 (claim check), OJS, OMP and OPS on `main`
+and OJS and OMP on `stable-3_5_0`, two runs each (the kept script
+`shared/playwright/checks/U03/J15/j15.js`, mode `email`): the second
+browser's tab presses, the first included, each raised a browser alert
+reading "##user.authorization.userRequired##" (A26); after OK the tab
+was marked open, showing the form it held there before (empty for a tab
+never opened there); a "Save" got the same alert and stored nothing. The
 save ends the other sessions by design (`invalidateOtherSessions()`
 above); the 2026-09-03 reading that both still worked is diagnosed
 (2026-10-07) as the remembered sign-in bringing that browser back, which
@@ -2278,7 +2310,9 @@ characters."`, the third `textbox "Repeat new password"`. The other
 browser (A25): with Contact never opened there, a tab press was answered
 302 → the Login page 200 and the panel stayed empty; with Contact opened
 there before, the same press left the Contact form showing; its next full
-load reached the Login page. The activity log of the author's submission,
+load reached the Login page. Re-read 2026-10-15 over all seven tabs and
+"Save" (Rule 10b): only the first press failed that way, every later one
+got the alert of A26 (notes f-a25, f-a26). The activity log of the author's submission,
 read by the journal's manager, listed the same events before and after
 the author saved Password, Identity, Public, Notifications and Roles,
 created and deleted an API key and requested an email change (Side
@@ -3022,11 +3056,62 @@ Issue report: [pkp-e2e#969](https://github.com/jardakotesovec/pkp-e2e/issues/969
 `{context}/login?source=…` 200, an HTML page the tab's script reads as
 data. Run records of 2026-10-14 (drift sweep), all three apps, seven runs
 (the kept script `shared/playwright/checks/U03/SW3/sw3.js`, phase
-`password`): every such press logged the uncaught page error "Unexpected
+`password`, one press per phase): each such press, the first request
+after the change, logged the uncaught page error "Unexpected
 token '<', "<!DOCTYPE "... is not valid JSON", and the page's script stayed
 busy for 30 s after it; the panel stayed empty for a tab not opened
 before and kept the Contact form for a tab opened before (note g).
+Live-probed 2026-10-15 (claim check), OJS, OMP and OPS on `main` (lib/pkp
+`b17fadae59`) and OJS and OMP on `stable-3_5_0` (`4045d9241e`), two runs
+each, `rvaca` on PKP's default dataset in two browsers (the kept script
+`shared/playwright/checks/U03/J15/j15.js`, modes `pw` and `pwrev`): only
+the first request after the change got the 302 to the Login page, and
+only a first tab press logged the page error; the later presses (the
+other six tabs, then "Save" on Identity) were answered 200 JSON with the
+alert and no page error (f-a26). A first request made instead from a
+second page of the same browser, the "Search" of Settings › Website ›
+Plugins with "u03j15" typed, `POST
+…/grid/settings/plugins/settings-plugin-grid/fetch-grid`, was answered
+302 → the Login page 200 with no alert and no page error: the search box
+kept "u03j15", a spinner stayed beside "Search" and the list did not
+change. That "Search" sent later (after the tab presses) was answered
+200 JSON and raised the alert "The current role does not have access to
+this operation." (`user.authorization.roleBasedAccessDenied`, the
+`RoleBasedHandlerOperationPolicy` message, through
+`PKPComponentRouter::handleAuthorizationFailure()`); the list did not
+change.
 Issue report: [pkp-e2e#970](https://github.com/jardakotesovec/pkp-e2e/issues/970) ([docs/issues/U03-A25-stale-session-tab-press-script-error.md](../issues/U03-A25-stale-session-tab-press-script-error.md)).
+
+<a id="fn-a26"></a>
+**f-a26** — The key `user.authorization.userRequired` is
+`UserRequiredPolicy`'s default message (lib/pkp `7e53bc157b`, 2012-05-07,
+"Added user required policy");
+`PKPComponentRouter::handleAuthorizationFailure()` passes it through
+`__()` into the JSON message the page shows as an alert, and no locale
+file in any language defines it, in lib/pkp or in the app: grep over
+every non-PHP file on `main` OJS, OMP and OPS (lib/pkp `b17fadae59`),
+`stable-3_5_0` OJS, OMP and OPS (`4045d9241e`), `stable-3_4_0` OJS
+(`30303e536a`) and `stable-3_3_0` OJS (`d446601ebe`, tag 3_3_0-23), 0
+hits. `[debug] show_stacktrace` is Off, so nothing is appended to it.
+Live-probed 2026-10-15 (claim check; Rules 6a and 10b), OJS, OMP and OPS
+on `main` and OJS and OMP on `stable-3_5_0`, two runs each, the same on
+all, `rvaca` on PKP's default dataset in two browsers (the kept script
+`shared/playwright/checks/U03/J15/j15.js`, modes `pw`, `pwrev` and
+`email`): after a password change, each press after the first request
+(the other six tabs, and "Save" on Identity with "RJ" typed in "Preferred
+Avatar Initials") got `GET …/tab/user/profile-tab/<op>` or `POST
+…/save-identity` answered 200 JSON and the alert, with no page error;
+after OK the pressed tab was marked open, a tab opened there before
+(Contact, Identity) showed its old form and the others an empty panel,
+"RJ" stayed in the box, "Save" could be pressed again, and the database
+kept the account's initials unchanged. After an email change the first
+tab press already got the 200 JSON and the alert, then the same for
+every press; no 302 and no page error in that mode. A reload reached the
+Login page with no alert in both modes. The first browser put the
+account back after each mode (password set back, pending request
+cancelled). The expired and signed-out-elsewhere sessions are read from
+the code: their next request arrives with no user and meets the same
+policy.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
