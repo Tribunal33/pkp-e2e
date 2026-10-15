@@ -2773,6 +2773,7 @@ with the record as read plus `creditRoles`:
   curation and Software kept their old degrees (none, `SUPPORTING`).
 - Conceptualization alone with the lower-case `"lead"`: 500; Data
   curation and Software were gone, Conceptualization still `EQUAL`.
+Issue report: [pkp-e2e#978](https://github.com/jardakotesovec/pkp-e2e/issues/978) ([docs/issues/U41-A29-contributor-unknown-credit-degree-server-error.md](../issues/U41-A29-contributor-unknown-credit-degree-server-error.md)).
 
 Three server errors per run. The form itself sends `""` for an empty
 "Degree", which saves (fn c). Mechanism: `schemas/author.json` types
