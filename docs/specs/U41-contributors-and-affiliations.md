@@ -984,7 +984,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A25](#a25) | A contributor's later CRediT rows have unnamed drop-downs, and a click on their labels edits the first row | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A26](#a26) | On an article, book or preprint page with several contributors, a contributor's affiliations print in reverse order | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A27](#a27) | A contributor's affiliations on an article, book or preprint page read "First Univ , Second Univ" | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
-| [A29](#a29) | Through the programming interface, a contributor saved with an unknown degree of contribution fails with a server error, and part of the change is kept | 🐞 | latent · crash: server | — |
+| [A29](#a29) | A program saving a contributor with an unknown CRediT degree gets a server error, and part of the change is kept | 🐞 | low · crash: server | issues (claude), 2026-10-15 — re-verified |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
 | [A4](#a4) | The organization contributor's "ROR ID" box accepts any text without a shape check | ❓ | minor | — |
@@ -1447,22 +1447,19 @@ in that language, the form keeps offering it and the save goes through.
 Basis: probe + code reading, 2026-10-13. <sup>f-a28</sup>
 
 <a id="a29"></a>
-**A29 — Through the programming interface, a contributor saved with an unknown degree of contribution fails, and part of the change is kept** · 🐞 · latent · crash: server.
+**A29 — A program saving a contributor with an unknown CRediT degree gets a server error, and part of the change is kept** · 🐞 · low · crash: server.
 The contributor form offers only "Lead", "Equal" and "Supporting" as a
-CRediT role's "Degree", or none, so no user of the apps' screens meets
-this. A program that saves a contributor through the install's
-programming interface (the contributor's edit request, `PUT
-{journal}/api/v1/submissions/{id}/publications/{id}/contributors/{id}`,
-with its `creditRoles` list; note f-a29 has the request as sent) can
-send any other word as a degree ("lead" in lower case, for one). It expects the save refused with a message naming
-the field, and nothing changed. Instead the save fails with a server
-error, and part of the change is already made: the CRediT roles the
-request lists before the faulty one are saved with their new degrees, the CRediT roles
-the request leaves out are removed from the contributor, and the rest of
-the change, a new given name for one, is lost.
-Seen on a journal; the press and the preprint server save contributors
-through the same code. CRediT roles are on `main` only, so no release
-has it.
+CRediT role's "Degree", or none. A program that saves a contributor
+through the install's programming interface (the REST API's contributor
+edit request) can send any other word as a degree ("lead" in lower
+case, for one). The program expects the save to be refused with a
+message naming the field, and the contributor to stay as it was.
+
+Instead the save fails with a server error after part of the change is
+made. The CRediT roles the request lists before the faulty one take
+their new degrees. The roles it lists after the faulty one are not
+saved, and the roles it leaves out are removed from the contributor.
+The rest of the change, a new given name for one, is lost.
 Basis: probe + code reading, 2026-10-15. <sup>f-a29</sup>
 
 ### OMP

@@ -1,0 +1,33 @@
+--- a/lib/pkp/classes/author/Repository.php
++++ b/lib/pkp/classes/author/Repository.php
+@@ -19,9 +19,11 @@
+ use APP\core\Request;
+ use APP\facades\Repo;
+ use APP\submission\Submission;
++use Illuminate\Validation\Rule;
+ use PKP\author\contributorRole\ContributorRole;
+ use PKP\author\contributorRole\ContributorRoleIdentifier;
+ use PKP\author\contributorRole\ContributorType;
++use PKP\author\creditRole\CreditRoleDegree;
+ use PKP\context\Context;
+ use PKP\identity\Identity;
+ use PKP\plugins\Hook;
+@@ -111,9 +113,17 @@
+         $primaryLocale = $submission->getData('locale');
+         $allowedLocales = $submission->getPublicationLanguages($context->getSupportedSubmissionMetadataLocales());
+ 
++        $rules = $schemaService->getValidationRules(PKPSchemaService::SCHEMA_AUTHOR, $allowedLocales);
++        // The schema marks creditRoles readOnly (they are stored in their own table), so it adds no
++        // rule for them. Their degree must still be one the credit_degree column accepts, and the
++        // contributor type one the contributor_type column accepts, or the save fails midway.
++        $rules['creditRoles'] = ['nullable', 'array'];
++        $rules['creditRoles.*.degree'] = ['nullable', Rule::in(CreditRoleDegree::getDegrees())];
++        $rules['contributorType'][] = Rule::in(ContributorType::getTypes());
++
+         $validator = ValidatorFactory::make(
+             $props,
+-            $schemaService->getValidationRules(PKPSchemaService::SCHEMA_AUTHOR, $allowedLocales),
++            $rules,
+             [
+                 'country.regex' => __('validator.country.regex'),
+             ]
