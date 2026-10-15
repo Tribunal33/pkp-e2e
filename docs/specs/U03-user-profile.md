@@ -2730,7 +2730,7 @@ default dataset (kept script
 `shared/playwright/checks/issues/password-tab-not-cleared-after-save/walk.js`);
 the fix the issue report proposes (return a freshly drawn form on a
 successful save) was tried there: boxes empty, hint back, notice gone.
-Issue report: [docs/issues/U03-A11-password-tab-not-cleared-after-save.md](../issues/U03-A11-password-tab-not-cleared-after-save.md).
+Issue report: [pkp-e2e#966](https://github.com/jardakotesovec/pkp-e2e/issues/966) ([docs/issues/U03-A11-password-tab-not-cleared-after-save.md](../issues/U03-A11-password-tab-not-cleared-after-save.md)).
 
 <a id="fn-a12"></a>
 **f-a12** — `changePassword.tpl` renders `{fbvFormButtons}` without
@@ -2938,7 +2938,7 @@ glacier…, ethics…, ethics…" (before the save: "glacier…, ethics…"). Tw
 earlier runs that reused fixed words across runs showed the growth: three
 copies, and "ethics" three times on OJS. OPS registers the copies the
 same way; its save erases instead (OPS3).
-Issue report: [docs/issues/U03-A20-interest-listed-twice-after-roles-save.md](../issues/U03-A20-interest-listed-twice-after-roles-save.md).
+Issue report: [pkp-e2e#967](https://github.com/jardakotesovec/pkp-e2e/issues/967) ([docs/issues/U03-A20-interest-listed-twice-after-roles-save.md](../issues/U03-A20-interest-listed-twice-after-roles-save.md)).
 
 <a id="fn-a21"></a>
 **f-a21** — `ChangeProfileEmailInviteRedirectController::acceptHandle()`
@@ -3057,7 +3057,7 @@ field; "Save" with nothing changed posted `readerGroup[…]=on&submitFormButton=
 visitor's links were gone (another visitor's kept), and the manager's
 view read "Reviewing interests --". Control: OJS and OMP posted
 `interests[]` with the same save and kept them.
-Issue report: [docs/issues/U03-OPS3-server-roles-save-erases-interests.md](../issues/U03-OPS3-server-roles-save-erases-interests.md).
+Issue report: [pkp-e2e#968](https://github.com/jardakotesovec/pkp-e2e/issues/968) ([docs/issues/U03-OPS3-server-roles-save-erases-interests.md](../issues/U03-OPS3-server-roles-save-erases-interests.md)).
 
 ## Reference — entry points & surfaces
 
