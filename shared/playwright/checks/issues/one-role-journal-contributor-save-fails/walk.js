@@ -17,11 +17,18 @@
 // MODE=neighbour (the neighbour check for fix.diff): no role is deleted. On the same list,
 //   "Add Contributor" with only "Translator" ticked must save with that role alone, and one with
 //   no role ticked must still be refused on screen.
+// MODE=upgraded (the group "A preprint server upgraded from 3.5"): the fleet loaded from the
+//   stable-3_5_0 dataset and upgraded to main (PKP_E2E_DATASET_BRANCH=stable-3_5_0 on the reset).
+//   No role is deleted. 11 the "Contributor Roles" table; 12-13 "Edit" on the second contributor
+//   and "Save" with nothing changed; on a one-role context also 14 the add and 15 the wizard (the
+//   default mode's 5-7 and 9-10). OJS and OMP are the controls: the table and the edit only.
 // On stable-3_5_0 the walk stops after step 2: the line has no "Contributor Roles" screen.
 //
 // Reset first:  PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH npm run fleet-prep -- --feature issues-u41h --dataset 1 --reset
 // Run (main):   PROBE_FEATURE=issues-u41h PROBE_AGENT=u41h node bin/probe.js all shared/playwright/checks/issues/one-role-journal-contributor-save-fails/walk.js
 // Neighbour:    MODE=neighbour PROBE_RUN=nb-out PROBE_FEATURE=issues-u41h PROBE_AGENT=u41h node bin/probe.js all …/walk.js
+// Upgraded:    PKP_E2E_DATASET_BRANCH=stable-3_5_0 npm run fleet-prep -- --feature <f> --dataset 1 --reset, then
+//               MODE=upgraded PROBE_RUN=upg PROBE_FEATURE=<f> PROBE_AGENT=<a> node bin/probe.js all …/walk.js
 // Run (3.5):    PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 PROBE_FEATURE=issues-u41h-3_5 PROBE_AGENT=u41h node bin/probe.js all …/walk.js
 // Facts: .reports/<feature>/u41h/walk[-<run>]-<app>.json, screens NN-<name>[-<run>]-<app>.json
 const {forEachApp, launch, signIn, signOut, screen, shot, record, sql, idle, serverLog} = require('../../../probe');
@@ -98,7 +105,11 @@ forEachApp(async (app) => {
             await snap('contributor-roles-one-left');
         }
 
-        // 4: the workflow's Contributors list
+        // 4: the workflow's Contributors list (an upgraded dataset's publication ids are read, not assumed)
+        if (MODE === 'upgraded') {
+            sub.pub = Number(sql(app, `select current_publication_id from submissions where submission_id = ${sub.id}`));
+            fact('upgradedVersion', sql(app, `select major||'.'||minor||'.'||revision||'.'||build from versions where current = 1 and product_type = 'core'`));
+        }
         await L.openWorkflowContributors(page, app, sub.id, sub.pub);
         fact('listBefore', await L.contributorRows(page));
         await snap('workflow-contributors');
@@ -119,8 +130,22 @@ forEachApp(async (app) => {
             return;
         }
 
-        // 5-7: adding
-        let mark = log.mark();
+        let mark;
+        if (MODE === 'upgraded') {
+            // 12-13: "Edit" › "Save" with nothing changed
+            mark = log.mark();
+            const same = await step('edit-unchanged', () => L.saveContributor(page, {edit: sub.edit}));
+            fact('editUnchanged', {...same, screen: undefined, notices: same && same.screen && same.screen.notices, serverLog: log.since(mark)});
+            await snap('edit-unchanged-after-save');
+            await L.closeForm(page);
+            await L.openWorkflowContributors(page, app, sub.id, sub.pub);
+            fact('editUnchangedListAfterReload', await L.contributorRows(page));
+            fact('editUnchangedStored', storedRoles(`${sub.given}%`));
+            if (before.length > 1) return;
+        }
+
+        // 5-7: adding (upgraded: 14)
+        mark = log.mark();
         const add = await step('add', () => L.saveContributor(page, {
             fill: {givenName: 'Ana u41h', familyName: 'Person', email: 'u41h@mailinator.com', country: 'Canada'}}));
         fact('add', {...add, screen: undefined, notices: add && add.screen && add.screen.notices, serverLog: log.since(mark)});
@@ -132,7 +157,8 @@ forEachApp(async (app) => {
         await snap('add-list-reload');
         fact('addStored', storedRoles('Ana u41h%'));
 
-        // 8: editing
+        // 8: editing (not in the upgraded mode, whose 13 saved the edit unchanged)
+        if (MODE !== 'upgraded') {
         mark = log.mark();
         const edit = await step('edit', () => L.saveContributor(page, {edit: sub.edit, fill: {givenName: `${sub.given} u41h`}}));
         fact('edit', {...edit, screen: undefined, notices: edit && edit.screen && edit.screen.notices, serverLog: log.since(mark)});
@@ -142,6 +168,7 @@ forEachApp(async (app) => {
         fact('editListAfterReload', await L.contributorRows(page));
         await snap('edit-list-reload');
         fact('editStored', storedRoles(`${sub.given}%`));
+        }
 
         // 9-10: the author in the wizard
         await signOut(page);

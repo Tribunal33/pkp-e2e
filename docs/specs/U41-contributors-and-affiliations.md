@@ -971,7 +971,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | Contributor rows never show affiliations, though the list reserves a line for them; a press's book page with five or more contributors shows "Name, ;" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Journal and preprint server listings still name contributors unticked from "Publication Lists" | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | A registry pick the server cannot cache raises an error dialog, then saves and publishes with no name until the install's registry copy gains it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A14](#a14) | On a journal with one contributor role, adding or editing any contributor fails with an error | 🐞 | medium · crash: server | issues (claude), 2026-10-03 — re-verified |
+| [A14](#a14) | With a single contributor role, as on an upgraded preprint server, saving any contributor fails with an error | 🐞 | medium · crash: server | issues (claude), 2026-10-15 — re-verified |
 | [A20](#a20) | "Add Contributor" never saves when a "Forms" language is not a metadata language | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A22](#a22) | A role name changed in "Edit Role" and closed without saving shows on the row, and the role's next "Save" stores it | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A24](#a24) | A refused "Add Contributor" still saves the contributor, so correcting it lists the person twice | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
@@ -1209,28 +1209,27 @@ form promises it twice.
 Basis: probe. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — On a journal with one contributor role, adding or editing any contributor fails with an error** · 🐞 · medium · crash: server.
-When a journal has exactly one contributor role, the contributor form
-hides the "Contributor Roles" field, as designed. Every "Save" from that
-form then fails on the server. An editor adding or editing a contributor
-in the workflow, and an author adding a co-author in the submission
-wizard, get "An unexpected error has occurred. Please reload the page and
-try again.", and the window stays open.
+**A14 — With a single contributor role, as on an upgraded preprint server, saving any contributor fails with an error** · 🐞 · medium · crash: server.
+When a journal, press or preprint server has exactly one contributor
+role, the contributor form hides the "Contributor Roles" field, as
+designed. Every "Save" from that form then fails on the server,
+including one with nothing changed. An editor adding or editing a
+contributor in the workflow, and an author adding a co-author in the
+submission wizard, get "An unexpected error has occurred. Please reload
+the page and try again.", and the window stays open.
 
 A failed edit keeps the contributor's old name. A failed add still
 creates the contributor, without a role, so each retry leaves another
 role-less contributor in the list. A manager can get round it by adding
-a second role back on the "Contributor Roles" screen.
+a second role on the "Contributor Roles" screen.
 
-It happens once a manager deletes the roles the journal does not use:
+A preprint server upgraded from version 3.5 with its default user groups
+starts in that state, since the upgrade gives it "Author" alone; so does
+any journal or press that had only one Author-level role. Elsewhere it
+starts once a manager deletes the roles the context does not use:
 "Translator" on a journal or preprint server, or three of a press's four
-roles. Every preprint server upgraded from version 3.5 starts in that
-state: the upgrade gives it "Author" alone, so no contributor can be
-added or edited there from the form, and even "Edit" › "Save" with
-nothing changed fails. An upgraded journal or press keeps several roles
-and saves normally.
-Basis: probe, 2026-10-03; the upgraded server, probe, 2026-10-15. <sup>f-a14</sup>
-Report: refresh owed — the 2026-10-15 incidentals fold widened the reach: an upgrade from 3.5 gives each context one contributor role per author user group (lib/pkp `I857_ContributorRolesTypes`), so every preprint server upgraded from 3.5 has "Author" alone and every contributor save there fails (`PKP\author\Author::getContributorRoles()`, the same server error), walked on PKP's 3.5 dataset upgraded to `main` (OPS submission 7, "Edit" › "Save" with nothing changed, two loads); the Summary, the reach and the severity's grounds follow (2026-10-15)
+roles.
+Basis: probe, 2026-10-15. <sup>f-a14</sup>
 
 <a id="a16"></a>
 **A16 — The auto-created contributor can lack a Country, then every edit demands one** · ❓ · user-visible.
