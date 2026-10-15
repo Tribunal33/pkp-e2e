@@ -2306,7 +2306,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
-| [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-12 — re-verified |
+| [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-15 — re-verified |
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
 | [OJS9](#ojs9) | With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [OJS10](#ojs10) | A review whose reviewer was cancelled keeps its DOI on the DOIs page and in every export and deposit | 🐞 | user-visible | — |
@@ -2818,27 +2818,31 @@ DOI of its own fails on the server, and the galley's DOI is never sent.
 A manager who presses "Deposit All", or ticks the article and presses
 "Deposit DOIs", sees "Items successfully submitted for deposit" and the
 galley's row turn "Submitted".
+
 The row stays "Submitted", which reads as a deposit on its way, and
 later presses of "Deposit All" skip it. Only Administration › "Failed
 Jobs" lists the failure. The way round is "Assign DOIs" on the article,
 then "Deposit DOIs" on it.
-It takes an article whose own DOI was emptied on the DOIs page while its
-galley kept one. A journal with "Articles" unticked is not hit: its
-galley DOIs are deposited. The other articles the same "Deposit All"
-takes are deposited too.
-"Export DOIs" on such an article is not refused either, as one with no
-DOI at all is: it goes on to DataCite's format check, and the file it
-builds holds the article's record with an empty DOI beside the
-galley's (Rule 29). Whether that check then stops it with an "Error"
-window or the file downloads with the empty DOI could not be seen,
-since the test installs cannot fetch the format.
+
+It takes an article without a DOI of its own whose galley has one: its
+"Article" DOI was emptied on the DOIs page, or the journal ticked
+"Articles" after its galleys got DOIs. A journal with "Articles"
+unticked is not hit: its galley DOIs are deposited. The other articles
+the same "Deposit All" takes are deposited too.
+
+"Export DOIs" accepts such an article, though it refuses one with no DOI
+anywhere. The file it builds holds the article's record with an empty
+DOI beside the galley's, which DataCite's format check refuses: the
+export stops with an "Error" window that points at the empty identifier,
+and nothing downloads, the galley's record included.
+
 That is `main`. On 3.5 and 3.4 "Deposit All" also has an older and wider
 fault, which `main` no longer has: it marks a galley DOI "Submitted" and
-starts no deposit unless the article's own DOI goes out with it. So it also leaves galley DOIs unsent when the article's DOI is
-already "Registered" (galley DOIs turned on after the articles were
-registered) and when "Articles" is unticked.
-Basis: probe, 2026-10-12. <sup>f-ojs5</sup>
-Report: refresh owed — the housekeeping claim check of 2026-10-15 found that "Export DOIs" on the article whose "Article" DOI was emptied while its galley kept one is not refused with "One or more invalid publication objects were included with the request.": the work passes `publication\DAO::getExportableDOIsSubmissionIds()` (`whereHasDoi()`, a galley's DOI counts) and `DataciteExportPlugin` builds the article's record with an empty `identifier` beside the galley's; the report should add the export side and its open end (what DataCite's schema check does with the empty identifier) (2026-10-15)
+starts no deposit unless the article's own DOI goes out with it. So it
+also leaves galley DOIs unsent when the article's DOI is already
+"Registered" (galley DOIs turned on after the articles were registered)
+and when "Articles" is unticked.
+Basis: probe, 2026-10-15. <sup>f-ojs5</sup>
 
 <a id="ojs7"></a>
 **OJS7 — A review that loses its "Unregistered" DOI and qualifies again gets a new DOI under "Immediately…" and none under the other settings** · ✅ · minor.

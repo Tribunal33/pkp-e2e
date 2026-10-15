@@ -1,6 +1,7 @@
 // Helpers for walk.js (issue reports U45 A15 and U45 OJS5). Runs nothing when required.
 const fs = require('fs');
 const path = require('path');
+const {execFileSync} = require('child_process');
 const {expect} = require('@playwright/test');
 const {DOIS_TEXT, isListFetch} = require('../../../pages/DoisPages.js');
 
@@ -43,11 +44,8 @@ exports.depositAll = depositAll;
  * @returns {{file: string, doi: string|null, count: number}[]}
  */
 function leftExportFiles(app) {
-    const root = path.resolve(__dirname, '../../../../..');
-    const config = fs.readFileSync(path.isAbsolute(app.configFile) ? app.configFile : path.join(root, app.configFile), 'utf8');
-    const filesDir = (config.match(/^files_dir\s*=\s*"?([^"\n]+?)"?\s*$/m) || [])[1];
-    const dir = path.join(filesDir || '', 'temp');
-    if (!filesDir || !fs.existsSync(dir)) return [];
+    const dir = tempDir(app);
+    if (!dir) return [];
     const seen = new Map();
     for (const f of fs.readdirSync(dir).filter((n) => /\.xml$/.test(n)).sort()) {
         const xml = fs.readFileSync(path.join(dir, f), 'utf8');
@@ -58,3 +56,82 @@ function leftExportFiles(app) {
     return [...seen].map(([key, count]) => ({file: key.split(' | ')[0], doi: key.split(' | ')[1] || null, count}));
 }
 exports.leftExportFiles = leftExportFiles;
+
+/**
+ * The install's `files_dir`/temp, where the agency plugins write their export
+ * files (read from the fleet's config); null when it does not exist.
+ *
+ * @param {object} app the probe kit's bag
+ * @returns {string|null}
+ */
+function tempDir(app) {
+    const root = path.resolve(__dirname, '../../../../..');
+    const config = fs.readFileSync(path.isAbsolute(app.configFile) ? app.configFile : path.join(root, app.configFile), 'utf8');
+    const filesDir = (config.match(/^files_dir\s*=\s*"?([^"\n]+?)"?\s*$/m) || [])[1];
+    const dir = filesDir ? path.join(filesDir, 'temp') : null;
+    return dir && fs.existsSync(dir) ? dir : null;
+}
+exports.tempDir = tempDir;
+
+/** The names of the DataCite export files (`dataciteplugin-*.xml`, `*.tar.gz`) in files_dir/temp now. */
+function exportFileNames(app) {
+    const dir = tempDir(app);
+    return dir ? fs.readdirSync(dir).filter((n) => /^datacite.*\.(xml|tar\.gz)$/.test(n)).sort() : [];
+}
+exports.exportFileNames = exportFileNames;
+
+/**
+ * The XML records of the DataCite export files that appeared in files_dir/temp
+ * since `before` (a list from exportFileNames()): "Export DOIs" writes one XML file
+ * per object and packs two or more into a .tar.gz, and leaves the result there when
+ * the endpoint answers an error. Read only: a tar is listed and its members read to
+ * stdout. Each record: {file, member, identifier, xml}.
+ *
+ * @param {object} app the probe kit's bag
+ * @param {string[]} before
+ */
+function newExportRecords(app, before) {
+    const dir = tempDir(app);
+    if (!dir) return [];
+    const out = [];
+    for (const f of exportFileNames(app).filter((n) => !before.includes(n))) {
+        const full = path.join(dir, f);
+        const members = f.endsWith('.tar.gz')
+            ? execFileSync('tar', ['-tzf', full], {encoding: 'utf8'}).split('\n').filter(Boolean).map((m) => [m, execFileSync('tar', ['-xzOf', full, m], {encoding: 'utf8'})])
+            : [[f, fs.readFileSync(full, 'utf8')]];
+        for (const [member, xml] of members) {
+            const id = xml.match(/<identifier[^>]*identifierType="DOI"[^>]*?(?:\/>|>([^<]*)<\/identifier>)/);
+            out.push({file: f.replace(/-\d{8}-\d{6}-/, '-'), member: member.replace(/-\d{8}-\d{6}-/, '-'), identifier: id ? (id[1] || '') : null, xml});
+        }
+    }
+    return out;
+}
+exports.newExportRecords = newExportRecords;
+
+/**
+ * DataCite's own schema check, run offline on one record: the same
+ * DOMDocument::schemaValidate() against the same address the plugin's filter
+ * declares (xml::schema(http://schema.datacite.org/meta/kernel-4/metadata.xsd),
+ * lib/pkp XMLTypeDescription), in a PHP CLI outside the install, which fetches the
+ * schema directly (the test installs' [proxy] is a dead port). Returns
+ * {valid, errors}; a schema file that fails to load is fetched again.
+ *
+ * @param {string} xml
+ */
+function validateDatacite(xml) {
+    const code = [
+        'libxml_use_internal_errors(true);',
+        '$d = new DOMDocument();',
+        '$d->loadXML(stream_get_contents(STDIN));',
+        "$ok = $d->schemaValidate('http://schema.datacite.org/meta/kernel-4/metadata.xsd');",
+        "echo json_encode(['valid' => $ok, 'errors' => array_values(array_map(fn ($e) => 'line ' . $e->line . ': ' . trim($e->message), libxml_get_errors()))]);",
+    ].join(' ');
+    // A schema file DataCite's host fails to serve is a fetch error, not a verdict: try again, three times at most
+    let result;
+    for (let n = 0; n < 3; n++) {
+        result = JSON.parse(execFileSync('php', ['-r', code], {input: xml, encoding: 'utf8', timeout: 120_000}));
+        if (!result.errors.some((e) => /failed to load|Failed to locate/i.test(e))) break;
+    }
+    return result;
+}
+exports.validateDatacite = validateDatacite;

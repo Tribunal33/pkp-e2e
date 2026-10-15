@@ -41,11 +41,22 @@
 //   WALK=galleyonly (OJS, DataCite): 3. tick galleys and untick "Articles";
 //        5. "Assign DOIs" (the PDF alone gets a DOI); "Deposit All": the PDF's
 //        deposit is queued since pkp/pkp-lib#13253 (none on 3.5).
+//   WALK=galleyfirst (OJS, DataCite): 3. tick galleys and untick "Articles";
+//        5. "Assign DOIs" (the PDF alone gets a DOI); 6. "Setup": tick "Articles",
+//        "Save" (the article gets no DOI); 7. "Deposit All": the report's second
+//        route into the state.
 //   WALK=galleyleft (OJS, DataCite): as WALK=galley, then 6b. "Setup": untick the
 //        galleys again (the PDF keeps its DOI, the work reads "Needs DOI");
 //        "Deposit DOIs", and at the end "Export DOIs" on the work. Nothing of
 //        the work has a DOI of a ticked kind: with fix-datacite-ojs.diff the
 //        deposit sends nothing and the export answers 400.
+//   WALK=galleyexport (OJS, DataCite): as WALK=galley, but 7. "Export DOIs" on the
+//        work instead of a deposit; 8. the file the export built, read from
+//        files_dir/temp where the endpoint leaves it (read only), each record put
+//        through DataCite's schema check offline (lib.js validateDatacite(): the
+//        test installs cannot fetch the schema, so the app's own check stops at the
+//        fetch). NEIGHBOUR=1 WALK=galleyexport: step 6 skipped (the control, with
+//        fix-datacite-ojs.diff in and out).
 //   WAYROUND=1 (WALK=galleyall, galley): after the Steps, "Assign DOIs" on the
 //        work, then "Deposit DOIs" on it: the report's way round.
 // The test installs cannot reach an agency, so a deposit that gets that far
@@ -58,7 +69,7 @@
 // On 3.5: PKP_E2E_LINE=stable-3_5_0 in front of both, feature issues-ir1-3_5,
 // and PROBE_RUN=r35 in front of the run.
 const {forEachApp, launch, signIn, screen, shot, record, idle, sql} = require('../../../probe');
-const {depositAll, leftExportFiles} = require('./lib');
+const {depositAll, leftExportFiles, exportFileNames, newExportRecords, validateDatacite} = require('./lib');
 
 const T = 30_000;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -69,7 +80,7 @@ const WAYROUND = !!process.env.WAYROUND;
 
 const ITEM = {ojs: 17, ops: 2};
 const GALLEY = WALK.startsWith('galley');
-const ALL = WALK === 'galleyall' || WALK === 'galleylater' || WALK === 'galleyonly';
+const ALL = ['galleyall', 'galleylater', 'galleyonly', 'galleyfirst'].includes(WALK);
 const AGENCY = GALLEY
     ? {plugin: 'dataciteplugin', label: 'DataCite', apps: ['ojs'], fields: {username: 'u45rf1'}}
     : {plugin: 'crossrefplugin', label: 'Crossref', apps: ['ojs', 'ops'],
@@ -115,8 +126,8 @@ forEachApp(async (app) => {
         // 3
         await settings.goto('Setup');
         await settings.prefixBox().fill('10.1234');
-        if (['galley', 'galleyall', 'galleyonly', 'galleyleft'].includes(WALK)) await settings.kindBox('Article galleys, such as a published PDF').check();
-        if (WALK === 'galleyonly') await settings.kindBox('Articles').uncheck();
+        if (['galley', 'galleyall', 'galleyonly', 'galleyleft', 'galleyexport', 'galleyfirst'].includes(WALK)) await settings.kindBox('Article galleys, such as a published PDF').check();
+        if (WALK === 'galleyonly' || WALK === 'galleyfirst') await settings.kindBox('Articles').uncheck();
         const r3 = await settings.save(settings.setup);
         fact('3 setup save', {status: r3.status(), kinds: await settings.kinds()});
 
@@ -158,7 +169,7 @@ forEachApp(async (app) => {
                 table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
             await dois.collapse(row, id);
         }
-        if (['galley', 'galleyall', 'galleyleft'].includes(WALK) && !NEIGHBOUR) {
+        if (['galley', 'galleyall', 'galleyleft', 'galleyexport'].includes(WALK) && !NEIGHBOUR) {
             // 6: empty the article (preprint) DOI, the table's first row
             await dois.expand(row, id);
             const types = await dois.doiTypes(row);
@@ -174,6 +185,20 @@ forEachApp(async (app) => {
                 table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
             await dois.collapse(row, id);
         }
+        if (WALK === 'galleyfirst') {
+            // 6: "Articles" ticked after the galley got its DOI; the article gets none of its own
+            await settings.goto('Setup');
+            await settings.kindBox('Articles').check();
+            const r6 = await settings.save(settings.setup);
+            const kinds = await settings.kinds();
+            await dois.goto();
+            await row.waitFor({timeout: T});
+            await dois.expand(row, id);
+            record(`${pre}-6-articles-ticked`, await screen(page));
+            fact('6 articles ticked', {status: r6.status(), kinds, badge: flat(await dois.rowBadge(row).innerText()),
+                table: flat(await dois.expanded(row).locator('table').innerText()), dois: doiRows()});
+            await dois.collapse(row, id);
+        }
         if (WALK === 'galleyleft') {
             // 6b: galley DOIs turned off again; the PDF keeps the DOI it has
             await settings.goto('Setup');
@@ -185,65 +210,96 @@ forEachApp(async (app) => {
             fact('6b galleys unticked', {status: r6b.status(), kinds, badge: flat(await dois.rowBadge(row).innerText()), dois: doiRows()});
         }
 
+        const EXPORT = WALK === 'galleyexport';
+        if (EXPORT) {
+            // 7: "Export DOIs" on the work; 8: what it built, and DataCite's schema check on it
+            const before = exportFileNames(app);
+            const answer = page.waitForResponse((r) => /\/api\/v1\/dois\/submissions\/export/.test(r.url()), {timeout: T}).catch(() => null);
+            let threw = null;
+            let question = null;
+            await dois.tick([id], 'submission');
+            const dialog = await dois.chooseBulkAction('Export DOIs');
+            question = flat(await dialog.innerText().catch(() => null), 400);
+            await dois.confirmAction(dialog, 'Export DOIs', {list: 'submissions'}).catch((e) => {
+                threw = flat(String(e), 300);
+            });
+            const res = await answer;
+            await sleep(1000);
+            const errorWindow = await dois.errorDialog().isVisible().catch(() => false)
+                ? flat(await dois.errorDialog().innerText(), 900) : null;
+            const s7 = await screen(page);
+            record(`${pre}-7-export`, s7);
+            await shot(page, `${pre}-7-export`).catch(() => {});
+            fact('7 export', {question, status: res && res.status(), body: flat(res && (await res.text().catch(() => null)), 600), errorWindow,
+                notices: await notices(page), threw});
+            const recs = newExportRecords(app, before);
+            fact('8 built', recs.map((r) => ({file: r.file, member: r.member, identifier: r.identifier,
+                relatedDois: [...r.xml.matchAll(/<relatedIdentifier[^>]*relatedIdentifierType="DOI"[^>]*relationType="(\w+)"[^>]*>([^<]*)</g)].map((m) => `${m[1]} ${m[2]}`),
+                schema: validateDatacite(r.xml)})));
+            facts.records = recs.map((r) => ({member: r.member, xml: r.xml}));
+        }
+
         // deposit
-        const failedBefore = Number(sql(app, 'select count(*) from failed_jobs') || 0);
-        let status;
-        let body;
-        if (ALL) {
-            const all = await depositAll(page, dois);
-            status = all.status;
-            body = all.body;
-            fact('deposit all window', all.window);
-        } else {
-            const answer = page.waitForResponse((r) => /\/api\/v1\/dois\/submissions\/deposit/.test(r.url()), {timeout: T});
-            const deposited = await dois.runBulk('Deposit DOIs', [id]);
-            status = deposited.status();
-            body = await (await answer).text().catch(() => null);
-        }
-        await sleep(800);
-        const sDep = await screen(page);
-        record(`${pre}-deposit`, sDep);
-        await shot(page, `${pre}-deposit`).catch(() => {});
-        fact('deposit', {action: ALL ? 'Deposit All' : 'Deposit DOIs', status, body: flat(body, 300), badge: flat(await dois.rowBadge(row).innerText()),
-            notices: await notices(page), dialogs: (sDep.text && sDep.text.dialog) || null,
-            queued: sql(app, `select substring(payload from 'displayName":"([^"]+)') from jobs order by id`).split('\n').filter(Boolean),
-            dois: doiRows()});
+        if (!EXPORT) {
+            const failedBefore = Number(sql(app, 'select count(*) from failed_jobs') || 0);
+            let status;
+            let body;
+            if (ALL) {
+                const all = await depositAll(page, dois);
+                status = all.status;
+                body = all.body;
+                fact('deposit all window', all.window);
+            } else {
+                const answer = page.waitForResponse((r) => /\/api\/v1\/dois\/submissions\/deposit/.test(r.url()), {timeout: T});
+                const deposited = await dois.runBulk('Deposit DOIs', [id]);
+                status = deposited.status();
+                body = await (await answer).text().catch(() => null);
+            }
+            await sleep(800);
+            const sDep = await screen(page);
+            record(`${pre}-deposit`, sDep);
+            await shot(page, `${pre}-deposit`).catch(() => {});
+            fact('deposit', {action: ALL ? 'Deposit All' : 'Deposit DOIs', status, body: flat(body, 300), badge: flat(await dois.rowBadge(row).innerText()),
+                notices: await notices(page), dialogs: (sDep.text && sDep.text.dialog) || null,
+                queued: sql(app, `select substring(payload from 'displayName":"([^"]+)') from jobs order by id`).split('\n').filter(Boolean),
+                dois: doiRows()});
 
-        // reload until nothing is queued (each web request runs the queue, job_runner On)
-        let loads = 0;
-        const started = Date.now();
-        for (; loads < 30; loads++) {
-            await sleep(4000);
+            // reload until nothing is queued (each web request runs the queue, job_runner On)
+            let loads = 0;
+            const started = Date.now();
+            for (; loads < 30; loads++) {
+                await sleep(4000);
+                await dois.reload();
+                if (loads >= 4 && Number(sql(app, "select count(*) from jobs where payload like '%Deposit%'") || 0) === 0) break;
+            }
+            await sleep(2000);
             await dois.reload();
-            if (loads >= 4 && Number(sql(app, "select count(*) from jobs where payload like '%Deposit%'") || 0) === 0) break;
-        }
-        await sleep(2000);
-        await dois.reload();
-        await dois.expand(row, id);
-        const sAfter = await screen(page);
-        record(`${pre}-after-expanded`, sAfter);
-        await shot(page, `${pre}-after-expanded`).catch(() => {});
-        fact('after the background job', {
-            seconds: Math.round((Date.now() - started) / 1000), reloads: loads + 1,
-            badge: flat(await dois.rowBadge(row).innerText()),
-            table: flat(await dois.expanded(row).locator('table').innerText()),
-            panel: flat(await dois.agencyPanel(row).innerText().catch(() => null)),
-            failedJobs: sql(app, `select substring(payload from 'displayName":"([^"]+)') || ' | ' || split_part(exception, E'\\n', 1) from failed_jobs order by id offset ${failedBefore}`)
-                .split('\n').filter(Boolean).map((l) => flat(l, 400)),
-            // the object a deposit was posting when it died: its export file stays in files_dir/temp (read only)
-            exportFilesLeft: leftExportFiles(app),
-            jobsLeft: sql(app, 'select count(*) from jobs'),
-            dois: doiRows(),
-        });
+            await dois.expand(row, id);
+            const sAfter = await screen(page);
+            record(`${pre}-after-expanded`, sAfter);
+            await shot(page, `${pre}-after-expanded`).catch(() => {});
+            fact('after the background job', {
+                seconds: Math.round((Date.now() - started) / 1000), reloads: loads + 1,
+                badge: flat(await dois.rowBadge(row).innerText()),
+                table: flat(await dois.expanded(row).locator('table').innerText()),
+                panel: flat(await dois.agencyPanel(row).innerText().catch(() => null)),
+                failedJobs: sql(app, `select substring(payload from 'displayName":"([^"]+)') || ' | ' || split_part(exception, E'\\n', 1) from failed_jobs order by id offset ${failedBefore}`)
+                    .split('\n').filter(Boolean).map((l) => flat(l, 400)),
+                // the object a deposit was posting when it died: its export file stays in files_dir/temp (read only)
+                exportFilesLeft: leftExportFiles(app),
+                jobsLeft: sql(app, 'select count(*) from jobs'),
+                dois: doiRows(),
+            });
 
-        await signIn(page, 'admin');
-        await page.goto(app.url('/index.php/index/admin/failedJobs'));
-        await idle(page);
-        await sleep(1000);
-        const sF = await screen(page);
-        record(`${pre}-failed-jobs`, sF);
-        await shot(page, `${pre}-failed-jobs`).catch(() => {});
-        fact('failed jobs page', {title: sF.title, main: flat(sF.text && sF.text.main, 900)});
+            await signIn(page, 'admin');
+            await page.goto(app.url('/index.php/index/admin/failedJobs'));
+            await idle(page);
+            await sleep(1000);
+            const sF = await screen(page);
+            record(`${pre}-failed-jobs`, sF);
+            await shot(page, `${pre}-failed-jobs`).catch(() => {});
+            fact('failed jobs page', {title: sF.title, main: flat(sF.text && sF.text.main, 900)});
+        }
 
         if (WALK === 'galleyall') {
             // 10: "Deposit All" once more
