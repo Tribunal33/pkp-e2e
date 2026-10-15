@@ -4094,6 +4094,7 @@ with the review download (pkp-lib `d5d08a789a`, 2024-07-01);
 `stable-3_5_0` has the same `$xml->save()` call (read in the code, not
 walked). Kept script `shared/playwright/checks/U27/H15/h15.js`,
 `PHASES=dl`, `ORDER=xml-first|pdf-first`.
+Issue report: [pkp-e2e#998](https://github.com/jardakotesovec/pkp-e2e/issues/998) ([docs/issues/U27-A49-review-form-xml-download-error-page.md](../issues/U27-A49-review-form-xml-download-error-page.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Mechanism in notes b, i, o: recommendation roster passed only
