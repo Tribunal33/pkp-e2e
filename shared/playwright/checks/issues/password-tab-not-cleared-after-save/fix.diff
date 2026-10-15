@@ -1,0 +1,16 @@
+--- a/lib/pkp/controllers/tab/user/ProfileTabHandler.php
++++ b/lib/pkp/controllers/tab/user/ProfileTabHandler.php
+@@ -334,7 +334,12 @@
+             $notificationMgr = new NotificationManager();
+             $notificationMgr->createTrivialNotification($user->getId());
+ 
+-            return new JSONMessage(true);
++            // Draw the tab afresh, as when it is opened (the Contact and API Key
++            // saves also return the form), so that the typed passwords, an
++            // earlier refusal's notice and its error under "New password" go.
++            $passwordForm = new ChangePasswordForm($user, $request->getSite());
++            $passwordForm->initData();
++            return new JSONMessage(true, $passwordForm->fetch($request));
+         }
+ 
+         return new JSONMessage(true, $passwordForm->fetch($request));

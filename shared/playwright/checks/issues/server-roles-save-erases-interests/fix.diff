@@ -1,0 +1,42 @@
+--- a/lib/pkp/classes/user/form/RolesForm.php
++++ b/lib/pkp/classes/user/form/RolesForm.php
+@@ -54,8 +54,7 @@
+ 
+         $templateMgr->assign('userGroupIds', $userGroupIds);
+ 
+-        // OPS does not have a reviewing system, so disable the interests section
+-        $templateMgr->assign('disableInterestsSection', Application::get()->getName() === 'ops');
++        $templateMgr->assign('disableInterestsSection', !$this->hasInterestsSection());
+ 
+         $userFormHelper = new UserFormHelper();
+         $userFormHelper->assignRoleContent($templateMgr, $request);
+@@ -64,6 +63,15 @@
+     }
+ 
+     /**
++     * Whether the tab offers the reviewing interests field.
++     * OPS does not have a reviewing system, so it does not.
++     */
++    protected function hasInterestsSection(): bool
++    {
++        return Application::get()->getName() !== 'ops';
++    }
++
++    /**
+      * @copydoc BaseProfileForm::initData()
+      */
+     public function initData()
+@@ -102,8 +110,11 @@
+         $userFormHelper = new UserFormHelper();
+         $userFormHelper->saveRoleContent($this, $user);
+ 
+-        // Insert the user interests
+-        Repo::userInterest()->setInterestsForUser($user, $this->getData('interests'));
++        // Insert the user interests, only where the tab offers them: a tab without the
++        // field posts none, which would remove the interests already stored
++        if ($this->hasInterestsSection()) {
++            Repo::userInterest()->setInterestsForUser($user, $this->getData('interests'));
++        }
+ 
+         parent::execute(...$functionArgs);
+     }

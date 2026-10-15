@@ -1,0 +1,40 @@
+--- a/lib/pkp/classes/user/interest/Repository.php
++++ b/lib/pkp/classes/user/interest/Repository.php
+@@ -61,9 +61,13 @@
+      */
+     public function setInterestsForUser(User $user, string|array|null $interests = null): void
+     {
+-        $interests = is_array($interests)
+-            ? $interests
+-            : (empty($interests) ? [] : explode(',', $interests));
++        // Trim before the lookup, so an interest typed after ", " finds the stored one
++        $interests = collect(is_array($interests) ? $interests : explode(',', (string) $interests))
++            ->map(fn ($interest): string => trim((string) $interest))
++            ->filter(fn (string $interest): bool => $interest !== '')
++            ->unique()
++            ->values()
++            ->all();
+ 
+         $controlledVocab = Repo::controlledVocab()->build(
+             UserInterest::CONTROLLED_VOCAB_INTEREST,
+@@ -83,7 +87,10 @@
+             )
+             ->withLocales([''])
+             ->withSettings('name', $interests)
+-            ->get();
++            ->get()
++            // One entry per name (the oldest) where the vocabulary already holds copies
++            ->sortBy(fn (ControlledVocabEntry $entry) => $entry->getKey())
++            ->unique(fn (ControlledVocabEntry $entry) => collect($entry->name)->first());
+ 
+         // Delete user's existing interests association.
+         UserInterest::query()->withUserId($user->getId())->delete();
+@@ -94,8 +101,6 @@
+                 $currentInterests->pluck('name')->flatten()->toArray()
+             )
+         )
+-            ->map(fn (string $interest): string => trim($interest))
+-            ->unique()
+             ->map(
+                 fn (string $interest) => ControlledVocabEntry::create([
+                     'controlledVocabId' => $controlledVocab->id,

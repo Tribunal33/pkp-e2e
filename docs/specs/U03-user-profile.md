@@ -1034,6 +1034,21 @@ Left out of the scenarios above, by reason:
     ([A17](#a17); Rule 2d): the guard the issue report
     (`docs/issues/U03-A17-contact-refused-save-lost-on-next-tab.md`)
     proposes, once fixed
+  - a valid password change right after a refused one, and the Password
+    tab's three boxes empty with the hint under "New password" back
+    ([A11](#a11); Rule 10b): the guard the issue report
+    (`docs/issues/U03-A11-password-tab-not-cleared-after-save.md`)
+    proposes, once fixed
+  - an interest already on the site typed again after a comma and a space on
+    the Register page, then the Roles tab saved, and "View more details"
+    listing each interest once ([A20](#a20)): the guard the issue report
+    (`docs/issues/U03-A20-interest-listed-twice-after-roles-save.md`)
+    proposes, once fixed
+  - {OPS} a Roles tab "Save" on a preprint server with nothing changed, and
+    the account's reviewing interests still listed under "View more
+    details" ([OPS3](#ops3)): the guard the issue report
+    (`docs/issues/U03-OPS3-server-roles-save-erases-interests.md`)
+    proposes, once fixed
   - a 40-character password chosen while accepting a role invitation
     then signing in on the Login page, and the Password tab's boxes
     taking all 40 characters ([A7](#a7)): the guard the issue report
@@ -1142,17 +1157,17 @@ unless its Basis line says otherwise.
 | [A4](#a4) | Saving Roles in a journal closed to registrations ends the user's roles in another journal, and journals that offer no role are still listed | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [A7](#a7) | The Password tab's three boxes stop accepting input at 32 characters (the *Login & sessions* cap) | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A10](#a10) | An email change asked for on the site-wide Profile page sends a message signed "Kind regards, Array" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
-| [A11](#a11) | After a successful password change the Password tab keeps the typed passwords, and after a refused attempt the hint under "New password" does not come back | 🐞 | minor | issues (claude), 2026-10-03 — rescoped |
+| [A11](#a11) | After a successful password change, the profile's Password tab still holds the typed passwords | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A12](#a12) | "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On the site-wide Profile page, every tab's "privacy statement" link opens "404 Not Found" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | After a refused "Save" on the Profile page's Contact tab, another tab drops the typed values unasked | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A18](#a18) | "confirm" and "reject" land an account with roles in more than one journal on the site-level profile, outside the journal where it asked for the email change | 🐞 | minor | @jarda.kotesovec 2026-09-25 · risk accepted |
 | [A19](#a19) | Text typed only into "Signature", "Mailing Address" or "Bio Statement" is lost with no question when another tab is pressed or the page is reloaded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A20](#a20) | An interest the site holds twice is listed twice for the account once its Roles tab is saved, though the tab shows it once | 🐞 | minor | — |
+| [A20](#a20) | After a newcomer registers with an existing reviewing interest, accounts that save their Roles tab list it twice | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A24](#a24) | On the site-level profile, the page's script sometimes fails just after an email change is saved on the Contact tab | 🐞 | minor · crash: script | — |
 | [A25](#a25) | After a password change, a tab pressed in the account's other browser fails in the page's script, keeps its old content and never shows the Login page | 🐞 | minor · crash: script | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [OPS3](#ops3) | On a preprint server, "Save" on the Roles tab, which has no interests box, empties the account's stored reviewing interests | 🐞 | minor | — |
+| [OPS3](#ops3) | On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere, and gives the earliest waiting date on the site | ❓ | minor | claim check (claude), 2026-10-14 — widened |
 | [A6](#a6) | A user can drop a Reader, Author or Reviewer role a manager gave them by unticking it; an Author is then locked out of My Submissions without warning | ❓ | user-visible | — |
 | [A8](#a8) | The email-change confirmation goes to the old address; the new address is never checked to exist | ❓ | user-visible | — |
@@ -1309,18 +1324,17 @@ no role in any journal are left on it.
 Basis: probe, 2026-10-03. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — The Password tab is not cleared after a successful change** · 🐞 · minor.
-A successful save on the Password tab shows "Your changes have been
-saved." at the top right; an earlier attempt's "Errors occurred
-processing this form" notice is not removed by the save and stays
-until it fades by itself, about six seconds after it appeared
-(Rule 10a). The three boxes still hold the
-passwords just typed, and when an attempt was refused first, the line
-under "New password" stays empty: the hint "The password must be at
-least {N} characters." does not come back. The password did change,
-but the tab looks as if nothing had been done; the Contact and API Key
-tabs are drawn afresh after a save, this one is not.
-Basis: probe, 2026-10-03; test run, 2026-10-06 (the earlier notice). <sup>[f-a11](#fn-a11)</sup>
+**A11 — After a successful password change, the profile's Password tab still holds the typed passwords** · 🐞 · low.
+A user who changes their password on the "Password" tab of their
+profile sees "Your changes have been saved." at the top right, but the
+tab is not cleared: the three boxes still hold the passwords just typed.
+
+Two more things show when the change follows a refused attempt. The
+refusal's "Errors occurred processing this form" notice stays above the
+boxes until it fades on its own, about six seconds after the refusal.
+And the line under "New password" stays empty: the hint "The password
+must be at least 6 characters." does not come back.
+Basis: probe, 2026-10-15. <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a12"></a>
 **A12 — "Cancel" on the profile's Password tab does nothing, and turns off the unsaved-change question** · 🐞 · low.
@@ -1439,19 +1453,25 @@ static page, custom block, reviewer email and issue windows is reported with it
 Basis: probe, 2026-10-02. <sup>[f-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
-**A20 — An interest stored twice is listed twice once the Roles tab is saved** · 🐞 · minor.
-The site can hold two copies of one reviewing interest: two visitors who
-type the same interests into the site-wide Register page's box the way a
-person does ("glacier, ethics", a space after the comma) leave a second
-"ethics" on the site
-([Registration & account validation](U02-registration-and-account-validation.md)
-owns that page). On a journal or press, a later "Save" on either
-account's Roles tab, with nothing changed, gives that account both
-copies. The tab itself still shows "glacier" and "ethics" once each, but
-the account's "View more details" under Users & Roles › "Edit" reads
-"glacier, ethics, ethics", and an interest is listed once more for every
-further copy. Expected: each interest listed once.
-Basis: probe, 2026-10-07. <sup>[f-a20](#fn-a20)</sup>
+**A20 — After a newcomer registers with an existing reviewing interest, accounts that save their Roles tab list it twice** · 🐞 · low.
+On a Register page, the reviewing interests box takes a typed list. When
+an interest after the first is typed with a space after the comma
+("glacier, ethics") and the site already holds that interest, the site
+stores it a second time. Typed without the space ("glacier,ethics"), or
+first in the list, it is not stored again.
+
+After that, any account that holds "ethics" and presses "Save" on its
+Profile's "Roles" tab, even with nothing changed, is given both stored
+copies. Its tab still shows "ethics" once, but a manager's "View more
+details" under Users & Roles › "Edit" reads "ethics, ethics". An account
+is not affected until it saves its own Roles tab. Every further copy adds
+one more repeat at the next save, and nothing on screen removes a copy.
+
+It needs reviewer self-registration with interests typed, which a journal
+and a press offer by default. On 3.5 a preprint server shows it too. On
+`main` a server's Roles tab has no interests box, and its "Save" erases
+the interests instead ([OPS3](#ops3)).
+Basis: probe, 2026-10-15. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
 **A21 — "confirm" opened in another account's browser switches the address without a word** · ❓ · minor.
@@ -1550,19 +1570,22 @@ since 3.4 never joined it.
 Basis: probe, issue report walk, 2026-10-02. <sup>[f-ops2](#fn-ops2)</sup>
 
 <a id="ops3"></a>
-**OPS3 — Saving the Roles tab on a preprint server erases the account's reviewing interests** · 🐞 · minor.
-A preprint server's Roles tab has no "Reviewing interests" box
-([OPS1](#ops1)), yet its "Save", even with nothing changed, empties the
-interests stored for the account. Interests typed on the site-wide
-Register page, which still asks for them on a preprint server
-([Registration & account validation OPS1](U02-registration-and-account-validation.md#ops1)),
-or kept from an install upgraded from 3.5, are gone after the first
-save: the account's "View more details" under Users & Roles › "Edit"
-lists them under "Reviewing interests" before the save and reads
-"Reviewing interests --" after it. Expected: a tab without the box
-leaves the interests as they are. 3.5 shows the box on a preprint server
-and keeps them, so this came with the box's removal, not by choice.
-Since: 2025-11-27 · Basis: probe, 2026-10-07. <sup>[f-ops3](#fn-ops3)</sup>
+**OPS3 — On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests** · 🐞 · low.
+On a preprint server, the Profile's "Roles" tab has no "Reviewing
+interests" box. Even so, every "Save" on that tab, even one with nothing
+changed, deletes the reviewing interests stored for the account. The tab
+says "Your changes have been saved.", and nothing tells the user or a
+manager that the interests are gone.
+
+A server account gets interests in one of two ways:
+
+- the site-wide Register page, which still asks for them on a preprint
+  server ([Registration & account validation OPS1](U02-registration-and-account-validation.md#ops1));
+- an upgrade from 3.5, where the server's Roles tab still had the box.
+
+A server has no reviewers, so nothing on it uses the interests. What is
+lost is only what the person typed.
+Since: 2025-11-27 · Basis: probe, 2026-10-15. <sup>[f-ops3](#fn-ops3)</sup>
 
 ### Retired
 
@@ -2702,8 +2725,12 @@ until the fade at about 6.2 s; the OJS and OMP suites saw the notice
 removed after the saved toast. The 2026-10-03 "gone by 3 s" reading fits
 the same timer when the refusal came about 3 s before the save, and the
 2026-09-03 and 2026-09-04 probes, which recorded the notice still above
-the form, read it inside its six seconds. An untried fix sits beside the script (`fix.diff`: `initData()` and return
-the fetched form on success, as Contact does).
+the form, read it inside its six seconds. Re-walked 2026-10-15 on `main` and `stable-3_5_0`, all three apps, from the
+default dataset (kept script
+`shared/playwright/checks/issues/password-tab-not-cleared-after-save/walk.js`);
+the fix the issue report proposes (return a freshly drawn form on a
+successful save) was tried there: boxes empty, hint back, notice gone.
+Issue report: [docs/issues/U03-A11-password-tab-not-cleared-after-save.md](../issues/U03-A11-password-tab-not-cleared-after-save.md).
 
 <a id="fn-a12"></a>
 **f-a12** — `changePassword.tpl` renders `{fbvFormButtons}` without
@@ -2911,6 +2938,7 @@ glacier…, ethics…, ethics…" (before the save: "glacier…, ethics…"). Tw
 earlier runs that reused fixed words across runs showed the growth: three
 copies, and "ethics" three times on OJS. OPS registers the copies the
 same way; its save erases instead (OPS3).
+Issue report: [docs/issues/U03-A20-interest-listed-twice-after-roles-save.md](../issues/U03-A20-interest-listed-twice-after-roles-save.md).
 
 <a id="fn-a21"></a>
 **f-a21** — `ChangeProfileEmailInviteRedirectController::acceptHandle()`
@@ -3029,6 +3057,7 @@ field; "Save" with nothing changed posted `readerGroup[…]=on&submitFormButton=
 visitor's links were gone (another visitor's kept), and the manager's
 view read "Reviewing interests --". Control: OJS and OMP posted
 `interests[]` with the same save and kept them.
+Issue report: [docs/issues/U03-OPS3-server-roles-save-erases-interests.md](../issues/U03-OPS3-server-roles-save-erases-interests.md).
 
 ## Reference — entry points & surfaces
 
