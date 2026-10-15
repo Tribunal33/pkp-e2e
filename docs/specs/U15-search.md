@@ -796,7 +796,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
-| [A1](#a1) | A Search date filter chosen without its Month or Day is ignored and comes back showing another date | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A1](#a1) | A Search date filter chosen without its Month or Day is ignored and comes back showing another date | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A3](#a3) | Search never finds the corrected title, abstract or added contributor of an already published article | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Two search settings in the configuration file still promise an effect but change nothing | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | A reader's search never finds a word that appears only in an article's or book's full text | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -841,12 +841,11 @@ searches by the date shown, or with no date at all when the Year is
 blank.
 
 Choosing all three parts works, but the selects start blank and
-nothing asks for all three. The ignored filter is on `main` only, the
-coming 3.6. On 3.5 the first search is filtered correctly, and the
-wrong date in the selects is what a repeated search uses. A press's
-Search page has no date filters.
-Basis: probe, 2026-10-03. <sup>f-a1</sup>
-Report: refresh owed — the housekeeping claim check of 2026-10-15 (now [A18](#a18)) drove what the report's Evidence "Timezone" bullet read in the code: on a site east of UTC every full date limit falls a day early, from the same pkp-lib `b44cf27793` (pkp/pkp-lib#8920, 2025-08-01) as this fault, not older, and 3.5 has no shift; the report's proposed `getDateFilter()` builds the limit the same way and so keeps the shift. The bullet should point at A18 and the fix take the site's zone (2026-10-15)
+nothing asks for all three. On 3.5 the first search is filtered
+correctly, but the form comes back showing the wrong date, and pressing
+"Search" again searches by it. A press's Search page has no date
+filters.
+Basis: probe, 2026-10-15. <sup>f-a1</sup>
 
 <a id="a2"></a>
 **A2 — "Published Before" excludes the chosen day** · ❓ · minor.

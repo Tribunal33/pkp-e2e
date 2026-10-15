@@ -1,6 +1,10 @@
 // Helpers of walk.js (U15 A1: a partly chosen date filter on the Search page is ignored, and
 // its selects then show a date the reader never chose). Requiring this file runs nothing.
-const {idle} = require('../../../probe');
+const fs = require('fs');
+const path = require('path');
+const {idle, drainJobs, sql} = require('../../../probe');
+
+const REPO_ROOT = path.resolve(__dirname, '../../../../..');
 
 const T = 30_000;
 const flat = (s, n = 400) => (s == null ? s : String(s).replace(/\s+/g, ' ').trim().slice(0, n));
@@ -9,8 +13,8 @@ const flat = (s, n = 400) => (s == null ? s : String(s).replace(/\s+/g, ' ').tri
  * From the context's home page, "Search" in the header (the Search page's own address when
  * the theme shows no such link). Returns how the page was reached.
  */
-async function openSearch(app, page) {
-    await page.goto(app.url(`/index.php/${app.contextPath}`));
+async function openSearch(app, page, ctxPath = app.contextPath) {
+    await page.goto(app.url(`/index.php/${ctxPath}`));
     await idle(page).catch(() => {});
     const link = page.locator('header a[href*="/search"]').first();
     if (await link.isVisible().catch(() => false)) {
@@ -18,7 +22,7 @@ async function openSearch(app, page) {
         await idle(page).catch(() => {});
         return 'header link';
     }
-    await page.goto(app.url(`/index.php/${app.contextPath}/search`));
+    await page.goto(app.url(`/index.php/${ctxPath}/search`));
     await idle(page).catch(() => {});
     return 'address';
 }
@@ -72,4 +76,52 @@ async function readResults(page) {
     };
 }
 
-module.exports = {T, flat, openSearch, readSelects, searchWith, readResults};
+/** The fleet's own config file (written by the fleet reset), absolute. */
+function configPath(app) {
+    return path.isAbsolute(app.configFile) ? app.configFile : path.join(REPO_ROOT, app.configFile);
+}
+
+/** The site's time zone: `time_zone` under [general] in the fleet's config, as written there. */
+function readZone(app) {
+    const m = fs.readFileSync(configPath(app), 'utf8').match(/^time_zone\s*=\s*(.*)$/m);
+    return m ? m[1].trim() : null;
+}
+
+/** Sets the site's time zone in the fleet's config; the next request reads it (no restart). */
+function writeZone(app, value) {
+    const file = configPath(app);
+    const text = fs.readFileSync(file, 'utf8');
+    if (!/^time_zone\s*=.*$/m.test(text)) throw new Error(`no time_zone line in ${file}`);
+    fs.writeFileSync(file, text.replace(/^time_zone\s*=.*$/m, `time_zone = ${value}`));
+}
+
+/**
+ * A scratch journal or server (through the kit's API, not a step) holding one published item
+ * per date in `dates` ({key: 'YYYY-MM-DD'}), titled "<prefix> <key> published <date>".
+ * Returns {path, items: {key: {id, date}}, db: the stored date_published rows}.
+ */
+async function seedDatedItems(app, t, dates, prefix) {
+    const isOPS = app.name === 'ops';
+    const year = Number(Object.values(dates).sort()[0].slice(0, 4));
+    const ctx = await app.api.createContext({
+        tag: t,
+        context: {name: `${prefix} ${t}`, acronym: prefix.slice(0, 8)},
+        users: [{username: `${t}m`, roles: ['manager']}, {username: `${t}a`, roles: ['author']}],
+        ...(isOPS ? {} : {issues: [{volume: 1, number: 1, year, published: true, datePublished: `${year}-01-01`}]}),
+    });
+    const items = {};
+    for (const [k, d] of Object.entries(dates)) {
+        const r = await app.api.createSubmission({
+            tag: `${t}${k}`, context: ctx.path, submitter: `${t}a`, title: `${prefix} ${k} published ${d}`,
+            published: true, datePublished: d,
+            ...(isOPS ? {} : {issue: {volume: 1, number: 1, year}}),
+        });
+        items[k] = {id: r.submissionId, date: d};
+    }
+    await drainJobs(app).catch(() => {});
+    const ctxId = sql(app, `select ${app.contextTables.id} from ${app.contextTables.table} where path='${ctx.path}'`);
+    const db = sql(app, `select p.submission_id || ' ' || p.status || ' ' || p.date_published from publications p join submissions s on s.submission_id=p.submission_id where s.context_id=${ctxId} order by 1`).split('\n');
+    return {path: ctx.path, items, db};
+}
+
+module.exports = {T, flat, openSearch, readSelects, searchWith, readResults, configPath, readZone, writeZone, seedDatedItems};

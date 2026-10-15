@@ -13,19 +13,34 @@
 // NB=1 is the neighbour check for a fix trial, alone (OJS, OPS and OMP): Month "Jan" and Day "1"
 // without a Year stay ignored with blank selects; a full Published Before date keeps its
 // rule; OMP's own Search page still finds a word.
+// ZONE=<zone> walks the steps with the site's time zone (`time_zone` in the fleet's config) set to
+// that zone, put back at the end (the fix trial walks them under Europe/Prague too).
+// NB=zone is the time-zone neighbour, alone (OJS, OPS): a scratch journal / server built through
+// the kit's API (not a step) with five items published 2024-12-31, 2025-01-01, 2025-01-30,
+// 2025-01-31 and 2025-02-01, then a visitor's partial filters (Published After 2025; After 2025 +
+// Feb; Before 2025 + Jan) and one full date (Before 2025 Jan 31), under each zone in ZONES
+// (default UTC,Europe/Prague). It shows which day a filled-in limit lands on (U15 A18).
 // Reset first: npm run fleet-prep -- --feature <feature> --dataset <n> --reset
 // Run: PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/partial-date-filter-ignored/walk.js
 //      (PKP_E2E_LINE=stable-3_5_0 PROBE_RUN=r35 in front for 3.5; PROBE_RUN=fix|nb-in|nb-out for the fix trial)
-const {forEachApp, launch, screen, record, idle} = require('../../../probe');
+const {forEachApp, launch, screen, record, idle, tag} = require('../../../probe');
 const L = require('./lib');
 
 const YEAR = process.env.YEAR || '2026';
 const QUERY = process.env.QUERY || '';
+const ZONES = (process.env.ZONES || 'UTC,Europe/Prague').split(',').filter(Boolean);
+const DATED = {i1: '2024-12-31', i2: '2025-01-01', i3: '2025-01-30', i4: '2025-01-31', i5: '2025-02-01'};
+const ZONE_CASES = [
+    ['Z1 Published After 2025', {dateFromYear: '2025'}],
+    ['Z2 Published After 2025 Feb', {dateFromYear: '2025', dateFromMonth: 'Feb'}],
+    ['Z3 Published Before 2025 Jan', {dateToYear: '2025', dateToMonth: 'Jan'}],
+    ['Z4 Published Before 2025 Jan 31 (full date)', {dateToYear: '2025', dateToMonth: 'Jan', dateToDay: '31'}],
+];
 
 forEachApp(async (app) => {
     if (!app.dataset) throw new Error('walk.js runs on a dataset fleet (fleet-prep --dataset n --reset)');
-    const nb = !!process.env.NB;
-    if (app.name === 'omp' && !nb) {
+    const nb = process.env.NB || '';
+    if (app.name === 'omp' && (nb === '' || nb === 'zone')) {
         console.log('[fact] omp: no date filters on the press Search page (U15 OMP2); steps skipped');
         return;
     }
@@ -35,13 +50,34 @@ forEachApp(async (app) => {
         console.log(`[fact] ${app.name} ${k}: ${JSON.stringify(v).slice(0, 2500)}`);
     };
     const step = async (k, fn) => { try { fact(k, await fn()); } catch (e) { fact(k, {error: L.flat(e.message, 400)}); } };
+    const zoneAtStart = app.name === 'omp' ? null : L.readZone(app);
+    if (process.env.ZONE && nb !== 'zone') {
+        L.writeZone(app, process.env.ZONE);
+        fact('site time zone', {atStart: zoneAtStart, walked: process.env.ZONE});
+    }
     const {page, close} = await launch(app);
     const errs = [];
     page.on('pageerror', (e) => errs.push(L.flat(e.message, 200)));
     const fails = [];
     page.on('response', (r) => { if (r.status() >= 500) fails.push(`${r.status()} ${r.url()}`); });
     try {
-        if (nb && app.name === 'omp') {
+        if (nb === 'zone') {
+            const t = tag('hkk3');
+            const ctx = await L.seedDatedItems(app, t, DATED, 'hkk3');
+            fact('zone scratch (kit-built)', ctx);
+            for (const zone of ZONES) {
+                L.writeZone(app, zone);
+                const z = zone.replace(/\W+/g, '');
+                for (const [name, choose] of ZONE_CASES) {
+                    await L.openSearch(app, page, ctx.path);
+                    await step(`${zone} ${name}`, async () => {
+                        const r = await L.searchWith(page, choose);
+                        return {listed: r.titles.map((x) => x.replace(/^hkk3 (i\d) published /, '$1 ')), notice: r.notice, url: r.url, dateFrom: r.dateFrom, dateTo: r.dateTo};
+                    });
+                    record(`nbz-${z}-${name.split(' ')[0]}`, await screen(page));
+                }
+            }
+        } else if (nb && app.name === 'omp') {
             await step('nb omp reached by', () => L.openSearch(app, page));
             await step('nb omp search "Bricks"', () => L.searchWith(page, {}, 'Bricks'));
             record('nb-omp-search', await screen(page));
@@ -74,6 +110,7 @@ forEachApp(async (app) => {
             record('4-before-full-date', await screen(page));
         }
     } finally {
+        if (zoneAtStart !== null && L.readZone(app) !== zoneAtStart) L.writeZone(app, zoneAtStart);
         fact('page errors', errs);
         fact('5xx', fails);
         record('facts', facts);
