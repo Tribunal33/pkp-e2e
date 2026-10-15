@@ -988,7 +988,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
 | [A12](#a12) | On "Reviewer Recommendations", a screen reader announces the "Activate" tick boxes and the status dropdown without a name | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A13](#a13) | A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations | 🐞 | medium | issues (claude), 2026-10-07 — re-verified |
-| [OJS1](#ojs1) | A review made public gives anyone who asks, without signing in, the review form answers meant for the editor only | 🐞 | user-visible | — |
+| [OJS1](#ojs1) | A review made public gives anyone, without signing in, the review form answers meant for the editor only | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
 | [A3](#a3) | A deadline saved as 0 or left empty makes Add Reviewer preset three weeks for the response but four for the review | ❓ | minor | — |
 | [A4](#a4) | A reload on a "Review" side tab lands on "Submission" › "Disable Submissions", although the address names the side tab and a pressed "Submission" side tab survives a reload | ❓ | minor | — |
@@ -1195,22 +1195,28 @@ picked. Basis: probe, 2026-10-07. <sup>f-a14</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — A review made public gives anyone who asks, without signing in, the review form answers meant for the editor only** · 🐞 · user-visible.
+**OJS1 — A review made public gives anyone, without signing in, the review form answers meant for the editor only** · 🐞 · medium.
 A journal's review form can hold items with "Included in message to
 author" unticked: questions whose answers only the editor is meant to
-read (Rule 15). An editor makes a review public ("Publicly Show
-Reviewer Comments" ticked on the review, then "Mark as Complete"), and
-the article is published. The journal's public review data for that
-article, which anyone may request without signing in, then lists every
-item of the reviewer's form with its answer, the unticked ones
-included. No screen of the journal shows that data (the article page
-shows no reviews,
-[→ Article landing page & reading's OJS12](U13-article-landing-page-and-reading.md#ojs12)),
-so nobody on the journal sees what it gives away. Expected: the data
-leaves the unticked items out, as the decision email and the Author's
-own reading of the review do; the editor's "Read Review" window shows
-them, as it should. A press has no such data. Security: unreleased.
-Since: 2025-10-15 (a year) · Basis: probe, 2026-10-13. <sup>f-ojs1</sup>
+read, which the decision email and the author's own reading of the
+review leave out. But once the editor makes a review on such a form
+public ("Publicly Show Reviewer Comments") and the article is
+published, the journal's open peer review API, which anyone may call
+without signing in, returns every item of the reviewer's form with its
+answer, the editor-only ones included. A review written without a form
+keeps its "For editor" comments out, as it should.
+
+No page of the journal requests that data, and nothing tells the editor
+or the reviewer what it gives away. An editor who knows can avoid it
+only by keeping such reviews private.
+
+It needs a review form with an editor-only item and a public review:
+ticked on that review, or set as the journal's default under Settings ›
+Workflow › Review › "Setup", which applies to reviewers assigned after
+it is set.
+No screen of the journal shows that data (the article page shows no reviews, [→ Article landing page & reading's OJS12](U13-article-landing-page-and-reading.md#ojs12)).
+Security: unreleased.
+Since: 2025-10-15 (a year) · Basis: probe, 2026-10-15. <sup>f-ojs1</sup>
 
 ### OMP
 

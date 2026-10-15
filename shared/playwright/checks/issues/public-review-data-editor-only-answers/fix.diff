@@ -1,0 +1,20 @@
+--- a/lib/pkp/api/v1/peerReviews/resources/SubmissionPeerReviewResource.php
++++ b/lib/pkp/api/v1/peerReviews/resources/SubmissionPeerReviewResource.php
+@@ -284,14 +284,15 @@
+             }
+         }
+ 
+-        // Fetch all review form elements for each form
++        // Fetch each form's elements marked "Included in message to author": the answers to the
++        // others are for the editor only and never part of the public record
+         $this->reviewFormElementsCache = $this->reviewFormElementsCache ?? collect();
+         foreach ($reviewFormIds as $formId) {
+             if ($this->reviewFormElementsCache->has($formId)) {
+                 continue;
+             }
+ 
+-            $elements = $reviewFormElementDao->getByReviewFormId($formId);
++            $elements = $reviewFormElementDao->getByReviewFormId($formId, null, true);
+             $elementsList = collect();
+ 
+             while ($element = $elements->next()) {
