@@ -1828,7 +1828,7 @@ dialog. Control: a username held by a dataset user (`rvaca`) or taken a
 minute earlier by a newcomer was refused at `refine` (422) on "Create
 OJS account" with the message under the field. First seen 2026-10-10 on
 OJS during the review of pkp/pkp-lib#13497.
-Issue report: [docs/issues/U06-A13-accept-taken-username-nothing-happens.md](../issues/U06-A13-accept-taken-username-nothing-happens.md).
+Issue report: [pkp-e2e#975](https://github.com/jardakotesovec/pkp-e2e/issues/975) ([docs/issues/U06-A13-accept-taken-username-nothing-happens.md](../issues/U06-A13-accept-taken-username-nothing-happens.md)).
 
 <a id="fn-a14"></a>
 **f-a14** — `PHP Warning: Undefined array key "invitation_id" in
@@ -1848,7 +1848,7 @@ warnings first seen beside them on 2026-10-02 did not appear
 Where the warnings are read: the test install's PHP server output,
 `apps/<app>/playwright/.server-logs/server-<port>.log` (harness.md
 "Server output"; a probe server's is `server-<port>-probe.log`).
-Issue report: [docs/issues/U06-A14-invitation-wizard-logs-php-warnings.md](../issues/U06-A14-invitation-wizard-logs-php-warnings.md).
+Issue report: [pkp-e2e#976](https://github.com/jardakotesovec/pkp-e2e/issues/976) ([docs/issues/U06-A14-invitation-wizard-logs-php-warnings.md](../issues/U06-A14-invitation-wizard-logs-php-warnings.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two
