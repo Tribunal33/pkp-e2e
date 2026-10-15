@@ -1164,7 +1164,7 @@ list answered the administrator 500 (A5), so no site highlight's `_href`
 could be compared. 3.5 read in the code only (lib/pkp f4f8fcdbc0 under
 ojs, 8094f06bf5 under omp and ops); 3.4 and 3.3 have no highlights
 (note a).
-Issue report: [docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md).
+Issue report: [pkp-e2e#974](https://github.com/jardakotesovec/pkp-e2e/issues/974) ([docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md)).
 
 ## Reference — entry points & surfaces
 

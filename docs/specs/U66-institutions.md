@@ -1402,7 +1402,7 @@ answer. The journal's address `{journal}/api/v1/institutions/{id}`
 answers the manager and the administrator 200 with the record (its own
 `_href` again names `index`), the author 401
 `user.authorization.roleBasedAccessDenied`, signed out 401.
-Issue report: [docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md).
+Issue report: [pkp-e2e#974](https://github.com/jardakotesovec/pkp-e2e/issues/974) ([docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** `PKPInstitutionController::get()` answers an

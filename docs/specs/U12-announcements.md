@@ -2240,7 +2240,7 @@ administrator 200 with the record (whose own `_href` again names
 found."; the author and a signed-out visitor 401 there too. Settings ›
 Announcements sent no request to the announcements API on landing. No
 server error in any run.
-Issue report: [docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md).
+Issue report: [pkp-e2e#974](https://github.com/jardakotesovec/pkp-e2e/issues/974) ([docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md)).
 
 <a id="fn-f-omp2"></a>
 **f-omp2 — OMP2 evidence.** OMP's `pages/index/IndexHandler.php` calls
