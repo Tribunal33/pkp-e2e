@@ -1,0 +1,25 @@
+--- a/lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php
++++ b/lib/pkp/controllers/grid/eventLog/SubmissionReviewEventLogGridHandler.php
+@@ -40,6 +40,22 @@
+     }
+ 
+     /**
++     * @copydoc SubmissionEventLogGridHandler::authorize()
++     */
++    public function authorize($request, &$args, $roleAssignments)
++    {
++        $success = parent::authorize($request, $args, $roleAssignments);
++
++        // Prevent authors from accessing review changes, even if they are also
++        // assigned as an editor or sub-editor (EventLogGridRow offers them no link).
++        if ($success && $this->_isCurrentUserAssignedAuthor) {
++            return false;
++        }
++
++        return $success;
++    }
++
++    /**
+      * Get the contents of the log.
+      */
+     public function viewReviewChange($args): JSONMessage

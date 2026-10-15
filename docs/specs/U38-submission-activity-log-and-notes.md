@@ -565,7 +565,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Activity Log file lines show an empty file name when read in a language other than the submission's | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | After closing drops a typed note, the next page change asks "Leave site?" with nothing typed | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | After a switch to "History" discarded a typed note, "Close" asks again whether to continue without saving | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A12](#a12) | An editor who is also the submission's author is offered no "View changes", but the link's address shows them the edited review's old and new text | 🐞 | user-visible | — |
+| [A12](#a12) | An author assigned as their submission's editor can read a review as it stood before an editor changed it | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OMP1](#omp1) | A press's activity log prints "{$formatName}" instead of the format's name when a publication format is created or deleted | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | A Site Administrator whose journal roles are all assistant roles gets "Notes" alone | ❓ | latent | — |
 | [A8](#a8) | An "Open" review's assignment line reads "Anonymous Reviewer" for an editor who is also the author | ❓ | minor | — |
@@ -699,23 +699,28 @@ was kept.
 Basis: probe, 2026-10-04. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a12"></a>
-**A12 — An editor who is also the submission's author is offered no "View changes", but the link's address shows them the edited review's old and new text** {OJS OMP} · 🐞 · user-visible.
+**A12 — An author assigned as their submission's editor can read a review as it stood before an editor changed it** {OJS OMP} · 🐞 · medium.
 A person who is one of a submission's authors and is also assigned to it
-as its Section Editor (Series Editor on a press) sees the line "The
-following was modified in this review: Comments. Select "View changes"
-to see a detailed summary of all modifications." on its "History", with
-no arrow and no "View changes" (Rule 9). The link's own address (note
-td14), typed in the browser's address bar, all the same shows them the
-change: the tab
-shows a line of raw text holding "Updated Comments" with the editor's
-new text and "Previous Comments" with the text the reviewer wrote. The
-address is expected to refuse this reader, as the list does. The
-reviewer is not named. An Author who holds no editor role on the
-submission is refused ("The current role does not have access to this
-operation."), and the submission's other editors read the change through
-the link as before.
+as its Section editor (Series editor on a press) can read what a
+reviewer wrote before an editor changed the review with "Modify Review".
+In the submission's "Activity Log" they see the line "The following was
+modified in this review: Comments. Select "View changes" to see a
+detailed summary of all modifications." with no arrow and no "View
+changes". But the address that the other editors' "View changes" link
+opens, typed into the browser's address bar, shows them the change as
+the server's raw reply: "Updated Comments" with the editor's text and
+"Previous Comments" with the reviewer's own.
+
+That address is expected to refuse them, just as the list withholds the
+link: an author is kept from their submission's review details even when
+also assigned as its editor. The reviewer is not named. The exposed
+comments are the reviewer's comments for the author and editor; the
+comments for the editor only are never logged. An author who holds the
+Journal editor role (Press editor) but is not assigned to the
+submission is refused, and so is an author with no editor role; the
+submission's other editors read the change through the link as before.
 Security: unreleased.
-Since: 2026-08-20 · Basis: probe, 2026-10-13. <sup>[f-a12](#fn-a12)</sup>
+Since: 2026-08-20 · Basis: probe, 2026-10-15. <sup>[f-a12](#fn-a12)</sup>
 
 ### OMP
 
