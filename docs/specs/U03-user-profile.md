@@ -1567,12 +1567,14 @@ has ended either.
 
 The other ways an account's password changes behave the same: changing
 one's own password under Users & Roles, "Reset Password" from the email,
-and the change asked for at sign-in. Signing out in another browser, a
-session that expires, and an administrator setting the user's password
-do not: the page's next request arrives signed out and gets the alert
-above (code).
+and the change asked for at sign-in. A session that ends another way
+(it expires, or a Site Administrator's "Expire User Sessions") does
+not: the page's next request arrives signed out and gets the alert
+above; an administrator setting the user's password is read the same
+way in the code. Signing out in another browser ends only that
+browser's session, so this page keeps working.
 Basis: probe, 2026-10-15. <sup>[f-a25](#fn-a25)</sup>
-Report: refresh owed — the list case is now seen: on Settings › Website › Plugins a first "Search" does nothing, and a later one gets the alert "The current role does not have access to this operation."; the raw-key alert of the later presses is now its own entry, A26; and the first tab press leaves the area as it last showed there (empty only for a tab not opened there before), not always empty (housekeeping claim check J15, 2026-10-15)
+Report: refresh owed — the list case is now seen: on Settings › Website › Plugins a first "Search" does nothing, and a later one gets the alert "The current role does not have access to this operation."; the raw-key alert of the later presses is now its own entry, A26; and the first tab press leaves the area as it last showed there (empty only for a tab not opened there before), not always empty (housekeeping claim check J15, 2026-10-15); and a sign-out in another browser does not end this page's session at all, so the last paragraph no longer lists it (the Login & sessions claim check J15, 2026-10-15)
 
 <a id="a26"></a>
 **A26 — A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##"** · 🐞 · user-visible.
@@ -1585,8 +1587,9 @@ first ([A25](#a25)); after an email change made in another browser,
 which for now also signs that browser out (Rule 6a), every press. After
 OK the pressed tab is marked open with what it last showed there (empty
 for a tab never opened there), and a "Save" stores nothing; only a
-reload reaches the Login page. A session that expired or was signed out
-in another browser gets the same alert (code).
+reload reaches the Login page. By the code, a session that expired gets
+the same alert on this page; signing out in another browser ends only
+that browser's session, so this page keeps working.
 Since: 2012-05-07 (14 years) · Basis: probe, 2026-10-15. <sup>[f-a26](#fn-a26)</sup>
 
 ### OMP

@@ -152,9 +152,11 @@ Login, the site's name stands in for the journal's), but after a refused
 5a. **Back after the session ended, signed out.** A user who signed in
    with "Keep me logged in" ticked and comes back after the idle limit,
    or reopens the browser on an installation that ends sessions at
-   browser close, is signed out on every page: "Edit Profile" and the
-   Dashboard both open the Login page ⚠ [A14](#a14). Signing in again
-   works. Before that fault, the same return left the user half signed
+   browser close, is signed out: every page they open or reload,
+   "Edit Profile" and the Dashboard included, shows the Login page
+   ⚠ [A14](#a14). A search on a back-office page still open from before is refused
+   instead of leading there (Rule 18). Signing in again works. Before
+   that fault, the same return left the user half signed
    in: the Dashboard still opened signed in, but the public pages
    offered "Register" and "Login", the Login page showed its form
    (Rule 1), and "Login As" failed (Rule 14) ⚠ [A8](#a8). <sup>c</sup>
@@ -299,7 +301,11 @@ Login, the site's name stands in for the journal's), but after a refused
     configured to end a session whose network address changes mid-visit (on
     by default). The Site Administrator can also expire every session at
     once with the "Expire User Sessions" tool (see *System administration*).
-    The user's next click then lands on the Login page. <sup>m</sup>
+    The user's next page load, a link followed or a page reloaded, then
+    lands on the Login page. A search on a page already open does not:
+    after the idle limit (Rule 5), "Expire User Sessions" or the
+    browser's cookies for the site cleared, it is refused with a message
+    that does not say the user is signed out ⚠ [A16](#a16). <sup>m</sup>
 
 ## Side effects
 
@@ -693,6 +699,7 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
   - A12 (the next correct sign-in after a disabled account's refusal landing back on the Login page; Rule 2)
+  - A16 (a search on a page left open after its session ended refused with an alert or an "Error" window instead of the Login page; Rules 5a, 18)
 - **No seed**:
   - a disabled account refused, with or without a reason (Rule 2)
   - the Site Administrator passing Confirm Access (Actors row "Pass the Confirm Access gate"): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
@@ -735,6 +742,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
 | [A15](#a15) | A sign-in that re-saves an account's password, while a manager is logged in as it, sends the manager to the Login page, signed out of both accounts | 🐞 | minor | — |
+| [A16](#a16) | A back-office page left open after its session ended answers a search with an alert or an "Error" window that does not say the user is signed out, instead of the Login page | 🐞 | user-visible | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
@@ -1026,6 +1034,27 @@ end the impersonation. Driven only with test accounts at their first
 sign-in.
 Basis: probe, 2026-10-14. <sup>[f-a15](#fn-a15)</sup>
 
+<a id="a16"></a>
+**A16 — A back-office page left open after its session ended answers a search with a refusal, not the Login page** · 🐞 · user-visible.
+Once a session has ended (after the idle limit, "Expire User Sessions"
+or the browser's cookies for the site cleared), the user expects the
+next thing they do to bring up the Login page, as opening or reloading
+any page does (Rules 5a, 18). On a page already open in a tab, a search
+is refused instead, in words that do not say the session has ended. On
+Settings › Website › "Plugins", every "Search", the first included,
+raises the browser alert "The current role does not have access to this
+operation.", the access-denied sentence of Rule 17; after "OK" the
+spinner beside "Search" keeps turning and the list stays unfiltered. On
+Settings › Users & Roles, a search typed in the box "Enter a user's
+name, role (e.g Journal editor), or affiliation" opens a window headed
+"Error" reading "You are not authorized to access the requested resource." with
+"OK". Nothing leads to the Login page until the user follows a link or
+reloads, so they may well conclude that their role has lost access.
+After a password change in another browser, a Profile page open here
+behaves as [User profile A25](U03-user-profile.md#a25) and
+[A26](U03-user-profile.md#a26) record.
+Basis: probe, 2026-10-15. <sup>[f-a16](#fn-a16)</sup>
+
 ### Retired
 
 <a id="a3"></a>
@@ -1166,6 +1195,10 @@ read, with the 2026-10-04 unticked control above). Before/after on
 the 3.5 twin `edc3d36c74`) the profile and `…/dashboard/mySubmissions`
 loaded signed in after the same drop; at the pointer with the twin, the
 Login page. Finding A14, note f-a14.
+Live-probed 2026-10-15 (Rule 5a's page still open; OJS, OMP, OPS on
+`main`, OJS on `stable-3_5_0`): after the same eight-day lapse with the
+remember cookie held, a page load landed on the Login page while a
+search on a page already open was refused (finding A16, note f-a16).
 
 <a id="fn-d"></a>
 **d** — `LoginHandler::signOut()` → `Validation::logout()`: invalidates the
@@ -1179,6 +1212,13 @@ same account signed in. Redirect: back to the `login` page. Menu wiring:
 `TopNavActions.vue` + `useUserAuth.getLogoutUrl()` — impersonating, the menu
 link becomes `login/signOutAsUser` labeled `user.logOutAs` (Rule 15); there
 is no second, plain-logout entry while impersonating.
+Driven again 2026-10-15 (OJS, OMP, OPS on `main`, OJS on
+`stable-3_5_0`, two runs each; kept script
+`shared/playwright/checks/U01/J15/j15.js`, mode `logout-p`): after
+"Logout" in one browser (the Login page, "Username or Email" prefilled
+with the account's email), the other browser's Settings › Website ›
+Plugins "Search", Settings › Users & Roles search and side-menu links all
+answered as before, signed in, with no alert or window.
 
 <a id="fn-e"></a>
 **e** — `LoginHandler::lostPassword()` / `requestResetPassword()`:
@@ -1445,6 +1485,10 @@ old md5/sha1 hashes are transparently re-hashed on successful login),
 management*), `password_timeout`. `[general] session_lifetime` = idle days.
 Sessions live server-side in the database; the expire-sessions tool is
 `AdminHandler::expireSessions()` (*System administration & jobs*).
+Live-probed 2026-10-15 (Rule 18; OJS, OMP, OPS on `main`, OJS on
+`stable-3_5_0`, two runs each): after "Expire User Sessions", the
+manager's side-menu link and a reload landed on the Login page; a search
+on a page already open was refused instead (finding A16, note f-a16).
 
 <a id="fn-n"></a>
 **n** — Administration → Site Settings security form
@@ -1861,6 +1905,38 @@ So any account whose stored hash has another cost (PHP's default 10
 before 8.4, an import, the test seed's 4) meets it once, at its next
 sign-in; not driven outside the test seed. The same check is what ends
 the account's other sessions on a reset or a forced change (Rules 9, 11).
+
+<a id="fn-a16"></a>
+**f-a16** — Live-probed 2026-10-15 (Rules 5a, 6, 18; OJS, OMP, OPS on
+`main` and OJS on `stable-3_5_0`, two runs each; PKP's default test
+dataset, the manager `rvaca` holding Settings › Website › Plugins and
+Settings › Users & Roles open in one browser; kept script
+`shared/playwright/checks/U01/J15/j15.js`). The session was ended three
+ways: the browser's own cookies deleted; every session's last activity
+moved back eight days, past the 7-day `session_lifetime`, the
+`remember_web_…` cookie still held; and Administration › "Expire User
+Sessions" pressed by `admin` in a third browser, answering OK to "Are you
+sure you want to expire all user sessions? All users who are currently
+logged into the system will be forced to log in again (yourself
+included)." (the administrator landed on the site-level Login page). In
+each case every Plugins "Search", the first included, answered
+`200 {"status":false,"content":"The current role does not have access to this operation."}`
+(`settings-plugin-grid/fetch-grid`), shown as a browser alert, the
+spinner left turning and the list at its unfiltered row count; every
+Users & Roles search (`GET api/v1/users`, the Vue list on `main` and on
+3.5) answered `401 {"error":"You are not authorized to access the requested resource."}`,
+shown in the "Error" window, the console logging the 401 as a failed
+resource (no page error, no server error). The side menu's "Users &
+Roles" link and a reload landed on `login?source=…management%2Fsettings%2Faccess`,
+"Username or Email" empty. Controls: with the session left alone, and
+after a "Logout" in a second browser signed in as the same account, every
+press answered `200` with its results and no window. The probe's search
+phrases matched no user, so the list's "Current Users (0)" behind the
+"Error" window is the control's count too, not something the refusal
+empties. Code: an older-style list's request refused by its access check
+gets `PKPComponentRouter::handleAuthorizationFailure()` → `JSONMessage(false, …)`,
+the same on `stable-3_4_0` and `stable-3_3_0` (code read, not walked);
+the API's answer there was not read.
 
 ## Reference — entry points & surfaces
 
