@@ -318,6 +318,16 @@ discards the changes. <sup>g</sup>
     alone, while the hidden feed links a browser's feed reader looks for
     sit on every page ⚠ [A16](#a16). A press and a preprint server install no
     announcement feed plugin. <sup>g</sup>
+19. **The programming interface.** The Announcements panel searches,
+    adds, edits and deletes announcements through the install's
+    programming interface, which programs outside the apps can also call
+    (the address is in the footnote). With each announcement it lists,
+    the interface gives, as its `_href`, the interface's own address for
+    reading that announcement back on its own (not its public page). For a journal's announcement that address points at
+    the site instead of the journal, and the site refuses it; the
+    journal's own address for the same announcement gives it ⚠
+    [A19](#a19). The panel never reads one announcement on its own, so no
+    screen meets this. <sup>f-a19</sup>
 
 ## Side effects
 
@@ -909,6 +919,8 @@ Left out of the scenarios above, by reason:
     English page; Rule 14; scenario 5 marks it)
   - A18 ("Send an email about this to all registered users." offered on
     the site's panel and sending nothing; Rule 16; scenario 6 marks it)
+  - A19 (a journal's announcement read on its own through the
+    programming interface, at the address its list gives; Rule 19)
   - OMP2 (a press's home page carrying the site's announcements while
     the press has no "Display on Homepage" count; Rule 11; scenario 6
     marks it)
@@ -953,6 +965,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On a French press or preprint server, the new-announcement email's last sentence arrives in English {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A journal's Atom and RSS 1.0 announcement feeds write every date with "%" signs ("%2026-%10-%03UTC%UTC%275") {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
+| [A19](#a19) | Through the programming interface, an announcement's own address points at the site, which refuses it | 🐞 | latent | — |
 | [OMP2](#omp2) | A press's home page shows the site's announcements, with links that lead nowhere {OMP} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An announcement's type is printed nowhere a reader looks | ❓ | minor | — |
 | [A6](#a6) | A chosen "Announcement Type" cannot be cleared, only changed | ❓ | minor | — |
@@ -1191,6 +1204,27 @@ on an edit (Rule 16). The administrator sees "Save" succeed and
 believes the users were emailed. Question: should the site's panel
 offer the box at all? Lean: no, hide it there; a box that can never do
 anything misleads. Basis: probe, 2026-09-17. <sup>f-a18</sup>
+
+<a id="a19"></a>
+**A19 — Through the programming interface, an announcement's own address points at the site, which refuses it** · 🐞 · latent.
+The apps' own screens never read one announcement on its own, so no user
+of them meets this. A program listing a journal's announcements through
+the install's programming interface (Rule 19) gets, with each
+announcement, the interface's own address to read that announcement
+back from (its `_href`, not its public page), and
+expects it to give the announcement. The address points at the site
+instead of the journal. There the journal's Journal Manager is refused
+with "The current role does not have access to this operation.", the
+Site Administrator with "The announcement you requested is not part of
+this journal." ("…of this server." on a preprint server; on a press the
+raw "##api.announcements.400.contextsNotMatched##", as OMP has no
+English text for it), and a visitor who is not signed in with "You are
+not authorized to access the requested resource.". The journal's own
+address for the same announcement gives it to the Journal Manager and
+the Site Administrator. The same wrong address as
+*[Highlights](U11-highlights.md#a10)* A10, where the journal's own
+address fails as well.
+Basis: probe, 2026-10-15. <sup>f-a19</sup>
 
 ### OMP
 
@@ -2166,6 +2200,47 @@ calls it (A9). Code read 2026-10-03, all apps `main`. Live-probed
 box ticked mailed nobody (note d); the site's "Edit Announcement" with the
 box ticked was not walked (code alone).
 
+<a id="fn-f-a19"></a>
+**f-a19 — Rule 19 and A19 evidence.** `PKP\announcement\maps\Schema::mapByProperties()`
+builds `_href` with `getApiUrl('announcements/' . $item->getKey())` and
+no context path, so `core/maps/Schema::getApiUrl()` falls back to
+`PKPApplication::SITE_CONTEXT_PATH` (`index`): on `main` through the
+map's own context, which `Repository::getSchemaMap()` never sets, on
+`stable-3_5_0` as the parameter's default. At that address the
+`has.roles` middleware refuses a role held only in the journal; for the
+Site Administrator `PKPAnnouncementController::get()` compares the
+announcement's `assocId` with the request's context (none) and answers
+400 `api.announcements.400.contextsNotMatched`. Same cause as
+*Highlights* A10. The default was the all-contexts path `_` until
+4ebcf37eb4 (2024-06-10), not the journal's either; 3.4 read in the code
+only, not driven. The panel (`AnnouncementsListPanel.vue`) builds each
+item's address as `apiUrl + '/' + id` and sends the list (a search, the
+re-fetch after an add), add, edit and delete to
+`{journal}/api/v1/announcements` (`index/api/v1/announcements` on the
+site's tab); it never reads `_href` nor sends the single-item `get`, and
+the first list is the panel's own page data (note c). Code read
+2026-10-15, lib/pkp b17fadae59 (`main`) and 4045d9241e
+(`stable-3_5_0`). Live-probed 2026-10-15 (Rule 19; A19), OJS, OMP and
+OPS on `main` (ojs 378eced941, omp f4836d4fb, ops 2ece50497f) and on
+`stable-3_5_0`, two runs each on a scratch journal holding one
+announcement seeded the way the panel saves: the journal's list gives
+`_href` `/index.php/index/api/v1/announcements/{id}`. That address
+answers the journal's manager and its author 401
+`user.authorization.roleBasedAccessDenied`, the administrator 400 "The
+announcement you requested is not part of this journal." (OJS; OPS
+"…this server."; OMP `##api.announcements.400.contextsNotMatched##`,
+the key missing from OMP's `locale/en/api.po` on both lines, where OJS
+and OPS carry it; `edit()` and `delete()` answer the same key for an
+announcement of another context, code only) and a
+signed-out visitor 401 "You are not authorized to access the requested
+resource."; opened in the browser as the manager it shows that error
+text. `{journal}/api/v1/announcements/{id}` answers the manager and the
+administrator 200 with the record (whose own `_href` again names
+`index`) and an unknown id 404 "The announcement you requested was not
+found."; the author and a signed-out visitor 401 there too. Settings ›
+Announcements sent no request to the announcements API on landing. No
+server error in any run.
+
 <a id="fn-f-omp2"></a>
 **f-omp2 — OMP2 evidence.** OMP's `pages/index/IndexHandler.php` calls
 `_setupAnnouncements($journal ?? $request->getSite(), …)` with `$journal`
@@ -2200,7 +2275,7 @@ Issue report: [pkp-e2e#764](https://github.com/jardakotesovec/pkp-e2e/issues/764
 | Home page block | `{journal}/` (site: `index/`) | AFFR-030 |
 | Announcement page | `{journal}/announcement/view/{id}` | AFFR-031 · ROUTE-004 |
 | Header item, skip link, breadcrumb, "Edit" link | every public page | AFFR-004, AFFR-005, AFFR-006, AFFR-010, AFFR-014, AFFR-016 |
-| Announcements API | `api/v1/announcements` | API-008 |
+| Announcements API | `api/v1/announcements` at journal or site scope (list, get, add, edit, delete). A journal announcement's `_href` points at the site's address, which refuses it; the journal's own address for it answers ([A19](#a19)). The panel reads neither. | API-008 |
 | Announcement record | — | SET-002 |
 | "New Announcement" email | the mail catcher | MAIL-001 |
 | New-announcement notification and its job | — | NOTIF-008 · JOB-014 |

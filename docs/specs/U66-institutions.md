@@ -146,6 +146,24 @@ languages these are:
      with one button, "OK", and the institution stays in the list, after
      a reload too
      ⚠ [A3](#a3). <sup>q5</sup>
+8. **The programming interface.** The Institutions page searches the
+   list, turns its pages, adds, edits and deletes institutions through
+   the install's programming interface, which programs outside the apps can also call
+   (the address is in the footnote). The page's first rows come with the
+   page itself, and the page never asks for one institution on its own,
+   so no screen meets the two faults below. <sup>j</sup>
+   - 8a. With each institution it lists, the interface gives, as its
+     `_href`, its own address for reading that institution back on its
+     own. That address
+     points at the site instead of the journal, and the site refuses it
+     ⚠ [A12](#a12). The journal's own address for the institution gives
+     it to the Journal Manager and the Site Administrator; an Author and
+     a visitor who is not signed in are refused there too. <sup>j</sup>
+   - 8b. Asked at the journal's address, by the Journal Manager or the
+     Site Administrator, for an institution number that no institution on
+     the install has, the interface answers as if it had succeeded,
+     carrying only the text "The institution you requested was not
+     found." ⚠ [A13](#a13). <sup>j</sup>
 
 ## Side effects
 
@@ -529,6 +547,10 @@ Left out of the scenarios above, by reason:
     ranges")
   - A10 (the rows' order; Rules 3, 5)
   - A11 (pressing "Jump to next error"; Fields)
+  - A12 (an institution read back on its own through the programming
+    interface at the address the interface gives; Rule 8a)
+  - A13 (an institution the journal does not hold asked for through the
+    programming interface; Rule 8b)
 - **Owned by another feature**:
   - the Subscription Manager shown "Institutions" and refused the page
     {OJS} (Actors rows 1–2; *[Subscriptions](U51-subscriptions.md)*,
@@ -558,6 +580,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | On a press and a preprint server no institution can be deleted | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | A press or preprint server that holds an institution cannot be removed and is left half deleted | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
+| [A12](#a12) | Through the programming interface, an institution's own address points at the site, which refuses it | 🐞 | latent | — |
+| [A13](#a13) | Asking the programming interface for an institution the journal does not hold answers as a success, with an error text | 🐞 | latent | — |
 | [A4](#a4) | Deleting an institution deletes the usage figures credited to it | ❓ | latent | — |
 | [A5](#a5) | The "ROR" box asks for an ID and refuses one | ❓ | minor | — |
 | [A6](#a6) | On a journal, a Site Administrator with no manager role is shown the page under an "Error" window and refused every change | ❓ | minor | — |
@@ -704,6 +728,38 @@ screen-reader "Go to …" buttons keep the cursor too.
 Question: should the button put the cursor in the first flagged box?
 Lean: yes; otherwise a keyboard or screen-reader user still has to find the box.
 Basis: probe, 2026-09-28. <sup>f-a11</sup>
+
+<a id="a12"></a>
+**A12 — Through the programming interface, an institution's own address points at the site, which refuses it** · 🐞 · latent.
+The apps' own screens never read one institution on its own, so no user
+of them meets this. A program listing a journal's institutions through
+the install's programming interface (Rule 8a) gets, with each
+institution, the interface's own address to read that institution back
+from (its `_href`), and
+expects it to give the institution. The address points at the site
+instead of the journal. There every signed-in account, the journal's
+Journal Manager and the Site Administrator included, is refused with
+"You cannot call this operation without a context (press, journal,
+conference, etc).", and a visitor who is not signed in is refused too.
+The journal's own address for the same institution gives it to the
+Journal Manager and the Site Administrator. The same fault as
+[Highlights A10](U11-highlights.md#a10).
+Basis: probe, 2026-10-15. <sup>f-a12</sup>
+
+<a id="a13"></a>
+**A13 — Asking the programming interface for an institution the journal does not hold answers as a success, with an error text** · 🐞 · latent.
+A program that asks the journal's programming interface, as the Journal
+Manager or the Site Administrator, for one institution by a number that
+no institution on the install has (another journal's institution was not
+tried) expects a "not found"
+answer, as the same interface gives when such an institution is edited
+or deleted. Instead the answer reports success and carries only the text
+"The institution you requested was not found.", so a program that trusts
+the answer's status takes that text for an institution. No screen asks
+for one institution on its own (Rule 8b). In 3.4 the same request
+answered "not found" (read from the code), so this is a regression of
+the 2023 rework of the interface, not a choice.
+Since: 2023-10-13, a date read from the code's history · Basis: probe, 2026-10-15. <sup>f-a13</sup>
 
 ---
 
@@ -1063,6 +1119,20 @@ was still listed, after a reload too. Every "Yes" answered a server
 error: 500 on `POST {context}/api/v1/institutions/{id}` (the method
 override `DELETE`). Control: on OJS the same removes the row.
 
+<a id="fn-j"></a>
+**j — the programming interface.** `PKPInstitutionController` serves
+`{journal}/api/v1/institutions`: list, get, add, edit and delete, behind
+`has.context` and the manager role (note f-a6). The page renders its
+first rows itself (note e); `InstitutionsListPanel.vue` sends the list
+(search and paging), the add to `apiUrl` and the edit and delete to
+`apiUrl + '/' + id`, and never reads `_href` nor sends the single-item
+`get`. Code read 2026-10-15. Live-probed 2026-10-15 (Rule 8), OJS, OMP
+and OPS, `main` and `stable-3_5_0`, two runs each: Settings ›
+Institutions as a scratch journal's manager showed "Add Institution"
+and the one row with "Edit" and "Delete", and sent no
+`api/v1/institutions` request on landing. The address and the unknown
+id: notes f-a12 and f-a13.
+
 <a id="fn-h"></a>
 **h — what the list feeds.** No mailable, notification or log call sits
 on the institution paths (`PKPInstitutionController`, `Repository` fire
@@ -1311,6 +1381,43 @@ the focused element is the pressed button. The persona read (step 7)
 could not judge the scenario's former pass sign, "the page scrolls to
 'Name'", on a panel whose first box is in view; the step was dropped.
 
+<a id="fn-f-a12"></a>
+**f-a12 — A12 evidence.** `PKP\institution\maps\Schema::mapByProperties()`
+builds `_href` with `getApiUrl('institutions/' . $item->getId())` and no
+context path; `Repository::getSchemaMap()` builds the map with no
+context, so `core/maps/Schema::getApiUrl()` falls back to
+`PKPApplication::SITE_CONTEXT_PATH` (`index`). At `index` the
+controller's `has.context` middleware refuses every signed-in request
+(401 `user.authorization.contextRequired`). The same cause as
+*Highlights* A10. Live-probed 2026-10-15 (Rule 8a), OJS, OMP and OPS,
+`main` (lib/pkp b17fadae59) and `stable-3_5_0` (lib/pkp 4045d9241e), two
+runs each, on a scratch journal (press, server) with one institution
+saved the way "Add Institution" saves: the list's record carries `_href`
+`/index.php/index/api/v1/institutions/{id}`. That address answers the
+manager, the administrator and the scratch journal's author 401 "You
+cannot call this operation without a context (press, journal,
+conference, etc).", signed out 401 "You are not authorized to access the
+requested resource."; opened in the browser as the manager it shows that
+answer. The journal's address `{journal}/api/v1/institutions/{id}`
+answers the manager and the administrator 200 with the record (its own
+`_href` again names `index`), the author 401
+`user.authorization.roleBasedAccessDenied`, signed out 401.
+
+<a id="fn-f-a13"></a>
+**f-a13 — A13 evidence.** `PKPInstitutionController::get()` answers an
+id the journal does not hold (`Repository::exists($id, $contextId)`
+false) with `{"error": __('api.institutions.404.institutionNotFound')}`
+and `Response::HTTP_OK`; the same controller's `edit()` and `delete()`
+answer the same miss with `Response::HTTP_NOT_FOUND` (code, not driven).
+Since pkp-lib 71e79e31e3 (2023-10-13, pkp/pkp-lib#7698, the move of the
+API to the Laravel router); 3.4's `PKPInstitutionHandler::get()`
+answered 404 (code only). The announcements interface answers an unknown
+id 404 "The announcement you requested was not found.". Live-probed
+2026-10-15 (Rule 8b), OJS, OMP and OPS, `main` and `stable-3_5_0`, two
+runs each (the runs of f-a12): `{journal}/api/v1/institutions/100001`
+answered the manager and the administrator 200
+`{"error":"The institution you requested was not found."}`.
+
 ## Reference — entry points & surfaces
 
 | Entry | Path | Atom |
@@ -1320,7 +1427,7 @@ could not judge the scenario's former pass sign, "the page scrolls to
 | "Edit" and the "Edit Institution" panel | the page above | AFFM-139 · VUE-098 |
 | "Delete" and the "Delete Institution" dialog | the page above | AFFM-140 |
 | Side-menu entry "Institutions" | every editorial page | ROUTE-017 |
-| Institutions API | `api/v1/institutions` (`GET`, `GET {id}`, `POST`, `PUT {id}`, `DELETE {id}`) | API-023 |
+| Institutions API | `api/v1/institutions` (`GET`, `GET {id}`, `POST`, `PUT {id}`, `DELETE {id}`). An institution's `_href` points at the site's address, which refuses it for want of a journal; the journal's own address for it answers ([A12](#a12)). An id the journal does not hold answers success with an error text ([A13](#a13)). The page never sends `GET {id}`. | API-023 |
 | Institution record | — | SET-016 |
 
 ## Reference — code anchors
