@@ -114,8 +114,11 @@ wish to delete this item? This action cannot be undone." and the buttons
    on the galley's current file; what the wizard shows and what "Cancel"
    and "Close" do there is
    *[Submission files](U36-submission-files.md#cancel-restore)*' (its Rule
-   9a). After "Complete" the galley's link, and the reader's link once the
-   version is published, download the new file; the label is unchanged.
+   9a). After "Complete" the galley's link downloads the new file, and
+   the label is unchanged. Once the version is published, readers get the
+   new file at once, with one exception: on a journal, a reader who is
+   not signed in keeps getting an HTML galley's old file for up to a day,
+   while a signed-in reader gets the new one ⚠ [OJS3](#ojs3).
    <sup>e</sup>
 4. **Remote galleys.** A **remote galley** is one saved with "This galley
    will be available at a separate website." ticked: it points readers to
@@ -200,7 +203,10 @@ wish to delete this item? This action cannot be undone." and the buttons
     published (posted), the list, "Order", "Add galley" and every row
     action stay as they were, and the galley's window still saves; only
     who may use them on a preprint server changes (Actors). Every change
-    reaches readers at once (Side effects). <sup>l</sup> <sup>q14</sup>
+    reaches readers at once (Side effects), except a journal's HTML
+    galley file replaced with "Change File", which reaches readers who
+    are not signed in up to a day late (Rule 3, [OJS3](#ojs3)).
+    <sup>l</sup> <sup>q14</sup>
 <a id="versions"></a>
 11. **A new version starts with copies of the galleys.** "Create New
     Version"
@@ -234,9 +240,11 @@ wish to delete this item? This action cannot be undone." and the buttons
   the galley's language added in brackets when it is not the language
   the reader is browsing in. A galley's reader address ends in its URL
   Path instead of its number when one is set. A remote galley's link
-  opens the remote address. On a journal, the full text a signed-out
-  reader sees on an HTML galley's reader page can be a copy that one
-  crafted visit planted for every later signed-out reader
+  opens the remote address. On a journal, a reader who is not signed in
+  gets an HTML galley's full text as it was stored at the first visit by
+  anyone not signed in, for up to a day. A file replaced in that time
+  reaches them late ([OJS3](#ojs3)), and one crafted visit can decide
+  what the stored copy holds for every later signed-out reader
   ⚠ [OJS2](#ojs2). Which
   galleys the page lists, and under which heading, is *Article landing
   page & reading*'s. <sup>p</sup> <sup>q17</sup>
@@ -686,6 +694,8 @@ Left out of the scenarios above, by reason:
     version copied it; Rule 11)
   - OJS2 (an HTML galley's copy for signed-out readers made by one
     crafted visit; Side effects, "What readers see")
+  - OJS3 (a journal's HTML galley file replaced with "Change File",
+    still old for readers who are not signed in; Rules 3, 10)
 - **Owned by another feature**:
   - the roles the side menu does not offer the page (Actors row 1;
     *Workflow screen & stage access*, scenario 4)
@@ -721,6 +731,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS2](#ojs2) | One crafted visit decides what an HTML galley shows every later signed-out reader for a day, including markup that runs on the journal's site | 🐞 | user-visible | — |
 | [OPS2](#ops2) | Before posting, a Moderator without "Permissions" cannot edit, add or reorder the galleys the page offers | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | A preprint's Author is offered "Change File" on every galley and refused on files others uploaded | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
+| [OJS3](#ojs3) | A replaced HTML galley file reaches readers who are not signed in up to a day late | ❓ | user-visible | — |
 | [OPS1](#ops1) | A preprint's Author manages the galleys while they may edit the preprint; a journal's Author never does | ✅ | — | issue report (claude), 2026-10-02 — rescoped to the Author |
 | [A2](#a2) | Retired: the galley window's "Close" was thought to drop unsaved changes without asking | ✅ | retired | — |
 
@@ -859,6 +870,27 @@ not allowed"; the list is empty where the file came from the app's
 template or an older version. Expected: every reader gets the galley
 as the journal published it. Security: unreleased.
 Since: 2026-07-13 · Basis: probe, 2026-10-13. <sup>f-ojs2</sup>
+
+<a id="ojs3"></a>
+**OJS3 — A replaced HTML galley file reaches readers who are not signed in up to a day late** · ❓ · user-visible.
+On a journal, the first visit to a published HTML galley by a reader
+who is not signed in stores the page that reader got, and every later
+reader who is not signed in gets that stored page for the next 24
+hours. "Change File" does not replace it. After an editor replaces the
+file, signed-in visitors (editors and readers alike) see the new file
+at once, while everyone else keeps seeing the old one until 24 hours
+after that first visit. A galley nobody had read signed out shows the
+new file at once. Administration › "Delete Data Caches" (Site
+Administrator) ends the stored page; the button is always on the
+Administration page, though its description presents it as a tool for
+development. Expected: a replaced file
+reaches every reader at once, as every other change on the "Galleys"
+page does (Rule 10). A preprint server serves the new file at once.
+Question: should a replaced galley file reach every reader at once?
+Lean: yes; the page is stored for speed, but nothing on the
+"Galleys" page clears it, so a corrected galley reaches most readers
+only the next day.
+Since: 2026-07-13 · Basis: probe, 2026-10-15. <sup>f-ojs3</sup>
 
 ### OPS
 
@@ -1586,11 +1618,47 @@ name instead pointed every image at that host. Code re-read 2026-10-13
 on OJS `main` (ojs `7c6fba2064`, lib/pkp `f4c2578c94`), unchanged; not
 re-driven here. Fix proposed with the row: key the copy on the host
 too, or build the addresses from the configured base URL, escape them,
-and clear the copy when the galley's file changes. By the same code, a
-file replaced with "Change File" would reach signed-out readers only
-when the day's copy expires; not driven. Security-shaped and
+and clear the copy when the galley's file changes. The same copy keeps
+a file replaced with "Change File" from signed-out readers until it
+expires, driven 2026-10-15 (note f-ojs3). Security-shaped and
 unreleased: its issue report carries "- **Security** unreleased"
 (REPORT.md).
+
+<a id="fn-f-ojs3"></a>
+**f-ojs3** — The copy of note f-ojs2: `HtmlArticleGalleyPlugin::articleDownloadCallback()`
+stores a signed-out request's page with `Cache::remember('htmlArticleGalley-'
+. $galley->getId(), 60 * 60 * 24, …)`, so the day runs from the first
+signed-out read, not from the change; a signed-in request always reads
+the file. Nothing calls `Cache::forget` for the key ("Change File"
+revises the same submission file, so the galley id and the key stay);
+`AdminHandler::clearDataCache()` ("Delete Data Caches", whose group the
+Administration page describes as "Delete cache files from the system.
+This should only be done in development environments.") flushes the
+store. Introduced by ojs `04ff2f998c` (2026-07-13, pkp/pkp-lib#12752);
+`stable-3_5_0`'s plugin has no `Cache::` call, so 3.5 and earlier serve
+the new file at once (code read, not driven). A preprint server's HTML
+galley is a download, with no such copy. Live-probed 2026-10-15 (Rules
+3, 10; Side effects, "What readers see"), on `main` with PKP's default
+test dataset, four OJS runs and two OPS runs, kept script
+`shared/playwright/checks/U35/H15/h15.js` (`PHASE=galley`): the Editor
+added two HTML galleys, "A" and "B", whose file read "VERSION-ONE", to
+the dataset's published article. A signed-out reader pressed "A" on the
+article page and its reader page's frame showed VERSION-ONE, twice; the
+stored copy then existed, expiring 24 hours after that read. "Change
+File" on both galleys uploaded "VERSION-TWO"; the galley stayed the
+same submission file with a new stored file, and the Editor's row link
+downloaded VERSION-TWO. Signed-out reads of "A" in fresh browsers, at
+once and again on a second visit, still showed VERSION-ONE, and the
+stored copy still held it with its expiry unchanged. Signed in, the
+Editor and an Author with no part in the article got VERSION-TWO. "B",
+never read signed out before the change, showed VERSION-TWO to a
+signed-out reader. In runs 3 and 4 the Site Administrator then pressed
+"Delete Data Caches": the copy was gone and the next signed-out read of
+"A" showed VERSION-TWO. OPS control: an HTML galley on the dataset's
+posted preprint gave a signed-out reader a download, and the first
+signed-out download after "Change File" was VERSION-TWO. No request
+failed in any run. The media-file side of the same copy is
+*[Media files](U47-media-files.md#ojs1)*' OJS1.
 
 <a id="fn-f-ops1"></a>
 **f-ops1** — Notes b, c and l: OPS `PreprintGalleyGridHandler::canEdit()`
