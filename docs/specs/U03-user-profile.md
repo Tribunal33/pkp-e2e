@@ -1587,7 +1587,7 @@ page, and what was typed is lost with it.
 A Site Administrator's "Expire User Sessions" brings the alert on every
 press. A password change made in another browser brings it on every
 press after the first; the first press fails in another way
-([U03 A25](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a25)).
+([A25](#a25)).
 By the code, a session that expired brings it too. No other page shows
 this code.
 Since: 2012-05-07 (14 years) · Basis: probe, 2026-10-15. <sup>[f-a26](#fn-a26)</sup>
