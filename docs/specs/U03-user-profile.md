@@ -3115,6 +3115,7 @@ account back after each mode (password set back, pending request
 cancelled). The expired and signed-out-elsewhere sessions are read from
 the code: their next request arrives with no user and meets the same
 policy.
+Issue report: [pkp-e2e#990](https://github.com/jardakotesovec/pkp-e2e/issues/990) ([docs/issues/U03-A26-session-ended-alert-raw-key.md](../issues/U03-A26-session-ended-alert-raw-key.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
