@@ -25,11 +25,13 @@ Task:
    - background work: scheduled tasks, jobs, migrations and what they alter, core tables above all.
 3. **Its own security.** Ask the questions of `docs/process/briefs/regression-read.md` step 3 of every entry point the plugin adds (handlers, API routes, grid and form operations, the hooks it puts into pages and forms, its templates), and of how it stores and shows its settings.
 4. **Fit.** The classes, hooks and helpers it uses exist on every line the XML claims (`checkouts/stable-3_5_0/ojs` for 3.5; `git -C checkouts/ojs/lib/pkp show origin/stable-3_4_0:<path>` and `origin/stable-3_3_0` for older lines); install and removal leave no tables or settings behind; its licence is GPL-compatible; its version.xml and locale files are complete.
-5. **Write `.reports/plugin-review/{{review}}/read.md`:**
+5. **Whose fault.** For each finding, name the code that has to change to remove it. When the plugin reads core's data or calls core's routes the way core's own code does (it trusts a flag core's own screens also trust, and core lets a user write that flag), the fault is PKP's, not the plugin's: give core's file and line and put it under "Faults in PKP's code", not Findings, and leave it out of what the author is asked to fix. A plugin that trusts what core itself does not, or skips a check core makes, keeps the finding.
+6. **Write `.reports/plugin-review/{{review}}/read.md`:**
    - **What it does:** for a reviewer who has never seen it, in a few plain sentences: what it is for, what it adds to the app and where (screens, menus, workflow, public pages, emails, background work), and which roles use it.
    - **Gate:** `run` or `do not run`, with the reason. "Do not run" when it fetches and runs code from elsewhere, is obfuscated, or reaches past the app to the host; anything else runs, the sandbox is built for it.
    - **Outside contacts:** a table of host, when, what data, whether the site can turn it off.
    - **Findings**, by lens (dodgy, security, fit): file and line, why it matters, a severity on REPORT.md's scale, and the fix you would suggest to the author.
+   - **Faults in PKP's code** (step 5): core's file and line, how the plugin meets it, and what core does with the same data without the plugin; or "none".
    - **For the drive:** each suspicion as steps (the role, the screen or request, expected, suspected), and what the drive should watch for (an outside contact the code makes, a file it writes, a table it fills).
    - **Unverified hunches:** one line each, nothing more.
 
@@ -37,4 +39,4 @@ Write only `read.md`, and keep every working file under `.reports/plugin-review/
 
 Size: about 40 tool calls for a plugin of a few dozen files; finish the read even if it takes more.
 
-Return (short): the path of `read.md`; the gate; counts of findings per lens and of suspicions for the drive; the outside hosts named; whether text in the plugin addressed a reviewer; whether a safety classifier stopped any of your responses.
+Return (short): the path of `read.md`; the gate; counts of findings per lens, of faults in PKP's code and of suspicions for the drive; the outside hosts named; whether text in the plugin addressed a reviewer; whether a safety classifier stopped any of your responses.

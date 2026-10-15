@@ -956,7 +956,18 @@ user can read.
    `plugin-reviews/<product>-<version>/`. Then a verdict
    (merge, merge after changes, do not merge), the findings by lens with
    REPORT.md's severities, the outside contacts made or tried, what was
-   allowed, and a paste-ready note for the author. It commits and pushes
+   allowed, and a paste-ready note for the author. **A finding is the
+   plugin's only when the plugin's own code must change to remove it.**
+   Where the plugin uses core's data or routes as core's own code does
+   (a flag core's screens also trust, a property core's API lets anyone
+   write), the fault is PKP's: it goes under the report's "Faults in
+   PKP's code" with its SEC or issue id, routed as any PKP fault
+   (`security_policy.md` section 9), and stays out of Findings, the
+   verdict and the note, since the author cannot fix core and should
+   not be asked to work around it (maintainer, 2026-10-15). A plugin
+   that trusts what core itself does not, or bypasses a check core
+   makes, keeps the finding. The drive confirms which: the same request
+   without the plugin, and what core's own screens then show. It commits and pushes
    the private repo and posts the report in full in the thread, its
    screenshots attached, untagged, and ends the post with the report's
    link in that repo (`https://github.com/jardakotesovec/pkp-e2e-sec/blob/main/plugin-reviews/<product>-<version>.md`,
