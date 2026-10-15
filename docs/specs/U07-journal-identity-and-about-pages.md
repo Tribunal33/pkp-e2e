@@ -1074,7 +1074,7 @@ Left out of the scenarios above, by reason:
   - A10 (a reviewer whose submitted review was cancelled still listed under "Peer Reviewers in Previous Year"; Rule 15)
   - A11 (Hosted Journals "Edit" refused on a journal whose "Country" was never set; Settings bullet 8)
   - A13 (the invitation and the role-change email promising a masthead listing the journal does not show; Settings bullet 3)
-  - A14 (the page about the software in Russian on a press, and in Hindi and Uzbek on a journal, showing the version's placeholder; Rule 20)
+  - A14 (the page about the software in Russian on a press, Czech on a preprint server, and Hindi and Uzbek on a journal, showing the version's placeholder; Rule 20)
   - OMP1 (Settings › Press headed "Setup"; Rule 1; scenario 2 marks it)
   - OPS2 ("Sponsoring organization" used nowhere; Fields; Rule 10)
   - OPS3 (a preprint server's French privacy default arriving as a raw text key; Fields)
@@ -1109,7 +1109,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A9](#a9) | The default "For Readers" text's "Privacy Statement" link opens the Submissions page, not the Privacy Statement page {OJS OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A11](#a11) | Hosted Journals "Edit" refuses to save a journal whose "Country" was never set | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | With the masthead not based on enrollments, invitations and masthead changes still promise "Your name will appear in the {journal}'s masthead"; reviewers are promised it while the journal lists none | 🐞 | minor | — |
-| [A14](#a14) | In Russian on a press, and in Hindi and Uzbek (Latin) on a journal, the page about the software shows "{$ompVersion, …" or "{$ ojsVersion}" instead of the version {OJS OMP} | 🐞 | minor | — |
+| [A14](#a14) | In Russian on a press, Czech on a preprint server, and Hindi and Uzbek (Latin) on a journal, the page about the software shows "{$ompVersion, …", "{$ojsVersion}" or "{$ ojsVersion}" instead of the version | 🐞 | minor | — |
 | [OMP2](#omp2) | On a site hosting several presses, the site's "About Open Monograph Press" page says "This press uses" {OMP} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | A preprint server's French "Privacy Statement" default is the raw text "##default.contextSettings.privacyStatement##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OPS4](#ops4) | A preprint server's French "Editorial Masthead" heads the Moderators "##default.groups.name.sectionEditor##" {OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1262,11 +1262,11 @@ protect them. The older promise for roles the masthead never lists:
 Since: 2026-09-28 · Basis: probe + code reading. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — In Russian on a press, and in Hindi and Uzbek (Latin) on a journal, the page about the software shows "{$ompVersion, …" or "{$ ojsVersion}" instead of the version** {OJS OMP} · 🐞 · minor.
+**A14 — In Russian on a press, Czech on a preprint server, and Hindi and Uzbek (Latin) on a journal, the page about the software shows "{$ompVersion, …", "{$ojsVersion}" or "{$ ojsVersion}" instead of the version** · 🐞 · minor.
 A visitor who opens the page about the software (Rule 20) in another
 language expects the version number, as English gives it ("Open Journal
-Systems 3.6.0.0"). Three translations misspell the placeholder, so the
-page prints its raw text instead:
+Systems 3.6.0.0"). Four translations write the placeholder wrongly, so
+the page prints its raw text instead:
 
 - **Russian, on a press**: "{$ompVersion, которая является …" (the
   closing brace left out), on the site's page and each press's page.
@@ -1278,9 +1278,15 @@ page prints its raw text instead:
   link to "Contact".
 - **Uzbek (Latin), on a journal**: "{$ ojsVersion}" on the site's page
   and each journal's page.
+- **Czech, on a preprint server**: "Tento web používá Open Preprint
+  Systems {$ojsVersion}, což je …" on the site's page, and "Tento server
+  používá Open Preprint Systems {$ojsVersion}, což je …" on each
+  server's page. The server page's link "Kontaktujte přímo server" still
+  opens its "Kontakt" page.
 
-A journal in Russian shows the version. Each fix is one translated text.
-Basis: probe, 2026-10-13. <sup>f-a14</sup>
+A journal in Russian, and a journal and a press in Czech, show the
+version. Each fix is one or two translated texts.
+Basis: probe, 2026-10-13 and 2026-10-15. <sup>f-a14</sup>
 
 ### OMP
 
@@ -2595,6 +2601,23 @@ and `about.aboutOJSJournal` read `{$ ojsVersion}`. Read in the code:
 stable-3_5_0 carries the same texts, and stable-3_4_0 too (`uz@latin`);
 on stable-3_3_0 OMP's `ru_RU` leaves the text empty (English shows) and
 OJS's `hi_IN` site text is broken the same way.
+Live-probed 2026-10-15 (OPS `cs`; OJS, OMP and OPS on `main` and
+stable-3_5_0, two runs each after a reset): signed out, the site's
+`index/cs/about/aboutThisPublishingSystem`, also reached from the footer
+logo of the site's Czech home, and a scratch server's page after `admin`
+ticked Czech under "UI" on its Settings › Website › "Setup" ›
+"Languages". All three, headed "O Open Preprint Systems", printed
+"{$ojsVersion}" and no version; the server's "Kontaktujte přímo server"
+link led to its "Kontakt" page. The same server in English printed
+"3.6.0.0" ("3.5.0.5" on 3.5); OJS and OMP in Czech printed the version
+on both pages, on both lines. No raw text keys; nothing in the server
+log. Mechanism: OPS `locale/cs/locale.po` `about.aboutOPSSite` and
+`about.aboutOPSServer` write `{$ojsVersion}`, while
+`templates/frontend/pages/aboutThisPublishingSystem.tpl` passes
+`opsVersion`; the text came with the Weblate commit 99c34f9551
+(2023-05-02). Read in the code: stable-3_4_0 carries the same text and
+template; OPS stable-3_3_0 ships no Czech interface (only plugin
+`cs_CZ` files).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `locale/en/locale.po` `manager.setup` "Setup" (OJS

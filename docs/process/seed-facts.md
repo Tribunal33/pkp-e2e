@@ -225,8 +225,10 @@ behind a line; that scratch is deleted after review.
   Administrator's rows carry an arrow ("Reload defaults"); a manager,
   editor or production editor sees no arrow. All three apps, 2026-09-27
   (U57 claim check K2).
-- The site's "Install Locale" window offers 79 languages on OJS (including
-  "Unknown language (und)") and 69 on OMP and OPS; installed, every one but
+- The site's "Install Locale" window offers 78 languages on OJS (including
+  "Unknown language (und)") and 68 on OMP and OPS on `main`, where Norwegian
+  Bokmål is gone (U57 A14), and 79 and 69 on `stable-3_5_0` (U07 claim
+  check H15, 2026-10-15); installed, every one but
   English carries the "*". On the fleets one site-level language change
   takes 5–15 s (every context is re-saved), and saving two at once took
   34 s on OJS, 36 s on OMP and 11 s on OPS (2026-10-05, U13 claim check
