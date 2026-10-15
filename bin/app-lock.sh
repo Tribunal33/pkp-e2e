@@ -9,9 +9,16 @@
 # overtaken by walks on the same app that ask after it (first come, first served per app),
 # and a walk on an app nobody waits for is not held behind another app's queue.
 set -euo pipefail
-mode=$1; apps=$2; shift 2; [ "${1:-}" = "--" ] && shift
+mode=${1:-}; apps=${2:-}; shift 2 || true
+# A space-separated app list ("exclusive ojs omp -- …") would run "omp" as the command: refuse it.
+case "$mode" in shared|exclusive) ;; *) echo "usage: bin/app-lock.sh <shared|exclusive> <apps, comma separated> -- <command…>" >&2; exit 2;; esac
+[ "${1:-}" = "--" ] || { echo "app-lock: expected -- after the comma-separated apps, got '${1:-}' (usage: bin/app-lock.sh <shared|exclusive> ojs,omp,ops -- <command…>)" >&2; exit 2; }
+shift
 root=$(cd "$(dirname "$0")/.." && pwd)
+# Each line's checkouts have locks of their own (PKP_E2E_LINE, as the harness reads it), so a
+# stable-line walk never queues behind a fix trial on the main checkouts.
 dir=${APPLOCK_DIR:-$root/.reports/locks}
+case "${PKP_E2E_LINE:-main}" in main|"") ;; *) dir=$dir/$PKP_E2E_LINE;; esac
 mkdir -p "$dir"
 flag=-s; [ "$mode" = exclusive ] && flag=-x
 echo "[applock] $mode $apps: asked $(date +%T)" >&2

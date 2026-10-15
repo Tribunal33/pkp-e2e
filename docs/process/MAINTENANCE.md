@@ -335,7 +335,8 @@ same model: a false positive's piece goes to a narrow Sonnet fallback
    changes a site-wide setting (Site Settings, the site record) takes it
    `exclusive`, as one command that puts the setting back, since every
    visitor of the fleet reads it (U02 sweep, 2026-10-12). On the VM that lock
-   is `bin/app-lock.sh <shared|exclusive> <apps> -- <command>`: a walk
+   is `bin/app-lock.sh <shared|exclusive> <apps, comma separated> -- <command>`
+   (the stable lines' checkouts have locks of their own): a walk
    or a drive takes it `shared`, any number at once since only a fix
    changes the code, and a fix trial takes it `exclusive` as one command
    (apply, walks, revert), naming only the apps it patches; requests are
