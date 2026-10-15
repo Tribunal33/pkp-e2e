@@ -2632,6 +2632,7 @@ the first, and the next "Schedule For Publication" opens the copy again
 with a new one; its own report, linked from
 [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)'s
 neighbour.
+Issue report: [pkp-e2e#985](https://github.com/jardakotesovec/pkp-e2e/issues/985) ([docs/issues/U49-OJS5-refused-publish-confirm-opens-blank-panel.md](../issues/U49-OJS5-refused-publish-confirm-opens-blank-panel.md)).
 
 <a id="fn-ojs6"></a>
 **f-ojs6** — Code read 2026-10-05 (OJS `main`, lib/pkp `987776cd04`):
