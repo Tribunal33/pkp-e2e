@@ -1063,8 +1063,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [A25](#a25) | "Cancel upload" in the submission wizard, pressed once the file has been sent, keeps the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A26](#a26) | "Upload File" in the upload wizard cannot be reached with the keyboard, so no file can be chosen without a mouse | 🐞 | high | — |
 | [A27](#a27) | A refused "History" tab in a file's "More Information" shows a second alert that reads only "undefined" | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
-| [A28](#a28) | Submission wizard: a file's "Remove" the server refuses leaves the "Remove" window open with a spinner and no message; a refused component choice says nothing either | 🐞 | minor | — |
-| [A29](#a29) | Submission wizard: the "Files" panel's screen-reader status keeps reading "Uploading 100% complete" after "Cancel upload" and on an emptied panel | 🐞 | minor | — |
+| [A28](#a28) | Submission wizard: a file "Remove" the server refuses leaves the window spinning with no message | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
+| [A29](#a29) | Submission wizard: screen readers are told "Uploading 100% complete" after an upload is cancelled | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A30](#a30) | Closing "Edit a file" without "Save" drops a changed file name without asking | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
@@ -1497,41 +1497,35 @@ Information" on another stage's file in "Upload/Select Files".
 Basis: probe, 2026-10-15. <sup>[f-a27](#fn-a27)</sup>
 
 <a id="a28"></a>
-**A28 — Submission wizard: a "Remove" or a component choice the server refuses shows no message** · 🐞 · minor.
-In the submission wizard's "Files" panel, an Author presses "Remove" ›
-"Yes" on a file the server will not remove: one already removed in
-another browser tab, or any file once they have signed out in another
-tab. A message that the file was not removed, and why, is expected.
-Instead the "Remove" window stays open with "Yes" and "No", a spinner
-turns beside "No" without end, and the row stays on the panel; each
-further "Yes" does the same, and only "No" closes the window.
+**A28 — Submission wizard: a file "Remove" the server refuses leaves the window spinning with no message** · 🐞 · low.
+In the submission wizard's "Files" panel, an author presses "Remove"
+and then "Yes" on a file the server refuses to remove: one already
+removed in another tab of the same browser, or any file once the author
+has been signed out. The "Remove" window stays open with a spinner
+beside "No" that never stops, and the file stays listed. Nothing says
+that the file was not removed, or why. Only "No" closes the window; on
+3.5, where "Yes" and "No" stay greyed out, only the keyboard's Escape
+does.
 
-A component link ("Article Text"; "Book Manuscript" on a press) pressed
-on a file already removed in another tab is as silent: its spinner shows
-briefly, and the row asks "What kind of file is this?" again. On the same
-row, "Edit" with a component chosen and "Save" does show "An unexpected
-error has occurred. Please reload the page and try again." and keeps
-"Edit {file name}" open.
-
-Nothing is lost, and a reload shows the panel without a file removed
-elsewhere. A preprint server has no such panel.
-Basis: probe, 2026-10-09. <sup>[f-a28](#fn-a28)</sup>
+Choosing the file's type under "What kind of file is this?" on such a
+row ("Article Text", or "Book Manuscript" on a press) fails the same
+way: the choice is not saved, the row asks "What kind of file is
+this?" again, and no message appears.
+Basis: probe, 2026-10-15. <sup>[f-a28](#fn-a28)</sup>
 
 <a id="a29"></a>
-**A29 — Submission wizard: the "Files" panel's screen-reader status keeps reading "Uploading 100% complete"** · 🐞 · minor.
+**A29 — Submission wizard: screen readers are told "Uploading 100% complete" after an upload is cancelled** · 🐞 · low.
 The submission wizard's "Files" panel gives screen readers an upload's
-progress as a status, "Uploading {percent}% complete" (Rule 17c). Once
-the status is there it reads "Uploading 100% complete" until the page is
-reloaded, where a status that is empty, or says the upload was cancelled,
-is expected. It reads so after "Cancel upload" has removed an uploading
-row. It first appears, reading so, when "Cancel upload" clears a file
-refused for its size, of which nothing was uploaded. It still reads so
-after every stored file has been removed and the panel is empty again.
+progress as a status message, "Uploading {percent}% complete". When an
+author presses "Cancel upload", the status changes to "Uploading 100%
+complete", though nothing was stored. An empty status, or one saying
+that the upload was cancelled, is expected. This happens both for a
+file still on its way and for a file refused for its size.
 
-A screen reader user who cancels an upload finds a status saying it is
-complete. A file's refusal for its size is in the row's text only,
-never in the status. A preprint server has no such panel.
-Basis: probe, 2026-10-09. <sup>[f-a29](#fn-a29)</sup>
+The text then stays until the page is reloaded. It is still there
+after the author removes the files, and the panel is empty again. A
+screen reader user who cancels an upload is told that it completed.
+Basis: probe, 2026-10-15. <sup>[f-a29](#fn-a29)</sup>
 
 <a id="a30"></a>
 **A30 — Closing "Edit a file" without "Save" drops a changed file name without asking** {OJS OMP} · 🐞 · low.

@@ -1,0 +1,37 @@
+--- a/lib/ui-library/src/components/ListPanel/submissionFiles/SubmissionFilesListPanel.vue
++++ b/lib/ui-library/src/components/ListPanel/submissionFiles/SubmissionFilesListPanel.vue
+@@ -58,6 +58,7 @@
+ import PkpButton from '@/components/Button/Button.vue';
+ import PkpHeader from '@/components/Header/Header.vue';
+ import SubmissionFilesListItem from '@/components/ListPanel/submissionFiles/SubmissionFilesListItem.vue';
++import ajaxError from '@/mixins/ajaxError';
+ import dialog from '@/mixins/dialog.js';
+ import cloneDeep from 'clone-deep';
+ import SubmissionFilesEditModal from './SubmissionFilesEditModal.vue';
+@@ -70,7 +71,7 @@
+ 		PkpHeader,
+ 		SubmissionFilesListItem,
+ 	},
+-	mixins: [dialog],
++	mixins: [ajaxError, dialog],
+ 	props: {
+ 		/** A localized string for the button to add a file. */
+ 		addFileLabel: {
+--- a/lib/ui-library/src/components/ListPanel/submissionFiles/SubmissionFilesListItem.vue
++++ b/lib/ui-library/src/components/ListPanel/submissionFiles/SubmissionFilesListItem.vue
+@@ -101,6 +101,7 @@
+ import PkpButton from '@/components/Button/Button.vue';
+ import Icon from '@/components/Icon/Icon.vue';
+ import Spinner from '@/components/Spinner/Spinner.vue';
++import ajaxError from '@/mixins/ajaxError';
+ 
+ export default {
+ 	components: {
+@@ -111,6 +112,7 @@
+ 		FileUploadProgress,
+ 		SubmissionFilesFile,
+ 	},
++	mixins: [ajaxError],
+ 	props: {
+ 		apiUrl: {
+ 			type: String,

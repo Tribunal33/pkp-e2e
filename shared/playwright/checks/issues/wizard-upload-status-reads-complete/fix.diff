@@ -1,0 +1,85 @@
+--- a/lib/ui-library/src/components/FileUploader/FileUploader.vue
++++ b/lib/ui-library/src/components/FileUploader/FileUploader.vue
+@@ -85,6 +85,8 @@
+ 	data() {
+ 		return {
+ 			status: '',
++			/** The ids of the files the status reports on, once uploaded */
++			statusFileIds: [],
+ 			isMounted: false,
+ 		};
+ 	},
+@@ -132,6 +134,21 @@
+ 			};
+ 		},
+ 	},
++	watch: {
++		/**
++		 * Clear the status once the files it reports on have left the list
++		 * (removed) and nothing is uploading
++		 */
++		files(newFiles) {
++			if (
++				this.status &&
++				!this.$refs.dropzone?.dropzone.getActiveFiles().length &&
++				!newFiles.some((file) => this.statusFileIds.includes(file.id))
++			) {
++				this.clearStatus();
++			}
++		},
++	},
+ 	mounted() {
+ 		this.isMounted = true;
+ 	},
+@@ -188,6 +205,7 @@
+ 		 * @see https://www.dropzonejs.com/#event-list
+ 		 */
+ 		dropzoneFilesAdded(files) {
++			this.statusFileIds = [];
+ 			console.log('dropzone files added1');
+ 			// use $nextTick because file.upload is undefined on initial call
+ 			this.$nextTick(() => {
+@@ -228,6 +246,7 @@
+ 		 * @see https://www.dropzonejs.com/#event-list
+ 		 */
+ 		dropzoneSuccess(file, response) {
++			this.statusFileIds.push(response.id);
+ 			const files = this.files.map((item) => {
+ 				if (item.id === file.upload.uuid) {
+ 					return response;
+@@ -240,10 +259,19 @@
+ 		/**
+ 		 * Respond to a dropzone.js event when the total upload progress is updated
+ 		 *
++		 * Dropzone also reports 100 when no file is uploading (after a file is
++		 * removed or its upload cancelled), with a total of 0 bytes: the
++		 * status is cleared then.
++		 *
+ 		 * @param {Number} progress Upload progress 0-100
++		 * @param {Number} totalBytes The bytes of the files being uploaded
+ 		 * @see https://www.dropzonejs.com/#event-list
+ 		 */
+-		dropzoneTotalUploadProgress(progress) {
++		dropzoneTotalUploadProgress(progress, totalBytes) {
++			if (!totalBytes) {
++				this.clearStatus();
++				return;
++			}
+ 			this.status = this.uploadProgressLabel.replace(
+ 				'{$percent}',
+ 				progress.toFixed(0),
+@@ -268,6 +296,14 @@
+ 		},
+ 
+ 		/**
++		 * Clear the screen reader status
++		 */
++		clearStatus() {
++			this.status = '';
++			this.statusFileIds = [];
++		},
++
++		/**
+ 		 * Open the file browser dialog
+ 		 */
+ 		openFileBrowser() {
