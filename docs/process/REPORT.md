@@ -234,6 +234,13 @@ submissions wherever they serve, by username and by title ("sign in as
 it helps), so the reader creates nothing they already have; create only
 what the dataset lacks (a setting it does not turn on, a role or a
 second context it does not hold), and say why when it is not obvious.
+A fault no screen reaches (a program's REST API request, an author
+resending their own save) is shown with the request itself, as a
+`curl` or a console snippet a developer can send: the user's API key
+(`api_key_secret` set in `config.inc.php`, the key from Profile › "API
+Key"), and a body built from what a `GET` of the object returns, so the
+handler gets every field it needs; a PHP call of the handler's code is
+evidence, not the Steps (U41 A29, U49 A11).
 Then numbered steps, one action each, using the names as they appear on
 screen in quotes ("Add discussion", "Save And Continue"), with the page's
 address where it helps. Then two paragraphs, **Expected** and

@@ -863,8 +863,13 @@ probe on a legacy window blurs the box first: the form notices a change on
 blur, so `page.goto()` with the box still focused raises no "Leave site?".
 The run record
 carries the browser's console errors and warnings and uncaught page errors
-from `launch()` on; a script that needs every level (info, log) attaches
-its own `page.on('console')` listener.
+from `launch()` on, for the first page only: a second page of the same
+context (`context.newPage()`, the "other browser" of a two-session drive)
+needs its own `dialog`, `pageerror` and `console` listeners, and a
+`screen()` on a page whose script never settles waits out its 30 s, so
+read such a page directly (U03, U01 claim checks J15). A script that
+needs every level (info, log) attaches its own `page.on('console')`
+listener.
 A download is awaited on `page.waitForEvent('download')` alone, never
 raced against a `waitForURL` (the link's navigation aborts and settles the
 race first, with nothing), and settled by the response's

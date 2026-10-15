@@ -269,6 +269,13 @@ node bin/try-fix.js status [ojs] [omp] [ops]    # exits 1 while a named app (def
   or read it on a context created after the apply; a migration's fix
   shows on an older dataset loaded with `PKP_E2E_DATASET_BRANCH`, which
   runs the upgrade ("Dataset fleets", the reset).
+- An agency export ("Export DOIs" for Crossref or DataCite) stops at the
+  schema fetch on the fleets, which reach no agency, and shows an "Error"
+  window: read the file the plugin builds with its own `exportXML()`,
+  validation off, and check it against the agency's schema with
+  `schemaValidate()` where the schema can be fetched; the Steps then say
+  the file came from that read, not a download (U45 OJS5, A30, OPS6,
+  OPS7 reports).
 
 ### Dataset fleets
 
