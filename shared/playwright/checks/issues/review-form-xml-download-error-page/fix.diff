@@ -1,0 +1,11 @@
+--- a/lib/pkp/api/v1/reviews/PKPReviewController.php
++++ b/lib/pkp/api/v1/reviews/PKPReviewController.php
+@@ -720,7 +720,7 @@
+         $articleMeta->appendChild($customMetaGroupObject);
+         $fileManager = new TemporaryFileManager();
+         $tempFilename = $fileManager->getBasePath() . "submission_review_{$submissionId}-{$reviewId}.xml";
+-        $xml->save($tempFilename);
++        $fileManager->writeFile($tempFilename, $xml->saveXML());
+         $user = Application::get()->getRequest()->getUser();
+ 
+         return $fileManager->createTempFileFromExisting($tempFilename, $user->getId());

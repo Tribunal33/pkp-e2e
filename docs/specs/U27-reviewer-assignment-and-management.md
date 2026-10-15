@@ -1486,7 +1486,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A45](#a45) | Inverted review due dates: the refusal says "adding the reviewer" in Edit and Resend, and misspells "response" everywhere | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A46](#a46) | "Resend Review Request" with the review due date before the response date shows a "Please try again" alert, and the window never states the date rule | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A47](#a47) | A late, unanswered re-sent review request is not marked "Overdue" and offers no "Send Reminder" | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
-| [A49](#a49) | On an install where nothing has been uploaded or downloaded as a PDF yet, both XML entries of "Download Review Form" lead to an error page and no file until a PDF has been downloaded | 🐞 | user-visible | — |
+| [A49](#a49) | Both XML entries of "Download Review Form" open a "not authorized" page until a review PDF is downloaded | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A4](#a4) | Editorial Notes are one shared note per reviewer; editing them on one submission silently rewrites them everywhere | ❓ | user-visible | — |
 | [A6](#a6) | Declined and cancelled rows are silently hidden from assistant-level participants, so the same table shows different reviewers per role | ❓ | minor | — |
 | [A17](#a17) | The due-date pickers accept dates already past without any warning | ❓ | minor | — |
@@ -2131,21 +2131,23 @@ Security: unreleased.
 Since: 2026-08-20 · Basis: code, 2026-10-13. <sup>[f-a48](#fn-a48)</sup>
 
 <a id="a49"></a>
-**A49 — On an install where nothing has been uploaded or downloaded as a PDF yet, both XML entries of "Download Review Form" lead to an error page and no file until a PDF has been downloaded** · 🐞 · user-visible.
-An editor opens a review's Review Details window, opens "Download
+**A49 — Both XML entries of "Download Review Form" open a "not authorized" page until a review PDF is downloaded** · 🐞 · medium.
+An editor opens a review's "Review Details" window, presses "Download
 Review Form" and picks "Editor Form Shows All Review Sections (XML)" or
-"Author-Only Sections Displayed (XML)". Expected: the file downloads, as
-the PDF entries' files do. On an install where no file has been
-uploaded through a form or downloaded as a PDF review form yet (a fresh
-install, or PKP's default test dataset as loaded), the browser leaves the workflow instead for a page reading
+"Author-Only Sections Displayed (XML)". Instead of a file, the browser
+leaves the workflow for a page reading
 `{"error":"You are not authorized to access the requested resource."}`,
-and no file arrives, however often the entry is pressed. The editor has
-done nothing unauthorized, and nothing says that a PDF download first
-would help. The state is the whole install's: the first PDF review form
-downloaded by anyone, on any review, makes both XML entries download from
-then on, and by the code so does the first file uploaded through any
-form (the submission wizard, a reviewer's upload), which is why an
-install in use rarely meets it.
+however often the entry is pressed.
+
+It happens until the install's temporary files folder exists. The first
+review PDF downloaded by anyone, on any review, creates it and makes
+both XML entries work from then on, but nothing on screen says so.
+
+Uploading a logo, an email attachment or a library file creates the
+folder too; submission and review files do not. So a new journal or
+press whose only uploads so far are submissions and reviews meets it
+at its first XML review download, and so does PKP's default test
+dataset as loaded.
 Basis: probe, 2026-10-15. <sup>[f-a49](#fn-a49)</sup>
 
 ### OMP
