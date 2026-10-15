@@ -83,7 +83,7 @@ that fails validation keeps the panel open with the error on the field and
 | **DOI** | No | Help text "e.g. 10.1000/182, doi:10.1000/182, https://doi.org/10.1000/182". Any of the three forms is accepted and kept as the bare DOI. Anything else is refused with "This is not formatted correctly." <sup>f</sup> |
 | **URL** | No | Must be a web address, or "This is not a valid URL." <sup>f</sup> |
 | **URN** | No | Free text. <sup>f</sup> |
-| **Arxiv** | No | Help text "e.g. 1234.123456v2, arxiv:1234.123456v2, https://arxiv.org/abs/1234.123456v2". Any of the three forms is accepted and kept as the bare ID, with its version when it has one: "2101.12345v2", "arxiv:2101.12345v2" and "https://arxiv.org/abs/2101.12345v2" are each stored as "2101.12345v2". Anything else: "This is not formatted correctly." <sup>f</sup> |
+| **Arxiv** | No | Help text "e.g. 1234.123456v2, arxiv:1234.123456v2, https://arxiv.org/abs/1234.123456v2". Any of the three forms is accepted and kept as the bare ID, with its version when it has one: "2101.12345v2", "arxiv:2101.12345v2" and "https://arxiv.org/abs/2101.12345v2" are each stored as "2101.12345v2". Anything else: "This is not formatted correctly.", which also refuses an older ID with a dotted subject class ("math.AG/0309136") that the lookup itself put in the box ⚠ [A28](#a28). <sup>f</sup> |
 | **Handle** | No | Help text "e.g. 20.1000/100, handle:20.1000/100, https://hdl.handle.net/20.1000/100". Kept as the bare handle. Anything else: "This is not formatted correctly." <sup>f</sup> |
 | **Title** | No | The cited work's title. <sup>f</sup> |
 | **Author Information** | No | A small table with the columns **Given Name**, **Family Name** and **ORCID iD**, an "Add" button for a new row and a "Delete" per row. The boxes have no names for a screen reader ⚠ [A14](#a14). A row added and left empty is saved as an author with no name [A13](#a13). The ORCID iD box takes only an ORCID address, "https://orcid.org/…" or "https://sandbox.orcid.org/…" with a valid check digit, as a data citation's "Creators" do. Anything else (another website's address, a `javascript:` link, the bare iD) is refused with "The ORCID iD you specified is invalid. Please include the full URI (e.g. "https://orcid.org/0000-0002-1825-0097")." under the row's box, and nothing is saved. A row with the box empty is saved with no iD. The expanded row gives each author with an iD an ORCID icon linking to it. <sup>f</sup> <sup>f-a22</sup> |
@@ -1090,6 +1090,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A24](#a24) | A screen reader hears that a refused box of the data citation panel is invalid, but not why | 🐞 | minor | — |
 | [A25](#a25) | A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text, without a word | 🐞 | minor | — |
+| [A28](#a28) | A reference whose text holds an arXiv ID with a subject class, such as "arXiv:math.AG/0309136", cannot be saved in "Edit citation" once the ID is picked out | 🐞 | user-visible | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
 | [A26](#a26) | Whether a lookup that finishes after an editor filled a reference in by hand replaces what was typed has not been seen | ❓ | user-visible | — |
@@ -1362,6 +1363,22 @@ question and its lean are
 *[Institutions](U66-institutions.md#a11)*'s A11, where the same was
 seen on "Add Institution".
 Basis: probe, 2026-10-07. <sup>f-a27</sup>
+
+<a id="a28"></a>
+**A28 — A reference whose text holds an arXiv ID with a subject class cannot be saved in "Edit citation" once the ID is picked out** · 🐞 · user-visible.
+With metadata lookup on, an editor adds a reference whose text holds an
+arXiv ID in its older form, with a subject class: "Roe, R. Moduli
+spaces. 2003. arXiv:math.AG/0309137". The lookup's first step (Rule 11)
+picks the ID out, and "Edit" shows "math.AG/0309137" in "Arxiv". The
+editor fills "Title" and presses "Save", expecting the change to be
+kept. The panel stays open with "This is not formatted correctly." under
+"Arxiv", a box the editor never typed in, and nothing is saved until
+that box is cleared or rewritten. IDs without a dot in the class
+("hep-th/9901001", "math/0309136v1") and the newer "2101.12345v2" are
+saved. Once pkp/pkp-lib#13537 is merged, a reference added with lookup
+off, or brought in by a command-line native import, gets the same ID
+and meets the same refusal when lookup is later on.
+Basis: probe, 2026-10-15. <sup>f-a28</sup>
 
 ### Retired
 
@@ -2879,6 +2896,24 @@ panel scrolled was not measured, and a screen reader itself was not
 run. Kept check
 `shared/playwright/checks/U42/I07b/i07b.js` (phase `l13`). *Institutions*
 note f-a11 has the same read on "Add Institution" (2026-09-28).
+
+<a id="fn-f-a28"></a>
+**f-a28 — A28 evidence.** `PKP\pid\Arxiv::regexes` and its
+`validationRegexes` take `[a-z.-]+\/\d+` for the older form, so
+"arXiv:math.AG/0309136" gives "math.AG/0309136"; `schemas/citation.json`
+checks `arxiv` with `regex:/^(?:\d+.\d+|[a-z-]+.\d+)/i`, which needs a
+digit after the class's first letters and one character, and refuses it.
+`PKPCitationController::edit()` re-reads `arxiv` with
+`Arxiv::extractFromString()`, which needs a prefix, so the stored bare
+value is validated as it is. Live-probed 2026-10-15 on PKP's default
+dataset, OJS, OMP and OPS (`checks/sync/pkp-lib-13537/arxiv.js`), at
+pkp-lib `dce15320c7`: the reference added with lookup on was refused
+(400, `{"arxiv":["This is not formatted correctly."]}`), one added with
+lookup off held no arXiv ID and saved; at pkp/pkp-lib#13537's head
+`20c178bcb8` both were refused. The schema rule set to the class's own
+pattern (`fix-arxiv.diff`, tried on OJS at the head) saved both, the ID
+kept; by the pattern "hep-th/9901001v1" and "2101.12345v2" still pass,
+"xyz" and "3456.34567vx" are still refused.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where

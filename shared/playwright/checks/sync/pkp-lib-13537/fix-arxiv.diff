@@ -1,0 +1,13 @@
+diff --git a/schemas/citation.json b/schemas/citation.json
+index b25c859299..003e284be7 100644
+--- a/schemas/citation.json
++++ b/schemas/citation.json
+@@ -14,7 +14,7 @@
+             "apiSummary": true,
+             "validation": [
+                 "nullable",
+-                "regex:/^(?:\\d+.\\d+|[a-z-]+.\\d+)/i"
++                "regex:/^(?:\\d+\\.\\d+|[a-z.-]+\\/\\d+)(?-i:v\\d+)?$/i"
+             ]
+         },
+         "authors": {
