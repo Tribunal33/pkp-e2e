@@ -894,7 +894,7 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A Journal Manager of one journal can read, approve, hide and delete another journal's comments by requests made by hand, and any signed-in account can report them | 🐞 | latent | — |
 | [A13](#a13) | On the editorial Comments page, the browser tab shows only the journal's name, not "Comments" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
-| [A17](#a17) | Anyone, signed in or not, reads the reports on every approved comment, with the reporter's name and reason, by a request made by hand | 🐞 | latent | — |
+| [A17](#a17) | Anyone, signed in or not, can read who reported a comment and why from the public comment list | 🐞 | high | issues (claude), 2026-10-15 — re-verified |
 | [A18](#a18) | Any signed-in account comments by a request made by hand on a submission that is not published, with comments off, and learns its title and first author | 🐞 | latent | — |
 | [A19](#a19) | Deleting all of a comment's reports at once, by a request made by hand, fails with a server error unless the comment has exactly one report | 🐞 | latent · crash: server | — |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
@@ -1135,22 +1135,21 @@ one person's, whose public comments should survive it.
 Basis: probe, 2026-10-04; code for what the merge hands over. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — Anyone, signed in or not, reads the reports on every approved comment by a request made by hand** · 🐞 · latent.
-The comments under an article come from a list anyone may ask for,
-signed in or not. Asked by hand to include the reports (`GET
-api/v1/comments/public?publicationIds={id}&includeReports=1`, which no
-screen sends; note f-a17), the list returns with each approved comment every report
-filed on it: the reporter's name, affiliation and ORCID iD, and the
-reason as they typed it. Only the moderators are meant to read these, on
-the Comments page (Rule 15); without that request the list carries no
-reports, and the moderators' own request for a comment's reports refuses
-a visitor who is not signed in. Expected the reports withheld from all
-but the moderators; observed them handed to anyone, so a reader who
-reports a comment is named, with their reason, to its writer and to the
-public.
+**A17 — Anyone, signed in or not, can read who reported a comment and why from the public comment list** · 🐞 · high.
+Only a journal's moderators are meant to know who reported a comment
+and why: they read reports on the Comments page. But the comment list
+behind every article's page, `GET /api/v1/comments/public`, which
+anyone may call without signing in, returns every report on each
+approved comment when `includeReports` is added to the request. Each
+report carries the reporter's name, affiliation and ORCID iD, and the
+reason exactly as they typed it.
+
+So the writer of a reported comment, or any visitor, can learn who
+reported it and what they wrote. The reporter is not told. No page of
+the app sends `includeReports`, but the parameter is in pkp-lib's
+public source.
 Security: unreleased.
-Since: 2025-06-18 · Basis: probe, 2026-10-13, on a journal; code for the
-press and the preprint server. <sup>f-a17</sup>
+Since: 2025-06-18 · Basis: probe, 2026-10-15. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — Any signed-in account comments by a request made by hand on a submission that is not published, and learns its title and first author** · 🐞 · latent.
@@ -2327,6 +2326,7 @@ commit, with the same controller and resource, and each app registers
 the `comments` API; no comment box writes comments on a press or a
 server, so there the reports sit only on comments written through the
 API.
+Issue report: [docs/issues/U14-A17-public-comment-list-exposes-reports.md](../issues/U14-A17-public-comment-list-exposes-reports.md).
 
 <a id="fn-f-a18"></a>
 **f-a18 — A18.** `UserCommentController::submit()` (the `has.user` group,

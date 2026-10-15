@@ -1,0 +1,28 @@
+--- a/lib/pkp/api/v1/comments/resources/UserCommentResource.php
++++ b/lib/pkp/api/v1/comments/resources/UserCommentResource.php
+@@ -31,6 +31,8 @@
+ 
+         $publication = $this->publication; /** @var Publication $publication */
+ 
++        $isModerator = $request->user() && Repo::userComment()->isModerator($request->user());
++
+         $results = [
+             'id' => $this->id,
+             'contextId' => $this->contextId,
+@@ -54,13 +56,14 @@
+                 'fullTitle' => $publication->getLocalizedFullTitle(),
+             ],
+             // Fields only available to moderators
+-            $this->mergeWhen($request->user() && Repo::userComment()->isModerator($request->user()), [
++            $this->mergeWhen($isModerator, [
+                 'approvedAt' => $this->approvedAt,
+                 'approvedByUserName' => $this->approvedByUserId ? Repo::user()->get($this->approvedByUserId)->getFullName() : null,
+             ]),
+         ];
+ 
+-        if (key_exists('includeReports', $requestQueryParams)) {
++        // Reports name the reporter and their reason: moderators only
++        if ($isModerator && key_exists('includeReports', $requestQueryParams)) {
+             $results['reports'] = UserCommentReportResource::collection($this->reports);
+         }
+ 
