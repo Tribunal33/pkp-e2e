@@ -1165,7 +1165,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A5](#a5) | Readers never see a new version's Summary of Changes, though the editor is told it appears publicly | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Creating a new version, still unpublished, makes the reader page say "Published {today} — Updated on {real date}" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A11](#a11) | Markup an author saves in a revision's summary of changes runs as script in the editor's browser when "Insert Content" opens | 🐞 | user-visible | — |
+| [A11](#a11) | An author's revision summary can carry a script that runs in the editor's browser when "Insert Content" opens | 🐞 | high | issues (claude), 2026-10-15 — re-verified |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused without naming the summary and publishing is unreachable | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1378,23 +1378,26 @@ finding, and why a missing French text shows as a code at all is
 Since: 2026-09-30 · Basis: probe, 2026-10-02. <sup>[f-a10](#fn-a10)</sup>
 
 <a id="a11"></a>
-**A11 — Markup an author saves in a revision's summary of changes runs as script in the editor's browser when "Insert Content" opens** · 🐞 · user-visible.
-An Author who uploads a revised file in review fills its "Summary of
-Changes (Amendment Notice)" in the upload's details step, and the text
-is kept as typed. Later, a Journal Manager or Editor presses "Insert
-Content" on a version's Summary of Changes box (Rule 14). Expected: the
-panel lists each saved summary as text. Observed: a summary holding
-HTML markup that carries a script (an image tag with an error handler,
-for one) runs that script in the editor's browser, under the editor's
-sign-in, the moment the panel opens. When the summary holds no other
-text the panel reads "No saved summaries found for this submission's
-review revisions.", so the editor sees nothing amiss. Any author of a
-submission in review can save such a summary. It runs for whoever opens
-"Insert Content" on that submission: the may-publish roles (Actors),
-and anyone else the entry page lets edit the publication. A journal and
-a press; a preprint server has no such button.
+**A11 — An author's revision summary can carry a script that runs in the editor's browser when "Insert Content" opens** · 🐞 · high.
+An author asked for revisions uploads a revised file and writes a
+"Summary of Changes (Amendment Notice)" for it. Later a Journal or Press
+Manager or Editor presses "Insert Content" on a version's own Summary of
+Changes box to reuse that text. They expect the panel to list each saved
+summary as text. Instead, a summary holding markup that carries a script
+(an image tag with an error handler, for one) runs that script in their
+browser, under their sign-in, the moment the panel opens.
+
+Nothing on screen gives it away: the panel lists the summary's text as
+usual, or "No saved summaries found for this submission's review
+revisions." when the summary holds nothing else. The script can do
+whatever the editor's account can do.
+
+Typing or pasting markup into the author's box is not enough: the box
+strips it. But the server stores whatever summary the box's save request
+carries, so the author can send that request again from their own
+signed-in browser with the markup added.
 Security: unreleased.
-Since: 2026-05-28 · Basis: probe, 2026-10-13 (a journal; a press by the
+Since: 2026-05-28 · Basis: probe, 2026-10-15 (a journal; a press by the
 code). <sup>[f-a11](#fn-a11)</sup>
 
 ### OJS
