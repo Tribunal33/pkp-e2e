@@ -1,0 +1,67 @@
+--- a/lib/pkp/classes/submission/reviewAssignment/ReviewAssignment.php
++++ b/lib/pkp/classes/submission/reviewAssignment/ReviewAssignment.php
+@@ -712,13 +712,13 @@
+             if (!$this->getDateConfirmed()) { // no response
+                 if ($responseDueTime < time()) { // response overdue
+                     return self::REVIEW_ASSIGNMENT_STATUS_RESPONSE_OVERDUE;
+-                } elseif ($reviewDueTime < strtotime('tomorrow')) { // review overdue but not response
++                } elseif ($reviewDueTime < time()) { // review overdue but not response
+                     return self::REVIEW_ASSIGNMENT_STATUS_REVIEW_OVERDUE;
+                 } else { // response not due yet
+                     return self::REVIEW_ASSIGNMENT_STATUS_AWAITING_RESPONSE;
+                 }
+             } else { // response given
+-                if ($reviewDueTime < strtotime('tomorrow')) { // review due
++                if ($reviewDueTime < time()) { // review overdue
+                     return self::REVIEW_ASSIGNMENT_STATUS_REVIEW_OVERDUE;
+                 } else {
+                     return self::REVIEW_ASSIGNMENT_STATUS_ACCEPTED;
+--- a/lib/pkp/classes/submission/Collector.php
++++ b/lib/pkp/classes/submission/Collector.php
+@@ -591,12 +591,12 @@
+                                         ->where('raod.cancelled', '<>', 1)
+                                         ->where(
+                                             fn (Builder $q) =>
+-                                            $q->where('raod.date_due', '<', Core::getCurrentDate(strtotime('tomorrow')))
++                                            $q->where('raod.date_due', '<', Core::getCurrentDate(strtotime('today')))
+                                                 ->whereNull('raod.date_completed')
+                                         )
+                                         ->orWhere(
+                                             fn (Builder $q) =>
+-                                            $q->where('raod.date_response_due', '<', Core::getCurrentDate(strtotime('tomorrow')))
++                                            $q->where('raod.date_response_due', '<', Core::getCurrentDate(strtotime('today')))
+                                                 ->whereNull('raod.date_confirmed')
+                                         )
+                     )
+@@ -977,12 +977,12 @@
+                         fn (Builder $q) =>
+                         $q->where(
+                             fn (Builder $q) =>
+-                            $q->where('ra.date_due', '<', Core::getCurrentDate(strtotime('tomorrow')))
++                            $q->where('ra.date_due', '<', Core::getCurrentDate(strtotime('today')))
+                                 ->whereNull('ra.date_completed')
+                         )
+                             ->orWhere(
+                                 fn (Builder $q) =>
+-                                $q->where('ra.date_response_due', '<', Core::getCurrentDate(strtotime('tomorrow')))
++                                $q->where('ra.date_response_due', '<', Core::getCurrentDate(strtotime('today')))
+                                     ->whereNull('ra.date_confirmed')
+                             )
+                     )
+--- a/lib/pkp/classes/submission/reviewAssignment/Collector.php
++++ b/lib/pkp/classes/submission/reviewAssignment/Collector.php
+@@ -528,12 +528,12 @@
+                         ->where('raod.cancelled', '<>', 1)
+                         ->where(
+                             fn (Builder $q) =>
+-                        $q->where('raod.date_due', '<', Core::getCurrentDate(strtotime('tomorrow')))
++                        $q->where('raod.date_due', '<', Core::getCurrentDate(strtotime('today')))
+                             ->whereNull('raod.date_completed')
+                         )
+                         ->orWhere(
+                             fn (Builder $q) =>
+-                        $q->where('raod.date_response_due', '<', Core::getCurrentDate(strtotime('tomorrow')))
++                        $q->where('raod.date_response_due', '<', Core::getCurrentDate(strtotime('today')))
+                             ->whereNull('raod.date_confirmed')
+                         )
+                 )

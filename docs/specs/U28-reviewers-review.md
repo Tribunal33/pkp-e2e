@@ -1087,7 +1087,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A14](#a14) | Typing a first answer on a review form shows the reviewer "Please fill in required fields."; "Save for Later" then shows its notice beside it | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | Unsaved free-form review text is lost without a warning when the reviewer leaves step 3, while a changed "Recommendation" or review-form answer is guarded | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | With strict mode on, step 3's "Reviewer Files" list stays on "Loading" with no "Upload File" | 🐞 | low | — |
-| [A18](#a18) | On its due date, a review already reads "Deadline for completing this review has passed" in the reviewer's list, and a request due that day offers "Finish review" | 🐞 | user-visible | — |
+| [A18](#a18) | On its due date a review already reads as overdue, to the reviewer and to the editor | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OMP2](#omp2) | {OMP} On a press, the email telling editors a review is in says the reviewer "recommends None" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | {OMP} On a press, a review form refused for an unanswered required question shows the reviewer a raw text code | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | {OPS} On a preprint server, a user given a "Reviewer"-level role lands after every sign-in on a page headed "undefined (0)" under an "Error" window | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
@@ -1400,26 +1400,30 @@ fix are recorded with
 Basis: probe, 2026-10-03. <sup>[f-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
-**A18 — On its due date, a review already reads "Deadline for completing this review has passed"** · 🐞 · user-visible.
-An editor sets "Review Due Date" as a day, and the reviewer expects that
-day to be in time. On the due date (Rule 3), the reviewer's list
-already reads "Deadline for completing this review has passed. Please complete
-the review at the earliest." for an accepted review; the day before it
-read "Please complete this review by {date} 00:00:00.". A response date,
-by contrast, is in time on its day: an unanswered request whose
-"Response Due Date" is today still reads "Please accept or decline this
-request by {date}". The editor's row of the assignment also reads
-"Overdue" from the due date on
-([→ statuses](U27-reviewer-assignment-and-management.md#statuses)).
+**A18 — On its due date a review already reads as overdue, to the reviewer and to the editor** · 🐞 · low.
+An editor sets "Review Due Date" as a day, and the reviewer expects
+that day to be in time. On the due date, the reviewer's list already
+reads "Deadline for completing this review has passed. Please complete
+the review at the earliest." for an accepted review; the day before,
+it read "Please complete this review by 2026-10-15 00:00:00." (the
+midnight time is a separate fault,
+[A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U28-reviewers-review.md#a5)).
+The editor's row of the assignment reads "Overdue" with "Send
+Reminder", and the editors' "Reviews overdue" view lists the
+submission. A response date, by contrast, is in time on its day.
 
-The same sentence, with "Finish review", shows on a request not yet
-answered whose "Response Due Date" and "Review Due Date" are both today,
-though the reviewer never agreed to review; the button opens "1.
-Request" with "Accept Review, Continue to Step #2" and "Decline Review
-Request". A request's review date cannot fall before its response date,
-so this shows only when both fall on the same day, and only on
-that day.
-Basis: probe, 2026-10-05. <sup>[f-a18](#fn-a18)</sup>
+The same "Deadline for completing this review has passed" sentence,
+with a "Finish review" button, shows on a request not yet answered
+whose "Response Due Date" and "Review Due Date" are both today, though
+the reviewer never agreed to review. Both dates fall on the same day
+by default, four weeks after the request. The button still opens the
+request, so the reviewer can accept or decline.
+
+Nothing is lost, and the review can still be submitted that day.
+"Today" is the server's date, in the time zone the install is set to.
+The fix is a handful of comparisons in one shared library.
+The editor's row of the assignment reads "Overdue" by the same rule ([→ statuses](U27-reviewer-assignment-and-management.md#statuses)).
+Basis: probe, 2026-10-15. <sup>[f-a18](#fn-a18)</sup>
 
 ### OMP
 
