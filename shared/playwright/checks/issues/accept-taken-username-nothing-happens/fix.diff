@@ -1,0 +1,55 @@
+--- a/lib/ui-library/src/pages/acceptInvitation/AcceptInvitationPageStore.js
++++ b/lib/ui-library/src/pages/acceptInvitation/AcceptInvitationPageStore.js
+@@ -446,14 +446,19 @@
+ 				await updateInvitationPayload();
+ 			}
+ 			if (isValid.value) {
+-				const {data, fetch} = useFetch(finalizeInvitationUrl, {
++				const {data, validationError, fetch} = useFetch(finalizeInvitationUrl, {
+ 					expectValidationError: true,
+ 					method: 'PUT',
+ 					body: {},
+ 				});
+ 
+ 				await fetch();
+-				if (data.value) {
++				if (validationError.value) {
++					// A 400 or 422 without field errors (the API's own `error`) shows under the step title
++					showFinalizeErrors(
++						validationError.value.errors ?? {error: validationError.value.error},
++					);
++				} else if (data.value) {
+ 					openDialog({
+ 						title: t('acceptInvitation.modal.title'),
+ 						message: t('acceptInvitation.modal.message'),
+@@ -471,6 +476,30 @@
+ 			}
+ 		}
+ 
++		/**
++		 * Show the errors of a refused finalize request
++		 *
++		 * The review step has no fields of its own, so a field refused at
++		 * this point (a username taken since its step was saved) is shown on
++		 * the step that holds the field, where it can be corrected.
++		 *
++		 * @param {Object} fieldErrors Errors keyed by field name
++		 */
++		function showFinalizeErrors(fieldErrors) {
++			const fieldNames = Object.keys(fieldErrors);
++			const step = steps.value.find((step) =>
++				step.sections.some((section) =>
++					(section.props?.validateFields || []).some((field) =>
++						fieldNames.includes(field),
++					),
++				),
++			);
++			if (step) {
++				openStep(step.id);
++			}
++			errors.value = fieldErrors;
++		}
++
+ 		function cancel() {
+ 			openDialog({
+ 				name: 'cancel',

@@ -638,6 +638,11 @@ App-specific:
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - two newcomers choosing the same free username, the first accepting, and
+    the second's "Accept And Continue" showing the taken-username message
+    under Username ([A13](#a13)): the guard the issue report
+    (`docs/issues/U06-A13-accept-taken-username-nothing-happens.md`)
+    proposes, once fixed
   - the send wizard's address typed by roles that do not open Users &
     Roles, a Section Editor and an Editor with "Permit changes to Settings"
     unticked, each getting the access-denied page, and by a signed-out
@@ -797,8 +802,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Role invitation wizard: a screen reader hears no field names in role rows after the first | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | The invitation email promises a masthead listing for roles the masthead never lists, such as Author or Reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A12](#a12) | The "Invite to a role" address with a wrong last word shows an empty page instead of "404 Not Found" | 🐞 | low · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [A13](#a13) | A newcomer whose chosen username was taken in the meantime presses "Accept And Continue to OJS" and nothing happens | 🐞 | minor | — |
-| [A14](#a14) | Each opening of the invitation wizard leaves PHP warnings in the server's error log | 🐞 | invisible | — |
+| [A13](#a13) | A newcomer whose chosen username was taken meanwhile presses "Accept And Continue" and nothing happens | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
+| [A14](#a14) | Each opening of the "Invite to a role" wizard writes PHP warnings to the server's error log | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OMP1](#omp1) | On a press or preprint server, a member's masthead change ends in an "Error" and emails nobody | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OPS1](#ops1) | The invitation email template has no row on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A2](#a2) | Daily cleanup deletes invitations still being composed | ❓ | latent | — |
@@ -969,27 +974,40 @@ typed or pasted by hand reaches the empty page.
 Basis: probe, issue report walk, 2026-10-02. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
-**A13 — A newcomer whose chosen username was taken in the meantime presses "Accept And Continue to OJS" and nothing happens** · 🐞 · minor.
-A newcomer chooses a free username on "Create OJS account" and walks on
-to "Review & create account". If another newcomer accepts with the same
-username first, pressing "Accept And Continue to OJS" changes nothing on
-the page: no message, no error under any field, and the button stays as
-it was. Pressing it again does the same. The newcomer should be told the
-username is taken, as "Create OJS account" tells them when it is taken
-there. The review step offers no Edit for the username; "Back" twice
-reaches "Create OJS account", where the box still holds the taken name
-with no error under it. Another username entered there goes through,
-and the role is granted.
-Basis: probe, 2026-10-13. <sup>[f-a13](#fn-a13)</sup>
+**A13 — A newcomer whose chosen username was taken meanwhile presses "Accept And Continue" and nothing happens** · 🐞 · low.
+A person invited to a role who has no account yet chooses a free
+username on "Create OJS account" and walks on to "Review & create
+account". If someone else takes the same username before they accept,
+pressing "Accept And Continue to OJS" changes nothing on the page: no
+message, no error under any field, no dialog, and the button stays.
+
+When the name is already taken as they press "Save and continue" on
+"Create OJS account", that step tells them so under the Username box;
+the last step does not. The review step offers no Edit for the
+username, and "Back" twice reaches "Create OJS account" with the taken
+name in the box and no error under it. Another username typed there
+goes through, and the role is granted.
+
+The name is checked only when "Save and continue" is pressed on "Create
+OJS account" and again at the accept, so a clash needs another person
+to register or accept with the same username while the newcomer is on
+"Enter details" and the review, usually minutes, longer when the page
+is left open.
+Basis: probe, 2026-10-15. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — Each opening of the invitation wizard leaves PHP warnings in the server's error log** · 🐞 · invisible.
-Each time the send wizard opens, whether by "Invite to a role", by a
-pending invitation's "Edit Invitation" or by Edit on a member in the
-users list, the server's error log gains four PHP warnings
-`Undefined array key "invitation_id"` (note f-a14 says where the log
-is read). No screen shows them, and the wizard works. Sending, accepting and declining leave no warning.
-Basis: probe, 2026-10-13. <sup>[f-a14](#fn-a14)</sup>
+**A14 — Each opening of the "Invite to a role" wizard writes PHP warnings to the server's error log** · 🐞 · low.
+Each time a manager opens the invitation wizard, the server's error log
+gains PHP warnings `Undefined array key "invitation_id"`, two for each
+form language of the journal. It happens on all three ways in: "Invite
+to a role" on Users & Roles, a pending invitation's "Edit" › "Edit
+Invitation", and "Edit" on a member in the users list.
+
+The warnings come from a real fault in the code, but its result is
+harmless: no screen shows them, and the wizard works. The invitation is
+sent and edited as usual, and its email links carry the invitation's
+id. No setting in the app turns them off.
+Basis: probe, 2026-10-15. <sup>[f-a14](#fn-a14)</sup>
 
 ### OMP and OPS
 
@@ -1810,6 +1828,7 @@ dialog. Control: a username held by a dataset user (`rvaca`) or taken a
 minute earlier by a newcomer was refused at `refine` (422) on "Create
 OJS account" with the message under the field. First seen 2026-10-10 on
 OJS during the review of pkp/pkp-lib#13497.
+Issue report: [docs/issues/U06-A13-accept-taken-username-nothing-happens.md](../issues/U06-A13-accept-taken-username-nothing-happens.md).
 
 <a id="fn-a14"></a>
 **f-a14** — `PHP Warning: Undefined array key "invitation_id" in
@@ -1829,6 +1848,7 @@ warnings first seen beside them on 2026-10-02 did not appear
 Where the warnings are read: the test install's PHP server output,
 `apps/<app>/playwright/.server-logs/server-<port>.log` (harness.md
 "Server output"; a probe server's is `server-<port>-probe.log`).
+Issue report: [docs/issues/U06-A14-invitation-wizard-logs-php-warnings.md](../issues/U06-A14-invitation-wizard-logs-php-warnings.md).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Error observed on OMP and OPS (live probes 2026-07-31, two
