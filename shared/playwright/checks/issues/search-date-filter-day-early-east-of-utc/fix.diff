@@ -1,0 +1,25 @@
+--- a/lib/pkp/classes/search/engines/DatabaseEngine.php
++++ b/lib/pkp/classes/search/engines/DatabaseEngine.php
+@@ -61,7 +61,8 @@
+         foreach ($builder->wheres as $field => $value) {
+             $$field = match($field) {
+                 'contextId' => (int) $value,
+-                'publishedFrom', 'publishedTo' => $value ? new \Carbon\Carbon($value) : null,
++                // The limit is a timestamp of midnight in the site's time zone; keep that day.
++                'publishedFrom', 'publishedTo' => $value ? \Carbon\Carbon::createFromTimestamp($value, date_default_timezone_get()) : null,
+                 'author', 'title', 'abstract', 'body' => (string) $value,
+             };
+         };
+--- a/lib/pkp/classes/search/engines/OpenSearchEngine.php
++++ b/lib/pkp/classes/search/engines/OpenSearchEngine.php
+@@ -287,7 +287,9 @@
+                 case 'publishedFrom':
+                 case 'publishedTo':
+                     if ($value) {
+-                        $$field = new \Carbon\Carbon($value);
++                        // The limit is a timestamp of midnight in the site's time zone; compare
++                        // its day with the indexed Y-m-d dates.
++                        $$field = \Carbon\Carbon::createFromTimestamp($value, date_default_timezone_get())->toDateString();
+                     }
+                     break;
+                 case 'title':

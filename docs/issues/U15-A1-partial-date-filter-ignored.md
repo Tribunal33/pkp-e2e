@@ -50,8 +50,8 @@ filters.
 - **Way round**: choose Year, Month and Day; a full date is applied
   and shown as chosen. On a site whose time zone is east of UTC (most
   of Europe, Africa, Asia and Oceania), a full date is applied a day
-  early, with the built-in database search and with OpenSearch alike;
-  that is a separate fault with its own report, and the fix here is
+  early with the built-in database search, the default; that is a
+  separate fault with [its own report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U15-A18-search-date-filter-day-early-east-of-utc.md), and the fix here is
   complete without it and can land before or after it.
 
 Medium: the filter is silently ignored, but a full date works. It would
@@ -155,10 +155,11 @@ Reach:
   (code).
 - The page links (`page_links`) pass on the raw parts, so page 2 drops
   the filter and redraws the selects the same way (code).
-- On a site whose time zone is east of UTC, both search drivers PKP
-  ships on `main` (`DatabaseEngine`, the default, and `OpenSearchEngine`)
-  read every date limit as the day before: `new \Carbon\Carbon($value)`
-  turns the timestamp into a UTC date. That is a separate fault from
+- On a site whose time zone is east of UTC, the database search driver
+  (`DatabaseEngine`, the default) reads every date limit as the day
+  before: `new \Carbon\Carbon($value)` turns the timestamp into a UTC
+  date (`OpenSearchEngine` misreads it too, differently; see
+  [A18's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U15-A18-search-date-filter-day-early-east-of-utc.md)). That is a separate fault from
   the same `pkp/pkp-lib#8920` change set
   ([b44cf27793](https://github.com/pkp/pkp-lib/commit/b44cf277933),
   spec U15 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U15-search.md#a18)).
@@ -225,13 +226,11 @@ runs in PHP's default zone, which
 `PKPApplication::initializeTimeZone()` sets from `[general] time_zone`.
 A full date gets the same value from `getUserDateVar()`, and 3.5's
 query compares dates in that zone. On a site east of UTC the day is
-lost later, in both search drivers (A18, Cause). There, with this fix
+lost later, in the search drivers (A18, Cause). There, with this fix
 alone, a partial limit moves one day earlier, as a full date's does
 today: "After" also takes in the day before, and "Before" stops a day
 sooner. A18's own fix goes in the drivers, where the timestamp becomes
-a date (`\Carbon\Carbon::createFromTimestamp($value, date_default_timezone_get())`
-in place of `new \Carbon\Carbon($value)`), and covers full and
-partial dates alike.
+a date, and covers full and partial dates alike.
 
 Tried on `main`, OJS and OPS, with the site's time zone at UTC and at
 Europe/Prague: steps 2 and 3 now give the Expected in both zones ("No

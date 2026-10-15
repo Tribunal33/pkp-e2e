@@ -803,7 +803,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | A Search link naming a sort that main does not know, such as a typo or 3.5's "publicationDate", shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
-| [A18](#a18) | On a site whose time zone is east of UTC, the Search date filters apply the day before the chosen day | 🐞 | user-visible | — |
+| [A18](#a18) | On a site east of UTC, the Search page's "Published After" and "Published Before" apply the day before the chosen date | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OJS1](#ojs1) | Screen readers hear a raw code, or "Found one item.", when a search finds several items | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS4](#ojs4) | Rebuilding one journal's search index by its path leaves Search empty on every other journal until a full rebuild | 🐞 | medium | — |
@@ -1070,19 +1070,18 @@ made. Searching again lists the results. Its cause is its own: a fix for
 Basis: probe, 2026-10-07. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — On a site whose time zone is east of UTC, the Search date filters apply the day before the chosen day** · 🐞 · user-visible.
-A reader on the Search page of a journal or preprint server whose time
-zone is east of UTC (most of Europe, Africa, Asia and Oceania) who sets
-"Published After" to 31 January 2025 also gets the articles published on
-30 January, and with "Published Before" 31 January also loses them: each
-full date the reader chooses is applied as the day before. The result
-summaries show the articles' own dates and the selects show the date as
-chosen, so nothing tells the reader. On a site at UTC or west of it the
-filters keep the chosen day. A partial date is ignored whatever the zone
-([A1](#a1)), and a press's Search page has no date filters.
+**A18 — On a site east of UTC, the Search page's "Published After" and "Published Before" apply the day before the chosen date** · 🐞 · medium.
+On a journal or preprint server whose site time zone (the `time_zone`
+setting) is east of UTC, as in most of Europe, Africa, Asia and
+Oceania, the Search page applies each full date chosen under
+"Published After" or "Published Before" as the day before. "Published
+After" then also lists the items published on the day before the
+chosen date, and "Published Before" leaves them out.
 
-No release has it: only `main`, the coming 3.6. 3.5 applies the chosen
-day in every zone.
+The selects still show the date as chosen and no message appears; only
+the dates printed under the extra "Published After" items give it
+away. On a site at UTC or west of it, the default database search
+keeps the chosen day.
 Since: 2025-08 (about a year). Basis: probe, 2026-10-15. <sup>f-a18</sup>
 
 ### OJS
