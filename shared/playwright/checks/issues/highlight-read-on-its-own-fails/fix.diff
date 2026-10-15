@@ -1,0 +1,32 @@
+--- a/lib/pkp/classes/core/maps/Schema.php
++++ b/lib/pkp/classes/core/maps/Schema.php
+@@ -77,13 +77,16 @@
+ 
+     /**
+      * Get the URL to an object in the REST API
++     *
++     * @param ?string $contextPath The path of the context whose API serves the object. Defaults to
++     *   the request's context, which the map holds, and to the site when there is none.
+      */
+-    protected function getApiUrl(string $route, $contextPath = PKPApplication::SITE_CONTEXT_PATH): string
++    protected function getApiUrl(string $route, ?string $contextPath = null): string
+     {
+         return $this->request->getDispatcher()->url(
+             $this->request,
+             PKPApplication::ROUTE_API,
+-            $contextPath,
++            $contextPath ?? $this->context?->getData('urlPath') ?? PKPApplication::SITE_CONTEXT_PATH,
+             $route,
+         );
+     }
+--- a/lib/pkp/api/v1/highlights/HighlightsController.php
++++ b/lib/pkp/api/v1/highlights/HighlightsController.php
+@@ -114,7 +114,7 @@
+      */
+     public function get(Request $illuminateRequest): JsonResponse
+     {
+-        $highlight = Repo::highlight()->get((int) $illuminateRequest->route('highlightId'), $this->getRequest()->getContext());
++        $highlight = Repo::highlight()->get((int) $illuminateRequest->route('highlightId'), $this->getRequest()->getContext()?->getId());
+ 
+         if (!$highlight) {
+             return response()->json([

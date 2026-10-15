@@ -965,7 +965,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | An edited announcement type keeps its old name in the Announcement Types table until a reload | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A14](#a14) | On a French press or preprint server, the new-announcement email's last sentence arrives in English {OMP OPS} | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | A journal's Atom and RSS 1.0 announcement feeds write every date with "%" signs ("%2026-%10-%03UTC%UTC%275") {OJS} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A19](#a19) | Through the programming interface, an announcement's own address points at the site, which refuses it | 🐞 | latent | — |
+| [A19](#a19) | Through the programming interface, an announcement's own address points at the site, which refuses it | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OMP2](#omp2) | A press's home page shows the site's announcements, with links that lead nowhere {OMP} | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A5](#a5) | An announcement's type is printed nowhere a reader looks | ❓ | minor | — |
 | [A6](#a6) | A chosen "Announcement Type" cannot be cleared, only changed | ❓ | minor | — |
@@ -1206,7 +1206,7 @@ offer the box at all? Lean: no, hide it there; a box that can never do
 anything misleads. Basis: probe, 2026-09-17. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Through the programming interface, an announcement's own address points at the site, which refuses it** · 🐞 · latent.
+**A19 — Through the programming interface, an announcement's own address points at the site, which refuses it** · 🐞 · low.
 The apps' own screens never read one announcement on its own, so no user
 of them meets this. A program listing a journal's announcements through
 the install's programming interface (Rule 19) gets, with each
@@ -1224,7 +1224,7 @@ address for the same announcement gives it to the Journal Manager and
 the Site Administrator. The same wrong address as
 *[Highlights](U11-highlights.md#a10)* A10, where the journal's own
 address fails as well.
-Basis: probe, 2026-10-15. <sup>f-a19</sup>
+Since: 2021-06-03 · Basis: probe, 2026-10-15. <sup>f-a19</sup>
 
 ### OMP
 
@@ -2240,6 +2240,7 @@ administrator 200 with the record (whose own `_href` again names
 found."; the author and a signed-out visitor 401 there too. Settings ›
 Announcements sent no request to the announcements API on landing. No
 server error in any run.
+Issue report: [docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md).
 
 <a id="fn-f-omp2"></a>
 **f-omp2 — OMP2 evidence.** OMP's `pages/index/IndexHandler.php` calls

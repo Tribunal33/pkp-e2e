@@ -580,7 +580,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | On a press and a preprint server no institution can be deleted | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A8](#a8) | A press or preprint server that holds an institution cannot be removed and is left half deleted | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
 | [A9](#a9) | A long "IP ranges" line makes an institution's "Save" fail, adding duplicates or wiping its ranges | 🐞 | medium · crash: server | issues (claude), 2026-09-30 — re-verified |
-| [A12](#a12) | Through the programming interface, an institution's own address points at the site, which refuses it | 🐞 | latent | — |
+| [A12](#a12) | Through the programming interface, an institution's own address points at the site, which refuses it | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A13](#a13) | Asking the programming interface for an institution the journal does not hold answers as a success, with an error text | 🐞 | latent | — |
 | [A4](#a4) | Deleting an institution deletes the usage figures credited to it | ❓ | latent | — |
 | [A5](#a5) | The "ROR" box asks for an ID and refuses one | ❓ | minor | — |
@@ -730,7 +730,7 @@ Lean: yes; otherwise a keyboard or screen-reader user still has to find the box.
 Basis: probe, 2026-09-28. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — Through the programming interface, an institution's own address points at the site, which refuses it** · 🐞 · latent.
+**A12 — Through the programming interface, an institution's own address points at the site, which refuses it** · 🐞 · low.
 The apps' own screens never read one institution on its own, so no user
 of them meets this. A program listing a journal's institutions through
 the install's programming interface (Rule 8a) gets, with each
@@ -744,7 +744,7 @@ conference, etc).", and a visitor who is not signed in is refused too.
 The journal's own address for the same institution gives it to the
 Journal Manager and the Site Administrator. The same fault as
 [Highlights A10](U11-highlights.md#a10).
-Basis: probe, 2026-10-15. <sup>f-a12</sup>
+Since: 2021-06-03 · Basis: probe, 2026-10-15. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — Asking the programming interface for an institution the journal does not hold answers as a success, with an error text** · 🐞 · latent.
@@ -1402,6 +1402,7 @@ answer. The journal's address `{journal}/api/v1/institutions/{id}`
 answers the manager and the administrator 200 with the record (its own
 `_href` again names `index`), the author 401
 `user.authorization.roleBasedAccessDenied`, signed out 401.
+Issue report: [docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md).
 
 <a id="fn-f-a13"></a>
 **f-a13 — A13 evidence.** `PKPInstitutionController::get()` answers an

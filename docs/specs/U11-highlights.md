@@ -477,7 +477,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A3](#a3) | The Highlights settings list shows a title's bold word as `<b>…</b>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site administrator cannot add site highlights: "Save" leaves the panel open and "Save Order" shows an error | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
-| [A10](#a10) | Through the programming interface, a journal's highlight cannot be read on its own: its own address points at the site, and the journal's address for it fails | 🐞 | latent · crash: server | — |
+| [A10](#a10) | Through the programming interface, a journal's highlight cannot be read on its own: its own address points at the site, and the journal's address for it fails | 🐞 | low · crash: server | issues (claude), 2026-10-15 — re-verified |
 | [A2](#a2) | "URL" accepts any text although its hint asks for a full web address, so a slide's button can point nowhere | ❓ | user-visible | — |
 | [A6](#a6) | The carousel's dots do nothing when pressed and have no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | "Save Order" on an empty list shows the generic "An unexpected error has occurred…" dialog | ❓ | minor | — |
@@ -582,7 +582,7 @@ miss, and a picture without a description fails visitors on assistive
 devices. Basis: probe. <sup>f-a9</sup>
 
 <a id="a10"></a>
-**A10 — Through the programming interface, a journal's highlight cannot be read on its own** · 🐞 · latent · crash: server.
+**A10 — Through the programming interface, a journal's highlight cannot be read on its own** · 🐞 · low · crash: server.
 The apps' own screens never read one highlight on its own, so no user of
 them meets this. A program listing a journal's highlights through the
 install's programming interface (Rule 15) gets, with each highlight, the
@@ -594,7 +594,7 @@ with a server error (the failure behind [A5](#a5)), and a visitor who is
 not signed in is refused. Asked for at the journal's own address, the
 same highlight fails with a server error for the Journal Manager and the
 Site Administrator alike.
-Since: 2023-10-13 · Basis: probe, 2026-10-13. <sup>f-a10</sup>
+Since: 2023-10-12 · Basis: probe, 2026-10-15. <sup>f-a10</sup>
 
 ### Retired
 
@@ -1146,7 +1146,7 @@ submission-file maps pass the context's `urlPath`. Since 9984fe44707
 `$this->getRequest()->getContext()`, the context object, where
 `Repository::get(int $id, ?int $contextId)` takes an id, so the request
 fails on the server; the controller's other operations pass the context's
-id. Since 71e79e31e3d (2023-10-13). The site route, once A5 is fixed,
+id. Since pkp-lib 9984fe4470 (2023-10-12, `pkp/pkp-lib#9321`); 71e79e31e3d (2023-10-13) only moved the line into the Laravel controller. The site route, once A5 is fixed,
 would look the id up among site highlights only (`DAO::get()` matches
 `COALESCE(context_id, 0) = 0`) and answer 404 rather than the journal's
 highlight (code only). Live-probed 2026-10-13 (Rule 15), OJS, OMP and
@@ -1164,6 +1164,7 @@ list answered the administrator 500 (A5), so no site highlight's `_href`
 could be compared. 3.5 read in the code only (lib/pkp f4f8fcdbc0 under
 ojs, 8094f06bf5 under omp and ops); 3.4 and 3.3 have no highlights
 (note a).
+Issue report: [docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md).
 
 ## Reference — entry points & surfaces
 
