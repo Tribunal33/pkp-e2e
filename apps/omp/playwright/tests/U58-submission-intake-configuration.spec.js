@@ -23,8 +23,6 @@
  *   spinner or pressing "OK" again.
  * - OMP1 🐞: the "Copyright notice" box is found by its editor id, never by
  *   its label; the "Disable Submissions" help is never read.
- * - OMP2 🐞: S3's "Edit" beside "Copyright Notice" is the journal's and the
- *   server's bullet ({OJS OPS}); a press's link is never pressed.
  * - OJS1, OPS1, OPS2: another app's territory.
  *
  * Seeding: scenario endpoints only. S1 reads the seeded press
@@ -507,6 +505,16 @@ test.describe('submission intake configuration', () => {
         await expect(authorPage.getByRole('heading', {name: /Make a Submission/}).first()).toBeVisible({timeout: T});
         await expect(authorPage.getByText('Read the guidelines first')).toBeVisible({timeout: T});
         await expect(authorPage.getByText('The manuscript is anonymised')).toBeVisible({timeout: T});
+
+        // "Edit" beside "Copyright Notice" opens "Author Guidance" (Rule 25).
+        const mgrAbout = new AboutSubmissionsPage(page, tag);
+        await mgrAbout.open();
+        await mgrAbout.partEditLink('Copyright Notice').click();
+        await workflow.waitLoaded();
+        await expect(workflow.submissionTab).toHaveAttribute('aria-selected', 'true', {timeout: T});
+        await expect(workflow.sideTab('Author Guidance')).toHaveAttribute('aria-selected', 'true', {timeout: T});
+        await expect(workflow.sideTab('Disable Submissions')).toHaveAttribute('aria-selected', 'false');
+        await guidance.ready();
 
         // "Author Guidelines" emptied: the part leaves the visitor's page.
         await guidance.type('Author Guidelines', '');

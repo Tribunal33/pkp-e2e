@@ -408,11 +408,9 @@ shows only while its text is not empty. <sup>j</sup>
 25. **"Edit" links.** The users of Actors row 7 see "Edit" beside the
     heading of every part but the section policies. Under "Author
     Guidelines", "Submission Preparation Checklist" and "Copyright
-    Notice" it opens Settings › Workflow ›
-    "Submission" › "Author Guidance"; on a press the link under "Copyright
-    Notice" opens the "Submission" tab on "Disable Submissions" instead
-    ⚠ [OMP2](#omp2). Under "Privacy Statement" it opens Settings › Website
-    › "Setup" › "Privacy Statement". A manager-level role without "Permit
+    Notice" it opens Settings › Workflow › "Submission" › "Author
+    Guidance". Under "Privacy Statement" it opens Settings › Website ›
+    "Setup" › "Privacy Statement". A manager-level role without "Permit
     changes to Settings" lands on the access-denied page. <sup>k</sup>
     <sup>td10</sup>
 26. **Opened on a closed journal.** On a journal that requires visitors
@@ -656,10 +654,9 @@ recipe are in the footnote. <sup>s</sup>
      page and presses "Make a new submission": the "Make a Submission"
      start screen shows Read the guidelines first and, in its
      confirmation, The manuscript is anonymised (Fields; Rule 7).
-   - **"Edit" beside "Copyright Notice"** {OJS OPS}: open the
-     "Submissions" page and press "Edit" beside "Copyright Notice":
-     Settings › Workflow › "Submission" opens on "Author Guidance". A
-     press opens another side tab [OMP2](#omp2) (Rule 25).
+   - **"Edit" beside "Copyright Notice"**: open the "Submissions" page
+     and press "Edit" beside "Copyright Notice": Settings › Workflow ›
+     "Submission" opens on "Author Guidance" (Rule 25).
    - **"Author Guidelines" emptied**: on "Author Guidance", delete the
      whole text of "Author Guidelines" and press "Save": "Saved". The
      visitor reloads: the page has no "Author Guidelines" part, and
@@ -850,9 +847,6 @@ Left out of the scenarios above, by reason:
   - a component's "Name" of one space refused with a sentence in the
     notice, not a raw code ([A10](#a10)): the guard the issue report
     proposes
-  - "Edit" beside each section of the "Submissions" page opening the
-    side tab that holds that section's box, on the three apps
-    ([OMP2](#omp2)): the guard the issue report proposes
   - each help on "Author Guidance" naming its own step and repeating no
     other help ([A7](#a7)): the guard the issue report proposes
   - the "Add a Component" window's labels and helps reading as Fields
@@ -892,8 +886,6 @@ Left out of the scenarios above, by reason:
   - A9 (a preprint server's component names in French; Fields)
   - OMP1 (a press's "Disable Submissions" help and "Copyright notice"
     label; Fields; scenario 3 names it)
-  - OMP2 (a press's "Edit" beside "Copyright Notice"; Rule 25; scenario 3
-    names it)
   - OJS1 (the LOCKSS and CLOCKSS pages' "Copyright" row; Cross-feature
     interactions)
 - **No seed**:
@@ -966,7 +958,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | A press on the dimmed page beside the "Add a Component" window closes it without the question "Close" asks, and the "Name" just typed is lost | 🐞 | minor | — |
 | [OJS1](#ojs1) | LOCKSS and CLOCKSS pages show the "Copyright" row only when an unrelated Copyright Notice is set | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [OMP1](#omp1) | A press's "Disable Submissions" help speaks of "new articles", and its "Author Guidance" labels the copyright box "Copyright notice" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OMP2](#omp2) | On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A new component lands at the top of the list, sharing first place with the first component | ❓ | minor | — |
 | [A3](#a3) | A deleted component keeps its key and can come back, though the confirmation says the delete cannot be undone | ❓ | minor | — |
 | [A4](#a4) | "Multimedia" arrives with both "File Type" boxes ticked, whose sentences contradict each other | ❓ | minor | — |
@@ -978,6 +969,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OPS2](#ops2) | "Author Screening" appears only with a screening plugin, and none is installed | ✅ | — | — |
 | [A13](#a13) | Retired: over an open window a notice's "×" did nothing, or closed the submission's workflow along with the notice; it now removes the notice alone (Rule 16) | ✅ | retired | PR review merge (claude), 2026-10-06 — fixed upstream (pkp/pkp-lib#13188) |
 | [A14](#a14) | Retired: in French (Canada), a press's "Disable Submissions" help reads a raw code | ✅ | retired | Jarda 2026-10-08 · overturned |
+| [OMP2](#omp2) | Retired: on a press's public "Submissions" page, "Edit" beside "Copyright Notice" opened "Disable Submissions", not "Author Guidance"; it now opens "Author Guidance" (Rule 25) | ✅ | retired | fix walked (claude), 2026-10-15 — fixed upstream (pkp/omp#2511, pkp/omp#2510) |
 
 ### All apps
 
@@ -1183,20 +1175,6 @@ label, which this does not touch; the fix is to the English text.
 The two have separate causes and fixes, each in its own issue report.
 Basis: probe, 2026-10-04. <sup>f-omp1</sup>
 
-<a id="omp2"></a>
-**OMP2 — On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance"** · 🐞 · low.
-A press's public "Submissions" page (About › Submissions) shows managers
-an "Edit" link beside each section's heading. "Edit" beside "Author
-Guidelines" and beside "Submission Preparation Checklist" opens Settings
-› Workflow › "Submission" › "Author Guidance", where those texts are
-written. So a manager who clicks "Edit" beside "Copyright Notice"
-expects the same side tab, which holds the "Copyright notice" box.
-Instead the "Submission" tab opens on "Disable Submissions".
-The link shows only once the press has a copyright notice, since the
-"Copyright Notice" section and its "Edit" appear only then. On 3.4,
-journals and preprint servers show the same.
-Basis: probe, 2026-10-04. <sup>f-omp2</sup>
-
 <a id="omp3"></a>
 **OMP3 — A press's components and "Type" default** · ✅ · intended divergence.
 A press lists "Monograph Components": "Appendix", "Bibliography", "Book
@@ -1241,6 +1219,9 @@ Basis: code. <sup>f-ops2</sup>
 
 <a id="a14"></a>
 **A14 — In French (Canada), a press's "Disable Submissions" help reads a raw code** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a14</sup>
+
+<a id="omp2"></a>
+**OMP2 — On a press's public "Submissions" page, "Edit" beside "Copyright Notice" opens "Disable Submissions", not "Author Guidance"** · ✅ · retired. Fixed upstream (`pkp/omp#2511` on `main`, `pkp/omp#2510` on 3.5, for `pkp/pkp-lib#13516`), 2026-10-15: the link now opens "Author Guidance" (Rule 25). <sup>f-omp2</sup>
 
 ---
 
@@ -1544,8 +1525,9 @@ signed out `about.onlineSubmissions.registrationRequired` (links to
 the core template), `copyrightNotice` (`about.copyrightNotice`) and
 `privacyStatement` (`about.privacyStatement`), each behind a non-empty
 `getLocalizedData()`. OMP overrides the whole template: the notice checks
-`disableSubmissions` alone and the copyright edit link's anchor differs
-(OMP2). The page reads the context's `privacyStatement` only; the
+`disableSubmissions` alone, and until 2026-10-15 the copyright edit
+link's anchor differed (OMP2). The page reads the context's
+`privacyStatement` only; the
 installation option `sitewide_privacy_statement` (`config.inc.php`,
 `[general]`) is read by `AboutSiteHandler` (the privacy page),
 `StartSubmission` and `RegistrationForm` and not here (A6). Seen live:
@@ -1582,9 +1564,10 @@ only, so a Reader-only user is refused before the redirect (A5, td9).
 "Edit": `frontend/components/editLink.tpl`, printed only when
 `ROLE_ID_MANAGER` is among the user's roles in the journal; screen-reader
 text `help.goToEditPage`. Anchors: `management/settings/workflow#submission/instructions`
-under the guidelines, the checklist and (OJS, OPS) the copyright notice;
-OMP's copyright link `#submission/authorGuidelines`, an id no side tab has
-(OMP2, td10); `management/settings/website#setup/privacy` under the
+under the guidelines, the checklist and the copyright notice (OMP's
+copyright link read `#submission/authorGuidelines`, an id no side tab
+has, until 2026-10-15: OMP2, td10);
+`management/settings/website#setup/privacy` under the
 privacy statement. Seen live 2026-09-23 as the manager, all three apps:
 the guidelines and checklist links opened "Author Guidance", the privacy
 link "Privacy Statement"; a manager-level role without Settings access
@@ -1742,7 +1725,8 @@ a press with a copyright notice the Press Manager's "Edit" beside
 "Copyright Notice" opened "Submission" › "Disable Submissions" (address
 ending `#submission`); "Edit" beside "Author Guidelines" on the press,
 and beside "Copyright Notice" on a journal and a preprint server, opened
-"Author Guidance".
+"Author Guidance". The press's link was fixed 2026-10-15 and now opens
+"Author Guidance" too (OMP2, note f-omp2).
 
 <a id="fn-td11"></a>
 **td11** — Live-probed 2026-09-27 (Actors row 8), all three apps: the
@@ -1959,8 +1943,13 @@ copyright notice's `editLink.tpl` include passes
 `anchor="submission/authorGuidelines"`, where the core template passes
 `submission/instructions`; `workflow.tpl` has no side tab `authorGuidelines`.
 Live-probed 2026-09-27, OMP with journal and server controls (note
-td10).
-Issue report: [pkp-e2e#823](https://github.com/jardakotesovec/pkp-e2e/issues/823) ([docs/issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md](../issues/U58-OMP2-press-copyright-edit-opens-disable-submissions.md)); the team's copy is `pkp/pkp-lib#13516` (open, 2026-10-14).
+td10). Fixed by `pkp/omp#2511` (`main`, merge `45fb5a8a14`) and
+`pkp/omp#2510` (3.5, merge `df7be0313d`), 2026-10-15, both walked on the
+default dataset that day: signed in as `rvaca`, with a copyright notice
+saved, "Edit" beside "Copyright Notice" linked to
+`…/management/settings/workflow#submission/instructions` and opened
+"Author Guidance" on OJS, OMP and OPS, `main` and `stable-3_5_0`.
+Issue report: [pkp-e2e#823](https://github.com/jardakotesovec/pkp-e2e/issues/823), closed 2026-10-15 at the fix; the team's copy is `pkp/pkp-lib#13516`.
 
 <a id="fn-f-omp3"></a>
 **f-omp3** — OMP `registry/genres.xml` (note f); OMP `schemas/context.json`

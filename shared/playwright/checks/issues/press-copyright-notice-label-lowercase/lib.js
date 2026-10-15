@@ -2,10 +2,18 @@
 // Requiring this file runs nothing. Every helper drives the screens a person uses.
 const {idle} = require('../../../probe');
 const {flat, L} = require('../section-editors-not-assigned-second-journal/lib.js');
-const {openSubmissionsPage} = require('../press-copyright-edit-opens-disable-submissions/lib.js');
 const {workflowPage, openWorkflow, openWorkflowInLocale, readGuidanceLabels} = require('../press-disable-submissions-help-says-articles/lib.js');
 
 const T = 30_000;
+
+/** The "Submissions" page (About › Submissions) of the signed-in user's context. */
+async function openSubmissionsPage(page, app) {
+    const {AboutSubmissionsPage} = require('../../../pages/SubmissionIntakePages.js');
+    const p = new AboutSubmissionsPage(page, app.contextPath, {locale: L(app).replace('/', '')});
+    await p.open();
+    await idle(page);
+    return p;
+}
 
 /** On "Author Guidance" (open): type a text into the copyright box and "Save". Returns whether "Saved" showed. */
 async function saveCopyrightNotice(page, app, text) {

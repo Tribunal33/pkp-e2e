@@ -24,7 +24,7 @@
  * - A12 🐞: S7 presses "Cancel" after the refused delete; the window's
  *   state in between is not read.
  * - OPS1 ✅, OPS2 ✅: S3 asserts them as the scenario states.
- * - A4, A6, A7, OJS1, OMP1, OMP2, OMP3: no scenario step here, or another
+ * - A4, A6, A7, OJS1, OMP1, OMP3: no scenario step here, or another
  *   app's surface.
  *
  * Seeding: scenario endpoints only (footnote s). S1 reads the seeded
