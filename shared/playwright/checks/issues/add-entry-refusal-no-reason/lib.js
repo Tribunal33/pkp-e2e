@@ -1,5 +1,5 @@
 // Helpers for walk.js (U70 A5). Requiring this file runs nothing.
-const {idle, screen, shot, sql} = require('../../../probe');
+const {idle, screen, sql} = require('../../../probe');
 const A8 = require('../add-entry-save-publishes-unchosen-book/lib.js');
 
 /** What the "Add Entry" panel shows after a press: open?, marks at the box, the footer's error line, "Save" enabled?, tags. */
@@ -55,31 +55,4 @@ function currentVersion(app, id) {
     return sql(app, `select p.publication_id, p.status from submissions s join publications p on p.publication_id = s.current_publication_id where s.submission_id = ${Number(id)}`);
 }
 
-/**
- * The control: book `id`'s workflow › "Title & Abstract", the header's "Publish", and what its
- * "Schedule For Publication" window says (never presses the window's "Publish").
- */
-async function workflowPublishWindow(page, app, id, label) {
-    const {WorkflowPage} = require('../../../pages/WorkflowPage.js');
-    const wf = new WorkflowPage(page, app.contextPath);
-    await wf.gotoEditorial(id);
-    await idle(page);
-    const entry = await wf.revealPublicationEntry('Title & Abstract');
-    await entry.click();
-    await idle(page);
-    const controls = page.locator('[data-cy="workflow-controls-right"]');
-    await controls.getByRole('button', {name: 'Publish', exact: true}).click();
-    const dialog = page.getByRole('dialog', {name: /Schedule For Publication/});
-    await dialog.waitFor({state: 'visible', timeout: A8.T});
-    await idle(page);
-    await A8.sleep(1000);
-    const s = await screen(page);
-    await shot(page, label);
-    return {
-        text: A8.flat(await dialog.innerText(), 800),
-        buttons: (await dialog.getByRole('button').allInnerTexts()).map((t) => A8.flat(t, 60)),
-        screen: s.text && A8.flat(s.text.dialog, 800),
-    };
-}
-
-module.exports = {panelState, seedUnverifiedOrcid, currentVersion, workflowPublishWindow};
+module.exports = {panelState, seedUnverifiedOrcid, currentVersion};

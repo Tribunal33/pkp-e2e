@@ -829,7 +829,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A2](#a2) | A published book's Production stage says "using the links just above" with no links there, and shows it to the Author | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | With a filter, an ascending "Order of monographs" lists the other way round; after a filter the press's order is lost | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A4](#a4) | Catalog page: pressing "Featured in category" for a book's second category unfeatures it in the first | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
-| [A5](#a5) | Catalog "Add Entry" refuses "Save" with no book chosen with only "Please correct these errors" and never says why | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
+| [A5](#a5) | Catalog "Add Entry" refuses "Save" with no book chosen, showing only "Please correct these errors" and never saying why | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A6](#a6) | On a press, an unpublished book's Production stage still says the monograph has been approved | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A8](#a8) | Catalog "Add Entry": "Save" with a word typed publishes the first suggested book, chosen or not | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [A9](#a9) | Catalog "Add Entry" still offers a book already chosen, and "Save" publishes it twice | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -913,18 +913,20 @@ series' box before it is featured there.
 Since: 2017-09-05 (nine years) · Basis: probe, 2026-10-03. <sup>f-a4</sup>
 
 <a id="a5"></a>
-**A5 — Catalog "Add Entry" refuses "Save" with no book chosen with only "Please correct these errors" and never says why** · 🐞 · low.
+**A5 — Catalog "Add Entry" refuses "Save" with no book chosen, showing only "Please correct these errors" and never saying why** · 🐞 · low.
 An editor opens the Catalog page's "Add Entry" and presses "Save" with
 nothing typed and no book chosen. The page shows only "The form was not
 saved because 1 error(s) were encountered. Please correct these errors
 and try again." for about five seconds, and nothing in the panel is
-marked. Expected: the box is marked with the reason. It shows on every
-press and version; the editor can guess the reason here.
+marked. The editor expected the "Find monographs to add to the
+catalog" field to be marked with the reason.
+
+No data is lost, and the editor can guess the reason. The fix is
+medium because it spans the OMP endpoint and the ui-library panel.
 
 A book whose contributor has an unauthenticated ORCID iD is not refused
 this way: "Add Entry" adds it (Rule 12c).
-Basis: probe, 2026-10-03. <sup>f-a5</sup>
-Report: refresh owed — pkp/pkp-lib#13493 (merged 2026-10-13; `36271ccef3`, "Fix unauthenticated ORCID to be a warning instead of blocking publication") moves the ORCID check from `Repo::publication()->validatePublish()` to `validatePublishWarnings()` (`classes/publication/Repository.php`; the report's other names, `OrcidManager::removeOrcidAccessToken()` and `VerifyIdentityWithOrcid::setIdentityData()`, untouched): "Add Entry" now adds a book whose contributor has an unauthenticated iD, so the report's walked case no longer shows; the refusal with no book chosen is left (2026-10-09; merged 2026-10-14)
+Basis: probe, 2026-10-15. <sup>f-a5</sup>
 
 <a id="a6"></a>
 **A6 — On a press, an unpublished book's Production stage still says the monograph has been approved** · 🐞 · low.

@@ -1,78 +1,56 @@
-# Catalog "Add Entry" refuses a book with only "Please correct these errors" and never says why
+# Catalog "Add Entry" refuses "Save" with no book chosen, showing only "Please correct these errors" and never saying why
 
 - **Severity** low
 - **Effort** medium
 - **Kind** defect
 - **Affects**
   - main: OMP
-  - 3.5: OMP (nothing chosen only; there an unauthenticated ORCID iD does not stop publishing)
-  - 3.4: OMP (code; nothing chosen only)
-  - 3.3: OMP (code; nothing chosen only)
+  - 3.5: OMP
+  - 3.4: OMP (code)
+  - 3.3: OMP (code)
 - **Introduced** `pkp/omp#812` for `pkp/pkp-lib#5865` · [6a4168a7b](https://github.com/pkp/omp/commit/6a4168a7b46230ff556f495553e9d127d8473b39) · 2020-05-13 · Nate Wright (NateWr)
-- **Upstream** none found (2026-10-03)
+- **Upstream** none found (2026-10-15)
 - **Tracked in** spec U70 [A5](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U70-catalog-management.md#a5)
-- **Checked** 2026-10-03, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-15, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-15: `pkp/pkp-lib#13493` (merged 2026-10-13 as
+[36271ccef3](https://github.com/pkp/pkp-lib/commit/36271ccef351f48f6b584e50f1bb51d86937c6aa))
+made an unauthenticated ORCID iD on `main` a warning instead of a
+publishing requirement; 3.5 already treated it as a warning. "Add
+Entry" now adds a book whose contributor has such an iD, so this report
+now covers only the refusal with no book chosen.
 
 ## Summary
 
-On a press with ORCID turned on, an editor chooses a book in the Catalog
-page's "Add Entry" and presses "Save". When one of the book's
-contributors has an unauthenticated ORCID iD, the book is not added, and
-the page shows only "The form was not saved because 1 error(s) were
-encountered. Please correct these errors and try again." for about five
-seconds. Nothing in the panel is marked, so the editor cannot tell why
-the book was refused, or which book when several were chosen.
+An editor opens the Catalog page's "Add Entry" and presses "Save" with
+nothing typed and no book chosen. The page shows only "The form was not
+saved because 1 error(s) were encountered. Please correct these errors
+and try again." for about five seconds, and nothing in the panel is
+marked. The editor expected the "Find monographs to add to the
+catalog" field to be marked with the reason.
 
-The same blank refusal answers "Save" with no book chosen, on every
-press and version; there the editor can guess the reason. The book's own
-workflow names the ORCID reason in its "Publish" window.
+No data is lost, and the editor can guess the reason. The fix is
+medium because it spans the OMP endpoint and the ui-library panel.
 
 ## Impact
 
-- **Lost**: the reason for the refusal, and the time spent looking for
-  it. With several books chosen, none is added.
+- **Lost**: the reason for the refusal, and the moment spent looking
+  for it.
 - **Who**: press managers and Press editors on Content › "Catalog" ›
-  "Add Entry". The ORCID refusal needs ORCID turned on (off by default)
-  and a contributor whose iD is unauthenticated or entered twice.
-- **Way round**: open the book's workflow and press "Publish". Its
-  "Schedule For Publication" window lists the unmet requirement.
+  "Add Entry", whenever "Save" is pressed before a book is chosen.
+- **Way round**: choose a book, then press "Save".
 
-Low: the refusal is correct and the workflow gives its reason; it would
-be medium if unauthenticated iDs were common on presses with ORCID on,
-which this report did not measure.
+Low: the refusal is correct and its reason is easy to guess; it would be
+medium if a plugin that adds a publishing requirement were in use, since
+the same blank notice would then refuse a chosen book with no way to
+tell why (read in the code; no such plugin was walked).
 
 ## Steps to reproduce
 
 Preconditions:
 
-- The default dataset, OMP `main`. Book 7, "Accessible Elements:
-  Teaching Science Online and at a Distance", is in Copyediting and
-  unpublished. Its first contributor is Dietmar Kennepohl
-  (dkennepohl@mailinator.com).
-- For steps 5–8 only:
-  - ORCID turned on, as `dbarnes`: Settings › Users & Roles › "ORCID",
-    tick "Enable ORCID functionality", "ORCID API" "Member Sandbox",
-    any "Client ID" and "Client Secret", "Save".
-  - Dietmar Kennepohl's ORCID iD on book 7 is unauthenticated: the
-    state ORCID leaves when an author authenticated the iD and the
-    access token later expired or was revoked. Only ORCID creates it,
-    so it is set with SQL:
-
-    ```sql
-    INSERT INTO author_settings (author_id, locale, setting_name, setting_value)
-    SELECT a.author_id, '', v.setting_name, v.setting_value
-    FROM authors a
-    JOIN submissions s ON s.current_publication_id = a.publication_id
-    CROSS JOIN (
-      SELECT 'orcid' AS setting_name, 'https://sandbox.orcid.org/0000-0002-1825-0097' AS setting_value
-      UNION ALL SELECT 'orcidIsVerified', '1'
-    ) v
-    WHERE s.submission_id = 7
-      AND a.email = 'dkennepohl@mailinator.com';
-    ```
-
-Nothing chosen:
+- The default dataset, OMP `main`. Nothing beyond it.
 
 1. Sign in as `dbarnes`.
 2. Open Content › "Catalog" (`/index.php/publicknowledge/en/manageCatalog`).
@@ -80,38 +58,23 @@ Nothing chosen:
 4. Type nothing in "Find monographs to add to the catalog" and press
    "Save".
 
-A book with an unauthenticated ORCID iD:
+**Expected:** the panel marks the box with the server's reason, "You
+must provide one or more submission ids to be added to the catalog.".
 
-5. Reload the Catalog page and press "Add Entry".
-6. Type `Accessible` and click "Accessible Elements: Teaching Science
-   Online and at a Distance".
-7. Press "Save". [On 3.5 an unauthenticated iD is only a warning, so
-   this step publishes the book.]
-8. Open submission 7, choose "Title & Abstract" under "Publication",
-   and press "Publish".
-
-**Expected:** at step 4 the panel marks the box with the server's
-reason, "You must provide one or more submission ids to be added to the
-catalog.". At step 7 it marks the box with "Unauthenticated ORCiDs for
-contributors detected.".
-
-**Observed:** at steps 4 and 7 the top-right notice reads "The form was
-not saved because 1 error(s) were encountered. Please correct these
-errors and try again." and disappears after about five seconds. The
-panel stays open with nothing marked and "Save" still enabled. Book 7
-stays unpublished. The server's answers hold the reasons:
+**Observed:** the top-right notice reads "The form was not saved because
+1 error(s) were encountered. Please correct these errors and try
+again." and disappears after about five seconds. The panel stays open
+with nothing marked and "Save" still enabled. The server's answer holds
+the reason:
 
 ```
-PUT /index.php/publicknowledge/api/v1/_submissions/addToCatalog   (step 4: submissionIds=)
+PUT /index.php/publicknowledge/api/v1/_submissions/addToCatalog   (submissionIds=)
 400 {"error":"You must provide one or more submission ids to be added to the catalog."}
-
-PUT /index.php/publicknowledge/api/v1/_submissions/addToCatalog   (step 7: submissionIds[]=7)
-400 {"hasUnauthenticatedOrcid":"Unauthenticated ORCiDs for contributors detected."}
 ```
 
-At step 8 the "Schedule For Publication" window reads "The following
-requirements must be met before this can be published. Unauthenticated
-ORCiDs for contributors detected." and offers no "Publish" button.
+Control: in a newly opened panel, choosing "Mobile Learning:
+Transforming the Delivery of Education and Training" and pressing "Save"
+adds the book and closes the panel.
 
 ## Cause
 
@@ -120,9 +83,11 @@ OMP's `BackendSubmissionsController::addToCatalog()`
 is the endpoint of the "Add Entry" form, whose only field is
 `submissionIds`. Its refusals are keyed by names that are not that
 field. With no IDs it answers `{"error": …}` (lines 165–168 and
-173–176). When `Repo::publication()->validatePublish()` lists unmet
-requirements, it returns that list as it is (lines 197–199), keyed by
-requirement.
+173–176). Its 404 for an unknown ID (`submissionsNotFound`) uses
+`error` too, but `Form.vue` shows a 403 or 404 `error` as a notice,
+which is right for it, and the fix leaves it alone. When `Repo::publication()->validatePublish()` lists unmet
+requirements for a chosen book, it returns that list as it is
+(lines 197–199), keyed by requirement.
 
 ui-library's `Form.vue` `error()` treats a 400 as field errors. It
 shows the `form.errors` notice with the number of keys and stores the
@@ -130,13 +95,11 @@ keys as the form's `errors`. A form draws an error only under the field
 of the same name, so these keys mark nothing. `removeError()` runs only
 for a field that changes, so they would never clear either.
 
-That is what 3.4 and 3.3 show (code): the errors reach the panel's
-form, which keeps the panel inside its own `<modal>`. Its footer then
-says "Please correct 2 errors." (the keys `error` and `errorMessage`)
+On 3.4 and 3.3 (code) the panel binds its form inside its own
+`<modal>`, so the errors reach the form. Its footer then says "Please correct 2 errors." (the keys `error` and `errorMessage`)
 with no reason on screen; the reason is only in the footer's hidden
 list for screen readers. "Save" stays disabled until the page is
-reloaded. No version showed the reason on screen, so this is a defect,
-not a regression.
+reloaded. No version showed the reason on screen.
 
 On `main` and 3.5 the panel's form receives no errors at all, so even
 the footer is gone. Since the side modal migration (`pkp/ui-library#366`,
@@ -154,12 +117,12 @@ copy-and-emit to editing its `activeForm` in place, for this reason;
 Reach:
 
 - The refusals the panel can meet on `main`: no book chosen (walked),
-  an unauthenticated ORCID iD (walked), the same iD on two contributors
-  (`hasDuplicateOrcids`, code), and any requirement a plugin adds
-  through the `Publication::validatePublish` hook (none in OMP's own
-  plugins). A declined book, and on 3.5 a book before the review stage,
-  are never suggested: `AddEntryForm` asks only for Copyediting and
-  Production books that are queued or scheduled.
+  and any requirement a plugin adds through the
+  `Publication::validatePublish` hook (none in OMP's own plugins; code).
+  `validatePublish()` itself checks only for a declined book, and on
+  3.5 also for a book before the review stage. The field's search never
+  offers such a book, since `AddEntryForm` asks only for Copyediting
+  and Production books that are queued or scheduled.
 - Two other side modals receive a container's form the same way and
   would not show a server's field errors either: the user report
   export (`StatsUsersPage.vue`, `UserExportModal`) and the submission
@@ -215,15 +178,18 @@ The diff also changes the second, identical `submissionIdsRequired`
 answer and adds `activeAddEntryForm: null` to `data()`.
 
 - The server half follows `PKPEmailController`, which refuses its form
-  under the form's field (`'userGroupIds' => [...]`).
+  under the form's field (`'userGroupIds' => [...]`). Its second change
+  covers a requirement a plugin adds, the one refusal of a chosen book
+  left on `main`, so that it too reaches the box.
 - The panel half follows `InstitutionsListPanel` and
   `HighlightsListPanel`, which keep the side modal's form in local data
   and update it in place. Unlike them, the copy here is shallow on
   purpose. `closeAddEntryForm()` clears the chosen books on the
   container's field objects, and chosen books come back on reopening
   because those objects are shared; a `cloneDeep` would break both.
-- Dropping the `$emit('set', …)` loses nothing, although it is the line
-  c6bf04ac (`pkp/pkp-lib#9313`) last fixed. The container's
+- Dropping the `$emit('set', …)` loses nothing, although ui-library
+  [c6bf04ac](https://github.com/pkp/ui-library/commit/c6bf04ac01ba71fff940e78637d09b25636a4053)
+  (`pkp/pkp-lib#9313`) last fixed that line. The container's
   `addEntryForm` is read only by `openAddEntryForm()` and
   `closeAddEntryForm()`, and its fields stay shared.
 
@@ -231,12 +197,11 @@ With both halves the box shows the reason. "Save" stays disabled until
 the choice changes, and choosing or removing a book clears the message.
 Each opening of the panel starts with no message.
 
-Tried on OMP `main`. Steps 4 and 7 marked the box with "You must
-provide one or more submission ids to be added to the catalog." and
-"Unauthenticated ORCiDs for contributors detected.", the footer read
+Tried on OMP `main`. Step 4 marked the box with "You must provide one
+or more submission ids to be added to the catalog.", the footer read
 "Please correct one error." and "Save" was disabled. Choosing book 13
-after the empty refusal cleared the message, and "Save" published it
-and closed the panel. Two checks came out the same with and without the
+after the refusal cleared the message, and "Save" published it and
+closed the panel. Two checks came out the same with and without the
 fix: the workflow's "Catalog Entry" form still marked a "URL Path" of
 "my book" at its box, and "Add Entry" with book 13 chosen published it.
 
@@ -279,30 +244,30 @@ lines each, with a test.
   [shared/playwright/checks/issues/add-entry-refusal-no-reason/walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/add-entry-refusal-no-reason/walk.js)
   with
   [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/add-entry-refusal-no-reason/lib.js).
-  It takes Steps 1–8 as `dbarnes` on an install freshly loaded from the
-  default dataset, turning ORCID on through the "ORCID" tab before
-  step 5. `MODE=neighbour` runs the two checks, `MODE=recover` the
-  choose-after-refusal check. Run:
+  It takes Steps 1–4 as `dbarnes` on an install freshly loaded from the
+  default dataset. `MODE=neighbour` runs the two checks of the fix's
+  trial, `MODE=recover` the choose-after-refusal check. Run:
   `PROBE_FEATURE=<dataset fleet feature> PROBE_AGENT=<id> node bin/probe.js omp shared/playwright/checks/issues/add-entry-refusal-no-reason/walk.js`.
-- The SQL precondition copies what
-  `PKP\orcid\actions\VerifyIdentityWithOrcid::setIdentityData()` stores
-  for a contributor (`orcid`, `orcidIsVerified`, locale `''`), without
-  the four token fields that `PKP\orcid\OrcidManager::removeOrcidAccessToken()`
-  clears and keeping `orcidIsVerified`, which it does not clear.
-  `validatePublish()` reads only `orcid` and `orcidAccessToken`; the
-  `orcidIsVerified` row is there because the integration leaves it.
-- Branch tips: OMP `main` 3b0ecf794c (lib/pkp 3dc90c81a6,
-  lib/ui-library 280f98c5); OMP `stable-3_5_0` 9c5e24246c
-  (lib/ui-library d4e01883); OMP `stable-3_4_0` 0aec65441f (lib/pkp
-  767353f4fe, lib/ui-library ee684b34); OMP `stable-3_3_0` 8e72fc8836
-  (lib/pkp ac3fa73402, lib/ui-library 96959f9e). Default dataset from
-  pkp/datasets 566bb1f (2026-10-03), PostgreSQL. No server error or
-  script error was recorded on any walk.
-- 3.5, walked; code read: 3.5's `validatePublish()` checks a declined
-  book and the review stage and reports ORCID problems from
-  `validatePublishWarnings()`; `addToCatalog()` and `setAddEntryForm()`
-  are as on `main`, and `CatalogEditModal.vue` comes from
-  `pkp/ui-library#366`.
+  The fix is tried with `node bin/try-fix.js apply shared/playwright/checks/issues/add-entry-refusal-no-reason/fix.diff omp`
+  (and `revert`).
+- ORCID control (the case that left): the same script then turns ORCID
+  on, gives book 7's first contributor an unauthenticated iD, and "Add
+  Entry" publishes book 7 with no notice, on `main` and 3.5.
+- Branch tips: OMP `main` f4836d4fba (lib/pkp b17fadae59, which
+  carries 36271ccef3; lib/ui-library 47b565cb); OMP `stable-3_5_0`
+  a70bbb9c4d (lib/pkp 4045d9241e, lib/ui-library 2576e00a); OMP
+  `stable-3_4_0` 0aec65441f (lib/pkp 55c8e406b3, lib/ui-library
+  ee684b34); OMP `stable-3_3_0` 8e72fc8836 (lib/pkp 5e84acd11b,
+  lib/ui-library 96959f9e). Default dataset from pkp/datasets 7912e09
+  (2026-10-14), PostgreSQL. No server error or script error was
+  recorded on any walk; the browser logged only the refusal's 400.
+- `main`, code read: pkp-lib `Repository::validatePublish()` checks only
+  a declined book and calls the hook; the ORCID checks are in
+  `validatePublishWarnings()`.
+- 3.5, walked; code read: `validatePublish()` checks a declined book
+  and the review stage, and ORCID problems are warnings there too
+  (`pkp/pkp-lib#13283`, 29b76297a3); `addToCatalog()` and
+  `setAddEntryForm()` are as on `main`.
 - 3.4 and 3.3, code only: OMP `BackendSubmissionsHandler::addToCatalog()`
   answers `withJsonError('api.submissions.400.submissionIdsRequired')`,
   that is `{"error": key, "errorMessage": text}`, and returns
@@ -310,13 +275,14 @@ lines each, with a test.
   form inside its own `<modal>`, `Form.vue` `error()` stores the
   errors, and `FormPage.vue` shows `FormErrors` (the reasons only in its
   `-screenReader` list) and disables "Save" while any error is held.
-  `validatePublish()` there checks only a declined book and the review
-  stage, neither reachable from the panel. ORCID was a separate plugin
-  on those versions; whether it adds a requirement was not read.
 - Introduced: `git log -S submissionIdsRequired` on OMP finds the
   endpoint's first version in 6a4168a7b (`pkp/omp#812`), which already
   answered `withJsonError()` and the raw requirement list; the keys are
   unchanged on `main`. `pkp/pkp-lib#9313` (script errors in the same
   panel) is a different fault.
-- Unverified: duplicate ORCID iDs and plugin requirements were read in
-  the code, not walked.
+- Upstream: pkp/pkp-lib, pkp/omp and pkp/ui-library searched on
+  2026-10-15 for `addToCatalog`, `submissionIdsRequired`,
+  `CatalogListPanel`, "Add Entry" with catalog and error, and side modal
+  form errors; nothing matched the fault.
+- Unverified: a requirement added through the `Publication::validatePublish`
+  hook, and the fix's server half for it, were not walked or tried.

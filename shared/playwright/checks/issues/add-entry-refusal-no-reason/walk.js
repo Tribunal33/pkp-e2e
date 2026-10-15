@@ -1,6 +1,5 @@
-// U70 A5 {OMP}: "Add Entry" › "Save" refused (nothing chosen; a book whose contributor's ORCID iD
-// is unverified while ORCID is on) shows only "Please correct these errors", and nothing in the
-// panel says what is wrong.
+// U70 A5 {OMP}: "Add Entry" › "Save" with no book chosen is refused with only "Please correct
+// these errors", and nothing in the panel says what is wrong.
 // The Steps of docs/issues/U70-A5-add-entry-refusal-no-reason.md, on PKP's default test dataset,
 // as `dbarnes`. Spec: docs/specs/U70-catalog-management.md, register A5.
 // Only OMP has the Catalog page; on OJS and OPS the script does nothing.
@@ -8,6 +7,9 @@
 // Run (reset the dataset fleet first):
 //   PROBE_FEATURE=<dataset fleet feature> PROBE_AGENT=<id> node bin/probe.js omp \
 //     shared/playwright/checks/issues/add-entry-refusal-no-reason/walk.js
+// The walk takes Steps 1-4, then a control that is not a step: with ORCID on and book 7's first
+// contributor's iD unauthenticated, "Add Entry" with book 7 chosen adds it (since
+// pkp/pkp-lib#13493 an unauthenticated iD is a warning, not a requirement; on 3.5 it always was).
 // MODE=neighbour runs the controls a fix must leave alone, alone: a field the server refuses on
 // the Catalog Entry page ("URL Path" "my book") is still marked at its box, and "Add Entry" with a
 // book chosen (book 13) still publishes it and closes the panel. MODE=recover (with the fix in):
@@ -56,16 +58,15 @@ forEachApp(async (app) => {
                 await shot(page, 's4-after-save');
                 return out;
             }));
-            // Preconditions of the second group: ORCID on (screen), book 7's iD unverified (ORCID's state, SQL).
+            // The control: ORCID on (screen), book 7's iD unauthenticated (ORCID's state, SQL).
             fact('p-orcid-settings', await step('p-orcid', async () => {
                 const out = await U49.setOrcidMember(page, app);
                 delete out.screen;
                 return out;
             }));
             fact('p-orcid-seed', L.seedUnverifiedOrcid(app, BOOK.id, BOOK.author));
-            // Steps 5-7.
             await catalog.goto();
-            fact('s7-refused-book', await step('s7', async () => {
+            fact('c1-orcid-book', await step('c1', async () => {
                 panel = await catalog.openAddEntry();
                 const typed = await A8.typeAndWait(panel, 'Accessible');
                 await panel.option(BOOK.title).click();
@@ -78,11 +79,9 @@ forEachApp(async (app) => {
                 out.tagsBefore = tagsBefore;
                 out.addToCatalog = calls.slice(n);
                 out.book = L.currentVersion(app, BOOK.id);
-                await shot(page, 's7-after-save');
+                await shot(page, 'c1-after-save');
                 return out;
             }));
-            // Step 8: the control.
-            fact('s8-workflow-publish', await step('s8', () => L.workflowPublishWindow(page, app, BOOK.id, 's8-schedule-window')));
         } else if (MODE === 'recover') {
             // r1: after the empty "Save" is refused, choosing a book clears the refusal and "Save" adds it.
             await catalog.goto();
