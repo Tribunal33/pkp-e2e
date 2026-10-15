@@ -2246,6 +2246,7 @@ and ORCID as the review mode allows (`pkp/pkp-lib#12045`). No server
 error in either run. Kept script
 `shared/playwright/checks/U27/S13/api-rows.js` (phase `api62`; its other
 phases belong to other features).
+Issue report: [pkp-e2e#993](https://github.com/jardakotesovec/pkp-e2e/issues/993) ([docs/issues/U29-OJS1-public-review-data-editor-only-answers.md](../issues/U29-OJS1-public-review-data-editor-only-answers.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the
