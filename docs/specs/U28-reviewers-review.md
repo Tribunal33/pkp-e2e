@@ -2712,6 +2712,7 @@ The editor's rows read "Overdue Review due: 2026-10-05 … Send Reminder"
 for the accepted review due that day and for the request due that day,
 "Request Accepted Review due: 2026-10-06" for the one due the next day.
 The "Edit" window refuses a review due date before the response due date.
+Issue report: [pkp-e2e#1000](https://github.com/jardakotesovec/pkp-e2e/issues/1000) ([docs/issues/U28-A18-review-due-today-reads-overdue.md](../issues/U28-A18-review-due-today-reads-overdue.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — OMP `classes/core/Application.php::hasCustomizableReviewerRecommendation()`
