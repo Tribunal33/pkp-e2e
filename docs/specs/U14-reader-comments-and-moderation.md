@@ -2350,7 +2350,7 @@ Policy and Practice" / "Montgomerie et al." and "Condensing Water
 Availability Models to Focus on Specific Water Management Systems" /
 "Novak". No server error. Another journal's publication, OMP and OPS:
 read in the code (same lib/pkp commit in the three apps).
-Issue report: [docs/issues/U14-A18-comment-request-unpublished-submission.md](../issues/U14-A18-comment-request-unpublished-submission.md).
+Issue report: [pkp-e2e#972](https://github.com/jardakotesovec/pkp-e2e/issues/972) ([docs/issues/U14-A18-comment-request-unpublished-submission.md](../issues/U14-A18-comment-request-unpublished-submission.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19 — A19.** `UserCommentController::deleteReports()` (the
@@ -2383,7 +2383,7 @@ answered 200, its report and its two task rows gone. Control: `DELETE
 report and its tasks gone. The server log held one
 `[500]: DELETE …/api/v1/comments/{id}/reports` line per failing request
 and no other error.
-Issue report: [docs/issues/U14-A19-delete-all-comment-reports-fails.md](../issues/U14-A19-delete-all-comment-reports-fails.md).
+Issue report: [pkp-e2e#973](https://github.com/jardakotesovec/pkp-e2e/issues/973) ([docs/issues/U14-A19-delete-all-comment-reports-fails.md](../issues/U14-A19-delete-all-comment-reports-fails.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`
