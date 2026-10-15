@@ -1,0 +1,45 @@
+--- a/lib/pkp/api/v1/peerReviews/resources/SubmissionPeerReviewResource.php
++++ b/lib/pkp/api/v1/peerReviews/resources/SubmissionPeerReviewResource.php
+@@ -138,7 +138,9 @@
+                 ],
+                 ...$reviewStatusData->toArray(),
+                 'reviews' => $this->getReviewAssignmentPeerReviews($assignments, $context)->toArray(),
+-                'authorResponse' => $currentRoundResponse ? (new ReviewRoundAuthorResponseResource($currentRoundResponse))->resolve() : null,
++                // A response answers every review of its round, so it joins the public record only when all of
++                // them are part of it (AuthorResponse::isPublic)
++                'authorResponse' => $currentRoundResponse?->isPublic ? (new ReviewRoundAuthorResponseResource($currentRoundResponse))->resolve() : null,
+             ]);
+         }
+ 
+--- a/lib/pkp/classes/submission/reviewRound/authorResponse/AuthorResponse.php
++++ b/lib/pkp/classes/submission/reviewRound/authorResponse/AuthorResponse.php
+@@ -120,19 +120,25 @@
+     }
+ 
+     /**
+-     * Whether this author response is directed at publicly available review assignment comments.
++     * Whether this author response is directed at publicly available review assignment comments:
++     * every review of the round that was not declined or cancelled is in the open peer review record,
++     * that is publicly visible, accepted by the reviewer and confirmed by the editor ("Mark as Complete").
+      */
+     protected function isPublic(): Attribute
+     {
+         return Attribute::make(
+             get: function () {
+-                $visibility = DB::table('review_assignments')
++                $assignments = DB::table('review_assignments')
+                     ->where('review_round_id', $this->review_round_id)
+                     ->where('declined', 0)
+                     ->where('cancelled', 0)
+-                    ->pluck('is_review_publicly_visible');
++                    ->get(['is_review_publicly_visible', 'date_confirmed', 'date_considered', 'date_acknowledged']);
+ 
+-                return $visibility->isNotEmpty() && $visibility->every(fn ($visibility) => (bool) $visibility);
++                return $assignments->isNotEmpty() && $assignments->every(
++                    fn ($assignment) => (bool) $assignment->is_review_publicly_visible
++                        && $assignment->date_confirmed !== null
++                        && ($assignment->date_considered !== null || $assignment->date_acknowledged !== null)
++                );
+             }
+         )->shouldCache();
+     }

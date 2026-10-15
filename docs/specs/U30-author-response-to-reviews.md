@@ -750,7 +750,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | "Request Author Response" page opened by its address: "Cancel" and the sent dialog lead to "404 Not Found" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A5](#a5) | "Request Author Response" refuses an empty subject or message with "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | Author who uploads revisions first can no longer respond to the reviewers, as the decision email asks | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A10](#a10) | Anyone, signed out, reads an author's response in the article's open peer review record while it is marked not public | 🐞 | user-visible | — |
+| [A10](#a10) | Anyone, without signing in, can read an author's response that also answers reviews the editor kept private | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A11](#a11) | A Section Editor can delete, and another journal's manager delete or rewrite, an author's response to reviews | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [OMP1](#omp1) | Press author's "Submit Author Response" email button opens a review round with nothing to respond in | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Nobody is told when the author's response arrives | ❓ | user-visible | — |
@@ -881,20 +881,23 @@ request page with one reviewer block? Lean: yes; the app drops a cancelled
 request wherever it drops a declined one. Basis: code. <sup>f-a8</sup>
 
 <a id="a10"></a>
-**A10 — Anyone, signed out, reads an author's response in the article's open peer review record while it is marked not public** · 🐞 · user-visible.
-A response is marked public only when every review of its round that
-was not declined or cancelled is public (Side effects). Expected: the
-article's open peer review record leaves a response that is not marked
-public out. Observed: once the article is published and one review of
-the round is public ("Publicly Show Reviewer Comments") and stands
-"Complete" (the editor's "Mark as Complete"), the record lists that round with the author's response in
-full, to anyone without signing in: the response's text, each
-contributor it speaks for (name, preferred public name, ORCID) and the
-name of the person who submitted it, beside the response's own mark
-reading not public. The round's other reviewers kept their comments
-private, and the response that answers them is published all the same.
+**A10 — Anyone, without signing in, can read an author's response that also answers reviews the editor kept private** · 🐞 · medium.
+The editor decides, review by review, which reviews are published with
+the article ("Publicly Show Reviewer Comments"). Once the article is
+published, the journal's open peer review API, which anyone may call
+without signing in, lists each public review the editor has marked
+complete ("Mark as Complete"). It also gives the author's response to
+that review round in full, even when other reviews of the round are not
+public. The author wrote that response to every reviewer, so whatever
+it repeats or answers of the private reviews goes out with it.
+
+The author is not told that the response may be published: the window
+they write it in says it "will be shared with the editorial team and
+may be sent back to reviewers if needed". No page of the journal
+requests this data today. An editor who knows can prevent it only by
+making every review of a round public, or none.
 Security: unreleased.
-Since: 2026-02-03 (pkp/pkp-lib#12294) · Basis: probe, 2026-10-13. <sup>f-a10</sup>
+Since: 2026-02-03 (pkp/pkp-lib#12294) · Basis: probe, 2026-10-15. <sup>f-a10</sup>
 
 <a id="a11"></a>
 **A11 — A Section Editor can delete, and another journal's manager delete or rewrite, an author's response to reviews** · 🐞 · medium.
