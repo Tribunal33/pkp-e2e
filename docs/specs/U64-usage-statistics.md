@@ -2697,6 +2697,7 @@ downloads the file instead of showing it; each wrote one line. On a
 second scratch journal the same day, two runs, whose galley had
 figure.png uploaded and article.css missing, one view wrote two such
 lines.
+Issue report: [pkp-e2e#984](https://github.com/jardakotesovec/pkp-e2e/issues/984) ([docs/issues/U64-OJS2-html-galley-missing-file-counts-view.md](../issues/U64-OJS2-html-galley-missing-file-counts-view.md)).
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — fn-h (`_processSearchPhrase()` matches the collector's
