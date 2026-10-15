@@ -2594,6 +2594,7 @@ fn-omp3 (a Series editor + Author and a Press editor + Author, four
 visits each) kept one order on every visit. Scratch contexts on
 2026-09-28 listed "Author" first on OJS (six visits) and OPS (four):
 note fn-omp3.
+Issue report: [pkp-e2e#986](https://github.com/jardakotesovec/pkp-e2e/issues/986) ([docs/issues/U21-A21-submit-as-role-order-not-fixed.md](../issues/U21-A21-submit-as-role-order-not-fixed.md)).
 
 <a id="fn-a22"></a>
 **fn-a22** — A22. First seen 2026-10-01 while walking A10, whose issue
