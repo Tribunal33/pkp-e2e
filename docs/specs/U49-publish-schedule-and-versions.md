@@ -1173,7 +1173,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS5](#ojs5) | Editor's refused "Confirm" in "Review Publishing Details" opens a blank copy of the panel that keeps coming back | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OPS6](#ops6) | The first-post acknowledgement's "Preprint URL" links the preprint's editorial workflow, not its public page | 🐞 | latent | — |
+| [OPS6](#ops6) | The "Preprint URL" in a preprint's first-post email sends its authors to the editorial dashboard, not the preprint | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A1](#a1) | The new-version email announces itself to editors but goes to every stage-assigned user, the submitting author included | ❓ | user-visible | — |
 | [A2](#a2) | Publishing is offered to managers only, although the app's deeper plumbing names Section Editors and Assistants; on a preprint server that leaves Moderators without a Post button | ❓ | user-visible | — |
 | [A3](#a3) | A published non-final version leaves the submission itself listed as unpublished, and a press's catalog page down | ❓ | user-visible | — |
@@ -1574,15 +1574,23 @@ too? Lean: yes. The leftovers read as another application's words. Since:
 <sup>[f-ops5](#fn-ops5)</sup>
 
 <a id="ops6"></a>
-**OPS6 — The first-post acknowledgement links the editorial workflow, not the preprint** · 🐞 · latent.
-"Preprint Posted Acknowledgement", the email meant for a preprint's first
-post, tells each contributor "Your preprint, "{title}" has been posted
-online on {server}." and gives a "Preprint URL" that leads to the
-preprint's workflow on the editorial dashboard, not to the public page
-the email announces. On `main` the email is never sent
-([OPS4](#ops4)); once it is, every first post sends this link, as the
-3.5 release already does. Basis: probe, 2026-10-02.
-<sup>[f-ops6](#fn-ops6)</sup>
+**OPS6 — The "Preprint URL" in a preprint's first-post email sends its authors to the editorial dashboard, not the preprint** · 🐞 · low.
+When a preprint is posted for the first time, each contributor receives
+"Preprint Posted Acknowledgement": "Your preprint, "{title}" has been
+posted online on {server}." Its "Preprint URL" does not lead to the
+preprint. It leads to the preprint's workflow on the editorial
+dashboard, so a contributor who follows it lands on the login page, and
+an author who signs in there is told "The current role does not have
+access to this operation."
+
+The preprint itself is online, and the author can reach it through the
+server's "Archives" or its search; only the email's one link is wrong.
+
+On `main` "Preprint Posted Acknowledgement" is not sent at all, a fault
+reported apart (pkp-e2e#551): every first post sends "New Version Posted
+Acknowledgement", which links the public page. Once pkp-e2e#551 is
+fixed, this wrong link reaches authors on `main` too.
+Basis: probe, 2026-10-15. <sup>[f-ops6](#fn-ops6)</sup>
 
 ### Retired
 

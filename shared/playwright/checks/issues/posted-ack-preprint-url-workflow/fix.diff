@@ -1,0 +1,108 @@
+--- a/locale/bg/emails.po
++++ b/locale/bg/emails.po
+@@ -63,7 +63,7 @@
+ "Вашият препринт, &quot;{$submissionTitle}&quot; е публикуван онлайн на "
+ "{$contextName}.<br />\n"
+ "<br />\n"
+-"URL адрес за препринт: <a href=\"{$submissionUrl}\">{$submissionUrl}</a><br />\n"
++"URL адрес за препринт: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a><br />\n"
+ "<br />\n"
+ "Ако имате въпроси, моля свържете се с мен.<br />\n"
+ "<br />\n"
+--- a/locale/cs/emails.po
++++ b/locale/cs/emails.po
+@@ -137,7 +137,7 @@
+ "Váš preprint, &quot;{$submissionTitle}&quot; byla zveřejněn online na "
+ "{$contextName}.<br />\n"
+ "<br />\n"
+-"URL preprintu: <a href=\"{$submissionUrl}\">{$submissionUrl}</a><br />\n"
++"URL preprintu: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a><br />\n"
+ "<br />\n"
+ "V případě jakýchkoli dotazů mě, prosím, kontaktujte.<br />\n"
+ "<br />\n"
+--- a/locale/de/emails.po
++++ b/locale/de/emails.po
+@@ -104,7 +104,7 @@
+ "Ihr Preprint, &quot;{$submissionTitle}&quot; wurde auf {$contextName} online "
+ "gestellt.<br />\n"
+ "<br />\n"
+-"Preprint URL: <a href=\"{$submissionUrl}\">{$submissionUrl}</a><br />\n"
++"Preprint URL: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a><br />\n"
+ "<br />\n"
+ "Wenn Sie Fragen haben, kontaktieren Sie mich bitte.<br />\n"
+ "<br />\n"
+--- a/locale/en/emails.po
++++ b/locale/en/emails.po
+@@ -99,7 +99,7 @@
+ "Your preprint, &quot;{$submissionTitle}&quot; has been posted online on "
+ "{$contextName}.<br />\n"
+ "<br />\n"
+-"Preprint URL: <a href=\"{$submissionUrl}\">{$submissionUrl}</a><br />\n"
++"Preprint URL: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a><br />\n"
+ "<br />\n"
+ "If you have any questions, please contact me.<br />\n"
+ "<br />\n"
+--- a/locale/es/emails.po
++++ b/locale/es/emails.po
+@@ -101,7 +101,7 @@
+ "Su preprint, “{$submissionTitle}”, ha sido publicado en línea en "
+ "{$contextName}.\n"
+ "\n"
+-"URL del preprint: <a href=\"{$submissionUrl}\">{$submissionUrl}</a>\n"
++"URL del preprint: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a>\n"
+ "\n"
+ "Si tiene alguna pregunta, no dude en ponerse en contacto conmigo.\n"
+ "\n"
+--- a/locale/mk/emails.po
++++ b/locale/mk/emails.po
+@@ -104,7 +104,7 @@
+ "Вашиот препечаток, &quot;{$submissionTitle}&quot; е објавен на Интернет на "
+ "{$contextName}. <br />\n"
+ "<br />\n"
+-"URL на препечатокот: <a href=\"{$submissionUrl}\">{$submissionUrl}</a><br />"
++"URL на препечатокот: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a><br />"
+ "\n"
+ "<br />\n"
+ "Доколку имате било какви прашања, Ве молам да ме контактирате.<br />\n"
+--- a/locale/pt_BR/emails.po
++++ b/locale/pt_BR/emails.po
+@@ -104,7 +104,7 @@
+ "Seu preprint, &quot;{$submissionTitle}&quot; foi publicado online em "
+ "{$contextName}. <br />\n"
+ "<br />\n"
+-"URL do preprint: <a href=\"{$submissionUrl}\">{$submissionUrl}</a> <br />\n"
++"URL do preprint: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a> <br />\n"
+ "<br />\n"
+ "Se você tiver alguma dúvida, entre em contato comigo. <br />\n"
+ "<br />\n"
+--- a/locale/uk/emails.po
++++ b/locale/uk/emails.po
+@@ -57,7 +57,7 @@
+ "ваш препринт, &quot;{$submissionTitle}&quot; було розмміщено онлайн на "
+ "{$contextName}.<br />\n"
+ "<br />\n"
+-"URL препринту: <a href=\"{$submissionUrl}\">{$submissionUrl}</a><br />\n"
++"URL препринту: <a href=\"{$submissionPublishedUrl}\">{$submissionPublishedUrl}</a><br />\n"
+ "<br />\n"
+ "Якщо є питання, звертайтесь до мене.<br />\n"
+ "<br />\n"
+--- a/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
++++ b/classes/migration/upgrade/v3_5_0/I13128_FixEmailUrlLinks.php
+@@ -21,6 +21,8 @@
+         parent::up();
+ 
+         $this->replace('POSTED_ACK', '{$submissionUrl}', '<a href="{$submissionUrl}">{$submissionUrl}</a>', 'href="{$submissionUrl}"');
++        // The authors are sent the preprint's public page, not its editorial workflow
++        $this->replace('POSTED_ACK', '{$submissionUrl}', '{$submissionPublishedUrl}');
+ 
+         // es kept a variable which no longer exists
+         $this->replace('USER_VALIDATE_CONTEXT', '{$enableUrl}', '<a href="{$activateUrl}">{$activateUrl}</a>', '', 'es');
+@@ -29,6 +31,8 @@
+ 
+     public function down(): void
+     {
++        // POSTED_ACK's public page address is not turned back into {$submissionUrl}:
++        // a manager may have made the same change by hand.
+         $this->replace('POSTED_ACK', '<a href="{$submissionUrl}">{$submissionUrl}</a>', '{$submissionUrl}');
+ 
+         parent::down();
