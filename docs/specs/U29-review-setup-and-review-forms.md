@@ -986,7 +986,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OMP3](#omp3) | A press's "Internal Review Guidelines" box has no list or quote buttons, unlike the external one | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A9](#a9) | Saving a reviewer's "Edit" window silently takes a deactivated review form off the review | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | A recommendation title abandoned in "Edit Recommendation" stays on the row and is stored by the next "Save" | 🐞 | medium | — |
-| [A12](#a12) | On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name | 🐞 | minor | — |
+| [A12](#a12) | On "Reviewer Recommendations", a screen reader announces the "Activate" tick boxes and the status dropdown without a name | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A13](#a13) | A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations | 🐞 | medium | issues (claude), 2026-10-07 — re-verified |
 | [OJS1](#ojs1) | A review made public gives anyone who asks, without signing in, the review form answers meant for the editor only | 🐞 | user-visible | — |
 | [A2](#a2) | A form in use can still be deactivated, although the activation confirmation promises it cannot | ❓ | minor | — |
@@ -1146,18 +1146,19 @@ The same fault as [Institutions' A2](U66-institutions.md#a2).
 Since: 2026-09-24 (a week) · Basis: probe, 2026-09-30. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — On "Reviewer Recommendations", a screen reader announces each row's "Activate" tick box, and the window's "Active Upon Saving" list, without a name** · 🐞 · minor.
-No row's "Activate" tick box has a label, so a screen reader announces
-"checkbox" and its state with nothing more, for the Journal Manager and
-the Site Administrator alike. A manager who cannot see the screen can
-tell which recommendation a box switches only from the row's name, read
-just before the box. The list under "Recommendation type" in the "Add
-Recommendation" window ("Active Upon Saving" / "Deactivate") has no name
-either, so nothing says what it decides. Both controls work from the
-keyboard: Space on a ticked box opens "Deactivate Reviewer
-Recommendation", as a click does. The same mistake as the DOIs page's
-row tick boxes ([DOIs' A8](U45-dois.md#a8)).
-Basis: probe, 2026-10-05. <sup>f-a12</sup>
+**A12 — On "Reviewer Recommendations", a screen reader announces the "Activate" tick boxes and the status dropdown without a name** · 🐞 · low.
+On a journal's "Reviewer Recommendations" settings, no row's "Activate"
+tick box has a name for a screen reader, and neither has the status
+dropdown of the "Add Recommendation" window, the one that offers "Active
+Upon Saving" and "Deactivate". A screen reader announces each box only as
+"checkbox" and its state, and the dropdown with no name at all.
+
+A journal manager who cannot see the screen learns which recommendation a
+box switches only from the row's title, read in the cell before it.
+Nothing tells them what the dropdown decides. Both controls work from
+the keyboard.
+The same mistake as the DOIs page's row tick boxes ([→ DOIs A8](U45-dois.md#a8)).
+Basis: probe, 2026-10-15. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — A Section Editor, or an editor without settings access, can change and switch off a journal's reviewer recommendations** · 🐞 · medium.

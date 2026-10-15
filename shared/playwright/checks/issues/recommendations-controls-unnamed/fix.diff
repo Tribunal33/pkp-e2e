@@ -1,0 +1,31 @@
+--- a/classes/components/forms/context/ReviewerRecommendationForm.php
++++ b/classes/components/forms/context/ReviewerRecommendationForm.php
+@@ -57,6 +57,7 @@
+                 'size' => 'normal',
+             ]))
+             ->addField(new FieldSelect('status', [
++                'label' => __('common.status'),
+                 'options' => [
+                     [
+                         'label' => __('manager.reviewerRecommendations.activateUponSaving.label'),
+--- a/lib/ui-library/src/managers/ReviewerRecommendationManager/ReviewerRecommendationManager.vue
++++ b/lib/ui-library/src/managers/ReviewerRecommendationManager/ReviewerRecommendationManager.vue
+@@ -28,7 +28,9 @@
+ 			<TableBody>
+ 				<TableRow v-for="item in store.items" :key="item.id">
+ 					<TableCell :is-row-header="true">
+-						<span class="text-lg-normal">{{ localize(item.title) }}</span>
++						<span :id="`${id}-title-${item.id}`" class="text-lg-normal">
++							{{ localize(item.title) }}
++						</span>
+ 					</TableCell>
+ 
+ 					<TableCell>
+@@ -38,6 +40,7 @@
+ 								:name="`recommendation_status[]`"
+ 								:value="item.id"
+ 								:checked="item.status"
++								:aria-labelledby="`${id}-title-${item.id}`"
+ 								class="text-blue-900 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 h-5 w-5 rounded focus:ring-2"
+ 								@click.prevent="(event) => handleStatusToggle(item, event)"
+ 							/>
