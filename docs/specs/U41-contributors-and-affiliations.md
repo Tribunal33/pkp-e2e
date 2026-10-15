@@ -91,7 +91,7 @@ nothing typed into its own fields clears, so Save stays disabled
 | **Bio Statement (e.g., department and rank)** | No | Rich text, multilingual. |
 | **Affiliations** | No | The contributor's institution list, any number of entries. Guidance: 'Enter the full name of the institution below, avoiding any acronyms. Select the name from the dropdown and click "Add" to include the affiliation in your profile (e.g. "Simon Fraser University")'. Typing under "Type the institution name in {language}" queries the public ROR registry as you type, from four characters on, straight from your own browser. Each suggestion shows the institution's name, country, the ROR mark and a link to its registry record. You can also pick your typed text itself, offered first as a bare label, to record a hand-typed institution. "Add" appears only once a suggestion is picked. There is no Add button before that, and text typed but never picked is silently dropped when the form is saved ⚠ [A8](#a8). "Add" puts the institution at the end of the list. The list keeps the order of adding and has no control to change it; the reader's page does not always follow it ⚠ [A26](#a26). While a picked entry sits under "Selected", the search box is disabled: add or remove the entry before typing a new query. A registry-backed entry's identity is fixed. Its row links to the registry record, its name comes from the registry, and its only action is "Remove institution". A typed entry carries one name box per submission language ("Type the institution name in {language}"). A screen reader announces those boxes wrongly ⚠ [A10](#a10). It also shows a completeness status: "{count} of {total} languages completed" while incomplete, "All translations available" once every language is filled. That total may follow the publication's own language set rather than the journal's ⚠ [A17](#a17). A typed entry offers both "Edit institution name" and "Remove institution"; the two actions sit behind the row's expander button, named "Click to edit or delete". A save without the submission language's name is refused with "Please provide affiliation name in the submission primary locale." under the field and "Please correct one error." at the form's foot. The foot's error list, which only a screen reader reads, names that refusal "Go to Affiliations: [object Object]" ⚠ [A7](#a7). A refused "Edit" saves nothing. A refused "Add Contributor" has already added the contributor, without the institution, so the corrected save adds the same contributor a second time ⚠ [A24](#a24). A typed entry's name saved in a language that is later unticked under "Metadata" (Settings that modify behavior) loses its box. On a submission with no other text in that language, "Save" in that contributor's "Edit" is then refused, even with nothing changed, and no field shows a reason ⚠ [A28](#a28). Removing asks "Are you sure?" with "The affiliation {name} will be deleted." (Yes/No). When a registry search fails, an "ROR API Error" dialog explains why. There are three distinct messages (rate-limited, unavailable or deprecated), each dismissed with "OK", and the text just searched is left pre-picked as a typed entry. Registry suggestions do not come back after the dialog. They stay off until the Edit panel is closed and reopened, whatever the dialog's own advice says ⚠ [A11](#a11). Hand-typed entry keeps working throughout. <sup>d</sup> |
 | **Contributor Roles** | Yes | One checkbox per role the journal defines (Rule 11). At least one must be ticked; a save with none is stopped as a missing required field (the refusal described above this table). When the journal has exactly one role, the field disappears. Every contributor save from the form then fails, leaving role-less contributors behind ⚠ [A14](#a14). <sup>c</sup> |
-| **CRediT roles and the degrees of contribution** | No | Guidance: "Select the CRediT roles of the contributor and the degrees of contribution." A table with one row per role, empty ("No Items") until "Add Another Role" is pressed. Each row has a "Select a new role (required)" drop-down of the standard CRediT taxonomy, a "Degree" drop-down ("Lead", "Equal", "Supporting") and "Remove Role". A new row arrives on the list's first role, "Conceptualization", with "Degree" empty, even beside another "Conceptualization" row; what "Save" does in either state was not seen. Every row's list grays out a role any row shows. From the second row on, the drop-downs are not tied to their labels: a click on a label lands in the first row ⚠ [A25](#a25). Shown on the landing page (Rule 14). <sup>c</sup> |
+| **CRediT roles and the degrees of contribution** | No | Guidance: "Select the CRediT roles of the contributor and the degrees of contribution." A table with one row per role, empty ("No Items") until "Add Another Role" is pressed. Each row has a "Select a new role (required)" drop-down of the standard CRediT taxonomy, a "Degree" drop-down ("Lead", "Equal", "Supporting") and "Remove Role". A new row arrives on the list's first role, "Conceptualization", with "Degree" empty, even beside another "Conceptualization" row. Saved with "Degree" still empty, the contributor keeps the role with no degree; what "Save" does with two rows on one role was not seen. Every row's list grays out a role any row shows. From the second row on, the drop-downs are not tied to their labels: a click on a label lands in the first row ⚠ [A25](#a25). Shown on the landing page (Rule 14). The form offers no degree but those three or none; a program that saves a contributor through the install's programming interface (the one programs outside the apps call) with any other degree gets a server error, and part of its change is kept ⚠ [A29](#a29). <sup>c</sup> |
 | **Publication Lists** | No | One checkbox, ticked by default: "Include this contributor when identifying authors in lists of publications." (Rule 8, and its limits in practice, ⚠ [A3](#a3)). |
 
 **The "Add Role" / "Edit Role" panel** (the Contributor Roles settings
@@ -157,7 +157,11 @@ screen, Rule 12): <sup>e</sup>
    panel, the three Preview formats and the reader pages, and stable
    across loads, whether or not "Save Order" has ever been used. Once an
    order has been saved, every list and author string follows it, and
-   later additions still join at the end. <sup>f</sup>
+   later additions still join at the end. Pressing "Save" in a
+   contributor's "Edit" window, even with nothing changed, leaves that
+   contributor in its place: in the list, after a reload, and on the
+   published item's page.
+   <sup>f</sup>
 7. **Preview: the three display formats.** "Preview" opens "List of
    Contributors" ("Contributors to this publication will be identified in
    the following formats."). It is a two-column table (Format / Display)
@@ -211,8 +215,11 @@ screen, Rule 12): <sup>e</sup>
     editor" (identifier EDITOR). Each arrives named in the journal's
     primary language only: its box for any other "Forms" language is
     empty ⚠ [A21](#a21). The submitting author's auto-created
-    contributor gets the journal's first AUTHOR-identifier role.
-    <sup>e</sup>
+    contributor gets the journal's first AUTHOR-identifier role. A
+    journal or press upgraded from version 3.5 holds the same roles as a
+    new one. A preprint server upgraded from 3.5 holds "Author" alone, so
+    its contributor form cannot save until a second role is added
+    ([A14](#a14)). <sup>e</sup>
 12. **The Contributor Roles screen.** Settings → Workflow → Submission →
     **"Contributor Roles"**. It is a table of **"Role Name"** and **"Role
     Identifier"**, with **"Add Role"** above it and "Edit" / "Delete Role"
@@ -843,9 +850,13 @@ Left out of the scenarios above, by reason:
     saving nothing: after "Close" and a reload, the contributor as
     before (Fields "Affiliations")
   - the CRediT table's "Add Another Role": a new row on
-    "Conceptualization" with no degree picked, and a role a row shows
-    grayed out in every row's list (Fields "CRediT roles and the degrees
-    of contribution")
+    "Conceptualization" with no degree picked, a role a row shows
+    grayed out in every row's list, and "Save" with "Degree" still empty
+    keeping the role with no degree (Fields "CRediT roles and the
+    degrees of contribution")
+  - "Edit" and "Save" with nothing changed leaving the contributor in
+    its place, in the list after a reload and on the published item's
+    page (Rule 6)
   - an article, book or preprint page with four contributors listing a
     contributor's two affiliations in the order "Edit" lists them
     ([A26](#a26)): the guard the issue report proposes
@@ -884,8 +895,9 @@ Left out of the scenarios above, by reason:
   - A11 (registry suggestions staying off after the "ROR API Error"
     dialog; Fields)
   - A13 (a Role Name saved with another language's box empty; Fields)
-  - A14 (a one-role journal: no roles choice and every save failing;
-    Fields; Settings)
+  - A14 (a one-role journal, every preprint server upgraded from 3.5
+    among them: no roles choice and every save failing; Fields; Rule 11;
+    Settings)
   - A16 (the auto-created contributor without a Country, every edit
     refused until one is chosen; Fields)
   - A17 (the "{count} of {total} languages" total following the
@@ -911,6 +923,8 @@ Left out of the scenarios above, by reason:
   - A28 (a contributor's "Edit" refused, with no reason shown, once a
     language an institution is named in is unticked under "Metadata";
     Fields; Settings)
+  - A29 (a contributor saved through the programming interface with an
+    unknown degree failing and keeping part of the change; Fields)
   - OPS2 (the Competing Interests label rendering raw on a preprint
     server; Fields)
 - **No seed**:
@@ -970,6 +984,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A25](#a25) | A contributor's later CRediT rows have unnamed drop-downs, and a click on their labels edits the first row | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A26](#a26) | On an article, book or preprint page with several contributors, a contributor's affiliations print in reverse order | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A27](#a27) | A contributor's affiliations on an article, book or preprint page read "First Univ , Second Univ" | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
+| [A29](#a29) | Through the programming interface, a contributor saved with an unknown degree of contribution fails with a server error, and part of the change is kept | 🐞 | latent · crash: server | — |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
 | [A4](#a4) | The organization contributor's "ROR ID" box accepts any text without a shape check | ❓ | minor | — |
@@ -1209,8 +1224,13 @@ a second role back on the "Contributor Roles" screen.
 
 It happens once a manager deletes the roles the journal does not use:
 "Translator" on a journal or preprint server, or three of a press's four
-roles.
-Basis: probe, 2026-10-03. <sup>f-a14</sup>
+roles. Every preprint server upgraded from version 3.5 starts in that
+state: the upgrade gives it "Author" alone, so no contributor can be
+added or edited there from the form, and even "Edit" › "Save" with
+nothing changed fails. An upgraded journal or press keeps several roles
+and saves normally.
+Basis: probe, 2026-10-03; the upgraded server, probe, 2026-10-15. <sup>f-a14</sup>
+Report: refresh owed — the 2026-10-15 incidentals fold widened the reach: an upgrade from 3.5 gives each context one contributor role per author user group (lib/pkp `I857_ContributorRolesTypes`), so every preprint server upgraded from 3.5 has "Author" alone and every contributor save there fails (`PKP\author\Author::getContributorRoles()`, the same server error), walked on PKP's 3.5 dataset upgraded to `main` (OPS submission 7, "Edit" › "Save" with nothing changed, two loads); the Summary, the reach and the severity's grounds follow (2026-10-15)
 
 <a id="a16"></a>
 **A16 — The auto-created contributor can lack a Country, then every edit demands one** · ❓ · user-visible.
@@ -1427,6 +1447,25 @@ language. When the submission's title or a contributor's name is written
 in that language, the form keeps offering it and the save goes through.
 Basis: probe + code reading, 2026-10-13. <sup>f-a28</sup>
 
+<a id="a29"></a>
+**A29 — Through the programming interface, a contributor saved with an unknown degree of contribution fails, and part of the change is kept** · 🐞 · latent · crash: server.
+The contributor form offers only "Lead", "Equal" and "Supporting" as a
+CRediT role's "Degree", or none, so no user of the apps' screens meets
+this. A program that saves a contributor through the install's
+programming interface (the contributor's edit request, `PUT
+{journal}/api/v1/submissions/{id}/publications/{id}/contributors/{id}`,
+with its `creditRoles` list; note f-a29 has the request as sent) can
+send any other word as a degree ("lead" in lower case, for one). It expects the save refused with a message naming
+the field, and nothing changed. Instead the save fails with a server
+error, and part of the change is already made: the CRediT roles the
+request lists before the faulty one are saved with their new degrees, the CRediT roles
+the request leaves out are removed from the contributor, and the rest of
+the change, a new given name for one, is lost.
+Seen on a journal; the press and the preprint server save contributors
+through the same code. CRediT roles are on `main` only, so no release
+has it.
+Basis: probe + code reading, 2026-10-15. <sup>f-a29</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1481,7 +1520,7 @@ Basis: probe + code reading, 2026-10-03. <sup>f-ops2</sup>
 ### Retired
 
 <a id="a15"></a>
-**A15 — A new contributor can land at the top of the list, varying between loads** · ✅ · retired. Fixed upstream (pkp-lib `922f895988`, pkp/pkp-lib#13003), 2026-09-03. <sup>f-a15</sup>
+**A15 — A new contributor can land at the top of the list, varying between loads** · ✅ · retired. Fixed upstream on `main` (pkp-lib `922f895988`, pkp/pkp-lib#13003), 2026-09-03; version 3.5 does not have the fix. <sup>f-a15</sup>
 
 <a id="a23"></a>
 **A23 — A CRediT role's degree prints as a raw code on a French landing page** · ✅ · retired. Not a defect: the degree words are new in the unreleased version and await their translations (the team's ruling, 2026-10-02); Rule 14 states what the page prints. <sup>f-a23</sup>
@@ -1647,8 +1686,15 @@ opened as a table headed "Role" / "Degree" reading "No Items", with
 "Supporting") and a "Remove Role" button, the second press too while
 row 1 still read "Conceptualization"; with row 2 moved to
 "Investigation", both rows' lists showed "Conceptualization" and
-"Investigation" disabled. Not driven: a "Save" with two rows on one role
-or with a "Degree" left empty. With the two rows added and nothing
+"Investigation" disabled. Not driven: a "Save" with two rows on one
+role. A "Save" with a "Degree" left empty, live-probed 2026-10-15 (OJS
+`main`, PKP's dataset, `dbarnes` on `publicknowledge`, submission 6's
+contributor Dana Phillips, two runs on fresh resets; OMP and OPS by the
+shared form and endpoint, not driven): "Edit" › "Add Another Role" ›
+"Save" sent `creditRoles[0][role]` (the Conceptualization address) with
+`creditRoles[0][degree]` = `""`, answered 200 and closed the panel, and
+the contributor's record then held "Conceptualization" with no degree.
+With the two rows added and nothing
 saved, "Close" (the panel header's button; both "Add Contributor"
 panels) and the Escape key (the workflow's "Edit") shut the panel with
 no browser dialog and no notice, and no CRediT role was stored. "Close"
@@ -1801,7 +1847,18 @@ contributor tied at 0 (A15, retired 2026-09-03: `getNextSeq()` now tests
 `$seq !== null` and the collector breaks sequence ties by `author_id`,
 so a new contributor takes `seq` 1 after the auto-created author's 0);
 an earlier append-at-end live-confirmation (2026-08-28, OJS) was a
-coincidental draw on the then-tied rows. Delete dialog,
+coincidental draw on the then-tied rows. An "Edit" saved with nothing
+changed keeps the contributor's place, live-probed 2026-10-15 (Rule 6;
+OJS, OMP and OPS on `main`, PKP's dataset, `dbarnes`, two runs on fresh
+resets, "Edit" on the first listed contributor): the order was the
+same right after "Save", after a reload and, for a published book and
+a posted preprint, in the public page's `citation_author` tags (OJS 4
+"Craig Montgomerie, Mark Irvine"; OMP 4, four contributors; OMP 14
+"Michael Dawson, Brian Dupuis, Michael Wilson"; OPS 7 "Elinor Ostrom,
+Frank van Laerhoven"); the same on PKP's 3.5 dataset upgraded to
+`main`, whose sequences stay tied at 0, for OJS 4 and OMP 4 and 14
+(OPS 7's save fails there, A14); the 3.5 line moves the contributor
+last (fn f-a15). Delete dialog,
 ordering mode with the verbatim arrow names,
 cancel-restore and the immediate primary-contact move
 live-confirmed 2026-08-28 (OJS); same date, the last delete emptied the
@@ -2292,7 +2349,23 @@ collapse pre-sets the hidden field as a string where the model demands
 an array) — with the generic reload toast and the panel left open;
 reproduced three times, each attempt inserting an `authors` row with
 no `credit_contributor_roles` link, listed after reload with no role
-badge. Deleting the role-less rows worked normally.
+badge. Deleting the role-less rows worked normally. The upgraded
+preprint server, live-probed 2026-10-15 (Rule 11; PKP's 3.5 dataset
+loaded and upgraded by the app from 3.5.0.5 to 3.6.0.0, two loads;
+`dbarnes` on `publicknowledge`): OPS submission 7, "Edit" on Elinor
+Ostrom showed no "Contributor Roles" field, and "Save" with nothing
+changed left the window open with "An unexpected error has occurred.
+Please reload the page and try again." (the `PUT` override `POST
+…/submissions/7/publications/8/contributors/12` answered 500, the same
+`getContributorRoles()` failure); the list kept its order. A fresh
+`main` server offers "Author" and "Translator" there and saves. The
+upgraded journal offered "Author" and "Translator", the upgraded press
+"Author", "Chapter Author", "Translator" and "Volume editor", and both
+saved. Code: the upgrade step `I857_ContributorRolesTypes` creates one
+contributor role per user group holding the Author role in each
+context (Author → AUTHOR, Translator → TRANSLATOR, Chapter Author →
+AUTHOR, Volume editor → EDITOR), and a preprint server's only such
+group is "Author".
 Issue report: [pkp-e2e#752](https://github.com/jardakotesovec/pkp-e2e/issues/752) ([docs/issues/U41-A14-one-role-journal-contributor-save-fails.md](../issues/U41-A14-one-role-journal-contributor-save-fails.md)).
 
 <a id="fn-f-a15"></a>
@@ -2326,6 +2399,25 @@ reloads; all three Preview formats, ordering mode, the landing/book page
 panel's own API responses carried `seq=0` for the auto-created author
 and `seq=1` for the new one on every publication. Not re-probed on OPS
 (shared pkp-lib mechanism) nor with three or more contributors.
+Not backported: on `stable-3_5_0` (lib/pkp `4045d9241e`, all three
+apps) `getNextSeq()` still tests `if ($seq)` and the collector still
+orders by `seq` alone (`git log --grep=13003` empty), so a list whose
+sequences tie, as most of PKP's 3.5 dataset's multi-contributor items
+do (every contributor at 0), reorders on any contributor save.
+Live-probed 2026-10-15 (`dbarnes`, two runs on fresh resets, "Edit" on
+the first listed contributor and "Save" with nothing changed): that
+contributor went last right after the save, after a reload and, for a
+published item, on its public page: OMP 14 (published) "Michael
+Dawson, Brian Dupuis, Michael Wilson" became "Brian Dupuis, Michael
+Wilson, Michael Dawson", the book page likewise; OMP 4 "Bart Beaty,
+Toby Miller, Ira Wagman, Will Straw" became "Toby Miller, Ira Wagman,
+Will Straw, Bart Beaty"; OPS 7 (posted) "Elinor Ostrom, Frank van
+Laerhoven" reversed in the list and on the preprint page; OJS 4 "Craig
+Montgomerie, Mark Irvine" reversed. The stored sequences stayed at 0;
+a published version shows "Edit" on 3.5, so nothing was unpublished
+first. On `main` the order holds (fn f), also on the 3.5 dataset
+upgraded to `main`, whose sequences stay tied at 0 (the tie-break by
+contributor id).
 
 <a id="fn-f-a16"></a>
 **f-a16 — A16 evidence.** `Repository::newAuthorFromUser()` copies the
@@ -2664,6 +2756,45 @@ ticking the language again), the submission wizard's step, a second
 names this refusal as a fault of its own that its fix does not cover
 (counted there it would rate medium); no issue report covers it yet.
 Issue report: [pkp-e2e#953](https://github.com/jardakotesovec/pkp-e2e/issues/953) ([docs/issues/U41-A28-affiliation-dropped-language-save-refused.md](../issues/U41-A28-affiliation-dropped-language-save-refused.md)).
+
+<a id="fn-f-a29"></a>
+**f-a29 — A29 evidence.** Live-probed 2026-10-15 (Fields "CRediT roles
+and the degrees of contribution"; OJS `main`, lib/pkp `b17fadae59`,
+PKP's dataset, `dbarnes` on `publicknowledge`, submission 6's
+contributor Dana Phillips; two runs, each on a fresh reset; every
+outcome read from the contributor's own record right after the
+request). `PUT …/api/v1/submissions/6/publications/7/contributors/13`
+with the record as read plus `creditRoles`:
+- `[]`: 200, no CRediT role left.
+- From none, Conceptualization `LEAD`, Data curation `"NULL"`, Software
+  `SUPPORTING`, with the given name changed in the same request: 500;
+  the contributor then held "Conceptualization (Lead)" alone and the old
+  given name ("Dana").
+- The same three with Data curation's degree `null` (the control): 200,
+  all three kept.
+- From those three, Conceptualization `EQUAL`, Data curation `"NULL"`,
+  Software `LEAD`: 500; Conceptualization then read `EQUAL`, Data
+  curation and Software kept their old degrees (none, `SUPPORTING`).
+- Conceptualization alone with the lower-case `"lead"`: 500; Data
+  curation and Software were gone, Conceptualization still `EQUAL`.
+
+Three server errors per run. The form itself sends `""` for an empty
+"Degree", which saves (fn c). Mechanism: `schemas/author.json` types
+`creditRoles[].degree` as a string with no allowed values, so
+`Repo::author()->validate()` passes any word; `author\DAO::update()`
+saves the affiliations, then
+`creditContributorRole\Repository::addCreditRoles()` (deletes the roles
+not sent, then one `updateOrCreate` per role in the order sent), then
+the contributor's own row, with no transaction, so the database's
+refusal of a value outside the `credit_degree` column's
+`CreditRoleDegree::getDegrees()` (LEAD, EQUAL, SUPPORTING) stops it
+midway. OMP and OPS by the code (the shared
+`PKPSubmissionController::editContributor()` and `author\DAO`, no app
+override); not driven there. A fix validates the degree against those
+three or none (a refusal naming the field) and saves the contributor in
+one transaction. `stable-3_5_0` has no CRediT roles: no
+`credit_contributor_roles` table and no `creditRoles` in its author
+schema.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP
