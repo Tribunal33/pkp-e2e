@@ -1080,7 +1080,7 @@ are the source; badges, Impact and Basis:
 | [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | "Submit As" preselects another role for an editor who is also an author once their editorial role is saved | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
-| [A22](#a22) | At phone width the "Make a Submission" screen gives its "Title" box no width, so no submission can be started | 🐞 | user-visible | — |
+| [A22](#a22) | On a phone, "Make a Submission" squeezes the "Title" box to nothing, so no submission can be started | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [OPS5](#ops5) | A can-post preprint submitter gets no acknowledgement email at all | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -1433,23 +1433,25 @@ of its table.
 Basis: probe, 2026-10-15. <sup>[fn-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
-**A22 — At phone width the "Make a Submission" screen gives its "Title" box no width, so no submission can be started** · 🐞 · user-visible.
-In a window as narrow as a phone's (375 pixels), the dashboard sidebar
-takes 336 pixels and leaves the "Make a Submission" screen 39. The
-"Title" box gets no width at all: it cannot be tapped and nothing can
-be typed in it. Pressing "Begin Submission" then stays on the screen
-with "Please correct one error.", the empty box flagged "This field is
-required." and "Begin Submission" greyed out, so the author cannot
-start a submission at that width. The screen works from about 600
-pixels, where the box is 180 pixels wide.
-This hits any user who already holds a role in the journal (Author,
-Journal Manager and Reader were tried). A signed-in user with no role
-in a journal or press gets no sidebar and a usable box; a preprint
-server makes that user an Author on opening the screen [OPS2](#ops2),
-so they meet the empty box too. On 3.5 the box is 153 pixels wide and
-runs past the narrow screen: scrolling sideways reaches it, and the
-submission starts.
-Basis: probe, 2026-10-05. <sup>[fn-a22](#fn-a22)</sup>
+**A22 — On a phone, "Make a Submission" squeezes the "Title" box to nothing, so no submission can be started** · 🐞 · medium.
+An author who opens "Make a Submission" on a phone finds the "Title" box
+squeezed to no width: it cannot be tapped and nothing can be typed in it.
+Pressing "Begin Submission" then only shows "Please correct one error."
+with "This field is required." under Title, so no submission can be
+started at that width. The other forms of the back office squeeze their
+boxes the same way, the wizard's "Details" step and the journal settings
+among them.
+
+A window 600 pixels wide or more (a tablet, a computer, most phones
+turned sideways) gives the boxes their width back. In 3.5 the page
+scrolled sideways to them instead.
+
+It affects users who hold a role in the journal, press or server, since
+only they get the side menu that takes most of a phone's width. A
+signed-in user with no role on a journal or press gets no side menu and
+a usable start screen; a preprint server makes such a user an Author as
+the screen opens, so they get the side menu and the empty box too.
+Basis: probe, 2026-10-15. <sup>[fn-a22](#fn-a22)</sup>
 
 ### OMP
 

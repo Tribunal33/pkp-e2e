@@ -1,0 +1,25 @@
+--- a/lib/ui-library/src/components/Form/FormGroup.vue
++++ b/lib/ui-library/src/components/Form/FormGroup.vue
+@@ -1,7 +1,7 @@
+ <template>
+ 	<div
+ 		class="pkpFormGroup -pkpClearfix"
+-		:class="spacingStyle"
++		:class="[spacingStyle, {'pkpFormGroup--editable': !displayOnly}]"
+ 		:role="label && 'group'"
+ 		:aria-labelledby="label && `${groupId}_label`"
+ 		:aria-describedby="description && `${groupId}_description`"
+@@ -355,6 +355,13 @@
+ 	}
+ }
+ 
++// Never narrower than its fields: the page scrolls sideways instead of
++// squeezing them to nothing, as it did when the group was a <fieldset>.
++// Read-only groups wrap long values instead.
++.pkpFormGroup--editable {
++	min-width: min-content;
++}
++
+ .pkpFormGroup__heading {
+ 	float: left;
+ 	width: 30%;
