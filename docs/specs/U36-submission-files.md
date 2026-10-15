@@ -2841,6 +2841,7 @@ changed name and "Close" behaved as in the list's window on each line; the forma
 both lines. OPS preprint 1's workflow showed no "Submission Files". Kept
 check `shared/playwright/checks/U36/H15/h15.js` (`PHASE=edit`,
 `PHASE=formats`).
+Issue report: [pkp-e2e#1003](https://github.com/jardakotesovec/pkp-e2e/issues/1003) ([docs/issues/U36-A30-edit-a-file-close-drops-name-unasked.md](../issues/U36-A30-edit-a-file-close-drops-name-unasked.md)).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
