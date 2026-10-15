@@ -1275,7 +1275,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | Statistics downloads: a double quote in the search phrase or a filter's name breaks that line of the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A14](#a14) | A refused request for the "Articles" figures answers with a code, not a sentence | 🐞 | minor | — |
+| [A14](#a14) | Statistics: a refused date range shows a raw code like "api.stats.400.wrongDateFormat", not a sentence | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A15](#a15) | "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author | 🐞 | user-visible | — |
 | [A16](#a16) | The SUSHI "Item Master Report (IR)" gives an author without an ORCID iD the iD of an author before them | 🐞 | user-visible | — |
 | [OJS2](#ojs2) | One view of an HTML galley counts once more for each file it names that was never uploaded | 🐞 | minor | upstream sync (claude), 2026-10-05 — ❓ settled to 🐞 |
@@ -1491,15 +1491,24 @@ never changes the range unasked.
 Basis: probe, 2026-09-29. <sup>f-a13</sup>
 
 <a id="a14"></a>
-**A14 — A refused request for the "Articles" figures answers with a code, not a sentence** · 🐞 · minor.
-When the server refuses the dates of a request for the figures of
-Statistics › "Articles", its answer carries only a code, such as
+**A14 — Statistics: a refused date range shows a raw code like "api.stats.400.wrongDateFormat", not a sentence** · 🐞 · low.
+On Statistics › "Articles", when the server refuses the dates the page
+asks for, its answer carries only a code such as
 "api.stats.400.wrongDateFormat", where a sentence saying what is wrong
-with the dates is expected. The "Error" window of [A1](#a1) shows that
-code on screen; a program sending the request without the page
-(address and account in the footnote) gets the same code, with no
-sentence to show its user.
-Basis: probe, 2026-10-02. <sup>f-a14</sup>
+with the dates is expected. Choosing "All dates" on a journal, press or
+server with nothing published is refused this way
+([pkp-e2e#610](https://github.com/jardakotesovec/pkp-e2e/issues/610)),
+and the "Error" window shows the code.
+
+A program that sends the statistics API a date or an "orderDirection"
+it refuses gets the same kind of code, for the articles', the
+journal's, the issues', the editorial and the users' figures. Nothing
+is lost: the refusal is right, only its sentence is missing.
+
+Once pkp-e2e#610 is fixed, a screen shows the code only on "Editorial
+Activity" when "This year" is chosen on 1 January. Otherwise only
+programs that use the statistics API meet it.
+Basis: probe, 2026-10-15. <sup>f-a14</sup>
 
 <a id="a15"></a>
 **A15 — "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author** · 🐞 · user-visible.

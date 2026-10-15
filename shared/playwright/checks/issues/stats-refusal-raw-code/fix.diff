@@ -1,0 +1,51 @@
+--- a/lib/pkp/classes/core/PKPBaseController.php
++++ b/lib/pkp/classes/core/PKPBaseController.php
+@@ -537,8 +537,8 @@
+      * @param string    $dateStartParam     Where the find the start date in the array of params
+      * @param string    $dateEndParam       Where to find the end date in the array of params
+      *
+-     * @return bool|string  True if they validate, or a string which
+-     *                      contains the locale key of an error message.
++     * @return bool|string  True if they validate, or the error message,
++     *                      translated, to send to the client.
+      */
+     protected function _validateStatDates(array $params, string $dateStartParam = 'dateStart', string $dateEndParam = 'dateEnd'): bool|string
+     {
+@@ -569,17 +569,17 @@
+             $errors = $validator->errors()->getMessages();
+             if ((!empty($errors[$dateStartParam]) && in_array('invalidFormat', $errors[$dateStartParam]))
+                     || (!empty($errors[$dateEndParam]) && in_array('invalidFormat', $errors[$dateEndParam]))) {
+-                return 'api.stats.400.wrongDateFormat';
++                return __('api.stats.400.wrongDateFormat');
+             }
+             if (!empty($errors[$dateStartParam]) && in_array('tooEarly', $errors[$dateStartParam])) {
+-                return 'api.stats.400.earlyDateRange';
++                return __('api.stats.400.earlyDateRange');
+             }
+             if (!empty($errors[$dateEndParam]) && in_array('tooLate', $errors[$dateEndParam])) {
+-                return 'api.stats.400.lateDateRange';
++                return __('api.stats.400.lateDateRange');
+             }
+             if ((!empty($errors[$dateStartParam]) && in_array('invalidRange', $errors[$dateStartParam]))
+                     || (!empty($errors[$dateEndParam]) && in_array('invalidRange', $errors[$dateEndParam]))) {
+-                return 'api.stats.400.wrongDateRange';
++                return __('api.stats.400.wrongDateRange');
+             }
+         }
+ 
+--- a/lib/pkp/api/v1/stats/publications/PKPStatsPublicationController.php
++++ b/lib/pkp/api/v1/stats/publications/PKPStatsPublicationController.php
+@@ -716,11 +716,11 @@
+         }
+ 
+         if (array_key_exists('orderDirection', $allowedParams) && !in_array($allowedParams['orderDirection'], [StatisticsHelper::STATISTICS_ORDER_ASC, StatisticsHelper::STATISTICS_ORDER_DESC])) {
+-            throw new \Exception('api.stats.400.invalidOrderDirection', 400);
++            throw new \Exception(__('api.stats.400.invalidOrderDirection'), 400);
+         }
+ 
+         if (array_key_exists('timelineInterval', $allowedParams) && !$this->isValidTimelineInterval($allowedParams['timelineInterval'])) {
+-            throw new \Exception('api.stats.400.invalidTimelineInterval', 400);
++            throw new \Exception(__('api.stats.400.invalidTimelineInterval'), 400);
+         }
+ 
+         // Identify submissions which should be included in the results when a searchPhrase is passed
