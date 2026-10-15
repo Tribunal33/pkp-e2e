@@ -1,0 +1,53 @@
+--- a/lib/ui-library/src/managers/FileManager/modals/FileMetadataForm.vue
++++ b/lib/ui-library/src/managers/FileManager/modals/FileMetadataForm.vue
+@@ -15,6 +15,8 @@
+ import {ref, onMounted, onBeforeUnmount} from 'vue';
+ import PkpForm from '@/components/Form/Form.vue';
+ import {useFileMetadataForm} from './useFileMetadataForm';
++import {useFormChanged} from '@/composables/useFormChanged';
++import {t} from '@/utils/i18n';
+ 
+ const props = defineProps({
+ 	submissionFile: {type: Object, required: true},
+@@ -33,7 +35,16 @@
+ 
+ const {form, set} = useFileMetadataForm(props);
+ 
++// Ask before unsaved details are dropped, as the legacy form did. The browser's
++// leave-page question comes from useFormChanged; the window's close question
++// comes from the legacy `containerClose` event (onMounted below), because this
++// form runs in its own Vue app and cannot inject the window's close callback.
++const {hasStateChanged, setInitialState} = useFormChanged(form, [], {
++	warnOnClose: true,
++});
++
+ function onSuccess(r) {
++	setInitialState();
+ 	// Replay events from the JSON response so the parent grid refreshes when this form is nested in another modal (galley's dependent files)
+ 	if (r && Array.isArray(r.events)) {
+ 		r.events.forEach((e) => $(rootEl.value).trigger(e.name, e.data ?? null));
+@@ -42,6 +53,7 @@
+ }
+ 
+ function onCancel() {
++	setInitialState();
+ 	props.onCancelled?.();
+ }
+ 
+@@ -52,6 +64,16 @@
+ 	);
+ 	if (!$container.length) return;
+ 
++	$container.on(
++		'containerClose.submissionFileMetadata',
++		(event, informationObject) => {
++			if (hasStateChanged() && !confirm(t('form.dataHasChanged'))) {
++				if (informationObject) {
++					informationObject.closePermitted = false;
++				}
++			}
++		},
++	);
+ 	$container.on('wizardAdvanceRequested.submissionFileMetadata', (event) => {
+ 		event.preventDefault();
+ 		pkpFormRef.value?.submit();

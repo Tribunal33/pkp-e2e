@@ -1065,7 +1065,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A27](#a27) | A refused "History" tab in a file's "More Information" shows a second alert that reads only "undefined" | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A28](#a28) | Submission wizard: a file's "Remove" the server refuses leaves the "Remove" window open with a spinner and no message; a refused component choice says nothing either | 🐞 | minor | — |
 | [A29](#a29) | Submission wizard: the "Files" panel's screen-reader status keeps reading "Uploading 100% complete" after "Cancel upload" and on an emptied panel | 🐞 | minor | — |
-| [A30](#a30) | "Edit a file" closed with "Close", a click beside it or a reload drops a changed name without asking {OJS OMP} | 🐞 | minor | — |
+| [A30](#a30) | Closing "Edit a file" without "Save" drops a changed file name without asking | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1534,20 +1534,19 @@ never in the status. A preprint server has no such panel.
 Basis: probe, 2026-10-09. <sup>[f-a29](#fn-a29)</sup>
 
 <a id="a30"></a>
-**A30 — "Edit a file" closes without asking and drops a changed name** {OJS OMP} · 🐞 · minor.
-In "Edit a file" (Rule 10), a person changes the name and, without
-"Save", presses the window's header "Close", clicks the shaded page
-beside the window or reloads the page. A question before the change is
-dropped is expected, as in the 3.5 release: there "Close" and the click
-ask "The data on this form has changed. Do you wish to continue without
-saving?" ("Cancel" keeps the window with the typed name, "OK" closes
-it), and the reload raises the browser's leave-page question. Instead
-nothing asks: the window goes at once, the typed name with it, and the
-list keeps the old name (Rule 10a). On a press, "Close" does the same in
-the "Edit a file" window a publication format file's "Edit" opens. A
-regression: the question went when the window was rebuilt in May 2026,
-in the change that added the "Summary of Changes (Amendment Notice)" box
-(Rule 12). A preprint server has no "Edit a file" window.
+**A30 — Closing "Edit a file" without "Save" drops a changed file name without asking** {OJS OMP} · 🐞 · low.
+An editor chooses "Update File Details" in a file's menu on a workflow
+file list. The window "Edit a file" opens, and the editor changes the
+file's name. The editor then leaves without pressing "Save", by
+pressing the window's "Close", clicking the shaded page beside the
+window, or reloading the page. In 3.5 each of these first asked "The
+data on this form has changed. Do you wish to continue without
+saving?", or for a reload, the browser's leave-page question. Now
+nothing asks. The window closes at once, the typed name goes with it,
+and the list keeps the old name.
+
+On a press, the "Edit a file" window that opens with "Edit" on a
+publication format's file does the same.
 Since: 2026-05-28 · Basis: probe, 2026-10-15. <sup>[f-a30](#fn-a30)</sup>
 
 ### OPS
