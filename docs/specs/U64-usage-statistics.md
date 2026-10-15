@@ -1276,8 +1276,8 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A10](#a10) | Site administrator cannot save Site Settings › "Statistics" after unticking "Platform" over a mistyped Platform ID | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | "Counter R5": the downloaded "counterReport.tsv" is comma-separated, not tab-separated | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Statistics: a refused date range shows a raw code like "api.stats.400.wrongDateFormat", not a sentence | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
-| [A15](#a15) | "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author | 🐞 | user-visible | — |
-| [A16](#a16) | The SUSHI "Item Master Report (IR)" gives an author without an ORCID iD the iD of an author before them | 🐞 | user-visible | — |
+| [A15](#a15) | "Counter R5": the "Authors" column of the item reports names only each work's last author | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
+| [A16](#a16) | SUSHI "Item Master Report (IR)" gives authors without an ORCID iD the iD of an author listed before them | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OJS2](#ojs2) | One view of an HTML galley counts once more for each picture or style sheet it names that was never uploaded | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1511,41 +1511,42 @@ programs that use the statistics API meet it.
 Basis: probe, 2026-10-15. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author** · 🐞 · user-visible.
+**A15 — "Counter R5": the "Authors" column of the item reports names only each work's last author** · 🐞 · medium.
 On Statistics › "Counter R5" of a journal or a preprint server, an
 editor presses "Edit" on "Item Master Report (IR)", ticks "Authors"
 under "Attributes To Show" and presses "Download"; on a journal,
-"Journal Article Requests (IR_A1)" has the "Authors" column without
-asking. For a work with several authors, the column names only the
-last one: an article by Alan Mwandenga, Amina Mansour and Nicolas
-Riouf reads "Nicolas Riouf", and a preprint by Catherine Kwantes and
-Urho Kekkonen reads "Urho Kekkonen", even when the first author has an
-ORCID iD. Only the last author's own iD shows, as
-"Nicolas Riouf(ORCID:https://orcid.org/…)". Expected: every author,
-in order, an iD after each who has one.
+"Journal Article Requests (IR_A1)" always has the "Authors" column. For
+a work with several authors, the column names only the last one: an
+article by Alan Mwandenga, Amina Mansour and Nicolas Riouf reads
+"Nicolas Riouf", and a preprint by Catherine Kwantes and Urho Kekkonen
+reads "Urho Kekkonen", even when the first author has an ORCID iD.
+Expected: every author, in order, an iD after each who has one.
 
-The figures in the row are right. A library that reads the file
-credits each work to its last author alone.
-Basis: probe, 2026-10-13. <sup>f-a15</sup>
+The usage figures in the row are right. A library that reads the file
+would credit each work to its last author alone, and nothing in the
+file says that names are missing.
+Basis: probe, 2026-10-15. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — The SUSHI "Item Master Report (IR)" gives an author without an ORCID iD the iD of an author before them** · 🐞 · user-visible.
-A harvesting system asks the journal's SUSHI address (Rule 23) for
-"Item Master Report (IR)" with the authors shown, the same request
-"Download" sends with "Authors" ticked. Each work lists all its
-authors and the ORCID iD of each who has one, but an author with no
-iD who comes after one with an iD is given that earlier author's iD. In an article
-by Alan Mwandenga, Amina Mansour and Nicolas Riouf where only Alan
-Mwandenga has one, all three carry his; in a preprint by Catherine
-Kwantes and Urho Kekkonen where only she has one, he carries hers. An
-author before the first one with an iD correctly has none. Expected:
-an iD only on the authors who have one.
+**A16 — SUSHI "Item Master Report (IR)" gives authors without an ORCID iD the iD of an author listed before them** · 🐞 · medium.
+A harvesting system asks the SUSHI address of a journal or a preprint
+server for "Item Master Report (IR)" with the authors shown: the same
+report and options as "Download" on Statistics › "Counter R5" with
+"Authors" ticked, served as JSON. Each work lists all its authors, but
+once one author in the report has an ORCID iD, every author without
+one who comes after is given that iD, in the same work and in the
+works that follow. In an article by Alan Mwandenga, Amina Mansour and
+Nicolas Riouf where only Alan Mwandenga has an iD, all three carry
+his, and so does Vajiheh Karbasizaed, the sole author of the next
+article in the report. Expected: an iD only on the authors who have
+one.
 
-A system that matches authors by their iD takes the other authors for
-that one researcher. The address answers so on a journal and on a
-preprint server; the downloaded file names only the last author
-instead ([A15](#a15)).
-Basis: probe, 2026-10-13. <sup>f-a16</sup>
+A system that matches authors by their iD would take all these authors
+for one researcher and credit that researcher with the usage of works
+they did not write. Nothing in the answer shows that the iDs are
+borrowed. The file "Download" gives is built separately and carries no
+borrowed iD.
+Basis: probe, 2026-10-15. <sup>f-a16</sup>
 
 ### OJS
 

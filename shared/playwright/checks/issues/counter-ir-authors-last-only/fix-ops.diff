@@ -1,0 +1,21 @@
+--- a/classes/sushi/IR.php
++++ b/classes/sushi/IR.php
+@@ -426,15 +426,16 @@
+ 
+                     if (in_array('Authors', $this->attributesToShow)) {
+                         $authors = $currentPublication->getData('authors');
+-                        $authorRowValue = '';
++                        $authorRowValues = [];
+                         foreach ($authors as $author) {
+                             $authorRowValue = $author->getFullName(true, false, $submissionLocale);
+                             $orcid = $author->getOrcid();
+                             if (!empty($orcid)) {
+                                 $authorRowValue .= '(ORCID:' . $orcid . ')';
+                             }
++                            $authorRowValues[] = $authorRowValue;
+                         }
+-                        array_push($resultRow, $authorRowValue); // Authors
++                        array_push($resultRow, implode('; ', $authorRowValues)); // Authors
+                     }
+ 
+                     if (in_array('Publication_Date', $this->attributesToShow)) {

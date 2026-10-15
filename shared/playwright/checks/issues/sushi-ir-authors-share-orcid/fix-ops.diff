@@ -1,0 +1,15 @@
+--- a/classes/sushi/IR.php
++++ b/classes/sushi/IR.php
+@@ -286,8 +286,10 @@
+                     $authors = $currentPublication->getData('authors');
+                     $itemContributors = [];
+                     foreach ($authors as $author) {
+-                        $itemContributor['Type'] = 'Author';
+-                        $itemContributor['Name'] = $author->getFullName(true, false, $submissionLocale);
++                        $itemContributor = [
++                            'Type' => 'Author',
++                            'Name' => $author->getFullName(true, false, $submissionLocale),
++                        ];
+                         $orcid = $author->getOrcid();
+                         if (!empty($orcid)) {
+                             $itemContributor['Identifier'] = $orcid;
