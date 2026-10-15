@@ -3014,7 +3014,7 @@ phase `imperson`), at the load of `{context}/user/profile#contact` after a
 reload that followed a Contact save. The message arrived each time. Not
 read: the tab a second after the save (settle by reading the site-level
 Contact tab 1 s after the save over several runs).
-Issue report: [docs/issues/U03-A24-profile-contact-save-script-error.md](../issues/U03-A24-profile-contact-save-script-error.md).
+Issue report: [pkp-e2e#969](https://github.com/jardakotesovec/pkp-e2e/issues/969) ([docs/issues/U03-A24-profile-contact-save-script-error.md](../issues/U03-A24-profile-contact-save-script-error.md)).
 
 <a id="fn-a25"></a>
 **f-a25** — The tab press fetches the tab with `GET
@@ -3026,7 +3026,7 @@ data. Run records of 2026-10-14 (drift sweep), all three apps, seven runs
 token '<', "<!DOCTYPE "... is not valid JSON", and the page's script stayed
 busy for 30 s after it; the panel stayed empty for a tab not opened
 before and kept the Contact form for a tab opened before (note g).
-Issue report: [docs/issues/U03-A25-stale-session-tab-press-script-error.md](../issues/U03-A25-stale-session-tab-press-script-error.md).
+Issue report: [pkp-e2e#970](https://github.com/jardakotesovec/pkp-e2e/issues/970) ([docs/issues/U03-A25-stale-session-tab-press-script-error.md](../issues/U03-A25-stale-session-tab-press-script-error.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
