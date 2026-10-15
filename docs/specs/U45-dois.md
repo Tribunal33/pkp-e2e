@@ -5757,6 +5757,7 @@ nor the DOIs page's rows (`filterByIsConfirmedByEditor()`,
 `filterByIsPubliclyVisible()`, note j) test the cancel; the deposit jobs
 failed at connection, as every test-install deposit does (Rule 33).
 3.5 has no peer-review DOIs.
+Issue report: [pkp-e2e#983](https://github.com/jardakotesovec/pkp-e2e/issues/983) ([docs/issues/U45-OJS10-cancelled-review-doi-still-deposited.md](../issues/U45-OJS10-cancelled-review-doi-still-deposited.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
