@@ -2,7 +2,9 @@
 // PR review of pkp/ojs#5935 (pkp-lib#13519, U45 OJS2): the DataCite records "Export DOIs" would carry for an issue
 // and an article, built with the DataCite export plugin's own exportXML() and validation off (the fleets answer
 // the export with the schema 400: the XSD fetch goes to the dead [proxy]), then checked against DataCite's kernel-4
-// schema from a local copy. Run after walk.js steps 1-6 (DataCite on, "Issues" ticked, both DOIs assigned).
+// schema from a local copy. Run on a dataset fleet set up as the issue report's steps 1-6 did (the DataCite
+// plugin on and chosen, prefix 10.1234, "Issues" ticked, issue 1 and article 1 given DOIs; the report and its
+// walk, checks/issues/datacite-issue-export-fails/walk.js, were deleted at the merge and live in git history).
 // Prints one JSON line: per object, the exception or the record's identifier, its funding references count,
 // schemaValid and the first libxml errors; with --xml, each record's XML. With --funder, the article is given one
 // funder with a grant inside a transaction that is rolled back (the dataset has none), so its record shows the

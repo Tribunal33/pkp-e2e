@@ -603,9 +603,9 @@ links under the list. <sup>g</sup>
       refused: the action goes on to the format check as for any work,
       and the file it builds holds the article's record with an empty
       DOI beside the galley's [OJS5](#ojs5). <sup>q51</sup> With DataCite,
-      exporting a
-      published issue fails on the server and shows nothing
-      ⚠ [OJS2](#ojs2).
+      a published issue's record is built as a work's is, with no
+      funding references, and goes on to the same format check.
+      <sup>f-ojs2</sup>
     - **"Deposit DOIs"** asks "You are about to send DOI metadata records
       for {count} item(s) to {agency}. Are you sure you want to deposit
       these records?". Confirmed, it sends the ticked published items to
@@ -2249,7 +2249,6 @@ Left out of the scenarios above, by reason:
   - A5 (a refused block field keeping the agency; Rule 35; scenario 16 passes it)
   - OJS3 (the ISSN publish warning listed twice; Rule 39; scenario 14 passes it)
   - OJS1 ("Never" not stopping an issue's DOI at "Publish Issue"; Rule 8)
-  - OJS2 (a DataCite issue export or deposit; Rule 29)
   - A15 ("Deposit DOIs" on a published work with no DOI, its own or a galley's; Rule 29)
   - OJS5 ("Deposit All" or "Deposit DOIs" on a DataCite journal marking "Submitted", and never sending, the galley DOI of a work whose article DOI was cleared, and "Export DOIs" not refusing that work; Rules 29, 29a, 41)
   - OJS8 ("Deposit All" and "Deposit DOIs" on a DataCite journal under "DOI Versioning" "Yes" marking an earlier major version's DOIs "Submitted"; Rules 29, 29a)
@@ -2303,7 +2302,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | The DOIs page's rows show a title's italic word as `<i>…</i>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A29](#a29) | A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it | 🐞 | user-visible | — |
 | [A30](#a30) | Crossref receives a title or subtitle typed with "&" or an italic word as the codes `&amp;` and `<i>…</i>` | 🐞 | high | issues (claude), 2026-10-15 — re-verified |
-| [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [OJS5](#ojs5) | DataCite deposits leave a galley DOI "Submitted" and unsent when its article has no DOI | 🐞 | medium · crash: server | issues (claude), 2026-10-15 — re-verified |
@@ -2333,6 +2331,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A26](#a26) | Under "Immediately", "Revert Decline" does not give the work its DOIs back | ✅ | retired | — |
 | [A27](#a27) | The DOIs page no longer lists a declined submission that carries a DOI | ✅ | retired | — |
 | [A28](#a28) | On a journal and a preprint server, "Mark DOIs Registered" also marks an unpublished new version's DOIs, which then never reach the agency | ✅ | retired | — |
+| [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | ✅ | retired | — |
 | [OJS6](#ojs6) | "Deposit DOIs" marks the kept DOI of a review taken out of public view "Submitted", though nothing sends it and the DOIs page no longer lists it | ✅ | retired | — |
 | [OMP4](#omp4) | With "DOI Versioning" "Yes", "Mark DOIs Unregistered" on a press cannot undo what "Mark DOIs Registered" set on an earlier version | ✅ | retired | — |
 | [OMP5](#omp5) | "Mark DOIs Registered" on a press marks the file DOIs of a version not yet published | ✅ | retired | — |
@@ -2753,20 +2752,6 @@ Lean: yes; the setting's help asks only about submissions, but a manager
 who chose "Never" expects no DOI to appear by itself.
 Basis: probe, 2026-09-26. <sup>f-ojs1</sup>
 
-<a id="ojs2"></a>
-**OJS2 — On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it** · 🐞 · high · crash: server.
-On a journal with DataCite chosen, "Export DOIs" on a published issue
-("Issues" tab) closes the "Export DOIs" confirmation window and shows
-nothing: the export fails on the server. "Deposit All" marks the issue
-"Submitted", and its background deposit fails the same way, so the
-issue's DOI never reaches DataCite. The journal cannot register any
-issue DOI with DataCite from the application, by deposit or by a
-downloaded file. The DOIs page tells the manager the opposite: the issue
-reads "Submitted" and no error shows. Article DOIs on the same journal
-are not affected. It needs DataCite as the journal's registration agency
-and "Issues" ticked under "Items with DOIs".
-Basis: probe, 2026-10-01. <sup>f-ojs2</sup>
-
 <a id="ojs3"></a>
 **OJS3 — A journal's publish window lists the missing-ISSN warning for Crossref twice** · 🐞 · low.
 An editor of a journal that deposits with Crossref and has neither an
@@ -3087,6 +3072,9 @@ Basis: probe, 2026-10-15. <sup>f-ops7</sup>
 
 <a id="a28"></a>
 **A28 — On a journal and a preprint server, "Mark DOIs Registered" also marks an unpublished new version's DOIs, which then never reach the agency** · ✅ · retired. Fixed 2026-10-07 at the round-3 PR heads of `pkp/pkp-lib#13447` (`pkp/pkp-lib#13460` `68d984c2c9`, `pkp/ojs#5903` `fe950f0fd9`, `pkp/omp#2495` `e4cab0c9e9`, `pkp/ops#1435` `69ab8ab1ee`, with `pkp/crossref-ojs#113` `f358a32628` and `pkp/crossref-ops#72` `4968397748`); merged 2026-10-09; this page describes the fixed behavior: "Mark DOIs Registered" and "Deposit DOIs" reach the DOIs of a work's published versions only, and a new version's DOIs read "Unregistered" once it is published (Rules 26, 29; on a press its file DOIs too since [OMP5](#omp5) was fixed). <sup>f-a28</sup>
+
+<a id="ojs2"></a>
+**OJS2 — On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it** · ✅ · retired. Fixed by `pkp/ojs#5935` (for `pkp/pkp-lib#13519`), merged 2026-10-15 as `e591926d11`; walked fixed at the OJS `main` tip the same day. <sup>f-ojs2</sup>
 
 <a id="ojs6"></a>
 **OJS6 — "Deposit DOIs" marks the kept DOI of a review taken out of public view "Submitted", though nothing sends it and the DOIs page no longer lists it** · ✅ · retired. Fixed 2026-10-07 at the round-7 PR heads of `pkp/pkp-lib#13447` (`pkp/pkp-lib#13460` `ed4299ffcb`); merged 2026-10-09; this page describes the fixed behavior: the per-work actions take only the reviews shown publicly, so a hidden review's kept DOI keeps its status and the deposit leaves the review out (Rules 7b, 29). <sup>f-ojs6</sup>
@@ -5479,7 +5467,16 @@ Argument #2 ($publication) must be of type APP\publication\Publication,
 null given"); after "Deposit All" the issue's deposit job failed with the
 same error. On a Crossref journal the issue export answers the 400 of
 A13 instead.
-Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204) ([docs/issues/U45-OJS2-datacite-issue-export-fails.md](../issues/U45-OJS2-datacite-issue-export-fails.md)); the team's copy is `pkp/pkp-lib#13519` (open, 2026-10-14).
+Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204) (closed 2026-10-15 at the fix); the team's copy is `pkp/pkp-lib#13519`.
+Fixed by `pkp/ojs#5935` (`createFundingReferencesNode()` takes a null
+publication and submission and returns no node), reviewed 2026-10-15 at
+its head `b933234b4d` and merged as `e591926d11`, tree-equal: the
+issue's "Export DOIs" answers the article's schema 400 on the test
+installs and its `DepositIssue` fails only at connecting to DataCite;
+the issue's record (built with validation off) passes DataCite's
+kernel-4 schema, and an article's funding references stay
+(`shared/playwright/checks/sync/ojs-5935/schema-read.php`). stable-3_5_0
+never had the funding references.
 
 <a id="fn-f-ojs3"></a>
 **f-ojs3** — Live-probed 2026-09-26 (q23), OJS, two processes and two
