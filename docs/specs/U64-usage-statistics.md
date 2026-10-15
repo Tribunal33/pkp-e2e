@@ -2659,6 +2659,7 @@ rows read `"Nicolas Riouf"` with the iD on the first author and
 on the last; OPS "The Facets Of Job Satisfaction…" (two authors) read
 `"Urho Kekkonen"` and `"Urho Kekkonen(ORCID:…)"` likewise. The column
 setup: fn-l.
+Issue report: [pkp-e2e#987](https://github.com/jardakotesovec/pkp-e2e/issues/987) ([docs/issues/U64-A15-counter-ir-authors-column-last-author-only.md](../issues/U64-A15-counter-ir-authors-column-last-author-only.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — `IR::getReportItems()` (OJS and OPS `classes/sushi/IR.php`)
@@ -2673,6 +2674,7 @@ gave Alan Mwandenga, Amina Mansour and Nicolas Riouf each
 `"Identifier":"https://orcid.org/0000-0002-1825-0097"`, and Catherine
 Kwantes and Urho Kekkonen the same; two runs per line with the iD on
 the last author: only that author carried it.
+Issue report: [pkp-e2e#988](https://github.com/jardakotesovec/pkp-e2e/issues/988) ([docs/issues/U64-A16-sushi-ir-authors-share-orcid.md](../issues/U64-A16-sushi-ir-authors-share-orcid.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-p. Live-probed 2026-09-27: td11; the side menu offers
