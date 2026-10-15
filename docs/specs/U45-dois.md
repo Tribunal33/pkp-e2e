@@ -5467,7 +5467,7 @@ Argument #2 ($publication) must be of type APP\publication\Publication,
 null given"); after "Deposit All" the issue's deposit job failed with the
 same error. On a Crossref journal the issue export answers the 400 of
 A13 instead.
-Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204) (closed 2026-10-15 at the fix); the team's copy is `pkp/pkp-lib#13519`.
+Issue report: [pkp-e2e#204](https://github.com/jardakotesovec/pkp-e2e/issues/204) (closed 2026-10-15 at the fix); the team's copy, `pkp/pkp-lib#13519`, closed as completed 2026-10-15.
 Fixed by `pkp/ojs#5935` (`createFundingReferencesNode()` takes a null
 publication and submission and returns no node), reviewed 2026-10-15 at
 its head `b933234b4d` and merged as `e591926d11`, tree-equal: the
