@@ -870,6 +870,7 @@ not allowed"; the list is empty where the file came from the app's
 template or an older version. Expected: every reader gets the galley
 as the journal published it. Security: unreleased.
 Since: 2026-07-13 · Basis: probe, 2026-10-13. <sup>f-ojs2</sup>
+Report: paused — written and read 2026-10-15, held for the maintainer's call on one paragraph before it is published (2026-10-15)
 
 <a id="ojs3"></a>
 **OJS3 — A replaced HTML galley file reaches readers who are not signed in up to a day late** · ❓ · user-visible.
