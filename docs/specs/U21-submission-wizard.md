@@ -1079,7 +1079,7 @@ are the source; badges, Impact and Basis:
 | [A18](#a18) | Submission wizard saves a field cut off mid-typing when the author starts typing after a quiet minute | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
-| [A21](#a21) | "Submit As" lists its roles in an order no app fixes, so the preselected role depends on the install | 🐞 | minor | — |
+| [A21](#a21) | "Submit As" preselects another role for an editor who is also an author once their editorial role is saved | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A22](#a22) | At phone width the "Make a Submission" screen gives its "Title" box no width, so no submission can be started | 🐞 | user-visible | — |
 | [OMP2](#omp2) | A press refuses the comma-separated "Notify Anyone" list its own help text asks for | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint author cannot delete their own draft: the wizard's "Cancel" does nothing and My Submissions refuses it | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
@@ -1412,19 +1412,25 @@ saves after submission
 Basis: probe, 2026-10-01. <sup>[fn-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — "Submit As" lists its roles in an order no app fixes, so the preselected role depends on the install** · 🐞 · minor.
-"Submit As" selects whichever role it lists first, and no app decides
-that order: the list comes out as the install's database returns it.
-On the seeded journal, press and server, a user who also holds Author
-sees their editorial role listed first and selected: "Journal editor",
-"Press editor" or "Preprint Server manager" on every visit, and
-"Section editor" ("Series editor" on a press) for a Section Editor. On
-a scratch journal or preprint server the same kinds of user saw
-"Author" first. On a scratch press, one run saw
-the order change between two visits of the same user and a later run
-did not. An author who accepts the preselection may submit under an
-editorial role they did not mean, or be refused [A14](#a14).
-Basis: probe, 2026-10-01. <sup>[fn-a21](#fn-a21)</sup>
+**A21 — "Submit As" preselects another role for an editor who is also an author once their editorial role is saved** · 🐞 · low.
+"Make a Submission" asks a user who holds more than one submitting role
+to choose one under "Submit As", and selects the role it lists first.
+No app decides that order: the roles come out as the database returns
+them. An editor who is also an author sees "Journal editor" ("Press
+editor", "Preprint Server manager") listed first and selected, until a
+manager changes an option of that editorial role in Settings › Users &
+Roles › "Roles", even if they change it straight back. From then on
+"Author" is listed first and selected, for every user who holds both
+roles.
+
+The user can always choose the other role. But which role is selected
+for them depends on the install's history, not on a rule: two installs
+with the same roles can differ, and one install's default changes when
+a manager saves a role option that has nothing to do with submitting.
+
+This happens on PostgreSQL, which stores a saved role again at the end
+of its table.
+Basis: probe, 2026-10-15. <sup>[fn-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
 **A22 — At phone width the "Make a Submission" screen gives its "Title" box no width, so no submission can be started** · 🐞 · user-visible.

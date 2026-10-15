@@ -1,0 +1,15 @@
+--- a/lib/pkp/classes/components/forms/submission/StartSubmission.php
++++ b/lib/pkp/classes/components/forms/submission/StartSubmission.php
+@@ -166,6 +166,12 @@
+             return;
+         }
+ 
++        // The user groups come from the database in no fixed order, and the first one listed
++        // is selected. List the author roles first, as PKPSubmissionController::add() prefers
++        // them when no role is sent, then the others by role_id, each in the order created.
++        $sortKey = fn (UserGroup $userGroup) => [(int) $userGroup->roleId !== Role::ROLE_ID_AUTHOR, (int) $userGroup->roleId, (int) $userGroup->id];
++        $userGroups = $userGroups->sort(fn (UserGroup $a, UserGroup $b) => $sortKey($a) <=> $sortKey($b));
++
+         $options = $userGroups->map(fn (UserGroup $userGroup) => [
+             'value' => $userGroup->id,
+             'label' => $userGroup->getLocalizedData('name'),
