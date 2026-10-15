@@ -5315,6 +5315,7 @@ Written up for the team in
 titles). A press has no
 agency plugin. The DOIs page's own rendering of the same title is
 [A24](#a24).
+Issue report: [pkp-e2e#979](https://github.com/jardakotesovec/pkp-e2e/issues/979) ([docs/issues/U45-A30-crossref-title-ampersand-italic-codes.md](../issues/U45-A30-crossref-title-ampersand-italic-codes.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25** — At the PR heads of `pkp/pkp-lib#13460` (`246e5387f6`, with
@@ -5956,12 +5957,14 @@ a journal and a press listed no draft.
 **f-ops6** — Live-probed 2026-10-15, OPS, two runs (note q51,
 versions). What Crossref answers to one file
 naming a DOI twice was not tried: the test installs reach no agency.
+Issue report: [pkp-e2e#980](https://github.com/jardakotesovec/pkp-e2e/issues/980) ([docs/issues/U45-OPS6-preprint-crossref-file-doi-twice.md](../issues/U45-OPS6-preprint-crossref-file-doi-twice.md)).
 
 <a id="fn-f-ops7"></a>
 **f-ops7** — Live-probed 2026-10-15, OPS, two runs (note q51,
 titles): OPS `PreprintCrossrefXmlFilter`
 `createPostedContentNode()`; OJS `ArticleCrossrefXmlFilter` writes the
 subtitle itself.
+Issue report: [pkp-e2e#981](https://github.com/jardakotesovec/pkp-e2e/issues/981) ([docs/issues/U45-OPS7-preprint-crossref-subtitle-repeats-title.md](../issues/U45-OPS7-preprint-crossref-subtitle-repeats-title.md)).
 
 ## Reference — entry points & surfaces
 
