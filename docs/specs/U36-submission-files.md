@@ -261,11 +261,14 @@ record what each role is offered once the list is on screen. <sup>b</sup>
     "Save" and "Cancel". "Save" stores the changes and closes the window;
     the list shows the new name at once. It changes the file's details
     only: the file itself is replaced by revising it (Rule 8), and the
-    component is chosen once, at upload. "Cancel" and the window's header
-    "Close" both close it at once without asking, even with the name
-    changed, and keep nothing: the list shows the old name, after a
-    reload too, and "Update File Details" reopens the window on it.
-    <sup>t</sup> <sup>d11</sup>
+    component is chosen once, at upload. <sup>t</sup>
+    - 10a. **Leaving without "Save".** "Cancel" closes the window at once
+      without asking, even with the name changed, and keeps nothing: the
+      list shows the old name, after a reload too, and "Update File
+      Details" reopens the window on it. The window's header "Close", a
+      click on the shaded page beside the window and reloading the page
+      with the window open also keep nothing, and nothing asks either
+      ⚠ [A30](#a30). <sup>d11</sup>
 <a id="dependent-files"></a>
 11. **Dependent files.** An HTML or XML file carries its own "Dependent
     Files" list (images, style sheets, media the page needs), shown under
@@ -967,7 +970,7 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the file's "History" keeping no line of the revision cancelled with "Cancel": one "A file revision "notes.md" …" line, not two (Rule 9): likely a bullet in scenario 3, which cancels a revision before the "History" it reads
-  - "Edit a file" closed with its header "Close" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10): likely a bullet in scenario 4 before "The rename"
+  - "Edit a file" left with "Cancel" after the name is changed: no question, the list keeping the old name after a reload, and the window reopening on it (Rule 10a): likely a bullet in scenario 4 before "The rename"
   - the "Files" panel's "Other" on a file with no component, then "Save" with no radio button chosen: a message under "What kind of file is this?" and no server error ([A11](#a11)): the guard the issue report proposes
   - "Add Note" with the box empty on a file's "Notes": refused, no note listed and no "Posted new note." line in "History" ([A10](#a10)): the guard the issue report proposes
   - "Cancel upload" pressed on the full bar with the server's answer held back: no file stored, the panel empty after a reload ([A25](#a25)): the guard the issue report proposes
@@ -1022,6 +1025,7 @@ Left out of the scenarios above, by reason:
   - A27 (a refused "History" tab adding a second alert that reads only "undefined"; Actors row 4; scenario 6 marks it)
   - A28 (a "Remove" or a component choice the server refuses saying nothing, the "Remove" window left open with its spinner; Rule 18b)
   - A29 (the "Files" panel's screen-reader status reading "Uploading 100% complete" after "Cancel upload" and on an emptied panel; Rule 17c)
+  - A30 ("Edit a file" closed with its header "Close", a click beside it or a reload dropping a changed name without asking; Rule 10a)
 - **Owned by another feature**:
   - a Production editor's lists: every stage's while not assigned, Copyediting and Production only once assigned (Actors preamble; *Workflow screen & stage access*, and *Stage participants*, whose A8 records the assigned case)
   - the Author's revision upload through "Upload revisions" (Actors row 2; *Review stage & rounds*, scenario 4)
@@ -1061,6 +1065,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A27](#a27) | A refused "History" tab in "More Information" shows a second alert that reads only "undefined" | 🐞 | minor | — |
 | [A28](#a28) | Submission wizard: a file's "Remove" the server refuses leaves the "Remove" window open with a spinner and no message; a refused component choice says nothing either | 🐞 | minor | — |
 | [A29](#a29) | Submission wizard: the "Files" panel's screen-reader status keeps reading "Uploading 100% complete" after "Cancel upload" and on an emptied panel | 🐞 | minor | — |
+| [A30](#a30) | "Edit a file" closed with "Close", a click beside it or a reload drops a changed name without asking {OJS OMP} | 🐞 | minor | — |
 | [A6](#a6) | Every file row's menu button is named "More Actions" alone, so a screen reader cannot tell the rows apart | ❓ | minor | — |
 | [A8](#a8) | The revise list names files only, so two files with the same name read the same | ❓ | minor | — |
 | [A13](#a13) | Deleting a file also deletes every copy made from it on other lists | ❓ | user-visible | — |
@@ -1527,6 +1532,23 @@ A screen reader user who cancels an upload finds a status saying it is
 complete. A file's refusal for its size is in the row's text only,
 never in the status. A preprint server has no such panel.
 Basis: probe, 2026-10-09. <sup>[f-a29](#fn-a29)</sup>
+
+<a id="a30"></a>
+**A30 — "Edit a file" closes without asking and drops a changed name** {OJS OMP} · 🐞 · minor.
+In "Edit a file" (Rule 10), a person changes the name and, without
+"Save", presses the window's header "Close", clicks the shaded page
+beside the window or reloads the page. A question before the change is
+dropped is expected, as in the 3.5 release: there "Close" and the click
+ask "The data on this form has changed. Do you wish to continue without
+saving?" ("Cancel" keeps the window with the typed name, "OK" closes
+it), and the reload raises the browser's leave-page question. Instead
+nothing asks: the window goes at once, the typed name with it, and the
+list keeps the old name (Rule 10a). On a press, "Close" does the same in
+the "Edit a file" window a publication format file's "Edit" opens. A
+regression: the question went when the window was rebuilt in May 2026,
+in the change that added the "Summary of Changes (Amendment Notice)" box
+(Rule 12). A preprint server has no "Edit a file" window.
+Since: 2026-05-28 · Basis: probe, 2026-10-15. <sup>[f-a30](#fn-a30)</sup>
 
 ### OPS
 
@@ -2064,7 +2086,15 @@ keeping the window open; at step 2 no question, the list reading the uploaded
 name "close-step2.pdf" although another name had been typed; closed at step 3,
 the name saved at step 2. "Cancel" at steps 1, 2 and 3 removed a new file and
 asked nothing. After "Change File" and "Complete" the list held
-"change-first.pdf" beside the second file (A14).
+"change-first.pdf" beside the second file (A14). Test run 2026-10-15 (Rules
+6, 7, 9a; OJS and OMP "Submission Files" and OPS's galley "Change File",
+`main` and `stable-3_5_0`, two runs each): on step 2 with the name changed,
+the header "Close" and "Cancel" asked nothing on either line; "Close" kept
+the file under its uploaded name and the galley served it, "Cancel" removed
+the new file and gave the galley back its previous one. On 3.5 step 2 is
+still the legacy form: after its "Close" the next reload raised the
+browser's leave-page question although the window was gone, as in A18;
+`main` raised none.
 
 <a id="fn-q"></a>
 **q** — Cross-feature pointers only; each linked spec states its own
@@ -2196,10 +2226,10 @@ refused with "This field is required." and the window stayed open. On an
 English and French journal the form showed the tabs "English" and "French
 (Canada)", one box at a time, opening on the submission's own language with
 "article.pdf" in its box (a French submission opened on "French (Canada)"); a
-one-language journal showed one box and no tabs. Test run 2026-09-29 (Rule 10;
+one-language journal showed one box and no tabs. Test run 2026-09-29 (Rule 10a;
 OJS and OMP, two runs each, as the Journal / Press Manager on a "Submission
 Files" file): with the name changed and the box left, the header "Close"
-closed "Edit a file" at once, with no browser question and nothing sent; the
+closed "Edit a file" at once, with no browser question and nothing sent (A30); the
 list read "article.pdf" at once and after a reload, and "Update File Details"
 reopened on "article.pdf". "Cancel" with a changed name likewise raised no
 question and kept the old name (f-a18). A preprint server's workflow shows no
@@ -2788,6 +2818,29 @@ runs when a row is removed too, which is what the status then reads.
 Live-probed 2026-10-09 (OJS and OMP `main`, two runs each): note d22.
 A screen reader was not run: the texts are the status element's, which is
 what a reader is given. 3.5 was not driven.
+
+<a id="fn-a30"></a>
+**f-a30** — Notes t and d11. pkp/pkp-lib#12584 (lib/pkp `de26641811`,
+2026-05-28, with ui-library `881503b4`) moved "Edit a file" and step 2 from
+the legacy `SubmissionFilesMetadataForm` template, whose changed-data
+tracking raised the question, to the Vue `FileMetadataForm`, which tracks no
+change; the issue says nothing of the question. Test run 2026-10-15 (Rule
+10a; `main` and `stable-3_5_0`, PKP's default test dataset, two runs each,
+as `dbarnes` on OJS submission 4's and OMP submission 3's "Submission Files"
+and, on OMP, on the file of an "EPUB" format the check added to book 4): on
+`main`, with the name changed, the header "Close", a press on the backdrop
+and a reload with the window open raised no question; the list read the old
+name at once and after a reload, the database kept it, and the window
+reopened on it; "Cancel" the same, and so with nothing changed. On 3.5
+"Close" and the backdrop raised "The data on this form has changed. Do you
+wish to continue without saving?" ("Cancel" kept the window with the typed
+name, "OK" closed it, nothing stored), the reload the browser's
+`beforeunload` question, and "Cancel" nothing. In the format file's "Edit"
+window ("Edit a file", one tab "Edit Metadata"; "Close" alone driven) the
+changed name and "Close" behaved as in the list's window on each line; the format's own "Edit" window (tabs "Edit", "Metadata") asked on
+both lines. OPS preprint 1's workflow showed no "Submission Files". Kept
+check `shared/playwright/checks/U36/H15/h15.js` (`PHASE=edit`,
+`PHASE=formats`).
 
 <a id="fn-ops1"></a>
 **f-ops1** — Note a (the OPS workflow and wizard configs). Live-probed
