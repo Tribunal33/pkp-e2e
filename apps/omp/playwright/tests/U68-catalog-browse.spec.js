@@ -415,16 +415,17 @@ test.describe('Catalog browse', () => {
         expect((await reader.browseSeriesLinks().allTextContents()).map((t) => t.trim()).sort()).toEqual(['Drama', 'History', 'Poetry']);
 
         // The current series: "History" grayed with a grey bar at its
-        // left; "Drama" and "Poetry" not (Rule 12).
+        // left; "Drama" and "Poetry" not (Rule 12). The grey is the theme's
+        // light text colour, #454545 since pkp/pkp-lib#12661 (omp#2466).
         const history = reader.browseSeriesLink('History');
         await expect(history).toHaveCSS('border-left-style', 'solid');
         await expect(history).toHaveCSS('border-left-width', '4px');
         await expect(history).toHaveCSS('border-left-color', 'rgb(221, 221, 221)');
-        await expect(history).toHaveCSS('color', 'rgba(0, 0, 0, 0.54)');
+        await expect(history).toHaveCSS('color', 'rgb(69, 69, 69)');
         for (const name of ['Drama', 'Poetry']) {
             const link = reader.browseSeriesLink(name);
             await expect(link).toHaveCSS('border-left-width', '0px');
-            await expect(link).not.toHaveCSS('color', 'rgba(0, 0, 0, 0.54)');
+            await expect(link).not.toHaveCSS('color', 'rgb(69, 69, 69)');
         }
 
         // A series with no book: "0 Titles", "All Books", the message, no

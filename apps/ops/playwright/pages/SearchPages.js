@@ -111,7 +111,7 @@ exports.SearchPage = class SearchPage extends BasePage {
         return this.page.locator('.page_search form.cmp_form');
     }
 
-    /** The search box, by its screen-reader label (placeholder "Search"). */
+    /** The search box, by its label "Search preprints for" (shown since pkp/ops#1422; no placeholder). */
     queryBox() {
         return this.form().getByRole('textbox', {name: 'Search preprints for', exact: true});
     }
@@ -357,7 +357,7 @@ exports.ArchiveHeaderSearch = class ArchiveHeaderSearch extends BasePage {
             .getByRole('search', {name: 'Preprint Search', exact: true});
     }
 
-    /** The form's box, read out as "Search Query" (no placeholder). */
+    /** The form's box, labelled "Search Query" (shown since pkp/ops#1422; no placeholder). */
     queryBox() {
         return this.form().getByRole('textbox', {name: 'Search Query', exact: true});
     }

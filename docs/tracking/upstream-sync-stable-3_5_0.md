@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `0b02f7c01a` | 2026-10-14 | claude (daily maintenance session) |
-| omp | `044228c00b` | 2026-10-14 | claude (daily maintenance session) |
-| ops | `61125ebca4` | 2026-10-14 | claude (daily maintenance session) |
-| pkp-lib | `2196fa2775` (ojs; omp and ops at `b1f342476a`, pkp/pkp-lib#13511's head, the tree of `5b835cd52e`) | 2026-10-14 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
+| ojs | `ca763c91cd` | 2026-10-15 | claude (daily maintenance session) |
+| omp | `a70bbb9c4d` | 2026-10-15 | claude (daily maintenance session) |
+| ops | `44aec6e131` | 2026-10-15 | claude (daily maintenance session) |
+| pkp-lib | `4045d9241e` (ojs, omp and ops) | 2026-10-15 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
 
 ## Read log
 
@@ -22,6 +22,12 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-15 (daily session, VM s2) — ojs `0b02f7c01a..ca763c91cd` (3: pkp/ojs#5934), omp `044228c00b..a70bbb9c4d` (3: pkp/omp#2512), ops `61125ebca4..44aec6e131` (3: pkp/ops#1451), pkp-lib `2196fa2775..4045d9241e` (2, ojs; omp and ops from `b1f342476a`, which adds `5b835cd52e` and `2196fa2775`, read 2026-10-14), ui-library none. `main` first: synced today, no regression to carry over. Read in full; baselines advanced.**
+  - pkp-lib `4045d9241e` (pkp/pkp-lib#13491) → `=main 689e7ec1a5` (PR review 2026-10-14, `upstream-sync.md`): no regression; now in the three apps' pointers.
+  - pkp-lib `17711b1864` (pkp/pkp-lib#13513 via #13500, "Fix missing context filter in active submissions count for editorial report") → `stable-only` (`main`'s PR pkp/pkp-lib#13515 open, `main` still without the filter): `StatisticsReportMail` passes `['contextIds' => [$this->contextId]]` to `countActiveByStages()`, whose 3.5 signature takes `$args` as the job's other calls do; one caller, the monthly report job. No regression; no security weakness (it narrows what the report counts).
+  - ojs `71d1fe2046`, omp `a9ef737b7`, ops `c8824b4088` (pkp/pkp-lib#13489, "Rebuild js/pkp.min.js") → `stable-only` (`main`'s bundles not rebuilt yet): a token diff of each bundle against its parent holds only the guard (`d.target.initialized&&!d.target.getContent().length&&…`), nothing else rebuilt in. `checks/sync/pkp-lib-13490/stuck-editors.js` at the OJS tip, `enable_minified = On`, dataset fleet 1 (`.reports/r13489-3_5/tip1015/`): forced, both boxes ready with no indicator, the one page error the `isIncomplete_()` twin (pkp/pkp-lib#13180), not the guarded handler; 0 of 8 natural rounds stuck. U09 S6's watch row notes it.
+  - ojs `4ed34e11d5`, omp `b084548195`, ops `0ca5cc2ef1` → pointer bumps to `4045d9241e`; `ca763c91cd`, `a70bbb9c4d`, `44aec6e131` → merges.
+  - Open stable-line rows not re-run: the range touches none of their code.
 - **2026-10-14 — Merge: pkp/pkp-lib#13491 squash-merged 18:26 UTC as `4045d9241e` on `17711b1864`, its diff the reviewed head `a6dd49f958`'s byte for byte (entry below). No 3.5 app pointer or `js/pkp.min.js` carries it yet. Baselines not advanced.**
   - `4045d9241e` → `=main 689e7ec1a5` (merged the same minute).
 

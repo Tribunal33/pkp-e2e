@@ -61,13 +61,13 @@ shared. <sup>b</sup>
 
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
-| **Search box** (hidden label "Search articles for", "Search preprints for" on a server, heard through a screen reader or seen in the browser's accessibility inspector, not on screen; the box shows the placeholder "Search") | No | The words to look for. Left empty, or holding only spaces, the page behaves as Rule 5 says. Reloaded with results, the box still holds the words searched. |
-| **Advanced filters › Published After** (three selects labelled "Year", "Month", "Day", each starting blank) | No | Keeps only articles published on or after the chosen day; on a site whose time zone is east of UTC, on or after the day before it ⚠ [A18](#a18) (Rule 9). The Year list runs from the earliest to the latest publication date entered on any of the journal's articles, published or not ⚠ [A15](#a15). All three parts must be chosen: a Year with one or no other part is ignored, and the selects then show a date the reader did not choose ⚠ [A1](#a1); a Month or Day without a Year is ignored and the selects go blank. The Day list offers 1 to 31 for every month; a day the month does not have is applied as the following month's date ⚠ [A14](#a14). {OJS OPS} |
-| **Advanced filters › Published Before** (the same three selects) | No | Keeps only articles published before the chosen day; the chosen day itself is left out ⚠ [A2](#a2), and on a site whose time zone is east of UTC the day before it too ⚠ [A18](#a18). Same Year list ⚠ [A15](#a15), same all-three-parts rule ⚠ [A1](#a1) and same handling of an impossible day ⚠ [A14](#a14). {OJS OPS} |
+| **Search box** (labelled "Search articles for", "Search preprints for" on a server: the label shows above the box and a screen reader reads it out; the box carries no hint text) | No | The words to look for. Left empty, or holding only spaces, the page behaves as Rule 5 says. Reloaded with results, the box still holds the words searched. |
+| **Advanced filters › Published After** (three selects labelled "Year", "Month", "Day", each starting blank) | No | Keeps only articles published on or after the chosen day; where the site's time zone (Settings that modify behavior; UTC on the test installs) is east of UTC, on or after the day before it ⚠ [A18](#a18) (Rule 9). The Year list runs from the earliest to the latest publication date of the journal's articles, published or not ⚠ [A15](#a15). All three parts must be chosen: a Year with one or no other part is ignored, and the selects show an earlier date ⚠ [A1](#a1); a Month or Day without a Year is ignored and the selects go blank. The Day list offers 1 to 31 for every month; a day the month lacks rolls over: 31 September is applied as 1 October ⚠ [A14](#a14). {OJS OPS} |
+| **Advanced filters › Published Before** (the same three selects) | No | Keeps only articles published before the chosen day, not on it ⚠ [A2](#a2), and where the site's time zone is east of UTC (Settings that modify behavior) not the day before it either ⚠ [A18](#a18). Same Year list ⚠ [A15](#a15), same all-three-parts rule ⚠ [A1](#a1) and same handling of an impossible day ⚠ [A14](#a14). {OJS OPS} |
 | **Advanced filters › By Journal** (a select, first entry blank) | No | On the site-wide Search page of a journal site only (Rule 10): limits the results to one journal, but only on the first page of results, and the select shows blank again after every search [OJS2](#ojs2). Inside a journal the select is absent, and a press or preprint server site never shows one ⚠ [A10](#a10). {OJS} |
 | **"Search"** button | — | Runs the search with the box and filters as they stand. |
-| Press: **search box** (read out as "Search Query" by a screen reader) and **"Search"** button, at the foot of the Search page | No | The press's Search page carries only these two controls, under the results, and no Advanced filters [OMP2](#omp2). |
-| Preprint server: **search box** (read out as "Search Query" by a screen reader) and **"Search"** button in the archive header | No | On the server's home page and its Preprints page (Rule 17). Submitting it opens the Search page with the results for the typed words. {OPS} |
+| Press: **search box** (labelled "Search Query" above it) and **"Search"** button, at the foot of the Search page | No | The press's Search page carries only these two controls, under the results, and no Advanced filters [OMP2](#omp2). |
+| Preprint server: **search box** (labelled "Search Query" above it) and **"Search"** button in the archive header | No | On the server's home page and its Preprints page (Rule 17). Submitting it opens the Search page with the results for the typed words. {OPS} |
 
 ## Rules & state
 
@@ -184,8 +184,8 @@ shared. <sup>b</sup>
    out, while the selects still show the day chosen ⚠ [A18](#a18). Both go by the
    article's published date as shown in its summary. A filter counts only
    when its Year, Month and Day are all chosen. A Year with one or no other
-   part is ignored, and after the search the selects show a date the reader
-   did not choose ⚠ [A1](#a1); a Month, a Day or both without a Year are
+   part is ignored, and after the search the selects show an earlier date
+   ⚠ [A1](#a1); a Month, a Day or both without a Year are
    ignored and the selects go blank. The Day list offers 1 to 31 whatever
    the month; a day the month does not have is applied, and shown, as the
    following month's date: 31 September becomes 1 October ⚠ [A14](#a14). The
@@ -289,14 +289,16 @@ shared. <sup>b</sup>
     open the article is decided on the article page by the subscription
     rules (*Subscriptions & open access control*). <sup>f</sup>
 17. **The archive header's search box** {OPS}. A preprint server's home
-    page and its Preprints page open with an archive header: a search box
-    and "Search" button on the left, the top-level category links on the
-    right (the category links belong to *Sections*, which owns those two
-    pages). The box is always empty when the page opens. Submitting it
-    opens the Search page with the typed words in the box and their
-    results below. The box is built to hide while the server's posting mode
-    says it will not post online, a state the settings screen cannot store
-    (Rule 13, [OPS2](#ops2)). <sup>p</sup>
+    page and its Preprints page open with an archive header: a grey panel
+    whose contents are centred and stacked. First comes the label "Search
+    Query", then the search box with the "Search" button beside it, and on
+    a line below them the top-level category links (the category links
+    belong to *Sections*, which owns those two pages). The box is always
+    empty when the page opens. Submitting it opens the Search page with the
+    typed words in the box and their results below. The box is built to
+    hide while the server's posting mode says it will not post online, a
+    state the settings screen cannot store (Rule 13, [OPS2](#ops2)).
+    <sup>p</sup>
 
 ## Side effects
 
@@ -685,13 +687,14 @@ Left out of the scenarios above, by reason:
 - **Planned**:
   - a word that is only in a published HTML galley finds the article, book or preprint once the queue has run (Rule 3; A11)
   - a title corrected and a contributor added on a published article, book or preprint are found by their new words once the queue has run, and the old title word no longer finds it (Rule 12; A3)
-  - a Year alone under "Published Before", and a Year and Month without a Day, limit the results and come back showing the date applied (Rule 9; A1)
+  - with A1 fixed, a Year alone under "Published Before", and a Year and Month without a Day, limit the results and show the date applied (Rule 9)
   - a published article's or preprint's date saved a week later (Rule 12): the result shows the new date and "Published After" the day after the old date finds it, at once with no queue run (Rules 9, 12)
   - on the site-wide Search page, a journal chosen under "By Journal" stays selected after the search and its page 2 lists that journal's articles only (Rule 10; OJS2)
   - on a press and a server, a published book or preprint returned to the workflow keeps its page, its place in the catalog or preprint list and its search result for a visitor (Rule 2; OMP3, OPS4)
   - a Search address asking for the sort by published date, newest or oldest first, lists the results in date order (Rule 14; A12)
   - a Search address whose page number is not a number, on a search that finds something, shows the first page of results (Rule 8; A13)
   - a search that finds several items gives the screen-reader status line "Found {N} items." with the count, on a journal and on a preprint server (Rule 7; OJS1, OPS1)
+  - the Search page's box shows its label above it ("Search articles for", "Search preprints for" on a server, "Search Query" on a press) and no hint text, and a preprint server's archive header shows "Search Query" above its box, centred over the category links (Fields rows "Search box", "Press: search box" and "Preprint server: search box"; Rule 17)
 - **Rarely met**:
   - "Items per page" changed on Settings › Website › Setup › Lists, the
     results per page following it (Rule 8, Settings): the Journal Manager
@@ -1300,17 +1303,23 @@ no link ending in `/search` anywhere on it.
 `searchContext` select block, sets no `role="form"`, and reads
 `$results->count` as a property, fn-g). Form `form.cmp_form method="get"`
 posting to the page's own address; box `input#query name="query"` with
-sr-only label `search.searchFor` and placeholder `common.search`; fieldset
+a visible `<label for="query">` `search.searchFor` and no placeholder
+(since pkp/ojs#5832 and pkp/ops#1422 for pkp/pkp-lib#13307, merged
+2026-10-14; the default theme's `search.less` now shows the date selects'
+labels too); fieldset
 legend `search.advancedFilters`; `{html_select_date_a11y}` twice
 (`PKPTemplateManager::smartyHtmlSelectDateA11y()`, each select with a
 leading blank option, years `start_year..end_year`); OJS-only
 `select#searchContext` `{if $searchableContexts}`; `button.submit`. Hook
 points `Templates::Search::SearchResults::AdditionalFilters` and
-`::PreResults`: no bundled plugin registers either (grep 2026-09-02). OMP:
+`::PreResults`: no bundled plugin registers either (grep 2026-09-02,
+again 2026-10-15). OMP:
 `omp/templates/frontend/pages/search.tpl` includes
 `components/searchForm_simple.tpl` after the results. OPS archive form:
-fn-p. Live-probed 2026-09-02, verbatim: hidden label "Search articles for"
-(OPS "Search preprints for"), placeholder "Search", legends "Advanced
+fn-p. Live-probed 2026-09-02 and re-probed 2026-10-15, verbatim: label
+"Search articles for" (OPS "Search preprints for") shown above the box,
+no placeholder (on 2026-09-02, before those changes, a hidden label and
+the placeholder "Search"), legends "Advanced
 filters", "Published After", "Published Before", select labels "Year",
 "Month", "Day"; Year offers a blank entry then the published years ("2026"
 alone on a context published only this year; "2024", "2025", "2026" on one
@@ -1318,9 +1327,11 @@ whose articles span 2024 and 2026), Month a blank then "Jan" … "Dec", Day a
 blank then "1" … "31"; button "Search". "By Journal" appears only on the
 site-wide page of the journal site (blank entry, then every enabled
 journal by name). OMP: a form read out as "Book Search" holding one box
-read out as "Search Query" (no placeholder, no visible label) and a
-"Search" button, under the results when there are any and directly under
-the heading otherwise.
+labelled "Search Query" on screen (`common.searchQuery`, `<label
+for="query">`, since pkp/omp#2464; no placeholder) and a "Search" button,
+under the results when there are any, under the "No titles were found…"
+line when the words find nothing, and directly under the heading when the
+box was empty (re-probed 2026-10-15).
 
 <a id="fn-c"></a>
 **c — what is indexed and what is returned.**
@@ -1729,15 +1740,27 @@ owned by *Sections*, search portion cited here) includes
 `components/searchForm_archive.tpl`: `{if !$currentServer ||
 $currentServer->getData('publishingMode') != PUBLISHING_MODE_NONE}` →
 `form.pkp_search role="search" aria-label="Preprint Search"` posting GET
-to `search/search`, `input name="query" value="{$searchQuery}"` (the
-variable is never assigned, so the box is always empty), button
-`common.search`. Live-probed 2026-09-02: the server's home page and its
+to `search/search`, a visible `<label for="query">` `common.searchQuery`
+("Search Query", shown above the box since pkp/ops#1422, merged
+2026-10-14; before it the box was named by an `aria-label`) and
+`input#query name="query" value="{$searchQuery}"` (the variable is never
+assigned, so the box is always empty), button `common.search`; the
+theme's `archiveHeader.less` centres the panel's contents, and #1422 added
+only its `label` rule. Live-probed 2026-09-02: the server's home page and its
 Preprints page (heading "Archives") each carried a form read out as
 "Preprint Search" with an empty box read out as "Search Query" (no
 placeholder) and a "Search" button; typing a word and pressing "Search"
 opened the Search page with the word in the box and its two results,
-"1 - 2 of 2 items". The hiding clause could not be observed (fn-l: the
-posting mode does not store).
+"1 - 2 of 2 items". Re-probed 2026-10-15 (Fields row "Preprint server:
+search box", Rule 17), on the scratch server and on the seeded one, and
+at 600 px wide on the scratch one: a grey panel with the label "Search Query", the
+empty box and "Search" centred, and the category links ("Applied
+Science", "Social Sciences" on the seeded server) centred on a line
+below; the box empty on every fresh open, for a visitor, a Reader and the Preprint
+Server Manager; the same Search page and results on submitting. The
+hiding clause could not be observed (fn-l: the posting mode does not
+store; on 2026-10-15 "Posting Mode" again showed "Saved", stored nothing,
+and the visitor still got the archive header).
 
 <a id="fn-s"></a>
 **s — seeding for the scenarios.** Scratch contexts and published

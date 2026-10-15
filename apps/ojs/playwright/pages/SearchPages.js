@@ -13,7 +13,7 @@
  * confirmed live 2026-09-02):
  * - the page is `.page_search` with an `h1` "Search" and one
  *   `form.cmp_form` (GET to the page's own address): box `input#query`
- *   (hidden label "Search articles for", placeholder "Search"), fieldset
+ *   (label "Search articles for", shown above it since pkp/ojs#5832; no placeholder), fieldset
  *   `.search_advanced` (legend "Advanced filters") holding the two date
  *   legends "Published After" / "Published Before" with selects
  *   `#dateFromYear/#dateFromMonth/#dateFromDay` and `#dateTo…` (each with a

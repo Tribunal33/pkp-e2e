@@ -18,8 +18,8 @@
  *
  * DOM facts (confirmed live 2026-09-02, probes A/B/E and this suite):
  * - the form is `form.pkp_search[role=search]` labelled "Book Search",
- *   `input[name=query]` is `type=search` labelled "Search Query" (no
- *   placeholder), the button reads "Search"; the form follows the results
+ *   `input#query` is `type=search` labelled "Search Query" (a visible
+ *   label since pkp/omp#2464; no placeholder), the button reads "Search"; the form follows the results
  *   in DOM order and carries the named anchor `search-form`;
  * - count line `.monograph_count`; the sentence sits in
  *   `.search_results[role=status]` together with the "Search again" link
