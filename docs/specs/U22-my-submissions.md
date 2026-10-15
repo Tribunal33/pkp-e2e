@@ -504,7 +504,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|------------------------------|------|--------|--------|
 | [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A7](#a7) | An account holding two Reader-level roles and nothing else lands on the access-denied page after every sign-in | 🐞 | user-visible | — |
+| [A7](#a7) | An account whose only roles are two Reader-level roles, or only Subscription Manager, lands on an access-denied page after every sign-in | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A1](#a1) | The author sees the review progress count ("Review update 1/2") for their submission under review | ❓ | user-visible | — |
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
 | [A3](#a3) | On a press or preprint server, nothing was found that feeds the "Scheduled for publication" view | ❓ | minor | — |
@@ -580,19 +580,20 @@ draft's own author can reach it.
 Basis: probe. <sup>a5</sup>
 
 <a id="a7"></a>
-**A7 — Two Reader-level roles land on the access-denied page after sign-in** · 🐞 · user-visible.
-An account whose only roles in the journal are two Reader-level roles,
-the Reader role plus a role created at the "Reader" permission level,
-signs in on the journal's login page and lands, every time, on a page
-reading "The current role does not have access to this operation."
-instead of the journal's home page. The account holding either role alone
-lands on the home page (Rule 3). {OJS} An account whose only role is
-Subscription Manager lands on the same page after sign-in, by the same
-cause; *[Subscriptions](U51-subscriptions.md)* describes that landing.
-Rationale for 🐞: the home page is chosen only for an account holding
-exactly one Reader-level role, so a second one sends the account on to a
-page that refuses Reader-level roles.
-Basis: probe, 2026-10-13. <sup>a7</sup>
+**A7 — An account whose only roles are two Reader-level roles, or only Subscription Manager, lands on an access-denied page after every sign-in** · 🐞 · low.
+An account whose only roles in the journal are two Reader-level roles
+(the built-in Reader role and a custom role at the "Reader" permission
+level) signs in on the journal's login page and lands, every time, on a
+page reading "The current role does not have access to this operation."
+instead of the journal's home page. Holding either role alone, the
+account lands on the home page. On a journal, an account whose only role
+is Subscription Manager lands on the same page after every sign-in.
+
+The user is signed in, and the page's "Home" link opens the journal. The
+fault is in where sign-in sends an account that holds no back-office
+role.
+*[Subscriptions](U51-subscriptions.md)* describes the Subscription Manager's landing.
+Basis: probe, 2026-10-15. <sup>a7</sup>
 
 ### OMP
 

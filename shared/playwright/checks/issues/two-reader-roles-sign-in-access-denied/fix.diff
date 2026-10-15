@@ -1,0 +1,24 @@
+--- a/lib/pkp/classes/core/PKPPageRouter.php
++++ b/lib/pkp/classes/core/PKPPageRouter.php
+@@ -417,9 +417,6 @@
+                 $query->withUserId($userId)->withActive();
+             })
+             ->get();
+-        if ($userGroups->isEmpty() || ($userGroups->count() == 1 && $userGroups->first()->role_id == Role::ROLE_ID_READER)) {
+-            return $request->url(null, 'index');
+-        }
+ 
+         $roleIdsArray = $userGroups->pluck('role_id')->all();
+ 
+@@ -435,7 +432,10 @@
+             return $request->url(null, 'dashboard', 'mySubmissions');
+         }
+ 
+-        return $request->url(null, 'submissions');
++        // No role in the context, or only roles with no dashboard (Reader-level roles, the
++        // Subscription Manager): the context's home page. The "submissions" page would only
++        // refuse them, as its handler admits none of these roles.
++        return $request->url(null, 'index');
+     }
+ 
+     //
