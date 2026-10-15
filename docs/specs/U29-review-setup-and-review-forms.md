@@ -2125,6 +2125,7 @@ nothing was sent. No server error, page error or console error in either
 run. Kept script `shared/playwright/checks/U28/I05/i05.js` (phase `recs`).
 First noted 2026-10-01 in the code by the DOIs page's A8 write-up, which
 names it as outside that fix (`docs/issues/U45-A8-doi-page-controls-unnamed.md`).
+Issue report: [pkp-e2e#991](https://github.com/jardakotesovec/pkp-e2e/issues/991) ([docs/issues/U29-A12-recommendations-controls-unnamed.md](../issues/U29-A12-recommendations-controls-unnamed.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — OJS `main`
