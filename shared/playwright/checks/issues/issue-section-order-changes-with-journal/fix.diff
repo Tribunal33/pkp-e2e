@@ -1,0 +1,17 @@
+--- a/controllers/grid/toc/TocGridHandler.php
++++ b/controllers/grid/toc/TocGridHandler.php
+@@ -212,6 +212,14 @@
+     public function setDataElementSequence($request, $sectionId, $gridDataElement, $newSequence)
+     {
+         $issue = $this->getAuthorizedContextObject(Application::ASSOC_TYPE_ISSUE);
++        // Once a section is moved, store a place for every section of the issue. A section
++        // the save leaves where it was has no place stored yet and would go on following
++        // the journal's section order, so reordering the journal's sections would change it.
++        foreach ($this->getGridDataElements($request) as $id => $section) {
++            if (Repo::section()->getCustomSectionOrder($issue->getId(), $id) === null) {
++                Repo::section()->upsertCustomSectionOrder($issue->getId(), $id, $section->getSequence());
++            }
++        }
+         Repo::section()->upsertCustomSectionOrder($issue->getId(), $sectionId, $newSequence);
+     }
+ 

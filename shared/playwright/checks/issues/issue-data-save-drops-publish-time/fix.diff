@@ -1,0 +1,16 @@
+--- a/controllers/grid/issues/form/IssueForm.php
++++ b/controllers/grid/issues/form/IssueForm.php
+@@ -268,7 +268,12 @@
+         $issue->setYear(empty($year) ? null : $year);
+ 
+         // If issue is not published, allow empty datePublished
+-        $issue->setDatePublished(!$this->getData('datePublished') && !$issue->getPublished() ? null : $this->getData('datePublished'));
++        $datePublished = $this->getData('datePublished');
++        // The form shows and posts the day alone: a day it repeats keeps the time of day stored with it
++        if ($datePublished && $issue->getDatePublished() && date('Y-m-d', strtotime($issue->getDatePublished())) === $datePublished) {
++            $datePublished = $issue->getDatePublished();
++        }
++        $issue->setDatePublished(!$datePublished && !$issue->getPublished() ? null : $datePublished);
+ 
+         $issue->setDescription($this->getData('description'), null); // Localized
+         $issue->setShowVolume((int) $this->getData('showVolume'));

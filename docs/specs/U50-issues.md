@@ -1213,8 +1213,8 @@ settles them on spec review.
 | [A16](#a16) | With only "Description" changed on "Issue Data", another tab opens without the unsaved-change question | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A17](#a17) | An article whose newer version was published with "Don't Assign To An Issue" stays listed in the issue, under the newer title, linking to a page that names no issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A18](#a18) | On such an article, "Remove" leaves it in the issue and unpublishes its earlier version, the one the issue published | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A19](#a19) | Saving "Issue Data" drops the time of day from Date Published, so the issue falls below another published earlier that day on "Back Issues" | 🐞 | minor | — |
-| [A21](#a21) | After the journal's sections are reordered, an issue with a saved section order shows an order that is neither its saved one nor the journal's | 🐞 | user-visible | — |
+| [A19](#a19) | Saving an issue's "Issue Data" drops it below the other issues published the same day on "Back Issues" | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
+| [A21](#a21) | An issue's saved section order changes when a manager reorders the journal's sections | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A3](#a3) | "Delete" takes an issue's published articles offline behind a generic confirmation | ❓ | user-visible | — |
 | [A7](#a7) | On "Archives", a cover with no alternate text is a link with no name | ❓ | minor | — |
 | [A15](#a15) | On a journal that does not publish online, "Publish Issue" still offers its email, ticked, and sends nothing | ❓ | user-visible | — |
@@ -1433,35 +1433,41 @@ A17.
 Basis: probe, 2026-10-02. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — Saving "Issue Data" drops the time of day from Date Published** · 🐞 · minor.
+**A19 — Saving an issue's "Issue Data" drops it below the other issues published the same day on "Back Issues"** · 🐞 · low.
 "Publish Issue" gives an issue whose "Date Published" box is empty the
 date and time it was published; the box and the "Published" column show
 the date alone. Every "Save" on "Issue Data", even with nothing changed,
-keeps the date and drops the time. On "Back Issues" (Rule 20) the saved
-issue then drops below any other issue published earlier the same day,
-where a Journal Manager who only corrected a description expects the
-list to stay as it was.
-Basis: probe, 2026-10-02. <sup>f-a19</sup>
+keeps the date and drops the time. "Back Issues" lists the newest issue
+first after the current one, so the saved issue then drops below every
+other issue published the same day, where a Journal Manager who only
+corrected a description expects the list to stay as it was.
+
+Nothing tells the editor, and the dates shown do not change. It reaches
+journals that publish two or more issues on one day, such as a journal
+entering its back issues, and that have never saved an order on "Back
+Issues". Readers do not see it: the journal's "Archives" does not sort
+by these dates.
+Basis: probe, 2026-10-15. <sup>f-a19</sup>
 
 <a id="a21"></a>
-**A21 — An issue's saved section order changes when the journal's sections are reordered** · 🐞 · user-visible.
-A Journal Manager who orders an issue's sections in "Order" on its
-"Table of Contents" tab expects that order to stay the issue's own
-(Rule 10a). But "Done" keeps in place only the sections it found in a
-new position (first, second, third and so on); a section still in the
-position it had goes on following the journal's section order. When
-someone later reorders the journal's sections on Settings › Journal ›
-"Sections", such an issue shows a section order that is neither the
-one saved for it nor the journal's new one, on its tab and on its
-page, a published issue's page included, though nobody touched the
-issue. With the journal's order Articles, Reviews, Essays, "Vol. 1
-No. 4 (2026)" was saved as Articles, Essays, Reviews. Once the
-journal's order became Reviews, Essays, Articles, the issue read
-Essays, Reviews, Articles on one scratch journal and Essays, Articles,
-Reviews on another after the same steps. An issue never ordered took
-the journal's new order, as expected, and an issue in which every
-section had changed position kept its saved order.
-Basis: probe, 2026-10-08. <sup>f-a21</sup>
+**A21 — An issue's saved section order changes when a manager reorders the journal's sections** · 🐞 · medium.
+A Journal Manager who orders an issue's sections with "Order" on its
+"Table of Contents" tab expects that order to stay the issue's own. But
+"Done" stores a place for the issue only for the sections whose
+position changed; the others go on following the journal's section
+order.
+
+So when someone later reorders the journal's sections on Settings ›
+Journal › "Sections", the issue's sections can come out in a third
+order, neither the one saved for the issue nor the journal's new one.
+It shows on the issue's tab and on its page, a published issue's page
+included, and nobody is told.
+
+This reaches most issues of three or more sections ordered since OJS
+3.4.0-10 and 3.5.0-2, many of them at once. Issues last ordered before
+those releases keep their order. Ordering an issue again restores it
+until the next reordering of the journal's sections.
+Basis: probe, 2026-10-15. <sup>f-a21</sup>
 
 <a id="a22"></a>
 **A22 — A section's never-ordered articles can change order between loads** · ❓ · user-visible.
