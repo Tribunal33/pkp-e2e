@@ -62,8 +62,8 @@ shared. <sup>b</sup>
 | Field (UI label) | Required? | Rules |
 |------------------|-----------|-------|
 | **Search box** (hidden label "Search articles for", "Search preprints for" on a server, heard through a screen reader or seen in the browser's accessibility inspector, not on screen; the box shows the placeholder "Search") | No | The words to look for. Left empty, or holding only spaces, the page behaves as Rule 5 says. Reloaded with results, the box still holds the words searched. |
-| **Advanced filters › Published After** (three selects labelled "Year", "Month", "Day", each starting blank) | No | Keeps only articles published on or after the chosen day (Rule 9). The Year list runs from the earliest to the latest publication date entered on any of the journal's articles, published or not ⚠ [A15](#a15). All three parts must be chosen: a Year with one or no other part is ignored, and the selects then show a date the reader did not choose ⚠ [A1](#a1); a Month or Day without a Year is ignored and the selects go blank. The Day list offers 1 to 31 for every month; a day the month does not have is applied as the following month's date ⚠ [A14](#a14). {OJS OPS} |
-| **Advanced filters › Published Before** (the same three selects) | No | Keeps only articles published before the chosen day; the chosen day itself is left out ⚠ [A2](#a2). Same Year list ⚠ [A15](#a15), same all-three-parts rule ⚠ [A1](#a1) and same handling of an impossible day ⚠ [A14](#a14). {OJS OPS} |
+| **Advanced filters › Published After** (three selects labelled "Year", "Month", "Day", each starting blank) | No | Keeps only articles published on or after the chosen day; on a site whose time zone is east of UTC, on or after the day before it ⚠ [A18](#a18) (Rule 9). The Year list runs from the earliest to the latest publication date entered on any of the journal's articles, published or not ⚠ [A15](#a15). All three parts must be chosen: a Year with one or no other part is ignored, and the selects then show a date the reader did not choose ⚠ [A1](#a1); a Month or Day without a Year is ignored and the selects go blank. The Day list offers 1 to 31 for every month; a day the month does not have is applied as the following month's date ⚠ [A14](#a14). {OJS OPS} |
+| **Advanced filters › Published Before** (the same three selects) | No | Keeps only articles published before the chosen day; the chosen day itself is left out ⚠ [A2](#a2), and on a site whose time zone is east of UTC the day before it too ⚠ [A18](#a18). Same Year list ⚠ [A15](#a15), same all-three-parts rule ⚠ [A1](#a1) and same handling of an impossible day ⚠ [A14](#a14). {OJS OPS} |
 | **Advanced filters › By Journal** (a select, first entry blank) | No | On the site-wide Search page of a journal site only (Rule 10): limits the results to one journal, but only on the first page of results, and the select shows blank again after every search [OJS2](#ojs2). Inside a journal the select is absent, and a press or preprint server site never shows one ⚠ [A10](#a10). {OJS} |
 | **"Search"** button | — | Runs the search with the box and filters as they stand. |
 | Press: **search box** (read out as "Search Query" by a screen reader) and **"Search"** button, at the foot of the Search page | No | The press's Search page carries only these two controls, under the results, and no Advanced filters [OMP2](#omp2). |
@@ -174,9 +174,14 @@ shared. <sup>b</sup>
    number is not a number gives a completely empty page instead: no
    heading, no search form, no message of any kind ⚠ [A13](#a13).
    <sup>g</sup>
-9. **The date filters** {OJS OPS}. "Published After" keeps articles
-   published on the chosen day or later; "Published Before" keeps articles
-   published strictly before the chosen day ⚠ [A2](#a2). Both go by the
+9. **The date filters** {OJS OPS}. On a site whose time zone is UTC or
+   west of it (Settings that modify behavior), "Published After" keeps
+   articles published on the chosen day or later, and "Published Before"
+   keeps articles published strictly before the chosen day ⚠ [A2](#a2).
+   On a site whose time zone is east of UTC, both filters work from the
+   day before the chosen day: "Published After" also keeps the articles
+   published the day before it, and "Published Before" also leaves them
+   out, while the selects still show the day chosen ⚠ [A18](#a18). Both go by the
    article's published date as shown in its summary. A filter counts only
    when its Year, Month and Day are all chosen. A Year with one or no other
    part is ignored, and after the search the selects show a date the reader
@@ -215,9 +220,9 @@ shared. <sup>b</sup>
     page-not-found error. <sup>i</sup>
 11. **Order of results.** Results are not ranked by relevance and are not
     sorted by date or title; they come in the order the database happens
-    to return them, which is neither newest-first nor alphabetical,
-    though it is the same each time the same search is repeated
-    ⚠ [A4](#a4). A sort by title or by published date can be asked for
+    to return them, which is neither newest-first nor alphabetical.
+    Repeating a search right away gives the same order; whether the order
+    holds from one visit to the next is open ⚠ [A4](#a4). A sort by title or by published date can be asked for
     only through the page's address (Rule 14). <sup>j</sup>
 12. **The index stays current, mostly.** Publishing an article (or a new
     version of it) queues a background refresh of its entry; the article
@@ -358,6 +363,10 @@ configuration file (config.inc.php), search section; no screen shows them.
   maximum number of search results fetched per keyword" are still listed in
   the file with their explanations, but nothing reads them ⚠ [A9](#a9).
   <sup>n</sup>
+- **The site's time zone** ("Site time zone" in the configuration file's
+  general section, UTC unless changed) decides which day the date filters
+  apply: at UTC or west of it, the day chosen; east of it, the day before
+  ⚠ [A18](#a18) (Rule 9). <sup>h</sup>
 - **"Items per page"** on the journal's Settings › Website › Setup › Lists
   screen (a required field, 25 unless changed) sets the results-per-page
   count (Rule 8); the setting belongs to *Appearance & theming*. <sup>g</sup>
@@ -700,6 +709,8 @@ Left out of the scenarios above, by reason:
     (Actors row 1): scenario 9's Reader sees the same sentence
   - a press having no publishing mode and no gate (Actors row 1, Rule 13):
     scenario 11's visitor gets the page as any visitor does
+  - a site time zone west of UTC (Settings, Rule 9): the date filters keep
+    the chosen day, as at UTC, where scenario 7 runs
 - **Register carries it**:
   - OPS2 (a server's gate and hidden archive box unreachable from its
     settings; Rules 13, 17, Settings)
@@ -719,11 +730,14 @@ Left out of the scenarios above, by reason:
   - A14 (a day the month lacks applied as the next month's date; Rule 9)
   - A15 (the Year lists following the dates on unpublished articles too;
     Rule 9)
+  - A18 (both date filters working from the day before the chosen day on
+    a site whose time zone is east of UTC; Rule 9, Settings)
   - A10 (a press or server site's site-wide page: no picker, no name under
     the results; Rule 10)
   - A16 (whether a journal's own configuration should govern its site-wide
     presence; Rule 10)
-  - A4 (results in no particular order, stable on repeat; Rule 11)
+  - A4 (results in no particular order, the same on an immediate repeat,
+    perhaps not from one visit to the next; Rule 11)
   - A7 (a newer version unpublished: the older one listed again after the
     jobs, the newer one's words still finding it; Rule 12)
   - A3 (edits after publication never reaching the index; Rule 12)
@@ -789,6 +803,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A12](#a12) | A Search link that sorts the results by published date shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A13](#a13) | A Search results address whose page number is not a number opens a completely blank page | 🐞 | low · crash: server | issues (claude), 2026-10-03 — re-verified |
 | [A17](#a17) | A Search link naming a sort that main does not know, such as a typo or 3.5's "publicationDate", shows an empty error page | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
+| [A18](#a18) | On a site whose time zone is east of UTC, the Search date filters apply the day before the chosen day | 🐞 | user-visible | — |
 | [OJS1](#ojs1) | Screen readers hear a raw code, or "Found one item.", when a search finds several items | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS2](#ojs2) | On the site-wide Search page, "By Journal" limits the first page only and never shows as chosen | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS4](#ojs4) | Rebuilding one journal's search index by its path leaves Search empty on every other journal until a full rebuild | 🐞 | medium | — |
@@ -831,6 +846,7 @@ coming 3.6. On 3.5 the first search is filtered correctly, and the
 wrong date in the selects is what a repeated search uses. A press's
 Search page has no date filters.
 Basis: probe, 2026-10-03. <sup>f-a1</sup>
+Report: refresh owed — the housekeeping claim check of 2026-10-15 (now [A18](#a18)) drove what the report's Evidence "Timezone" bullet read in the code: on a site east of UTC every full date limit falls a day early, from the same pkp-lib `b44cf27793` (pkp/pkp-lib#8920, 2025-08-01) as this fault, not older, and 3.5 has no shift; the report's proposed `getDateFilter()` builds the limit the same way and so keeps the shift. The bullet should point at A18 and the fix take the site's zone (2026-10-15)
 
 <a id="a2"></a>
 **A2 — "Published Before" excludes the chosen day** · ❓ · minor.
@@ -863,13 +879,17 @@ Since: 2025-08 (about a year). Basis: probe, 2026-10-03. <sup>f-a3</sup>
 A search that finds several articles lists them in whatever order the
 database returns them: not by relevance, not by date, not by title (three
 articles dated 2024, 2023 and 2025 came back in that order, and the same
-order on every repeat). A reader has no way to ask for a sort from the
-page (a sort exists only through the address, [A8](#a8)).
+order on every repeat). The order may not even hold from one visit to the
+next: on a preprint server, the bare Search page once listed the same 17
+preprints in another order on a visit 20 minutes after the first, and
+kept that new order on every repeat. A reader has no way to ask for a
+sort from the page (a sort exists only through the address, [A8](#a8)).
 Question: what order should results have, and should the page offer a
 sort?
 Lean: newest first by default, as the journal's other listings do, with a
-relevance order once a ranking driver is in use.
-Basis: probe. <sup>f-a4</sup>
+relevance order once a ranking driver is in use; as built, the order is
+the database's and a reader cannot count on it between visits.
+Basis: probe; the change between visits seen once, 2026-10-15. <sup>f-a4</sup>
 
 <a id="a5"></a>
 **A5 — Several words mean different things on different databases** · ❓ · user-visible.
@@ -1049,6 +1069,22 @@ of it, reaches the error, and an upgrade from 3.5 breaks no link the app
 made. Searching again lists the results. Its cause is its own: a fix for
 [A12](#a12) alone does not cure it.
 Basis: probe, 2026-10-07. <sup>f-a17</sup>
+
+<a id="a18"></a>
+**A18 — On a site whose time zone is east of UTC, the Search date filters apply the day before the chosen day** · 🐞 · user-visible.
+A reader on the Search page of a journal or preprint server whose time
+zone is east of UTC (most of Europe, Africa, Asia and Oceania) who sets
+"Published After" to 31 January 2025 also gets the articles published on
+30 January, and with "Published Before" 31 January also loses them: each
+full date the reader chooses is applied as the day before. The result
+summaries show the articles' own dates and the selects show the date as
+chosen, so nothing tells the reader. On a site at UTC or west of it the
+filters keep the chosen day. A partial date is ignored whatever the zone
+([A1](#a1)), and a press's Search page has no date filters.
+
+No release has it: only `main`, the coming 3.6. 3.5 applies the chosen
+day in every zone.
+Since: 2025-08 (about a year). Basis: probe, 2026-10-15. <sup>f-a18</sup>
 
 ### OJS
 
@@ -1876,7 +1912,17 @@ Issue report: [docs/issues/U15-A3-published-edits-never-reach-search.md](../issu
 <a id="fn-f-a4"></a>
 **f-a4** — fn-j. Live-probed 2026-09-02: the order was neither date order,
 and it was the same on every repetition, so the earlier "not necessarily
-the same twice" wording was dropped.
+the same twice" wording was dropped. Seen otherwise once, 2026-10-15, on
+OPS `main` (PKP's default dataset, PostgreSQL, a visitor): in one run the
+bare Search page of `publicknowledge` and every date-filtered search
+listed its 17 preprints in ascending ID order; in a run 20 minutes later
+the bare page and "Published Before" 2026 / Oct / 14 listed them in
+another order (IDs 11, 8, 19, 14, 3, 17, …), the same through that run's
+three time zones and five repeats, while "Published After" kept the
+ascending order. OJS's lists of 2 and 5 articles kept one order in both
+runs. One pair of runs only; what would settle it: the bare Search page
+of a freshly reset dataset read before and after another context gains
+published items (fn-j: no `ORDER BY` without a sort).
 
 <a id="fn-f-a5"></a>
 **f-a5** — fn-d. The PostgreSQL side live-probed 2026-09-02 (all words
@@ -2006,6 +2052,48 @@ result. Recorded beside the date-sort report,
 [docs/issues/U15-A12-search-sort-by-date-error-page.md](../issues/U15-A12-search-sort-by-date-error-page.md)
 (Cause, Reach), which leaves it out of its fix.
 Issue report: [pkp-e2e#935](https://github.com/jardakotesovec/pkp-e2e/issues/935) ([docs/issues/U15-A17-search-unknown-sort-error-page.md](../issues/U15-A17-search-unknown-sort-error-page.md)).
+
+<a id="fn-f-a18"></a>
+**f-a18** — fn-h: `PKPRequest::getUserDateVar()` returns
+`mktime(0, 0, 0, m, d, y)`, midnight of the chosen day in the site's zone
+(`PKPApplication::initializeTimeZone()` sets PHP's default zone from
+`[general] time_zone`); `SubmissionSearchResult::builderFromRequest()`
+passes it on as `publishedFrom` / `publishedTo`; `DatabaseEngine` turns it
+into `new \Carbon\Carbon($value)`, which Carbon 3 builds from the
+timestamp in UTC, and `whereDate('p.date_published', '>=' | '<', …)` keeps
+only that Carbon's `Y-m-d`: the day before wherever the zone's offset on
+the chosen day is positive. In PHP with the lib's vendor, Europe/Prague
+and Asia/Tokyo turn 31 January 2025 into `2025-01-30`, UTC and
+America/Vancouver keep `2025-01-31`. `OpenSearchEngine` builds the same
+UTC Carbon for its `gte` / `lte` range (code; OpenSearch not driven).
+Came with pkp-lib `b44cf27793` (pkp/pkp-lib#8920, "Implement Laravel
+Scout and Opensearch", 2025-08-01), the change that also made a partial
+date ignored (A1); multi-app rule 6: decay. 3.5 compares in the site's
+zone (`ArticleSearch` formats the timestamp with `date('Y-m-d H:i:s', …)`
+and `ArticleSearchDAO` compares `p.date_published` with that string), so
+3.5 has no shift (code, not driven). A fix for A1 that fills the missing
+parts before `mktime()` leaves partial dates with the same shift (code).
+Live-probed 2026-10-15 as a visitor on OJS and OPS `main` (PostgreSQL),
+two runs per app, the site's `time_zone` set to UTC, Europe/Prague and
+America/Vancouver in turn: on a scratch journal and server with five
+items published 2024-12-31, 2025-01-01, 2025-01-30, 2025-01-31 and
+2025-02-01, Published After 2025 / Jan / 31 listed the 31st and 1
+February under UTC and Vancouver and the 30th as well under Prague;
+Published Before 2025 / Jan / 31 listed the three earliest under UTC and
+Vancouver and the two earliest under Prague; Published Before 2025 / Jan
+/ 1 listed 2024-12-31 under UTC and Vancouver and read "No Results" under
+Prague; Published After Jan 1 and Feb 1 likewise took in the day before
+under Prague alone. On PKP's default dataset, every item published on
+one day (OJS 2026-10-12, 2 articles; OPS 2026-10-13, 17 preprints),
+Published After the day after listed every item under Prague and "No
+Results" under UTC and Vancouver, and Published Before the day after read
+"No Results" under Prague and listed every item under the other two. In
+every zone the summaries showed the stored dates and the selects the date
+chosen; no server error. Proposed fix: build the Carbon in the site's
+zone, `\Carbon\Carbon::createFromTimestamp($value,
+date_default_timezone_get())`, in both engines (checked in PHP: all four
+zones give `2025-01-31`; not tried live). Upstream: none found (pkp/pkp-lib
+issue search "search date timezone", "publishedFrom", 2026-10-15).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-g: `templates/frontend/pages/search.tpl` passes `count`
@@ -2159,6 +2247,7 @@ Issue report: [docs/issues/U15-OMP3-OPS4-returned-item-gone-search-still-lists.m
 - `lib/pkp/pages/search/SearchHandler.php` — the page; `<app>/pages/search/SearchHandler.php` (OJS/OPS: must-publish policy; OMP: empty), `<app>/pages/search/index.php`
 - `lib/pkp/classes/search/SubmissionSearchResult.php` — request → builder → result rows; `<app>/classes/search/SubmissionSearchResult.php` (OJS: issue availability; OMP/OPS: empty)
 - `lib/pkp/classes/search/engines/DatabaseEngine.php` · `OpenSearchEngine.php` — the two drivers
+- `lib/pkp/classes/core/PKPRequest.php::getUserDateVar()` · `PKPApplication::initializeTimeZone()` — the date filters' day in the site's time zone
 - `lib/pkp/classes/search/parsers/SearchFileParser.php` · `SearchHTMLParser.php` · `SearchHelperParser.php` — galley text extraction
 - `lib/pkp/jobs/submissions/UpdateSubmissionSearchJob.php` · `lib/pkp/classes/observers/listeners/UpdateSubmissionInSearchIndex.php` — the refresh
 - `lib/pkp/classes/migration/install/SubmissionSearchMigration.php` · `upgrade/v3_6_0/I8920_ReplaceSearchEngine.php` — the `submissions_fulltext` table
