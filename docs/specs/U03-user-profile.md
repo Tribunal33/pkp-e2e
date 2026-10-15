@@ -1181,7 +1181,7 @@ unless its Basis line says otherwise.
 | [A20](#a20) | After a newcomer registers with an existing reviewing interest, accounts that save their Roles tab list it twice | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A24](#a24) | The Profile page's Contact tab sometimes logs a script error on opening or saving; the save still works | 🐞 | low · crash: script | issues (claude), 2026-10-15 — re-verified |
 | [A25](#a25) | After a password change, a page left open in another browser drops its next save or tab press instead of going to the Login page | 🐞 | medium · crash: script | issues (claude), 2026-10-15 — re-verified |
-| [A26](#a26) | A Profile page whose session has ended answers each tab press and "Save" with the alert "##user.authorization.userRequired##" instead of a sentence | 🐞 | user-visible | — |
+| [A26](#a26) | A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##" | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere, and gives the earliest waiting date on the site | ❓ | minor | claim check (claude), 2026-10-14 — widened |
@@ -1573,19 +1573,23 @@ through "Reset Password" from the email, and at sign-in when asked to.
 Basis: probe, 2026-10-15. <sup>[f-a25](#fn-a25)</sup>
 
 <a id="a26"></a>
-**A26 — A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##"** · 🐞 · user-visible.
+**A26 — A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##"** · 🐞 · low.
 When the account's session has ended while its Profile page is open in
 a browser, a press there on a tab or on "Save" raises a browser alert
 reading "##user.authorization.userRequired##", a code in every language,
-where a sentence should say that the user has been signed out. After a
-password change made in another browser this is every press after the
-first ([A25](#a25)); after an email change made in another browser,
-which for now also signs that browser out (Rule 6a), every press. After
-OK the pressed tab is marked open with what it last showed there (empty
-for a tab never opened there), and a "Save" stores nothing; only a
-reload reaches the Login page. By the code, a session that expired gets
-the same alert on this page; signing out in another browser ends only
-that browser's session, so this page keeps working.
+where a sentence should say that the user has been signed out.
+
+After "OK" the pressed tab becomes the selected one. Its area keeps what
+it showed earlier on this page, or stays empty for a tab not opened
+there yet. A "Save" stores nothing. Only a reload reaches the Login
+page, and what was typed is lost with it.
+
+A Site Administrator's "Expire User Sessions" brings the alert on every
+press. A password change made in another browser brings it on every
+press after the first; the first press fails in another way
+([U03 A25](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U03-user-profile.md#a25)).
+By the code, a session that expired brings it too. No other page shows
+this code.
 Since: 2012-05-07 (14 years) · Basis: probe, 2026-10-15. <sup>[f-a26](#fn-a26)</sup>
 
 ### OMP

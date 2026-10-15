@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/security/authorization/UserRequiredPolicy.php
++++ b/lib/pkp/classes/security/authorization/UserRequiredPolicy.php
+@@ -11,7 +11,7 @@
+  *
+  * @ingroup security_authorization
+  *
+- * @brief Policy to deny access if a context cannot be found in the request.
++ * @brief Policy to deny access if no user is logged in.
+  */
+ 
+ namespace PKP\security\authorization;
+@@ -29,7 +29,7 @@
+      *
+      * @param PKPRequest $request
+      */
+-    public function __construct($request, $message = 'user.authorization.userRequired')
++    public function __construct($request, $message = 'user.authorization.loginRequired')
+     {
+         parent::__construct($message);
+         $this->_request = $request;
