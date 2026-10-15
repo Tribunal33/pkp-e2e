@@ -280,9 +280,13 @@ delete this item? This action cannot be undone." and "OK" and "Cancel"
     identifiers (Settings bullets 2 and 3), "Identifiers" (see
     [Identifiers](U44-identifiers.md)). The window works as on any file
     list ([→ Submission files](U36-submission-files.md#file-details)):
-    "Save" stores the details, and "Cancel" and the close arrow close
-    it at once, without asking, even with the name changed, and keep
-    nothing. "Delete" works as on any file list
+    "Save" stores the details, and "Cancel" closes it at once, without
+    asking, even with the name changed, and keeps nothing. With the name
+    changed, the close arrow closes it the same way, without the question
+    "The data on this form has changed. Do you wish to continue without
+    saving?" that the format's own window asks (Rule 4a), and the row
+    keeps the old name ⚠ [→ Submission files A30](U36-submission-files.md#a30).
+    "Delete" works as on any file list
     ([→ deleting](U36-submission-files.md#delete)). On an HTML or XML
     file, "Dependent Files" opens a window of that name holding the
     file's dependent-files list
@@ -1026,10 +1030,6 @@ Left out of the scenarios above, by reason:
     `docs/issues/U69-A15-omp-french-purchase-link-and-availability-title-wrong.md`):
     in French (Canada), the window a format's availability link opens
     is titled for availability ("Disponibilité du format")
-  - a format file's "Edit a file" closed with its close arrow after the
-    name is changed: no question, the row keeping the old name after a
-    reload, and "Edit" reopening on it (Rule 11): likely a bullet in
-    scenario 4's "A format file's actions", which closes that window
   - the guard for A14 (issue report
     `docs/issues/U46-A7-galley-format-moves-in-list-when-saved.md`): an
     unchanged "OK" on the first of three formats, an approval and an
@@ -1096,6 +1096,10 @@ Left out of the scenarios above, by reason:
     (Settings bullet 3; *[Identifiers](U44-identifiers.md)*)
   - an HTML format file's "Dependent Files" (Rule 11;
     *[Submission files](U36-submission-files.md#dependent-files)*)
+  - a format file's "Edit a file" closed with its close arrow after the
+    name is changed, which drops the name without asking (Rule 11;
+    *[Submission files](U36-submission-files.md#a30)*, whose register
+    carries it as A30)
   - a format's Activity Log lines (Side effects, "Activity Log";
     *[Submission activity log &
     notes](U38-submission-activity-log-and-notes.md)*)
@@ -2059,6 +2063,14 @@ With the name changed, the header "Close" and "Cancel" each closed the
 window at once, with no browser question and no request sent; the row
 kept the old name at once and after a reload, and "Edit" reopened on
 it. "Save" stored the new name, read at once and after a reload.
+Test run 2026-10-15 (Rule 11, the close arrow), two runs each on OMP
+`main` and `stable-3_5_0`, PKP's default test dataset, as `dbarnes` on
+the file of an "EPUB" format added to book 4: with the name changed, the
+header "Close" closed "Edit a file" on `main` with no question and the
+row kept the old name; on 3.5 it asked "The data on this form has
+changed. Do you wish to continue without saving?". The question went with
+pkp/pkp-lib#12584 (2026-05-28), which moved the window to the Vue
+`FileMetadataForm`; the finding is Submission files' A30.
 
 <a id="fn-td9"></a>
 **td9** — Live-probed 2026-09-28 (Fields, the format window; Rules 4a, 8), two
