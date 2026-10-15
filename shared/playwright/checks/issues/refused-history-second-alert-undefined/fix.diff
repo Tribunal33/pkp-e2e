@@ -1,0 +1,24 @@
+--- a/lib/pkp/js/controllers/UrlInDivHandler.js
++++ b/lib/pkp/js/controllers/UrlInDivHandler.js
+@@ -94,7 +94,7 @@
+ 			function(ajaxContext, jsonData) {
+ 
+ 		var handledJsonData = this.handleJson(jsonData), urlInDivHandler = this;
+-		if (handledJsonData.status === true) {
++		if (handledJsonData !== false) {
+ 			if (handledJsonData.content === undefined) {
+ 				// Request successful, but no data returned.
+ 				// Hide this div element.
+@@ -114,10 +114,9 @@
+ 							[urlInDivHandler.getHtmlElement().attr('id')]);
+ 				});
+ 			}
+-		} else {
+-			// Alert that loading failed.
+-			alert(handledJsonData.content);
+ 		}
++		// A refused or failed load has already been shown by handleJson(),
++		// which alerts the server's message and returns false.
+ 
+ 		return false;
+ 	};

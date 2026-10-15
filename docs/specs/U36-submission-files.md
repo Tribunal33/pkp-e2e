@@ -1062,7 +1062,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A24](#a24) | One file revised in two windows: the first window's "Cancel" does nothing, and the file keeps the upload cancelled there | 🐞 | minor | — |
 | [A25](#a25) | "Cancel upload" in the submission wizard, pressed once the file has been sent, keeps the file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A26](#a26) | "Upload File" in the upload wizard cannot be reached with the keyboard, so no file can be chosen without a mouse | 🐞 | high | — |
-| [A27](#a27) | A refused "History" tab in "More Information" shows a second alert that reads only "undefined" | 🐞 | minor | — |
+| [A27](#a27) | A refused "History" tab in a file's "More Information" shows a second alert that reads only "undefined" | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A28](#a28) | Submission wizard: a file's "Remove" the server refuses leaves the "Remove" window open with a spinner and no message; a refused component choice says nothing either | 🐞 | minor | — |
 | [A29](#a29) | Submission wizard: the "Files" panel's screen-reader status keeps reading "Uploading 100% complete" after "Cancel upload" and on an emptied panel | 🐞 | minor | — |
 | [A30](#a30) | "Edit a file" closed with "Close", a click beside it or a reload drops a changed name without asking {OJS OMP} | 🐞 | minor | — |
@@ -1484,17 +1484,17 @@ export's A6](U63-import-export.md#a6).
 Basis: probe, 2026-10-01. <sup>[f-a26](#fn-a26)</sup>
 
 <a id="a27"></a>
-**A27 — A refused "History" tab in "More Information" shows a second alert that reads only "undefined"** · 🐞 · minor.
+**A27 — A refused "History" tab in a file's "More Information" shows a second alert that reads only "undefined"** · 🐞 · low.
 When the app refuses the "History" tab of a file's "More Information"
 to the person who opened the window, the browser shows the alert "The
 current role does not have access to this operation.", and then a
-second alert that says only "undefined". The refusal alone is expected;
-the second alert tells nothing and has to be dismissed as well. It
-shows wherever this spec meets such a refusal: an assistant role's
-"History" tab ([A3](#a3)), and "More Information" on another stage's
-file in "Upload/Select Files" ([A19](#a19)). A preprint server's
-default roles meet neither case.
-Basis: probe, 2026-10-02. <sup>[f-a27](#fn-a27)</sup>
+second alert that says only "undefined". The first alert reports the
+refusal; the second tells nothing and has to be dismissed as well.
+
+It follows every such refusal, whatever the refusal's own cause: an
+assistant role's (a Copyeditor's) "History" tab, and "More
+Information" on another stage's file in "Upload/Select Files".
+Basis: probe, 2026-10-15. <sup>[f-a27](#fn-a27)</sup>
 
 <a id="a28"></a>
 **A28 — Submission wizard: a "Remove" or a component choice the server refuses shows no message** · 🐞 · minor.
