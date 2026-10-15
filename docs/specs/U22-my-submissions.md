@@ -1132,6 +1132,7 @@ landed on `{journal}/index`; an Author alone on
 Manager alone signing in on the journal's login page landed on the same
 access-denied page in all five runs. No server error, page error or
 dialog in any run.
+Issue report: [pkp-e2e#994](https://github.com/jardakotesovec/pkp-e2e/issues/994) ([docs/issues/U22-A7-two-reader-roles-sign-in-access-denied.md](../issues/U22-A7-two-reader-roles-sign-in-access-denied.md)).
 
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's filter form
