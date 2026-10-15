@@ -1,0 +1,18 @@
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowVersionForm.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowVersionForm.js
+@@ -183,10 +183,12 @@
+ 					goToPublicationPage(store, {publicationId: targetPublicationId});
+ 				}
+ 			}
+-		}
+ 
+-		if (typeof onSubmitFn === 'function') {
+-			onSubmitFn(store.selectedPublication);
++			// Only a saved version moves the flow on; a refused save keeps
++			// this form open with its values and the server's errors.
++			if (typeof onSubmitFn === 'function') {
++				onSubmitFn(store.selectedPublication);
++			}
+ 		}
+ 
+ 		// return result to Form component handler

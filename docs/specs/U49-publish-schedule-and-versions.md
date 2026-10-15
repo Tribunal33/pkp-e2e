@@ -1170,7 +1170,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
-| [OJS5](#ojs5) | A refused Confirm in "Review Publishing Details" opens a second, blank panel over the first | 🐞 | minor | — |
+| [OJS5](#ojs5) | Editor's refused "Confirm" in "Review Publishing Details" opens a blank copy of the panel that keeps coming back | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OPS6](#ops6) | The first-post acknowledgement's "Preprint URL" links the preprint's editorial workflow, not its public page | 🐞 | latent | — |
@@ -1453,18 +1453,22 @@ turned on for the journal. Basis: probe, 2026-10-02.
 <sup>[f-ojs4](#fn-ojs4)</sup>
 
 <a id="ojs5"></a>
-**OJS5 — A refused Confirm opens a second, blank details panel** · 🐞 · minor.
-When "Review Publishing Details" is refused with the passing "1
-error(s)" notice (Rule 3c) on a version with no Publication Stage yet,
-a second copy of the panel opens over the first, "Publication Stage"
-and "Revision Significance" empty. The editor expects to stay in the
-filled-in panel with the problem marked, and faces an empty one; one
-"Cancel" closes both. It was seen with a required plain
-language summary ([OJS1](#ojs1)), but is a fault of its own: fixing
-that requirement removes one trigger, and any other refusal of this
-kind would open the copy too. A refusal for an empty field of the
-panel stays in place. Basis: probe, 2026-10-02 (that other refusals do
-the same is a code reading). <sup>[f-ojs5](#fn-ojs5)</sup>
+**OJS5 — Editor's refused "Confirm" in "Review Publishing Details" opens a blank copy of the panel that keeps coming back** · 🐞 · low.
+When an editor presses "Confirm" in a journal's "Review Publishing
+Details" panel and the server refuses the save, a second, blank copy
+of the panel opens over the one they filled in. "Cancel" seems to close
+both, but the next "Schedule For Publication" on the same page opens
+two blank panels, the copy on top.
+
+The editor expected to stay in the panel they filled in, with the
+reason for the refusal shown. A passing notice counts "1 error(s)" and
+names nothing, and a "Confirm" in the copy is refused again and adds a
+third panel.
+
+Today a journal meets it when it requires a plain language summary:
+that requirement refuses every save from this panel, a separate fault
+([pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)).
+Basis: probe, 2026-10-15. <sup>[f-ojs5](#fn-ojs5)</sup>
 
 <a id="ojs6"></a>
 **OJS6 — With a plain language summary required, a version that skips the panel would publish without one** · ❓ · latent.
@@ -2622,9 +2626,12 @@ refused Confirm opened a second panel with "Publication Stage" and
 "Revision Significance" empty, and one "Cancel" closed both. Kept walk:
 `shared/playwright/checks/issues/plain-summary-required-refuses-other-saves/publish-confirm.js`.
 The in-place refusals (an empty stage, significance or issue) are
-client-side and send no request (fn-h, fn-o). Not reported; it rides
-with [pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)'s
-Cause.
+client-side and send no request (fn-h, fn-o). Walked again 2026-10-15
+(issue reporter, OJS `main`): "Cancel" hides both panels but closes only
+the first, and the next "Schedule For Publication" opens the copy again
+with a new one; its own report, linked from
+[pkp-e2e#323](https://github.com/jardakotesovec/pkp-e2e/issues/323)'s
+neighbour.
 
 <a id="fn-ojs6"></a>
 **f-ojs6** — Code read 2026-10-05 (OJS `main`, lib/pkp `987776cd04`):
