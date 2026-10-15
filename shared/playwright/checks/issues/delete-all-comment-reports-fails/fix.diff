@@ -1,0 +1,11 @@
+--- a/lib/pkp/api/v1/comments/UserCommentController.php
++++ b/lib/pkp/api/v1/comments/UserCommentController.php
+@@ -427,7 +427,7 @@
+         }
+ 
+         $reportIds = $comment->reports()->pluck('user_comment_report_id')->all();
+-        UserCommentReport::withReportIds([$reportIds])->delete();
++        UserCommentReport::withReportIds($reportIds)->delete();
+ 
+         // Delete notifications associated with the reports
+         Notification::where('assoc_type', Application::ASSOC_TYPE_COMMENT_REPORT)

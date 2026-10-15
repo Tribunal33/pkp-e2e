@@ -895,8 +895,8 @@ Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | On the editorial Comments page, the browser tab shows only the journal's name, not "Comments" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A14](#a14) | A report the server refuses closes the "Report Comment" window as a filed one would: no message, the reason lost | 🐞 | minor | — |
 | [A17](#a17) | Anyone, signed in or not, can read who reported a comment and why from the public comment list | 🐞 | high | issues (claude), 2026-10-15 — re-verified |
-| [A18](#a18) | Any signed-in account comments by a request made by hand on a submission that is not published, with comments off, and learns its title and first author | 🐞 | latent | — |
-| [A19](#a19) | Deleting all of a comment's reports at once, by a request made by hand, fails with a server error unless the comment has exactly one report | 🐞 | latent · crash: server | — |
+| [A18](#a18) | Any signed-in account can comment on unpublished submissions by hand and learn their title and first author | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
+| [A19](#a19) | Deleting all of a comment's reports at once fails with a server error unless it has exactly one | 🐞 | low · crash: server | issues (claude), 2026-10-15 — re-verified |
 | [A1](#a1) | A hidden comment reads to its writer exactly like one awaiting approval | ❓ | minor | — |
 | [A2](#a2) | Approving or hiding a comment leaves every moderator's "pending review" task in place | ❓ | minor | — |
 | [A3](#a3) | The report dialog neither refuses an empty reason with a message nor confirms a filed report, and the same person can report the same comment again | ❓ | minor | — |
@@ -1152,42 +1152,43 @@ Security: unreleased.
 Since: 2025-06-18 · Basis: probe, 2026-10-15. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — Any signed-in account comments by a request made by hand on a submission that is not published, and learns its title and first author** · 🐞 · latent.
-The landing page writes a comment only on a published article's latest
-version (Rule 4) and only while public comments are on (Rule 2b). The
-same request made by hand (`POST api/v1/comments` with a publication
-id, which the site numbers in sequence; note f-a18), which no screen
-sends, naming the current version of a
-submission still in the Submission or the Review stage, is
-accepted from a signed-in Reader who is not among its authors, with
-"Enable Public Comments" unticked. The comment is kept, pending, and the
-answer names the submission's full title and its first author's family
-name ("Novak"; "Montgomerie et al." with several authors). A submission
-of another journal was not tried; the check looks the version up across
-the whole site, so it would be accepted too. Expected the comment refused
-as not on a published article of this journal, and refused while comments
-are off; observed it accepted. Any account can thus read the title and
-first author of work under review, a Reviewer assigned "Anonymous
-Reviewer/Anonymous Author" included.
+**A18 — Any signed-in account can comment on unpublished submissions by hand and learn their title and first author** · 🐞 · medium.
+The article page's comment box sends a request that names its target by
+a publication id, a number the site gives out in sequence. The page
+offers the box only on a published article's latest version, and only
+while "Enable Public Comments" is ticked; the server checks neither.
+Typed into the browser's console by any signed-in account, the request
+is accepted for a submission not yet published, in any stage, and with
+comments switched off. The comment is kept, waiting for approval, and
+the answer names the submission's full title and its first author's
+family name.
+
+So by trying the numbers in turn, any account can read the title and
+first author of every submission in the workflow. That includes a Reader
+with no part in the submission, and a reviewer under "Anonymous
+Reviewer/Anonymous Author" review, who learns the author the review
+hides. The journal can see it happen: each request leaves a pending
+comment, under the account's name, and a task for each manager.
 Security: unreleased.
-Since: 2025-08-28 · Basis: probe, 2026-10-13, on a journal; code for
-another journal's submission, the press and the preprint server.
-<sup>f-a18</sup>
+Since: 2025-08-28 · Basis: probe, 2026-10-15. <sup>f-a18</sup>
 
 <a id="a19"></a>
-**A19 — The request that deletes all of a comment's reports at once fails** · 🐞 · latent · crash: server.
-No screen sends this request: the comment panel deletes one report at a
-time ("Delete Report", Rule 15). A Journal Manager who sends it by hand
-(`DELETE {journal}/api/v1/comments/{comment id}/reports`, signed in, with
-the page's CSRF token; not `DELETE …/comments/{id}`, which deletes the
-comment) for a comment with two or more reports, or with none, gets a server
-error, and nothing is deleted: the reports stay in the comment panel's
-"Reports" table, the comment stays on the "Reported" tab, and every
-moderator keeps the tasks about those reports. For a comment with
-exactly one report the request succeeds, and the report and its tasks
-go. Expected all of the comment's reports and their tasks deleted,
-whatever their number; observed a server error and nothing changed.
-Since: 2026-03-04 · Basis: probe, 2026-10-13. <sup>f-a19</sup>
+**A19 — Deleting all of a comment's reports at once fails with a server error unless it has exactly one** · 🐞 · low · crash: server.
+The comments API request that deletes all of a comment's reports at
+once, `DELETE {journal}/api/v1/comments/{id}/reports`, fails with a
+server error unless the comment has exactly one report. For a comment
+with two or more reports, or with none, nothing changes: the reports
+stay in the comment's panel, the comment stays on the Comments page's
+"Reported" tab, and every moderator keeps the Tasks panel entry "A
+report was submitted for a comment and requires review by a moderator."
+for each report.
+
+Nothing in the apps, their bundled plugins or the UI library sends this
+request today. The comment panel deletes reports one at a time with
+"Delete Report", which works. So the failure reaches only a client of
+the API, a third-party plugin, or a future "delete all reports"
+control.
+Since: 2026-03-04 · Basis: probe, 2026-10-15. <sup>f-a19</sup>
 
 ### OMP
 
@@ -2349,6 +2350,7 @@ Policy and Practice" / "Montgomerie et al." and "Condensing Water
 Availability Models to Focus on Specific Water Management Systems" /
 "Novak". No server error. Another journal's publication, OMP and OPS:
 read in the code (same lib/pkp commit in the three apps).
+Issue report: [docs/issues/U14-A18-comment-request-unpublished-submission.md](../issues/U14-A18-comment-request-unpublished-submission.md).
 
 <a id="fn-f-a19"></a>
 **f-a19 — A19.** `UserCommentController::deleteReports()` (the
@@ -2381,6 +2383,7 @@ answered 200, its report and its two task rows gone. Control: `DELETE
 report and its tasks gone. The server log held one
 `[500]: DELETE …/api/v1/comments/{id}/reports` line per failing request
 and no other error.
+Issue report: [docs/issues/U14-A19-delete-all-comment-reports-fails.md](../issues/U14-A19-delete-all-comment-reports-fails.md).
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1.** Footnote m: `omp/pages/management/SettingsHandler::__construct()`

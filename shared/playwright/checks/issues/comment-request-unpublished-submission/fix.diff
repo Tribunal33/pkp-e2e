@@ -1,0 +1,55 @@
+--- a/lib/pkp/api/v1/comments/formRequests/AddComment.php
++++ b/lib/pkp/api/v1/comments/formRequests/AddComment.php
+@@ -14,6 +14,7 @@
+ 
+ namespace PKP\API\v1\comments\formRequests;
+ 
++use APP\core\Application;
+ use APP\facades\Repo;
+ use Illuminate\Contracts\Validation\Validator;
+ use Illuminate\Foundation\Http\FormRequest;
+@@ -21,6 +22,7 @@
+ use Illuminate\Http\Response;
+ use Illuminate\Validation\Rule;
+ use PKP\core\PKPString;
++use PKP\publication\PKPPublication;
+ 
+ class AddComment extends FormRequest
+ {
+@@ -60,8 +62,18 @@
+                     $publication = Repo::publication()->get($publicationId);
+                     $submissionId = $publication->getData('submissionId');
+                     $submission = Repo::submission()->get((int)$submissionId);
++                    $context = Application::get()->getRequest()->getContext();
+ 
+-                    if (!$submission || $submission->getCurrentPublication()->getId() !== $publicationId) {
++                    // The publication must belong to this context's submissions
++                    if (!$submission || $submission->getData('contextId') !== $context->getId()) {
++                        $validator->errors()->add('publicationId', __('api.404.resourceNotFound'));
++                        return;
++                    }
++
++                    // Readers comment only on the most recently published version, as the article page offers
++                    if ($submission->getCurrentPublication()->getId() !== $publicationId
++                        || $publication->getData('status') !== PKPPublication::STATUS_PUBLISHED
++                    ) {
+                         $validator->errors()->add('publicationId', __('api.userComments.400.cannotCommentOnPublicationVersion'));
+                     }
+                 }
+--- a/lib/pkp/api/v1/comments/UserCommentController.php
++++ b/lib/pkp/api/v1/comments/UserCommentController.php
+@@ -271,6 +271,14 @@
+         $request = $this->getRequest();
+         $context = $request->getContext();
+         $currentUser = $request->getUser();
++
++        // Comments are written only while the context has public comments on
++        if (!$context->getData('enablePublicComments')) {
++            return response()->json([
++                'error' => __('api.403.unauthorized'),
++            ], Response::HTTP_FORBIDDEN);
++        }
++
+         $requestBody = $illuminateRequest->validated();
+ 
+         $publicationId = (int)$requestBody['publicationId'];
