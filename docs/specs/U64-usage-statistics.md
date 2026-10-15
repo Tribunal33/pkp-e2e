@@ -1278,7 +1278,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | Statistics: a refused date range shows a raw code like "api.stats.400.wrongDateFormat", not a sentence | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A15](#a15) | "Counter R5": the "Authors" column of "Item Master Report (IR)" and "Journal Article Requests (IR_A1)" names only a work's last author | 🐞 | user-visible | — |
 | [A16](#a16) | The SUSHI "Item Master Report (IR)" gives an author without an ORCID iD the iD of an author before them | 🐞 | user-visible | — |
-| [OJS2](#ojs2) | One view of an HTML galley counts once more for each file it names that was never uploaded | 🐞 | minor | upstream sync (claude), 2026-10-05 — ❓ settled to 🐞 |
+| [OJS2](#ojs2) | One view of an HTML galley counts once more for each picture or style sheet it names that was never uploaded | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [OJS4](#ojs4) | Statistics › Issues: "Download Issues" leaves out every issue after the first 30, without saying so | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS5](#ojs5) | "Counter R5": "Journal Article Requests (IR_A1)" also lists investigation rows, which its "Metric_Types" line leaves out | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | "COUNTER Reports": the downloaded XML file names its report by a cut-off code path instead of "JR1" or "AR1" | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1558,19 +1558,24 @@ Release 4 has been superseded, and two COUNTER pages invite the wrong one.
 Basis: probe, 2026-09-27. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
-**OJS2 — One view of an HTML galley counts once more for each file it names that was never uploaded** · 🐞 · minor.
-On a journal, a reader opens an HTML galley whose file names a picture
-or a style sheet that was never uploaded with it. Each missing file's
-address serves the galley's own file and is recorded as another view of
-it, and the 30-second rule (Rule 3a) does not merge them, because they
-come in the same second. For a galley naming two missing files, once
-the day is processed by hand <sup>w</sup>, Statistics › "Articles" reads
-"HTML" 3 for the one view, and "Download Files" lists the HTML file
-with 3. Expected: 1. A press and a preprint server record the same view
-once. A galley whose named files were all uploaded was not tried.
-Re-checked: upstream sync (claude), 2026-10-05 — was ❓ (does one HTML
-view count once?); a processed day showed three views, so 🐞.
-Basis: probe, 2026-10-05. <sup>f-ojs2</sup>
+**OJS2 — One view of an HTML galley counts once more for each picture or style sheet it names that was never uploaded** · 🐞 · medium.
+On a journal, a reader opens an HTML galley whose file names, by a
+relative address, a picture or a style sheet that was never uploaded
+with it. The browser asks for each missing file, and each request is
+answered with the galley's own HTML and recorded as another view of
+the galley. For a galley naming two missing files, once the day is
+processed, Statistics › "Articles" reads "HTML" 3 for the one view,
+and "Download Files" lists the HTML file with 3. Expected: 1.
+
+The extra views stay because they come in the same second as the
+view: the daily processing merges a repeat view only when it comes 1
+to 29 seconds later. A slower load that spreads the requests over
+two or three seconds reads 2 or 1.
+
+The reader sees the same page either way, the text without the
+picture. Uploading each file the HTML names as a dependent file of the
+galley is the way round; views already counted stay counted.
+Basis: probe, 2026-10-15. <sup>f-ojs2</sup>
 
 <a id="ojs3"></a>
 **OJS3 — The "Issues" search ignores a bare volume or number** · ❓ · minor.

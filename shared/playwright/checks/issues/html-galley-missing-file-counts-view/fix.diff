@@ -1,0 +1,20 @@
+--- a/pages/article/ArticleHandler.php
++++ b/pages/article/ArticleHandler.php
+@@ -182,9 +182,15 @@
+                 throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
+             }
+ 
+-            // Store the file id if it exists
++            // Store the file id if it exists. A file ID is a number: anything else (the
++            // relative address of a picture or style sheet that was never uploaded) names
++            // no file of this galley.
+             if (!empty($args)) {
+-                $this->submissionFileId = (int) array_shift($args);
++                $submissionFileId = (string) array_shift($args);
++                if (!ctype_digit($submissionFileId)) {
++                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
++                }
++                $this->submissionFileId = (int) $submissionFileId;
+             }
+         }
+ 
