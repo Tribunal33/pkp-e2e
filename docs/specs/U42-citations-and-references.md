@@ -83,7 +83,7 @@ that fails validation keeps the panel open with the error on the field and
 | **DOI** | No | Help text "e.g. 10.1000/182, doi:10.1000/182, https://doi.org/10.1000/182". Any of the three forms is accepted and kept as the bare DOI. Anything else is refused with "This is not formatted correctly." <sup>f</sup> |
 | **URL** | No | Must be a web address, or "This is not a valid URL." <sup>f</sup> |
 | **URN** | No | Free text. <sup>f</sup> |
-| **Arxiv** | No | Help text "e.g. 1234.123456v2, arxiv:1234.123456v2, https://arxiv.org/abs/1234.123456v2". Any of the three forms is accepted and kept as the bare ID, with its version when it has one: "2101.12345v2", "arxiv:2101.12345v2" and "https://arxiv.org/abs/2101.12345v2" are each stored as "2101.12345v2". Anything else: "This is not formatted correctly.", which also refuses an older ID with a dotted subject class ("math.AG/0309136") that the lookup itself put in the box ⚠ [A28](#a28). <sup>f</sup> |
+| **Arxiv** | No | Help text "e.g. 1234.123456v2, arxiv:1234.123456v2, https://arxiv.org/abs/1234.123456v2". Any of the three forms is accepted and kept as the bare ID, with its version when it has one: "2101.12345v2", "arxiv:2101.12345v2" and "https://arxiv.org/abs/2101.12345v2" are each stored as "2101.12345v2". An older ID with a subject class, such as "math.AG/0309136" or "hep-th/9901001", is kept as it is. Anything else: "This is not formatted correctly." <sup>f</sup> <sup>f-a28</sup> |
 | **Handle** | No | Help text "e.g. 20.1000/100, handle:20.1000/100, https://hdl.handle.net/20.1000/100". Kept as the bare handle. Anything else: "This is not formatted correctly." <sup>f</sup> |
 | **Title** | No | The cited work's title. <sup>f</sup> |
 | **Author Information** | No | A small table with the columns **Given Name**, **Family Name** and **ORCID iD**, an "Add" button for a new row and a "Delete" per row. The boxes have no names for a screen reader ⚠ [A14](#a14). A row added and left empty is saved as an author with no name [A13](#a13). The ORCID iD box takes only an ORCID address, "https://orcid.org/…" or "https://sandbox.orcid.org/…" with a valid check digit, as a data citation's "Creators" do. Anything else (another website's address, a `javascript:` link, the bare iD) is refused with "The ORCID iD you specified is invalid. Please include the full URI (e.g. "https://orcid.org/0000-0002-1825-0097")." under the row's box, and nothing is saved. A row with the box empty is saved with no iD. The expanded row gives each author with an iD an ORCID icon linking to it. <sup>f</sup> <sup>f-a22</sup> |
@@ -1093,7 +1093,6 @@ entry notes otherwise; the team settles them on spec review.
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A24](#a24) | A screen reader hears that a refused box of the data citation panel is invalid, but not why | 🐞 | minor | — |
 | [A25](#a25) | A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text, without a word | 🐞 | minor | — |
-| [A28](#a28) | A reference whose text holds an arXiv ID with a subject class, such as "arXiv:math.AG/0309136", cannot be saved in "Edit citation" once the ID is picked out | 🐞 | user-visible | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
 | [A26](#a26) | Whether a lookup that finishes after an editor filled a reference in by hand replaces what was typed has not been seen | ❓ | user-visible | — |
@@ -1109,6 +1108,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | ✅ | retired | — |
 | [A21](#a21) | Retired: in French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | ✅ | retired | Jarda 2026-10-08 · overturned |
 | [A22](#a22) | Retired: a reference author's "ORCID iD" took any web address, and editors' ORCID icon linked to it; fixed by pkp/pkp-lib#13502 | ✅ | retired | PR review (claude), 2026-10-13 — fixed by pkp/pkp-lib#13502, merged |
+| [A28](#a28) | Retired: a reference whose text held an arXiv ID with a dotted subject class ("arXiv:math.AG/0309136") could not be saved in "Edit citation" once the ID was picked out; fixed by pkp/pkp-lib#13537 | ✅ | retired | PR review (claude), 2026-10-15 — fixed by pkp/pkp-lib#13537, at its merge |
 
 ### All apps
 
@@ -1327,9 +1327,7 @@ either way. The reach is the time a new reference waits for its lookup
 to start: seconds on an install whose background jobs keep up, longer
 when they are behind. "Reprocess all references" replaces a typed DOI
 the same way, but its question warns that manual changes will have to
-be entered again (Rule 15); "Edit" warns of nothing. The command-line
-tool's `extract` (note h) does the same to a reference not looked up yet,
-once pkp/pkp-lib#13537 is merged.
+be entered again (Rule 15); "Edit" warns of nothing.
 Basis: probe, 2026-10-07. <sup>f-a25</sup>
 
 <a id="a26"></a>
@@ -1369,21 +1367,6 @@ question and its lean are
 seen on "Add Institution".
 Basis: probe, 2026-10-07. <sup>f-a27</sup>
 
-<a id="a28"></a>
-**A28 — A reference whose text holds an arXiv ID with a subject class cannot be saved in "Edit citation" once the ID is picked out** · 🐞 · user-visible.
-With metadata lookup on, an editor adds a reference whose text holds an
-arXiv ID in its older form, with a subject class: "Roe, R. Moduli
-spaces. 2003. arXiv:math.AG/0309137". The lookup's first step (Rule 11)
-picks the ID out, and "Edit" shows "math.AG/0309137" in "Arxiv". The
-editor fills "Title" and presses "Save", expecting the change to be
-kept. The panel stays open with "This is not formatted correctly." under
-"Arxiv", a box the editor never typed in, and nothing is saved until
-that box is cleared or rewritten. IDs without a dot in the class
-("hep-th/9901001", "math/0309136v1") and the newer "2101.12345v2" are
-saved. Once pkp/pkp-lib#13537 is merged, a reference added with lookup
-off, or brought in by a command-line native import, gets the same ID
-and meets the same refusal when lookup is later on.
-Basis: probe, 2026-10-15. <sup>f-a28</sup>
 
 ### Retired
 
@@ -1419,6 +1402,9 @@ Basis: probe, 2026-10-15. <sup>f-a28</sup>
 
 <a id="a22"></a>
 **A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · ✅ · retired. Fixed by `pkp/pkp-lib#13502` (for `pkp/pkp-lib#13501`, the team's copy of the issue report), merged 2026-10-13 (pkp-lib `3608f5e200`; OJS's `lib/pkp` carries it since ojs `5c056f34b7`, OMP's and OPS's not yet), reviewed at the PR's head before the merge and walked at the merge the same day on OJS, OMP and OPS: "Edit citation" refuses a reference author's ORCID iD that is not an ORCID address, a `javascript:` link included, and saves a full, a sandbox or an empty one as before ([Fields & validation](#fields)). <sup>f-a22</sup>
+
+<a id="a28"></a>
+**A28 — A reference whose text holds an arXiv ID with a subject class cannot be saved in "Edit citation" once the ID is picked out** · ✅ · retired. Fixed by `pkp/pkp-lib#13537` (for `pkp/pkp-lib#13536`, which took it in from this review's first round), reviewed at the PR's round-2 head `d56d57f021` before its merge: `schemas/citation.json` takes `[a-z.-]+` before the number, and "Edit citation" saves "math.AG/0309136" whether the lookup or a lookup-off "Add" put it there, on OJS, OMP and OPS ([Fields & validation](#fields)). <sup>f-a28</sup>
 
 ---
 
@@ -1795,9 +1781,13 @@ command is refused with the usage, exit 1): references stored without
 their identifiers got them, a PROCESSED and a QUEUED one kept none, a
 second run found nothing new, `submission <id>` held the scope, an
 unknown context was refused by name, and `queue` later took the same
-references. Like the lookup's first step at the base, it replaces a DOI
-corrected by hand in "Edit citation" on a reference not looked up yet
-with the one in the text.
+references. At the round-2 head `d56d57f021` (base `63e9702f37`) it fills
+only identifiers that are empty, so a DOI corrected by hand in "Edit
+citation" on a reference not looked up yet stays, where the lookup's
+first step replaces it (A25), and so does the DOI of a reference whose
+text was edited, beside the new text's web address; one emptied by hand
+is filled again from the text. Walked again that day on the three apps,
+the rest reading as before.
 Live-probed 2026-09-24 (Rule 11), all three apps: a reference added
 through "Add" with a DOI and an arXiv ID in its text showed its text alone,
 with no identifier link, after the Add and after a reload. Structured by
@@ -1942,8 +1932,9 @@ lookup on kept none at the base and every identifier at the head, no job
 queued; with `--citation-metadata-lookup` a chain per reference at both
 sides. A reference whose text alone is edited (`PUT …/citations/{id}`,
 the raw "Edit citation" form) keeps the identifiers of its old text at
-both sides, until the lookup or `citationLookup.php extract` (fn h) reads
-the new one. The OJS Crossref deposit
+both sides, until the lookup reads the new one (`citationLookup.php
+extract`, fn h, adds only the identifiers still empty). The round-2 head
+`d56d57f021` read the same on its base `63e9702f37`. The OJS Crossref deposit
 (`ArticleCrossrefXmlFilter`, `citation_list`) sends `<doi>` for an
 unstructured citation that has one. Required references: `citationsRaw`
 reads as the stored lines joined, so an empty list fails
@@ -2953,7 +2944,14 @@ lookup off held no arXiv ID and saved; at pkp/pkp-lib#13537's head
 `20c178bcb8` both were refused. The schema rule set to the class's own
 pattern (`fix-arxiv.diff`, tried on OJS at the head) saved both, the ID
 kept; by the pattern "hep-th/9901001v1" and "2101.12345v2" still pass,
-"xyz" and "3456.34567vx" are still refused.
+"xyz" and "3456.34567vx" are still refused. pkp/pkp-lib#13537's round-2
+head `d56d57f021` took a looser rule, `[a-z.-]+` in place of `[a-z-]+`
+with the rest as it was (no end anchor, unescaped dots): "math.AG/0309136"
+passes, and so does everything the old rule took ("3456.34567vx" and
+"abc 1junk" included, as at the base). Walked 2026-10-15 at that head and
+its base `63e9702f37`, OJS, OMP and OPS (`arxiv.js`): at the base the
+lookup's reference refused as above; at the head both references saved
+(200), the ID kept.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** Note p. Live-probed 2026-09-24: f-a20, where
