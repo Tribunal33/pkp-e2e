@@ -2623,6 +2623,7 @@ and 0px box showed on the first load. `stable-3_5_0`, the same roles:
 side menu 336px and `#app-main` 39px, but the box 153px wide, typing
 landed, and "Begin Submission" at 375px opened the wizard (POST
 `/api/v1/submissions` 200). No crashes, dialogs or notices in any run.
+Issue report: [pkp-e2e#992](https://github.com/jardakotesovec/pkp-e2e/issues/992) ([docs/issues/U21-A22-phone-start-screen-title-box-no-width.md](../issues/U21-A22-phone-start-screen-title-box-no-width.md)).
 
 <a id="fn-omp1"></a>
 **fn-omp1** — OMP divergence points: `StartSubmission` (OMP) adds
