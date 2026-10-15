@@ -1,0 +1,11 @@
+--- a/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
++++ b/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
+@@ -178,7 +178,7 @@
+         $node->appendChild($doc->createTextNode($publication->getLocalizedTitle($submission->getData('locale'), 'html')));
+         if ($subtitle = $publication->getLocalizedSubTitle($submission->getData('locale'), 'html')) {
+             $titlesNode->appendChild($node = $doc->createElementNS($deployment->getNamespace(), 'subtitle'));
+-            $node->appendChild($doc->createTextNode($publication->getLocalizedTitle($subtitle, 'html')));
++            $node->appendChild($doc->createTextNode($subtitle));
+         }
+         $postedContentNode->appendChild($titlesNode);
+ 

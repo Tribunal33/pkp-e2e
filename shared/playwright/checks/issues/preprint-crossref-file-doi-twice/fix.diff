@@ -1,0 +1,20 @@
+--- a/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
++++ b/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
+@@ -76,10 +76,16 @@
+             $publications = $pubObject->getData('publications')->toArray();
+             // Use array reverse so that the latest version of the submission is first in the xml output and the DOI relations do not cause an error with Crossref
+             $publications = array_reverse($publications, true);
++            // Versions can share a DOI ("DOI Versioning" off, a minor version, versions made before
++            // versioning was switched on), and Crossref takes one record per DOI in a deposit:
++            // each DOI is written once, with the newest posted version that carries it
++            $writtenDois = [];
+             foreach ($publications as $publication) {
+-                if ($publication->getDoi() && $publication->getData('status') === PKPSubmission::STATUS_PUBLISHED) {
++                $doi = $publication->getDoi();
++                if ($doi && $publication->getData('status') === PKPSubmission::STATUS_PUBLISHED && !in_array($doi, $writtenDois)) {
+                     $postedContentNode = $this->createPostedContentNode($doc, $publication, $pubObject);
+                     $bodyNode->appendChild($postedContentNode);
++                    $writtenDois[] = $doi;
+                 }
+             }
+         }

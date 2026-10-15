@@ -2302,7 +2302,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | The DOIs page's "Bulk Actions" menu stays open over the list when an action is confirmed at once | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | The DOIs page's rows show a title's italic word as `<i>…</i>` and "&" as `&amp;` | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
 | [A29](#a29) | A journal upgraded from 3.3 can come out with an old leftover DOI prefix, and new DOIs are made with it | 🐞 | user-visible | — |
-| [A30](#a30) | A title or subtitle typed with "&" or an italic word goes to Crossref with the codes `&amp;` and `<i>…</i>` as text | 🐞 | user-visible | — |
+| [A30](#a30) | Crossref receives a title or subtitle typed with "&" or an italic word as the codes `&amp;` and `<i>…</i>` | 🐞 | high | issues (claude), 2026-10-15 — re-verified |
 | [OJS2](#ojs2) | On a DataCite journal, "Export DOIs" on an issue downloads nothing and "Deposit All" never sends it | 🐞 | high · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OJS3](#ojs3) | A journal's publish window lists the missing-ISSN warning for Crossref twice | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | "Deposit DOIs" on the "Issues" tab queues the issues' deposits but they still read "Unregistered" | 🐞 | low | issues (claude), 2026-10-09 — re-verified |
@@ -2314,8 +2314,8 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server's Crossref "Username" help reads "see the advise above" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OPS6](#ops6) | A preprint server's Crossref file lists a DOI once for every posted version that shares it | 🐞 | minor | — |
-| [OPS7](#ops7) | A preprint server's Crossref file puts the preprint's title where its subtitle belongs | 🐞 | user-visible | — |
+| [OPS6](#ops6) | A preprint server's Crossref deposit names a DOI once per posted version that shares it | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
+| [OPS7](#ops7) | A preprint server's Crossref file repeats the preprint's title where its subtitle belongs | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A1](#a1) | A new journal arrives in a DOI state its own Setup tab refuses to save | ❓ | minor | — |
 | [A5](#a5) | The Registration tab keeps a new agency even when its fields are refused | ❓ | minor | — |
 | [A6](#a6) | Choosing an agency silently unticks the kinds it does not accept | ❓ | minor | — |
@@ -2725,17 +2725,20 @@ stops on such an install with a database error instead.
 Since: 2026-10-09 (pkp/pkp-lib#13481; on 3.5 pkp/pkp-lib#12082) · Basis: probe, 2026-10-09. <sup>f-a29</sup>
 
 <a id="a30"></a>
-**A30 — A title or subtitle typed with "&" or an italic word goes to Crossref with the codes `&amp;` and `<i>…</i>` as text** · 🐞 · user-visible.
-A manager expects Crossref to register a work's title as the work's
-page shows it. A title saved in the "Title" box as "hkrb forest trees &
-*shrubs*", with the subtitle "rocks & sand", goes into the Crossref file
-(Rule 29b) as the text
-`hkrb forest trees &amp; <i>shrubs</i>` and `rocks &amp; sand`, so
-Crossref, and every service that shows its records, reads the
-codes as part of the title. The "Title" and "Subtitle" boxes keep
-every typed "&" this way, so any title or subtitle with one is hit, not
-only a formatted one. The work's own page shows the title right. The DOIs page's rows show the same codes ([A24](#a24)). A press
-sends nothing to an agency.
+**A30 — Crossref receives a title or subtitle typed with "&" or an italic word as the codes `&amp;` and `<i>…</i>`** · 🐞 · high.
+A title saved in the "Title" box as "hkrb forest trees & *shrubs*",
+with the subtitle "rocks & sand", goes into the Crossref file escaped
+twice: the file holds `hkrb forest trees &amp;amp; &lt;i&gt;shrubs&lt;/i&gt;`
+and `rocks &amp;amp; sand`. Crossref therefore receives the text
+`hkrb forest trees &amp; <i>shrubs</i>` and `rocks &amp; sand`: the
+characters "&amp;" and "<i>" in the title, instead of an "&" and an
+italic word.
+
+The "Title" and "Subtitle" boxes save every typed "&" as `&amp;`, so
+any title or subtitle with an "&" is hit, not only a formatted one.
+"Export DOIs" and every deposit send the same file. The work's own page
+shows the title right, and the file passes Crossref's schema check, so
+nothing warns the manager. The DOIs page's rows show the same codes ([A24](#a24)).
 Basis: probe, 2026-10-15. <sup>f-a30</sup>
 
 ### OJS
@@ -3027,24 +3030,41 @@ leave drafts out.
 Basis: probe, 2026-09-26. <sup>f-ops5</sup>
 
 <a id="ops6"></a>
-**OPS6 — A preprint server's Crossref file lists a DOI once for every posted version that shares it** · 🐞 · minor.
-On a preprint server a "Minor Revision" shares its source's DOI
-(Rule 12). Once both versions are posted, the Crossref file (Rule 29b)
-carries that DOI twice, one record per version: first the newer one, with its own version page as
-the page the DOI leads to, then the older one, with its page. 1.0 and
-1.1 give two records, and so do 2.0 and 2.1. A journal's file names the
-family's newest version alone. What Crossref does with one file that
-names a DOI twice was not tried; if it takes the records in order, the
-DOI ends up leading to the older version's page.
+**OPS6 — A preprint server's Crossref deposit names a DOI once per posted version that shares it** · 🐞 · medium.
+On a preprint server that registers DOIs with Crossref, the posted
+versions of a preprint can share one DOI: every new version does while
+"DOI Versioning" is "No", and on `main` a "Minor Revision" does under
+"Yes", the server's default (3.5 and 3.4 have no "Minor Revision"). The
+Crossref file for such a preprint, the one "Export DOIs" downloads and a
+deposit sends, holds one record for each version that shares the DOI,
+newest version first, each pointing to that version's page. It should
+hold one record, the newest version's.
+
+Crossref takes the first record of a DOI in a file, so the DOI is
+registered with the newest version and its page, and it refuses each
+repeat. The server then counts the deposit as failed and shows the DOI
+as "Error", on every deposit of that preprint. Other preprints in the
+same "Deposit All" or automatic deposit are not affected: each preprint
+goes to Crossref in a file of its own. "Mark DOIs Registered" clears
+the "Error" until the next deposit.
+
+On 3.5 and 3.4 a server set to "No" sends the DOI once. There the fault
+shows only when versions made under "No" are deposited after the server
+switched to "Yes": two major versions on one DOI. `main` has that case
+too, and the open fix `pkp/crossref-ops#67` leaves it.
 Basis: probe, 2026-10-15. <sup>f-ops6</sup>
 
 <a id="ops7"></a>
-**OPS7 — A preprint server's Crossref file puts the preprint's title where its subtitle belongs** · 🐞 · user-visible.
-A preprint's "Subtitle" is missing from the Crossref file (Rule 29b),
-its title standing in its place: for "hkrb forest trees & *shrubs*"
-with the subtitle "rocks & sand", the file's subtitle reads "hkrb forest trees & *shrubs*". A
-journal's file carries the subtitle. A preprint without a subtitle gets
-no subtitle in the file.
+**OPS7 — A preprint server's Crossref file repeats the preprint's title where its subtitle belongs** · 🐞 · medium.
+A preprint's "Subtitle" is missing from the Crossref file, its title
+standing in its place: for "The influence of lactation on the quantity
+and quality of cashmere production" with the subtitle "hkrb a plain
+subtitle", the file's `<subtitle>` reads "The influence of lactation on
+the quantity and quality of cashmere production".
+
+"Export DOIs" and every deposit send the same file, and it passes
+Crossref's schema check, so nothing warns the manager. A preprint
+without a subtitle gets no `<subtitle>` in the file.
 Basis: probe, 2026-10-15. <sup>f-ops7</sup>
 
 ### Retired

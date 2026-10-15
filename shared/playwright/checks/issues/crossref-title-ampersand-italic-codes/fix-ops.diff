@@ -1,0 +1,65 @@
+--- a/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
++++ b/plugins/generic/crossref/filter/PreprintCrossrefXmlFilter.php
+@@ -22,6 +22,8 @@
+ use APP\submission\Submission;
+ use DOMDocument;
+ use DOMElement;
++use DOMNode;
++use DOMText;
+ use PKP\author\contributorRole\ContributorRoleIdentifier;
+ use PKP\author\contributorRole\ContributorType;
+ use PKP\core\Dispatcher;
+@@ -175,10 +177,10 @@
+         // Titles
+         $titlesNode = $doc->createElementNS($deployment->getNamespace(), 'titles');
+         $titlesNode->appendChild($node = $doc->createElementNS($deployment->getNamespace(), 'title'));
+-        $node->appendChild($doc->createTextNode($publication->getLocalizedTitle($submission->getData('locale'), 'html')));
++        $this->appendFaceMarkup($doc, $node, $publication->getLocalizedTitle($submission->getData('locale'), 'html'));
+         if ($subtitle = $publication->getLocalizedSubTitle($submission->getData('locale'), 'html')) {
+             $titlesNode->appendChild($node = $doc->createElementNS($deployment->getNamespace(), 'subtitle'));
+-            $node->appendChild($doc->createTextNode($publication->getLocalizedTitle($subtitle, 'html')));
++            $this->appendFaceMarkup($doc, $node, $subtitle);
+         }
+         $postedContentNode->appendChild($titlesNode);
+ 
+@@ -594,6 +596,40 @@
+     }
+ 
+     /**
++     * Append a title or subtitle stored as HTML to its Crossref element: the formatting the "Title" and
++     * "Subtitle" boxes save (bold, italic, underline, superscript, subscript) as Crossref's face markup,
++     * which the schema accepts in these elements, and everything else as text with its HTML entities
++     * decoded. A title stored with a bare "&" (from before titles were HTML) reads the same.
++     */
++    public function appendFaceMarkup(DOMDocument $doc, DOMElement $node, string $html): void
++    {
++        $source = new DOMDocument();
++        if (!@$source->loadHTML('<?xml encoding="utf-8"?><body>' . $html . '</body>', LIBXML_NONET)) {
++            $node->appendChild($doc->createTextNode(html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
++            return;
++        }
++        $this->copyFaceMarkup($doc, $node, $source->getElementsByTagName('body')->item(0));
++    }
++
++    /**
++     * Copy an HTML node's content into a Crossref element: the face markup elements kept, other
++     * elements reduced to their content.
++     */
++    protected function copyFaceMarkup(DOMDocument $doc, DOMElement $target, DOMNode $source): void
++    {
++        $faces = ['b' => 'b', 'strong' => 'b', 'i' => 'i', 'em' => 'i', 'u' => 'u', 'sup' => 'sup', 'sub' => 'sub'];
++        foreach ($source->childNodes as $child) {
++            if ($child instanceof DOMText) {
++                $target->appendChild($doc->createTextNode($child->data));
++            } elseif ($child instanceof DOMElement) {
++                $face = $faces[strtolower($child->localName)] ?? null;
++                $into = $face ? $target->appendChild($doc->createElementNS($this->getDeployment()->getNamespace(), $face)) : $target;
++                $this->copyFaceMarkup($doc, $into, $child);
++            }
++        }
++    }
++
++    /**
+      * Helper to ensure dispatcher is available even when called from CLI tools
+      *
+      *
