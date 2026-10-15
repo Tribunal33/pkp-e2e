@@ -2801,6 +2801,7 @@ d22; the refusals answered 401 (the file removed in another tab) and 403 (the
 session ended), with no response of 500 or more and no page error. 3.5 was not
 driven. The fix proposed for A25 adds the mixin to the panel and not to the
 row; whether the "Remove" window then closes was not tried.
+Issue report: [pkp-e2e#1004](https://github.com/jardakotesovec/pkp-e2e/issues/1004) ([docs/issues/U36-A28-wizard-refused-file-remove-hangs.md](../issues/U36-A28-wizard-refused-file-remove-hangs.md)).
 
 <a id="fn-a29"></a>
 **f-a29** — Notes k and d22. `FileUploader.vue` shows `status` in a
@@ -2812,6 +2813,7 @@ runs when a row is removed too, which is what the status then reads.
 Live-probed 2026-10-09 (OJS and OMP `main`, two runs each): note d22.
 A screen reader was not run: the texts are the status element's, which is
 what a reader is given. 3.5 was not driven.
+Issue report: [pkp-e2e#1005](https://github.com/jardakotesovec/pkp-e2e/issues/1005) ([docs/issues/U36-A29-wizard-upload-status-reads-complete.md](../issues/U36-A29-wizard-upload-status-reads-complete.md)).
 
 <a id="fn-a30"></a>
 **f-a30** — Notes t and d11. pkp/pkp-lib#12584 (lib/pkp `de26641811`,
