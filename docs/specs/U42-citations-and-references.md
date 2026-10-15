@@ -363,12 +363,15 @@ typed. Nothing asks first. The one exception is an author row added in
       grayed out. The submission cannot be completed until the box is
       filled.
 17. **Identifiers from the wizard with lookup off.** With lookup off, a
-    reference added through the workflow's "Add" keeps the DOI written in
-    its text as its DOI, which shows as a link, and in the "DOI" box of
-    "Edit", once lookup is switched on (Rule 12). A reference typed into
-    the wizard's box keeps it the same way: "Alpha study 2020.
-    https://doi.org/10.1234/abcd" keeps "10.1234/abcd". <sup>k</sup>
-    <sup>q15</sup>
+    reference added through the workflow's "Add" keeps the identifiers
+    written in its text, picked out as in the lookup's first step (Rule 11,
+    step 1): its DOI, arXiv ID, handle, web address and URN. Once lookup is
+    switched on they show as links and in their boxes of "Edit" (Rule 12).
+    A reference typed into the wizard's box keeps them the same way:
+    "Alpha study 2020. https://doi.org/10.1234/abcd" keeps "10.1234/abcd".
+    So does a reference that arrives through a native XML import run from
+    the server's command line without its lookup option, whether lookup
+    is on or off. <sup>k</sup> <sup>q15</sup>
 
 ### Data citations
 
@@ -1324,7 +1327,9 @@ either way. The reach is the time a new reference waits for its lookup
 to start: seconds on an install whose background jobs keep up, longer
 when they are behind. "Reprocess all references" replaces a typed DOI
 the same way, but its question warns that manual changes will have to
-be entered again (Rule 15); "Edit" warns of nothing.
+be entered again (Rule 15); "Edit" warns of nothing. The command-line
+tool's `extract` (note h) does the same to a reference not looked up yet,
+once pkp/pkp-lib#13537 is merged.
 Basis: probe, 2026-10-07. <sup>f-a25</sup>
 
 <a id="a26"></a>
@@ -1778,6 +1783,21 @@ chain each. Merged 2026-10-13 as pkp-lib `5d962d743e` (the reviewed head
 OPS's `lib/pkp` do not carry it yet. Both walks run again the same day at
 the merge, the three apps with `lib/pkp` at `5d962d743e`
 (`side.sh merge`), read as at the head.
+At the PR head of `pkp/pkp-lib#13537` (`20c178bcb8`), before its merge,
+the tool also takes `extract [scope]`: the identifiers are picked out of
+the text of every reference not looked up yet (NOT_PROCESSED and no
+status), at once, with no job and no outside service, in contexts with
+lookup off too, the status left as it was, and one line per context
+("Context 1 (publicknowledge): 16 citations checked, 6 with new PIDs, 6
+with a DOI."). Driven 2026-10-15 at the head, all three apps
+(`checks/sync/pkp-lib-13537/extract.sh`; at the base `dce15320c7` the
+command is refused with the usage, exit 1): references stored without
+their identifiers got them, a PROCESSED and a QUEUED one kept none, a
+second run found nothing new, `submission <id>` held the scope, an
+unknown context was refused by name, and `queue` later took the same
+references. Like the lookup's first step at the base, it replaces a DOI
+corrected by hand in "Edit citation" on a reference not looked up yet
+with the one in the text.
 Live-probed 2026-09-24 (Rule 11), all three apps: a reference added
 through "Add" with a DOI and an arXiv ID in its text showed its text alone,
 with no identifier link, after the Add and after a reload. Structured by
@@ -1903,7 +1923,27 @@ whole list: two PUTs of the same `citationsRaw` ("…one…" / spaces /
 "…two…") gave citation ids 1, 2 and then 3, 4 at the OJS tip, and 1, 2
 both times at the PR heads on all three apps (kept
 `shared/playwright/checks/sync/ui-library-982/whitespace.js`, facts
-`whitespace-facts-{tip,pr-r4}-<app>.json`, 2026-10-06). The OJS Crossref deposit
+`whitespace-facts-{tip,pr-r4}-<app>.json`, 2026-10-06). At the PR head
+of `pkp/pkp-lib#13537` (`20c178bcb8`, issue `pkp/pkp-lib#13536`), before
+its merge: `importCitations()` runs `ExtractPidsHelper` (the lookup's first
+step, Rule 11) before the insert whenever no lookup is queued, that is with
+lookup off or with `$reprocess` false (the native import filter passes its
+`citation-metadata-lookup` option, off by default on the command line),
+and `importAdditionalCitations()` does so with lookup off; the old
+`http://` to `https://` rewrite goes, `BasePid::removePrefix()` matching
+either. Driven 2026-10-15 at its base `dce15320c7` and at the head, all
+three apps, PKP's default dataset (`checks/sync/pkp-lib-13537/paths.js`,
+`native.sh`; OMP's file with its publication format removed, as OMP's
+command-line import stops on one): the References box and "Add" with
+lookup off kept the DOI alone at the base (the same value for
+`http://dx.doi.org/…` and `HTTP://DOI.ORG/…` at both sides) and every
+identifier at the head; the command-line import into a journal with
+lookup on kept none at the base and every identifier at the head, no job
+queued; with `--citation-metadata-lookup` a chain per reference at both
+sides. A reference whose text alone is edited (`PUT …/citations/{id}`,
+the raw "Edit citation" form) keeps the identifiers of its old text at
+both sides, until the lookup or `citationLookup.php extract` (fn h) reads
+the new one. The OJS Crossref deposit
 (`ArticleCrossrefXmlFilter`, `citation_list`) sends `<doi>` for an
 unstructured citation that has one. Required references: `citationsRaw`
 reads as the stored lines joined, so an empty list fails
@@ -2950,7 +2990,7 @@ the finding continues as A20.
 | Landing-page "References" block | article, preprint and book pages (*Article landing page & reading*, *Monograph landing page*) | AFFR-057 |
 | Settings "References", "References Metadata Lookup", "Data Citations" | Settings › Workflow › Submission › "Metadata" (*Publication metadata* owns the screen) | — |
 | `lib/pkp/tools/parseCitations.php` ("Parse and save submission(s) citations.") | command line, no screen | waived: not a screen (*System administration & jobs*) |
-| `lib/pkp/tools/citationLookup.php` ("Queue the metadata lookup of existing citations in bulk, and monitor it."; `status`, `queue`, `repair`) | command line, no screen | (not in the atlas: after the sweep) · waived: not a screen (*System administration & jobs*); note h |
+| `lib/pkp/tools/citationLookup.php` ("Queue the metadata lookup of existing citations in bulk, and monitor it."; `status`, `queue`, `repair`, `extract`) | command line, no screen | (not in the atlas: after the sweep) · waived: not a screen (*System administration & jobs*); note h |
 | Unreached pieces: the unused lookup-toggle component, the legacy author dashboard's references form | none | recorded in `docs/tracking/UNASSIGNED.md` item 25 |
 
 ## Reference — code anchors
