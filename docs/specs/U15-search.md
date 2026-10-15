@@ -2092,6 +2092,7 @@ zone, `\Carbon\Carbon::createFromTimestamp($value,
 date_default_timezone_get())`, in both engines (checked in PHP: all four
 zones give `2025-01-31`; not tried live). Upstream: none found (pkp/pkp-lib
 issue search "search date timezone", "publishedFrom", 2026-10-15).
+Issue report: [pkp-e2e#977](https://github.com/jardakotesovec/pkp-e2e/issues/977) ([docs/issues/U15-A18-search-date-filter-day-early-east-of-utc.md](../issues/U15-A18-search-date-filter-day-early-east-of-utc.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn-g: `templates/frontend/pages/search.tpl` passes `count`
