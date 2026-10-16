@@ -787,7 +787,7 @@ ci-triage companion row says "into `ore`" in its App PR cell, and the
 sync-log entry goes to `upstream-sync-ore.md`.
 
 **Teardown**, when ORE moves to `stable-3_6_0`: delete the pkp-e2e `ore`
-branch and its worktrees, the `ojs-ore` job in `main`'s `e2e.yml`, this
+branch and its worktrees, this
 section, `upstream-sync-ore.md`, `docs/reports/ore/` and
 `checks/sync/ore/`, and drop `ore` from ci-triage rows; the hook change
 on pkp/ojs `ore` is the team's. The same steps follow `stable-3_6_0`
