@@ -67,9 +67,14 @@ The scheduled prompt only points here; this section is the day's order.
    `stable-3_5_0`" below): the regression hunt alone, after `main` is
    synced and green, never before, because the `main` read is its
    context: most of what 3.5 receives was read on `main` first.
-7. End pushed: commit and push everything commit-worthy to pkp-e2e `main`,
+   Then the ore branch ("The ore branch" below), OJS only, the same
+   order: what `ore` received is read against its `main` twin, and the
+   pkp-e2e `ore` branch follows by cherry-pick.
+7. End pushed: commit and push everything commit-worthy to pkp-e2e `main`
+   (and to pkp-e2e `ore` when the ore step moved it),
    and post a one-paragraph summary to the channel: what was synced, what
    was red and why, what was changed, what the stable line's read found,
+   what the ore branch received and whether its suite is green,
    how many security suspicions were read, reproduced and routed (counts
    only), with the day's regression report (sync loop step 5) attached as a file
    when there is one.
@@ -681,6 +686,97 @@ command points it at the line; without it every command means `main`.
    was and says so. `main` comes first: on a day the `main` sync
    accommodated a spec or `main` is red, the line's range may wait for the
    next session, stated in one log line.
+
+## The ore branch: `ore` (temporary, OJS only)
+
+The ORE project runs OJS in production from the branch `ore` of pkp/ojs,
+pkp/pkp-lib and pkp/ui-library (OMP and OPS have none) until the 3.6
+stable release, when it moves there and everything in this section is
+torn down. The branches were cut from `main` on 2026-10-13 (ojs
+`9f18cd1d46`, pkp-lib `266505ecd8`, ui-library `c9889f00`) and receive
+cherry-picks of fixes `main` gets. Unlike `stable-3_5_0`, `ore` has a
+suite: the pkp-e2e branch **`ore`**, cut from `main` at `2853af70`, the
+sync that reviewed exactly those tips, plus the U03 S4 skip (K-12780,
+which `ore` carries). That branch holds the OJS suite, specs and
+overlays as they described the branch point, and it moves only by
+cherry-picks that mirror the team's. Nothing is ever built on it; a
+new feature `ore` alone would get is a question for the maintainer.
+Baselines and the read log: `docs/tracking/upstream-sync-ore.md`.
+
+CI covers `ore` three ways, all from the pkp-e2e `ore` branch: its own
+push runs (`e2e.yml` there runs OJS alone against pkp/ojs `ore`), the
+nightly `ojs-ore` job in `main`'s `e2e.yml` (a schedule fires on the
+default branch alone), and pkp/ojs's hook on `ore`, which runs the
+`ore` suite on every push and on every PR into `ore` (pkp/ojs#5944), a
+companion branch named like the PR's branch winning as on `main`. The
+latest hook run on pkp/ojs `ore` is the "is the ore tip red?" answer
+(`gh run list -R pkp/ojs --workflow e2e-tests.yml --branch ore`).
+
+The daily step, after `main` and the stable line (upstream session step
+6), with the ore worktree beside the slot clone (harness.md "The ore
+worktree" once Phase 1 lands; until then CI is the only runner):
+
+1. **List the range** per repo since the baselines, `main` fetched
+   first, and class each commit as the stable line does (`=main`,
+   `~main`, `ore-only`, pointer bump; `bin/line-range.js` once it takes
+   `--branch ore`, `git cherry -v` and `git range-diff` by hand before).
+2. **Carry the suite over.** `=main`: the `main` read's verdict stands;
+   the pkp-e2e commits that accommodated the twin (the sync log entry or
+   the merged companion names them) are cherry-picked onto pkp-e2e
+   `ore`, in order, and any `main`-only context in the conflict is
+   dropped. `~main`: `git range-diff <main>^! <ore>^!` is the read, the
+   accommodation is cherry-picked and adapted, and the difference gets
+   the regression reader (`briefs/regression-read.md`, `{{line}}`
+   `ore`), because a backport adapted by hand is where a regression
+   sits. `ore-only`: sync loop steps 3 to 5 on the ore branch, with the
+   slimmed Accommodate of step 4. A test-only change on `main` (a flake
+   fix, a page object) is cherry-picked only once an `ore` run shows the
+   need.
+3. **Carry `main`'s findings over.** Every regression `main` confirmed
+   today, and every ci-triage "Open regressions" row, is on `ore` when
+   its introducing commit is an ancestor of the ore tip (`git merge-base
+   --is-ancestor`), or when its twin was cherry-picked; the kept script
+   runs on the ore fleet when there is one, and the row and the report
+   say "ore shows it too" or "ore does not, at `<sha>`".
+4. **Gate.** Push pkp-e2e `ore` and `node bin/ci.js watch` its push run
+   (OJS alone, 10 to 20 min); a red is fixed on the branch. Then advance
+   the baselines in `upstream-sync-ore.md` with a dated entry, one line
+   per commit, as the stable line's rule says: a range not fully read
+   leaves its baseline where it was.
+
+**Findings on `ore`.** A regression `main` shows too is `main`'s
+finding and takes the usual path, its report saying `ore` has it. One
+only `ore` shows gets no register entry anywhere (the specs on `main`
+describe `main`, and the ore copies are not kept as a second register,
+maintainer 2026-10-16): a report under `docs/reports/ore/<date>-<repo>-<pr>.md`
+in `REPORT.md`'s shape, a ci-triage "Open regressions" row with `ore`
+in its Apps cell, the kept reproduction under
+`shared/playwright/checks/sync/ore/<repo>-<pr>/`, and, when a shipped
+test on the ore branch reds on it, a `test.fixme` there naming the row,
+as `main` treats a known red. **Every regression found on `ore` is
+posted in the session's thread tagging @beaug**, as `main`'s
+regression reports are (maintainer, 2026-10-16). Anything
+security-shaped on `ore` is released code (ORE runs it in production):
+it follows `../pkp-e2e-sec/security_policy.md` as a 3.5 finding would,
+never this repo (maintainer, 2026-10-16).
+
+**A PR into `ore`** (pkp/ojs, pkp/pkp-lib or pkp/ui-library with base
+`ore`, usually a backport PR) is a "PR review" as below, with three
+differences: the companion is cut from pkp-e2e `ore`, most often as the
+cherry-pick of the `main` companion's commits; the dispatch is `node
+bin/ci.js dispatch --ref <companion> --apps ojs --ojs-repo <fork>/ojs
+--ojs-ref <head sha>` (plus `--pkp-lib-ref` / `--ui-library-ref` for a
+shared PR the app PR's pointers do not carry); and on the merge ping the
+companion is fast-forwarded into pkp-e2e `ore`, never `main`. Its
+ci-triage companion row says "into `ore`" in its App PR cell, and the
+sync-log entry goes to `upstream-sync-ore.md`.
+
+**Teardown**, when ORE moves to `stable-3_6_0`: delete the pkp-e2e `ore`
+branch and its worktrees, the `ojs-ore` job in `main`'s `e2e.yml`, this
+section, `upstream-sync-ore.md`, `docs/reports/ore/` and
+`checks/sync/ore/`, and drop `ore` from ci-triage rows; the hook change
+on pkp/ojs `ore` is the team's. The same steps follow `stable-3_6_0`
+with a suite, should the team want that.
 
 ## Triage: where does a change land?
 

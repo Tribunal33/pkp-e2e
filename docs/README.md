@@ -30,6 +30,9 @@ record changes still in effect.
   reviewed against.
 - `docs/tracking/upstream-sync-stable-3_5_0.md`: the last `stable-3_5_0`
   commits read for regressions (no suite runs on that branch).
+- `docs/tracking/upstream-sync-ore.md`: the last `ore` commits read, and
+  what the pkp-e2e `ore` branch (the OJS suite for the ORE project's
+  production branch, until 3.6 is released) took over from `main`.
 - `docs/tracking/app-changes.md`: app defects the tests work around, and
   any app code the campaign changed.
 - `docs/tracking/parity-ledger.md`: evidence that the test-data builders
