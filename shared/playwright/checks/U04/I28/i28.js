@@ -21,15 +21,18 @@
 //            the field after and after a reload; an unauthenticated iD's note and its
 //            Delete question (Yes), after and after a reload. Control: en, No only.
 // Run twice, each under its own facts name (fresh scratch context per RUN):
-//   RUN=r1 PROBE_FEATURE=U04 PROBE_AGENT=ccI28 node bin/probe.js all shared/playwright/checks/U04/I28/i28.js
-//   RUN=r2 …   (PHASES=site,journal,contrib narrows)
+//   PROBE_RUN=r1 PROBE_FEATURE=U04 PROBE_AGENT=ccI28 node bin/probe.js all shared/playwright/checks/U04/I28/i28.js
+//   PROBE_RUN=r2 …   (PHASES=site,journal,contrib narrows; RUN=… still overrides the state file's run)
 const fs = require('fs');
 const path = require('path');
 const {execFileSync} = require('child_process');
 const {forEachApp, launch, signIn, screen, shot, record, loc, note, idle, tag, outDir} =
     require('../../../probe');
 
-const RUN = process.env.RUN || 'r1';
+// RUN defaults to PROBE_RUN: a second run under PROBE_RUN=r2 alone used to share r1's state file and
+// so r1's scratch context, its French contributor already requested and its iD already deleted (U04
+// drift sweep 2026-10-16, SW1).
+const RUN = process.env.RUN || process.env.PROBE_RUN || 'r1';
 const ALL = ['site', 'journal', 'contrib'];
 const PHASES = process.env.PHASES ? process.env.PHASES.split(',') : ALL;
 const on = (p) => PHASES.includes(p);

@@ -329,9 +329,10 @@ same model: a false positive's piece goes to a narrow Sonnet fallback
    reporter takes before its status read and holds to the walk's end or
    the revert, and the brief names that lock and every reporter of the
    slot (U35, U45, U50, U51, U54 issues sessions, 2026-10-01). A claim
-   checker driving the slot's own fleets beside reporters takes the same
-   lock for each run on `main`, since a fix applied mid-run serves its
-   pages too (U03, U39 claim checks, 2026-10-07); a run of its that
+   checker driving the slot's own fleets beside reporters, or beside another
+   checker, takes the same lock for each run on `main`, since a fix applied
+   mid-run serves its pages too and a checker's site-wide change reaches
+   the other's (U03, U39 claim checks, 2026-10-07; U04 sweep, 2026-10-16); a run of its that
    changes a site-wide setting (Site Settings, the site record) takes it
    `exclusive`, as one command that puts the setting back, since every
    visitor of the fleet reads it (U02 sweep, 2026-10-12). On the VM that lock

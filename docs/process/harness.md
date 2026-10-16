@@ -676,7 +676,8 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   Look there when debugging server-side errors (a 500 a probe's traffic
   shows); it carries only the request line of a 500 (`[500]: POST …`),
   whose exception sits in the app's own log under the fleet's files dir,
-  `logs/app-<date>.log` (`checkouts/files/<app>-test/` on `main`); a
+  `logs/app-<date>.log` (`checkouts/files/<app>-test/` on `main`), where
+  the ORCID log (`OrcidManager`) and the queued jobs write too; a
   dataset fleet's config logs to `errorlog`, so its exceptions are in its
   own server log. The kit's `serverLog(app)` reads the probe server's or
   dataset fleet's log from a mark (patterns.md "Probe kit"); every agent

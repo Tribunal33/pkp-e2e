@@ -108,7 +108,9 @@ Keys:
   "Canada") or a non-string is a 400 before the context exists; an empty
   string reads as absent. Without the key a scratch context has no
   country, and both windows refuse their first "Save" until one is
-  picked; with it both open on the seeded country. The Masthead also
+  picked; with it both open on the seeded country. A review deposit to
+  ORCID on a member-API journal needs it too (U04 Rule 12; without it the
+  deposit job fails in the background, 2026-10-16). The Masthead also
   requires "Journal initials" (`context.acronym`), which a scratch
   context has only when given (U19 harness, 2026-09-26, three apps).
 - `sections[]` (OJS, OPS): same shape as in the bootstrap payload. The first
@@ -1417,9 +1419,11 @@ Keys:
   active titles. A form becomes uneditable on screen the moment a request
   carries it, so text to type on the form (a second language, a renamed
   item) is typed before the reviewer is seeded. A reviewer named here
-  leaves the Add Reviewer search, so a script that both seeds a request and
-  opens Add Reviewer seeds a spare `externalReviewer` in the context's
-  `users[]`. `completed` is a review accepted and submitted through the
+  stays in Add Reviewer's "Locate a Reviewer" list, marked "This reviewer
+  has already been assigned to this review round." with no "Select
+  Reviewer" (OJS and OMP, U04 drift sweep, 2026-10-16), so a script that
+  both seeds a request and adds one on screen seeds a spare
+  `externalReviewer` in the context's `users[]`. `completed` is a review accepted and submitted through the
   reviewer wizard's own step forms: the editor's row reads "Review
   Submitted" with "Read Review", and the reviewer's list shows it under
   "Completed". Its two optional inputs are step 3's: `recommendation` (OJS
