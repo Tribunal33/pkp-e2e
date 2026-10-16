@@ -32,9 +32,10 @@
  * - A16 🐞, A17: no argument is given twice.
  * - A18, OMP*, OPS*: the press's and the preprint server's, in those suites.
  * - A19 🐞: no section is deleted.
- * - A22 🐞: no journal versions its DOIs (feature fact: while any OJS
- *   journal has "DOI Versioning" on, every OJS OAI read on the install
- *   fails, and every suite shares the install).
+ * - A22 ✅ (retired, fixed by pkp/ojs#5947), A27 ❓: no journal versions
+ *   its DOIs yet (spec Coverage, Planned: before that fix, any OJS journal
+ *   with "DOI Versioning" on failed every OJS OAI read on the install, and
+ *   every suite shares the install).
  *
  * Seeding: scenario endpoints only, as footnote s says; publicknowledge and
  * the seeded roster are only read. Every scenario runs on its own scratch

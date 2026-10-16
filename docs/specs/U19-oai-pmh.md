@@ -139,7 +139,7 @@ does not show. <sup>d</sup>
 
 | Part | Content |
 |------|---------|
-| OAI Identifier | on a journal "oai:{repository identifier}:article/{ID}", `{ID}` being the submission's ID (the number the Dashboard lists it under); on a press "oai:{repository identifier}:publicationFormat/{format number}" [OMP1](#omp1); on a preprint server "oai:{repository identifier}:preprint/{ID}". An earlier version has an identifier of its own on a journal that versions its DOIs (Rule 20) ⚠ [A22](#a22) <sup>e</sup> |
+| OAI Identifier | on a journal "oai:{repository identifier}:article/{ID}", `{ID}` being the submission's ID (the number the Dashboard lists it under); on a press "oai:{repository identifier}:publicationFormat/{format number}" [OMP1](#omp1); on a preprint server "oai:{repository identifier}:preprint/{ID}". An earlier version has an identifier of its own on a journal that versions its DOIs (Rule 20) <sup>e</sup> |
 | Datestamp | the record's last change, such as "2026-09-26T10:15:00Z" (Rule 5) <sup>e</sup> |
 | setSpec | the set of the article's section, "{journal path}:{section abbreviation}" (Rule 7); on a press the book's series, or the press alone for a book in no series; with "DRIVER" on, a second row "driver" (Rule 23) <sup>e</sup> |
 
@@ -458,9 +458,7 @@ message. <sup>m</sup>
       plain address is first sent on to the one with a language in it:
       the language the same browser last asked for (the app remembers
       it), else `…/en/oai`. <sup>u</sup> <sup>q19</sup>
-20. **Versions** {OJS}. While any journal of the install versions its
-    DOIs, every OAI list and record request fails ⚠ [A22](#a22), so the
-    records this rule and 20a describe have not been seen. A journal
+20. **Versions** {OJS}. A journal
     with DOIs enabled and "DOI Versioning" set to "Yes, assign a unique
     DOI to every version of an article." lists, beside the article's record, one record for each
     earlier published major version, identified as
@@ -468,17 +466,22 @@ message. <sup>m</sup>
     `{stage}` "VoR" (Version of Record), "AO" (Author's Original) or
     "PMUR" (Published Manuscript Under Review); the latest minor version
     of that major stands for it. The current version keeps the plain
-    identifier. <sup>r</sup> <sup>q20</sup>
+    identifier. The lists give an earlier version's record just before
+    the article's own. That record has the version's date, its title and
+    its galley in "Relation", and the article's address as "Resource
+    Identifier", the address that shows the current version ⚠
+    [A27](#a27). <sup>r</sup> <sup>q20</sup> <sup>q20a</sup>
     - 20a. Unpublishing an earlier version makes its own identifier a
       deleted record; unpublishing the current version gives the plain
       identifier back to the version before it, and that version's own
-      identifier becomes a deleted record [A22](#a22). <sup>r</sup>
+      identifier becomes a deleted record. <sup>r</sup>
       <sup>q20</sup>
     - 20b. Without versioning, only the current version has a record.
       Once a later major version is published, its record names the
       version before it in "Relation" (and MARC 780), minor versions
       included: by that version's DOI when versioning gave it one of its
-      own [A22](#a22), else by its address. <sup>r</sup> <sup>q20</sup>
+      own, else by its address. <sup>r</sup> <sup>q20</sup>
+      <sup>q20a</sup>
 21. **The JATS format** {OJS}. `jats` is offered only while "JATS
     Metadata Format" is enabled in the journal. <sup>h</sup>
     <sup>q5</sup>
@@ -574,8 +577,8 @@ message. <sup>m</sup>
    article should have the same DOI."). DOIs on and a "DOI Prefix"
    given: the article's DOI in "Resource Identifier" and in `marcxml`
    024 (not `oai_marc`). Both on: a record per earlier version, and the
-   previous version named by its DOI in "Relation" (Rules 20, 20b)
-   [A22](#a22). *DOIs* owns the tab. <sup>r</sup>
+   previous version named by its DOI in "Relation" (Rules 20, 20b).
+   *DOIs* owns the tab. <sup>r</sup>
 7. **"Publishing Mode"** {OJS} (Settings › Distribution › "Access";
    a new journal has none chosen, which reads as open access).
    "…require subscriptions…": `jats` refuses articles in subscription
@@ -1149,11 +1152,15 @@ Left out of the scenarios above, by reason:
     published book (preprint) edited, then unpublished and published again:
     the record's datestamp moves each time and `from` today lists it {OMP
     OPS} (once fixed)
-  - the guard for A22 (issue report
+  - the per-version records and the guard for retired [A22](#a22) (issue report
     `docs/issues/U19-A22-doi-versioning-oai-requests-fail.md`): with "DOI
     Versioning" at "Yes" on one journal (a "DOI Prefix" typed first),
     Identify, the lists and GetRecord answering at that journal, at another
-    journal and at the site-wide address {OJS} (once fixed)
+    journal and at the site-wide address; a second major version
+    published on screen listed as its own record before the article's,
+    each answering GetRecord {OJS} (Rules 20, 20b; once pkp/ojs#5947 is
+    on `main`, before which one such journal fails every OJS OAI read on
+    the shared install)
   - the guard for A16 (issue report
     `docs/issues/U19-A16-oai-argument-twice-server-error.md`): a request
     that gives `metadataPrefix`, `set` or `verb` twice answering the
@@ -1334,9 +1341,8 @@ Left out of the scenarios above, by reason:
   - A18 {OMP OPS} (a datestamp that stays put after an edit or a second
     publish; Rule 5)
   - A19 (the set of a section that no longer exists; Rule 7c)
-  - A22 {OJS} (per-version records on a journal with "DOI Versioning"
-    on; Rules 20, 20a, 20b; Settings bullet 6): turning versioning on
-    fails every journal's OAI requests on the install
+  - A27 {OJS} (an earlier version's record giving the article's address;
+    Rule 20)
   - A23, A24 {OJS} (a `driver` member with no galley; the set's "Resume"
     repeating records; Rules 23, 23a; scenario 10 passes A24)
   - A26 {OJS} (an article in no issue on MySQL or MariaDB, left out of
@@ -1387,7 +1393,6 @@ an entry notes otherwise; the team settles them on spec review.
 | [A18](#a18) | A press's or preprint server's OAI record keeps its earlier datestamp after an edit or a second publish {OMP OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A19](#a19) | An OAI set left behind by a changed section abbreviation or a deleted section is listed but lists nothing {OJS OPS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [A20](#a20) | Asked for a section's set, OAI lists return its deleted records whatever "from" and "until" say {OJS OPS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [A22](#a22) | Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error {OJS} | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [A23](#a23) | A journal's `driver` OAI set lists articles that have no galley {OJS} | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A24](#a24) | On 3.5 a journal's `driver` OAI list stops after a hundred records; on every version it offers "Resume" when complete {OJS} | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
 | [OMP3](#omp3) | Asked for a set it does not have, a press's OAI-PMH address lists every record of the press, or of every press | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
@@ -1402,6 +1407,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A21](#a21) | A section has one set identifier per language {OJS OPS} | ❓ | minor | — |
 | [A25](#a25) | Other journals' `driver` OAI sets may list journal 1's deleted records {OJS} | ❓ | minor | — |
 | [A26](#a26) | On MySQL or MariaDB, an article in no issue may get no datestamp and be left out of lists with "from" or "until" {OJS} | ❓ | user-visible | — |
+| [A27](#a27) | An earlier version's OAI record gives the article's address, which shows the current version {OJS} | ❓ | minor | — |
 | [OMP2](#omp2) | A press cannot withhold its records: it has no "Enable OAI" | ❓ | minor | — |
 | [OMP7](#omp7) | A book's new version changes its format identifiers without leaving deleted records | ❓ | minor | — |
 | [OMP9](#omp9) | On the first press, the press's set may leave out the deleted records of books in a series | ❓ | user-visible | — |
@@ -1410,6 +1416,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP5](#omp5) | Retired: an address with no press answers as the whole site | ✅ | retired | — |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answered a server error once one book was published without an abstract | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/omp#2490's head |
 | [OPS2](#ops2) | One preprint without an abstract made the server's record lists fail | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/ops#1430's head |
+| [A22](#a22) | Retired: once one journal set "DOI Versioning" to "Yes", every journal's OAI-PMH requests answered a server error; fixed by pkp/ojs#5947 | ✅ | retired | PR review (claude), 2026-10-16 — fixed at pkp/ojs#5947's head |
 
 ### All apps
 
@@ -1728,17 +1735,7 @@ the plain address can send the same harvester to either (Rule 19a).
 Basis: probe, 2026-09-26. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error** {OJS} · 🐞 · medium · crash: server.
-A Journal Manager sets "DOI Versioning" to "Yes, assign a unique DOI to
-every version of an article." on a journal that has DOIs enabled. From
-then on these OAI-PMH requests answer a server error with an empty page:
-Identify, ListRecords, ListIdentifiers, GetRecord and
-ListMetadataFormats for an identifier. ListSets still answers. The
-failure is not limited to that journal. Every other journal of the
-install and the site-wide OAI-PMH address fail the same way, so no
-harvester can read anything from the install until the setting is back
-at "No". It was seen on PostgreSQL. MySQL and MariaDB were not run.
-Basis: probe, 2026-10-01. <sup>f-a22</sup>
+**A22 — Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error** {OJS} · ✅ · retired. Fixed by pkp/ojs#5947 (for pkp/pkp-lib#13547, the issue report's proposed fix), verified 2026-10-16 at the PR's head `dd219baf6d` before its merge, on PostgreSQL: the report's Steps answer at the head where the base answers 500. <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — A journal's `driver` OAI set lists articles that have no galley** {OJS} · 🐞 · low.
@@ -1802,6 +1799,21 @@ datestamp of its record in the list without dates.
 Basis: code. <sup>f-a26</sup>
 
 ### OMP
+
+<a id="a27"></a>
+**A27 — An earlier version's OAI record gives the article's address, which shows the current version** {OJS} · ❓ · minor.
+A harvester reading a journal that versions its DOIs gets a record of its
+own for each earlier major version of an article (Rule 20). That record
+has the earlier version's date and title, and its galley in "Relation".
+Its "Resource Identifier" is the article's address, though, and that
+page shows the current version. The earlier version's own address
+(`…/article/view/{ID}/version/{publication}`) is the one the current
+version's record names in "Relation". A harvester that links its entry
+for version 1.0 sends its readers to version 2.0.
+Question: should an earlier version's record give that version's own
+address as "Resource Identifier"? Lean: 🐞; the record's other fields
+describe that version, and the address beside them shows another one.
+Basis: probe, 2026-10-16. <sup>f-a27</sup>
 
 <a id="omp1"></a>
 **OMP1 — A press's record is a publication format** · ✅ · invisible.
@@ -2014,10 +2026,10 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 **p** — Plugins list: `PluginGridCellProvider` column `enabled`: `selected` = `getEnabled()`, `disabled` = enabled ? `!getCanDisable()` : `!getCanEnable()`; `Plugin` defaults `getCanEnable()`/`getCanDisable()` false and `getEnabled()` true, which `OAIMetadataFormatPlugin` (DC, MARC, MARC21) does not override. Category label `plugins.categories.oaiMetadataFormats` "OAI Metadata Format Plugins" ("These format plugins express metadata in OAI communications."). Display names: `plugins.oaiMetadata.dc.displayName` "DC Metadata Format", `plugins.OAIMetadata.marc.displayName` "MARC Metadata Format", `plugins.OAIMetadata.marcxml.displayName` "MARC21 Metadata Format", "JATS Metadata Format". Prefixes and schemas: `oai_dc` `http://www.openarchives.org/OAI/2.0/oai_dc.xsd`; `oai_marc` `http://www.openarchives.org/OAI/1.1/oai_marc.xsd`; `marcxml` `https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd`; `jats` (note h). `OAIMetadataFormatPlugin::register()` hooks `OAI::metadataFormats` only while enabled; `OAI::metadataFormats()` ignores the identifier. The "Metadata Plugins" category also lists "Dublin Core 1.1 metadata" (`PKPDc11MetadataPlugin`), the schema the DC format reads, its box ticked and disabled. Seed facts (U48 claim check, 2026-09-25): "JATS Metadata Format" unticked on a new journal and on `publicknowledge`. Live-probed 2026-09-26 (Actors row 4; the formats table; Rule 10; Settings bullet 2): notes q2, q12.
 
 <a id="fn-r"></a>
-**r** — Versions (OJS). `OAIDAO::getRecordsRecordSetQuery()` treats journals with `doiVersioning = 1` and `enableDois = 1` (`Context::SETTING_DOI_VERSIONING`, `SETTING_ENABLE_DOIS`) apart: their records come from a second query over every published publication of stage `AO`, `PMUR` or `VoR` (`APP\publication\enums\VersionStage`), the latest minor per stage and major; `setOAIData()` gives the current publication the bare identifier and the others `/version/{stage}/{major}`, pointing the submission's `currentPublicationId` at the rendered version. `JournalOAI::versionToPublicationId()` resolves a versioned identifier. `ArticleTombstoneManager` tombstones and restores versioned identifiers as versions are unpublished and published. DOI tab: `PKPDoiSetupSettingsForm` `enableDois` ("Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal."), `doiVersioning` "DOI Versioning" with "Yes, assign a unique DOI to every version of an article." / "No, all versions of an article should have the same DOI." (a null setting shows "No" on OJS). Relation: `Repo::publication()->getVersionRelation()` (the immediately preceding published version; its DOI URL when versioning gives it a different DOI, else the `article/view/{id}/version/{publicationId}` URL, OJS and OPS only when the address is included; OMP `catalog/book/{id}/version/{publicationId}`). While any journal has both settings on, the per-version union makes the record query fail on the test database (A22), so Rules 20 and 20a rest on this reading: a second major version published on screen got its own DOI, and after its "Unpublish" the database held one tombstone, for `…/version/VoR/1` (Rule 20a); publishing it again removed that tombstone. A new journal stores `enableDois` 1, "Articles" ticked and no prefix. Live-probed 2026-09-26 (Rules 20, 20a, 20b; Settings bullet 6): note q20.
+**r** — Versions (OJS). `OAIDAO::getRecordsRecordSetQuery()` treats journals with `doiVersioning = 1` and `enableDois = 1` (`Context::SETTING_DOI_VERSIONING`, `SETTING_ENABLE_DOIS`) apart: their records come from a second query over every published publication of stage `AO`, `PMUR` or `VoR` (`APP\publication\enums\VersionStage`), the latest minor per stage and major; `setOAIData()` gives the current publication the bare identifier and the others `/version/{stage}/{major}`, pointing the submission's `currentPublicationId` at the rendered version. `JournalOAI::versionToPublicationId()` resolves a versioned identifier. `ArticleTombstoneManager` tombstones and restores versioned identifiers as versions are unpublished and published. DOI tab: `PKPDoiSetupSettingsForm` `enableDois` ("Allow Digital Object Identifiers (DOIs) to be assigned to work published in this journal."), `doiVersioning` "DOI Versioning" with "Yes, assign a unique DOI to every version of an article." / "No, all versions of an article should have the same DOI." (a null setting shows "No" on OJS). Relation: `Repo::publication()->getVersionRelation()` (the immediately preceding published version; its DOI URL when versioning gives it a different DOI, else the `article/view/{id}/version/{publicationId}` URL, OJS and OPS only when the address is included; OMP `catalog/book/{id}/version/{publicationId}`). Before pkp/ojs#5947 (A22) the per-version union made the record query fail on PostgreSQL while any journal had both settings on, so Rules 20a and 20b rest on this reading, Rules 20 and 20b on the drive of note q20a too: a second major version published on screen got its own DOI, and after its "Unpublish" the database held one tombstone, for `…/version/VoR/1` (Rule 20a); publishing it again removed that tombstone. A new journal stores `enableDois` 1, "Articles" ticked and no prefix. Live-probed 2026-09-26 (Rules 20, 20a, 20b; Settings bullet 6): note q20.
 
 <a id="fn-s"></a>
-**s** — Seeding for the scenarios. Each scenario runs on its own scratch contexts from `POST scenarios/context` (`docs/process/scenarios.md`), with throwaway `users[]` (password: the username twice, `docs/process/users.md`): an `author` (`givenName` "Ada", `familyName` "Author") who submits every item, and a `manager` (the Journal Manager, Press Manager or Preprint Server Manager) in scenarios 3, 7 and 9; scenario 6's Site Administrator is the installer's `admin`. The visitor is a signed-out browser context of its own; the suites read the raw XML through a request (`page.request`) in a fresh request context, following redirects, and open the rendered page only for the browser-view checks (scenario 1's "The browser view", the Login pages of scenario 6). Items come from `POST scenarios/submission` by the `author` with `published: true` and no `datePublished` (so every record's datestamp and "Date" are the day of the run, UTC by the suites' configuration); galleys are `galleys: [{label: 'PDF', file: 'article.pdf'}]` on OJS and `preprint.pdf` on OPS; a press's format is `publicationFormats: [{name: 'PDF', file: 'article.pdf'}]`. A first section's `abbrev` is given as a bare string (a locale map stores "Array", scenarios.md). The OAI requests are typed addresses; the unpublish, the second publish, "Enable OAI", the plugin ticks, the JATS window and the Hosted Journals window are the screens'. Scenario 1: context `name` "Sea Letters", `contactName` "Pat Contact", `contactEmail` "pat.contact@example.org", `sections: [{abbrev: 'ART', title: 'Articles'}]` (OPS `{abbrev: 'PRE', title: 'Preprints'}`), on OJS `issues: [{volume: 1, number: 2, year: 2026}]` (unpublished); "Tidal Patterns" (`abstract` "Tides follow the moon.", OJS and OPS `keywords: ['tides', 'moon']`, published with its galley; OMP `publicationFormats: [{name: 'PDF', file: 'article.pdf'}, {name: 'EPUB'}]`, and "Bare Book" published with no `publicationFormats`); "Draft Study" `submitted: true`, not published; on OJS "Future Tides" `published: true` with `issue` Vol. 1 No. 2 (2026), which schedules it; a second context with "Elsewhere" published. The "Repository Identifier" is the install's (`ojs-test.localhost`, `omp-test.localhost`, `ops-test.localhost`, `config.test.inc.php`). Scenario 2: contexts "Sea Letters" with "Tidal Patterns" and "Hill Notes" with "Mountain Air", each one-language; the site's languages and its empty "Site Name" are the test install's (seed-facts). Scenario 3: "Tidal Patterns", then "Coral Reefs", published (OMP each with the one format); the unpublish and the second publish by the `manager` on the workflow screen. Scenario 4: "Sea Letters" with "Tidal Patterns" published; on OPS a second context "Empty Shelf" with nothing. Scenario 5: OJS and OPS `sections: [{abbrev: 'ART', title: 'Articles'}, {abbrev: 'REV', title: 'Reviews'}]`, "Tidal Patterns" (`section: 'ART'`) seeded and published before "Hill Review" (`section: 'REV'`); OMP two books, no series; "today", "tomorrow" and "yesterday" are UTC dates. Scenario 6: "Sea Letters" with "Tidal Patterns"; "Hill Notes" with `restrictSiteAccess: true` and "Mountain Air". Scenario 7 (OJS, OPS): "Tidal Patterns" and "Coral Reefs" published; the `enableOai` key is not used, the tab is driven. Scenario 8 (OJS): `sections: [{abbrev: 'ART', title: 'Articles', identifyType: 'Research Article'}]`, `issues: [{volume: 1, number: 2, year: 2026, published: true}]`; "Tidal Patterns" with `subtitle` "A Study", the abstract, `disciplines: ['Marine Science']`, `subjects: ['Oceanography']`, `articleNumber: 'e0142'`, its galley and that `issue`; "Loose Notes" published with no `issue`. Scenario 9 (OJS): "Tidal Patterns" with its PDF galley and "Marked Tides" with `galleys: [{label: 'XML', file: 'article.xml'}]` (the JATS fixture as an XML galley), both in no issue; no `plugins` key, so "JATS Metadata Format" is off and "JATS Template Plugin" on, as on every new journal (seed-facts). Scenario 10 (OJS): "Paid Letters" with `publishingMode: 'subscription'`, `plugins: {oaimetadataformatplugin_jats: {enabled: true}, driverplugin: {enabled: true}}` ("DRIVER" by its class name, lowercased) and `issues: [{volume: 1, number: 1, year: 2026, published: true, accessStatus: 'open'}, {volume: 1, number: 2, year: 2026, published: true}]` (an issue published under subscriptions is "Subscription"); "Open Tides" into the first issue, "Closed Tides" and "Opened Tides" (`accessStatus: 'open'`) into the second, each with its galley; "Print Letters" with `publishingMode: 'none'` and "Paper Tides" published with its galley. `publicknowledge` is never read: it has no published item on a fresh fleet, and on a used fleet the suites publish into it and it holds deleted records on every app (on OMP a format set "Not Available" leaves one), which every OJS journal's and OMP press's own lists show (A1), so no scenario asserts a journal's unfiltered list to be complete or empty. No scenario seeds `doiVersioning: true`: while any OJS journal has "DOI Versioning" on, every OJS OAI read fails (A22), and the three suites share one install. A context with more than one language answers its plain address with a redirect and the app remembers the last language a browser asked for, hence the fresh request context. The mail catcher is not read: nothing is emailed (Side effects). Live-probed 2026-09-26 (the preamble): every probe of this spec ran this way, all three apps; a signed-in staff browser reads a different `jats` answer from a harvester's (Actors), so the visitor stays signed out.
+**s** — Seeding for the scenarios. Each scenario runs on its own scratch contexts from `POST scenarios/context` (`docs/process/scenarios.md`), with throwaway `users[]` (password: the username twice, `docs/process/users.md`): an `author` (`givenName` "Ada", `familyName` "Author") who submits every item, and a `manager` (the Journal Manager, Press Manager or Preprint Server Manager) in scenarios 3, 7 and 9; scenario 6's Site Administrator is the installer's `admin`. The visitor is a signed-out browser context of its own; the suites read the raw XML through a request (`page.request`) in a fresh request context, following redirects, and open the rendered page only for the browser-view checks (scenario 1's "The browser view", the Login pages of scenario 6). Items come from `POST scenarios/submission` by the `author` with `published: true` and no `datePublished` (so every record's datestamp and "Date" are the day of the run, UTC by the suites' configuration); galleys are `galleys: [{label: 'PDF', file: 'article.pdf'}]` on OJS and `preprint.pdf` on OPS; a press's format is `publicationFormats: [{name: 'PDF', file: 'article.pdf'}]`. A first section's `abbrev` is given as a bare string (a locale map stores "Array", scenarios.md). The OAI requests are typed addresses; the unpublish, the second publish, "Enable OAI", the plugin ticks, the JATS window and the Hosted Journals window are the screens'. Scenario 1: context `name` "Sea Letters", `contactName` "Pat Contact", `contactEmail` "pat.contact@example.org", `sections: [{abbrev: 'ART', title: 'Articles'}]` (OPS `{abbrev: 'PRE', title: 'Preprints'}`), on OJS `issues: [{volume: 1, number: 2, year: 2026}]` (unpublished); "Tidal Patterns" (`abstract` "Tides follow the moon.", OJS and OPS `keywords: ['tides', 'moon']`, published with its galley; OMP `publicationFormats: [{name: 'PDF', file: 'article.pdf'}, {name: 'EPUB'}]`, and "Bare Book" published with no `publicationFormats`); "Draft Study" `submitted: true`, not published; on OJS "Future Tides" `published: true` with `issue` Vol. 1 No. 2 (2026), which schedules it; a second context with "Elsewhere" published. The "Repository Identifier" is the install's (`ojs-test.localhost`, `omp-test.localhost`, `ops-test.localhost`, `config.test.inc.php`). Scenario 2: contexts "Sea Letters" with "Tidal Patterns" and "Hill Notes" with "Mountain Air", each one-language; the site's languages and its empty "Site Name" are the test install's (seed-facts). Scenario 3: "Tidal Patterns", then "Coral Reefs", published (OMP each with the one format); the unpublish and the second publish by the `manager` on the workflow screen. Scenario 4: "Sea Letters" with "Tidal Patterns" published; on OPS a second context "Empty Shelf" with nothing. Scenario 5: OJS and OPS `sections: [{abbrev: 'ART', title: 'Articles'}, {abbrev: 'REV', title: 'Reviews'}]`, "Tidal Patterns" (`section: 'ART'`) seeded and published before "Hill Review" (`section: 'REV'`); OMP two books, no series; "today", "tomorrow" and "yesterday" are UTC dates. Scenario 6: "Sea Letters" with "Tidal Patterns"; "Hill Notes" with `restrictSiteAccess: true` and "Mountain Air". Scenario 7 (OJS, OPS): "Tidal Patterns" and "Coral Reefs" published; the `enableOai` key is not used, the tab is driven. Scenario 8 (OJS): `sections: [{abbrev: 'ART', title: 'Articles', identifyType: 'Research Article'}]`, `issues: [{volume: 1, number: 2, year: 2026, published: true}]`; "Tidal Patterns" with `subtitle` "A Study", the abstract, `disciplines: ['Marine Science']`, `subjects: ['Oceanography']`, `articleNumber: 'e0142'`, its galley and that `issue`; "Loose Notes" published with no `issue`. Scenario 9 (OJS): "Tidal Patterns" with its PDF galley and "Marked Tides" with `galleys: [{label: 'XML', file: 'article.xml'}]` (the JATS fixture as an XML galley), both in no issue; no `plugins` key, so "JATS Metadata Format" is off and "JATS Template Plugin" on, as on every new journal (seed-facts). Scenario 10 (OJS): "Paid Letters" with `publishingMode: 'subscription'`, `plugins: {oaimetadataformatplugin_jats: {enabled: true}, driverplugin: {enabled: true}}` ("DRIVER" by its class name, lowercased) and `issues: [{volume: 1, number: 1, year: 2026, published: true, accessStatus: 'open'}, {volume: 1, number: 2, year: 2026, published: true}]` (an issue published under subscriptions is "Subscription"); "Open Tides" into the first issue, "Closed Tides" and "Opened Tides" (`accessStatus: 'open'`) into the second, each with its galley; "Print Letters" with `publishingMode: 'none'` and "Paper Tides" published with its galley. `publicknowledge` is never read: it has no published item on a fresh fleet, and on a used fleet the suites publish into it and it holds deleted records on every app (on OMP a format set "Not Available" leaves one), which every OJS journal's and OMP press's own lists show (A1), so no scenario asserts a journal's unfiltered list to be complete or empty. No scenario seeds `doiVersioning: true`: before pkp/ojs#5947 (A22) every OJS OAI read failed while any OJS journal had "DOI Versioning" on, and the three suites share one install (Coverage, Planned). A context with more than one language answers its plain address with a redirect and the app remembers the last language a browser asked for, hence the fresh request context. The mail catcher is not read: nothing is emailed (Side effects). Live-probed 2026-09-26 (the preamble): every probe of this spec ran this way, all three apps; a signed-in staff browser reads a different `jats` answer from a harvester's (Actors), so the visitor stays signed out.
 
 <a id="fn-t"></a>
 **t** — Configuration `[oai]` (`config.TEMPLATE.inc.php`): `oai = On` ("Enable OAI front-end to the site"), `repository_id` ("OAI Repository identifier. This setting forms part of OAI-PMH record IDs. Changing this setting may affect existing clients and is not recommended."), `oai_max_records = 100`. The installer (`lib/pkp/templates/install/install.tpl`, `InstallForm`) asks "Repository Identifier" under "OAI Settings", default `{application}.{server host}`. Off: OJS and OPS `OAIHandler::validate()` redirect to the context's (site's) `index`; OMP `authorize()` returns false → `handleAuthorizationFailure()` (Login signed out, else `user/authorizationDenied`). The test installs run with `oai = On`, `repository_id` `ojs-test.localhost` / `omp-test.localhost` / `ops-test.localhost`, `oai_max_records = 100`; PRINCIPLES D9 forbids editing the running configuration, and the validation-variant server (harness.md) flips no OAI key, so the interface's off end (Rule 24; Actors row 1's condition) is read from the code. Live-probed 2026-09-26 (Settings bullet 14; Rule 24's last sentence), all three apps: Administration › "System Information" lists the group "oai" with "oai" 1, "repository_id" and "oai_max_records" 100, read-only; no settings page of a context, nor Site Settings, Hosted Journals or the Administration index, carries an OAI switch.
@@ -2087,6 +2099,9 @@ Code read 2026-09-26 at the checkouts: ojs `71bb244152` (the working tree) and `
 
 <a id="fn-q20"></a>
 **q20** — Live-probed 2026-09-26 (Rules 20, 20a, 20b; Settings bullet 6; A22), OJS: a new journal had DOIs on, "Articles" ticked, no "DOI Prefix" and "No, all versions of an article should have the same DOI.". Without a prefix no DOI reached the record; with one, the DOI was in "Resource Identifier" and `marcxml` 024, not in `oai_marc`. With "DOI Versioning" at "Yes, …" saved on screen, every list, record and Identify request at that journal, a second journal and the site-wide address answered a server error with an empty page (ListSets answered), before and after a second major version was published, which got its own DOI; set back to "No", they answered again. On a journal without versioning, versions 1.0 and 2.0 gave one record, `…/version/VoR/1` answered "No matching identifier in this repository", and "Relation" and MARC 780 named 1.0 by its address.
+
+<a id="fn-q20a"></a>
+**q20a** — Live-probed 2026-10-16 (Rules 20, 20b; A22, A27), OJS, at pkp/ojs#5947's head `dd219baf6d`, before its merge (`walk.js versions` and `neighbour`, each on a fresh copy of PKP's default dataset). As `dbarnes`, "DOI Versioning" "Yes" with no "DOI Prefix" stored; article 17's "Create New Version", "Major Revision", "Publish": publication 18 (VoR 1.0) and 22 (VoR 2.0, current), both published. ListRecords, ListIdentifiers and the site-wide ListRecords held `article/1`, `article/17/version/VoR/1` and `article/17`, in that order. GetRecord of `…/version/VoR/1`: "Date" 2026-10-12 (1.0's), "Resource Identifier" `…/article/view/17` only (no DOI: 1.0 never had one), "Relation" `…/article/view/17/3` (galley 3, publication 18's PDF). GetRecord of `article/17`: "Date" the day of the run, the DOI `10.1234/…` beside the address, "Relation" galley 4 and `…/article/view/17/version/18`. Identify answered. `neighbour`: at "No", article 17's "Unpublish" made it a deleted record in both lists, GetRecord and the site-wide list; "Yes" saved after it changed none of these answers.
 
 <a id="fn-q21"></a>
 **q21** — Live-probed 2026-09-26 (Rules 23, 23a; A11, A23, A24), OJS, two runs: "DRIVER" ticked on screen asked nothing and showed 'The plugin "DRIVER" has been enabled.'; ListSets added `driver` "Open Access DRIVERset". On an open journal an article with a galley and one with none were both members, each header naming "driver". On a subscription journal an article in an open issue and one marked "Open Access" in a subscription issue were members; one in a subscription issue, one past its open access date and one in no issue were not. "Users must be registered and log in to view open access content." (and the site box) ticked emptied the set; unticked, the members were back. `set=driver` said "There are more results." with "completeListSize" 5 for two members, and "Resume" returned the same two again. An article in no issue unpublished with the plugin on showed "Status: Unscheduled" and "Schedule For Publication", its page answered 404 signed out, and its deleted record carried no `driver` mark. No deleted record was listed in the set on these scratch journals, none of them the installation's first (A1), and the site-wide address had no `driver` set. On the first journal: note q22.
@@ -2175,7 +2190,7 @@ Issue report: [pkp-e2e#310](https://github.com/jardakotesovec/pkp-e2e/issues/310
 **f-a21** — Live-probed 2026-09-26, OJS and OPS: note q19; the record headers read at `…/fr_CA/oai` named "{path}:ARTF". Code: note j (`getLocalizedAbbrev()` under the request's locale).
 
 <a id="fn-f-a22"></a>
-**f-a22** — Live-probed 2026-09-26, OJS, in three drives: while four journals of the install had "DOI Versioning" on, every Identify, list and record request of every journal and of the site-wide address answered 500 with an empty body; after "No" was saved on them, 200; a scratch journal set to "Yes" on screen brought the 500s back for 37 seconds, "No" removed them (note q20). The server log: `SQLSTATE[42804]: Datatype mismatch: 7 ERROR: UNION types text and bigint cannot be matched`, from the per-version branch of `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` (`NULL AS tombstone_id` against the tombstones' bigint), reached through `PKPOAIDAO::getEarliestDatestamp()` and the record lists. The test installs run Postgres; MySQL, whose union typing is looser, was not tried.
+**f-a22** — Live-probed 2026-09-26, OJS, in three drives: while four journals of the install had "DOI Versioning" on, every Identify, list and record request of every journal and of the site-wide address answered 500 with an empty body; after "No" was saved on them, 200; a scratch journal set to "Yes" on screen brought the 500s back for 37 seconds, "No" removed them (note q20). The server log: `SQLSTATE[42804]: Datatype mismatch: 7 ERROR: UNION types text and bigint cannot be matched`, from the per-version branch of `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` (`NULL AS tombstone_id` against the tombstones' bigint), reached through `PKPOAIDAO::getEarliestDatestamp()` and the record lists. The test installs run Postgres; MySQL, whose union typing is looser, was not tried. Fix verified 2026-10-16 at pkp/ojs#5947's head `dd219baf6d` (one commit on `79c3676d1b`, the OJS `main` tip; `lib/pkp` `7a20f715db`), before its merge, on PKP's default dataset (PostgreSQL), the report's kept walk (`checks/issues/doi-versioning-oai-requests-fail/walk.js`) at the base and the head, each on a fresh dataset. Base: with "Yes" saved, every address but ListSets answered 500 (the error above), "No" brought them back. Head: every address answered 200 at "Yes", ListRecords and ListIdentifiers holding `article/1` and `article/17` as at "No"; `versions` and `neighbour` as note q20a says. The PR's `tests/classes/oai/OAIDAOTest.php` passed 3 of 3 at the head and failed 2 of 3 against the base's `OAIDAO.php` with the same `UNION types text and bigint` error, journal 1's settings unchanged after both runs. The DRIVER set (`DRIVERDAO`) reads the same query, so it takes the fix too: code only, not driven. MySQL and MariaDB not run (PKP's CI runs the test on both).
 Issue report: [pkp-e2e#281](https://github.com/jardakotesovec/pkp-e2e/issues/281) ([docs/issues/U19-A22-doi-versioning-oai-requests-fail.md](../issues/U19-A22-doi-versioning-oai-requests-fail.md)).
 
 <a id="fn-f-a23"></a>
@@ -2191,6 +2206,9 @@ Issue report: [pkp-e2e#341](https://github.com/jardakotesovec/pkp-e2e/issues/341
 
 <a id="fn-f-a26"></a>
 **f-a26** — Not run: the test installs, and every install the campaign drives, run PostgreSQL; no MySQL or MariaDB was at hand on 2026-10-05. Code: note e; OJS `APP\oai\ojs\OAIDAO::getRecordsRecordSetQuery()` writes the datestamp as `GREATEST(a.last_modified, i.last_modified, p.last_modified)` over `leftJoin('issues AS i', …)`, so for an article in no issue `i.last_modified` is NULL; MySQL's and MariaDB's `GREATEST` returns NULL when any argument is NULL, PostgreSQL's ignores NULL arguments. Read 2026-10-01 for the issue report of A18 (its Cause and "Unverified", [docs/issues/U19-A18-oai-datestamp-stays-after-edit-republish.md](../issues/U19-A18-oai-datestamp-stays-after-edit-republish.md)), which does not copy the expression into its fix. What the record's datestamp then reads in a list without dates was not followed. The question and lean are judgment.
+
+<a id="fn-f-a27"></a>
+**f-a27** — Live-probed 2026-10-16 at pkp/ojs#5947's head (note q20a), OJS: the earlier version's record gave `…/article/view/17` as its only "Resource Identifier"; that page showed version 2.0. Code: `APP\oai\ojs\OAIDAO::setOAIData()` points the submission's `currentPublicationId` at the rendered version, while `plugins/metadata/dc11/filter/Dc11SchemaArticleAdapter.php` writes "Resource Identifier" as `article/view/{getBestId()}` (line 172), with no version. Not the PR's: the per-version records came with `pkp/ojs#5674`, and the PR only reorders the UNION.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Live-probed 2026-09-26: note q7; a format set "Not Available" in its "Format Availability" window left the list and its GetRecord answered "No matching identifier in this repository"; "Available" again brought it back. Code: note e (`publication_formats`, `pf.is_available = 1`); the OMP Dublin Core adapter works on a publication format (note f).
