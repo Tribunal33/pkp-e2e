@@ -3,22 +3,15 @@
  * @file playwright/tests/U03-user-profile.spec.js
  *
  * User profile — OJS suite, one test per canonical scenario the spec runs on
- * OJS (scenarios 1–12, all common; the spec lists no OJS-specific scenario).
+ * OJS (scenarios 1–13, all common; the spec lists no OJS-specific scenario).
+ * Scenarios 1–12 are here; scenario 13 changes a site-wide setting and runs
+ * in the serial project, `serial/U03-user-profile.spec.js`.
  * Spec: docs/specs/U03-user-profile.md
  *
- * Deliberately NOT covered (register IDs from the spec's Findings register —
- * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap):
- * A2 🐞, A18 🐞, A4 🐞, A5 ❓, A6 ❓, A7 🐞, A8 ❓, A9 ❓, A10 🐞, A11 🐞,
- * A12 🐞, A14 🐞. Where a test passes through one (S3 presses a tab after
- * the refused Contact save, A17; S7 saves the corrected homepage (A15 retired); S4
- * reads the confirmation where the app delivers it, A8; S8 saves after the
- * refusals, A11) it asserts the effect the spec states and leaves the
- * finding's own claim unasserted either way. S12 reads the first
- * contributor's name and ORCID field as the screen shows them today, the
- * given-plus-family name with an empty preferred-name box and "Request
- * verification", because the register's A13 ❓ and A16 ❓ describe exactly
- * that; the read is a record of today's screen, never a pass of the hint's
- * promise. The spec's Coverage section records everything else left out.
+ * Deliberately NOT covered, by register ID (a 🐞 is never asserted as the
+ * contract, a ❓ is parked, not a gap): A2, A4, A5, A6, A7, A8, A9, A10,
+ * A11, A12, A13, A14, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25,
+ * A26. The spec's Coverage section is the record of the rest.
  *
  * Isolation: every account that changes is a throwaway user in a scratch
  * journal seeded through the scenario endpoint (unique tags); the roster
@@ -35,7 +28,12 @@
  * silence claim is bounded by a message the test itself triggers. A
  * refused image upload raises a browser alert (Rule 9a), so S7 records
  * every dialog before its uploads; S3 answers the unsaved-changes question
- * itself; S9 answers the delete question. No hard-coded waits.
+ * itself; S9 answers the delete question. S9's "application" is a request
+ * the test sends itself, as the spec's scenario names it (fn-s): a
+ * cookie-less `GET {context}/api/v1/submissions` with the key as a bearer
+ * token. S2's journal takes French on its forms, S3's English alone, so the
+ * two read the multilingual pop-up panel's presence and absence. No
+ * hard-coded waits.
  */
 const path = require('path');
 const {test, expect} = require('../support/fixtures.js');
@@ -73,6 +71,7 @@ const NOTIFICATIONS_INTRO =
 const NOTIFICATION_GROUPS = ['Public Announcements', 'Submission Events', 'Reviewing Events', 'Editors'];
 const API_KEY_GENERATE_NOTE = 'Generating a new API key will invalidate any existing key for this user.';
 const API_KEY_REMOVE_NOTE = 'Deleting a key will revoke access to any application that uses it.';
+const API_UNAUTHORIZED = 'You are not authorized to access the requested resource.';
 const IMAGE_FIXTURE = path.resolve(__dirname, '../fixtures/files/profile-image-400.png');
 const TEXT_FIXTURE = path.resolve(__dirname, '../fixtures/files/not-an-image.txt');
 const TEXT_AS_IMAGE_FIXTURE = path.resolve(__dirname, '../fixtures/files/not-an-image.png');
@@ -197,6 +196,25 @@ async function requestEmailChange(profile, newEmail) {
     await expect(profile.email()).toHaveAttribute('readonly', /.*/);
 }
 
+/**
+ * "An application at hand that sends the journal's API a request carrying a
+ * key it is given" (S9): a cookie-less request context sending
+ * `GET {context}/api/v1/submissions` with the key as a bearer token (fn-s,
+ * note h). Returns the response's status and body text.
+ */
+async function applicationRequest(playwright, baseURL, contextPath, key) {
+    const application = await playwright.request.newContext({baseURL, storageState: {cookies: [], origins: []}});
+    try {
+        const response = await application.get(`/index.php/${contextPath}/api/v1/submissions`, {
+            headers: {Authorization: `Bearer ${key}`, Accept: 'application/json'},
+            maxRedirects: 0,
+        });
+        return {status: response.status(), body: await response.text()};
+    } finally {
+        await application.dispose();
+    }
+}
+
 /** Open the user menu's "Edit Profile" and wait for the Identity tab. */
 async function openEditProfile(page, contextPath) {
     await openUserNav(page);
@@ -307,10 +325,12 @@ test.describe('user profile', () => {
         const manager = `${tag}mg`;
         const email = `${username}@mail.test`;
         const preferredName = `Dr. Pat Profile ${tag}`;
-        // French among the journal's languages, so its French listing address works (fn-s).
+        // French among the journal's languages, so its French listing address
+        // works, and among its form languages, so the multilingual boxes carry
+        // the French pop-up panel (fn-s, note j).
         await ojsApi.createContext({
             tag,
-            context: {supportedLocales: ['en', 'fr_CA']},
+            context: {supportedLocales: ['en', 'fr_CA'], supportedFormLocales: ['en', 'fr_CA']},
             users: [
                 {username, givenName: 'Ulla', familyName: 'Bergmann', roles: ['author']},
                 {username: manager, givenName: 'Mona', familyName: 'Manager', roles: ['manager']},
@@ -355,6 +375,31 @@ test.describe('user profile', () => {
             await expect(avatar).toBeVisible();
             await expect(avatar).toContainText(username);
             await expect(avatar).not.toContainText(preferredName);
+
+            // The French boxes: clicking into a multilingual box opens a small
+            // pop-up panel named for French with a second box; each field has
+            // its own panel (Fields & validation, the multilingual fields).
+            // Closed before the click, the panel's own hidden state is the
+            // control for "opens".
+            await expect(profile.localePopover('identity', 'givenName')).toBeHidden();
+            await profile.givenName().click();
+            await expect(profile.localePopover('identity', 'givenName')).toBeVisible();
+            await expect(profile.localePopoverLabel('identity', 'givenName')).toHaveText('(French)');
+            await expect(profile.localePopoverBox('identity', 'givenName', 'fr_CA')).toBeVisible();
+            await expect(profile.localePopover('identity', 'familyName')).toBeHidden();
+            await profile.open('contact');
+            await expect(profile.localePopover('contact', 'affiliation')).toBeHidden();
+            await profile.affiliation().click();
+            await expect(profile.localePopover('contact', 'affiliation')).toBeVisible();
+            await expect(profile.localePopoverLabel('contact', 'affiliation')).toContainText('French');
+            await expect(profile.localePopoverBox('contact', 'affiliation', 'fr_CA')).toBeVisible();
+            await profile.open('public');
+            await expect(profile.localePopover('public', 'biography')).toBeHidden();
+            await profile.focusBio();
+            await expect(profile.localePopover('public', 'biography')).toBeVisible();
+            await expect(profile.localePopoverLabel('public', 'biography')).toContainText('French');
+            await expect(profile.localePopover('public', 'biography').locator('iframe[id^="biography-fr_CA"]')).toBeVisible();
+            await profile.open('identity');
 
             // The Journal Manager's Users & Roles lists the preferred name
             // (Rule 4).
@@ -464,6 +509,16 @@ test.describe('user profile', () => {
             await expect(profile.phone()).toHaveValue('555 0100');
             await expect(profile.affiliation()).toHaveValue('Contact Institute');
             await expect(profile.country()).toHaveValue('CA');
+
+            // One box per field: the journal takes English alone on its forms,
+            // so clicking into "Affiliation" opens no pop-up panel and the
+            // field has one box (Fields & validation, the multilingual fields;
+            // S2's French journal is where the panel opens). The focused box
+            // is the read's control.
+            await profile.affiliation().click();
+            await expect(profile.affiliation()).toBeFocused();
+            await expect(profile.localePopovers('contact')).toHaveCount(0);
+            await expect(profile.form('contact').locator('input[name^="affiliation["]')).toHaveCount(1);
 
             // "Working Languages": one box per site language; the second
             // ticked and saved, held on reopening, the site still shown in
@@ -937,12 +992,21 @@ test.describe('user profile', () => {
             expect(saves.count).toBe(0);
             await expect(profile.bioEditorBody()).toContainText(bio);
 
-            // Corrected: saved at the top right (that the refusal sentence is
-            // gone is a Planned assertion; A15 retired 2026-10-07).
-            await profile.homepage().fill('https://example.org/home');
+            // Corrected: typed key by key, the refusal goes from under the box
+            // before any save (its visible line just above is the control);
+            // the save shows the saved message at the top right alone, and
+            // the refusal is still not under the box (Rule 9c).
+            await expect(profile.homepageError()).toHaveText(URL_INVALID);
+            await profile.typeHomepage('https://example.org/home');
+            await expect(profile.homepageError()).toBeHidden();
+            expect(saves.count).toBe(0);
             await profile.save();
             expect(saves.count).toBe(1);
             await expect(profile.toast).toContainText(SAVED_MESSAGE);
+            await expect(profile.toast).not.toContainText(URL_INVALID);
+            await expect(profile.inTabNotice('public')).not.toContainText(SAVED_MESSAGE);
+            await expect(profile.homepageError()).toBeHidden();
+            await expect(profile.fieldError(URL_INVALID)).toHaveCount(0);
 
             // "Delete": the page reloads without the button; the bio and the
             // homepage stay (Rule 9b).
@@ -983,11 +1047,28 @@ test.describe('user profile', () => {
             const profile = new ProfilePage(first.page, tag);
             await profile.goto('password');
             await expect(profile.form('password').getByText(PASSWORD_TOO_SHORT)).toBeVisible();
+            const saves = countSaves(first.page);
+
+            // All three boxes empty: the browser stops the save before
+            // anything is sent, with "This field is required." under "Current
+            // password" and "New password", not under "Repeat new password",
+            // and no "Errors occurred processing this form" notice (Fields &
+            // validation, Password tab). The two lines shown are the control
+            // for the third's absence; the later refused saves, sent and
+            // answered with the notice, are the control for "nothing sent".
+            await profile.saveButton().click();
+            await expect(profile.passwordBoxError('current')).toHaveText(REQUIRED);
+            await expect(profile.passwordBoxError('new')).toHaveText(REQUIRED);
+            await expect(profile.passwordBoxError('repeat')).toHaveCount(0);
+            await expect(profile.form('password').locator('label.error:visible')).toHaveCount(2);
+            await expect(profile.passwordErrorNotice()).toHaveCount(0);
+            expect(saves.count).toBe(0);
 
             // A wrong current password: the notice with that sentence, the
             // three boxes emptied (Rule 10a).
             await profile.fillPasswords({current: `wrong${tag}`, next});
             await profile.save();
+            expect(saves.count).toBe(1);
             await expect(profile.passwordErrorNotice()).toContainText(ERRORS_HEADING);
             await expect(profile.passwordErrorNotice()).toContainText(CURRENT_PASSWORD_WRONG);
             await expect(profile.currentPassword()).toHaveValue('');
@@ -1056,7 +1137,7 @@ test.describe('user profile', () => {
         }
     });
 
-    test('S9: create and delete an API key', async ({browser, baseURL, ojsApi}, testInfo) => {
+    test('S9: create and delete an API key', async ({browser, baseURL, ojsApi, playwright}, testInfo) => {
         test.slow();
         const tag = makeTag('s9', testInfo);
         const username = `${tag}au`;
@@ -1093,21 +1174,35 @@ test.describe('user profile', () => {
             await profile.goto('apiKey');
             await expect(profile.apiKeyBox()).toHaveValue(key);
 
+            // An application using the key: its request is answered, not
+            // refused (Side effects; note h).
+            const answered = await applicationRequest(playwright, baseURL, tag, key);
+            expect(answered.status, answered.body).toBe(200);
+            expect(answered.body).not.toContain(API_UNAUTHORIZED);
+
             // "Delete" then Cancel in the browser's dialog: the key stays and
-            // nothing is sent (Rule 12c; the OK press below is the control).
+            // nothing is sent (Rule 12c; the OK press below is the control);
+            // the application's request, sent again, is still answered.
             await profile.deleteApiKey({confirm: false});
             await expect(profile.apiKeyBox()).toHaveValue(key);
             await expect(profile.deleteApiKeyButton()).toBeVisible();
             expect(saves.count).toBe(1);
+            const stillAnswered = await applicationRequest(playwright, baseURL, tag, key);
+            expect(stillAnswered.status, stillAnswered.body).toBe(200);
 
             // "Delete" then OK: back to "None" with "Create API Key", saved
-            // inside the tab.
+            // inside the tab again; the application's request with the
+            // deleted key is refused at once (Side effects, "On deleting an
+            // API key"; the two answered requests above are the control).
             await profile.deleteApiKey({confirm: true});
             expect(saves.count).toBe(2);
             await expect(profile.apiKeyBox()).toHaveValue('None');
             await expect(profile.createApiKeyButton()).toBeVisible();
             await expect(profile.deleteApiKeyButton()).toHaveCount(0);
             await expect(profile.inTabNotice('apiKey')).toContainText(SAVED_MESSAGE);
+            const refused = await applicationRequest(playwright, baseURL, tag, key);
+            expect(refused.status, refused.body).toBe(401);
+            expect(refused.body).toContain(API_UNAUTHORIZED);
 
             // A second key differs from the deleted one (Rule 12b).
             await profile.createApiKey();

@@ -2729,6 +2729,7 @@ These keys do not exist. They are ideas recorded from an earlier harness.
   `published: true`, so an unpublished article in an issue, or one whose
   Publication Settings must save on a journal with a published issue, is
   assigned on screen; U44, U13, U16 claim checks).
+- Site: `POST site` `passwordUncompromisedEnabled` and `minPasswordLength` (Site Setup › Security, "Check passwords against compromised password databases" and "Minimum password length (characters)"); U03 S13 and U60 set them on the screen and put them back with the app's own `PUT index/api/v1/site` (U03 revision, 2026-10-16).
 - Decision: `toAuthor`, `toReviewers`, `toEditor`.
 - Submission: `tasks[].ageMinutes` (a seeded discussion or task whose
   headnote is older than the one-hour edit window, pkp/pkp-lib#12278; a

@@ -81,7 +81,7 @@ Each of these has bitten at least once.
    empty: type it from the keyboard (select all, Delete, the date, Tab)
    into the visible box, `[name="<field>-removed"]`, since the input
    named `<field>` is the hidden one the form posts (lib/pkp
-   FormHandler; U13 PFL settings, U50 Issues forms, U72 chapters). A closed Vue side modal (and a legacy one closed
+   FormHandler; U13 PFL settings, U50 Issues forms, U72 chapters). A refusal line jQuery validate put under a legacy form's box (`label.error`) clears on the box's keyup, so a test that reads it going types the corrected value (`pressSequentially`); `fill()` leaves it (U03 S7). A closed Vue side modal (and a legacy one closed
    by its own "Cancel", U32 ccK3) leaves a hidden shell in the DOM until the
    next navigation, so `getByRole` on the table behind it returns nothing
    until then; and a Vue form's "Save" is disabled after a refused save

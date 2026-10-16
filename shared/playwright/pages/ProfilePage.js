@@ -460,6 +460,41 @@ exports.ProfilePage = class ProfilePage extends BasePage {
     }
 
     // ---------------------------------------------------------------------
+    // Multilingual fields (Fields & validation, the multilingual fields)
+    // ---------------------------------------------------------------------
+
+    /**
+     * The small pop-up panel of a multilingual field on a tab, holding the
+     * other form languages' boxes (`form/textInput.tpl`, `textarea.tpl`:
+     * `#{field}-localization-popover-container… .localization_popover`).
+     * Hidden until the first box is focused; absent altogether when the
+     * journal has one form language. Its label names the language:
+     * "(French)" on a text box, "French" on a rich-text one (probed
+     * 2026-10-16, `.reports/U03/screen-notes.md`).
+     *
+     * @param {keyof typeof TAB_FORMS} tab
+     * @param {string} field the box's name without the locale (`givenName`, `affiliation`, `biography`)
+     */
+    localePopover(tab, field) {
+        return this.form(tab).locator(`[id^="${field}-localization-popover-container"] .localization_popover`);
+    }
+
+    /** Every multilingual pop-up panel on a tab (none on a one-form-language journal). */
+    localePopovers(tab) {
+        return this.form(tab).locator('.localization_popover');
+    }
+
+    /** A field's box for one language inside its pop-up panel. */
+    localePopoverBox(tab, field, locale) {
+        return this.localePopover(tab, field).locator(`[name="${field}[${locale}]"]`);
+    }
+
+    /** The pop-up panel's language label ("(French)", or "French" on a rich-text box). */
+    localePopoverLabel(tab, field) {
+        return this.localePopover(tab, field).locator('label');
+    }
+
+    // ---------------------------------------------------------------------
     // Identity (Rules 4–5)
     // ---------------------------------------------------------------------
 
@@ -704,11 +739,21 @@ exports.ProfilePage = class ProfilePage extends BasePage {
         await this.expectOpen('public');
     }
 
-    /** The bio statement's rich-text editor body (one per form language). */
+    /**
+     * The bio statement's rich-text editor body (one per form language).
+     * With two form languages the editors' frames are
+     * `biography-{locale}-{uniq}_ifr`, the primary language's first; with one
+     * there is a single `biography-{uniq}_ifr` naming no language. So `en`
+     * (the fleets' primary language) takes the first bio frame, which is
+     * either, and another locale its own frame alone.
+     */
     bioEditorBody(locale = 'en') {
-        return this.form('public')
-            .frameLocator(`iframe[id^="biography-${locale}"], iframe[id^="biography"]`)
-            .locator('body');
+        const own = `iframe[id^="biography-${locale}-"]`;
+        const frame =
+            locale === 'en'
+                ? this.form('public').locator(`${own}, iframe[id^="biography"]`).first()
+                : this.form('public').locator(own);
+        return frame.contentFrame().locator('body');
     }
 
     /** Wait for the bio editor to be ready before typing into it. */
@@ -726,8 +771,30 @@ exports.ProfilePage = class ProfilePage extends BasePage {
         );
     }
 
+    /** Click into the bio statement's editor (a multilingual box: its pop-up panel opens). */
+    async focusBio(locale = 'en') {
+        await this.expectBioEditorReady();
+        await this.bioEditorBody(locale).click();
+    }
+
     homepage() {
         return this.form('public').locator('input[name="userUrl"]');
+    }
+
+    /**
+     * The browser-side refusal line under "Homepage URL" (`label.error` for
+     * the box). It stays in the page once raised, emptied and hidden when a
+     * keystroke makes the address valid (jQuery validate on keyup; a
+     * Playwright `fill()` sends no keystroke), so read it with `toBeHidden()`.
+     */
+    homepageError() {
+        return this.form('public').locator('label.error[for^="userUrl-"]');
+    }
+
+    /** Type a homepage the way a user does, key by key, after emptying the box. */
+    async typeHomepage(address) {
+        await this.homepage().fill('');
+        await this.homepage().pressSequentially(address);
     }
 
     // ---------------------------------------------------------------------
@@ -756,6 +823,18 @@ exports.ProfilePage = class ProfilePage extends BasePage {
     /** The sentence shown under "New password" in place of its hint. */
     newPasswordSubLabel() {
         return this.form('password').locator('label[for^="password-"], label.sub_label[for^="password"]').first();
+    }
+
+    /**
+     * The browser-side refusal line under one of the three boxes
+     * (`label.error` for `oldPassword-…`, `password-…` or `password2-…`),
+     * e.g. "This field is required." after a "Save" with the boxes empty.
+     *
+     * @param {'current'|'new'|'repeat'} box
+     */
+    passwordBoxError(box) {
+        const name = {current: 'oldPassword', new: 'password', repeat: 'password2'}[box];
+        return this.form('password').locator(`label.error[for^="${name}-"]`);
     }
 
     /** The tab's "Cancel" link (Rule 10c). */

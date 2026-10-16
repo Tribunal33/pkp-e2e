@@ -659,8 +659,9 @@ tooling recipe are in the footnote. <sup>s</sup>
 2. **Rename yourself and change your initials**
 
    Given: an Author, signed in on a scratch journal with French as a
-   second language, on the profile's "Identity" tab; the journal's Journal
-   Manager signed in in a second browser. <sup>s</sup>
+   second language on its screens and among its form languages, on the
+   profile's "Identity" tab; the journal's Journal Manager signed in in a
+   second browser. <sup>s</sup>
 
    - **"Given Name" emptied**: clear "Given Name" and press "Save": "This
      field is required." appears under the box and nothing is saved.
@@ -671,6 +672,11 @@ tooling recipe are in the footnote. <sup>s</sup>
      been saved." appears inside the tab, and nothing at the top right.
    - **The avatar after a reload**: reload the page: the top-right avatar
      shows "ZQ", and the top bar still shows the username.
+   - **The French boxes**: click into "Given Name": a small pop-up panel
+     named for French opens with a second "Given Name" box. On "Contact",
+     click into "Affiliation", and on "Public", into "Bio Statement": each
+     opens its own panel named for French with a second box (Fields &
+     validation, the multilingual fields).
    - **Users & Roles**: the Journal Manager opens the Users & Roles screen,
      "Users" tab: the account is listed under "Dr. Pat Profile".
    - **The same list in French**: the Journal Manager opens the same list
@@ -694,8 +700,9 @@ tooling recipe are in the footnote. <sup>s</sup>
 3. **Update contact details**
 
    Given: an Author, signed in on a scratch journal of a site with two
-   languages, English and French, on the profile's "Contact" tab, with the
-   email address of another existing account at hand. <sup>s</sup>
+   languages, English and French, the journal taking English alone on its
+   forms, on the profile's "Contact" tab, with the email address of
+   another existing account at hand. <sup>s</sup>
 
    - **"Country" left blank**: set "Country" to the blank entry, set "Phone"
      to "555 0100", and save: "This field is required." appears under
@@ -710,6 +717,9 @@ tooling recipe are in the footnote. <sup>s</sup>
      "555 0100" and "Affiliation" to "Contact Institute", and save: "Your
      changes have been saved." at the top right, and reopening the tab
      shows the new values.
+   - **One box per field**: click into "Affiliation": no pop-up panel
+     opens; on a journal with one form language each multilingual field
+     has one box (Fields & validation, the multilingual fields).
    - **"Working Languages"**: the block lists two boxes, one per site
      language; tick the second and save: "Your changes have been saved.";
      reopening the tab shows it ticked, and the site is still shown in the
@@ -866,9 +876,11 @@ tooling recipe are in the footnote. <sup>s</sup>
      "example.org/home" (without "http://") into "Homepage URL" and save:
      "Please enter a valid URL." appears under "Homepage URL" and the bio
      stays in its box.
-   - **The homepage corrected**: correct it to "https://example.org/home"
-     and save: "Your changes have been saved." at the top right, and
-     "Please enter a valid URL." is no longer under the box (Rule 9c).
+   - **The homepage corrected**: correct it to "https://example.org/home":
+     "Please enter a valid URL." goes from under the box as soon as the
+     address is typed, before any save. Save: "Your changes have been
+     saved." at the top right alone, and "Please enter a valid URL." is
+     still not under the box (Rule 9c).
    - **"Delete"**: press "Delete": the page reloads on the "Public" tab
      with no "Delete" button.
    - **Control**: after that reload "Profile bio." and
@@ -880,6 +892,11 @@ tooling recipe are in the footnote. <sup>s</sup>
    Given: an Author, signed in on a scratch journal in two browsers, on the
    profile's "Password" tab in the first. <sup>s</sup>
 
+   - **All three boxes empty**: press "Save" with the three boxes empty:
+     "This field is required." appears under "Current password" and under
+     "New password", not under "Repeat new password", and no "Errors
+     occurred processing this form" notice appears; the browser stops the
+     save before anything is sent (Fields & validation, Password tab).
    - **A wrong current password**: type "wrongpass" into "Current
      password" and "newpass99" (at least as long as the hint under "New
      password" says, 6 on a default install, and not the current password)
@@ -897,13 +914,14 @@ tooling recipe are in the footnote. <sup>s</sup>
      and "np1" into both new-password boxes, and save: "The password must
      be at least {N} characters." in the notice and under "New password",
      in place of the hint (Rule 10a).
-   - **A valid change**: type the right current password and "newpass99"
-     into both new-password boxes, and save: "Your changes have been
-     saved." at the top right. The previous attempt's "Errors occurred
-     processing this form" notice is not removed by the save: it fades
-     away by itself about six seconds after it appeared, and is then gone
-     from the tab (Rule 10a). The three boxes still hold the typed
-     passwords and the line under "New password" is empty [A11](#a11).
+   - **A valid change**: within six seconds of the "np1" refusal (have the
+     passwords ready to paste), type the right current password and
+     "newpass99" into both new-password boxes, and save: "Your changes have
+     been saved." at the top right, with the refusal's "Errors occurred
+     processing this form" notice beside it until it fades, about
+     six seconds after the refusal (Rule 10b). The three boxes still hold
+     the typed passwords and the line under "New password" is empty
+     [A11](#a11).
    - **The other browser**: in the other browser, load the page afresh (a
      full reload, not a tab press): it lands on the Login page.
    - **The mailbox**: the account's mailbox has received nothing: no email
@@ -917,8 +935,9 @@ tooling recipe are in the footnote. <sup>s</sup>
 
    Given: an Author, signed in on a scratch journal, on the profile's "API
    Key" tab, on an installation with an API secret configured (without one
-   the tab has no button, Rule 12d, and the scenario cannot run).
-   <sup>s</sup>
+   the tab has no button, Rule 12d, and the scenario cannot run); an
+   application at hand that sends the journal's API a request carrying a
+   key it is given. <sup>s</sup>
 
    - **No key**: the box reads "None" beside a "Create API Key" button with
      the note "Generating a new API key will invalidate any existing key
@@ -928,11 +947,18 @@ tooling recipe are in the footnote. <sup>s</sup>
      access to any application that uses it.", and "Your changes have been
      saved." shows inside the tab.
    - **The tab reloaded**: reload the tab: the same key is shown.
+   - **An application using the key**: give the application the key shown
+     and have it send its request: the key works, and the request is
+     answered rather than refused.
    - **"Delete", then Cancel**: press "Delete", then Cancel in the browser's
-     dialog "Are you sure you want to delete this API key?": the key stays.
+     dialog "Are you sure you want to delete this API key?": the key stays,
+     and the application's request, sent again, is still answered.
    - **"Delete", then OK**: press "Delete" again and OK: the box reads
      "None", "Create API Key" is back, and the saved message shows inside
-     the tab again.
+     the tab again. The application's request, sent again with the
+     deleted key, is refused at once with "You are not authorized to
+     access the requested resource." (*Side effects*, "On deleting an API
+     key").
    - **A second key**: press "Create API Key" again: the new key differs
      from the deleted one (Rule 12b).
    - **Control**: throughout, no message appeared at the top right of the
@@ -1023,6 +1049,33 @@ tooling recipe are in the footnote. <sup>s</sup>
       reopened, still reads "Profile Institute": after the copy the two are
       independent (*Cross-feature interactions*).
 
+13. **A leaked password refused on the Password tab**
+
+    Given: an Author, signed in on a scratch journal, on the profile's
+    "Password" tab, the site's "Check passwords against compromised
+    password databases" ticked (Administration › Site Settings › Site
+    Setup › Security, under "Compromised Password Check"), the install
+    online and with no local list, so the check asks Have I Been Pwned,
+    which refuses "qwerty123456"; the Site Administrator signed in in a
+    second browser. <sup>s</sup>
+
+    - **A leaked password typed twice**: type the right current password
+      and "qwerty123456" into both new-password boxes, and save: the notice
+      "Errors occurred processing this form" with "This password has
+      appeared in data leaks. Please choose a different, strong
+      password.", the same sentence under "New password" in place of the
+      hint, and the three boxes emptied (Rule 10a).
+    - **The leaked password with a different repeat**: type the right
+      current password, "qwerty123456" into "New password" and
+      "qwerty654321" into "Repeat new password", and save: "The passwords
+      do not match." in the notice and under "New password", with no
+      sentence about data leaks (Rule 10a).
+    - **Control**: the Site Administrator unticks that box on the same
+      screen and saves; the Author types the right current password and "qwerty123456" into
+      both new-password boxes and saves: "Your changes have been saved."
+      at the top right; unticked, a leaked password goes through
+      (*Settings*, "Site password policy").
+
 ## Coverage
 
 Left out of the scenarios above, by reason:
@@ -1093,25 +1146,6 @@ Left out of the scenarios above, by reason:
     ([A2](#a2); Rule 9a): the guard the issue report
     (`docs/issues/U03-A2-refused-gif-wipes-profile-image.md`)
     proposes, once fixed
-  - "Please enter a valid URL." gone from under "Homepage URL" once the
-    corrected address is typed, and still gone after "Save" (Rule 9c;
-    scenario 7, "The homepage corrected"): the bullet states it, and no
-    suite asserts it yet
-  - "Save" on the Password tab with the three boxes empty: nothing sent,
-    "This field is required." under "Current password" and "New password"
-    (Fields, Password tab): scenario 8 can take it as a first bullet
-  - the site's "Check passwords against compromised password databases"
-    ticked: "password1234" refused on the Password tab, after the
-    other new-password sentences (Rule 10a; *Settings* "Site password
-    policy"), asking Have I Been Pwned
-    ([Site settings](U60-site-settings.md) Rule 11): a site-wide setting,
-    so a serial test that puts it back
-  - an application using a deleted API key refused at once, and the key
-    working until then and after a cancelled "Delete" (*Side effects*):
-    scenario 9 can take it beside "Delete", then Cancel and OK
-  - a scratch journal with French among its form languages showing the
-    "(French)" boxes on Identity, Contact and Public, and one box on a
-    journal with English alone (Fields intro; *Settings* "Languages")
 - **Nothing new to test**:
   - a tab named in the site-level address kept on the forward to a one-journal user's profile (Rule 3; scenario 2 opens the site-level address with no tab named, and scenario 1 reads a tab named in a journal's address)
   - no submission or activity-log entry written by this page (*Side effects*): the log is a submission's, and reading its silence needs a submission and a positive control for nothing this page does
@@ -2478,10 +2512,13 @@ context; the Users & Roles reads run as the scratch context's manager (`admin`
 or a scratch `manager`). Scenario 2's context is seeded
 `context.supportedLocales: ['en', 'fr_CA']` so the French listing's address
 (`{context}/fr_CA/management/settings/access`) works there (seed-facts,
-2026-09-06); its site-level read opens `index/user/profile` with no tab named
+2026-09-06), and `context.supportedFormLocales: ['en', 'fr_CA']` so the
+Identity, Contact and Public boxes carry the "(French)" pop-up panel (note
+j; scenarios.md "Configuring a scratch context"); its site-level read opens `index/user/profile` with no tab named
 (the forward lands on `{context}/user/profile` with Identity open; with a
 tab named it ends on that tab, note b). Scenario 3's "another account's address" is any roster
-address; its "Working Languages" block shows two boxes on the fleets (site
+address; its context is seeded with no `supportedFormLocales`, so it keeps
+one form language, English (note j); its "Working Languages" block shows two boxes on the fleets (site
 languages `en` and `fr_CA`), the second one ticked. Scenarios 4–5: a scratch
 author with unique throwaway `@mail.test` addresses, mail observed in the
 test mail catcher scoped by that recipient (PRINCIPLES A8): the catcher is
@@ -2516,13 +2553,18 @@ before 2026-09-24 (it renders since, note f). Scenario 8: a scratch author in tw
 contexts; never change a roster password; the minimum is 6 on the fleets; the
 32-character cap (A7) is avoided by keeping scratch passwords short; the
 site's "Check passwords against compromised password databases" box is
-unticked on the fleets, so the Password tab accepts `password1234`, and
-ticked it refuses `qwerty123456` there too (no outside service needed;
-2026-09-04); the no-email read is `expectNone` scoped by the scratch address,
+unticked on the fleets, so the Password tab accepts `password1234`; its
+empty-boxes read asserts the two sentences and that no request was sent;
+the no-email read is `expectNone` scoped by the scratch address,
 bounded by a message the test itself triggers to that address afterwards (an
 email-change request, scenario 4's, whose message arrives). Scenario 9: the
 fleets' `config.test.inc.php` sets `api_key_secret`
-(`shared/playwright/make-test-config.js`), so the button is present.
+(`shared/playwright/make-test-config.js`), so the button is present; "the
+application" is a request the test sends itself, `GET
+{context}/api/v1/submissions` with no cookie and the key as a bearer token,
+answered 200 with the key and after the cancelled "Delete", and 401 with
+"You are not authorized to access the requested resource." after "Delete"
+(note h).
 Scenario 10: a scratch `manager` in `users[]` on a scratch context (the
 seeded accounts are read-only; the three suites run it so, read
 2026-10-14), restoring the box afterwards; the
@@ -2550,7 +2592,16 @@ these scenarios (2026-09-03): a scenario-seeded user has no Country, so every
 Contact save (scenarios 3–5, 11, 12) chooses one first; the fleets' scratch
 contexts all accept registrations, so the other-journal fold (scenario 6) is
 always present; `publicknowledge` has no published item, so a reader-facing
-check of the bio needs a scenario-published scratch submission.
+check of the bio needs a scenario-published scratch submission. Scenario
+13: a scratch author in a scratch context, and `admin` in a second browser
+context ticking and unticking the box on Administration › Site Settings ›
+Site Setup › Security; it changes a site-wide setting, so it runs in the
+serial project (PRINCIPLES A9) and puts the box back unticked whatever the
+outcome. The installs carry no local list of leaked passwords, so the
+ticked check asks Have I Been Pwned and needs the network; the service
+unreachable, the check refuses nothing (note g). `qwerty123456` is the
+leaked password the fleets refuse (seed-facts; note g); its mismatching
+repeat is `qwerty654321`.
 
 <a id="fn-a1"></a>
 **f-a1** — `ProfileHandler::profile()`: with no context and exactly one
