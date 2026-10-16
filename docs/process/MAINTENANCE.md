@@ -708,15 +708,25 @@ push runs (`e2e.yml` there runs OJS alone against pkp/ojs `ore`), the
 nightly `ojs-ore` job in `main`'s `e2e.yml` (a schedule fires on the
 default branch alone), and pkp/ojs's hook on `ore`, which runs the
 `ore` suite on every push and on every PR into `ore` (pkp/ojs#5944), a
-companion branch named like the PR's branch winning as on `main`. The
-latest hook run on pkp/ojs `ore` is the "is the ore tip red?" answer
-(`gh run list -R pkp/ojs --workflow e2e-tests.yml --branch ore`).
+companion branch named like the PR's branch winning as on `main`.
+Nobody watches an Actions tab: these runs count only once the daily
+step reads them (step 0 below) and the day's channel summary says what
+they showed.
 
 The daily step, after `main` and the stable line (upstream session step
 6), in the ore worktree beside the slot clone (harness.md "The ore
 worktree"; `cd ../<clone>-ore`, `git pull --rebase`, `npm run fetch-apps
 -- --update`, `npm run mount`):
 
+0. **Read the runs.** The latest `ojs-ore` job of `main`'s nightly
+   (`gh run list -R jardakotesovec/pkp-e2e --workflow e2e.yml --event
+   schedule --limit 1`, then `node bin/ci.js summary <run-id>`) and the
+   latest hook run on pkp/ojs `ore` (`gh run list -R pkp/ojs --workflow
+   e2e-tests.yml --branch ore --limit 1`). A red is triaged against
+   `ci-triage.md` as `main`'s is (upstream session step 4) and named in
+   the day's summary with its link; a red the suite must follow (a
+   cherry-pick changed behavior the ore suite asserts) is step 2's
+   work, a regression is a finding, below.
 1. **List the range** per repo since the baselines, `main` fetched
    first, and class each commit as the stable line does (`=main`,
    `~main`, `ore-only`, pointer bump; `bin/line-range.js` once it takes
