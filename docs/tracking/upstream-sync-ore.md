@@ -20,14 +20,13 @@ pkp-e2e `ore` tip: `c448707a` (2026-10-16).
 
 ## Open
 
-- Phase 1 of the set-up, not done yet (plan of 2026-10-16): the ore
-  worktree beside each slot clone on the VM (its own `PKP_E2E_SLOT`,
-  `bin/fetch-apps.js` following a configured branch), `bin/line-range.js
-  --branch ore`, `bin/report-models.mjs` reading `docs/reports/ore/`,
-  REPORT.md "Affects" with an `ore` sub-item and the ten open
-  regressions marked for it, harness.md "The ore worktree". Until then
-  CI is the only runner for `ore`, and a local drive uses the `main`
-  checkout at the ore ref by hand.
+- Phase 1 of the set-up (plan of 2026-10-16), the rest of it:
+  `bin/line-range.js --branch ore`, `bin/report-models.mjs` reading
+  `docs/reports/ore/`, REPORT.md "Affects" with an `ore` sub-item and
+  the ten open regressions marked for it. Done 2026-10-16: the ore
+  worktree beside each slot clone (harness.md "The ore worktree": slot
+  number n+4, fetch-apps' `PKP_E2E_APP_BRANCH=ore`, `bin/slot.js`
+  counting it with its slot).
 
 ## Read log
 

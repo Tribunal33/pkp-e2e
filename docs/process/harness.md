@@ -222,6 +222,67 @@ No suite is meant to run on any of the three lines.
   PKP_E2E_LINE=stable-3_4_0 PROBE_FEATURE=issues-3_4 PROBE_AGENT=x node bin/probe.js all shared/playwright/checks/harness/lines/lines.js
   ```
 
+### The ore worktree
+
+Beside each slot clone sits an **ore worktree**, `<clone>-ore`: a git
+worktree of the clone on the pkp-e2e branch `ore` (MAINTENANCE "The ore
+branch"), with its own `checkouts/ojs` on pkp/ojs `ore` and that branch's
+`lib/pkp` and `lib/ui-library` pointers. OJS only: OMP and OPS have no
+`ore`. It belongs to its slot, so the session in slot n works in its own
+`-ore` and in no other.
+
+| Slot | Worktree | Its slot number | OJS port | Test DB | Mailpit (SMTP) |
+|---|---|---|---|---|---|
+| 0 | `/home/e2e/pkp-e2e-ore` | 4 | 12300 | `ojs_test_s4` | 8029 (1029) |
+| 1 | `/home/e2e/pkp-e2e-s1-ore` | 5 | 12600 | `ojs_test_s5` | 8030 (1030) |
+| 2 | `/home/e2e/pkp-e2e-s2-ore` | 6 | 16000 | `ojs_test_s6` | 8031 (1031) |
+| 3 | `/home/e2e/pkp-e2e-s3-ore` | 7 | 16300 | `ojs_test_s7` | 8032 (1032) |
+
+- **Identity.** Its `.env` says `PKP_E2E_SLOT=<n+4>`,
+  `PKP_E2E_APP_BRANCH=ore` and `OJS_ROOT=./checkouts/ojs`, so ports, DB,
+  files dir, Mailpit and API key are its own ("Slots"), and fetch-apps
+  follows pkp `ore` instead of `main` and defaults to OJS alone. No line
+  is provisioned there.
+- **Running.** Every harness command run from the worktree uses the
+  `ore` branch's suite, overlays and kit against its checkout: `npm run
+  reset:ojs`, `npx playwright test -c configs/ojs.config.js <file>`,
+  `fleet-prep`, `bin/probe.js`. Whole suites still run on CI (the
+  branch's push runs, `node bin/ci.js dispatch --ref <branch> --apps
+  ojs`). To the test lock it is its own slot, so its runs and the
+  clone's take turns as two slots' runs do.
+- **Moving it.** `npm run fetch-apps -- --update` then `npm run mount`
+  in the worktree brings the checkout to pkp `ore`'s tip; `git pull
+  --rebase` moves the worktree's branch. A PR into `ore` checks out its
+  companion there (`git switch -c <companion> origin/ore`).
+- **The branch is the clone's.** Worktrees share the clone's `.git`, so
+  the local branch `ore` lives in the slot clone and `git checkout ore`
+  there is refused while the worktree holds it: work on `ore` in the
+  worktree. Commit and push from the worktree as from the clone.
+- **Part of the slot.** `bin/slot.js` counts the worktree with its
+  slot: the hook lists `ore/ojs`, a release stops `php -S` servers
+  serving from it, and the slot frees only when the worktree is clean
+  too (nothing uncommitted, untracked, stashed or unpushed).
+- **The ore branch's harness** is `main`'s as at the branch point, plus
+  harness commits cherry-picked onto `ore` because the worktree needs
+  them (fetch-apps' `PKP_E2E_APP_BRANCH`, 2026-10-16). A harness fix
+  that `main` gets is cherry-picked once an `ore` run or the worktree
+  shows the need, like a test-only change.
+- **Provisioning**, slot n with clone `<clone>`:
+
+  ```bash
+  git -C <clone> fetch origin
+  git -C <clone> worktree add -b ore <clone>-ore origin/ore   # without -b once the branch exists
+  cd <clone>-ore
+  printf 'PKP_E2E_SLOT=<n+4>\nPKP_E2E_APP_BRANCH=ore\nOJS_ROOT=./checkouts/ojs\n' > .env
+  npm ci
+  npm run fetch-apps -- --reference <clone>   # borrows the clone's checkouts/ojs objects
+  npm run mount
+  ```
+
+- **Teardown** (MAINTENANCE "The ore branch"): `git -C <clone> worktree
+  remove --force <clone>-ore`, `git -C <clone> branch -D ore`, and
+  `dropdb ojs_test_s<n+4>`.
+
 ### Trying a fix
 
 An issue report's recommended fix is tried before the report goes out
@@ -647,7 +708,8 @@ Mailpit and API key. Only Postgres, the cores and `origin` are shared.
   `npm ci`, `npm run fetch-apps -- --reference /home/e2e/pkp-e2e` (borrows
   slot 0's objects), the same with `--line stable-3_5_0` (and
   `stable-3_4_0`, `stable-3_3_0` when the slot needs them), `npm run mount`
-  for every line, then add the clone to `~/.pkp-e2e-slots/slots.json`.
+  for every line, the ore worktree beside it ("The ore worktree"), then
+  add the clone to `~/.pkp-e2e-slots/slots.json`.
 
 ## Runtime model
 

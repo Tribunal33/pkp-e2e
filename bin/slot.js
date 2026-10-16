@@ -12,10 +12,11 @@
  * The rules, all decided by state:
  * - A new session takes a free slot, the one used longest ago first.
  * - When a session pauses or ends, its slot is freed if it left a clean
- *   tree (nothing uncommitted, untracked, stashed or unpushed in this repo
- *   or in the shared private security repo beside it, ../pkp-e2e-sec; the
- *   app checkouts do not count). Otherwise the slot stays BLOCKED for
- *   that thread, and the bot mentions the owner in the thread.
+ *   tree (nothing uncommitted, untracked, stashed or unpushed in this repo,
+ *   in its ore worktree <clone>-ore, or in the shared private security repo
+ *   beside it, ../pkp-e2e-sec; the app checkouts do not count). Otherwise
+ *   the slot stays BLOCKED for that thread, and the bot mentions the owner
+ *   in the thread.
  * - A resumed thread goes back to its own slot unless another session holds
  *   it right now; then it starts FRESH in a free slot (no --resume across
  *   slots: its transcript's paths point at the old one).
@@ -64,6 +65,11 @@ const THREAD_KEEP_MS = 30 * 24 * 3600 * 1000;
 const BASE_PORTS = {ojs: 8000, omp: 8100, ops: 8200};
 const slotPortShift = (n) => (n % 3) * 300 + Math.floor(n / 3) * 4000;
 const LINE_DIRS = [['main', ''], ['stable-3_5_0', 'stable-3_5_0']];
+// The ore worktree beside a slot clone (harness.md "The ore worktree"): the
+// pkp-e2e `ore` branch with its OJS checkout on pkp `ore`, slot number n+4.
+// It counts as part of slot n: its servers stop with the slot's, and its
+// tree must be clean for the slot to free.
+const oreDir = (dir) => `${dir}-ore`;
 
 const sleepSync = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 const now = () => new Date().toISOString();
@@ -247,6 +253,12 @@ const secDir = (dir) => path.resolve(dir, '..', SEC_REPO);
 function checkSlotClean(dir) {
     const check = checkClean(dir);
     const sec = secDir(dir);
+    const ore = oreDir(dir);
+    if (fs.existsSync(path.join(ore, '.git'))) {
+        const o = checkClean(ore);
+        check.clean = check.clean && o.clean;
+        check.reasons.push(...o.reasons.map((r) => `${path.basename(ore)}: ${r}`));
+    }
     if (!fs.existsSync(path.join(sec, '.git'))) return check;
     const c = checkClean(sec);
     return {clean: check.clean && c.clean, reasons: [...check.reasons, ...c.reasons.map((r) => `${SEC_REPO}: ${r}`)]};
@@ -274,20 +286,24 @@ function snapshot(dir) {
         repo: {branch: git(dir, ['symbolic-ref', '--short', '-q', 'HEAD']) || 'detached', head: git(dir, ['rev-parse', '--short', 'HEAD'])},
         apps: {},
     };
+    const roots = [];
     for (const [line, sub] of LINE_DIRS) {
         for (const app of Object.keys(BASE_PORTS)) {
-            const root = path.join(dir, 'checkouts', sub, app);
-            if (!fs.existsSync(path.join(root, '.git'))) continue;
-            const one = (d) => ({
-                ref: git(d, ['symbolic-ref', '--short', '-q', 'HEAD']) || 'detached',
-                head: git(d, ['rev-parse', '--short', 'HEAD']),
-            });
-            snap.apps[`${line === 'main' ? '' : `${line}/`}${app}`] = {
-                ...one(root),
-                'lib/pkp': one(path.join(root, 'lib', 'pkp')),
-                'lib/ui-library': one(path.join(root, 'lib', 'ui-library')),
-            };
+            roots.push([`${line === 'main' ? '' : `${line}/`}${app}`, path.join(dir, 'checkouts', sub, app)]);
         }
+    }
+    roots.push(['ore/ojs', path.join(oreDir(dir), 'checkouts', 'ojs')]);
+    for (const [key, root] of roots) {
+        if (!fs.existsSync(path.join(root, '.git'))) continue;
+        const one = (d) => ({
+            ref: git(d, ['symbolic-ref', '--short', '-q', 'HEAD']) || 'detached',
+            head: git(d, ['rev-parse', '--short', 'HEAD']),
+        });
+        snap.apps[key] = {
+            ...one(root),
+            'lib/pkp': one(path.join(root, 'lib', 'pkp')),
+            'lib/ui-library': one(path.join(root, 'lib', 'ui-library')),
+        };
     }
     return snap;
 }
@@ -319,7 +335,8 @@ function diffSnapshots(before, after) {
 function describeSnapshot(snap) {
     const lines = [`- pkp-e2e: ${snap.repo.branch} @ ${snap.repo.head}`];
     for (const [key, a] of Object.entries(snap.apps)) {
-        const off = [a, a['lib/pkp'], a['lib/ui-library']].some((r) => r.ref !== 'main' && r.ref !== 'stable-3_5_0');
+        const tips = key.startsWith('ore/') ? ['ore'] : ['main', 'stable-3_5_0'];
+        const off = [a, a['lib/pkp'], a['lib/ui-library']].some((r) => !tips.includes(r.ref));
         lines.push(`- ${key}: ${fmtRef(a)}; lib/pkp ${fmtRef(a['lib/pkp'])}${off ? '  ← not on a line tip' : ''}`);
     }
     return lines;
@@ -399,7 +416,7 @@ function acquire({thread, session, resume, dir, title, 'fresh-session': freshSes
  * SIGTERM, then SIGKILL after 3 s. The probe servers' pid files go too.
  */
 function stopSlotServers(dir) {
-    const inSlot = (p) => typeof p === 'string' && p.replace(/^"/, '').startsWith(`${dir}/`);
+    const inSlot = (p) => typeof p === 'string' && [`${dir}/`, `${oreDir(dir)}/`].some((d) => p.replace(/^"/, '').startsWith(d));
     const isServer = (argv) => {
         const bin = path.basename(argv[0] || '');
         if (/^php/.test(bin)) {

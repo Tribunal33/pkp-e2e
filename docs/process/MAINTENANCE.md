@@ -713,8 +713,9 @@ latest hook run on pkp/ojs `ore` is the "is the ore tip red?" answer
 (`gh run list -R pkp/ojs --workflow e2e-tests.yml --branch ore`).
 
 The daily step, after `main` and the stable line (upstream session step
-6), with the ore worktree beside the slot clone (harness.md "The ore
-worktree" once Phase 1 lands; until then CI is the only runner):
+6), in the ore worktree beside the slot clone (harness.md "The ore
+worktree"; `cd ../<clone>-ore`, `git pull --rebase`, `npm run fetch-apps
+-- --update`, `npm run mount`):
 
 1. **List the range** per repo since the baselines, `main` fetched
    first, and class each commit as the stable line does (`=main`,
