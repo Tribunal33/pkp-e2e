@@ -1108,7 +1108,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A20](#a20) | On a press or a preprint server, a book or preprint with no references shows an empty "References" heading | ✅ | retired | — |
 | [A21](#a21) | Retired: in French the References page's help text, table, "Delete all references" and its two windows show raw codes such as "##submission.citations.structured##" | ✅ | retired | Jarda 2026-10-08 · overturned |
 | [A22](#a22) | Retired: a reference author's "ORCID iD" took any web address, and editors' ORCID icon linked to it; fixed by pkp/pkp-lib#13502 | ✅ | retired | PR review (claude), 2026-10-13 — fixed by pkp/pkp-lib#13502, merged |
-| [A28](#a28) | Retired: a reference whose text held an arXiv ID with a dotted subject class ("arXiv:math.AG/0309136") could not be saved in "Edit citation" once the ID was picked out; fixed by pkp/pkp-lib#13537 | ✅ | retired | PR review (claude), 2026-10-15 — fixed by pkp/pkp-lib#13537, at its merge |
+| [A28](#a28) | Retired: a reference whose text held an arXiv ID with a dotted subject class ("arXiv:math.AG/0309136") could not be saved in "Edit citation" once the ID was picked out; fixed by pkp/pkp-lib#13537 | ✅ | retired | PR review (claude), 2026-10-15 — fixed by pkp/pkp-lib#13537, merged 2026-10-16 |
 
 ### All apps
 
@@ -1404,7 +1404,7 @@ Basis: probe, 2026-10-07. <sup>f-a27</sup>
 **A22 — A reference author's "ORCID iD" takes any web address, and editors' ORCID icon links to it** · ✅ · retired. Fixed by `pkp/pkp-lib#13502` (for `pkp/pkp-lib#13501`, the team's copy of the issue report), merged 2026-10-13 (pkp-lib `3608f5e200`; OJS's `lib/pkp` carries it since ojs `5c056f34b7`, OMP's and OPS's not yet), reviewed at the PR's head before the merge and walked at the merge the same day on OJS, OMP and OPS: "Edit citation" refuses a reference author's ORCID iD that is not an ORCID address, a `javascript:` link included, and saves a full, a sandbox or an empty one as before ([Fields & validation](#fields)). <sup>f-a22</sup>
 
 <a id="a28"></a>
-**A28 — A reference whose text holds an arXiv ID with a subject class cannot be saved in "Edit citation" once the ID is picked out** · ✅ · retired. Fixed by `pkp/pkp-lib#13537` (for `pkp/pkp-lib#13536`, which took it in from this review's first round), reviewed at the PR's round-2 head `d56d57f021` before its merge: `schemas/citation.json` takes `[a-z.-]+` before the number, and "Edit citation" saves "math.AG/0309136" whether the lookup or a lookup-off "Add" put it there, on OJS, OMP and OPS ([Fields & validation](#fields)). <sup>f-a28</sup>
+**A28 — A reference whose text holds an arXiv ID with a subject class cannot be saved in "Edit citation" once the ID is picked out** · ✅ · retired. Fixed by `pkp/pkp-lib#13537` (for `pkp/pkp-lib#13536`, which took it in from this review's first round), merged 2026-10-16 (pkp-lib `7ce31a8c4b`; no app's pointer carries it yet), reviewed at the PR's round-2 head `d56d57f021` before its merge (the merged head `d7c33942fc` differs from it by a docblock line and a comment): `schemas/citation.json` takes `[a-z.-]+` before the number, and "Edit citation" saves "math.AG/0309136" whether the lookup or a lookup-off "Add" put it there, on OJS, OMP and OPS ([Fields & validation](#fields)). <sup>f-a28</sup>
 
 ---
 
@@ -1787,7 +1787,10 @@ citation" on a reference not looked up yet stays, where the lookup's
 first step replaces it (A25), and so does the DOI of a reference whose
 text was edited, beside the new text's web address; one emptied by hand
 is filled again from the text. Walked again that day on the three apps,
-the rest reading as before.
+the rest reading as before. Merged 2026-10-16 as pkp-lib `7ce31a8c4b`
+(head `d7c33942fc`: a docblock line and a comment past the reviewed
+`d56d57f021`); no app's `lib/pkp` carries it yet (pkp/ojs#5940 left for a
+later submodule update).
 Live-probed 2026-09-24 (Rule 11), all three apps: a reference added
 through "Add" with a DOI and an arXiv ID in its text showed its text alone,
 with no identifier link, after the Add and after a reload. Structured by
