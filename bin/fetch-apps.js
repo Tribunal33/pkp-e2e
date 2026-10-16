@@ -37,12 +37,17 @@
  * An existing checkout's tree is left alone; to move it to the current
  * upstream main, pass --update (fetch + checkout + submodules).
  * Afterwards point .env at checkouts/<app> and run `npm run mount`.
+ *
+ * PKP_E2E_APP_BRANCH=<branch> in the repo .env makes the `main` checkouts
+ * follow that pkp branch instead of `main` (clone, --update): the ore
+ * worktree's `ore` (harness.md "The ore worktree"). With it set, the
+ * default apps are the ones the .env names, since OMP and OPS have no ore.
  */
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const {execFileSync, spawnSync} = require('child_process');
-const {APPS, REPO_ROOT, RUNTIMES_DIR, resolveLine, resolveSlot, dbName} = require('./apps.js');
+const {APPS, REPO_ROOT, RUNTIMES_DIR, resolveLine, resolveSlot, dbName, configuredApps} = require('./apps.js');
 
 const FORK_OWNER = 'jardakotesovec';
 const UPSTREAM_OWNER = 'pkp';
@@ -70,13 +75,18 @@ for (let i = 0; i < args.length; i++) {
 }
 const line = resolveLine(lineName);
 const slot = resolveSlot();
-const BRANCH = line ? line.branch : 'main';
+const appBranch = process.env.PKP_E2E_APP_BRANCH;
+if (line && appBranch) {
+    console.error(`PKP_E2E_APP_BRANCH=${appBranch} and --line ${line.name} together: a line names its own branch`);
+    process.exit(1);
+}
+const BRANCH = line ? line.branch : appBranch || 'main';
 const PORT_SHIFT = slot.portShift + (line ? line.portShift : 0);
 
 const MAIN_CHECKOUTS = path.join(REPO_ROOT, 'checkouts');
 const CHECKOUTS = line ? path.join(MAIN_CHECKOUTS, line.name) : MAIN_CHECKOUTS;
 const FILES_ROOT = path.join(CHECKOUTS, 'files');
-const names = requested.length ? requested : Object.keys(APPS);
+const names = requested.length ? requested : appBranch ? configuredApps() : Object.keys(APPS);
 for (const name of names) {
     if (!APPS[name]) {
         console.error(`Unknown app "${name}" — one of: ${Object.keys(APPS).join(', ')}`);
