@@ -16,8 +16,6 @@
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap; the
  * spec's Coverage section is the record of everything else left out):
  * - A6: S2 reads that "Users" lists "Site Administrator", never its figure.
- * - A9: S3 reads the attachment's "Active Submissions" block's heading
- *   line, never its counts.
  * - A11: S3 reads the email's closing from "A full copy of this month's
  *   trends is attached." on, never the "Login to the …" sentence.
  * - OPS4: S3 never reads the figure after "Accepted submissions this
@@ -405,12 +403,14 @@ test.describe('Statistics — editorial activity & reports', () => {
         await expect(solPage).toHaveURL(new RegExp(`/index\\.php/${tag}/stats/editorial`));
         await expect(solPage).toHaveTitle(/^Editorial Activity/);
 
-        // The attachment: BOM, three blocks (Rule 26; A9 unread).
+        // The attachment: BOM, three blocks; the server's own count in its
+        // one stage (Rule 26).
         expect(sol.attachments.map((a) => a.name)).toEqual(['editorial-report.csv']);
         const report = sol.attachments[0];
         expect(report.bom, 'the attachment starts with a byte-order mark').toBe(true);
         const blocks = csvBlocks(report.rows);
         expect(blocks.map((b) => b[0])).toEqual([['Active Submissions', 'Total'], ['Trends', PREVIOUS_MONTH, 'Total'], ['Users', 'Total']]);
+        expect(blocks[0].slice(1)).toEqual([['Production', '3']]);
         const trendsBlock = Object.fromEntries(blocks[1].slice(1).map((r) => [r[0], r.slice(1)]));
         expect(trendsBlock['Submissions Received']).toEqual(['3', '4']);
         for (const [row, [, total]] of Object.entries(trendsBlock)) expect(total, `${row}'s total carries no yearly average`).toMatch(/^[\d.]+$/);

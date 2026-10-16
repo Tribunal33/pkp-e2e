@@ -481,8 +481,9 @@ preprint server the links' addresses carry the English language code
     mark and holds three blocks separated by empty lines: <sup>p</sup>
     <sup>td14</sup>
     - "Active Submissions", "Total", then one line per stage with its
-      count; these counts cover every journal of the installation, not
-      this one ⚠ [A9](#a9);
+      count: the journal's own submissions still in the workflow, as
+      its chart counts them (Rule 2); a preprint server's one line is
+      "Production"; <sup>f-a9</sup>
     - "Trends", "{month}, {year}", "Total", then one line per "Trends"
       row with the month's figure and the all-time figure; rates are
       written as fractions ("0.5") and totals carry no yearly average;
@@ -696,11 +697,16 @@ other suite's run. <sup>sc</sup>
      a preprint server): "Editorial Activity" opens (Fields).
    - **The attachment**: the email carries "editorial-report.csv": a
      byte-order mark, then three blocks separated by empty lines:
-     "Active Submissions" [A9](#a9); "Trends", "{month}, {year}",
+     "Active Submissions", "Total", with "Submission" 3, "Review" 0,
+     "Copyediting" 1 and "Production" 0 (on a press "Submission" 3,
+     "Internal Review" 0, "External Review" 0, "Copyediting" 1 and
+     "Production" 0; on a preprint server "Production" 3); "Trends", "{month}, {year}",
      "Total", with the "Submissions Received" line giving 4 for the month and 5
      in total (3 and 4 on a preprint server) and the "Acceptance Rate"
      line 0.5 and 0.2 {OJS OMP}, no total followed by a yearly average;
-     "Users", "Total", with "All Users" 6 (Rule 26).
+     "Users", "Total", with "All Users" 6 (Maya, Sol, Tess, Uma, Wes and
+     the Site Administrator, who holds a Journal Manager role in the
+     journal; Vic is disabled; Rules 15, 26).
    - **Sol's Tasks entry**: Sol, signed in, opens the Tasks panel: it
      lists "This is a kind reminder for you to check your publication's
      health through the editorial report.". Press it: "Editorial
@@ -1037,8 +1043,6 @@ Left out of the scenarios above, by reason:
   - A7 ("Journal Manager" counting the Editors and Production Editors;
     Rule 14)
   - A8 (a report address naming no report; Rule 19)
-  - A9 (the attachment's installation-wide stage counts; Rule 26;
-    scenario 3 marks it)
   - A10 (a journal, press or preprint server whose primary
     language is French; Fields)
   - A11 ("Login to the the press"; Fields; scenario 3 marks it)
@@ -1078,7 +1082,6 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | The "Trends" information icons cannot be read from the keyboard | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A6](#a6) | Statistics › "Users" lists a "Site Administrator" row that always reads 0 | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A8](#a8) | A report address with an unknown or missing report name lands on "404 Not Found", not on "Reports" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A9](#a9) | Monthly editorial email's attachment counts every journal's active submissions, not the journal's own | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | A press's monthly statistics email reads "Login to the the press" ("the the preprint server" on a preprint server) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty for every submission, though the agencies are filled in | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1099,6 +1102,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OPS3](#ops3) | A preprint server's "Reports" offers no report | ❓ | minor | — |
 | [OPS1](#ops1) | A preprint server's "Editorial Activity" has no active submissions chart | ✅ | minor | — |
 | [OPS2](#ops2) | A preprint server's "Trends" has four rows, "Submissions Declined" counting every declined preprint | ✅ | minor | — |
+| [A9](#a9) | Retired: the monthly editorial email's attachment counted every journal's active submissions, not the journal's own; fixed by pkp/pkp-lib#13515 | ✅ | retired | upstream sync (claude), 2026-10-16 — fixed by pkp/pkp-lib#13515, merged 2026-10-15 |
 | [OMP5](#omp5) | Retired: A French press's monthly attachment names External Review by a raw code | ✅ | retired | Jarda 2026-10-08 · overturned |
 | [A13](#a13) | Retired: a French press's or preprint server's monthly email is in English but for the month and the footer | ✅ | retired | Jarda 2026-10-08 · overturned |
 
@@ -1224,30 +1228,6 @@ where the operation's name belongs. A report cannot be turned off, so
 only a name the install has no report for counts as unknown. Expected:
 the "Reports" page.
 Basis: probe, 2026-10-02. <sup>f-a8</sup>
-
-<a id="a9"></a>
-**A9 — Monthly editorial email's attachment counts every journal's active submissions, not the journal's own** · 🐞 · medium.
-The "Active Submissions" block of "editorial-report.csv" counts the
-submissions in each stage across every journal of the installation, not
-the journal the email is about, so on a multi-journal installation each
-journal's editors get the same, inflated stage counts; a journal with no
-submission at all gets counts above 0.
-
-The email goes each month to every Journal Manager and Section Editor of
-the journal (Press Managers and Series Editors, preprint server Managers
-and Moderators). It is on by default: a journal can stop it for everyone
-on Settings › Workflow › "Emails", and each recipient can turn it off on
-their Profile › "Notifications". Only this one block is wrong: the
-email's text and the file's "Trends" and "Users" blocks count this
-journal alone, and so does the journal's "Editorial Activity" page.
-
-Each count is the whole site's total for that stage. On a site with a
-few journals the figures can look plausible; on one with dozens or
-hundreds they are plainly too large. These totals are all that crosses
-between journals: the file names no submission, no person and no other
-journal, and does not split the totals by journal. Expected: the
-journal's own counts, as its "Editorial Activity" chart shows.
-Basis: probe, 2026-10-02. <sup>f-a9</sup>
 
 <a id="a10"></a>
 **A10 — A French journal's monthly email links to the English pages** · ❓ · minor.
@@ -1538,6 +1518,9 @@ reworded it. Expected: the line left out of the preprint server's email.
 Basis: probe, 2026-10-02. <sup>f-ops4</sup>
 
 ### Retired
+
+<a id="a9"></a>
+**A9 — Monthly editorial email's attachment counts every journal's active submissions, not the journal's own** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13515 for pkp/pkp-lib#13513, merged 2026-10-15; 3.5 `17711b1864`), retired by the upstream sync 2026-10-16. <sup>f-a9</sup>
 
 <a id="omp5"></a>
 **OMP5 — A French press's attachment names External Review by a raw code** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-omp5</sup>
@@ -2217,7 +2200,15 @@ Issue report: [docs/issues/U65-A8-report-address-unknown-name-404.md](../issues/
 submission, its chart 0 everywhere, got Submission 34, Review 2,
 Copyediting 12, Production 2 (a press 40/0/3/17/2, a preprint server
 Production 48), the installation's active counts.
-Issue report: [docs/issues/U65-A9-monthly-report-counts-other-journals.md](../issues/U65-A9-monthly-report-counts-other-journals.md), filed as [pkp-e2e#633](https://github.com/jardakotesovec/pkp-e2e/issues/633).
+Fixed 2026-10-16 (upstream sync): pkp/pkp-lib#13515 (`dac423e881`,
+merged as `dce15320c7` on 2026-10-15; 3.5 `17711b1864`, for
+pkp/pkp-lib#13513) passes `['contextIds' => [$this->contextId]]`.
+The issue report's walk on PKP's default dataset, `main` and 3.5,
+OJS, OMP and OPS: a new journal's attachment reads 0 in every stage
+(OJS Submission, Review, Copyediting, Production; OMP with Internal
+and External Review; OPS Production), and "Journal of Public
+Knowledge"'s gives its chart's counts (5, 6, 2, 4; the press 3, 4,
+4, 4, 1). The report and its walk deleted; pkp-e2e#633 closed.
 
 <a id="fn-f-a10"></a>
 **f-a10** — fn p (`editorialStatsLink`, `publicationStatsLink`, the

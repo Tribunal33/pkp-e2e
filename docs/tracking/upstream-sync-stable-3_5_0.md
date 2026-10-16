@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `ca763c91cd` | 2026-10-15 | claude (daily maintenance session) |
-| omp | `a70bbb9c4d` | 2026-10-15 | claude (daily maintenance session) |
-| ops | `44aec6e131` | 2026-10-15 | claude (daily maintenance session) |
-| pkp-lib | `4045d9241e` (ojs, omp and ops) | 2026-10-15 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
+| ojs | `97e230cc72` | 2026-10-16 | claude (daily maintenance session) |
+| omp | `9f6fd721f4` | 2026-10-16 | claude (daily maintenance session) |
+| ops | `6952ae6b0b` | 2026-10-16 | claude (daily maintenance session) |
+| pkp-lib | `93d0df22db` (ojs, omp and ops) | 2026-10-16 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
 
 ## Read log
 
@@ -21,6 +21,13 @@ _Newest first; one entry per read: the date and the range per repo, then
 one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
+
+- **2026-10-16 (daily session, VM s2) — ojs `ca763c91cd..97e230cc72` (2: pkp/ojs#5909), omp `a70bbb9c4d..9f6fd721f4` (4: pkp/omp#2510, #2496), ops `44aec6e131..6952ae6b0b` (2: pkp/ops#1436), pkp-lib `4045d9241e..93d0df22db` (1), ui-library none. Read in full; baselines advanced.**
+  - pkp-lib `93d0df22db` (pkp/pkp-lib#13471, "Increase font-size used in grid action buttons") → `=main 63e9702f37` (read today, `upstream-sync.md`): no regression, no security impact.
+  - omp `e2d7f2d9cf` (pkp/omp#2510 for pkp/pkp-lib#13516) → `=main f9c9224fc0` (pkp/omp#2511, read today; walked on 3.5 on 2026-10-15 at the U58 OMP2 retirement, `36026b26`): the 3.5 `submissions.tpl` is its only reader. No regression.
+  - ojs `4b720dc45b`, omp `d4f9ab33a9`, ops `2fe3fec6fb` → pointer bumps to `93d0df22db`; `97e230cc72`, `df7be0313d`, `9f6fd721f4`, `6952ae6b0b` → merges.
+  - `main`'s findings carried over: the `main` sync confirmed no regression today. U65 A9's 3.5 fix `17711b1864` (read 2026-10-15) is in the three apps' pointers: the A9 walk on the 3.5 dataset fleet, OJS, OMP and OPS, reads as on `main` (fixed).
+  - Open stable-line rows not re-run: the range touches none of their code.
 
 - **2026-10-15 (daily session, VM s2) — ojs `0b02f7c01a..ca763c91cd` (3: pkp/ojs#5934), omp `044228c00b..a70bbb9c4d` (3: pkp/omp#2512), ops `61125ebca4..44aec6e131` (3: pkp/ops#1451), pkp-lib `2196fa2775..4045d9241e` (2, ojs; omp and ops from `b1f342476a`, which adds `5b835cd52e` and `2196fa2775`, read 2026-10-14), ui-library none. `main` first: synced today, no regression to carry over. Read in full; baselines advanced.**
   - pkp-lib `4045d9241e` (pkp/pkp-lib#13491) → `=main 689e7ec1a5` (PR review 2026-10-14, `upstream-sync.md`): no regression; now in the three apps' pointers.

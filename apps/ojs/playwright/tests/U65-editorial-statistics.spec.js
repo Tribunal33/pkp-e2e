@@ -12,8 +12,6 @@
  * spec's Coverage section is the record of everything else left out):
  * - A5: S6 reads the information icons with the pointer only.
  * - A6: S2 reads that "Users" lists "Site Administrator", never its figure.
- * - A9: S3 reads the attachment's "Active Submissions" block's heading
- *   line, never its counts.
  * - A14: S4 leaves the Section Editor's Notifications tab without saving.
  * - OJS3: S7 reads the dates of "Marsh survey"'s two decisions and that
  *   each decision cell is filled, never a decision's name.
@@ -484,12 +482,14 @@ test.describe('Statistics — editorial activity & reports', () => {
         await expect(solPage).toHaveURL(new RegExp(`/index\\.php/${tag}/stats/editorial`));
         await expect(solPage).toHaveTitle(/^Editorial Activity/);
 
-        // The attachment: BOM, three blocks (Rule 26).
+        // The attachment: BOM, three blocks; the stage counts are the
+        // journal's own (Rule 26).
         expect(sol.attachments.map((a) => a.name)).toEqual(['editorial-report.csv']);
         const report = sol.attachments[0];
         expect(report.bom, 'the attachment starts with a byte-order mark').toBe(true);
         const blocks = csvBlocks(report.rows);
         expect(blocks.map((b) => b[0])).toEqual([['Active Submissions', 'Total'], ['Trends', PREVIOUS_MONTH, 'Total'], ['Users', 'Total']]);
+        expect(blocks[0].slice(1)).toEqual([['Submission', '3'], ['Review', '0'], ['Copyediting', '1'], ['Production', '0']]);
         const trendsBlock = Object.fromEntries(blocks[1].slice(1).map((r) => [r[0], r.slice(1)]));
         expect(trendsBlock['Submissions Received']).toEqual(['4', '5']);
         expect(trendsBlock['Acceptance Rate']).toEqual(['0.5', '0.2']);

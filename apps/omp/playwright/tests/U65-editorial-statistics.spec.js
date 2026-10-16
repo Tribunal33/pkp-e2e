@@ -19,8 +19,6 @@
  * spec's Coverage section is the record of everything else left out):
  * - A6 🐞: S2 reads the "Site Administrator" row's name and place, never
  *   its figure.
- * - A9 🐞: S3 reads the attachment's "Active Submissions" block by its
- *   heading line only.
  * - A11 🐞: S3 reads the email's closing from "to view more detailed…" on,
  *   never the words before it.
  * - A14 🐞: S4 leaves the Section Editor's Profile tab without saving.
@@ -586,15 +584,16 @@ test.describe('Statistics — editorial activity & reports', () => {
             expect(words.lastIndexOf('Unsubscribe'), 'the footer after "Sincerely,"').toBeGreaterThan(words.indexOf('Sincerely,'));
         }
 
-        // The attachment: a byte-order mark, three blocks; "Trends" for the
-        // month and in total, rates as fractions, no yearly average; "Users"
-        // (Rule 26; A9).
+        // The attachment: a byte-order mark, three blocks; the press's own
+        // stage counts; "Trends" for the month and in total, rates as
+        // fractions, no yearly average; "Users" (Rule 26).
         const attachment = mails[u.maya].attachments.find((a) => a.name === 'editorial-report.csv');
         expect(attachment, 'editorial-report.csv is attached').toBeTruthy();
         expect(attachment.bom).toBe(true);
         const blocks = csvBlocks(attachment.rows);
         expect(blocks).toHaveLength(3);
         expect(blocks[0][0]).toEqual(['Active Submissions', 'Total']);
+        expect(blocks[0].slice(1)).toEqual([['Submission', '3'], ['Internal Review', '0'], ['External Review', '0'], ['Copyediting', '1'], ['Production', '0']]);
         expect(blocks[1][0]).toEqual(['Trends', PREV_MONTH, 'Total']);
         const trend = Object.fromEntries(blocks[1].slice(1).map((r) => [r[0], r.slice(1)]));
         expect(trend['Submissions Received']).toEqual(['4', '5']);
