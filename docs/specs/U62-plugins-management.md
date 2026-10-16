@@ -184,10 +184,10 @@ None of these is shown for a plugin with no compatible version.
     <sup>td6</sup>
 12. **The theme in use.** The "Theme Plugins" row of the theme a journal
     uses (a fresh journal uses "Default Theme") can be unticked like any
-    other plugin ⚠ [A8](#a8). The journal's public pages then show with
-    no styling at all, except a journal's home page, which comes up blank
-    (on a press and a preprint server the home page shows unstyled like
-    the rest) ⚠ [OJS1](#ojs1). <sup>i</sup> <sup>td7</sup>
+    other plugin ⚠ [A8](#a8). The journal's public pages, its home page
+    included, then show with no styling at all; a journal's home page
+    still shows its current issue and that issue's articles. <sup>i</sup>
+    <sup>td7</sup> <sup>f-ojs1</sup>
 
 **A plugin's links**
 
@@ -627,8 +627,8 @@ Left out of the scenarios above, by reason:
     `docs/issues/U62-A1-plugin-gallery-offline-stays-loading.md`): "Plugin Gallery" on an installation that cannot reach PKP's site shows an empty list, with no server error
   - the guard for A5 (issue report
     `docs/issues/U62-A5-failed-upgrade-removes-plugin.md`): an upgrade through a row's "Upgrade" whose own upgrade step fails leaves the old version listed, ticked and working
-  - the guard for OJS1 (issue report
-    `docs/issues/U62-OJS1-theme-off-journal-home-page-blank.md`): a journal's home page with its theme unticked answers 200 and shows its current issue
+  - Rule 12's journal home page with its theme unticked (OJS1,
+    retired): it answers 200 and shows its current issue
 - **Nothing new to test**:
   - a tick made in the Settings Wizard's "Plugins" tab showing on the
     journal's own list, and the reverse (Rule 3)
@@ -653,8 +653,7 @@ Left out of the scenarios above, by reason:
     journal, whose ticks are refused with an alert, a raw code except
     on a press; Actors row 3)
   - A7 (the Delete notice's spelling; Rule 21; scenario 5 marks it)
-  - A8 and OJS1 (the theme in use unticked, and a journal's home page
-    coming up blank; Rule 12)
+  - A8 (the theme in use unticked; Rule 12)
   - A10 (a file that is not a ".tar.gz" archive, refused in the
     server's own words; Rule 17)
 - **No seed**:
@@ -708,11 +707,11 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A7](#a7) | Deleting a plugin: the notice that confirms it reads "successfuly deleted" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | A refused tick or untick is explained by a raw code, and "Disable" stays open with its spinner | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | Uploading a file that is not a plugin package shows PHP's archive error with a server path | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [OJS1](#ojs1) | With its theme switched off, a journal's home page comes up blank for every visitor | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [A4](#a4) | "Delete" is offered on plugins nobody can switch off, and on the theme in use | ❓ | minor | — |
 | [A6](#a6) | A Site Administrator with no manager role in a journal cannot switch its plugins | ❓ | minor | — |
 | [A8](#a8) | The theme a journal uses can be switched off | ❓ | user-visible | — |
 | [OMP1](#omp1) | A press's list shows site-wide plugins to the Site Administrator only on a one-press installation | ✅ | invisible | — |
+| [OJS1](#ojs1) | Retired: with its theme switched off, a journal's home page came up blank for every visitor; fixed by pkp/pkp-lib#13549 | ✅ | retired | housekeeping (claude), 2026-10-16 — fixed by pkp/ojs#5948, merged 2026-10-16 |
 | [OMP2](#omp2) | A press lists the category headings in another order | ✅ | invisible | — |
 
 ### All apps
@@ -817,8 +816,7 @@ Basis: probe, 2026-10-02. <sup>f-a7</sup>
 **A8 — The theme in use can be switched off** · ❓ · user-visible.
 The list accepts unticking the theme a journal uses, with the ordinary
 "Disable" window and the notice "The plugin "Default Theme" has been
-disabled."; the journal's public pages then show with no styling (on a
-journal the home page fails outright, [OJS1](#ojs1)), and Settings ›
+disabled."; the journal's public pages then show with no styling, and Settings ›
 Website › "Appearance" › "Theme" offers an empty list. Ticked again,
 the pages are styled again.
 Question: should the list refuse to disable the theme in use? Lean:
@@ -854,21 +852,6 @@ Nothing is installed, but the message does not tell the administrator
 what was wrong with the file or what to upload instead.
 Basis: probe, 2026-10-02. <sup>f-a10</sup>
 
-### OJS
-
-<a id="ojs1"></a>
-**OJS1 — With its theme switched off, a journal's home page comes up blank for every visitor** · 🐞 · medium · crash: server.
-After the theme a journal uses is unticked in the Plugins list, the
-journal's home page should show its content unstyled, as its other pages
-do. Instead the server fails and the page comes up blank, so readers who
-arrive at the journal see nothing. On a press and a preprint server the
-home page shows unstyled like the rest.
-The journal manager is told only that the plugin was disabled, and the
-page stays blank until the theme is ticked again. The same blank page
-follows when the theme chosen for the journal cannot be loaded, as when
-its folder is gone.
-Basis: probe, 2026-10-02. <sup>f-ojs1</sup>
-
 ### OMP
 
 <a id="omp1"></a>
@@ -886,6 +869,11 @@ A press lists "Public Identifier Plugins" second and "Theme Plugins"
 sixth (Fields); a journal and a preprint server keep the order of their
 own application.
 Basis: probe. <sup>f-omp2</sup>
+
+### Retired
+
+<a id="ojs1"></a>
+**OJS1 — With its theme switched off, a journal's home page comes up blank for every visitor** · ✅ · retired. Fixed upstream (pkp/ojs#5948 for pkp/pkp-lib#13549, merged 2026-10-16), retired by the housekeeping session 2026-10-16. <sup>f-ojs1</sup>
 
 ---
 
@@ -1097,8 +1085,9 @@ theme only when `isActive()` (the context's or site's
 `PluginRegistry::loadCategory('themes', true)`, enabled themes only.
 `PluginGridHandler::disable()` checks nothing about the active theme.
 Display name `plugins.themes.default.name` "Default Theme". OJS's
-`IndexHandler` reads an option of the active theme, which is missing
-then (OJS1). Live-probed 2026-09-27 (Rule 12): td7.
+`IndexHandler` reads an option of the active theme only when there is
+one, falling back to the default home page content (OJS1, retired).
+Live-probed 2026-09-27 (Rule 12): td7.
 
 <a id="fn-j"></a>
 **j** — Row links. `PluginGridRow::initialize()` adds
@@ -1417,7 +1406,15 @@ Issue report: [pkp-e2e#506](https://github.com/jardakotesovec/pkp-e2e/issues/506
 an empty page; server log `Call to a member function getOption() on
 null` in `IndexHandler`. OMP's and OPS's home pages, and OJS's "About
 the Journal" and login pages, showed unstyled.
-Issue report: [pkp-e2e#504](https://github.com/jardakotesovec/pkp-e2e/issues/504) ([docs/issues/U62-OJS1-theme-off-journal-home-page-blank.md](../issues/U62-OJS1-theme-off-journal-home-page-blank.md)).
+Fixed 2026-10-16 (housekeeping): pkp/ojs#5948 (`f3c0f72f89`, for
+pkp/pkp-lib#13549; `main` only, 3.5 never had the call) reads the
+option through `$activeTheme?->getOption(…)`, so a missing theme falls
+back to `JournalContentOption::default()`. The issue report's walk on
+PKP's default dataset, OJS `main` `f3c0f72f89`, PostgreSQL: with
+"Default Theme" unticked, the journal's home page answered 200,
+unstyled, with "Current Issue", "Vol. 1 No. 2 (2014)" and its articles,
+and the server log stayed empty. The report and its walk deleted;
+pkp-e2e#504 closed.
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — fn-d. The one-press test predates the 2022 controller
