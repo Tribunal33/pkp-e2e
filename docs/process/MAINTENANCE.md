@@ -703,26 +703,30 @@ cherry-picks that mirror the team's. Nothing is ever built on it; a
 new feature `ore` alone would get is a question for the maintainer.
 Baselines and the read log: `docs/tracking/upstream-sync-ore.md`.
 
-CI covers `ore` three ways, all from the pkp-e2e `ore` branch: its own
-push runs (`e2e.yml` there runs OJS alone against pkp/ojs `ore`), the
-nightly `ojs-ore` job in `main`'s `e2e.yml` (a schedule fires on the
-default branch alone), and pkp/ojs's hook on `ore`, which runs the
-`ore` suite on every push and on every PR into `ore` (pkp/ojs#5944), a
-companion branch named like the PR's branch winning as on `main`.
-Nobody watches an Actions tab: these runs count only once the daily
-step reads them (step 0 below) and the day's channel summary says what
-they showed.
+CI covers `ore` two ways, both from the pkp-e2e `ore` branch: pkp/ojs's
+hook on `ore` runs the `ore` suite on every push to `ore` and on every
+PR into it (pkp/ojs#5944), a companion branch named like the PR's
+branch winning as on `main`; and the pkp-e2e `ore` branch's own push
+runs (`e2e.yml` there runs OJS alone against the pkp/ojs `ore` tip)
+cover the suite's side when a cherry-pick moves it. No nightly: the two
+tips are tested together whenever either moves, and the daily step
+dispatches when they were not (step 0 below; maintainer, 2026-10-16).
+Nobody watches an Actions tab: the runs count only once that step reads
+them and the day's channel summary says what they showed.
 
 The daily step, after `main` and the stable line (upstream session step
 6), in the ore worktree beside the slot clone (harness.md "The ore
 worktree"; `cd ../<clone>-ore`, `git pull --rebase`, `npm run fetch-apps
 -- --update`, `npm run mount`):
 
-0. **Read the runs.** The latest `ojs-ore` job of `main`'s nightly
-   (`gh run list -R jardakotesovec/pkp-e2e --workflow e2e.yml --event
-   schedule --limit 1`, then `node bin/ci.js summary <run-id>`) and the
-   latest hook run on pkp/ojs `ore` (`gh run list -R pkp/ojs --workflow
-   e2e-tests.yml --branch ore --limit 1`). A red is triaged against
+0. **Read the runs.** The latest hook run on pkp/ojs `ore` (`gh run
+   list -R pkp/ojs --workflow e2e-tests.yml --branch ore --limit 1`) and
+   the latest push run of pkp-e2e `ore` (`gh run list -R
+   jardakotesovec/pkp-e2e --workflow e2e.yml --branch ore --limit 1`,
+   `node bin/ci.js summary <run-id>`). When neither ran the current
+   pair of tips (the OJS tip with the pkp-e2e `ore` tip), `node
+   bin/ci.js dispatch --ref ore --apps ojs` runs it now, in the
+   background under the keepalive. A red is triaged against
    `ci-triage.md` as `main`'s is (upstream session step 4) and named in
    the day's summary with its link; a red the suite must follow (a
    cherry-pick changed behavior the ore suite asserts) is step 2's

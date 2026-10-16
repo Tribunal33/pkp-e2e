@@ -20,7 +20,7 @@ on:
   pull_request:
     branches: ['main']
   schedule:
-    - cron: '17 3 * * *' # nightly against the app branches below, and the ojs-ore job
+    - cron: '17 3 * * *' # nightly against the app branches below
   # Dispatch can pin any app to an exact repo/ref (e.g. a PR's merge sha) and,
   # via --ref, run the suite from any pkp-e2e branch — the fix-verification
   # combo: `gh workflow run e2e.yml --ref <fix-branch> -f ojs_ref=<sha>`.
@@ -112,16 +112,3 @@ jobs:
       pkp_lib_ref: ${{ inputs.pkp_lib_ref || '' }}
       ui_library_ref: ${{ inputs.ui_library_ref || '' }}
       php_ini_values: ${{ inputs.php_ini_values || '' }}
-  # The ore branch (MAINTENANCE "The ore branch"): pkp/ojs `ore` is what the
-  # ORE project runs in production until 3.6 is released, and the pkp-e2e
-  # branch `ore` is its suite. A schedule fires on the default branch alone,
-  # so its nightly lives here: run-app.yml at main, the suite from `ore`
-  # (e2e_ref), the app at pkp/ojs `ore`. Temporary: goes with the branch.
-  ojs-ore:
-    if: github.event_name == 'schedule' && github.repository == 'jardakotesovec/pkp-e2e'
-    uses: ./.github/workflows/run-app.yml
-    with:
-      app: ojs
-      app_repo: pkp/ojs
-      app_ref: ore
-      e2e_ref: ore
