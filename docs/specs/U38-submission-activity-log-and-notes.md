@@ -1525,7 +1525,7 @@ through the scenario API), the recommendation, review-form and
 competing-interests changes, and OPS (no reviews). Security-shaped and
 unreleased: its issue report will carry "- **Security** unreleased"
 (REPORT.md).
-Issue report: [pkp-e2e#1002](https://github.com/jardakotesovec/pkp-e2e/issues/1002) ([docs/issues/U38-A12-author-editor-reads-review-change-by-address.md](../issues/U38-A12-author-editor-reads-review-change-by-address.md)).
+Issue report: [pkp-e2e-sec#15](https://github.com/jardakotesovec/pkp-e2e-sec/issues/15) ([docs/issues/U38-A12-author-editor-reads-review-change-by-address.md](../issues/U38-A12-author-editor-reads-review-change-by-address.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — Note o. Live-probed 2026-09-23 (the submission-files claim

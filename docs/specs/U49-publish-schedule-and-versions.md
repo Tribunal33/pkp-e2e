@@ -2521,7 +2521,7 @@ Proposed fix: parse inertly (`DOMParser`, or the `textContent` of a
 `InsertSummaryOfChanges` component, so no release carries it.
 Security-shaped and unreleased: its issue report carries "- **Security**
 unreleased" (REPORT.md).
-Issue report: [pkp-e2e#997](https://github.com/jardakotesovec/pkp-e2e/issues/997) ([docs/issues/U49-A11-revision-summary-markup-runs-on-insert-content.md](../issues/U49-A11-revision-summary-markup-runs-on-insert-content.md)).
+Issue report: [pkp-e2e-sec#13](https://github.com/jardakotesovec/pkp-e2e-sec/issues/13) ([docs/issues/U49-A11-revision-summary-markup-runs-on-insert-content.md](../issues/U49-A11-revision-summary-markup-runs-on-insert-content.md)).
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with

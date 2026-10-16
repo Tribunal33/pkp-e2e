@@ -43,7 +43,8 @@ not here. `docs/README.md` is the map of the documentation.
   `jardakotesovec/pkp-e2e-sec` cloned next to this one (one clone shared by
   the slots on the VM), kept like this repo: pulled at session start,
   committed and pushed before the session ends. Main-only faults are
-  ordinary findings with the `security` label. Released ones go only to
+  ordinary findings with the `security` label, their GitHub issue filed
+  on the private repo's tracker, never pkp-e2e's public one. Released ones go only to
   that repo, after a check against its findings and its copies of the
   advisories. The campaign's
   maintainers have access to PKP's security advisories, so this is

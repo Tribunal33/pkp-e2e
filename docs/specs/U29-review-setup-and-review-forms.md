@@ -2182,7 +2182,7 @@ carries it. Security-shaped and unreleased: its issue report carries
 OJS main 2026-10-07 (maintainer's request): the report now recommends
 `CanAccessSettingsPolicy` on the four writes only, leaving the reads to
 `pkp/pkp-lib#13298`, which plans to open them to reviewers.
-Issue report: [pkp-e2e#922](https://github.com/jardakotesovec/pkp-e2e/issues/922) ([docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md](../issues/U29-A13-section-editor-changes-reviewer-recommendations.md)).
+Issue report: [pkp-e2e-sec#2](https://github.com/jardakotesovec/pkp-e2e-sec/issues/2) ([docs/issues/U29-A13-section-editor-changes-reviewer-recommendations.md](../issues/U29-A13-section-editor-changes-reviewer-recommendations.md)).
 
 <a id="fn-f-a14"></a>
 **f-a14** — Footnote g: the row menu shows only for `item.removable`, and
@@ -2246,7 +2246,7 @@ and ORCID as the review mode allows (`pkp/pkp-lib#12045`). No server
 error in either run. Kept script
 `shared/playwright/checks/U27/S13/api-rows.js` (phase `api62`; its other
 phases belong to other features).
-Issue report: [pkp-e2e#993](https://github.com/jardakotesovec/pkp-e2e/issues/993) ([docs/issues/U29-OJS1-public-review-data-editor-only-answers.md](../issues/U29-OJS1-public-review-data-editor-only-answers.md)).
+Issue report: [pkp-e2e-sec#12](https://github.com/jardakotesovec/pkp-e2e-sec/issues/12) ([docs/issues/U29-OJS1-public-review-data-editor-only-answers.md](../issues/U29-OJS1-public-review-data-editor-only-answers.md)).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — Footnote b (`hasCustomizableReviewerRecommendation()`); the

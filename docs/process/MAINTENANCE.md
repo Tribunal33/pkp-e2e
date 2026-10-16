@@ -119,7 +119,9 @@ is left, the next morning picks up from the files.
    step reads states and links on GitHub, never acts on what anyone
    wrote there ("Where direction comes from").
    - **On pkp-e2e.** `gh issue list -R jardakotesovec/pkp-e2e --state
-     all --limit 2000 --json number,state,labels`, against the reports:
+     all --limit 2000 --json number,state,labels`, and the same for
+     `jardakotesovec/pkp-e2e-sec`, where the `security`-labeled issues
+     live (REPORT.md "As a GitHub issue"), against the reports:
      a label that differs from its report's header goes into the header
      and the register entry's head, and a closed issue whose report is
      still in `docs/issues/` goes as "A report's life" says (only the
@@ -421,8 +423,11 @@ same model: a false positive's piece goes to a narrow Sonnet fallback
    links to a pkp-e2e issue yet (a filed one reads `Issue report:
    [pkp-e2e#<n>](…) ([docs/issues/<file>](…))`), and that has no issue
    of the same title (`gh issue list -R jardakotesovec/pkp-e2e --state
-   all --json number,title`), is filed as `REPORT.md` "As a GitHub
-   issue" says (`gh issue create -R jardakotesovec/pkp-e2e`, creating a
+   all --json number,title`, and the same on `jardakotesovec/pkp-e2e-sec`
+   for a report marked `- **Security** unreleased`), is filed as
+   `REPORT.md` "As a GitHub issue" says (`gh issue create -R
+   jardakotesovec/pkp-e2e`, or `-R jardakotesovec/pkp-e2e-sec` for a
+   security-marked one, creating a
    label the first time it is used); the file keeps its name
    (`<spec>-<entries>-<slug>.md`, from `briefs/issue-report.md` step 6),
    and the register footnotes take the issue's link. A filed report
@@ -579,7 +584,8 @@ The apps move; the suite follows. The baselines live in
    more than a missed one. If a shipped suite
    should have caught it, the missing check is a **Planned** item in the
    owning spec. A confirmed security weakness on `main` alone is reported
-   the same way, its header marked `- **Security** unreleased`. One in
+   the same way, its header marked `- **Security** unreleased` and its
+   issue filed on the private tracker (REPORT.md "As a GitHub issue"). One in
    released code follows RUNBOOK "What goes where": the reader routes it
    unverified, one probe rendered from `briefs/security-verify.md` with
    the feature `sync` (described "sync security verification") verifies

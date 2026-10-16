@@ -2327,7 +2327,7 @@ commit, with the same controller and resource, and each app registers
 the `comments` API; no comment box writes comments on a press or a
 server, so there the reports sit only on comments written through the
 API.
-Issue report: [pkp-e2e#971](https://github.com/jardakotesovec/pkp-e2e/issues/971) ([docs/issues/U14-A17-public-comment-list-exposes-reports.md](../issues/U14-A17-public-comment-list-exposes-reports.md)).
+Issue report: [pkp-e2e-sec#10](https://github.com/jardakotesovec/pkp-e2e-sec/issues/10) ([docs/issues/U14-A17-public-comment-list-exposes-reports.md](../issues/U14-A17-public-comment-list-exposes-reports.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18 — A18.** `UserCommentController::submit()` (the `has.user` group,
@@ -2350,7 +2350,7 @@ Policy and Practice" / "Montgomerie et al." and "Condensing Water
 Availability Models to Focus on Specific Water Management Systems" /
 "Novak". No server error. Another journal's publication, OMP and OPS:
 read in the code (same lib/pkp commit in the three apps).
-Issue report: [pkp-e2e#972](https://github.com/jardakotesovec/pkp-e2e/issues/972) ([docs/issues/U14-A18-comment-request-unpublished-submission.md](../issues/U14-A18-comment-request-unpublished-submission.md)).
+Issue report: [pkp-e2e-sec#11](https://github.com/jardakotesovec/pkp-e2e-sec/issues/11) ([docs/issues/U14-A18-comment-request-unpublished-submission.md](../issues/U14-A18-comment-request-unpublished-submission.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19 — A19.** `UserCommentController::deleteReports()` (the

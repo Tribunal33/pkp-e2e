@@ -1,4 +1,4 @@
-// PR review of pkp/pkp-lib#13521 (issue pkp/pkp-lib#13520, pkp-e2e#928, U01 A13): the in-page
+// PR review of pkp/pkp-lib#13521 (issue pkp/pkp-lib#13520, pkp-e2e-sec#6, U01 A13): the in-page
 // requests of Administration that the issue walk (checks/issues/admin-changes-skip-confirm-access/
 // walk.js) does not press, sent from an open Administration page the way its grids and forms send
 // them, on PKP's default dataset with `[security] password_timeout = 1`.

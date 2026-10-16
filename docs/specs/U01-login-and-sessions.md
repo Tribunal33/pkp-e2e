@@ -1844,7 +1844,7 @@ live, then reverted). Gated requests would then also extend the window.
 3.5, 3.4 and 3.3 do not have it: none has `password_timeout` or the policy.
 Security-shaped and unreleased: its issue report carries
 "- **Security** unreleased" (REPORT.md).
-Issue report: [pkp-e2e#928](https://github.com/jardakotesovec/pkp-e2e/issues/928) ([docs/issues/U01-A13-admin-changes-skip-confirm-access.md](../issues/U01-A13-admin-changes-skip-confirm-access.md)); the team's copy is `pkp/pkp-lib#13520` (open, 2026-10-14).
+Issue report: [pkp-e2e-sec#6](https://github.com/jardakotesovec/pkp-e2e-sec/issues/6) ([docs/issues/U01-A13-admin-changes-skip-confirm-access.md](../issues/U01-A13-admin-changes-skip-confirm-access.md)); the team's copy is `pkp/pkp-lib#13520` (open, 2026-10-14).
 
 <a id="fn-a14"></a>
 **f-a14** — pkp-lib `3407fc5bc0` ("Fix an issue with disabled accounts

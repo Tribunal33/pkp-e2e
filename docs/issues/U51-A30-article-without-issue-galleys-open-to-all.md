@@ -245,7 +245,7 @@ alone.
   method's docblock.
 - Overlap with the U48 A22 fix: the JATS XML link that gives the article's
   text to visitors whom the galleys refuse
-  ([pkp-e2e#923](https://github.com/jardakotesovec/pkp-e2e/issues/923)).
+  ([pkp-e2e-sec#3](https://github.com/jardakotesovec/pkp-e2e-sec/issues/3)).
   That fix adds `IssueAction::userCanReadArticle()` and replaces
   `view()`'s `hasAccess` block with it. The two diffs edit the same
   lines of `view()`, so whichever lands second rebases. They also

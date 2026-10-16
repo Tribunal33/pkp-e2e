@@ -2878,8 +2878,8 @@ it: 3.5's `canEditPublication(int $submissionId, …)` locks the Author out
 of every version once one is published (`classes/submission/Repository.php:514-547`),
 and none of them has the funders API or `reviewRoundIds`.
 Security-shaped and unreleased: its issue report carries "- **Security** unreleased" (REPORT.md).
-Issue report (the funders): [pkp-e2e#929](https://github.com/jardakotesovec/pkp-e2e/issues/929) ([docs/issues/U40-A21-author-new-version-changes-published-funders.md](../issues/U40-A21-author-new-version-changes-published-funders.md)).
-Issue report (the review round): [pkp-e2e#930](https://github.com/jardakotesovec/pkp-e2e/issues/930) ([docs/issues/U40-A21-review-round-taken-from-other-version.md](../issues/U40-A21-review-round-taken-from-other-version.md)).
+Issue report (the funders): [pkp-e2e-sec#7](https://github.com/jardakotesovec/pkp-e2e-sec/issues/7) ([docs/issues/U40-A21-author-new-version-changes-published-funders.md](../issues/U40-A21-author-new-version-changes-published-funders.md)).
+Issue report (the review round): [pkp-e2e-sec#8](https://github.com/jardakotesovec/pkp-e2e-sec/issues/8) ([docs/issues/U40-A21-review-round-taken-from-other-version.md](../issues/U40-A21-review-round-taken-from-other-version.md)).
 
 <a id="fn-f-a22"></a>
 **f-a22 — A22 evidence.** The Title's TinyMCE editor, mounted by the

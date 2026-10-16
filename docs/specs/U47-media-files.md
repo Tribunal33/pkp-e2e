@@ -1853,7 +1853,7 @@ request): the report's fix keeps `StageRolePolicy`'s default
 another role (the `pkp/pkp-lib#12702` fault) and "recommend only"
 Section Editors, whom the page offers the actions; tried with the media
 routes refused for the Copyeditor and the controls unchanged.
-Issue report: [pkp-e2e#926](https://github.com/jardakotesovec/pkp-e2e/issues/926) ([docs/issues/U47-A8-copyeditor-changes-media-outside-production.md](../issues/U47-A8-copyeditor-changes-media-outside-production.md)).
+Issue report: [pkp-e2e-sec#5](https://github.com/jardakotesovec/pkp-e2e-sec/issues/5) ([docs/issues/U47-A8-copyeditor-changes-media-outside-production.md](../issues/U47-A8-copyeditor-changes-media-outside-production.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — Note q29. `HtmlArticleGalleyPlugin`, the galley view: a

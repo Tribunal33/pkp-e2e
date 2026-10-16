@@ -95,7 +95,11 @@ read; a label changed on GitHub is copied back into the header.
   the browser (`script`), or both.
 - **Security**, only for a fault that could plausibly be a security
   weakness and that no release carries (Affects names `main` alone): the
-  word `unreleased`. One in released code never gets a report; it goes to
+  word `unreleased`. The report is written like any other, but its GitHub
+  issue is filed on the private tracker, `jardakotesovec/pkp-e2e-sec`,
+  never pkp-e2e's public one (maintainer, 2026-10-16: ORE runs `main`-line
+  code in production, so an open weakness is not advertised). One in
+  released code never gets a report; it goes to
   the private security repo (RUNBOOK "What goes where").
 - **Affects**, **Introduced**, **Upstream**: below.
 - **Tracked in** links each register entry (or names the tracking row),
@@ -421,7 +425,10 @@ that is not wastes the time the label was meant to save.
 ## As a GitHub issue
 
 An issue report under `docs/issues/` is written to be filed from the
-file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`):
+file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`) — except one whose
+header carries `- **Security** unreleased`, which is filed the same way
+on the private tracker (`jardakotesovec/pkp-e2e-sec`), and whose register
+footnote reads `pkp-e2e-sec#<n>`:
 
 - The title is the report's title. The labels are read off the header:
   `severity: <word>`, `effort: <word>`, the kind (`regression`,
