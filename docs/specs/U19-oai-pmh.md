@@ -1158,9 +1158,9 @@ Left out of the scenarios above, by reason:
     Identify, the lists and GetRecord answering at that journal, at another
     journal and at the site-wide address; a second major version
     published on screen listed as its own record before the article's,
-    each answering GetRecord {OJS} (Rules 20, 20b; once pkp/ojs#5947 is
-    on `main`, before which one such journal fails every OJS OAI read on
-    the shared install)
+    each answering GetRecord {OJS} (Rules 20, 20b; writable since
+    pkp/ojs#5947: before it, one such journal failed every OJS OAI read
+    on the shared install)
   - the guard for A16 (issue report
     `docs/issues/U19-A16-oai-argument-twice-server-error.md`): a request
     that gives `metadataPrefix`, `set` or `verb` twice answering the
@@ -1416,7 +1416,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OMP5](#omp5) | Retired: an address with no press answers as the whole site | ✅ | retired | — |
 | [OMP4](#omp4) | A press's OAI-PMH record lists answered a server error once one book was published without an abstract | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/omp#2490's head |
 | [OPS2](#ops2) | One preprint without an abstract made the server's record lists fail | ✅ | retired | PR review (claude), 2026-10-05 — fixed at pkp/ops#1430's head |
-| [A22](#a22) | Retired: once one journal set "DOI Versioning" to "Yes", every journal's OAI-PMH requests answered a server error; fixed by pkp/ojs#5947 | ✅ | retired | PR review (claude), 2026-10-16 — fixed at pkp/ojs#5947's head |
+| [A22](#a22) | Retired: once one journal set "DOI Versioning" to "Yes", every journal's OAI-PMH requests answered a server error; fixed by pkp/ojs#5947 | ✅ | retired | PR review (claude), 2026-10-16 — fixed by pkp/ojs#5947, merged 2026-10-16 |
 
 ### All apps
 
@@ -1735,7 +1735,7 @@ the plain address can send the same harvester to either (Rule 19a).
 Basis: probe, 2026-09-26. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error** {OJS} · ✅ · retired. Fixed by pkp/ojs#5947 (for pkp/pkp-lib#13547, the issue report's proposed fix), verified 2026-10-16 at the PR's head `dd219baf6d` before its merge, on PostgreSQL: the report's Steps answer at the head where the base answers 500. <sup>f-a22</sup>
+**A22 — Once one journal sets "DOI Versioning" to "Yes", every journal's OAI-PMH requests answer a server error** {OJS} · ✅ · retired. Fixed by pkp/ojs#5947 (for pkp/pkp-lib#13547, the issue report's proposed fix), verified 2026-10-16 at the PR's head `dd219baf6d` before its merge, on PostgreSQL: the report's Steps answer at the head where the base answers 500. Merged the same day as ojs `2815f33e65`, a squash of that head on `79c3676d1b` with the same tree; `main` only, no 3.5 twin (3.5 has no per-version records). <sup>f-a22</sup>
 
 <a id="a23"></a>
 **A23 — A journal's `driver` OAI set lists articles that have no galley** {OJS} · 🐞 · low.

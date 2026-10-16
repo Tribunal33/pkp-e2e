@@ -10,7 +10,7 @@
   - 3.4: none (code; no per-version records)
   - 3.3: none (code; no per-version records)
 - **Introduced** `pkp/ojs#5674` for `pkp/pkp-lib#12922` · [4ea46f5f35](https://github.com/pkp/ojs/commit/4ea46f5f35f3312394bc993074ce62043bf4b761) · 2026-07-27 · Kaitlin Newson (kaitlinnewson)
-- **Upstream** none found (2026-10-01)
+- **Upstream** none found (2026-10-01); filed as `pkp/pkp-lib#13547` (closed), fixed by `pkp/ojs#5947` with the proposed fix, merged 2026-10-16 as ojs `2815f33e65` (`main` only)
 - **Tracked in** spec U19 [A22](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U19-oai-pmh.md#a22)
 - **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
