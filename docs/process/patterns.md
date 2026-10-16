@@ -310,7 +310,17 @@ wait on `animationend`, and a true 0 can mean the event never fires.
   settled, `waitForLegacyFormSettled(page, window)` (placeholders gone,
   jQuery idle, nothing `:animated`, fonts loaded), and waits again after a
   change that slides something in, a box press included
-  (`setEditReviewFile`; U31 S2/S4, U27 S6, U28 S4 on CI, 2026-09-30).
+  (`setEditReviewFile`; U31 S2/S4, U27 S6, U28 S4 on CI, 2026-09-30). A legacy form's answer is not the form taking it: the
+  `response` event fires on the headers and `AjaxFormHandler` applies the
+  answer later, a refusal answered 200 swapping the pressed `<form>` for a
+  new one whose handler binds a tick after; a page object that presses such
+  a submit and returns while the window may stay waits for
+  `legacyAnswerApplied(page, formId)`, or a box filled on the old form goes
+  with it and the next press posts the refused value again. A legacy
+  category grid's control line is the row's next `tr.row_controls`, never
+  `[id="<row id>-control-row"]`, since a category row and a row under it
+  can share an id (OMP U73 S2 on CI, 10 of 10 red with the callback held
+  150 ms, 2026-10-16).
 - **A cancel read under a network throttle** (CDP
   `Network.emulateNetworkConditions`): lifting the throttle releases every
   held byte at once, ahead of the page's abort, so the throttle stays on

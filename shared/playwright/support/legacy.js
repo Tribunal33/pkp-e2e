@@ -55,4 +55,36 @@ async function waitForLegacyFormSettled(page, scope) {
     );
 }
 
-module.exports = {waitForJQueryIdle, waitForLegacyFormSettled};
+/**
+ * Wait until the page has applied the answer to a legacy AJAX form's
+ * submit, after `waitForResponse` has seen it. Playwright's `response`
+ * fires on the answer's headers; `AjaxFormHandler` applies the answer in
+ * jQuery's callback once the body is read: a refusal answered 200 with the
+ * form again (`JSONMessage(true, $form->fetch())`) swaps the pressed
+ * `<form>` for a new one holding the posted values (`Handler.replaceWith`),
+ * whose handler binds a tick later still (its inline `$(function () {…})`
+ * runs from jQuery's ready promise). Between the answer and that swap the
+ * old form is still on screen, so a box filled there is thrown away with it
+ * and the next press posts the refused value again (OMP U73 S2 on CI,
+ * `.reports/flake-2026-10-16/u73s2-pubdate/diagnosis.md`). Settled: no
+ * jQuery request in flight (the callback runs before jQuery counts the
+ * request done) and every shown form with `formId` has its handler bound.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} formId the form's id (`addPubDateForm`)
+ */
+async function legacyAnswerApplied(page, formId) {
+    await page.waitForFunction(
+        (id) => {
+            const $ = window.jQuery;
+            if (!$ || $.active !== 0) return false;
+            return [...document.querySelectorAll(`form[id="${id}"]`)]
+                .filter((form) => form.checkVisibility())
+                .every((form) => $(form).data('pkp.handler') !== undefined);
+        },
+        formId,
+        {timeout: 30_000}
+    );
+}
+
+module.exports = {waitForJQueryIdle, waitForLegacyFormSettled, legacyAnswerApplied};

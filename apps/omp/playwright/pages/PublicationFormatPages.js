@@ -48,7 +48,7 @@
 const {expect} = require('@playwright/test');
 const {WorkflowPage} = require('../../../../shared/playwright/pages/WorkflowPage.js');
 const {expectNotice} = require('../../../../shared/playwright/pages/SectionsPages.js');
-const {waitForJQueryIdle} = require('../../../../shared/playwright/support/legacy.js');
+const {waitForJQueryIdle, legacyAnswerApplied} = require('../../../../shared/playwright/support/legacy.js');
 
 const T = 30_000;
 
@@ -415,8 +415,13 @@ class PublicationFormatsPage {
      */
     async openRowEntries(row) {
         await expect(row).toHaveCount(1, {timeout: T});
-        const id = await row.getAttribute('id');
-        const controls = this.page.locator(`[id="${id}-control-row"]`);
+        // The control line is the row's next `tr`, as the grid's own arrow
+        // finds it (GridHandler.js `.next('.row_controls')`), never by its
+        // id: a format row and a file row under it carry the same id when
+        // the format's id equals the file's (`…-row-4` twice, so
+        // `…-row-4-control-row` twice; the format grid keys formats by
+        // representation id and files by submission file id).
+        const controls = row.locator('xpath=following-sibling::tr[1][contains(concat(" ", @class, " "), " row_controls ")]');
         if (!(await controls.isVisible())) {
             await row.locator('a.show_extras').click();
         }
@@ -665,8 +670,9 @@ class FormatWindow {
         const body = await response.json();
         expect(body.content, 'the save answered with the form again').toContain('addPublicationFormatForm');
         // The answer's form replaces the tab's in the request's own
-        // callback, which runs before jQuery counts the request done.
-        await waitForJQueryIdle(this.page);
+        // callback, which runs before jQuery counts the request done, and
+        // the new form's handler binds a tick after that.
+        await legacyAnswerApplied(this.page, 'addPublicationFormatForm');
         await expect(message).toBeVisible({timeout: T});
         await expect(this.dialog()).toHaveCount(1);
     }
@@ -992,14 +998,21 @@ class DateWindow {
         return this.form().getByRole('link', {name: 'Cancel', exact: true});
     }
 
-    /** Press "OK" and return the save's answer (the window may stay: Rule 19b). */
+    /**
+     * Press "OK" and return the save's answer (the window may stay: Rule
+     * 19b), once the page has applied it: a refusal redraws the form with
+     * the posted date after the answer is in, so a box filled before that
+     * is lost (`legacyAnswerApplied`).
+     */
     async pressOk() {
         const saved = this.page.waitForResponse(
             (r) => /publication-date-grid\/update-date/.test(r.url()) && r.request().method() === 'POST',
             {timeout: T}
         );
         await this.okButton().click();
-        return saved;
+        const response = await saved;
+        await legacyAnswerApplied(this.page, 'addPubDateForm');
+        return response;
     }
 }
 
@@ -1173,14 +1186,20 @@ class TermsWindow {
         await box.blur();
     }
 
-    /** Press "Save" and wait for the save's answer; returns it. */
+    /**
+     * Press "Save" and return the save's answer once the page has applied
+     * it (a refusal redraws the form after the answer is in:
+     * `legacyAnswerApplied`).
+     */
     async pressSave() {
         const saved = this.page.waitForResponse(
             (r) => /publication-format-grid\/save-approved-proof/.test(r.url()) && r.request().method() === 'POST',
             {timeout: T}
         );
         await this.saveButton().click();
-        return saved;
+        const response = await saved;
+        await legacyAnswerApplied(this.page, 'approvedProofForm');
+        return response;
     }
 
     /** "Save" on a valid choice: the window closes. */

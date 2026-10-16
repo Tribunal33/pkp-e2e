@@ -1323,9 +1323,25 @@ trips.
   after 47 s; the run's failed-step log carries the error's first line
   only and the job log is no longer served, so the failing line is not
   known; found by the CI tally of 2026-10-08, no earlier sighting on any
-  app or ref. **Watch condition**: a second sighting; then read the
-  failing line from that run's artifact (`gh run download`) before a
-  diagnosis.
+  app or ref. Watch condition met 2026-10-16 (pkp-e2e branch run
+  38845616290, U03, shard 3/3, green on retry): `form#addPubDateForm`
+  still open 30 s after the date's OK at `:274`, its Date box reading
+  "2026091". **Diagnosed and fixed 2026-10-16** (housekeeping,
+  `.reports/flake-2026-10-16/u73s2-pubdate/diagnosis.md`): a race in the
+  page object. `DateWindow.pressOk()` returned on the `update-date`
+  response, before jQuery applied it; the refused seven-character date's
+  200 swaps in a new form holding the posted value, so "20260915" typed
+  into the old one was thrown away and the next OK posted "2026091" again.
+  `shared/playwright/support/legacy.js` gains `legacyAnswerApplied()`
+  (jQuery idle, the shown form's handler bound), used by `pressOk()` and
+  by `TermsWindow.pressSave()` and `FormatWindow.okRefused()` (the same
+  shape); `openRowEntries()` finds a row's control line as its next
+  `tr.row_controls`, since a format and its file can share an id
+  (app-changes row 23). With the callback held 1500 ms: red 10 of 10
+  before, 0 of 10 after; the U73 file `--repeat-each 5` at eight workers
+  50 of 50, U74 and U45 20 of 20, the serial U73 and U74 2 of 2.
+  patterns.md "Legacy jQuery flows" gained the rule. **Watch condition**:
+  a legacy window left open after an OK that answered ok.
 
 - **The reader-side user menu pressed before the theme's script bound
   it, fixed 2026-10-08** (OMP U01 S6, once, pkp-e2e push run 37724191553
