@@ -1369,8 +1369,21 @@ trips.
   the page kept its role boxes below the fold; it now centres the whole
   `li.context` block before the viewport reads, and the OJS and OPS twins
   do the same. Branch run 38505248989: OMP U02 S6 green on its first
-  attempt, no flaky line. **Watch condition**: a role box read out of the
-  viewport again.
+  attempt, no flaky line. Watch condition tripped 2026-10-15 on OJS
+  (pkp-e2e push run 38781476505 at b5825368, shard 1/3, green on its
+  retry): the first block's name line read "viewport ratio 0" for 10 s.
+  **Diagnosed and fixed 2026-10-16** (housekeeping,
+  `.reports/flake-2026-10-16/u02s6-viewport/diagnosis.md`): another
+  mechanism, a race in the test's flow. The "Register" press does not wait
+  for the theme's `css?name=stylesheet`, the block was centred in the
+  layout without it and moved when the sheet landed; the OMP and OPS twins
+  already waited for `stylesApplied()`, the OJS one did not. OJS
+  `RegistrationPages.js` now waits for it in `scrollBlockIntoView()`,
+  `expectConsentHidden()` and `expectConsentShown()`; patterns.md parallel
+  lesson 16 gained the scroll clause. With the sheet held 3 s: OJS S6 red
+  5 of 5 before, 0 of 8 after (OMP and OPS 0 of 5 before); the OJS U02
+  file `--repeat-each 5` at eight workers 40 of 40. **Watch condition**: a
+  role box or name read out of the viewport again.
 
 - **OMP U28 S15's "submit this review?" dialog not shown in 30 s** (OMP,
   once, pkp-e2e dispatch run 37915669207 from `main` at `12e6e1d0` with

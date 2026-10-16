@@ -190,11 +190,18 @@ exports.RegisterPage = class RegisterPage extends BasePage {
      * into the viewport: the block is centred, so a journal near the foot
      * of the list does not leave its boxes below the fold the way
      * scrolling only the name line did (OMP's twin flaked on CI with
-     * "viewport ratio 0" on the second journal's boxes).
+     * "viewport ratio 0" on the second journal's boxes). The scroll waits
+     * for the theme's stylesheet first (patterns.md parallel lesson 16):
+     * the page is laid out without it while `css?name=stylesheet` is still
+     * out after the "Register" press, a block centred in that layout moves
+     * when the sheet lands, and nothing scrolls again, so the name read
+     * "viewport ratio 0" for 10 s (OJS CI 2026-10-15; 5 of 5 red with the
+     * sheet held 3 s, `.reports/flake-2026-10-16/u02s6-viewport/`).
      *
      * @param {import('@playwright/test').Locator} block
      */
     async scrollBlockIntoView(block) {
+        await this.stylesApplied();
         await block.evaluate((li) => li.scrollIntoView({block: 'center', inline: 'nearest'}));
     }
 
@@ -282,16 +289,27 @@ exports.RegisterPage = class RegisterPage extends BasePage {
         return this.form.locator('.context_privacy.context_privacy_visible');
     }
 
-    /** No consent line under this block (nothing of its roles ticked, Rule 5). */
+    /**
+     * No consent line under this block (nothing of its roles ticked, Rule
+     * 5). The rule that parks the line off screen is in the theme's
+     * stylesheet, so the viewport read waits for it (patterns.md parallel
+     * lesson 16): before it lands the line sits in place.
+     */
     async expectConsentHidden(block) {
+        await this.stylesApplied();
         const line = this.contextConsent(block);
         await expect(line).toHaveCount(1);
         await expect(line).not.toHaveClass(/context_privacy_visible/);
         await expect(line).not.toBeInViewport();
     }
 
-    /** The block's consent line is on screen (a role of it ticked, Rule 5). */
+    /**
+     * The block's consent line is on screen (a role of it ticked, Rule 5);
+     * its scroll and viewport read wait for the theme's stylesheet, as
+     * `scrollBlockIntoView()` does.
+     */
     async expectConsentShown(block) {
+        await this.stylesApplied();
         const line = this.contextConsent(block);
         await expect(line).toHaveClass(/context_privacy_visible/);
         await line.scrollIntoViewIfNeeded();

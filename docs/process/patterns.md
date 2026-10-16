@@ -446,7 +446,13 @@ over.
     `reload()` wait for it; a link's `click()`, a heading assertion and
     `toHaveURL` do not. A page-object reader of styles or geometry calls
     `BasePage.stylesApplied()` (the `load` state) before it reads (OMP U16
-    S8, 10 of 10 red with the stylesheet held 3 s, 2026-09-29).
+    S8, 10 of 10 red with the stylesheet held 3 s, 2026-09-29). A scroll is
+    such a read too: `scrollIntoView()`, `scrollIntoViewIfNeeded()` or a
+    `toBeInViewport()` after one sets its offset in the layout without the
+    theme, the sheet's reflow moves the element and nothing scrolls again,
+    so the wait goes inside the page object's scroll helper, not its
+    callers, and the three apps' twins of a page object carry the same
+    waits (OJS U02 S6, 5 of 5 red with the sheet held 3 s, 2026-10-16).
 
 ## Tag conventions
 
