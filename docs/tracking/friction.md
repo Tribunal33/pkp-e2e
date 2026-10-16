@@ -13,4 +13,3 @@ Facts only, the same quarantine as everywhere else (nothing
 security-shaped, no credentials).
 
 ## Entries
-2026-10-15 · sync · regression reader rr13537 · the brief said lib/pkp sat at the PR head, but mid-read the three checkouts moved to the base (dce15320c7), so a grep showed the old code and cost re-checks through git show · a brief line saying whether the session will move the checkouts during the read, or telling the reader to read the head through `git show <head>:<file>` throughout

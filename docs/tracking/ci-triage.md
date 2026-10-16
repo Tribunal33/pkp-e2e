@@ -1396,6 +1396,19 @@ trips.
   app. **Watch condition**: a second sighting; then read the trace for
   whether the typed text reached the box before the tick.
 
+- **OMP U53 S1's first row read "Press editor" for the Site
+  Administrator** (OMP, once, pkp-e2e push run 38735135797 on `main` at
+  1a13854, 2026-10-15, shard 2/3, green on its retry; found by the CI
+  tally of 2026-10-16). "S1: find a user in the "Users" list"
+  (`U53-users-management.spec.js:572`): `rolesCell(adminRow)` on the
+  scratch press's first row ("admin admin") expected "Press manager" and
+  read "Press editor" for the 10 s; the name cell before it passed. No
+  earlier sighting at that line on any app. Lead, not read: the cell
+  names one of the administrator's roles on the scratch press, and which
+  one may follow the query's row order (the class "Order asserted on lists
+  the app does not order" above). **Watch condition**: a second
+  sighting; then read the error context and the query behind the cell.
+
 - **Docker Hub pull limit: a job dead at "Initialize containers".** Not a
   test red. The job ends in its first 30 seconds, its failed steps
   "Initialize containers" and "php -S deaths", its log `docker pull
