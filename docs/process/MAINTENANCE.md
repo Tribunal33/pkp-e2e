@@ -171,14 +171,17 @@ is left, the next morning picks up from the files.
    rewrite goes through "Issue reports" as a unit of its own.
 5. **Security refinement**, every morning. Pull `../pkp-e2e-sec` and
    list its `new` findings (`grep -l 'status:\*\* new' ../pkp-e2e-sec/findings/sec-*.md`
-   — the status line reads `- **status:** new`). One that is `unreleased`
-   (no tagged release nor `ore` carries it; the security repo's policy,
-   "Is it released?") is refined, oldest first, **one per session**, by
-   that repo's `CLAUDE.md` process (serial: never parallel helpers on
-   the shared apps), and its issue posted right after (`bin/post-issue.mjs`,
-   labels checked with `--dry-run` first). A `new` finding in released
-   code is left alone: it waits for the maintainer's ask. A refinement
-   started is finished in the same session, like any unit here.
+   — the status line reads `- **status:** new`). Refine one, oldest
+   first, **one per session**, by that repo's `CLAUDE.md` process
+   (serial: never parallel helpers on the shared apps). What follows
+   depends on the release state (the security repo's policy, "Is it
+   released?"): an `unreleased` finding's issue is posted right after
+   (`bin/post-issue.mjs`, labels checked with `--dry-run` first); one in
+   released code stays at `refined`, ready for the maintainer to check
+   and say "post sec-NNN" — never posted unasked. Say in the summary
+   what was refined and whether it waits for the maintainer. A
+   refinement started is finished in the same session, like any unit
+   here.
 6. **Incidentals** (odd days). Every row whose feature has a shipped spec (PROGRESS
    `done`), oldest first; rows against pending features stay for their
    spec author (RUNBOOK step 3). First grep the spec for each row: a
