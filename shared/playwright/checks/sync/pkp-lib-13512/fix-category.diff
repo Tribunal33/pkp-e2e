@@ -1,0 +1,11 @@
+--- a/lib/pkp/api/v1/categories/CategoryCategoryController.php
++++ b/lib/pkp/api/v1/categories/CategoryCategoryController.php
+@@ -197,7 +197,7 @@
+             $filenameBase = $categoryId . '-category';
+             $originalFileName = $temporaryFile->getOriginalFileName();
+             // Moves the temporary file to the public directory
+-            $fileName = app()->get('context')->moveTemporaryFile($context, $temporaryFile, $filenameBase, $user->getId());
++            $fileName = app()->get('context')->moveTemporaryFile($context, $temporaryFile, $filenameBase, $user);
+             $imageData = [
+                 'name' => $originalFileName,
+                 'thumbnailName' => $thumbnail['thumbnailName'],
