@@ -182,7 +182,12 @@ is left, the next morning picks up from the files.
    and say "post sec-NNN" — never posted unasked. Say in the summary
    what was refined and whether it waits for the maintainer. A
    refinement started is finished in the same session, like any unit
-   here.
+   here. While there, reconcile the tracker: one
+   `gh issue list -R jardakotesovec/pkp-e2e-sec --state open --json number,labels`
+   against the findings' header bullets — a label the team changed on an
+   issue (severity above all) is copied into its finding's header line,
+   marked as the team's call with the date; the finding never argues
+   back. Commit what changed with the repo's other updates.
 6. **Incidentals** (odd days). Every row whose feature has a shipped spec (PROGRESS
    `done`), oldest first; rows against pending features stay for their
    spec author (RUNBOOK step 3). First grep the spec for each row: a
