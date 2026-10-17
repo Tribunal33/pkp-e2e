@@ -637,9 +637,11 @@ command points it at the line; without it every command means `main`.
      the line checkout and put the answer in the log line. A twin `main`
      has not read yet is read on `main` first, in the same session. A
      twin of a `main` commit whose security weakness is filed as
-     `unreleased` makes it released: say so in the thread, tagging
-     @jarda.kotesovec, and the finding's issue loses the `unreleased`
-     label (the security repo's policy, "Is it released?").
+     `unreleased` puts the fault on a release branch: say so in the
+     thread, tagging @jarda.kotesovec — it ships with the line's next
+     patch release unless fixed there first. The label flips to released
+     only once a tag or `ore` carries it (the security repo's policy,
+     "Is it released?").
    - `~main <sha,…>`: `main` has the same subject or issue number and a
      different patch, an adapted backport. `git range-diff <main sha>^!
      <stable sha>^!` inside the line checkout (both histories are there)

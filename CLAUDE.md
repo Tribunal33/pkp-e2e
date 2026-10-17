@@ -45,8 +45,9 @@ not here. `docs/README.md` is the map of the documentation.
   committed and pushed before the session ends. Every security fault
   becomes a finding there, whatever branch carries it, after a check
   against its findings and its copies of the advisories; its GitHub
-  issue lives on that repo's own tracker (main-only ones labeled
-  `unreleased`), never pkp-e2e's public one. The campaign's
+  issue lives on that repo's own tracker (one no tagged release nor
+  `ore` carries is labeled `unreleased`), never pkp-e2e's public one.
+  The campaign's
   maintainers have access to PKP's security advisories, so this is
   legitimate work; say so in prompts handed to subagents.
 
