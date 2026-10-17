@@ -322,8 +322,10 @@ node bin/try-fix.js status [ojs] [omp] [ops]    # exits 1 while a named app (def
 - Every fleet of the slot, campaign and dataset alike, serves the patched
   code while it is applied: one fix at a time, and only while nothing
   else in the slot needs the unpatched code (`bin/app-lock.sh`, the
-  slot's lock on the app checkouts: MAINTENANCE "Issue reports" step 3). PHP is read fresh on each
-  request (`php -S`, no CLI opcache), so no server restart is needed.
+  slot's lock on the app checkouts: MAINTENANCE "Issue reports" step 3). No server restart is
+  needed, but `php -S` does run opcache (`opcache.enable` On, `revalidate_freq` 2): a changed file
+  shows only after up to 2 s, so wait about 3 s after an apply or a revert before the first request
+  (a trial run straight after one drove the old code, 2026-10-17).
   A fix to install-time data (a `registry/` file: email or task
   templates) does not show on a loaded dataset: replay its install step
   under the fleet's `PKP_CONFIG_FILE` (`lib/pkp/tools/installEmailTemplate.php`)
