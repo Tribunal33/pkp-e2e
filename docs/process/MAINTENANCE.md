@@ -171,9 +171,10 @@ is left, the next morning picks up from the files.
    rewrite goes through "Issue reports" as a unit of its own.
 5. **Security refinement**, every morning. Pull `../pkp-e2e-sec` and
    list its `new` findings (`grep -l 'status:\*\* new' ../pkp-e2e-sec/findings/sec-*.md`
-   — the status line reads `- **status:** new`). Refine one, oldest
-   first, **one per session**, by that repo's `CLAUDE.md` process
-   (serial: never parallel helpers on the shared apps). What follows
+   — the status line reads `- **status:** new`). Refine **up to three
+   per session** (as many as are there), oldest first, by that repo's
+   `CLAUDE.md` process, one at a time (serial: never parallel helpers
+   on the shared apps). What follows
    depends on the release state (the security repo's policy, "Is it
    released?"): an `unreleased` finding's issue is posted right after
    (`bin/post-issue.mjs`, labels checked with `--dry-run` first); one in
