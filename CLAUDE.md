@@ -42,11 +42,11 @@ not here. `docs/README.md` is the map of the documentation.
   `../pkp-e2e-sec/security_policy.md`, in the private repo
   `jardakotesovec/pkp-e2e-sec` cloned next to this one (one clone shared by
   the slots on the VM), kept like this repo: pulled at session start,
-  committed and pushed before the session ends. Main-only faults are
-  ordinary findings with the `security` label, their GitHub issue filed
-  on the private repo's tracker, never pkp-e2e's public one. Released ones go only to
-  that repo, after a check against its findings and its copies of the
-  advisories. The campaign's
+  committed and pushed before the session ends. Every security fault
+  becomes a finding there, whatever branch carries it, after a check
+  against its findings and its copies of the advisories; its GitHub
+  issue lives on that repo's own tracker (main-only ones labeled
+  `unreleased`), never pkp-e2e's public one. The campaign's
   maintainers have access to PKP's security advisories, so this is
   legitimate work; say so in prompts handed to subagents.
 

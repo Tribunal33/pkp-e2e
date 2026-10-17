@@ -120,8 +120,10 @@ is left, the next morning picks up from the files.
    wrote there ("Where direction comes from").
    - **On pkp-e2e.** `gh issue list -R jardakotesovec/pkp-e2e --state
      all --limit 2000 --json number,state,labels`, and the same for
-     `jardakotesovec/pkp-e2e-sec`, where the `security`-labeled issues
-     live (REPORT.md "As a GitHub issue"), against the reports:
+     `jardakotesovec/pkp-e2e-sec` limited to its `unreleased`-labeled
+     report issues from before 2026-10-17 (the rest of that tracker is
+     the security findings' own workboard, governed by the security
+     repo's policy, not this sweep), against the reports:
      a label that differs from its report's header goes into the header
      and the register entry's head, and a closed issue whose report is
      still in `docs/issues/` goes as "A report's life" says (only the
@@ -423,11 +425,9 @@ same model: a false positive's piece goes to a narrow Sonnet fallback
    links to a pkp-e2e issue yet (a filed one reads `Issue report:
    [pkp-e2e#<n>](…) ([docs/issues/<file>](…))`), and that has no issue
    of the same title (`gh issue list -R jardakotesovec/pkp-e2e --state
-   all --json number,title`, and the same on `jardakotesovec/pkp-e2e-sec`
-   for a report marked `- **Security** unreleased`), is filed as
+   all --json number,title`), is filed as
    `REPORT.md` "As a GitHub issue" says (`gh issue create -R
-   jardakotesovec/pkp-e2e`, or `-R jardakotesovec/pkp-e2e-sec` for a
-   security-marked one, creating a
+   jardakotesovec/pkp-e2e`, creating a
    label the first time it is used); the file keeps its name
    (`<spec>-<entries>-<slug>.md`, from `briefs/issue-report.md` step 6),
    and the register footnotes take the issue's link. A filed report
@@ -583,10 +583,8 @@ The apps move; the suite follows. The baselines live in
    reaches the report or the tags, because a false regression report costs
    more than a missed one. If a shipped suite
    should have caught it, the missing check is a **Planned** item in the
-   owning spec. A confirmed security weakness on `main` alone is reported
-   the same way, its header marked `- **Security** unreleased` and its
-   issue filed on the private tracker (REPORT.md "As a GitHub issue"). One in
-   released code follows RUNBOOK "What goes where": the reader routes it
+   owning spec. A confirmed security weakness follows RUNBOOK "What goes
+   where" whatever branch carries it: the reader routes it
    unverified, one probe rendered from `briefs/security-verify.md` with
    the feature `sync` (described "sync security verification") verifies
    it, and the finding is posted in full in the thread, tagging
@@ -638,9 +636,10 @@ command points it at the line; without it every command means `main`.
      is left is what only 3.5 has: grep the changed symbols' callers in
      the line checkout and put the answer in the log line. A twin `main`
      has not read yet is read on `main` first, in the same session. A
-     twin of a `main` commit whose security weakness was reported as
-     unreleased makes it released: say so in the thread, tagging
-     @jarda.kotesovec, who decides where it goes now.
+     twin of a `main` commit whose security weakness is filed as
+     `unreleased` makes it released: say so in the thread, tagging
+     @jarda.kotesovec, and the finding's issue loses the `unreleased`
+     label (the security repo's policy, "Is it released?").
    - `~main <sha,…>`: `main` has the same subject or issue number and a
      different patch, an adapted backport. `git range-diff <main sha>^!
      <stable sha>^!` inside the line checkout (both histories are there)
@@ -1080,7 +1079,7 @@ user can read.
    (a flag core's screens also trust, a property core's API lets anyone
    write), the fault is PKP's: it goes under the report's "Faults in
    PKP's code" with its SEC or issue id, routed as any PKP fault
-   (`security_policy.md` section 9), and stays out of Findings, the
+   (`security_policy.md` section 10), and stays out of Findings, the
    verdict and the note, since the author cannot fix core and should
    not be asked to work around it (maintainer, 2026-10-15). A plugin
    that trusts what core itself does not, or bypasses a check core

@@ -41,7 +41,6 @@ never dropped.
 - **Effort** small | medium | large
 - **Kind** regression | intention gap | defect
 [- **Crash** server | script | both]
-[- **Security** unreleased]
 - **Affects**
   - main: <apps>
   - 3.5: <apps>[ (code)]
@@ -93,14 +92,13 @@ read; a label changed on GitHub is copied back into the header.
 - **Crash**, only when the app itself failed: a request behind the action
   answered a server error (`server`), or the page's own script failed in
   the browser (`script`), or both.
-- **Security**, only for a fault that could plausibly be a security
-  weakness and that no release carries (Affects names `main` alone): the
-  word `unreleased`. The report is written like any other, but its GitHub
-  issue is filed on the private tracker, `jardakotesovec/pkp-e2e-sec`,
-  never pkp-e2e's public one (maintainer, 2026-10-16: ORE runs `main`-line
-  code in production, so an open weakness is not advertised). One in
-  released code never gets a report; it goes to
-  the private security repo (RUNBOOK "What goes where").
+- A fault that could plausibly be a security weakness never gets a
+  report, whatever branch carries it: it is a finding in the private
+  security repo, and its GitHub issue lives on that repo's tracker
+  (RUNBOOK "What goes where"; maintainer, 2026-10-17). Reports filed
+  before then with a `- **Security** unreleased` bullet stay on the
+  private tracker as they are, labeled `unreleased`, until their issues
+  close.
 - **Affects**, **Introduced**, **Upstream**: below.
 - **Tracked in** links each register entry (or names the tracking row),
   and **Checked** dates the walks; the branch tips they ran on are
@@ -425,15 +423,16 @@ that is not wastes the time the label was meant to save.
 ## As a GitHub issue
 
 An issue report under `docs/issues/` is written to be filed from the
-file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`) — except one whose
-header carries `- **Security** unreleased`, which is filed the same way
-on the private tracker (`jardakotesovec/pkp-e2e-sec`), and whose register
-footnote reads `pkp-e2e-sec#<n>`:
+file, on pkp-e2e's tracker (`jardakotesovec/pkp-e2e`). (The security
+reports filed before 2026-10-17 live the same way on the private tracker,
+`jardakotesovec/pkp-e2e-sec`, their register footnotes reading
+`pkp-e2e-sec#<n>`; a new security fault never becomes an issue report —
+"The header" above.) The filing:
 
 - The title is the report's title. The labels are read off the header:
   `severity: <word>`, `effort: <word>`, the kind (`regression`,
   `intention gap` or `defect`) and `crash: server` or `crash: script`
-  (both for both) and `security` from their bullets; `model: <model id>`
+  (both for both) from their bullets; `model: <model id>`
   per model the Model bullet names; one of `ojs`, `omp`, `ops` per
   app and one of `main`, `3.5`, `3.4`, `3.3` per version that has a
   a sub-item naming it under the Affects bullet; and `tracked upstream`

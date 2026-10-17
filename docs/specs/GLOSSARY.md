@@ -370,6 +370,9 @@ The long form of the legend. Each spec's Conventions line carries the three symb
   under it is the record of the earlier ruling. A line **Security:
   unreleased.** in an entry marks a security weakness in code only `main`
   holds (no release has it); it reads and is tested like any other entry.
+  Only entries from before 2026-10-17 carry it: a new security weakness,
+  whatever branch holds it, is routed to the private security repo and
+  gets no register entry (RUNBOOK "What goes where").
 - **Coverage.** The canonical scenarios are what the automated suites
   check: a scenario's bold leads name what it opens, its badge which apps
   run it. The Coverage section lists what they leave out and why: a
