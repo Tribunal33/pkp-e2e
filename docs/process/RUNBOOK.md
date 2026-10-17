@@ -91,7 +91,7 @@ orchestrator.
     PRs, a bad push gets a follow-up commit, never a force-push. Before
     committing, `npm run check-models` must pass: it lists every agent of
     the session that was stopped or served another model and blocks on any
-    but the security probe and a Sonnet fallback after a stop ("Model
+    but the security probe and a narrow rerun after a stop ("Model
     discipline"; for the probe, add `(finished on <model>)` to its
     finding's `verified` line). Gate: the
     commit on `origin/main`.
@@ -188,22 +188,31 @@ Test files cite these by number, so the numbers are stable.
 - Opus 5.5 runs every role (maintainer, 2026-10-12); subagents inherit
   the session model, no per-role pins: no agent is launched on another
   model because its task looks light.
-- A refusal or safeguard flag: never re-press or reword on the same
-  model. When the flag is a false positive on legitimate work (security
-  work most often: the maintainers have access to PKP's advisories), the
-  piece it stopped is rerun in a fresh agent on Sonnet (Agent `model:
-  sonnet`), cut as narrow as it goes (one task, such as writing the
+- A refusal or safeguard flag is not the end of the run: the agent
+  carries on with its task after the notice instead of winding down, and
+  the safeguard then serves the rest on a fallback model (Opus 5.5 →
+  Opus 4.8, Sonnet 5.5 → Sonnet 5; seen in the transcripts 2026-10-17,
+  where an agent that pressed on finished on Opus 4.8 and three that
+  wrote up straight away left their work open). The agent cannot tell it
+  was switched, so `npm run check-models` (the transcript) names the
+  model, never the agent's own word. When the flag is a false positive on
+  legitimate work (security work most often: the maintainers have access
+  to PKP's advisories) and the piece is still undone, it is rerun cut as
+  narrow as it goes (one task, such as one reproduction or the
   reproduction script for a security issue), briefed with what is
-  already settled and returning that piece alone; the session carries on
-  with it on its own model (maintainer, 2026-10-12). Its description ends
-  in "(Sonnet fallback)", which `npm run check-models` allows only in a
-  session that recorded a stop. When the Sonnet rerun of a security
-  piece is stopped too, one more fresh agent takes that piece and
-  finishes it on whatever model the safeguard serves it (a downgraded
-  one, say); its result stands, named with that model (maintainer,
-  2026-10-12). When the flag is not a false positive, or another narrow
-  rerun is stopped too: record the gate reached in the PROGRESS note and
-  stop for maintainer review. A technical stall is not
+  already settled and made self-contained (the rows it acts on created by
+  the agent itself on the disposable install, the clean-up said), in this
+  order until one gets through (maintainer, 2026-10-17: never give up on
+  a false positive, use the model that gets through): a fresh agent on
+  the session's model, description ending "(narrow rerun)"; then Agent
+  `model: sonnet`, "(Sonnet fallback)"; then `model: fable`, "(Fable
+  fallback)" (not tried yet). `npm run check-models` allows these only in
+  a session that recorded a stop. The session carries on with the result
+  on its own model; specs and reports are written on Opus 5.5 only, and
+  the result names the model that served it. When the flag is not a
+  false positive, or every step above is stopped too: record the gate
+  reached in the PROGRESS note and stop for maintainer review. A
+  technical stall is not
   a flag: respawn on a narrower slice, at most twice.
 - The one exception is the security verification probe: a stop there, or
   the rest of its run served on another model, does not hold up the

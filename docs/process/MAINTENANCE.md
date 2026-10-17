@@ -299,7 +299,7 @@ nothing: a report partly served by another model lands like any
 other, and its Model bullet says so (REPORT.md "The header";
 maintainer, 2026-10-06), so the team knows to check it more closely;
 a classifier stop is reported, and the attempt is never re-sent on the
-same model: a false positive's piece goes to a narrow Sonnet fallback
+same model: a false positive's piece goes to a narrow rerun
 (RUNBOOK "Model discipline").
 
 1. **Set up.** Start on the right code ("Session hygiene"), the

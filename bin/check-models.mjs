@@ -3,9 +3,10 @@
 // Claude Code session run on the session's own model, with no safety-classifier
 // stop? Two exceptions are allowed (RUNBOOK "Model discipline"): the security
 // verification probe may be stopped, or finished on another model, without
-// holding up the feature; and an agent described "(Sonnet fallback)", the narrow
-// rerun of a piece a false-positive safety flag stopped, may run on another model
-// when the session recorded a stop; and an agent described "(downgraded finish)",
+// holding up the feature; and an agent described "(narrow rerun)", "(Sonnet
+// fallback)" or "(Fable fallback)", the narrow rerun of a piece a false-positive
+// safety flag stopped, may run (on the session's model or another) when the session
+// recorded a stop; and an agent described "(downgraded finish)",
 // which finishes a security piece on whatever model the safeguard serves it after
 // the Sonnet fallback was stopped too. Prints one line per agent that is off-model or
 // was stopped, then a verdict; exit 1 means do not commit, pause for the maintainer.
@@ -34,7 +35,7 @@ const STOP = 'Your response above was stopped by a safety classifier';
 // Known by its dispatch description alone: every brief pastes the Frame, which
 // names security-verify.md, so the prompt cannot tell the probe apart.
 const SECURITY = /security\b.*verif/i;
-const FALLBACK = /\(sonnet fallback\)\s*$/i;
+const FALLBACK = /\((?:narrow rerun|sonnet fallback|fable fallback)\)\s*$/i;
 const DOWNGRADED = /\(downgraded finish\)\s*$/i;
 
 function scan(jsonl) {
@@ -76,7 +77,7 @@ for (const a of agents) {
     const what = [a.stops && `${a.stops} classifier stop(s)`, other.length && `served ${other.map(([m, n]) => `${m} ×${n}`).join(', ')}`].filter(Boolean).join('; ');
     if (a.security) console.log(`allowed  ${a.name}: ${what} (security probe: its verified-by line names the model that finished it, or the entry stays unverified)`);
     else if (a.fallback && sessionStops && !a.stops) console.log(`allowed  ${a.name}: ${what} (the narrow rerun after a safety flag)`);
-    else if (!a.fallback && a.stops && !other.length && fallbackRan) console.log(`allowed  ${a.name}: ${what} (the stopped piece rerun by the Sonnet fallback)`);
+    else if (!a.fallback && a.stops && !other.length && fallbackRan) console.log(`allowed  ${a.name}: ${what} (the stopped piece rerun by the narrow fallback)`);
     else if (a.downgraded && fallbackStopped) console.log(`allowed  ${a.name}: ${what} (the security piece finished on the model the safeguard served, after the Sonnet fallback was stopped too)`);
     else if (downgradedRan && a.stops && (a.fallback || !other.length)) console.log(`allowed  ${a.name}: ${what} (the stopped piece finished by a downgraded finish)`);
     else if (stopsWarn && !other.length) console.log(`warning  ${a.name}: ${what}, stayed on ${sessionModel}`);
