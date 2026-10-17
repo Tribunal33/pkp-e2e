@@ -96,13 +96,13 @@ session on weekdays, scheduled through claude-threads. Its queue is
 `npm run backlog`, which reads every kind of work from where it lives
 (the registers, the reports, the tracking files) and prints it in the
 order of the steps below, so the order is the priority. Every morning
-works steps 1 to 4; then the day of the month decides the main work,
+works steps 1 to 5; then the day of the month decides the main work,
 so neither side starves the other: an **odd day** works incidentals
-and reports owed (steps 5 and 6), an **even day** builds and Planned
-coverage (step 7). Steps 8 to 11 follow on either day. After about
+and reports owed (steps 6 and 7), an **even day** builds and Planned
+coverage (step 8). Steps 9 to 12 follow on either day. After about
 five hours the session starts nothing new, but whatever it started
 (a report, a fold, a build or revision) it finishes in the same
-session, however long that takes, and then ends pushed (step 12). What
+session, however long that takes, and then ends pushed (step 13). What
 is left, the next morning picks up from the files.
 
 1. Note the start time (`date`). Read the PROGRESS banner, this file,
@@ -169,7 +169,17 @@ is left, the next morning picks up from the files.
    in" lacks) is edited in the report and the issue directly (`gh issue
    edit`), the `Report:` line deleted. One that needs a walk or a
    rewrite goes through "Issue reports" as a unit of its own.
-5. **Incidentals** (odd days). Every row whose feature has a shipped spec (PROGRESS
+5. **Security refinement**, every morning. Pull `../pkp-e2e-sec` and
+   list its `new` findings (`grep -l 'status:\*\* new' ../pkp-e2e-sec/findings/sec-*.md`
+   — the status line reads `- **status:** new`). One that is `unreleased`
+   (no tagged release nor `ore` carries it; the security repo's policy,
+   "Is it released?") is refined, oldest first, **one per session**, by
+   that repo's `CLAUDE.md` process (serial: never parallel helpers on
+   the shared apps), and its issue posted right after (`bin/post-issue.mjs`,
+   labels checked with `--dry-run` first). A `new` finding in released
+   code is left alone: it waits for the maintainer's ask. A refinement
+   started is finished in the same session, like any unit here.
+6. **Incidentals** (odd days). Every row whose feature has a shipped spec (PROGRESS
    `done`), oldest first; rows against pending features stay for their
    spec author (RUNBOOK step 3). First grep the spec for each row: a
    sighting the spec already states is deleted without a drive. The rest
@@ -189,12 +199,12 @@ is left, the next morning picks up from the files.
    (TEMPLATE "Retired entries"); when the entry still shows, the row is
    deleted and the entry stays where the backlog lists it. Every worked
    row is deleted from `incidentals.md`.
-6. **Reports owed** (odd days), spec by spec, the backlog's top spec
+7. **Reports owed** (odd days), spec by spec, the backlog's top spec
    first: every
    🐞 entry no report covers is written up and filed through "Issue
    reports". A spec is worked whole; the next starts only inside the
    five hours.
-7. **Builds and Planned coverage** (even days). One piece of work a
+8. **Builds and Planned coverage** (even days). One piece of work a
    morning, the first of these that exists, run to its end:
    - a build or revision left mid-way, resumed from its
      `phase-status.md` (RUNBOOK "Resuming a feature mid-flight");
@@ -207,7 +217,7 @@ is left, the next morning picks up from the files.
      session writes the sheet from all its ready Planned items, then the same writer, reader, test authors, test
      fold and finals as a build, so the scenarios stay one coherent set
      and not a scenario per sync.
-8. **Friction.** Fold `docs/tracking/friction.md` and delete every row. A
+9. **Friction.** Fold `docs/tracking/friction.md` and delete every row. A
    row earns a change only when a third feature would meet the same
    thing, the docs do not already say it (grep first) and it is not one
    screen's fact or general Playwright knowledge; what passes is a kit
@@ -220,13 +230,13 @@ is left, the next morning picks up from the files.
    have given, or whose fix the session that wrote it already made (a
    corrected brief, a new footnote), earns nothing either. When in doubt,
    delete.
-9. **Flakes.** Diagnose the flake classes whose watch condition has
+10. **Flakes.** Diagnose the flake classes whose watch condition has
    tripped ("Keep the flake rate down"); a flake that reds CI on the day
    is the upstream session's interrupt, its diagnosis this session's.
-10. **Stale artifacts and CI balance.** Fix what the day's work showed
+11. **Stale artifacts and CI balance.** Fix what the day's work showed
    stale, and refresh the shard timings when they drifted ("Keep CI
    balanced").
-11. **Quiet mornings.** When the day's steps left nothing open:
+12. **Quiet mornings.** When the day's steps left nothing open:
    - **Drift sweep of one spec**, the one whose PROGRESS note carries the
      oldest "Swept" date (none counts as oldest). Its kept checks
      (`shared/playwright/checks/<feature>/`) run twice, under `PROBE_RUN`
@@ -244,7 +254,7 @@ is left, the next morning picks up from the files.
      coverage as a **Planned** item) and the entry goes; dead code keeps
      its entry with the evidence; one that looks out of scope or like a
      new feature goes to the maintainer.
-12. End pushed: commit and push to pkp-e2e `main`, and post a
+13. End pushed: commit and push to pkp-e2e `main`, and post a
    one-paragraph summary to the channel: filed issues closed, relabelled
    or newly tracked upstream, fixes merged upstream that still show,
    and anything step 3 left to the maintainer; reports refreshed and
@@ -269,7 +279,7 @@ proposed fix. Every 🐞 entry in the registers gets one, and every report
 is held to `docs/process/REPORT.md`. The ❓ and ✅ entries stay out: a
 question needs a ruling, not a fix.
 
-The housekeeping session writes them (its steps 4 and 6), from the
+The housekeeping session writes them (its steps 4 and 7), from the
 backlog: a refresh is a unit of its own, and owed reports go spec by
 spec. A maintainer's own session may work a spec too: it first gives
 the entries it takes a `Report: paused — taken in the maintainer's
