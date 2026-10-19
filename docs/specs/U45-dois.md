@@ -393,9 +393,7 @@ links under the list. <sup>g</sup>
     version made while its source had no DOI does not take the one the
     source is given later: it gets its own when it is published
     [A10](#a10). "Deposit All" takes the DOIs of every family with a
-    published version (Rule 29a).
-    While any journal of the install is set to "Yes", every journal's
-    OAI requests fail ([→ OAI-PMH, A22](U19-oai-pmh.md#a22)). <sup>k</sup> <sup>q16</sup>
+    published version (Rule 29a). <sup>k</sup> <sup>q16</sup>
 13. **Switching versioning later.** A change of "DOI Versioning" affects
     versions made afterwards; versions made before keep what they have.
     <sup>k</sup>
@@ -677,11 +675,15 @@ links under the list. <sup>g</sup>
 
 29b. **What a Crossref file holds** {OJS OPS}. The files "Export DOIs"
     downloads are the ones a deposit sends (Rule 33). A test install
-    downloads none (Rule 29): there they are read on the server,
-    without the format check. A work's file holds: <sup>q51</sup>
+    downloads none (Rule 29): there they are read by hand on the
+    server, format check off. <sup>q49</sup> <sup>q52</sup> A work's file holds: <sup>q51</sup>
     - **Its versions**: on a journal one record per family (Rule 12),
       the newest published version's: with 1.0 and 1.1 published,
-      1.1's. On a preprint server one record per posted version that
+      1.1's; once 2.0 is published with a DOI of its own, 1.1's, then
+      2.0's. Two published major versions that share a DOI (2.0 made
+      while "DOI Versioning" was "No", then "Yes" saved, Rule 13) both
+      get a record with that DOI, the older first ⚠ [OJS11](#ojs11).
+      On a preprint server one record per posted version that
       carries a DOI, the newest first, so a DOI that two posted versions
       share (1.0 and 1.1, or 2.0 and 2.1) is listed twice
       ⚠ [OPS6](#ops6); a posted version without a DOI is left out.
@@ -814,6 +816,12 @@ links under the list. <sup>g</sup>
 38. **"Update Policy DOI"** {OJS}. Shown and required while "DOI
     Versioning" is "Yes"; with "No", shown and required only while
     "Crossmark" is ticked, and hidden (not required) otherwise. <sup>e</sup>
+    Saving "Yes" on "Setup" while the box is empty does not ask for it:
+    the tab reads "Saved", the "Registration" tab shows the box starred
+    and empty once opened again, and until it is filled every Crossref
+    file of the journal (Rule 29b) carries an empty `<crossmark_policy/>`,
+    which an install that reaches crossref.org refuses (read in the code,
+    not seen) ⚠ [OJS12](#ojs12). <sup>q52</sup>
 39. **Publish warnings from Crossref** {OJS}. While Crossref is the
     chosen agency, "Articles" is ticked and "Automatic DOI Assignment" is
     not "Upon publication", the publish window's warning list ("The
@@ -1201,8 +1209,7 @@ differs. <sup>z1</sup>
 - **[OAI-PMH](U19-oai-pmh.md)** and **[Search-engine metadata &
   analytics](U20-search-engine-metadata-and-analytics.md)**: carry the
   DOI in their records and head tags (the OAI records drop it while
-  "DOIs" is off, Rule 43); with "DOI Versioning" "Yes" the journal's OAI
-  fails ([→ A22](U19-oai-pmh.md#a22)).
+  "DOIs" is off, Rule 43).
 - **[Citations & references](U42-citations-and-references.md)**: what a
   deposit carries of the references, and the Crossref plugin's hourly
   reference-DOI matching (Rule 40).
@@ -2256,6 +2263,8 @@ Left out of the scenarios above, by reason:
   - A30 (a typed "&" or italic word reaching Crossref as codes; Rule 29b)
   - OJS10 (a cancelled review's DOI kept on the DOIs page and in the exports and deposits; Rule 7b)
   - OPS6 (a DOI listed once per posted version that shares it in a preprint server's Crossref file; Rule 29b)
+  - OJS11 (two published major versions sharing a DOI both written to a journal's Crossref file, the older first; Rule 29b)
+  - OJS12 ("DOI Versioning" "Yes" saved while Crossref's "Update Policy DOI" is empty; Rule 38)
   - OPS7 (the title in a preprint's subtitle place in the Crossref file; Rule 29b)
   - OJS4 ("Deposit DOIs" on the "Issues" tab leaving the issues' status; Rules 29, 32)
   - A18 (a deposit that cannot reach the agency staying "Submitted"; Rule 33)
@@ -2308,6 +2317,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
 | [OJS9](#ojs9) | With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [OJS10](#ojs10) | A cancelled reviewer's review stays on the DOIs page and is still deposited with Crossref | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
+| [OJS11](#ojs11) | A journal's Crossref file names a DOI twice when two published major versions share it, the older version first | 🐞 | user-visible | — |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
@@ -2322,6 +2332,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | A "Needs Sync" item's agency panel says its metadata "has not been submitted" | ❓ | minor | — |
 | [A23](#a23) | A journal's or a preprint server's galley given its DOI alone at a publish: its Activity Log line untried | ❓ | minor | — |
 | [OJS1](#ojs1) | "Never" does not stop an issue's DOI at "Publish Issue" | ❓ | minor | — |
+| [OJS12](#ojs12) | Saving "DOI Versioning" "Yes" leaves Crossref's required "Update Policy DOI" empty, and every Crossref file then fails Crossref's format check | ❓ | user-visible | — |
 | [OMP3](#omp3) | A chapter that cannot have a DOI reads "Needs DOI" | ❓ | minor | — |
 | [OPS2](#ops2) | A preprint server offers "Automatic Deposit" but nothing runs it | ❓ | user-visible | — |
 | [OPS5](#ops5) | A preprint server's DOIs page lists drafts nobody has submitted | ❓ | minor | — |
@@ -2920,6 +2931,43 @@ Neither the fix nor any way round removes a record Crossref already
 holds; they stop the review being sent, or sent again.
 Basis: probe, 2026-10-15. <sup>f-ojs10</sup>
 
+<a id="ojs11"></a>
+**OJS11 — A journal's Crossref file names a DOI twice when two published major versions share it, the older version first** · 🐞 · user-visible.
+A journal on "DOI Versioning" "No" publishes 2.0 of an article, made
+with "Major Revision", so it keeps 1.0's DOI (Rule 11); then it saves
+"Yes". The article's Crossref file (Rule 29b) holds two records for
+that one DOI: 1.0's first, pointing to 1.0's page, then 2.0's, which
+names its own DOI as the one it is a version of. It should hold one
+record, the newest published version's. Crossref takes the first
+record of a DOI in a file, so the
+DOI is registered with 1.0's page and metadata, and the repeat is
+refused, which the journal counts as a failed deposit: the DOI reads
+"Error", as on a preprint server ([OPS6](#ops6), where the newest
+version comes first). The DOIs page gives no sign: "View all" lists
+1.0 and 2.0 with the same DOI. Saving "Yes" before 2.0 is published
+gives the same file. 3.5 is not affected: a journal there has no "DOI
+Versioning".
+Basis: probe, 2026-10-19. <sup>f-ojs11</sup>
+
+<a id="ojs12"></a>
+**OJS12 — Saving "DOI Versioning" "Yes" leaves Crossref's required "Update Policy DOI" empty, and every Crossref file then fails Crossref's format check** · ❓ · user-visible.
+A journal chose Crossref while "DOI Versioning" was "No", so "Update
+Policy DOI" was hidden and stayed empty (Rule 38). A Journal Manager
+then saves "Yes" on "Setup": the tab reads "Saved" and says nothing of
+the Crossref block; only the "Registration" tab, opened again, shows the
+box starred and empty. Until someone fills it, every Crossref file of
+the journal (Rule 29b) carries an empty `<crossmark_policy/>`; once
+"10.1234/policy" is saved, the next carries
+`<crossmark_policy>10.1234/policy</crossmark_policy>`. Read in the code,
+not seen: an install that reaches crossref.org refuses the empty one
+with Rule 29's "Error" window, and each deposit stops unsent, its DOI
+reading "Error".
+Question: should saving "Yes" ask for "Update Policy DOI" when Crossref
+is the agency (or the file leave the policy out while it is empty)?
+Lean: a low 🐞; the save that makes the box required gives no sign of
+it, and deposits then fail over a box on another tab.
+Basis: probe, 2026-10-19. <sup>f-ojs12</sup>
+
 
 ### OMP
 
@@ -3042,6 +3090,7 @@ shows only when versions made under "No" are deposited after the server
 switched to "Yes": two major versions on one DOI. `main` has that case
 too, and the open fix `pkp/crossref-ops#67` leaves it.
 Basis: probe, 2026-10-15. <sup>f-ops6</sup>
+Report: refresh owed — the journal's case, which the report reads from the code alone, was walked on OJS `main`: two major versions on one DOI are both written, the older first ([OJS11](#ojs11), 2026-10-19)
 
 <a id="ops7"></a>
 **OPS7 — A preprint server's Crossref file repeats the preprint's title where its subtitle belongs** · 🐞 · medium.
@@ -3639,6 +3688,52 @@ naming the galley's DOI, then the galley's record. Work 9 with its only
 DOI emptied: "One or more invalid publication objects were included
 with the request." in an "Error" window.
 
+<a id="fn-q52"></a>
+**q52** — Live-probed 2026-10-19 (Rules 13, 29b, 38; OJS11, OJS12),
+OJS `main` (ojs `6b4323ced7`, crossref plugin `a49e612`) and OJS
+`stable-3_5_0` (3.5.0.5), PKP's default test dataset, signed in as
+`dbarnes` (Journal editor, a manager-level role), each walk twice on a freshly reset install.
+The "Crossref Manager Plugin" ticked on Plugins; "Setup": "DOI Prefix"
+`10.1234`, "DOI Versioning" "No", "Save"; "Registration": Crossref
+with its depositor fields, "Save" ("Update Policy DOI" hidden, stored
+empty); "Assign DOIs" on article 17; "Create New Version" › "Major
+Revision" › "Confirm" (2.0 stored with 1.0's DOI); 2.0 published;
+"Export DOIs"; "Setup" › "Yes" › "Save" ("Saved", no other notice);
+"Export DOIs". A second walk saved "Yes" before 2.0 was published.
+Each "Export DOIs" answered the standing schema-fetch window
+(seed-facts); the file it built was read right after from the
+install's files `temp/` folder
+(`crossrefplugin-<YYYYMMDD>-<HHMMSS>-articles-1.xml`), and the same work
+built again read-only, validation off, by
+`shared/playwright/checks/U45/H15/xml-read.php --raw` (note q49); each
+file was then checked against Crossref's 5.4.0 schema outside the
+app. Under "No": one
+`journal_article`, the DOI with `/article/view/17` (2.0's date). Under
+"Yes", both walks: two `journal_article` records with the same `<doi>`
+under one `<timestamp>`, 1.0's first (`/article/view/17/version/18`,
+1.0's date), then 2.0's (`/version/22`), whose
+`<rel:intra_work_relation relationship-type="isVersionOf">` and
+Crossmark `<update>` name its own DOI. The DOIs row read "Version of
+Record 2.0", "There are 2 versions. View all", "Unregistered"; "View
+all" listed "Version of Record 1.0 ({date})" and "Version of Record 2.0
+({date})" with the same DOI, "Unregistered" (Rule 13: versions made
+before the switch kept their DOI). The "Registration" tab, opened
+again, showed "Update Policy DOI *" "Required", empty; every file built
+under "Yes" carried an empty `<crossmark_policy/>`, refused by the
+schema ("[facet 'minLength'] … length of '0'" and "[facet 'pattern']
+The value '' is not accepted", once per record); with `10.1234/policy`
+typed and saved (answered 200), the next file was valid. Control, "Yes"
+from the start: 1.0 and a minor 1.1 published, one record, 1.1's
+(`/version/22`); 2.0 (major, its own DOI) then published, two records
+with two DOIs, 1.1's then 2.0's, 2.0's `isVersionOf` naming 1.1's DOI.
+3.5: "Setup" has no "DOI Versioning", the Crossref block no "Crossmark"
+or "Update Policy DOI"; "Create New Version" ("Are you sure you want to
+create a new version?", "Yes") kept the DOI, and every file held one
+`journal_article`, the current version's, valid against the schema; the
+row read "Unregistered" with no "View all". Each run's record held only
+the known Plugin Gallery error and the "Export DOIs" schema-fetch
+refusals.
+
 <a id="fn-m"></a>
 **m** — `components/ListPanel/doi/DoiListItem.vue`: tick box, title link
 (`target="_blank"`), `{{ item.id }}`, the badge (`publicationStatusLabel`
@@ -4115,7 +4210,9 @@ DOI" in the "View all" window (OPS4, fixed at the PR heads of
 Original …") as links opening in a new tab, and one "Edit" beside
 "Close". While a journal of the install was on "Yes", `publicknowledge`'s
 OAI answered a server error, and again 200 once it was set back to "No";
-the press and preprint-server installs answered 200.
+the press and preprint-server installs answered 200. That OAI failure
+was fixed on `main` by `pkp/ojs#5947`, merged 2026-10-16 as ojs
+`2815f33e65` ([OAI-PMH, A22](U19-oai-pmh.md#a22), retired).
 
 <a id="fn-q50"></a>
 **q50** — Live-probed 2026-10-15 (Rule 20), two runs as note q49 (phase
@@ -4928,10 +5025,14 @@ everywhere but scenario 2; `doiCreationTime` `publication` (scenarios
 10, 11), `chapter` (OMP: 4, 5, 7, 9, 10, 11), `file` (4, OMP),
 `peerReview` (17) or `issue` (18); `doiVersioning` `false` on OPS in
 scenario 10 and `true` in 11; `context.acronym: 'JPK'` in scenario 8.
-Scenarios 11 and 15 put a journal on "DOI Versioning" "Yes", which
-makes every OJS OAI request of the install fail while it lasts
-(seed-facts), so the OJS test of scenario 11 sets it back to "No" on
-screen before it ends. The agency: `plugins: {crossrefplugin |
+Scenarios 11 and 15 put a journal on "DOI Versioning" "Yes". On an
+OJS checkout older than `pkp/ojs#5947` (ojs `2815f33e65`, merged
+2026-10-16) that makes every OJS OAI request of the install fail while
+it lasts ([OAI-PMH, A22](U19-oai-pmh.md#a22), retired), and most open
+pkp/ojs PRs, whose checks run this suite at their own heads, predate
+that fix (99 of 100 on 2026-10-19). So the OJS tests of scenarios 11
+and 15 run in the `ojs-serial` project, after the parallel suite, and
+each sets "No" back on screen before it ends. The agency: `plugins: {crossrefplugin |
 dataciteplugin: {enabled: true, settings: {depositorName,
 depositorEmail}}}` with `registrationAgency` (scenarios 13, 14, 15),
 the DataCite plugin enabled alone in scenario 16, none in 12 and 19;
@@ -5755,6 +5856,39 @@ nor the DOIs page's rows (`filterByIsConfirmedByEditor()`,
 failed at connection, as every test-install deposit does (Rule 33).
 3.5 has no peer-review DOIs.
 Issue report: [pkp-e2e#983](https://github.com/jardakotesovec/pkp-e2e/issues/983) ([docs/issues/U45-OJS10-cancelled-review-doi-still-deposited.md](../issues/U45-OJS10-cancelled-review-doi-still-deposited.md)).
+
+<a id="fn-f-ojs11"></a>
+**f-ojs11** — Live-probed 2026-10-19, OJS `main`, four runs (note q52):
+2.0 published under "No" and "Yes" saved after it, and "Yes" saved
+before 2.0 was published, each twice; the walk on 3.5.0.5 found no
+"DOI Versioning" on a journal and one record per file. What Crossref
+answers to a file naming a DOI twice was not tried: the test installs
+reach no agency; the outcome is the preprint server's, read from the
+same deposit code. The preprint server's twin is [OPS6](#ops6), issue
+report [pkp-e2e#980](https://github.com/jardakotesovec/pkp-e2e/issues/980)
+([docs/issues/U45-OPS6-preprint-crossref-file-doi-twice.md](../issues/U45-OPS6-preprint-crossref-file-doi-twice.md)),
+which reads this journal case from the code only: the same cause
+shape, another filter. Code: ojs `plugins/generic/crossref`
+`ArticleCrossrefXmlFilter::process()` (crossref plugin `a49e612`) loops
+`Repo::doi()->getLatestMinorPublicationsForDoiDeposit()`, one
+publication per version stage and major version, never one per DOI;
+lib/pkp `publication\Repository::version()` keeps the source's DOI
+unless "DOI Versioning" is on and the version is not minor.
+
+<a id="fn-f-ojs12"></a>
+**f-ojs12** — Live-probed 2026-10-19, OJS `main`, four runs (note q52).
+The empty `<crossmark_policy/>` and Crossref's refusal of it were read
+from the built files checked against Crossref's 5.4.0 schema outside
+the app; on the test installs every "Export DOIs" stops earlier, at the
+schema fetch (Rule 29). What an install that reaches crossref.org shows
+is read from the code: the export lists the schema's messages in the
+"Error" window, and `CrossrefExportPlugin::exportAndDeposit()` skips
+the deposit of a file with schema errors and sets its DOI "Error" with
+the same messages. `ArticleCrossrefXmlFilter::createJournalArticleNode()`
+adds the Crossmark node whenever "DOI Versioning" is on, and
+`appendCrossmarkNode()` writes the stored `updatePolicyDoi` as it is.
+3.5 is not affected: a journal there has neither "DOI Versioning" nor
+"Update Policy DOI".
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — `omp/classes/submission/Collector.php`
