@@ -1,0 +1,20 @@
+--- a/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOJS.js
++++ b/lib/ui-library/src/pages/workflow/composables/useWorkflowConfig/workflowConfigEditorialOJS.js
+@@ -768,9 +768,15 @@
+ 		}) => {
+ 			const items = [];
+ 
++			// The same rule as PKPSubmissionController::changeLocale(): one
++			// version, not published. The submission's own status cannot stand
++			// in for it, since it counts only a published Version of Record.
+ 			if (
+-				submission.status !== pkp.const.submission.STATUS_PUBLISHED &&
+-				submission.publications.length < 2
++				submission.publications.length < 2 &&
++				!submission.publications.some(
++					(publication) =>
++						publication.status === pkp.const.publication.STATUS_PUBLISHED,
++				)
+ 			) {
+ 				items.push({
+ 					component: 'WorkflowChangeSubmissionLanguage',

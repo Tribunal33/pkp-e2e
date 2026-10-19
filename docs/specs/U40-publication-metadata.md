@@ -1038,7 +1038,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A19](#a19) | Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | Through a new version of a published item, the permitted Author changes the published version's funders and can take its review round | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A22](#a22) | Change Submission Language: on a slow link, a title typed the moment the Title box appears is wiped | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
-| [OJS1](#ojs1) | An article published as "Author's Original" or "Published Manuscript Under Review" keeps "Change", and every language change on it is refused | 🐞 | minor | claim check (claude), 2026-10-07 — trigger corrected |
+| [OJS1](#ojs1) | Editors are offered a language "Change" on an article published as Author's Original, and every change is refused | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A3](#a3) | Reset permissions rewrites every submission, unpublished and declined included, and logs one "metadata updated" line per version | ❓ | user-visible | — |
@@ -1334,22 +1334,23 @@ Basis: probe, 2026-10-19. <sup>f-a22</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — "Change" stays on an article published as a version other than the Version of Record** · 🐞 · minor.
-A journal article whose only version was published as "Author's
-Original" or "Published Manuscript Under Review" (the "Publication
-Stage" list's other two values) keeps "Current Submission Language:
-{language}" with its "Change" button on every Publication page, beside
-"Status: Published" and "Unpublish". Picking a language and confirming
-is refused with the toast "You can not change language of this
-submission because it already has more than one publication version or
-a published publication.", and the panel stays open. Published as
-"Version of Record", the article hides both as Rule 13a says.
-The button is offered for a change that always fails: the screen and
-the refusal disagree about whether the item counts as published.
-Re-checked: claim check (claude), 2026-10-07 — an article published
-into an issue not yet published (the case seen on 2026-08-28) no longer
-keeps the button.
-Basis: probe, 2026-10-07. <sup>f-ojs1</sup>
+**OJS1 — Editors are offered a language "Change" on an article published as Author's Original, and every change is refused** · 🐞 · low.
+An editor publishes a journal article's only version with the
+"Publication Stage" "Author's Original" or "Published Manuscript Under
+Review". The article's Publication pages (Title & Abstract,
+Contributors, Metadata) then still show "Current Submission Language:
+English" with a "Change" button, beside "Status: Published" and
+"Unpublish". An article published as "Version of Record" no longer shows
+that line or the button. Picking another language there and pressing
+"Confirm" is always refused with the toast "You can not change language
+of this submission because it already has more than one publication
+version or a published publication.", and the panel stays open. The
+refusal is the intended rule: the button should not be offered. The
+editor loses only the title and abstract typed into the panel. Only
+journals that publish an article's first version under one of these two
+stages meet it. Publication stages are new on `main` and in no release
+yet. (Rule 13a)
+Basis: probe, 2026-10-19. <sup>f-ojs1</sup>
 
 <a id="ojs2"></a>
 **OJS2 — A scheduled article's terms** · ❓ · minor.
@@ -2950,6 +2951,7 @@ from the issue. That override is no longer in OJS
 `classes/submission/Repository.php` (last touched by ojs `4ea46f5f35`,
 pkp/pkp-lib#12922; not traced further). Kept script
 `shared/playwright/checks/U40/I07/i07.js` (`PHASES=ojs1,stage`).
+Issue report: [docs/issues/U40-OJS1-published-early-version-language-change-refused.md](../issues/U40-OJS1-published-early-version-language-change-refused.md).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2 — OJS2 evidence.** Lean: not offered. The suggestions lookup
