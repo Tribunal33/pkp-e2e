@@ -234,6 +234,11 @@ preprint server the links' addresses carry the English language code
    There is no "All dates". Choosing a range renames the middle column
    "{first date} — {last date}" and recounts it; the "Total" column
    keeps its figures.
+
+   On 1 January, "Year to date" ends the day before it starts (31
+   December of last year): the column is renamed, but an "Error" window
+   opens and the figures stay those of the range chosen before ⚠
+   [A15](#a15). <sup>f-a15</sup>
 4. **Filters.** "Filters" shows under the same conditions as on the
    "Articles" page of
    [Statistics — usage](U64-usage-statistics.md#filters), whose panel,
@@ -790,7 +795,8 @@ other suite's run. <sup>sc</sup>
      (Rules 3, 7).
    - **Control**: choose "Year to date": "Submissions Received" reads 0
      in the middle column, since the range ends yesterday and "Zeta"
-     arrived today (Rules 3, 7). <sup>sc</sup>
+     arrived today (Rules 3, 7); on 1 January the page shows an "Error"
+     window instead [A15](#a15). <sup>sc</sup>
 
 6. **Reading "Editorial Activity"** {OJS OMP}
 
@@ -1050,6 +1056,8 @@ Left out of the scenarios above, by reason:
     submission; Rule 20b)
   - A14 (an account that saved Profile › "Notifications" while the
     email was off; Settings bullet 1; scenario 4 marks it)
+  - A15 ("Year to date" chosen on 1 January; Rule 3; scenario 5 marks
+    it)
   - OJS1 and OJS2 ("Supporting Agencies" and "&amp;" in "Articles
     Report"; Rule 20d)
   - OJS3 (the decisions "Articles Report" has no name for; Rule 20b)
@@ -1063,6 +1071,10 @@ Left out of the scenarios above, by reason:
     unnamed "Move to Done"; Rule 23; scenario 7 marks OMP3)
   - OPS4 (the preprint server's blank "Accepted submissions this
     month:"; Fields; scenario 3 marks it)
+- **No seed**:
+  - "Year to date" chosen on 1 January, showing figures (the guard for
+    A15, once fixed; Rule 3): the test installs' date cannot be set to
+    1 January
 - **Owned by another feature**:
   - "COUNTER Reports" {OJS} opening its page (Rule 19;
     *[Statistics — usage](U64-usage-statistics.md)*, scenario 12)
@@ -1084,6 +1096,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A8](#a8) | A report address with an unknown or missing report name lands on "404 Not Found", not on "Reports" | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | A press's monthly statistics email reads "Login to the the press" ("the the preprint server" on a preprint server) | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | Saving Profile › "Notifications" while it hides the statistics row stops that editor's monthly statistics email | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
+| [A15](#a15) | On 1 January, "Year to date" on "Editorial Activity" shows an "Error" window instead of figures | 🐞 | minor | — |
 | [OJS1](#ojs1) | "Articles Report" leaves "Supporting Agencies" empty for every submission, though the agencies are filled in | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | "Articles Report" writes article titles holding "&", an apostrophe or italics with web codes ("&amp;") | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | "Articles Report" leaves "Editor Decision" empty for skipped reviews, new rounds, reverted declines and stage moves | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1301,6 +1314,20 @@ missing every journal's email until `pkp/pkp-lib#12769` makes the
 email's recipient list read each journal's own choices. Expected: the
 account's earlier choice is kept.
 Basis: probe, 2026-10-02. <sup>f-a14</sup>
+
+<a id="a15"></a>
+**A15 — On 1 January, "Year to date" on "Editorial Activity" shows an "Error" window instead of figures** · 🐞 · minor.
+"Year to date" runs from 1 January of this year to yesterday (Rule 3),
+so on 1 January it ends on 31 December of last year, the day before it
+starts. Choosing it that day renames the middle column "{this
+year}-01-01 — {last year}-12-31" and opens an "Error" window reading
+"api.stats.400.wrongDateRange", a code where a sentence belongs (the
+code is [Statistics — usage](U64-usage-statistics.md)'s
+[A14](U64-usage-statistics.md#a14)); after "OK" the table still shows
+the figures of the range chosen before. The other presets work on
+every day of the year. Expected: "Year to date" shows figures on 1
+January too.
+Basis: code, 2026-10-19. <sup>f-a15</sup>
 
 ### OJS
 
@@ -2247,6 +2274,28 @@ send the email to editors."; switched back on, that account's row read
 out and no email came, while a control account that had not saved read
 ticked and got the email.
 Issue report: [docs/issues/U65-A14-stats-email-optout-after-saving-notifications.md](../issues/U65-A14-stats-email-optout-after-saving-notifications.md), filed as [pkp-e2e#646](https://github.com/jardakotesovec/pkp-e2e/issues/646).
+
+<a id="fn-f-a15"></a>
+**f-a15** — Code read 2026-10-19 at ojs `6b4323ced7`, omp `5777025bec`
+and ops `f048e747b4` (lib/pkp `042726ebf6` in all three), and at
+`stable-3_5_0` lib/pkp `092ec34b0f` (ojs `007c2cd0d6`), the file the same
+in the three apps on both lines: `PKPStatsHandler::editorial()` builds
+the `stats.dateRange.thisYear` preset as `dateStart`
+`date('Y') . '-01-01'` and `dateEnd` `strtotime('yesterday')`, so on 1
+January `dateEnd` falls before `dateStart`; "Last 90 days", "Last year"
+and "Last two years" start before they end on every day.
+`DateRange.vue` emits `set-range` and `updated:current-range` on the
+preset, which renames column 1 (`setCurrentDateRange()`);
+`StatsEditorialPage.vue::get()` sends the range request to
+`stats/editorial`, where `PKPBaseController::_validateStatDates()`
+returns `api.stats.400.wrongDateRange` and
+`PKPStatsEditorialController` answers 400 with that key as its `error`;
+`ajaxErrorCallback()` opens the "Error" dialog with that
+message, and the rejected `Promise.all()` leaves `tableRows` as they
+were. Not driven: the test installs' server date cannot be moved. The
+raw key is *Statistics — usage*'s A14, whose issue report
+([docs/issues/U64-A14-stats-refusal-raw-code.md](../issues/U64-A14-stats-refusal-raw-code.md))
+already names this case.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — fn l (`$agencies`). Live-probed 2026-09-28: td10, with the item switched off and on.

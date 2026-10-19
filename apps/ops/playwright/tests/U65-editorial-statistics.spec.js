@@ -598,10 +598,13 @@ test.describe('Statistics — editorial activity & reports', () => {
         await stats.expectColumn('total', totals);
 
         // Control: "Year to date" ends yesterday, and "Zeta" arrived today
-        // (Rules 3, 7).
-        await stats.choosePreset('Year to date');
-        await expect(stats.trendsColumns()).toHaveText(['Name', RANGE(`${YEAR}-01-01`, utcDay(1)), 'Total']);
-        await stats.expectColumn('middle', {'Submissions Received': 0});
+        // (Rules 3, 7). Not on 1 January, when the preset ends before it
+        // starts and the page shows an "Error" window (A15 🐞).
+        if (TODAY.slice(5) !== '01-01') {
+            await stats.choosePreset('Year to date');
+            await expect(stats.trendsColumns()).toHaveText(['Name', RANGE(`${YEAR}-01-01`, utcDay(1)), 'Total']);
+            await stats.expectColumn('middle', {'Submissions Received': 0});
+        }
     });
 
     test('S9: a preprint server\'s editorial statistics', async ({asUser, opsApi}, testInfo) => {
