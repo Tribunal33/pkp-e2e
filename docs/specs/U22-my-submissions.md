@@ -216,6 +216,9 @@ revision upload it can open is owned by *[Review stage & rounds](U26-review-stag
 - Deleting incomplete submissions removes them permanently. There is no
   email and no undo. They vanish from every view, and a bookmarked link back
   into a deleted draft's wizard no longer opens it.
+- A draft deleted instead with the request
+  `DELETE {context}/api/v1/submissions/{id}`, which no screen sends, is
+  gone just as permanently, but the answer is a server error ⚠ [A8](#a8). <sup>a8</sup>
 - "Submit revisions" has the same side effects as uploading revisions on the
   review stage. Those belong to *[Review stage & rounds](U26-review-stage-and-rounds.md#revisions)*.
 - The list itself sends nothing and logs nothing. It only shows information
@@ -473,6 +476,8 @@ Left out of the scenarios above, by reason:
   - A7 (an account holding two Reader-level roles, or on a journal a
     Subscription Manager alone, landing on the access-denied page after
     sign-in; Rule 3)
+  - A8 (a submission deleted through the REST API answered with a server
+    error; Side effects)
   - OMP1 (no series filter on a press; Rule 5; scenario 3 marks it)
 - **Owned by another feature**:
   - "Start A New Submission" beside the menu group (Rule 1; *Submission
@@ -505,6 +510,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 |----|------------------------------|------|--------|--------|
 | [OPS2](#ops2) | A preprint server author is offered draft deletion, but confirming always fails with a permission error | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | An account whose only roles are two Reader-level roles, or only Subscription Manager, lands on an access-denied page after every sign-in | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
+| [A8](#a8) | Deleting an unpublished submission through the REST API fails with a server error, though the submission is deleted | 🐞 | minor · crash: server | — |
 | [A1](#a1) | The author sees the review progress count ("Review update 1/2") for their submission under review | ❓ | user-visible | — |
 | [A2](#a2) | A declined submission's row keeps showing the review progress counter | ❓ | minor | — |
 | [A3](#a3) | On a press or preprint server, nothing was found that feeds the "Scheduled for publication" view | ❓ | minor | — |
@@ -594,6 +600,23 @@ fault is in where sign-in sends an account that holds no back-office
 role.
 *[Subscriptions](U51-subscriptions.md)* describes the Subscription Manager's landing.
 Basis: probe, 2026-10-15. <sup>a7</sup>
+
+<a id="a8"></a>
+**A8 — Deleting an unpublished submission through the REST API fails with a server error, though the submission is deleted** · 🐞 · minor · crash: server.
+No screen sends this request, `DELETE {context}/api/v1/submissions/{id}`:
+a program sends it by hand ([footnote a8](#fn-a8) gives it as sent).
+Sent from the Site Administrator's signed-in browser (the only way it
+was tried), the delete of a draft, or of a submitted submission never
+published, gets the server error "Call to a member function getData() on
+null" instead of the deleted submission's record. The submission is
+deleted all the same: a deleted draft no longer shows on its author's My
+Submissions. Deleting a published submission the same way answers
+normally. So the program is told the delete failed when it worked. The
+same request sent by the submission's author is refused by role, and
+nothing is deleted. My Submissions' delete (Rule 9) and the workflow's
+"Delete" ([→ the "Delete" dialog](U24-workflow-screen-and-stage-access.md#delete-dialog))
+send other requests and are not affected.
+Since: 2025-05-30 · Basis: probe, 2026-10-19. <sup>a8</sup>
 
 ### OMP
 
@@ -896,7 +919,14 @@ action cannot be undone. Please confirm to proceed." / "Confirm" ·
 "Cancel"; confirming deleted both drafts, the heading and sidebar badges
 moving without a reload, checkboxes appearing only on draft rows on its
 Active view. The identical OPS surface refuses the
-confirmation — fn-ops2.
+confirmation — fn-ops2. Re-driven 2026-10-19 (OJS, OMP, OPS, `main` and
+`stable-3_5_0`, two runs each, PKP's default dataset): the list's
+`DELETE _submissions?ids[]={id}` answered 200 and the draft was gone
+from the list at once, after a reload and from the database, with no
+other dialog or notice (OJS, OMP; OPS refused, fn-ops2); leaving the
+page with a draft ticked raised no leave-page question and the list came
+back out of selection mode. The REST API's own delete endpoint, which
+the list does not use, is fn-a8.
 
 <a id="fn-j"></a>
 **j — search and filters.** `useDashboardConfig.js` `getLeftControls` /
@@ -1134,6 +1164,42 @@ access-denied page in all five runs. No server error, page error or
 dialog in any run.
 Issue report: [pkp-e2e#994](https://github.com/jardakotesovec/pkp-e2e/issues/994) ([docs/issues/U22-A7-two-reader-roles-sign-in-access-denied.md](../issues/U22-A7-two-reader-roles-sign-in-access-denied.md)).
 
+<a id="fn-a8"></a>
+**a8 — A8 evidence.** `PKPSubmissionController::delete()` (`DELETE
+{context}/api/v1/submissions/{id}`, in the route group for Journal
+Manager and Section Editor) maps the submission
+(`Repo::submission()->getSchemaMap()->map()`), deletes it, then
+serializes the map in `response()->json()`. The map's publications are a
+lazy collection read only then, and a publication with no version yet
+(every unpublished one) builds its `versionString`
+(`publication/maps/Schema.php`) through
+`Publication\Repository::getVersionString()`, which looks up its
+submission, already deleted, and calls `getData()` on null. From
+`958592a159` (pkp-lib#10669, version support for publications,
+2025-05-30), `main` only. No screen sends this request: My Submissions'
+bulk delete and the wizard's "Cancel" send `DELETE
+_submissions?ids[]={id}`, the workflow's "Delete" `DELETE
+_submissions/{id}` (`useWorkflowActions.js`); the endpoint's only
+ui-library caller, `SubmissionsListItem.vue`, is mounted on no page.
+Live-probed 2026-10-19 (OJS, OMP, OPS `main`, PKP's default dataset, two
+runs, OPS's submitted case a third; `stable-3_5_0` 3.5.0.5 as the
+control, two runs): as the Site Administrator, a fresh draft and a
+submitted, never-published dataset submission (OJS 20 and 19, OMP 18 and
+17, OPS 1), the request sent from the signed-in page's console as
+`fetch(pkp.context.apiBaseUrl + 'submissions/{id}', {method: 'DELETE',
+headers: {'X-Csrf-Token': pkp.currentUser.csrfToken}})`, each answered 500 `{"error":"Call to a member function
+getData() on null"}`, the server log naming
+`classes/publication/Repository.php` in `getVersionString()`, and the
+`submissions`, `publications` and `stage_assignments` rows were gone, the
+draft off its author's My Submissions after a reload; published ones (OJS
+17, OMP 14 and 5, OPS 19 and 18) answered 200 with the record. The
+author's own request answered 401 "The current role does not have access
+to this operation." with the draft untouched, on both lines. On
+`stable-3_5_0` every one of these deletes answered 200 with the record,
+on all three apps. A Journal Manager's or Section Editor's request, and
+an API key as `Authorization: Bearer <key>` (*[User profile](U03-user-profile.md#fn-h)*), were
+not driven.
+
 <a id="fn-omp1"></a>
 **omp1 — OMP1 evidence.** OMP's filter form
 (`APP\components\forms\dashboard\SubmissionFilters`) never calls
@@ -1171,7 +1237,13 @@ submission."); the screen shows an error dialog, verbatim "Error / You do
 not have permission to delete this submission. / OK", and the draft is
 still listed after a reload. Reproduced with a draft created live through
 the OPS wizard (not a seeding artifact); the identical flow on OJS deleted
-its drafts (positive control).
+its drafts (positive control). Re-driven 2026-10-19 (OPS `main` and
+`stable-3_5_0`, PKP's default dataset, four runs): the author's confirm
+answered 403 with the same dialog and the draft stayed after a reload;
+the Preprint Server Manager deleting the same kind of draft from the
+Dashboard's "Active submissions" › "More Actions" › "Delete Incomplete
+Submissions" › "Confirm" got 200 and the draft was gone (OJS and OMP the
+same, as controls).
 Issue report: [pkp-e2e#331](https://github.com/jardakotesovec/pkp-e2e/issues/331) ([docs/issues/U21-OPS3-author-cancel-draft-does-nothing.md](../issues/U21-OPS3-author-cancel-draft-does-nothing.md)).
 
 ## Reference — entry points & surfaces
