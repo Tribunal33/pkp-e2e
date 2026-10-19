@@ -108,12 +108,10 @@ Login, the site's name stands in for the journal's), but after a refused
    for more information." When staff recorded a reason, it reads "Your
    account has been disabled for the following reason: {reason}". With a
    wrong password, a disabled account gets the generic sentence. After a
-   disabled account's refusal, the next sign-in in the same browser, by
-   any account and with the correct password, lands back on the Login
-   page with no message and "Username or Email" empty; the try after that
-   lands where Rule 3 says ⚠ [A12](#a12). Opening the Login page afresh in
-   between does not help. After a wrong-password or unknown-username
-   refusal, the next correct sign-in lands at once. <sup>a</sup>
+   refusal, the next correct sign-in in the same browser lands at once
+   where Rule 3 says: after a wrong password, after an unknown username,
+   and after a disabled account's refusal when another account signs in
+   next. <sup>a</sup>
 3. **Landing after sign-in.** An interrupted destination wins (Rule 4).
    Otherwise, a user holding a role beyond Reader **in the journal signed
    into** lands on that journal's Dashboard. A user with no such role there
@@ -689,6 +687,12 @@ Left out of the scenarios above, by reason:
     manager's next page still shows the Author's account and "Logout as"
     leads back to the manager's own (Rule 15a); for a sign-in that
     re-saves the Author's password, the guard owed once [A15](#a15) is fixed
+  - a disabled account refused on the journal's and the site-level Login
+    page with "Your account has been disabled. Please contact the
+    administrator for more information.", and with the reason when staff
+    typed one; then another account's correct password in the same
+    browser landing where Rule 3 says, not back on the Login page
+    (Rule 2; [A12](#a12))
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -698,10 +702,8 @@ Left out of the scenarios above, by reason:
   - a held address the user's roles do not allow ending on the access-denied page after sign-in (Rule 4): the page scenario 4 reads (Rule 17)
 - **Register carries it**:
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
-  - A12 (the next correct sign-in after a disabled account's refusal landing back on the Login page; Rule 2)
   - A16 (a search on a page left open after its session ended refused with an alert or an "Error" window instead of the Login page; Rules 5a, 18)
 - **No seed**:
-  - a disabled account refused, with or without a reason (Rule 2)
   - the Site Administrator passing Confirm Access (Actors row "Pass the Confirm Access gate"): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
   - Confirm Access's window lapse, no replay, and the direct address going home (Rule 16): the same missing window setting
   - other Site Administrators never offered Login As (Rule 14): what is missing is a second site administrator
@@ -738,7 +740,6 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A8](#a8) | Latent today: a user signed back in by "Keep me logged in" looks signed out on the public site, and "Login As" gives a blank page | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
 | [A10](#a10) | The Site Administrator's "Edit User" never shows "Change Password" ticked, and saving it removes the flag | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A12](#a12) | After a disabled account is refused, the browser's next correct sign-in lands back on the Login page with no message; after that account's second refusal, the next correct one reads "Invalid username/email or password" | 🐞 | minor | — |
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
 | [A15](#a15) | A sign-in that re-saves an account's password, while a manager is logged in as it, sends the manager to the Login page, signed out of both accounts | 🐞 | minor | — |
@@ -747,6 +748,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
 | [A6](#a6) | With rate limiting on, even the correct password is refused as "Invalid username/email or password" during the cool-down; the concealment is intended | ✅ | latent | Jarda 2026-08-25 |
+| [A12](#a12) | Retired: after a disabled account was refused, the browser's next correct sign-in landed back on the Login page with no message; it now lands at once (Rule 2) | ✅ | retired | issues (claude), 2026-10-19 — fixed upstream (pkp/pkp-lib#12780) |
 
 ### All apps
 
@@ -966,24 +968,6 @@ A screen-reader user hears only the journal's name as the page's title,
 and on "Reset Password" finds no heading to move to.
 Since: 2020-05-13 (pkp/pkp-lib#5866) · Basis: probe, 2026-10-04. <sup>[f-a11](#fn-a11)</sup>
 
-<a id="a12"></a>
-**A12 — After a disabled account is refused, the next correct sign-in in that browser fails** · 🐞 · minor.
-In one browser, on a journal's Login page, each account with its correct
-password:
-1. A disabled account signs in: refused with its message (Rule 2).
-2. An enabled account signs in: back on the Login page with no message and
-   "Username or Email" empty, instead of landing where Rule 3 says.
-3. The disabled account again: the same refusal.
-4. The enabled account again: refused with "Invalid username/email or
-   password. Please try again."
-5. The enabled account again: it lands.
-
-Without step 3, step 4 lands. Steps 1 and 2 go the same on the site-level
-Login page. The user is given no reason and may well conclude that their
-own password is wrong. After a wrong-password or unknown-username refusal,
-the next correct sign-in lands at once.
-Basis: probe. <sup>[f-a12](#fn-a12)</sup>
-
 <a id="a13"></a>
 **A13 — With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password** · 🐞 · medium.
 An installation can make the Site Administrator re-enter the password
@@ -1064,6 +1048,9 @@ Basis: probe, 2026-10-15. <sup>[f-a16](#fn-a16)</sup>
 > tab title to the translated "Reset Password" string. Already reported as
 > pkp/pkp-lib#13132.
 
+<a id="a12"></a>
+**A12 — After a disabled account was refused, the next correct sign-in in that browser failed** · ✅ · retired. Fixed upstream ([pkp/pkp-lib#12780](https://github.com/pkp/pkp-lib/issues/12780), 2026-10-06), verified 2026-10-19 on OJS, OMP and OPS: right after a disabled account's refusal, another account's correct sign-in in the same browser lands at once where Rule 3 says; it used to land back on the Login page with no message (Rule 2). <sup>[f-a12](#fn-a12)</sup>
+
 ---
 
 <a id="footnotes"></a>
@@ -1099,8 +1086,9 @@ Author disabled with no reason, another through Settings › Users & Roles
 › the row's "Disable User" with a typed reason): both messages verbatim
 on the journal's and the site-level Login pages, the refused form keeping
 the typed username; a disabled account's wrong password answers the
-generic `user.login.loginError`. The next sign-in in the same browser:
-finding A12 (note f-a12).
+generic `user.login.loginError`. The next correct sign-in in the same
+browser after a disabled account's refusal: note f-a12 (finding A12,
+retired 2026-10-19).
 
 <a id="fn-b"></a>
 **b** — Landing: `LoginHandler::_redirectAfterLogin()` — with a context and
@@ -1809,6 +1797,21 @@ seventh, an OJS repeat on the same context, bounced that attempt to
 `login?source=…login%2FsignIn` with no message instead, the next try
 getting in. No server error and no page error in any run. Cause not
 traced.
+Retired: fixed by pkp/pkp-lib#12780's second commit, lib/pkp
+`3407fc5bc0` on `main` (2026-10-06), which reverts the July fallback
+`a6d68f9547` (`PKPRequest::getUser()` falling back on `Auth::user()`)
+that left the refused account in the session; the 3.5 twin
+`edc3d36c74` is in stable-3_5_0's lib/pkp (code read, not walked).
+Walked 2026-10-19 on OJS, OMP and OPS `main` (lib/pkp `042726ebf6`),
+each on PKP's default dataset freshly reset: the five-step sequence
+(the disabled account, `dbarnes`, the disabled account, `dbarnes`
+twice) on the journal's Login page and the site-level one: every
+correct `dbarnes` sign-in landed at once (the Dashboard, or the journal
+home page from the site-level Login), with no return to the Login page
+and no `user.login.loginError`; the setups above (a fresh browser, the
+Login address with and without the locale segment) re-driven once on
+OJS, the same (the issues session's kept walk,
+`shared/playwright/checks/U01/H19/walk.js`).
 
 <a id="fn-a13"></a>
 **f-a13** — `AdminHandler::authorize()` (`lib/pkp/pages/admin/AdminHandler.php:111`

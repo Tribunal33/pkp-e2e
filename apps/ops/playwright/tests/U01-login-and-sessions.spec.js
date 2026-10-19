@@ -13,7 +13,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings
  * register): A1 🐞, A2 🐞, A4 🐞, A5 ❓, A6 ✅, A7 🐞, A8 🐞, A10 🐞, A11 🐞,
- * A12 🐞, A13 🐞, A14 🐞. The spec's Coverage section records everything
+ * A13 🐞, A14 🐞. The spec's Coverage section records everything
  * else left out.
  *
  * Session hygiene: every sign-in, sign-out and impersonation flow runs in a

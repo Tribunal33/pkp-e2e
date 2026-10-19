@@ -8,7 +8,7 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
- * A2 🐞, A4 🐞, A5 ❓, A7 🐞, A8 🐞, A9 ❓, A10 🐞, A11 🐞, A12 🐞, A13 🐞,
+ * A2 🐞, A4 🐞, A5 ❓, A7 🐞, A8 🐞, A9 ❓, A10 🐞, A11 🐞, A13 🐞,
  * A14 🐞. The spec's Coverage section records everything else left out.
  *
  * Session hygiene: every sign-in, sign-out, forced-change and impersonation
