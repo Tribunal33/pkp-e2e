@@ -1,0 +1,28 @@
+--- a/plugins/pubIds/urn/URNPubIdPlugin.php
++++ b/plugins/pubIds/urn/URNPubIdPlugin.php
+@@ -537,7 +537,9 @@
+         $newURN = '';
+         for ($i = 0; $i < strlen($urnLower); $i++) {
+             $char = $urnLower[$i];
+-            $newURN .= $conversionTable[$char];
++            // A character without a value in the table (such as "~") is skipped,
++            // as getCheckNumber() in js/checkNumber.js does.
++            $newURN .= $conversionTable[$char] ?? '';
+         }
+         $sum = 0;
+         for ($j = 1; $j <= strlen($newURN); $j++) {
+--- a/plugins/pubIds/urn/js/checkNumber.js
++++ b/plugins/pubIds/urn/js/checkNumber.js
+@@ -52,7 +52,11 @@
+ 			suffix = urn.replace(urnPrefix, '').toLowerCase();
+ 			for (i = 0; i < suffix.length; i++) {
+ 				char = suffix.charAt(i);
+-				newURN += conversionTable[char];
++				// A character without a value in the table (such as "~") is skipped,
++				// as URNPubIdPlugin::_calculateCheckNo() does.
++				if (Object.prototype.hasOwnProperty.call(conversionTable, char)) {
++					newURN += conversionTable[char];
++				}
+ 			}
+ 			sum = 0;
+ 			for (j = 1; j <= newURN.length; j++) {

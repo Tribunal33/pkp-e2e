@@ -832,6 +832,7 @@ are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A15 (issue report `docs/issues/U44-A15-urn-check-number-nan-unlisted-character.md`): once fixed, with "Enter an individual URN suffix…" and "Check Number" chosen, "Add Check Number" on the suffix "a~b" adds one digit, not "NaN".
   - the guard for A16 (issue report `docs/issues/U44-A16-urn-shared-across-item-kinds.md`): once fixed, with "Enter an individual URN suffix…" chosen, a galley's "Identifiers" tab refuses the URN an article already carries, and an article's page refuses a galley's, with "The given URN suffix is already in use for another published item. Please enter a unique URN suffix for each item." (Rules 11, 12a).
   - the guard for OJS1 (issue report
     `docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md`):
@@ -1001,7 +1002,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A11](#a11) | URN settings window: every click under the pattern choice raises a page script error | 🐞 | low · crash: script | issues (claude), 2026-10-02 — re-verified |
 | [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
-| [A15](#a15) | "Add Check Number" on an item's "Identifiers" tab adds "NaN" to a suffix holding a character such as "~" | 🐞 | minor | — |
+| [A15](#a15) | "Add Check Number" appends "NaN" to a URN suffix holding a character such as "~" | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A16](#a16) | An editor can give one URN to an issue, an article and its galley without any warning | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A17](#a17) | The header "Close" on a galley's or chapter's "Identifiers" tab drops a typed value without asking | 🐞 | minor | — |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
@@ -1221,18 +1222,19 @@ same tabs, OPS galleys included, acts the same way.
 Basis: probe, 2026-10-02. <sup>f-a14</sup>
 
 <a id="a15"></a>
-**A15 — "Add Check Number" on an item's "Identifiers" tab adds "NaN" to a suffix holding a character such as "~"** · 🐞 · minor.
-On a galley's "Identifiers" tab (journal) or a chapter's (press; issue,
-format and file tabs untried), with "Enter an individual URN
-suffix…" chosen and "Check Number" ticked in the URN settings, an editor
-types "a~b" in "URN Suffix" and presses "Add Check Number". The box then
-reads "a~bNaN": "NaN" where a digit was expected. The area above the box says a suffix "can take
-any form", and nothing on the tab warns that this one cannot take a
-check digit. The editor sees the value at once and can correct it.
-Which characters a suffix may hold, and whether the button should
-refuse or skip the others, is for the team to settle; [A13](#a13)'s empty
-box is a separate case.
-Basis: probe, 2026-10-02. <sup>f-a15</sup>
+**A15 — "Add Check Number" appends "NaN" to a URN suffix holding a character such as "~"** · 🐞 · low.
+A journal or press can let editors type each item's URN suffix by hand
+and have the app add a check digit: the URN plugin's settings "Enter an
+individual URN suffix…" and "Check Number". When the suffix holds a
+character such as "~", the "Add Check Number" button appends "NaN"
+instead of a digit: "a~b" becomes "a~bNaN". This happens on the
+"Identifiers" tab of a galley or a chapter and on the article's or
+monograph's "Identifiers" page. The box shows "NaN" at once, but nothing
+refuses it: "Save" keeps "a~bNaN" as the suffix, and a URN assigned from
+it ends in "NaN". The text above the box says a suffix "can take any
+form", and nothing warns that this one cannot take a check digit.
+[A13](#a13)'s empty box is a separate case.
+Basis: probe, 2026-10-19. <sup>f-a15</sup>
 
 <a id="a16"></a>
 **A16 — An editor can give one URN to an issue, an article and its galley without any warning** · 🐞 · medium.
@@ -2153,6 +2155,7 @@ characters outside its table. Not walked: saving the tab with
 whose "Add Check Number" calls the same `getCheckNumber()` (note f-a6).
 The A13 report leaves this case out of its fix until the team rules on
 the characters a suffix may hold: [pkp-e2e#462](https://github.com/jardakotesovec/pkp-e2e/issues/462) ([docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issues/U44-A13-check-number-empty-urn-suffix-nan.md)).
+Issue report: [docs/issues/U44-A15-urn-check-number-nan-unlisted-character.md](../issues/U44-A15-urn-check-number-nan-unlisted-character.md).
 
 <a id="fn-f-a16"></a>
 **f-a16** — The page's check (`validatePublicationUrn()`, note c) and
