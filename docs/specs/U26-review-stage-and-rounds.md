@@ -1743,7 +1743,7 @@ traced further: the task is the decision-owned resubmit row (note m,
 the revisions task on a revision upload
 (`PendingRevisionsNotificationManager`, `PKPManageFileApiHandler`) names
 `NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS` only.
-Issue report: [docs/issues/U26-A13-resubmit-task-stays-after-revisions-upload.md](../issues/U26-A13-resubmit-task-stays-after-revisions-upload.md).
+Issue report: [pkp-e2e#1027](https://github.com/jardakotesovec/pkp-e2e/issues/1027) ([docs/issues/U26-A13-resubmit-task-stays-after-revisions-upload.md](../issues/U26-A13-resubmit-task-stays-after-revisions-upload.md)).
 
 <a id="fn-a14"></a>
 **f-a14** — Driven 2026-10-07 on OJS and OMP `main`, two runs each, on a
@@ -1765,7 +1765,7 @@ that one user, while `PKP\submissionFile\Repository::add()` and `delete()`
 pass every stage author. The same code is in `stable-3_5_0`,
 `stable-3_4_0` and `stable-3_3_0` (`.inc.php`), read through git in the
 lib/pkp checkout.
-Issue report: [docs/issues/U26-A14-co-author-revisions-task-stays-after-upload.md](../issues/U26-A14-co-author-revisions-task-stays-after-upload.md).
+Issue report: [pkp-e2e#1028](https://github.com/jardakotesovec/pkp-e2e/issues/1028) ([docs/issues/U26-A14-co-author-revisions-task-stays-after-upload.md](../issues/U26-A14-co-author-revisions-task-stays-after-upload.md)).
 
 <a id="fn-a10"></a>
 **f-a10** — Probed 2026-08-02, editorial view (Journal/Press Manager), on
