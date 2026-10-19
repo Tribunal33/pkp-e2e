@@ -1,0 +1,67 @@
+--- a/lib/pkp/classes/orcid/actions/PKPSendSubmissionToOrcid.php
++++ b/lib/pkp/classes/orcid/actions/PKPSendSubmissionToOrcid.php
+@@ -35,17 +35,19 @@
+ 
+     /**
+      * Gather valid authors with ORCIDs and dispatch job to deposit ORCID submission for each.
++     *
++     * @return bool Whether a deposit was queued for at least one contributor
+      */
+-    public function execute(): void
++    public function execute(): bool
+     {
+         if (!OrcidManager::isEnabled($this->context)) {
+-            return;
++            return false;
+         }
+ 
+         if (!OrcidManager::isMemberApiEnabled($this->context) || $this->canDepositSubmission() === false) {
+             // Sending to ORCID only works with the member API
+             // FIXME: OMP cannot deposit submissions currently. Check can be removed once added
+-            return;
++            return false;
+         }
+ 
+         $authors = Repo::author()
+@@ -69,6 +71,7 @@
+             }
+         }
+ 
++        $queued = false;
+         if (empty($authorsWithOrcid)) {
+             OrcidManager::logInfo('No contributor with ORICD id or valid access token for submission ' . $this->publication->getData('submissionId'));
+         } else {
+@@ -76,14 +79,17 @@
+             OrcidManager::logInfo('Request body (without put-code): ' . json_encode($orcidWork->toArray()));
+ 
+             if ($orcidWork === null) {
+-                return;
++                return false;
+             }
+             foreach ($authorsWithOrcid as $orcid => $author) {
+                 dispatch(new DepositOrcidSubmission($author, $this->context, $orcidWork->toArray(), $orcid));
+             }
++            $queued = true;
+         }
+ 
+         $this->depositReviewsForSubmission();
++
++        return $queued;
+     }
+ 
+     /**
+--- a/lib/pkp/classes/orcid/actions/VerifyIdentityWithOrcid.php
++++ b/lib/pkp/classes/orcid/actions/VerifyIdentityWithOrcid.php
+@@ -204,8 +204,10 @@
+             $publication = Repo::publication()->get($publicationId);
+ 
+             if ($publication->getData('status') == PKPPublication::STATUS_PUBLISHED) {
+-                (new SendSubmissionToOrcid($publication, $this->context))->execute();
+-                $this->addTemplateVar('sendSubmissionSuccess', true);
++                $queued = (new SendSubmissionToOrcid($publication, $this->context))->execute();
++                // The landing's deposit line shows only under sendSubmission (orcidVerify.tpl)
++                $this->addTemplateVar('sendSubmission', $queued);
++                $this->addTemplateVar('sendSubmissionSuccess', $queued);
+             } else {
+                 $this->addTemplateVar('submissionNotPublished', true);
+             }

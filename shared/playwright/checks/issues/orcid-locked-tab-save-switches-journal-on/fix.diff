@@ -1,0 +1,12 @@
+--- a/lib/pkp/classes/components/forms/context/OrcidSettingsForm.php
++++ b/lib/pkp/classes/components/forms/context/OrcidSettingsForm.php
+@@ -60,6 +60,9 @@
+                 ]
+             ],
+             'value' => $isEnabledValue,
++            // While the site-wide configuration applies, the box only shows it: it is not
++            // saved, so the journal keeps its own choice for when the site-wide box is unticked.
++            'isInert' => OrcidManager::isGloballyConfigured(),
+         ]));
+ 
+         $settingsDescriptionText = __('orcid.manager.settings.description');

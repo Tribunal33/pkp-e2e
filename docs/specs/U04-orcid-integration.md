@@ -578,6 +578,9 @@ Left out of the scenarios above, by reason:
   - the guard for A5's refusal (issue report `docs/issues/U04-A5-assistant-orcid-controls-refused.md`): once fixed, an Assistant whose assignment has the "Permissions" box presses "Request verification" (the email arrives) and "Delete" (the iD is gone), and one without the box is offered no "Edit".
   - the guard for A14 (issue report `docs/issues/U04-A14-orcid-reauthorization-link-blank-page.md`): once fixed, a contributor verified under the public API follows "Requesting updated ORCID record access" after the journal moved to the member API and lands on the "ORCID Authorization" page, not a blank page.
   - the guard for A15 (issue report `docs/issues/U04-A15-orcid-pages-tab-no-page-name.md`): once fixed, the "What is ORCID?" and "ORCID Authorization" pages' browser tab reads "What is ORCID? | {journal name}" and "ORCID Authorization | {journal name}".
+  - the guard for A17 (issue report `docs/issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md`): once fixed, a Journal Manager saves "City" on the journal's locked ORCID tab while the site-wide switch is on, the Site Administrator turns the switch off, and the journal's "Enable ORCID functionality" reads unticked (Rule 3).
+  - the guard for A22 (issue report `docs/issues/U04-A22-orcid-landing-silent-on-deposit.md`): once fixed, a contributor of a published article on a member-API journal or preprint server completes the emailed authorization and the "ORCID Authorization" page adds "The submission has been added to your ORCID record." (Side effects).
+  - the guard for A18 (issue report `docs/issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md`): once fixed, the sign-in popup sent back with ORCID unreachable, on the profile's Identity tab and on the registration page, closes and the page under it shows the failure notice (Rules 5, 7).
   - the guard for A1's early offer, once fixed: the row menu of a reviewer with a verified iD offers no "Send Review To ORCID" before the review is complete (Rule 12; scenario 9's first bullet, which the OJS suite does not assert while A1 stands).
   - the profile's "Delete" window titled "Confirm", with "OK" and "Cancel" (Rule 6c; scenario 3's "Delete" bullet).
   - a contributor verified under the public API receiving "Requesting updated ORCID record access" from the journal's principal contact, with the personal authorization link and the What-is-ORCID link, when their article is published after the journal switched to the member API (Rules 11, 14; journals and preprint servers, a press deposits nothing, OMP1).
@@ -670,10 +673,10 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A14](#a14) | A contributor following the "Requesting updated ORCID record access" link gets a blank page and can never allow deposits | 🐞 | medium · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A15](#a15) | The "What is ORCID?" and "ORCID Authorization" pages' browser tab shows only "\| {journal name}" | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
 | [A16](#a16) | "All" under "ORCID request log" writes the feature's informational entries in place of its errors | 🐞 | invisible | — |
-| [A17](#a17) | "Save" on a journal's locked ORCID tab switches the journal's own ORCID on, so it stays on with no Client ID once the site-wide box is unticked | 🐞 | user-visible | — |
-| [A18](#a18) | When ORCID cannot be reached or fails as the sign-in popup comes back, the popup stays open on a blank page and nothing is said | 🐞 | user-visible · crash: server | — |
-| [A21](#a21) | The "Requesting updated ORCID record access" email asks for "updateded permissions" | 🐞 | minor | — |
-| [A22](#a22) | The landing after an emailed authorization for a published article never says the article goes to the ORCID record | 🐞 | minor | — |
+| [A17](#a17) | Saving a journal's locked ORCID tab leaves ORCID on, with no Client ID, after the site-wide ORCID switch is turned off | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
+| [A18](#a18) | The ORCID sign-in popup stays open on a blank page, saying nothing, when ORCID cannot be reached or fails | 🐞 | medium · crash: both | issues (claude), 2026-10-19 — re-verified |
+| [A21](#a21) | The "Requesting updated ORCID record access" email asks contributors for "updateded permissions" | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
+| [A22](#a22) | The ORCID authorization page never tells a contributor their published work is going to their record | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [OJS1](#ojs1) | A review sent to ORCID on a journal with no country fails in the background instead of being skipped | 🐞 | invisible · crash: server | — |
 | [OJS2](#ojs2) | Verifying from the email for an article published without an issue ends on a blank page, though the iD is stored | 🐞 | medium · crash: server | issues (claude), 2026-10-19 — re-verified |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -878,21 +881,24 @@ write no informational entries at either level. (Fields; Side effects)
 Basis: probe, 2026-10-16. <sup>[f-a16](#fn-a16)</sup>
 
 <a id="a17"></a>
-**A17 — "Save" on a journal's locked ORCID tab switches the journal's own ORCID on** · 🐞 · user-visible.
-While the site-wide configuration is on, a Journal Manager who presses
-"Save" on the journal's ORCID tab, to change City, the email toggle or
-the log level, also stores the journal's own "Enable ORCID
-functionality" as ticked, though that box is locked. When the Site
-Administrator later unticks "Enable ORCID functionality site-wide", a
-journal that had ORCID off keeps it on with no Client ID: its Identity
-tab and Register page offer "Create or Connect your ORCID iD", and the
-ORCID sign-in address that button opens carries an empty client ID. The
-manager expected only the field they changed to be saved, and the
-journal to be back to ORCID off. (Rule 3)
-Basis: probe, 2026-10-16. <sup>[f-a17](#fn-a17)</sup>
+**A17 — Saving a journal's locked ORCID tab leaves ORCID on, with no Client ID, after the site-wide ORCID switch is turned off** · 🐞 · medium.
+While the Site Administrator's site-wide ORCID switch ("Enable ORCID
+functionality site-wide") is on, each journal's ORCID tab shows the
+journal's own "Enable ORCID functionality" box ticked and locked. A
+Journal Manager who presses "Save" on that tab, to change one of the
+fields it leaves editable ("City", the email option or the log level),
+also stores the locked box as the journal's own setting, ticked. When
+the site-wide switch is turned off again, a journal that had ORCID off
+keeps it on, with no Client ID. Its Identity tab and Register page offer
+"Create or Connect your ORCID iD", and "Request verification" on a
+contributor emails the author an ORCID link. Both open ORCID's sign-in
+with an empty client ID, which names no journal to connect an iD to.
+Nobody is told. Nothing stored is lost, and a journal that had its own
+ORCID on keeps it as it was. (Rule 3)
+Basis: probe, 2026-10-19. <sup>[f-a17](#fn-a17)</sup>
 
 <a id="a18"></a>
-**A18 — When ORCID cannot be reached or fails as the sign-in popup comes back, the popup stays open on a blank page** · 🐞 · user-visible · crash: server.
+**A18 — The ORCID sign-in popup stays open on a blank page, saying nothing, when ORCID cannot be reached or fails** · 🐞 · medium · crash: both.
 A user who signs in at ORCID from the profile's "Create or Connect your
 ORCID iD" (or "Authorize and Connect your ORCID iD"), or from a
 journal's registration page, is sent back to the journal in the popup.
@@ -901,9 +907,14 @@ failure of its own, the app fails on the server: the popup stays open on
 a blank page, and the profile or the registration form under it says
 nothing. Nothing is stored. When ORCID refuses the journal's credentials
 instead, the popup closes and the profile shows "ORCID authorization
-failed:" (Rule 6d); the user expected the same kind of answer here.
-(Rules 5, 7)
-Basis: probe, 2026-10-16. <sup>[f-a18](#fn-a18)</sup>
+failed:"; the user expected the same kind of answer here. The
+registration page does not get that refusal notice either. When ORCID
+refuses the journal's credentials there, the popup's own script fails in
+the browser, and the popup stays blank just the same. It happens only on
+a journal, press or server that has ORCID switched on. On an install
+whose server cannot reach ORCID at all (a firewall on outbound traffic,
+a wrong proxy), every attempt fails this way. (Rules 5, 7)
+Basis: probe, 2026-10-19. <sup>[f-a18](#fn-a18)</sup>
 
 <a id="a19"></a>
 **A19 — "Delete" beside a verified iD discards the Identity tab's unsaved changes without asking** · ❓ · minor.
@@ -930,26 +941,36 @@ no token.
 Basis: probe, 2026-10-16. <sup>[f-a20](#fn-a20)</sup>
 
 <a id="a21"></a>
-**A21 — The "Requesting updated ORCID record access" email asks for "updateded permissions"** · 🐞 · minor.
-The email a contributor receives when a deposit needs a wider
-permission (Rule 11) reads "You have previously authorized {journal
-name} to list your ORCID id on the site, and we require updateded
-permissions to add your contribution to your ORCID profile." The English
-text is the same in the three apps; journals and preprint servers send
-the email, a press never does ([OMP1](#omp1)). (Rule 14)
-Basis: probe, 2026-10-16. <sup>[f-a21](#fn-a21)</sup>
+**A21 — The "Requesting updated ORCID record access" email asks contributors for "updateded permissions"** · 🐞 · low.
+When a journal or preprint server needs a wider ORCID permission from a
+contributor, it emails them "Requesting updated ORCID record access".
+The email reads "You have previously authorized {journal name} to list
+your ORCID id on the site, and we require updateded permissions to add
+your contribution to your ORCID profile." A corrected text in a new
+release reaches new installs only: each journal already running keeps
+its stored copy of the email until its manager corrects the word in the
+template under Settings › Workflow › Emails. A preprint server does not
+list the email there, so it cannot. The email is sent to contributors
+who verified their iD while the journal or server used ORCID's public
+API, once the journal or server has switched to the member API and one
+of their works is published. A press never sends it ([OMP1](#omp1)).
+(Rule 14)
+Basis: probe, 2026-10-19. <sup>[f-a21](#fn-a21)</sup>
 
 <a id="a22"></a>
-**A22 — The landing after an emailed authorization for a published article never says the article goes to the ORCID record** · 🐞 · minor.
+**A22 — The ORCID authorization page never tells a contributor their published work is going to their record** · 🐞 · low.
 On a member-API journal, a contributor who completes the emailed
-authorization for an article already published reads only that their
-iD is verified: the article is queued for their ORCID record in the
+authorization for an article already published sees only that their iD
+is verified. The article is queued for their ORCID record in the
 background, and the page says nothing about it. For an article not yet
-published the same page adds "The submission will be added to your
-ORCID record during publication." The page holds a line for the
-published case, "The submission has been added to your ORCID record.",
-which never shows. (Side effects)
-Basis: probe + code, 2026-10-16. <sup>[f-a22](#fn-a22)</sup>
+published the same page adds "The submission will be added to your ORCID
+record during publication." The page holds a line for the published
+case, "The submission has been added to your ORCID record.", which never
+shows. Up to 3.4, when ORCID came as the ORCID Profile plugin, the same
+page showed that line for a published article (read in the plugin's
+code). The deposit still goes out, so nothing is lost: the contributor
+is only not told. (Side effects)
+Basis: probe, 2026-10-19. <sup>[f-a22](#fn-a22)</sup>
 
 ### OJS
 
@@ -1913,6 +1934,7 @@ sign-in address behind it carried an empty `client_id`. Mechanism:
 `OrcidSettingsForm` gives the disabled enable option the value true
 while `OrcidManager::isGloballyConfigured()`, and the form posts it; the
 same code on `stable-3_5_0` (read, not driven there).
+Issue report: [docs/issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md](../issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md).
 
 <a id="fn-a18"></a>
 **f-a18** — Live-probed 2026-10-16 (OJS, OMP, OPS on `main`, two runs
@@ -1934,6 +1956,7 @@ Server Error` response"); a 401 gave Rule 6d's notice (note c).
 Mechanism: `AuthorizeUserData::execute()` catches only the token
 request's `ClientException`, ORCID's refusals; the same catch on
 `stable-3_5_0` (read, not driven there).
+Issue report: [docs/issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md](../issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md).
 
 <a id="fn-a19"></a>
 **f-a19** — Live-probed 2026-10-16 (OJS, OMP, OPS on `main`, two runs
@@ -1963,6 +1986,7 @@ permissions to add your contribution to your ORCID profile.". The text
 is `emails.orcidRequestUpdateScope.body` in lib/pkp's
 `locale/en/emails.po`, shared by the three apps, the same on
 `stable-3_5_0`.
+Issue report: [docs/issues/U04-A21-orcid-update-scope-email-updateded.md](../issues/U04-A21-orcid-update-scope-email-updateded.md).
 
 <a id="fn-a22"></a>
 **f-a22** — The landings: note f (live-probed 2026-10-16, OJS, OMP,
@@ -1972,6 +1996,7 @@ added to your ORCID record.") only under `$sendSubmission`, which
 `OrcidHandler::verify()` assigns false and nothing sets otherwise
 (`VerifyIdentityWithOrcid` sets only `sendSubmissionSuccess`), on `main`
 and on `stable-3_5_0`.
+Issue report: [docs/issues/U04-A22-orcid-landing-silent-on-deposit.md](../issues/U04-A22-orcid-landing-silent-on-deposit.md).
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live-probed 2026-10-16 (OJS on `main`, two runs): Member
