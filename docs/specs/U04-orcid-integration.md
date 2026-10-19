@@ -677,7 +677,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A18](#a18) | The ORCID sign-in popup stays open on a blank page, saying nothing, when ORCID cannot be reached or fails | 🐞 | medium · crash: both | issues (claude), 2026-10-19 — re-verified |
 | [A21](#a21) | The "Requesting updated ORCID record access" email asks contributors for "updateded permissions" | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A22](#a22) | The ORCID authorization page never tells a contributor their published work is going to their record | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
-| [OJS1](#ojs1) | A review sent to ORCID on a journal with no country fails in the background instead of being skipped | 🐞 | invisible · crash: server | — |
+| [OJS1](#ojs1) | A review sent to ORCID by a journal with no country fails in the background instead of being skipped | 🐞 | low · crash: server | issues (claude), 2026-10-19 — re-verified |
 | [OJS2](#ojs2) | Verifying from the email for an article published without an issue ends on a blank page, though the iD is stored | 🐞 | medium · crash: server | issues (claude), 2026-10-19 — re-verified |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
@@ -975,15 +975,23 @@ Basis: probe, 2026-10-19. <sup>[f-a22](#fn-a22)</sup>
 ### OJS
 
 <a id="ojs1"></a>
-**OJS1 — A review sent to ORCID on a journal with no country fails in the background instead of being skipped** · 🐞 · invisible · crash: server.
-On a journal using the member API with a City set but no country in its
-settings, an editor's "Send Review To ORCID" › "OK" closes with the
-usual silence ([A1](#a1)), and the review's deposit then fails in the
-background because the app breaks, instead of being skipped without a
-word as it is when the City is missing. Nothing reaches the reviewer's
-ORCID record either way; the failure lands in a server record that no
-screen shows. (Rule 12)
-Basis: probe, 2026-10-16. <sup>[f-ojs1](#fn-ojs1)</sup>
+**OJS1 — A review sent to ORCID by a journal with no country fails in the background instead of being skipped** · 🐞 · low · crash: server.
+An editor on a journal with no country presses "Send Review To ORCID" on
+a completed review and answers "OK". The question closes with no
+message, as it always does. The journal uses ORCID's member API and has
+a City in its ORCID settings. The deposit then runs as a background job,
+and the server fails it with a type error. Without a City the same job
+ends quietly, and the design means a review to be skipped the same way
+when the country is missing. The editor sees nothing different, but the
+site administrator's Administration › "View Failed Jobs" gains an entry
+for every review the journal tries to send, and its error does not say
+that a country is missing. A journal upgraded from 3.3 has no country
+until its "Masthead" is saved. Among those, one that sent reviews to
+ORCID through the ORCID Profile plugin keeps the plugin's City through
+the upgrade, which drops the plugin's Country, so its first review sent
+afterwards fails this way. (Rule 12; the editor's silent "OK" is
+[A1](#a1))
+Basis: probe, 2026-10-19. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 <a id="ojs2"></a>
 **OJS2 — Verifying from the email for an article published without an issue ends on a blank page** · 🐞 · medium · crash: server.
@@ -2009,6 +2017,7 @@ tried `…/peer-review` (note g). `OrcidManager::getCountry()` declares a
 string and returns the journal's unset `country`; the same on
 `stable-3_5_0` (read, not driven there). The A1 issue report lists this
 failure among the job's outcomes.
+Issue report: [docs/issues/U04-OJS1-orcid-review-no-country-fails-in-background.md](../issues/U04-OJS1-orcid-review-no-country-fails-in-background.md).
 
 <a id="fn-ojs2"></a>
 **f-ojs2** — Live-probed 2026-10-16 with a local stand-in for ORCID's

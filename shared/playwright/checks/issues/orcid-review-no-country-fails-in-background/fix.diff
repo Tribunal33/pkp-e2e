@@ -1,0 +1,11 @@
+--- a/lib/pkp/classes/orcid/OrcidManager.php
++++ b/lib/pkp/classes/orcid/OrcidManager.php
+@@ -219,7 +219,7 @@
+         if ($context === null) {
+             $context = Application::get()->getRequest()->getContext();
+         }
+-        return $context->getData('country');
++        return $context->getData('country') ?? '';
+     }
+ 
+ 
