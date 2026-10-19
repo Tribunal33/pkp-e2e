@@ -2155,7 +2155,7 @@ characters outside its table. Not walked: saving the tab with
 whose "Add Check Number" calls the same `getCheckNumber()` (note f-a6).
 The A13 report leaves this case out of its fix until the team rules on
 the characters a suffix may hold: [pkp-e2e#462](https://github.com/jardakotesovec/pkp-e2e/issues/462) ([docs/issues/U44-A13-check-number-empty-urn-suffix-nan.md](../issues/U44-A13-check-number-empty-urn-suffix-nan.md)).
-Issue report: [docs/issues/U44-A15-urn-check-number-nan-unlisted-character.md](../issues/U44-A15-urn-check-number-nan-unlisted-character.md).
+Issue report: [pkp-e2e#1012](https://github.com/jardakotesovec/pkp-e2e/issues/1012) ([docs/issues/U44-A15-urn-check-number-nan-unlisted-character.md](../issues/U44-A15-urn-check-number-nan-unlisted-character.md)).
 
 <a id="fn-f-a16"></a>
 **f-a16** — The page's check (`validatePublicationUrn()`, note c) and
