@@ -1,0 +1,42 @@
+--- a/controllers/grid/users/chapter/ChapterGridHandler.php
++++ b/controllers/grid/users/chapter/ChapterGridHandler.php
+@@ -318,6 +318,27 @@
+     }
+ 
+ 
++    /**
++     * @copydoc GridHandler::saveSequence()
++     *
++     * Also announces the chapters in their stored order, as "Save" and "Delete" announce
++     * the chapter they changed, so that a view built from the chapters (the submission
++     * wizard's Review step) can follow a new order.
++     */
++    public function saveSequence($args, $request)
++    {
++        $json = parent::saveSequence($args, $request);
++        $publication = $this->getPublication();
++        /** @var ChapterDAO */
++        $chapterDao = DAORegistry::getDAO('ChapterDAO');
++        $chapters = $chapterDao->getByPublicationId($publication->getId())->toArray();
++        $json->setGlobalEvent('chapters:ordered', [
++            'chapters' => array_map(fn (Chapter $chapter) => $this->getChapterData($chapter, $publication), $chapters),
++        ]);
++        return $json;
++    }
++
++
+     //
+     // Implement template methods from CategoryGridHandler
+     //
+--- a/lib/ui-library/src/components/Container/SubmissionWizardPageOMP.vue
++++ b/lib/ui-library/src/components/Container/SubmissionWizardPageOMP.vue
+@@ -24,6 +24,9 @@
+ 				chapter.id === data.id ? getChapter(data) : chapter,
+ 			);
+ 		});
++		pkp.eventBus.$on('chapters:ordered', (data) => {
++			this.chapters = data.chapters.map(getChapter);
++		});
+ 		pkp.eventBus.$on(
+ 			'chapter:deleted',
+ 			(data) =>

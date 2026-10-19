@@ -821,7 +821,7 @@ them on spec review.
 | [A10](#a10) | A book in a press's second language cannot get a chapter titled in that language alone | 🐞 | medium | — |
 | [A11](#a11) | In the wizard, "Order" pressed while the chapter list is being ordered opens the first step, "Upload Files" | 🐞 | minor | — |
 | [A12](#a12) | Ordering a book's chapters: a dragged chapter with no authors leaves its "No Items" line under another chapter | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
-| [A13](#a13) | The wizard's Review panel "Chapters" keeps the old order after "Order" until the wizard is reloaded | 🐞 | minor | — |
+| [A13](#a13) | Submission wizard: after "Order", the Review step lists a book's chapters in the old order until a reload | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
 | [A9](#a9) | A chapter added to a published Edited Volume may stay without a license | ❓ | minor | — |
 | [A6](#a6) | "Order" could not move a chapter: a dragged chapter stayed where it was | ✅ | retired | housekeeping (claude), 2026-10-08 — fixed upstream (pkp/pkp-lib#13453), walked on main |
@@ -1000,18 +1000,17 @@ authors.
 Basis: probe, 2026-10-19. <sup>f-a12</sup>
 
 <a id="a13"></a>
-**A13 — The wizard's Review panel "Chapters" keeps the old order after "Order"** · 🐞 · minor.
-On the wizard's Details step the Author moves a chapter, or one of a
-chapter's authors, with "Order" and "Done", then opens the Review step.
-The panel "Chapters" still lists the chapters, and each chapter's
-authors, in the order the page loaded with; a chapter added after the
-move is listed last in that old order. The Details step shows the saved
-order, and the book is submitted with it, so nothing is lost, but the
-last screen before "Submit" shows the Author a table of contents that is
-not the saved one. Reloading the wizard puts the panel right. Expected:
-the panel shows the saved order at once, as it does an added, edited or
-deleted chapter.
-Basis: probe, 2026-10-08. <sup>f-a13</sup>
+**A13 — Submission wizard: after "Order", the Review step lists a book's chapters in the old order until a reload** · 🐞 · low.
+On the submission wizard's "Details" step, an author reorders the book's
+chapters, or the authors of a chapter, with "Order" and "Done", then
+opens the "Review" step. The "Chapters" panel there still lists the
+chapters, and each chapter's authors, in the order they had when the
+page loaded. If the author then adds a chapter, the panel shows it at
+the bottom of that old order. The new order is saved: "Details" shows it
+and the book is submitted with it. But the last screen before "Submit"
+shows the author a table of contents that is not the one saved, with no
+hint why, until the page is reloaded.
+Basis: probe, 2026-10-19. <sup>f-a13</sup>
 
 ### Retired
 
@@ -1967,6 +1966,7 @@ loaded with, to which an added chapter is pushed last. Live-probed
 2026-09-28 (a chapter's authors): notes td11 and td18. Live-probed
 2026-10-08 (the chapters, the authors, a chapter added after a move),
 three runs: note td20.
+Issue report: [docs/issues/U72-A13-wizard-review-chapters-old-order.md](../issues/U72-A13-wizard-review-chapters-old-order.md).
 
 ## Reference — entry points & surfaces
 
