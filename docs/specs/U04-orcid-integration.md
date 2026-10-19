@@ -117,10 +117,11 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
    solid-icon link and its "Delete" button; the connect button and the
    "What is ORCID?" link beside it are gone. The connect/authorize button
    opens ORCID's sign-in in a popup window. Completing it closes the popup,
-   stores the verified iD and reloads the tab. ⚠ [A18](#a18) when ORCID's
-   service cannot be reached or fails as the popup comes back, the popup
-   instead stays open on a blank page, the tab under it says nothing, and
-   nothing is stored. <sup>c</sup> <sup>h</sup>
+   stores the verified iD and reloads the tab. ⚠ [A18](#a18) when the
+   journal's server then cannot reach ORCID, or ORCID fails on its own
+   side (not Rule 6d's refusal), the popup instead stays open on a blank
+   page, the tab under it says nothing, and nothing is stored.
+   <sup>c</sup> <sup>h</sup>
 6. Companions of the profile flow:
    6a. ⚠ [A4](#a4) the "What is ORCID?" link beside the button opens the same
    sign-in popup instead of the What-is-ORCID page it names. <sup>c</sup>
@@ -138,14 +139,15 @@ Contributor's ORCID iD field (add/edit contributor, Contributors list):
    without a question. ⚠ [A13](#a13) an unauthenticated iD has no
    "Delete", so its owner cannot remove it from the profile. <sup>d</sup>
    6d. When ORCID refuses the journal's credentials at the end of the
-   sign-in (a wrong Client ID or Client Secret), the popup closes and the
+   sign-in (a wrong Client Secret), the popup closes and the
    profile shows a notice opening "ORCID authorization failed:". No iD is
    stored, and the "Create or Connect your ORCID iD" button stays. <sup>c</sup>
 7. **Connecting while registering.** A journal's registration page offers the
    same "Create or Connect your ORCID iD" button at the top of the form.
-   Connecting is never required to register. When ORCID's service cannot
-   be reached or fails as the popup comes back, the popup stays open on a
-   blank page here too, and the form says nothing [A18](#a18). <sup>i</sup>
+   Connecting is never required to register. In Rule 5's failure, and
+   also when ORCID refuses the journal's credentials (Rule 6d), the popup
+   stays open on a blank page and the form says nothing: no "ORCID
+   authorization failed:" notice appears here [A18](#a18). <sup>i</sup>
    - Completing ORCID's sign-in fills the name, email, country and
      affiliation fields from the ORCID record, hides the button and keeps
      the iD in a hidden field. ⚠ [A3](#a3) the account created afterwards
@@ -580,7 +582,7 @@ Left out of the scenarios above, by reason:
   - the guard for A15 (issue report `docs/issues/U04-A15-orcid-pages-tab-no-page-name.md`): once fixed, the "What is ORCID?" and "ORCID Authorization" pages' browser tab reads "What is ORCID? | {journal name}" and "ORCID Authorization | {journal name}".
   - the guard for A17 (issue report `docs/issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md`): once fixed, a Journal Manager saves "City" on the journal's locked ORCID tab while the site-wide switch is on, the Site Administrator turns the switch off, and the journal's "Enable ORCID functionality" reads unticked (Rule 3).
   - the guard for A22 (issue report `docs/issues/U04-A22-orcid-landing-silent-on-deposit.md`): once fixed, a contributor of a published article on a member-API journal or preprint server completes the emailed authorization and the "ORCID Authorization" page adds "The submission has been added to your ORCID record." (Side effects).
-  - the guard for A18 (issue report `docs/issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md`): once fixed, the sign-in popup sent back with ORCID unreachable, on the profile's Identity tab and on the registration page, closes and the page under it shows the failure notice (Rules 5, 7).
+  - the guard for A18 (issue report `docs/issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md`): once fixed, a sign-in popup coming back while the journal's server cannot reach ORCID closes with a message opening "ORCID authorization failed:", on the profile's Identity tab as Rule 6d's notice and on the registration page as an alert in the popup, the form keeping what was typed; on the registration page a refusal of the journal's credentials ends the same way (Rules 5, 6d, 7).
   - the guard for A1's early offer, once fixed: the row menu of a reviewer with a verified iD offers no "Send Review To ORCID" before the review is complete (Rule 12; scenario 9's first bullet, which the OJS suite does not assert while A1 stands).
   - the profile's "Delete" window titled "Confirm", with "OK" and "Cancel" (Rule 6c; scenario 3's "Delete" bullet).
   - a contributor verified under the public API receiving "Requesting updated ORCID record access" from the journal's principal contact, with the personal authorization link and the What-is-ORCID link, when their article is published after the journal switched to the member API (Rules 11, 14; journals and preprint servers, a press deposits nothing, OMP1).
@@ -619,7 +621,7 @@ Left out of the scenarios above, by reason:
   - A15 (the public ORCID pages' browser tab showing no page name; Rule 10)
   - A16 (the "All" log level writing informational entries in place of errors; Fields, Side effects)
   - A17 ("Save" on the locked tab switching the journal's own ORCID on; Rule 3)
-  - A18 (the popup left blank when ORCID cannot be reached or fails as it comes back; Rules 5, 7)
+  - A18 (the popup left blank when the journal's server cannot reach ORCID or ORCID fails, and on the registration page when ORCID refuses the journal's credentials; Rules 5, 7)
   - A19 ("Delete" on the Identity tab discarding unsaved changes; Rule 6c)
   - A20 (a contributor's unauthenticated iD deleted with a token cancellation sent to ORCID; Rule 8a)
   - A21 ("updateded permissions" in the re-authorization email; Rule 14)
@@ -1220,6 +1222,9 @@ the stand-in answering a token, the popup closed with no notice and the
 tab showed the iD as a link with "Delete" (Rule 5's completion).
 ORCID's own sandbox answers a made-up client with 401
 `{"error_description":"Client authentication failed","error":"invalid_client"}`.
+Rule 6d names only a wrong Client Secret: the refusal driven is the
+token request's, after the sign-in; a wrong Client ID, which ORCID's own
+sign-in page may refuse before any sign-in, was not driven.
 `AuthorizeUserData::execute()` catches the token request's
 `ClientException`, composes the notice (`getAuthErrorDisplayMessage()`)
 and, for `targetOp` `profile` and `invitation`, skips the token storage.
@@ -1429,7 +1434,19 @@ each, signed out): `#connect-orcid-button` was the first control of
 new account's Identity tab offered "Create or Connect your ORCID iD";
 the site's `index/user/register` had no ORCID block. The popup's return
 `…/orcid/authorizeOrcid?targetOp=register&code=…` answered 500 with a
-blank popup (finding A18).
+blank popup (finding A18). Live-probed 2026-10-19 (OJS, OMP, OPS on
+`main` and `stable-3_5_0`, each on a freshly loaded dataset), with a
+local stand-in answering ORCID's token request `401`
+`{"error":"invalid_client","error_description":"Client not found: APP-TEST"}`:
+the same register return answered 200 with a script whose first line,
+`opener.pkp.eventBus.$emit("notify", "ORCID authorization failed:
+Client not found: APP-TEST. Reason: invalid_client.", …)`, threw
+`TypeError: Cannot read properties of undefined (reading 'eventBus')`
+in the popup, since the reader-side registration page carries no
+`pkp.eventBus` (`AuthorizeUserData::renderFrontendErrorNotification()`);
+`window.close()` was never reached, the popup stayed open and blank,
+and the form showed no notice (finding A18). On the profile the same
+`401` closed the popup with Rule 6d's notice (note c).
 
 <a id="fn-j"></a>
 **j** — Deposit pipeline: listener
