@@ -819,7 +819,7 @@ them on spec review.
 | [A7](#a7) | "Done" on a book's chapter list loses the author order of some chapters, dragged or not | 🐞 | medium | issues (claude), 2026-10-08 — re-verified |
 | [A8](#a8) | Chapter window promises an automatic license above a chapter's own License URL and on a published book | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A book in a press's second language cannot get a chapter titled in that language alone | 🐞 | medium | — |
-| [A11](#a11) | In the wizard, "Order" pressed while the chapter list is being ordered opens the first step, "Upload Files" | 🐞 | minor | — |
+| [A11](#a11) | Submission wizard: "Order" pressed again, or "Done" twice, while ordering chapters or galleys sends the author to the first step | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A12](#a12) | Ordering a book's chapters: a dragged chapter with no authors leaves its "No Items" line under another chapter | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A13](#a13) | Submission wizard: after "Order", the Review step lists a book's chapters in the old order until a reload | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
@@ -975,16 +975,20 @@ Expected: the title is required in the book's language only.
 Since: 2023-01-20 (pkp/pkp-lib#8554) · Basis: probe, 2026-10-04. <sup>f-a10</sup>
 
 <a id="a11"></a>
-**A11 — In the wizard, "Order" pressed while the chapter list is being ordered opens the first step** · 🐞 · minor.
-On the wizard's Details step, while the "Chapters" list is being ordered
-("Done" and "Cancel ordering" show), "Order" still stands above the list
-and looks as before. Pressed, it takes the Author to the wizard's first
-step, "Upload Files". Nothing is saved or lost: back on the Details step
-the list is still being ordered, a drag made before the press included.
-On the workflow's Chapters page the same press does nothing. Expected:
-the press does nothing in the wizard either, or "Order" is greyed while
-the list is being ordered.
-Basis: probe, 2026-10-08. <sup>f-a11</sup>
+**A11 — Submission wizard: "Order" pressed again, or "Done" twice, while ordering chapters or galleys sends the author to the first step** · 🐞 · low.
+In the submission wizard, an author orders a list with "Order". While
+the list is being ordered, "Order" still stands above it, looking as
+before. Pressed again, it sends the author back to the wizard's first
+step instead of doing nothing. "Done" pressed twice in quick succession
+(a double click) does the same after saving the order. Nothing is lost:
+on its step again, the list is still being ordered after "Order", or
+saved after "Done", and one press of "Continue" gets the author back
+there. Which list is hit depends on the wizard's step order. On `main`
+it is a book's chapters, on "Details", and the author lands on "Upload
+Files". On 3.5 and 3.4 it is a preprint's galleys, on "Upload Files",
+and the author lands on "Details". A list on the wizard's first step is
+not hit, and a journal's wizard has no such list.
+Basis: probe, 2026-10-19. <sup>f-a11</sup>
 
 <a id="a12"></a>
 **A12 — Ordering a book's chapters: a dragged chapter with no authors leaves its "No Items" line under another chapter** · 🐞 · low.
@@ -1947,6 +1951,7 @@ being ordered. "Add Chapter" and the chapter titles carry the same two
 attributes and stay on the step when pressed; what makes the wizard
 follow the "Order" press alone was not read. On the Chapters page the
 press did nothing (two runs). Not driven on 3.5.
+Issue report: [docs/issues/U72-A11-wizard-order-pressed-again-opens-upload-files.md](../issues/U72-A11-wizard-order-pressed-again-opens-upload-files.md).
 
 <a id="fn-f-a12"></a>
 **f-a12** — lib/pkp `templates/controllers/grid/gridBodyPartWithCategory.tpl`

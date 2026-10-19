@@ -1,0 +1,52 @@
+--- a/lib/pkp/js/classes/features/OrderItemsFeature.js
++++ b/lib/pkp/js/classes/features/OrderItemsFeature.js
+@@ -560,10 +560,13 @@
+ 			function() {
+ 		if (this.isOrdering) {
+ 			this.$orderButton_.unbind('click');
++			// The link's href is "#": keep a press from following it.
++			this.$orderButton_.click(this.noAction_);
+ 			this.$orderButton_.attr('disabled', 'disabled');
+ 		} else {
+ 			var clickHandler = this.gridHandler.callbackWrapper(
+ 					this.clickOrderHandler, this);
++			this.$orderButton_.unbind('click', this.noAction_);
+ 			this.$orderButton_.click(clickHandler);
+ 			this.$orderButton_.removeAttr('disabled');
+ 		}
+@@ -601,8 +604,8 @@
+ 				saveButtonHandler = this.gridHandler.callbackWrapper(
+ 						this.saveOrderHandler, this);
+ 
+-		$saveButton.click(saveButtonHandler);
+-		$cancelLink.click(cancelLinkHandler);
++		$saveButton.unbind('click', this.noAction_).click(saveButtonHandler);
++		$cancelLink.unbind('click', this.noAction_).click(cancelLinkHandler);
+ 	};
+ 
+ 
+@@ -614,8 +617,22 @@
+ 	$.pkp.classes.features.OrderItemsFeature.prototype.
+ 			unbindOrderFinishControlsHandlers_ = function() {
+ 
+-		this.getSaveOrderButton().unbind('click');
+-		this.getCancelOrderButton().unbind('click');
++		// Both links' href is "#": keep a press from following it until
++		// they are bound again.
++		this.getSaveOrderButton().unbind('click').click(this.noAction_);
++		this.getCancelOrderButton().unbind('click').click(this.noAction_);
++	};
++
++
++	/**
++	 * Click handler of a control that must do nothing, as
++	 * LinkActionHandler.noAction_() is for a disabled link action.
++	 * @return {boolean} Always returns false.
++	 * @private
++	 */
++	$.pkp.classes.features.OrderItemsFeature.prototype.noAction_ =
++			function() {
++		return false;
+ 	};
+ 
+ 
