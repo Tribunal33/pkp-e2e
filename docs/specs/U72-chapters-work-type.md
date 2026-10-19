@@ -1966,7 +1966,7 @@ loaded with, to which an added chapter is pushed last. Live-probed
 2026-09-28 (a chapter's authors): notes td11 and td18. Live-probed
 2026-10-08 (the chapters, the authors, a chapter added after a move),
 three runs: note td20.
-Issue report: [docs/issues/U72-A13-wizard-review-chapters-old-order.md](../issues/U72-A13-wizard-review-chapters-old-order.md).
+Issue report: [pkp-e2e#1019](https://github.com/jardakotesovec/pkp-e2e/issues/1019) ([docs/issues/U72-A13-wizard-review-chapters-old-order.md](../issues/U72-A13-wizard-review-chapters-old-order.md)).
 
 ## Reference — entry points & surfaces
 
