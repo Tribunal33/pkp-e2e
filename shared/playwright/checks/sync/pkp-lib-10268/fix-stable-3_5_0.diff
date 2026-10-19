@@ -1,0 +1,10 @@
+--- a/lib/pkp/controllers/informationCenter/FileInformationCenterHandler.php
++++ b/lib/pkp/controllers/informationCenter/FileInformationCenterHandler.php
+@@ -26,6 +26,7 @@
+ use PKP\core\PKPRequest;
+ use PKP\db\DAORegistry;
+ use PKP\log\event\EventLogEntry;
++use PKP\note\Note;
+ use PKP\notification\Notification;
+ use PKP\security\authorization\WorkflowStageAccessPolicy;
+ use PKP\security\Role;

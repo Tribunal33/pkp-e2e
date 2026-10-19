@@ -20,7 +20,6 @@ _Suspicions another session met and handed over, one line each; the
 upstream session works them (MAINTENANCE upstream session step 3) and
 deletes each once it is a report, a register entry or dismissed._
 
-- 2026-10-19 · housekeeping (U36 incidentals row, claim checker cc19c) · stable-3_5_0: "More Information" › "Notes" on any copied file (every review file of the dataset, a promoted file) answers 500 on OJS and OMP 3.5 (`Class "PKP\controllers\informationCenter\Note" not found`, `lib/pkp/controllers/informationCenter/FileInformationCenterHandler.php:141`, no `use PKP\note\Note;`); the tab stays blank, "Earlier Revision Notes" never opens; `main` works (the import came with pkp-lib `51ebba2aa9`, not backported); 3.4 used `NoteDAO` and works, so a 3.4 → 3.5 regression from pkp-lib `d24432eb64` (first in `3_5_0-0`); OPS cannot reach it on 3.5 (no "More Information" on galleys). Lean medium; fix one `use` line on stable-3_5_0. Kept script `shared/playwright/checks/U36/H19/h19.js`, report `.reports/U36/cc-H19.md` (slot s1).
 
 
 ## Sync log
