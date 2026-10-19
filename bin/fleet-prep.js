@@ -238,9 +238,11 @@ let ok = true;
             (entry.validationURL === null
                 ? `fleet-prep:   ${name}: dataset fleet ${dataset} ${entry.probeURL}, db ${entry.db}`
                 : `fleet-prep:   ${name}: probe ${entry.probeURL}, validation ${entry.validationURL}, workers from ${entry.basePort}`) +
-                ` — ${Object.entries(entry.steps)
-                    .map(([step, state]) => `${step} ${state}`)
-                    .join(', ')}`,
+                (apps.includes(name)
+                    ? ` — ${Object.entries(entry.steps)
+                          .map(([step, state]) => `${step} ${state}`)
+                          .join(', ')}`
+                    : ' — kept (not in --apps; its earlier steps are not rerun)'),
         );
     }
     process.exit(ok ? 0 : 1);

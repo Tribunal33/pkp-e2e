@@ -38,6 +38,14 @@ what the team's installs hold (harness.md "Dataset fleets").
   submission 1's 1.1), and the workflow opens on the latest: a step on the
   published version picks it in the Publication menu ("All Versions" on
   3.5) (U13, U19, U44 issue walks).
+- Two facts no table shows. OMP book 4's only publication format, "PDF",
+  is remotely hosted, so its window has no "Identifiers" tab: a walk that
+  needs one adds a format on screen. And every account's password is
+  stored at bcrypt cost 12 in the `main` and `stable-3_5_0` dumps, at
+  cost 10 in the `stable-3_4_0` ones: a finding about an install upgraded
+  from 3.4 (a password re-saved at the first sign-in) loads that line's
+  dump with `PKP_E2E_DATASET_BRANCH=stable-3_4_0`, upgraded on reset
+  (U44 A16, U01 A15 issue walks, 2026-10-19).
 - Name screens and buttons, not the fleet's addresses: the team's install
   runs on its own host and port. A path after `index.php/` is fine
   (`/index.php/publicknowledge/en/dashboard/editorial`).

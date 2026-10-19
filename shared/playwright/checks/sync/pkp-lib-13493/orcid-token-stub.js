@@ -79,6 +79,22 @@ const ANSWERS = {
             orcid: '0000-0001-2345-6789',
         }),
     },
+    // The same success with the scope ORCID grants a member-API client, so a walk on a
+    // member-API journal reaches the work deposit instead of the "Requesting updated ORCID
+    // record access" email the public scope brings (U04 issue walks, 2026-10-19).
+    '200-token-member': {
+        status: 200,
+        type: 'application/json;charset=UTF-8',
+        body: JSON.stringify({
+            access_token: 'f5af9f51-07e6-4332-8f1a-c0c11c1e3728',
+            token_type: 'bearer',
+            refresh_token: 'f725f747-3a65-49f6-a231-3e8944ce464d',
+            expires_in: 631138518,
+            scope: '/read-limited /activities/update /person/update',
+            name: 'Sofia Garcia',
+            orcid: '0000-0001-2345-6789',
+        }),
+    },
 };
 
 function openssl(args, options = {}) {
