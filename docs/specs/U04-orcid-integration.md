@@ -1934,7 +1934,7 @@ sign-in address behind it carried an empty `client_id`. Mechanism:
 `OrcidSettingsForm` gives the disabled enable option the value true
 while `OrcidManager::isGloballyConfigured()`, and the form posts it; the
 same code on `stable-3_5_0` (read, not driven there).
-Issue report: [docs/issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md](../issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md).
+Issue report: [pkp-e2e#1006](https://github.com/jardakotesovec/pkp-e2e/issues/1006) ([docs/issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md](../issues/U04-A17-orcid-locked-tab-save-switches-journal-on.md)).
 
 <a id="fn-a18"></a>
 **f-a18** — Live-probed 2026-10-16 (OJS, OMP, OPS on `main`, two runs
@@ -1956,7 +1956,7 @@ Server Error` response"); a 401 gave Rule 6d's notice (note c).
 Mechanism: `AuthorizeUserData::execute()` catches only the token
 request's `ClientException`, ORCID's refusals; the same catch on
 `stable-3_5_0` (read, not driven there).
-Issue report: [docs/issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md](../issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md).
+Issue report: [pkp-e2e#1007](https://github.com/jardakotesovec/pkp-e2e/issues/1007) ([docs/issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md](../issues/U04-A18-orcid-popup-blank-when-orcid-unreachable.md)).
 
 <a id="fn-a19"></a>
 **f-a19** — Live-probed 2026-10-16 (OJS, OMP, OPS on `main`, two runs
@@ -1986,7 +1986,7 @@ permissions to add your contribution to your ORCID profile.". The text
 is `emails.orcidRequestUpdateScope.body` in lib/pkp's
 `locale/en/emails.po`, shared by the three apps, the same on
 `stable-3_5_0`.
-Issue report: [docs/issues/U04-A21-orcid-update-scope-email-updateded.md](../issues/U04-A21-orcid-update-scope-email-updateded.md).
+Issue report: [pkp-e2e#1008](https://github.com/jardakotesovec/pkp-e2e/issues/1008) ([docs/issues/U04-A21-orcid-update-scope-email-updateded.md](../issues/U04-A21-orcid-update-scope-email-updateded.md)).
 
 <a id="fn-a22"></a>
 **f-a22** — The landings: note f (live-probed 2026-10-16, OJS, OMP,
@@ -1996,7 +1996,7 @@ added to your ORCID record.") only under `$sendSubmission`, which
 `OrcidHandler::verify()` assigns false and nothing sets otherwise
 (`VerifyIdentityWithOrcid` sets only `sendSubmissionSuccess`), on `main`
 and on `stable-3_5_0`.
-Issue report: [docs/issues/U04-A22-orcid-landing-silent-on-deposit.md](../issues/U04-A22-orcid-landing-silent-on-deposit.md).
+Issue report: [pkp-e2e#1009](https://github.com/jardakotesovec/pkp-e2e/issues/1009) ([docs/issues/U04-A22-orcid-landing-silent-on-deposit.md](../issues/U04-A22-orcid-landing-silent-on-deposit.md)).
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live-probed 2026-10-16 (OJS on `main`, two runs): Member
