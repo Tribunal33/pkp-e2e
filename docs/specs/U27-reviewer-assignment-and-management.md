@@ -575,14 +575,19 @@ under the prompt "Record the response on behalf of the reviewer". Submit
     "Editor Form Shows All Review Sections", each as PDF or XML. The
     author-only variants omit the editor-only comments and show the
     reviewer anonymized. The file downloads through the browser. On an
-    install where no file has yet been uploaded through a form and no PDF
-    review form downloaded (a fresh install, or PKP's default test dataset
-    as loaded), both XML entries fail every time instead: the browser
-    leaves the workflow for a page reading
+    install where nobody has yet downloaded a review PDF or uploaded a
+    library file, an email attachment, a plugin or import file, or an
+    image (a logo or image on Settings › Website; a category, highlight,
+    announcement or OJS issue cover image), both XML entries fail every
+    time (a fresh install, or PKP's default test dataset as loaded): the
+    browser leaves the workflow for a page reading
     `{"error":"You are not authorized to access the requested resource."}`
-    and no file arrives ⚠ [A49](#a49). The first PDF download, by anyone
-    on any review, makes both XML entries work for the whole install; by
-    the code an upload through any form does the same. <sup>i</sup>
+    and no file arrives ⚠ [A49](#a49). The first such download or upload,
+    by anyone, makes both work for the whole install; a submission file
+    does not, from the submission wizard, a workflow file list, a
+    reviewer's files or a revision. Only the library and workflow-list
+    uploads were driven, the rest read in the code. <sup>i</sup>
+    <sup>[f-a49](#fn-a49)</sup>
 16. **Thanking, and taking it back.** "Thank Reviewer" sends the
     acknowledgement, or only records it when the skip box is ticked. The row
     turns "Reviewer Thanked" and the on-screen notice reads "Thank you email
@@ -1429,7 +1434,7 @@ Left out of the scenarios above, by reason:
   - A46 (the "Resend Review Request" refusal adding a browser alert, with no guidance sentence in its window; Fields)
   - A47 (a re-sent request past its response date never reading "Overdue", with no "Send Reminder"; Rule 2)
   - A48 (a review-form answer written as markup in the "View changes" window of a review-form change; Side effects)
-  - A49 (both XML exports leading to an error page and no file on an install where no file has been uploaded through a form or downloaded as a PDF review form yet; Rule 15)
+  - A49 (both XML exports leading to an error page and no file until Rule 15's first download or upload; Rule 15)
 - **No seed**:
   - the automatic reminder emails from the principal contact at the configured day-offsets, with their "Reviewer Reminded" and log stamps (Rule 13, Side effects, Settings)
   - a section's default "Review Form" preselected in the Add Reviewer window (Rule 10, Settings): the seed sets no default review form on a section
@@ -2776,7 +2781,9 @@ two runs each): the four entries read "Author-Only Sections Displayed
 Review Sections (PDF)", "Editor Form Shows All Review Sections (XML)";
 the PDF saves as `submission_review_{submission}-{review}.pdf`, the XML
 as `….xml`; the XML entries' failure before the first temporary file is
-finding A49 (note f-a49). Live probe 2026-08-29 (OJS
+finding A49, and what ends it (a review PDF or a library upload, not a
+submission-file upload) was re-driven 2026-10-19 (note f-a49). Live
+probe 2026-08-29 (OJS
 scratch journal + OMP publicknowledge press, manager role; apps ojs
 0471e029b9 / omp d34542e83, lib/pkp 13b621e42): window contents, dialog
 and toast texts, the live row flips (Viewed on open, Complete on
@@ -4093,7 +4100,29 @@ written; `getExportedFile()` answers 403 when
 with the review download (pkp-lib `d5d08a789a`, 2024-07-01);
 `stable-3_5_0` has the same `$xml->save()` call (read in the code, not
 walked). Kept script `shared/playwright/checks/U27/H15/h15.js`,
-`PHASES=dl`, `ORDER=xml-first|pdf-first`.
+`PHASES=dl`, `ORDER=xml-first|pdf-first`. Submission-file upload
+against library upload, live-probed 2026-10-19 (OJS `main`, ojs
+`6b4323ced7` / lib/pkp `042726ebf6`, and `stable-3_5_0`, ojs
+`007c2cd0d6` / lib/pkp `092ec34b0f`; PKP's default test dataset as
+loaded, the Journal editor, submission 10; two runs each with the
+submission upload first, one more on `main` with the library upload
+first; every run from a freshly reset install with no `temp` folder):
+a PDF uploaded through the Submission stage's "Submission Files" ›
+"Upload" wizard (`file-upload-wizard/upload-file` 200) and completed
+was listed after a reload, yet left no `temp` folder, and the XML entry
+answered 403 before and after it with the same log lines; a Publisher
+Library "Add a file" upload (`library-file-admin-grid/upload-file` 200)
+created `temp` as soon as the file was up, before its "OK", and the
+XML entry then downloaded `submission_review_10-15.xml` (`…/exports/{id}`
+200, `attachment`). Library first, the later submission upload left
+`temp` untouched and the XML still downloaded. Each refused XML press
+leaves a `temporary_files` row of size 0. Not driven, read in the code:
+the image, logo, email-attachment, plugin and import uploads go through
+`TemporaryFileManager::handleUpload()` as the library upload does; the
+submission wizard's, reviewers' and revision files go through
+`app()->get('file')->add()` from PHP's upload as the workflow wizard
+does; OMP runs the same lib/pkp code. Kept script
+`shared/playwright/checks/U27/H19/h19.js`, `ORDER=sub|lib`.
 Issue report: [pkp-e2e#998](https://github.com/jardakotesovec/pkp-e2e/issues/998) ([docs/issues/U27-A49-review-form-xml-download-error-page.md](../issues/U27-A49-review-form-xml-download-error-page.md)).
 
 <a id="fn-omp1"></a>
