@@ -1005,7 +1005,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | "Add Check Number" appends "NaN" to a URN suffix holding a character such as "~" | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A16](#a16) | An editor can give one URN to an issue, an article and its galley without any warning | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
-| [A17](#a17) | The header "Close" on a galley's or chapter's "Identifiers" tab drops a typed value without asking | 🐞 | minor | — |
+| [A17](#a17) | The header "Close" on a galley's or chapter's "Identifiers" tab drops a typed value without asking | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP1](#omp1) | A press cannot save URN settings with only "Chapters" or "Files" ticked | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1259,7 +1259,7 @@ and URNs on for more than one kind of item. (Rules 11, 12a)
 Basis: probe, 2026-10-19. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — Closing a galley's or chapter's window from the "Identifiers" tab drops a typed value without asking** · 🐞 · minor.
+**A17 — Closing a galley's or chapter's window from the "Identifiers" tab drops a typed value without asking** · 🐞 · low.
 An editor types a URN suffix or a Publisher ID on the "Identifiers" tab
 of a galley's window (journal, preprint server) or of "Edit Chapter"
 (press) and, without saving, presses the window's header "Close". The
@@ -1274,7 +1274,7 @@ browser's own leave-page box, although no window is open. A press's
 publication format window and "Edit a file" close the same way, once
 their first tab has appeared before "Identifiers" is opened; an issue's
 window asks the question.
-Basis: probe, 2026-10-09. <sup>f-a17</sup>
+Basis: probe, 2026-10-19. <sup>f-a17</sup>
 
 ### OJS
 
@@ -2206,6 +2206,7 @@ pair of reads that had these two windows ask on 3.5 and not on `main`
 came from a check that pressed "Identifiers" as soon as the tabs were
 drawn and so raced the first tab's request. The leave-page box followed
 each silent close in a second pair of runs on each line as well.
+Issue report: [pkp-e2e#892](https://github.com/jardakotesovec/pkp-e2e/issues/892) ([docs/issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md](../issues/U38-A3-A9-A10-activity-log-close-drops-typed-note.md)), joined 2026-10-19 (the same first-form close check).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `IssueGalleyForm::validate()` calls

@@ -1,4 +1,4 @@
-# Closing "Activity Log & Notes" drops a typed, unadded note without asking once the submission has a note
+# Closing "Activity Log & Notes" or an item's "Identifiers" tab drops typed text without asking
 
 - **Severity** low
 - **Effort** medium
@@ -6,13 +6,16 @@
 - **Affects**
   - main: OJS, OMP, OPS
   - 3.5: OJS, OMP, OPS
-  - 3.4: OJS, OMP, OPS (code)
-  - 3.3: OJS, OMP, OPS (code)
-- **Introduced** `pkp/pkp-lib#1648` for `pkp/pkp-lib#1647` · [a90c31b1e8](https://github.com/pkp/pkp-lib/commit/a90c31b1e8164c8a441821181dd47b07e50ef826) · 2016-07-26 · Nate Wright (NateWr), for the silent close; the repeated question after a tab switch is older, present since at least [ea8d4cda2f](https://github.com/pkp/pkp-lib/commit/ea8d4cda2f959149b9f5471f858f4defef931355) (2012-07-24)
-- **Upstream** none found (2026-10-04)
-- **Tracked in** spec U38 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a3), [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a9), [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a10)
-- **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+  - 3.4: OJS, OMP, OPS (code; the notes and the "Identifiers" tabs)
+  - 3.3: OJS, OMP, OPS (code; the notes and the "Identifiers" tabs)
+- **Introduced** `pkp/pkp-lib#1648` for `pkp/pkp-lib#1647` · [a90c31b1e8](https://github.com/pkp/pkp-lib/commit/a90c31b1e8164c8a441821181dd47b07e50ef826) · 2016-07-26 · Nate Wright (NateWr), for the notes window's silent close. The other two are not traced: the repeated question after a tab switch is present since at least [ea8d4cda2f](https://github.com/pkp/pkp-lib/commit/ea8d4cda2f959149b9f5471f858f4defef931355) (2012-07-24), and a window's close has asked only its first form since [fa58d3dc19](https://github.com/pkp/pkp-lib/commit/fa58d3dc190cbfa85efe073d66d0c739a259e401) (2011-12-06)
+- **Upstream** none found (2026-10-04; for the "Identifiers" tabs, 2026-10-19)
+- **Tracked in** spec U38 [A3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a3), [A9](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a9), [A10](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U38-submission-activity-log-and-notes.md#a10); spec U44 [A17](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#a17)
+- **Checked** 2026-10-04, and 2026-10-19 for the "Identifiers" tabs, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-19: the item windows' "Identifiers" tabs added (Summary's
+third paragraph, Steps 12 to 16, Cause, the fix trial).
 
 ## Summary
 
@@ -24,27 +27,43 @@ form has changed. Do you wish to continue without saving?". Once the
 submission has a note, it closes at once and the typed text is gone,
 with no question.
 
-The window also asks when nothing is left to lose. After such a silent
-close, the next reload or page change asks the browser's "Leave site?";
-answering "Leave" loses nothing, since nothing is typed. And on a
-submission with no note, after the editor switches to "History" and
-answers "OK" to discard the text, "Close" asks the same question again.
+Two questions come when nothing is left to lose. After such a silent
+close, the next reload or page change raises the browser's "Leave
+site?", though nothing is typed. And on a submission with no note,
+after the editor switches to "History" and answers "OK" to discard the
+text, "Close" asks the same question again.
 
-Only an unadded draft note is lost, and pressing "Add Note" before
-closing avoids it.
+The "Identifiers" tab of a galley's window, of "Edit Chapter" and of a
+publication format's "Edit" loses typed text every time, with no
+condition: an identifier typed on that tab and not saved is gone when
+the window is closed ("Close", Escape or a click beside it), with no
+question, and the next reload raises "Leave site?". Closing asks only
+when the window's first tab was changed too. Pressing that first tab
+instead of closing does ask.
+
+The tab offers a "Publisher ID" box where a manager has ticked that kind
+of item under Settings › Workflow › Submission › "Metadata" ›
+"Publisher ID", and a URN suffix box (journals and presses) where the
+URN plugin is enabled for it with "Enter an individual URN suffix"
+chosen. A DOI is not on this tab from 3.4 on; on 3.3 the DOI plugin's
+suffix box is, and is lost the same way.
 
 ## Impact
 
-- **Lost:** the text of a note typed and not yet added, silently. The
-  notes already added are kept.
+- **Lost:** the text of a note typed and not yet added, or an identifier
+  typed on an "Identifiers" tab and not saved, silently. What was saved
+  before is kept.
 - **Who:** editors, section editors and managers who use the
-  submission's notes, on every submission that holds at least one note.
-- **Way round:** press "Add Note" before closing. Nothing carries over:
-  a page load ends the wrong questions.
+  submission's notes, on every submission that holds at least one note;
+  and editors and managers who type publisher IDs or URN suffixes for
+  galleys, chapters or publication formats, where those boxes are on.
+- **Way round:** press "Add Note", or the tab's "Save", before closing.
+  Nothing is stored wrong: a reload ends both needless questions.
 
-Low: a draft internal note is lost without the question the window asks
-on a submission without a note, and the other two symptoms only ask once too often. It would
-be medium if the text lost were a core task's, such as a review or a
+Low: a draft internal note or a typed identifier is lost without the
+question the same window asks on a submission with no note, or on a
+switch to another tab, and the other two symptoms only ask once too
+often. It would be medium if the text lost were a core task's, such as a review or a
 decision's message.
 
 ## Steps to reproduce
@@ -81,9 +100,7 @@ With a note:
    "Add Note". "Note posted." shows and the note is listed.
 9. Type "Draft u38a" in the box, and do not press "Add Note".
 10. Press "Close".
-11. Wait two seconds (for about half a second after any close the
-    closing window can still raise the page's leave question, so the
-    wait keeps this reload apart from the close), then reload the page.
+11. Reload the page.
 
 **Expected:** at step 6 the window closes without a question, since
 the switch in step 5 already discarded the text. At step 10 the question of step 4 comes up; "OK"
@@ -101,6 +118,44 @@ question. Reopened, "Notes" lists "First note u38a" and an empty box:
 "Draft u38a" is gone. At step 11 the browser asks its own "Leave site?
 Changes you made may not be saved." ("Leave" reloads). The reload at
 step 7 asks nothing.
+
+On an "Identifiers" tab, from a freshly loaded dataset:
+
+Preconditions: publisher IDs on for the item. As `dbarnes`, Settings ›
+Workflow › Submission › "Metadata", under "Publisher ID" tick "Enable for
+Galleys" (journal, preprint server) or "Enable for Chapters" and "Enable
+for Publication Formats" (press), and "Save". The press's "PDF" format on
+submission 4 is a remote one, whose window has no "Identifiers" tab: on
+that submission, Publication › "Publication Formats" › "Add publication
+format", "Name" `h19n`, "OK".
+
+12. Open the item's window from the workflow's Publication pages:
+    - OJS submission 1, "Signalling Theory Dividends" (the workflow opens
+      on version 1.1): "Galleys", "PDF Version 2", row menu › "Edit";
+    - OPS submission 1, "The influence of lactation on the quantity and
+      quality of cashmere production": "Galleys", "PDF", row menu ›
+      "Edit";
+    - OMP submission 4, "How Canadians Communicate: Contexts of Canadian
+      Popular Culture": "Chapters", the title "Introduction: Contexts of
+      Popular Culture" ("Edit Chapter"); and, as a second run,
+      "Publication Formats", the arrow by `h19n` › "Edit".
+
+    The window opens on its first tab ("Edit Metadata"; the format's
+    "Edit"). Wait until that tab's form shows.
+13. Press "Identifiers", type `h19n` in "Publisher ID", and do not press
+    "Save".
+14. Press the window's "Close".
+15. Reload the page.
+16. Open the same window again and press "Identifiers".
+
+**Expected:** at step 14 the question of step 4; "Cancel" keeps the
+window open with `h19n` in the box. The reload at step 15 asks nothing.
+
+**Observed:** at step 14 the window closes at once, with no question. At
+step 15 the browser asks "Leave site? Changes you made may not be
+saved.". At step 16 "Publisher ID" is empty; nothing was saved. Control:
+with `h19n` typed on "Identifiers", pressing the first tab asks "The data
+on this form has changed. Do you wish to continue without saving?".
 
 ## Cause
 
@@ -151,25 +206,43 @@ ends it.
 Reach:
 
 - A file's "More Information" window (the same templates, through
-  `FileInformationCenterHandler`) has the History tab's search form
-  (`eventLogFilterForm`) as its first form. So its "Close" never asks,
-  with notes or without, and leaves the same stray "Leave site?"
+  `FileInformationCenterHandler`) opens, for a manager, sub-editor or
+  assistant, with the History tab's "All events" filter
+  (`eventLogFilterForm`, `eventLogGridFilter.tpl`, a `ToggleFormHandler`
+  that tracks no changes) as its first form. For them its "Close" never
+  asks, with notes or without, and leaves the same stray "Leave site?"
   (checked on screen, all three apps; spec U36 [A18](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U36-submission-files.md#a18)).
+  `SubmissionFileEventLogGridHandler::getFilterForm()` gives an author
+  no such filter, so an author's file window behaves like the notes
+  case (checked in the code).
 - "Close", Escape and a click beside the window are one path: the side
   panel (`SideModal.vue`, `handleClose()`) runs the wrapper's close
-  callback for each (checked in the code; Escape with the cursor out of
-  the box also on screen, by the spec's own checks). Escape with the
-  cursor in the box does nothing.
-- Every legacy window opened in a side panel goes through the same close
-  check: any whose typed-in form is not its first one drops the typing
-  the same way (checked in the code; no other such window was walked).
+  callback for each (checked in the code; on screen for the notes, Escape
+  with the cursor out of the box too, and for the "Identifiers" tabs
+  "Close" only). Escape with the cursor in the box does nothing.
+- The tabbed item windows (`TabHandler` without `emptyLastTab`) keep
+  the first tab's form in the window when "Identifiers" opens, so it
+  stays the first form: `articleGalleyForm` (OJS), `preprintGalleyForm`
+  (OPS), `editChapterForm` and `addPublicationFormatForm` (OMP), ahead
+  of the tab's `publicIdentifiersForm`, which holds the Publisher ID box
+  and each identifier plugin's fields (checked on screen with a
+  Publisher ID on `main` and 3.5, all three apps; spec U44
+  [A17](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U44-identifiers.md#a17)).
+  The galley, chapter and format templates (`editFormat.tpl`,
+  `editChapter.tpl`, OMP's `catalogEntry/editFormat.tpl`) set up the
+  same tabs on 3.4 and 3.3, where the DOI plugin's fields join that form
+  on 3.3 (checked in the code).
+- Every other legacy window opened in a side panel goes through the same
+  close check: any whose typed-in form is not its first one drops the
+  typing the same way (checked in the code; no other such window was
+  walked).
 - `tabsBeforeActivate()` serves every legacy tab set (`TabHandler`):
   among them the file metadata window, an issue's window, the review
   form editor and the import/export plugin pages (checked in the code).
-  A tab's forms stay marked changed after "OK" in each of them. The mark
-  is read later only by a window's close check: the side panel's on
-  `main` and 3.5, `ModalHandler.modalClose()` on 3.4 and 3.3, so the
-  repeated question shows in a window on every version.
+  A tab's forms stay marked changed after "OK" in each of them. Only a
+  window's close check reads that mark later (the side panel's on `main`
+  and 3.5, `ModalHandler.modalClose()` on 3.4 and 3.3), so the repeated
+  question shows in windows only, and on every version.
 - 3.4 and 3.3 open the window through the legacy `AjaxModalHandler`.
   `ModalHandler.modalClose()` there has the same first-form check, and
   the templates and `TabHandler` are the same (checked in the code).
@@ -236,6 +309,17 @@ same with the fix and without it: the tab switch still asks and
 "Cancel" keeps the text, and a note added with "Add Note" and an
 untouched window close without a question.
 
+The same diff was tried on 2026-10-19 on the "Identifiers" tabs, on
+`main` in all three apps. With the fix, step 14 asks, "Cancel" keeps
+`h19n` in the box and "OK" closes, and the reload at step 15 asks
+nothing. Three neighbouring paths behaved the same with the fix and
+without it, each reloading without a question afterwards:
+
+- "Identifiers" with nothing typed, then "Close": no question.
+- `h19n` typed, the first tab pressed and its question answered "OK",
+  then "Close": no question.
+- A change on the first tab, then "Close": the question, as before.
+
 **Alternatives:**
 
 - Ask from `SiteHandler`'s page-leave list instead of the forms. That
@@ -260,7 +344,8 @@ untouched window close without a question.
   bump and a JavaScript rebuild, beside the pkp-lib change.
 - Backport: 3.5 takes the diff as it stands. 3.4 and 3.3 need the
   wrapper's change made in `ModalHandler.modalClose()` instead, plus the
-  same `TabHandler` change.
+  same `TabHandler` change. No diff is given for that backport, and it
+  was not tried.
 
 Medium: two separate faults in the change tracking, a few lines each,
 but in two repositories (pkp-lib and ui-library), and the change of
@@ -323,3 +408,37 @@ close check reaches every legacy window.
   legacy windows whose typed-in form is not the first one (the file
   window apart). MySQL not checked; the fault is in the browser's script
   and does not depend on the database.
+- The "Identifiers" tabs (2026-10-19): kept script
+  [shared/playwright/checks/issues/identifiers-tab-close-drops-typed-value/walk.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/identifiers-tab-close-drops-typed-value/walk.js),
+  run like the notes script, takes steps 12 to 16 with their
+  preconditions and the control; `MODE=neighbour` runs the three paths
+  of the fix trial. It reads the database only to confirm nothing was
+  saved. Walked on `main` and 3.5 (pkp/datasets eaf024c5, 2026-10-18),
+  with the same result on both lines and no failed request or script
+  error. The fix trial ran as the first one did. The "Leave site?" at
+  step 15 is the stray page-leave entry, not a side effect of the
+  closing: on OJS `main` it came both with the reload sent as soon as
+  the window was gone and ten seconds later (`WAIT=10000` in front), and
+  not at all with the fix in. The notes script still reloads two
+  seconds after the close; a reload at once was walked on the
+  "Identifiers" tab only.
+- Tips for that walk: `main` OJS 6b4323ced7, OMP 5777025be, OPS
+  f048e747b4 (pkp-lib 042726ebf6, ui-library 99abe252); 3.5 OJS
+  007c2cd0d6, OMP 2d575f250, OPS e737a9e465 (pkp-lib 092ec34b0f,
+  ui-library 2576e00a); 3.4 OJS 0012bd1022, OMP e30fa7e38, OPS
+  0f1e21a117 (pkp-lib a71d6bd2ca, ui-library ee684b34); 3.3 OJS
+  d7d9dd14ec, OMP 8e72fc883, OPS c5532e2161 (pkp-lib 5e84acd11b,
+  ui-library 96959f9e).
+- Code reads for it, on every line: the galley windows'
+  `editFormat.tpl` (`articleGalleys/` in OJS and in OPS 3.3,
+  `preprintGalleys/` in OPS from 3.4), OMP's `editChapter.tpl` and
+  `catalogEntry/editFormat.tpl`, and `publicIdentifiersForm.tpl` with
+  each line's `plugins/pubIds/` (URN in OJS and OMP; DOI as well on 3.3,
+  OJS and OPS). OMP's `PublicationFormatGridHandler::editFormat()` shows
+  "Identifiers" only for a format that is not remote, hence the added
+  format.
+- Not walked for the "Identifiers" tabs: a URN or DOI suffix (the walk
+  types a Publisher ID; they sit in the same form), Escape and a click
+  beside the window, a format file's "Edit a file", and 3.4 and 3.3.
+  Upstream searched for them by "galley", "chapter", "publication
+  format", "identifiers", "close", "unsaved" and "Leave site"; no match.
