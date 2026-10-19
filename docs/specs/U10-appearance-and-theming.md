@@ -83,14 +83,18 @@ is sent; after a refusal made with "Upload File", that button and the
 tab's "Save" stay disabled ⚠ [A7](#a7). The refused file's empty frame
 holds a "Remove file" link that shows only under the pointer; pressing
 it brings "Upload File" back, but "Save" stays disabled ⚠ [A15](#a15).
-A picture that is sent and then fails on the server (A16 names the
-server and the size) leaves a red warning sign under the box with no
-message ⚠ [A16](#a16). A picture of a type the box takes but the
-server does not store (a BMP, for one), or a style sheet the server
-reads as some other kind of text, is sent and "Saved" shows, but
-nothing is stored and the earlier logo or style sheet is gone
-⚠ [A21](#a21). An upload counts only once
-the tab is saved. <sup>d</sup> <sup>td3</sup>
+A picture the server refuses gets no message under its box
+⚠ [A16](#a16). One that is sent and then fails on the server (A16
+names the server and the size) leaves a red warning sign under the
+box. One of a type the box takes but the server does not (a BMP, for
+one) is sent, but the tab's "Save" is refused: "Saved" does not show,
+nothing (neither a warning sign nor text) appears under the box, and
+the form's foot reads "Please correct one error." with "Jump to next
+error". The box shows the refused picture until the page is
+reloaded; then it shows what was saved before (the earlier logo, or
+nothing), which the public pages kept throughout. A ".css" file is
+saved as the style sheet whatever it holds, an empty one too
+(Rule 26). An upload counts only once the tab is saved. <sup>d</sup> <sup>td3</sup>
 
 **"Theme"** (Settings › Website › "Appearance" › "Theme"; the page opens
 on this tab). On a journal the fields follow "Theme" in the order below; a
@@ -1164,7 +1168,8 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A20 (issue report `docs/issues/U10-A20-removed-thumbnail-stays-public.md`): once fixed, "Remove" under the thumbnail and "Save" leave its address answering 404, also when another language keeps its own thumbnail, which stays.
-  - the guard for A16 (issue report `docs/issues/U10-A16-upload-box-server-refusal-no-message.md`): once fixed, a "Logo" the server refuses shows the server's message under the box.
+  - the guard for A16 (issue report `docs/issues/U10-A16-upload-box-server-refusal-no-message.md`): once fixed, a "Logo" the server refuses shows the server's message under the box, both for a BMP "Logo" refused at "Save" ("There was an error uploading this image.") and for a picture refused for its size.
+  - a BMP chosen for "Logo" over a saved logo and saved: refused with "Please correct one error.", the earlier logo back in the box after a reload and still in the visitor's header; and a ".css" file that opens with a comment block and a `:root` rule, saved as the style sheet and applied on the public pages (Fields, the upload boxes)
   - the "Homepage Image" description typed in scenario 3 read on a press's and a preprint server's home page, as on a journal's (A1; the guard its issue report names)
   - the names a screen reader hears for the "Editorial Masthead" arrows ("Increase position of {role}" for an up arrow) and for each "Sidebar" box (the block's name alone) (A3; the guard its issue report names)
   - a placed block's plugin turned off, then a "Page Footer" saved on "Setup" without a refusal (A4; the guard its issue report names)
@@ -1247,7 +1252,6 @@ otherwise; the team settles them on spec review.
 | [A17](#a17) | Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A18](#a18) | A "Custom" date pattern with "S" prints "17 Oct" on discussion messages and workflow file lists, "17th Oct" elsewhere | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A20](#a20) | A removed journal, press or server thumbnail stays online, or comes back when another language has one | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
-| [A21](#a21) | A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had | 🐞 | user-visible | — |
 | [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | On a journal's home page, each "Latest Publications" title is a heading at the section's own level | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OMP2](#omp2) | A press's category page shows only its first page of books, with no way to the rest | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1261,6 +1265,7 @@ otherwise; the team settles them on spec review.
 | [OJS4](#ojs4) | The Settings Wizard shows the current issue's table of contents ticked for a journal with no issue, and a save there stores it | ❓ | minor | — |
 | [OJS7](#ojs7) | A journal's homepage image saved without "Alternate text" has no text alternative at all | ❓ | minor | — |
 | [A6](#a6) | Retired: in French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes | ✅ | retired | Jarda 2026-10-08 · overturned |
+| [A21](#a21) | Retired: a BMP logo or a style sheet the server misread showed "Saved", stored nothing and removed the one the journal had; the BMP is now refused with the earlier logo kept, and the style sheet is saved | ✅ | retired | upstream sync (claude), 2026-10-19 — fixed upstream (pkp/pkp-lib#13512) |
 | [OJS1](#ojs1) | Only a journal has "Journal Content Organization" | ✅ | minor | — |
 | [OMP1](#omp1) | A press's appearance tabs carry the catalog's fields | ✅ | minor | — |
 | [OPS1](#ops1) | A preprint server's home page has a fixed order | ✅ | minor | — |
@@ -1512,7 +1517,12 @@ the server sends back: the context's logo, thumbnail, homepage image,
 favicon and style sheet, the site's logo and style sheet, the images of
 announcements, categories and highlights, and a publication's cover
 image. A file of the wrong type is refused in the browser before it is
-sent, and its message shows.
+sent, and its message shows. A picture of a type the box takes but the
+server does not (a BMP "Logo" or "Homepage Image") is refused when the
+tab is saved, and that message is dropped too: no text under the box,
+only "Please correct one error." at the form's foot, and the message
+("There was an error uploading this image.") is read out only by a
+screen reader, after "Go to Logo:" ("Go to Homepage Image:").
 
 The refusal walked here takes a server whose PHP limits
 `upload_max_filesize` and `post_max_size` are equal, and a picture of
@@ -1521,6 +1531,7 @@ refuses the request.
 ([Submission files](U36-submission-files.md#a21) describes why such a
 picture is sent at all; the disabled controls are [A7](#a7)'s.)
 Basis: probe, 2026-10-07. <sup>f-a16</sup>
+Report: refresh owed — pkp-lib `07bc43fe67` (pkp/pkp-lib#13512, 2026-10-16) makes `PKPContextService::_saveFileParam()` and `moveTemporaryFile()` refuse a picture type the server does not take, so a BMP "Logo" or "Homepage Image" now gets a save refusal whose message the box drops too; the report reads `_saveFileParam()` as having no image check (2026-10-19)
 
 <a id="a17"></a>
 **A17 — Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe** · 🐞 · low.
@@ -1592,22 +1603,6 @@ language's thumbnail does not even clear the setting: the save shows
 is still the journal's thumbnail in that language. (As with a removed
 style sheet: [A5](#a5).)
 Basis: probe, 2026-10-19. <sup>f-a20</sup>
-
-<a id="a21"></a>
-**A21 — A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had** · 🐞 · user-visible.
-A manager uploads a "Logo", "Homepage Image" or thumbnail as a BMP
-picture, which the box takes, and presses "Save". "Saved" shows and
-no message, but nothing is stored: a logo the journal already had is
-gone from every public page, whose header shows the journal's name
-instead, and after a reload the box is an empty frame with "Remove"
-and "Restore Original". A CSS file the server reads as some other kind
-of text (one that opens with a comment block and a `:root` rule, for
-one) does the same under "Journal style sheet": "Saved", and the
-journal's earlier style sheet stops loading on every page. Until
-2026-10-13 both were saved and shown. The change meant to refuse a
-non-image uploaded as the favicon or logo; it also refuses these, and
-silently wipes what the setting held: regression, not choice.
-Since: 2026-10-13 (pkp/pkp-lib#13512) · Basis: probe, 2026-10-14. <sup>f-a21</sup>
 
 ### OJS
 
@@ -1730,6 +1725,9 @@ Basis: code. <sup>f-ops1</sup>
 
 <a id="a6"></a>
 **A6 — In French (Canada), a press's appearance settings and a book's or preprint's download chart show untranslated codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a6</sup>
+
+<a id="a21"></a>
+**A21 — A BMP logo or a misread style sheet showed "Saved", stored nothing and removed the one the journal had** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13512, 2026-10-16), verified 2026-10-19 on OJS, OMP and OPS: a BMP "Logo" or "Homepage Image" is refused at "Save" and the earlier picture stays, and a ".css" file the server used to take for some other kind of text (one that opens with a comment block and a `:root` rule) is saved and applied (Fields, the upload boxes). <sup>f-a21</sup>
 
 ---
 
@@ -2461,6 +2459,12 @@ the message is empty; any server refusal of a settings upload that
 carries `error` would show the same (not driven). Why the file is sent
 and the server error itself belong to Submission files' A21 and Custom
 pages & blocks' A18 (pkp-e2e#373).
+Seen 2026-10-19 on all three apps, `main` (lib/pkp `042726ebf6`) and
+3.5 (`092ec34b0f`): a BMP "Logo" saved answers 400
+`{"pageHeaderLogoImage":["There was an error uploading this image."],"errors":{…}}`
+(a BMP "Homepage Image" the same, keyed `homepageImage`); the box shows
+no text, and the message reaches only the error summary's
+screen-reader text (f-a21).
 Issue report: [pkp-e2e#937](https://github.com/jardakotesovec/pkp-e2e/issues/937) ([docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md)).
 
 <a id="fn-f-a17"></a>
@@ -2555,6 +2559,34 @@ tried (`fix.diff`, `fix-ojs.diff` in the same folder). Tracked in
 ci-triage "Open regressions". Written up for the team in
 `docs/reports/2026-10-14-pkp-lib-13512.md` (a temporary report,
 deleted once acted on; git history keeps it).
+
+Fixed 2026-10-16 (upstream sync of 2026-10-19): pkp-lib `07bc43fe67`
+("Port image upload checking fixes to main", pkp/pkp-lib#13512, Alec
+Smecher, a direct commit; followed by `042726ebf6` for the category
+image; on `stable-3_5_0` as `092ec34b0f`, 2026-10-14).
+`moveTemporaryFile()` now throws `StoreTemporaryFileException` for an
+image setting whose type `getImageExtension()` lacks or whose file
+name and content disagree (`FileManager::isValidImage()`), and
+`PKPContextController::edit()` (`PKPSiteController::edit()` for the
+site) catches it and answers 400 keyed by the setting,
+`{"pageHeaderLogoImage":["There was an error uploading this image."]}`
+(`api.400.errorUploadingImage`); the setting keeps its value. The style
+sheet is saved with the extension `.css` whatever `finfo` reads.
+Live-probed 2026-10-19 with the kept check on PKP's default dataset as
+`rvaca`, OJS `6b4323ced7`, OMP `5777025be`, OPS `f048e747b4` (lib/pkp
+`042726ebf6`) and on `stable-3_5_0` (lib/pkp `092ec34b0f`), the same on
+all six: the BMP "Logo" save answered 400, no "Saved", the form's foot
+"Please correct one error." with "Jump to next error" and no text under
+the box (the error summary's screen-reader text "Go to Logo: There was
+an error uploading this image."); after a reload the box showed the
+earlier `pageHeaderLogoImage_en.png`, which the public header kept; the
+BMP "Homepage Image" the same, the box empty after the reload;
+`asm.css` (`text/x-asm`) and an empty `empty.css`
+(`application/x-empty`) saved ("Saved"), linked on the public pages,
+`asm.css` turning the page red; through the settings route (PUT
+`contexts/{id}`) a BMP logo and a BMP thumbnail answered the same 400
+and the earlier PNG stayed. Evidence: `.reports/r13512/s1019/`,
+`.reports/r13512-3_5/s1019/`.
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `journalContentOrganization` is added by OJS's

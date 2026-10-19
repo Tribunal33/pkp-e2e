@@ -13,10 +13,10 @@ below) plus the U03 S4 skip of `68975b4f`. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `61ddd345bd` (the merge of pkp/ojs#5943) | 2026-10-16 | claude (daily maintenance session; before it `9f18cd1d46`, the branch point, 2026-10-13) |
-| pkp-lib | `6123e3c449` (the merge of pkp/pkp-lib#13542; ojs at its head `b34350ab1b`, the same tree) | 2026-10-16 | claude (daily maintenance session; before it `266505ecd8`, the branch point); ui-library `103b834dd5` (the merge of pkp/ui-library#1020; ojs at its head `95e7365005`, the same tree; before it `c9889f00`, the branch point); ojs `plugins/generic/crossref` `7908654951` (the merge of pkp/crossref-ojs#114, as on `main`; before it `3a9f888d64`) |
+| ojs | `42b0fa2b84` (the merge of pkp/ojs#5945) | 2026-10-19 | claude (daily maintenance session; before it `61ddd345bd`, 2026-10-16; before it `9f18cd1d46`, the branch point, 2026-10-13) |
+| pkp-lib | `186654a359` (pkp/pkp-lib#13536, ojs's pointer since pkp/ojs#5945) | 2026-10-19 | claude (daily maintenance session; before it `6123e3c449`, the merge of pkp/pkp-lib#13542, 2026-10-16; before it `266505ecd8`, the branch point); ui-library `103b834dd5` (the merge of pkp/ui-library#1020; ojs at its head `95e7365005`, the same tree; before it `c9889f00`, the branch point); ojs `plugins/generic/crossref` `7908654951` (the merge of pkp/crossref-ojs#114, as on `main`; before it `3a9f888d64`) |
 
-pkp-e2e `ore` tip: `a6fe34b5` (2026-10-16, companion `13507-ore` fast-forwarded).
+pkp-e2e `ore` tip: `9c90708b` (2026-10-19, the U42 accommodation of pkp/pkp-lib#13536 cherry-picked).
 
 ## Open
 
@@ -35,6 +35,11 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `ore-only`; the verdict;
 what the pkp-e2e `ore` branch took)._
 
+- **2026-10-19 (daily session, VM s3) — ojs `61ddd345bd..42b0fa2b84` (2: `9e420d3266` "pkp/pkp-lib#13536 submodule upate", the merge of pkp/ojs#5945), pkp-lib `6123e3c449..186654a359` (1); ui-library and the crossref pointer unchanged. Read in full; baselines advanced.**
+  - Runs read first: the hook run on pkp/ojs `ore` at `42b0fa2b84`, [38896194893](https://github.com/pkp/ojs/actions/runs/38896194893), with pkp-e2e `ore` `a6fe34b5`: green. That pair stood as the tips until today's cherry-picks, which change no test.
+  - pkp-lib `186654a359` (pkp/pkp-lib#13536, Bozana Bokan, "Extract citation PIDs consistently when the metadata lookup does not run") → `=main d7c33942fc` (`git range-diff` "="; read at its PR review on `main`, 2026-10-15/16, two rounds, merged as `7ce31a8c4b`): `main`'s verdict stands (no regression, no security weakness; U42 A28 retired). ojs `9e420d3266` → pointer bump to it; `42b0fa2b84` → merge.
+  - Suite carried over: the `main` companion `13536`'s U42 commits cherry-picked onto pkp-e2e `ore` (`037d0db2` from `aaa9125e`, the U42 spec and kept `checks/sync/pkp-lib-13537/` only, its tracking lines being `main`'s; `abfa14e1`, `b1b6fc0e`, `9c90708b` from `8d609633`, `3fadb4b0`, `ed2122fc`), no conflict; U42 lint clean. Spec and kept checks only, so the push queued no run (the workflow's `paths-ignore`) and the green pair above stands as the gate.
+  - `main`'s findings carried over: pkp/pkp-lib#13512's fix (`07bc43fe67` + `042726ebf6` on `main`, `092ec34b0f` on 3.5) is not on `ore`, so **ore shows the 13512 regression too**: `checks/sync/pkp-lib-13512/refused-uploads.js` on the ore worktree's dataset fleet (OJS `42b0fa2b84`, lib/pkp `186654a359`): a BMP "Logo" "Saved", `[]` stored, the header logo gone; the `text/x-asm` style sheet the same (`.reports/r13512-ore/s1019/`). The ci-triage row now names `ore` alone; the report says so. The follow-up commits' own regressions (`docs/reports/2026-10-19-pkp-lib-13512.md`) are not on `ore` (code). The other open rows not run on ore today.
 - **2026-10-16 (daily session, VM s2) — ojs `9f18cd1d46..61ddd345bd` (3: `90ab974b52`, then pkp/ojs#5943 `87b0ec4048`, `33bfb2834e` and its merge), pkp-lib `266505ecd8..6123e3c449` (pkp/pkp-lib#13542), ui-library `c9889f00..103b834dd5` (pkp/ui-library#1020); the crossref plugin pointer `3a9f888d64..7908654951`. Read in full; baselines advanced. Companion `13507-ore` merged into pkp-e2e `ore`.**
   - ojs `90ab974b52` (Jarda Kotěšovec, "e2e hook on ore: check pull requests into ore and run the pkp-e2e ore suite", pkp/ojs#5944) → `ore-only`, `.github/workflows/e2e-tests.yml` alone: no impact on the suite, no regression, no security impact. Its first hook run, pkp/ojs 38879911542 at `90ab974b52`, green.
   - pkp/ojs#5943 + pkp/pkp-lib#13542 + pkp/ui-library#1020 merged 10:24 UTC as `61ddd345bd`, `6123e3c449`, `103b834dd5`: each merge's tree is the reviewed head's (ojs `33bfb2834e` plus `90ab974b52`, pkp-lib `b34350ab1b`, ui-library `95e7365005`), each `=main` (PR review below), so its verdict stands. The companion `13507-ore` rebased onto pkp-e2e `ore` over `bb827087` (`range-diff` "=" on all eight commits) and fast-forwarded: `ore` at `a6fe34b5`; the branch and its ci-triage row deleted.
