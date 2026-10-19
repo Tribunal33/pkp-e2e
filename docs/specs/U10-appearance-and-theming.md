@@ -1245,7 +1245,7 @@ otherwise; the team settles them on spec review.
 | [A15](#a15) | After a refused logo, removing it with the hidden "Remove file" still leaves the tab's "Save" disabled | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
 | [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A17](#a17) | Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
-| [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
+| [A18](#a18) | A "Custom" date pattern with "S" prints "17 Oct" on discussion messages and workflow file lists, "17th Oct" elsewhere | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A20](#a20) | A removed journal, press or server thumbnail stays online, or comes back when another language has one | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A21](#a21) | A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had | 🐞 | user-visible | — |
 | [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
@@ -1545,14 +1545,24 @@ blocks.md#a13); the tick box's name: [A3](#a3).)
 Basis: probe, 2026-10-19. <sup>f-a17</sup>
 
 <a id="a18"></a>
-**A18 — A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages** · 🐞 · minor.
-A manager who saves "jS M Y H:i" as the "Custom" pattern of "Date &
-Time (Short)" expects every date of that group with its ordinal ending,
-as a library file's "Date uploaded" reads it: "5th Oct 2026 04:38". A
-discussion's messages leave the ending out: "5 Oct 2026 04:38". The
-same journal writes the same moment two ways; with the default pattern
-both read "2026-10-05 04:38 AM". Basis: probe, 2026-10-05.
-<sup>f-a18</sup>
+**A18 — A "Custom" date pattern with "S" prints "17 Oct" on discussion messages and workflow file lists, "17th Oct" elsewhere** · 🐞 · low.
+A manager types a "Custom" date pattern with "S", the English ordinal
+ending, such as `jS M Y H:i` under "Date & Time (Short)". The Publisher
+Library's "Date uploaded" then reads "19th Oct 2026 05:48", but a
+discussion's messages read "17 Oct 2026 09:58", without the ending. With
+`jS M Y` under "Date (Short)", the "Files for Review" list in a
+submission's workflow reads "17 Oct 2026" right under the version label
+"Unassigned version (17th Oct 2026)". The ending goes missing on the
+lists the browser draws: discussion messages, the workflow's file lists,
+the reviewer list's due dates, the editorial dashboard and the emails
+list in an author's workflow. Pages the server draws keep it: the
+Publisher Library, the version label, file notes, the review history and
+the public pages. Up to 3.4 every page that used the journal's pattern
+was drawn by the server, so the ending showed everywhere. It went
+missing on the workflow lists in 3.5 and on discussions too on `main`.
+In other languages the browser prints no ending either, while the server
+prints that language's own ("1er" on the 1st in French, "5." in German).
+Basis: probe, 2026-10-19. <sup>f-a18</sup>
 
 <a id="a19"></a>
 **A19 — In French (Canada), the same time reads "a.m." on a discussion's messages and "AM" on a library file** · ❓ · minor.
@@ -2479,6 +2489,7 @@ two runs: "Custom" under "Date & Time (Short)" with `jS M Y H:i` saved
 file's "Date uploaded" read "5th Oct 2026 04:38" and a discussion
 message "Message from {username} 5 Oct 2026 04:38". Control, the
 default `Y-m-d h:i A`: both read "2026-10-05 04:38 AM".
+Issue report: [docs/issues/U10-A18-ordinal-ending-dropped-on-discussion-messages.md](../issues/U10-A18-ordinal-ending-dropped-on-discussion-messages.md).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note j. Live-probed 2026-10-05 on all three apps, two

@@ -1,0 +1,69 @@
+--- a/lib/ui-library/src/utils/convertPhpDateTimeFormatToLuxon.js
++++ b/lib/ui-library/src/utils/convertPhpDateTimeFormatToLuxon.js
+@@ -2,9 +2,10 @@
+  * Converts PHP datetime format tokens to Luxon format tokens
+  * Generate by Claude (with bit of help)
+  * @param {string} phpFormat - PHP datetime format string
++ * @param {Object} [overrides] - Luxon tokens or quoted literals that replace the map's entries
+  * @return {string} - Equivalent Luxon format string
+  */
+-export function phpToLuxonFormat(phpFormat) {
++export function phpToLuxonFormat(phpFormat, overrides = {}) {
+ 	const formatMap = {
+ 		// Day
+ 		d: 'dd', // Day of the month, 2 digits with leading zeros
+@@ -63,6 +64,8 @@
+ 		// Additional formats
+ 		x: "kkkk-'WW'", // ISO-8601 year-week pattern (e.g., 2022-W42)
+ 		X: 'W', // ISO-8601 week number of year without leading zeroes (PHP 7.2.0+)
++
++		...overrides,
+ 	};
+ 
+ 	// Characters used in Luxon format tokens that need to be escaped when used as literals
+--- a/lib/ui-library/src/utils/dateUtils.js
++++ b/lib/ui-library/src/utils/dateUtils.js
+@@ -163,8 +163,41 @@
+  * @returns {string} The formatted date string.
+  */
+ export function formatDateWithPhpFormat(dateTime, phpFormat, locale = 'en') {
+-	const luxonFormat = phpToLuxonFormat(phpFormat);
+-	return dateTime.setLocale(getLuxonLocale(locale)).toFormat(luxonFormat);
++	const localizedDateTime = dateTime.setLocale(getLuxonLocale(locale));
++	const luxonFormat = phpToLuxonFormat(phpFormat, {
++		S: toLuxonLiteral(getEnglishOrdinalSuffix(localizedDateTime)),
++	});
++	return localizedDateTime.toFormat(luxonFormat);
++}
++
++/**
++ * PHP's `S`: the English ordinal suffix of the day of the month ("st", "nd", "rd", "th"),
++ * as the server prints it in English. Other languages get none, as before.
++ * @param {DateTime} dateTime - The Luxon DateTime object, with its locale set.
++ * @returns {string} The suffix, or an empty string outside English or for an invalid date.
++ */
++function getEnglishOrdinalSuffix(dateTime) {
++	// An invalid DateTime has no locale; toFormat() prints "Invalid DateTime" for it
++	if (!dateTime.isValid || dateTime.locale.split('-')[0] !== 'en') {
++		return '';
++	}
++	const day = dateTime.day;
++	if (day >= 11 && day <= 13) {
++		return 'th';
++	}
++	return {1: 'st', 2: 'nd', 3: 'rd'}[day % 10] || 'th';
++}
++
++/**
++ * Quotes text as a Luxon literal, a single quote written as Luxon's ''.
++ * @param {string} text - The text to print as it is.
++ * @returns {string} The quoted literal ('' for empty text).
++ */
++function toLuxonLiteral(text) {
++	return text
++		.split('')
++		.map((char) => (char === "'" ? "''" : `'${char}'`))
++		.join('');
+ }
+ 
+ /**
