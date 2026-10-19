@@ -1,0 +1,531 @@
+--- a/locale/bg/manager.po
++++ b/locale/bg/manager.po
+@@ -1266,7 +1266,7 @@
+ msgstr "Публикационни формати"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+-msgstr "Например, press%ppub%r може да създаде DOI като 10.1234/pressESPub100"
++msgstr "Например, press%ppub%m може да създаде DOI като 10.1234/pressespub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.chapters"
+ msgstr "за глави / раздели"
+--- a/locale/ca/manager.po
++++ b/locale/ca/manager.po
+@@ -1516,7 +1516,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Per exemple, press%ppub%r podria crear un DOI tipus 10.1234/pressESPpub100"
++"Per exemple, press%ppub%m podria crear un DOI tipus 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "per a monografies"
+--- a/locale/cs/manager.po
++++ b/locale/cs/manager.po
+@@ -1487,7 +1487,7 @@
+ "registrační agentury, jako je Crossref. "
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+-msgstr "Například, press%ppub%r vytvoří DOI ve tvaru 10.1234/pressESPpub100"
++msgstr "Například, press%ppub%m vytvoří DOI ve tvaru 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "pro monografie"
+--- a/locale/da/manager.po
++++ b/locale/da/manager.po
+@@ -1503,8 +1503,8 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"For eksempel, press%ppub%r ville generere følgende DOI: 10.1234/"
+-"pressESPpub100"
++"For eksempel, press%ppub%m ville generere følgende DOI: 10.1234/"
++"pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "til monografier"
+--- a/locale/de/manager.po
++++ b/locale/de/manager.po
+@@ -1567,7 +1567,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Beispiel: press%ppub%f würde eine DOI wie 10.1234/pressESPpub100 kreieren"
++"Beispiel: press%ppub%f würde eine DOI wie 10.1234/pressesppub100 kreieren"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "für Monographien"
+--- a/locale/en/manager.po
++++ b/locale/en/manager.po
+@@ -1288,7 +1288,7 @@
+ "Beware that custom suffix patterns often lead to problems generating and depositing DOIs. When using a custom suffix pattern, carefully test that editors can generate DOIs and deposit them to a registration agency like Crossref. "
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+-msgstr "For example, press%ppub%r could create a DOI such as 10.1234/pressESPpub100"
++msgstr "For example, press%ppub%m could create a DOI such as 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "for monographs"
+--- a/locale/es/manager.po
++++ b/locale/es/manager.po
+@@ -1543,7 +1543,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Por ejemplo, press%ppub%f puede crear un DOI como 10.1234/pressESPpub100"
++"Por ejemplo, press%ppub%f puede crear un DOI como 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "para monografías"
+--- a/locale/fi/manager.po
++++ b/locale/fi/manager.po
+@@ -1503,8 +1503,8 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Esimerkiksi julkaisija%ppub%r voisi luoda DOI-tunnisteen 10.1234/"
+-"julkaisijaTHYpub100"
++"Esimerkiksi julkaisija%ppub%m voisi luoda DOI-tunnisteen 10.1234/"
++"julkaisijathypub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "kirjoille"
+--- a/locale/fr/manager.po
++++ b/locale/fr/manager.po
+@@ -149,8 +149,8 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Par exemple, press%ppub%r pourrait créer un DOI tel que 10.1234/"
+-"pressESPpub100"
++"Par exemple, press%ppub%m pourrait créer un DOI tel que 10.1234/"
++"pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "pour des livres"
+--- a/locale/gl/manager.po
++++ b/locale/gl/manager.po
+@@ -1484,7 +1484,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Por exemplo, press%ppub%r podería crear un DOI como 10.1234/pressESPpub100"
++"Por exemplo, press%ppub%m podería crear un DOI como 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "para monografías"
+--- a/locale/hr/manager.po
++++ b/locale/hr/manager.po
+@@ -1488,7 +1488,7 @@
+ "pohraniti ih agenciji za registraciju poput Crossref-a. "
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+-msgstr "Na primjer, press%ppub%r može stvoriti DOI poput 10.1234/pressESPub100"
++msgstr "Na primjer, press%ppub%m može stvoriti DOI poput 10.1234/pressespub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "za monografije"
+--- a/locale/hu/manager.po
++++ b/locale/hu/manager.po
+@@ -1509,7 +1509,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Például a press%ppub%r olyan DOI-t hozhat létre mint 10.1234/pressESPppub100"
++"Például a press%ppub%m olyan DOI-t hozhat létre mint 10.1234/pressespppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "kiadványoknak"
+--- a/locale/id/manager.po
++++ b/locale/id/manager.po
+@@ -787,7 +787,7 @@
+ "lembaga pendaftaran seperti Crossref. "
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+-msgstr "Misalnya, press%ppub%r dapat membuat DOI seperti 10.1234/pressESPpub100"
++msgstr "Misalnya, press%ppub%m dapat membuat DOI seperti 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "untuk monograf"
+--- a/locale/mk/manager.po
++++ b/locale/mk/manager.po
+@@ -1513,7 +1513,7 @@
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+ "На пример, изданието %ppub% r може да создаде ДОИ како што е 10.1234 / "
+-"pressESPpub100"
++"pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "за монографии"
+--- a/locale/mn/manager.po
++++ b/locale/mn/manager.po
+@@ -1476,7 +1476,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Жишээ нь: press%ppub%r гэвэл 10.1234/pressESPpub100 гэсэн DOI үүсгэж болно"
++"Жишээ нь: press%ppub%m гэвэл 10.1234/pressesppub100 гэсэн DOI үүсгэж болно"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "нэг сэдэвт бүтээлд зориулсан"
+--- a/locale/nb_NO/manager.po
++++ b/locale/nb_NO/manager.po
+@@ -1470,7 +1470,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"For eksempel, press%ppub%r vil generere følgende DOI: 10.1234/pressESPpub100"
++"For eksempel, press%ppub%m vil generere følgende DOI: 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "til monografier"
+--- a/locale/pl/manager.po
++++ b/locale/pl/manager.po
+@@ -1484,7 +1484,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Na przykład, press%ppub%r mogą stworzyć DOI takie jak 10.1234/pressESPpub100"
++"Na przykład, press%ppub%m mogą stworzyć DOI takie jak 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "Dla monografii"
+--- a/locale/pt/manager.po
++++ b/locale/pt/manager.po
+@@ -1450,8 +1450,8 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Por exemplo, editora%ppub%r poderia criar um DOI como 10.1234/"
+-"editoraESPpub100"
++"Por exemplo, editora%ppub%m poderia criar um DOI como 10.1234/"
++"editoraesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "para livros"
+--- a/locale/pt_BR/manager.po
++++ b/locale/pt_BR/manager.po
+@@ -1513,7 +1513,7 @@
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+ "Por exemplo, editora%ppub%f poderia criar um DOI como 10.1234/"
+-"editoraESPpub100"
++"editoraesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "para monografias"
+--- a/locale/ro/manager.po
++++ b/locale/ro/manager.po
+@@ -1551,8 +1551,8 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"De exemplu, press%ppub%r poate crea un număr DOI, precum 10.1234/"
+-"pressESPpub100"
++"De exemplu, press%ppub%m poate crea un număr DOI, precum 10.1234/"
++"pressesppub100"
+ 
+ msgid "doi.description"
+ msgstr ""
+--- a/locale/ru/manager.po
++++ b/locale/ru/manager.po
+@@ -1495,7 +1495,7 @@
+ "идентификатора файла и %x для \"Идентификатора пользователя\"."
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+-msgstr "Например, izd%ppub%r, чтобы создать DOI, например 10.1234/isdMURpub100"
++msgstr "Например, izd%ppub%m, чтобы создать DOI, например 10.1234/isdmurpub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "для монографий"
+--- a/locale/sl/manager.po
++++ b/locale/sl/manager.po
+@@ -1484,7 +1484,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"press%ppub%r, na primer, lahko ustvari DOI, kot je 10.1234/pressESPpub100"
++"press%ppub%m, na primer, lahko ustvari DOI, kot je 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "za monografije"
+--- a/locale/sv/manager.po
++++ b/locale/sv/manager.po
+@@ -1300,8 +1300,8 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Exempelvis, press%ppub%r kan generera en DOI som exempelvis ser ut som "
+-"följer: 10.1234/pressESPpub100"
++"Exempelvis, press%ppub%m kan generera en DOI som exempelvis ser ut som "
++"följer: 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "för böcker"
+--- a/locale/tr/manager.po
++++ b/locale/tr/manager.po
+@@ -1476,7 +1476,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Örneğin, %ppub%r tuşuna basmak 10.1234/pressESPpub100 gibi bir DOI "
++"Örneğin, %ppub%m tuşuna basmak 10.1234/pressesppub100 gibi bir DOI "
+ "oluşturabilir"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+--- a/locale/uk/manager.po
++++ b/locale/uk/manager.po
+@@ -1533,7 +1533,7 @@
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.example"
+ msgstr ""
+-"Наприклад, press%ppub%r створить DOI з значенням - 10.1234/pressESPpub100"
++"Наприклад, press%ppub%m створить DOI з значенням - 10.1234/pressesppub100"
+ 
+ msgid "doi.manager.settings.doiSuffixPattern.submissions"
+ msgstr "для монографій"
+--- a/plugins/pubIds/urn/locale/bg/locale.po
++++ b/plugins/pubIds/urn/locale/bg/locale.po
+@@ -69,7 +69,7 @@
+ msgstr "УИР суфикс"
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Например, press%ppub%r ще създаде УИР суфикс \"pressESPub100\"."
++msgstr "Например, press%ppub%m ще създаде УИР суфикс \"pressespub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "за монографии"
+--- a/plugins/pubIds/urn/locale/ca/locale.po
++++ b/plugins/pubIds/urn/locale/ca/locale.po
+@@ -74,7 +74,7 @@
+ "l'arxiu %x per a \"identificador personalitzat\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Per exemple, press%ppub%r crearia el sufix URN \"pressESPpub100\"."
++msgstr "Per exemple, press%ppub%m crearia el sufix URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "per a monografies"
+--- a/plugins/pubIds/urn/locale/cs/locale.po
++++ b/plugins/pubIds/urn/locale/cs/locale.po
+@@ -74,7 +74,7 @@
+ "publikačního formátu, %s pro ID souboru a %x pro \"Vlastní identifikátor\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Například, press%ppub%r vytvoří URN sufix \"pressESPpub100\"."
++msgstr "Například, press%ppub%m vytvoří URN sufix \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "pro monografie"
+--- a/plugins/pubIds/urn/locale/da/locale.po
++++ b/plugins/pubIds/urn/locale/da/locale.po
+@@ -75,7 +75,7 @@
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+ msgstr ""
+-"For eksmpel, press%ppub%r vil generere URNsuffikset \"pressESPpub100\"."
++"For eksmpel, press%ppub%m vil generere URNsuffikset \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "til monografier"
+--- a/plugins/pubIds/urn/locale/de/locale.po
++++ b/plugins/pubIds/urn/locale/de/locale.po
+@@ -80,7 +80,7 @@
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+ msgstr ""
+-"Beispielsweise würde press%ppub%r das URN-Suffix „pressESPpub100“ erstellen."
++"Beispielsweise würde press%ppub%m das URN-Suffix „pressesppub100“ erstellen."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "für Monographien"
+--- a/plugins/pubIds/urn/locale/en/locale.po
++++ b/plugins/pubIds/urn/locale/en/locale.po
+@@ -64,7 +64,7 @@
+ msgstr "Use the pattern entered below to generate URN suffixes. Use %p for press initials, %m for the monograph id, %c for the chapter id, %f for the publication format id, %s for the file id and %x for \"Custom Identifier\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "For example, press%ppub%r would create the URN suffix \"pressESPpub100\"."
++msgstr "For example, press%ppub%m would create the URN suffix \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "for monographs"
+--- a/plugins/pubIds/urn/locale/es/locale.po
++++ b/plugins/pubIds/urn/locale/es/locale.po
+@@ -75,7 +75,7 @@
+ "publicación, %s para el archivo y %x para \"identificador personalizado\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Por ejemplo, press%ppub%r crearía el sufijo URN \"pressESPpub100\"."
++msgstr "Por ejemplo, press%ppub%m crearía el sufijo URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "para monografías"
+--- a/plugins/pubIds/urn/locale/fi/locale.po
++++ b/plugins/pubIds/urn/locale/fi/locale.po
+@@ -78,8 +78,8 @@
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+ msgstr ""
+-"Esimerkiksi julkaisija%ppub%r voisi luoda URN-suffiksin "
+-"\"julkaisijaTHYpub100\"."
++"Esimerkiksi julkaisija%ppub%m voisi luoda URN-suffiksin "
++"\"julkaisijathypub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "teoksille"
+--- a/plugins/pubIds/urn/locale/fr/locale.po
++++ b/plugins/pubIds/urn/locale/fr/locale.po
+@@ -107,7 +107,7 @@
+ "Le motif de la racine URN doit être sous la forme \"urn:\"‹NID›\":\"‹NSS›."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Par exemple, press%ppub%r créerait le suffixe URN \"pressESPpub100\"."
++msgstr "Par exemple, press%ppub%m créerait le suffixe URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "pour des livres"
+--- a/plugins/pubIds/urn/locale/gl/locale.po
++++ b/plugins/pubIds/urn/locale/gl/locale.po
+@@ -71,7 +71,7 @@
+ "%x para \"Identificador personalizado\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Por exemplo, press%ppub%r crearía o sufixo URN \"pressESPpub100\"."
++msgstr "Por exemplo, press%ppub%m crearía o sufixo URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "para monografías"
+--- a/plugins/pubIds/urn/locale/hr/locale.po
++++ b/plugins/pubIds/urn/locale/hr/locale.po
+@@ -76,7 +76,7 @@
+ "formata publikacije, %s za ID datoteke i %x za \"prilagođeni identifikator\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Na primjer, press%ppub%r stvorio bi URN sufiks \"pressESPub100\"."
++msgstr "Na primjer, press%ppub%m stvorio bi URN sufiks \"pressespub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "za monografije"
+--- a/plugins/pubIds/urn/locale/hu/locale.po
++++ b/plugins/pubIds/urn/locale/hu/locale.po
+@@ -79,7 +79,7 @@
+ "%s-t a fájl azonosítójához és a %x-t az \"Egyéni azonosítóhoz\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Például a press%ppub%r a \"pressESPppub100\" URN utótagot hozná létre."
++msgstr "Például a press%ppub%m a \"pressespppub100\" URN utótagot hozná létre."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "köteteknek"
+--- a/plugins/pubIds/urn/locale/mk/locale.po
++++ b/plugins/pubIds/urn/locale/mk/locale.po
+@@ -75,7 +75,7 @@
+ "форматот за објавување,%0s за датотека и %x за \"Прилагоден идентификатор\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "На пример, press%ppub%r го креира URN префиксот \"pressESPpub100\"."
++msgstr "На пример, press%ppub%m го креира URN префиксот \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "за монографи"
+--- a/plugins/pubIds/urn/locale/nb_NO/locale.po
++++ b/plugins/pubIds/urn/locale/nb_NO/locale.po
+@@ -73,7 +73,7 @@
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+ msgstr ""
+-"For eksmpel, press%ppub%r vil generere URNsuffikset \"pressESPpub100\"."
++"For eksmpel, press%ppub%m vil generere URNsuffikset \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "til monografier"
+--- a/plugins/pubIds/urn/locale/pl/locale.po
++++ b/plugins/pubIds/urn/locale/pl/locale.po
+@@ -72,7 +72,7 @@
+ "publikacji, %s dla id pliku i %x dla niestandardowego identyfikatora."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Na przykład, press%ppub%r utworzyłoby sufiks URN \"pressESPpub100\"."
++msgstr "Na przykład, press%ppub%m utworzyłoby sufiks URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "dla monografii"
+--- a/plugins/pubIds/urn/locale/pt/locale.po
++++ b/plugins/pubIds/urn/locale/pt/locale.po
+@@ -58,7 +58,7 @@
+ "publicado com o mesmo prefixo URN atribuído:"
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Por exemplo, editra%ppub%r criar o sufixo URN \"editoraESPpub100\"."
++msgstr "Por exemplo, editra%ppub%m criar o sufixo URN \"editoraesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "para livros"
+--- a/plugins/pubIds/urn/locale/pt_BR/locale.po
++++ b/plugins/pubIds/urn/locale/pt_BR/locale.po
+@@ -75,7 +75,7 @@
+ "identificação do arquivo e %x para o \"Identificador Personalizado\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Por exemplo, press%ppub%r criaria o sufixo URN \"pressESPpub100\"."
++msgstr "Por exemplo, press%ppub%m criaria o sufixo URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "para monografias"
+--- a/plugins/pubIds/urn/locale/ro/locale.po
++++ b/plugins/pubIds/urn/locale/ro/locale.po
+@@ -40,7 +40,7 @@
+ msgstr "Sufix URN"
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "De exemplu, press%ppub%r ar crea sufixul URN „pressESPpub100”."
++msgstr "De exemplu, press%ppub%m ar crea sufixul URN „pressesppub100”."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "pentru monografii"
+--- a/plugins/pubIds/urn/locale/ru/locale.po
++++ b/plugins/pubIds/urn/locale/ru/locale.po
+@@ -76,7 +76,7 @@
+ "идентификатора файла и %x для \"Идентификатора пользователя\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Например, izd%ppub%r, чтобы создатьURN, например \"isdMURpub100\"."
++msgstr "Например, izd%ppub%m, чтобы создатьURN, например \"isdmurpub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "для монографий"
+--- a/plugins/pubIds/urn/locale/sl/locale.po
++++ b/plugins/pubIds/urn/locale/sl/locale.po
+@@ -78,7 +78,7 @@
+ "publikacije, %s za ID datoteke in %x za \"identifikator po meri\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Na primer: press%ppub%r bi ustvaril URN pripona \"pressESPpub100\"."
++msgstr "Na primer: press%ppub%m bi ustvaril URN pripona \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "za monografsko publikacijo"
+--- a/plugins/pubIds/urn/locale/tr/locale.po
++++ b/plugins/pubIds/urn/locale/tr/locale.po
+@@ -74,7 +74,7 @@
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+ msgstr ""
+-"Örneğin, %ppub%r tuşuna basmak “pressESPpub100” URN son ekini oluşturacaktır."
++"Örneğin, %ppub%m tuşuna basmak “pressesppub100” URN son ekini oluşturacaktır."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "yazılar için"
+--- a/plugins/pubIds/urn/locale/uk/locale.po
++++ b/plugins/pubIds/urn/locale/uk/locale.po
+@@ -78,7 +78,7 @@
+ "\"користувацького ідентифікатора\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.example"
+-msgstr "Для прикладу, press%ppub%r згенерує суфікс URN \"pressESPpub100\"."
++msgstr "Для прикладу, press%ppub%m згенерує суфікс URN \"pressesppub100\"."
+ 
+ msgid "plugins.pubIds.urn.manager.settings.urnSuffixPattern.submissions"
+ msgstr "для монографій"

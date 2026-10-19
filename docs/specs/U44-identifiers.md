@@ -832,6 +832,7 @@ are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for OMP8 (issue report `docs/issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md`): once fixed, the press's URN settings window's pattern example uses only the placeholders it lists, and the URN it shows is what "Assign" makes from that pattern.
   - the guard for A15 (issue report `docs/issues/U44-A15-urn-check-number-nan-unlisted-character.md`): once fixed, with "Enter an individual URN suffix…" and "Check Number" chosen, "Add Check Number" on the suffix "a~b" adds one digit, not "NaN".
   - the guard for A16 (issue report `docs/issues/U44-A16-urn-shared-across-item-kinds.md`): once fixed, with "Enter an individual URN suffix…" chosen, a galley's "Identifiers" tab refuses the URN an article already carries, and an article's page refuses a galley's, with "The given URN suffix is already in use for another published item. Please enter a unique URN suffix for each item." (Rules 11, 12a).
   - the guard for OJS1 (issue report
@@ -1013,7 +1014,7 @@ entry notes otherwise; the team settles them on spec review.
 | [OMP5](#omp5) | A press file's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP6](#omp6) | A press file's URN leaves out its format number, and file patterns leave "%f" unfilled | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP7](#omp7) | With the URN plugin switched off, a press's book page still shows format URNs | 🐞 | medium | — |
-| [OMP8](#omp8) | A press's example of an own URN pattern holds "%r", which is not a placeholder and stays in the URN | 🐞 | minor | — |
+| [OMP8](#omp8) | A press's URN settings give a pattern example with "%r", which stays in every URN made from it | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A3](#a3) | An article's Publisher ID accepts values the tabs refuse, a duplicate included | ❓ | minor | — |
 | [A12](#a12) | A URN that differs from another only in case is accepted as new | ❓ | minor | — |
 | [OJS2](#ojs2) | The JATS XML's publisher ID is the article's number, not the typed Publisher ID | ❓ | minor | — |
@@ -1398,20 +1399,19 @@ with no "URN" box; a journal hides both. The full entry is the workflow screen's
 Basis: probe, 2026-10-02. <sup>f-omp7</sup>
 
 <a id="omp8"></a>
-**OMP8 — A press's example of an own URN pattern holds "%r", which is not a placeholder** · 🐞 · minor.
+**OMP8 — A press's URN settings give a pattern example with "%r", which stays in every URN made from it** · 🐞 · medium.
 In a press's URN settings window, the choice "Use the pattern entered
-below to generate URN suffixes." names its placeholders, "%p for press
-initials, %m for the monograph id, %c for the chapter id, %f for the
-publication format id, %s for the file id and %x for "Custom
-Identifier"", and then reads "For example, press%ppub%r would create the
-URN suffix "pressESPpub100"." The list has no "%r", and nothing fills
-it: with "press%ppub%r" saved as the pattern for monographs, "Assign" on
-a monograph's "Identifiers" page fills the box with
-"urn:nbn:de:0000-presspkppub%r" on a press whose initials are PKP. The
-"%r" stays as typed, and the initials come in lower case where the
-example shows capitals. A manager who copies the example gets URNs that
-end in "%r".
-Basis: probe, 2026-10-09. <sup>f-omp8</sup>
+below to generate URN suffixes." names its placeholders (%p, %m, %c, %f,
+%s and %x). The line under it reads "For example, press%ppub%r would
+create the URN suffix "pressESPpub100"." The list has no "%r", nothing
+fills it, and the press initials always come out in lower case, not in
+capitals as the example shows. A manager who copies the example gets
+URNs that end in "%r": "Assign" on a monograph's "Identifiers" page
+fills the box with `urn:nbn:de:0000-pressjpkpub%r`, and "Save" keeps it.
+Once the book is published, that URN goes out in the book page's
+metadata and the press's OAI-PMH records. A pattern typed from the
+listed placeholders gives correct URNs.
+Basis: probe, 2026-10-19. <sup>f-omp8</sup>
 
 ### Retired
 
@@ -2301,6 +2301,7 @@ is A11's (note f-a11), not a second fault. A journal's example reads
 "For example, vol%viss%ipp%p could create the URN suffix
 "vol3iss2pp230"." (read in the OJS locale file, with placeholders its
 list names; not driven).
+Issue report: [docs/issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md](../issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md).
 
 ## Reference — entry points & surfaces
 
