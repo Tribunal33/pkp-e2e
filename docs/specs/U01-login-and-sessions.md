@@ -1908,7 +1908,7 @@ So any account whose stored hash has another cost (PHP's default 10
 before 8.4, an import, the test seed's 4) meets it once, at its next
 sign-in; not driven outside the test seed. The same check is what ends
 the account's other sessions on a reset or a forced change (Rules 9, 11).
-Issue report: [docs/issues/U01-A15-author-sign-in-ends-login-as.md](../issues/U01-A15-author-sign-in-ends-login-as.md).
+Issue report: [pkp-e2e#1014](https://github.com/jardakotesovec/pkp-e2e/issues/1014) ([docs/issues/U01-A15-author-sign-in-ends-login-as.md](../issues/U01-A15-author-sign-in-ends-login-as.md)).
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-10-15 (Rules 5a, 6, 18; OJS, OMP, OPS on
