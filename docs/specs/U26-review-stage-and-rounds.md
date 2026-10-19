@@ -743,8 +743,8 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A1](#a1) | After "Resubmit for Review", the Author's "Upload revisions" button disappears with their first file | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A9](#a9) | Deleting the only revised file flips the status back but never returns the author's revisions task | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | The review round's "Revisions Uploaded" list says revisions were requested on rounds where none were | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [A13](#a13) | After "Resubmit for Review", the Author's "Resubmit for review." task stays in their Tasks panel once they have uploaded a revised file | 🐞 | minor | — |
-| [A14](#a14) | With two authors on the review stage, a revised file clears only one author's revisions task; the other keeps "Revision required." | 🐞 | minor | — |
+| [A13](#a13) | After "Resubmit for Review", the author's "Resubmit for review." task stays once they upload their revisions | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
+| [A14](#a14) | With two authors on a submission, a revised file clears only one author's "Revision required." task | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A2](#a2) | The author sees the editor's status wording; the author-tailored wording exists but is never shown | ❓ | user-visible | — |
 | [A3](#a3) | What the read-review window's attachments section lists: observation recorded privately with the maintainer pending a fix | ❓ | latent | — |
 | [A4](#a4) | A round whose only reviewers declined reports "All reviews are confirmed and a decision is needed." | ❓ | user-visible | — |
@@ -923,25 +923,30 @@ Since: 2026-09-12 · Basis: test run (a journal, one run; the press was not
 driven on this path). <sup>[f-a11](#fn-a11)</sup>
 
 <a id="a13"></a>
-**A13 — After "Resubmit for Review", the Author's "Resubmit for review." task stays after their upload** · 🐞 · minor.
-When an editor requests revisions that will go to a new review round,
-the Author's Tasks panel gets the task "Resubmit for review.". After the
-Author uploads a revised file, the task is still there. When revisions
-are requested without a new round, the revisions task disappears with
-the first upload (see *Side effects*). The Author keeps being asked to
-resubmit work they have already sent.
-Basis: probe, 2026-10-02. <sup>[f-a13](#fn-a13)</sup>
+**A13 — After "Resubmit for Review", the author's "Resubmit for review." task stays once they upload their revisions** · 🐞 · low.
+When an editor requests revisions that will go to a new review round
+("Resubmit for Review"), the author's Tasks panel gets the task
+"Resubmit for review.". After the author uploads a revised file, the
+task is still there, although the round already reads "Revisions
+submitted. A new review round needs to be created." and their My
+Submissions row reads "Review update". When revisions are requested
+without a new round, the task goes with the first upload. The task stays
+until the editor records a decision such as "Create New Review Round"; a
+recommendation or "Cancel Review Round" leaves it. It sends no email. An
+author who takes it at its word and uploads again adds a second file to
+the round. (Side effects)
+Basis: probe, 2026-10-19. <sup>[f-a13](#fn-a13)</sup>
 
 <a id="a14"></a>
-**A14 — With two authors on the review stage, a revised file clears only one author's revisions task** · 🐞 · minor.
-When two authors are assigned to the review stage, "Request Revisions"
-gives each of them a revisions task. Uploading a revised file, whoever
-uploads it, clears only one author's task. The other author's "Revision
-required." stays in their Tasks panel, while their My Submissions row
-already reads "Review update". It stays through further uploads, through
-the deletion of every revised file, and through a later upload. That
-author keeps being asked for revisions that are already in.
-Basis: probe, 2026-10-07 (OJS and OMP, two runs each). <sup>[f-a14](#fn-a14)</sup>
+**A14 — With two authors on a submission, a revised file clears only one author's "Revision required." task** · 🐞 · low.
+When two authors with accounts are assigned to a submission and the
+editor records "Request Revisions" without a new review round, each
+author gets "Revision required." in their Tasks panel. Once either
+author uploads a revised file, only one of the two tasks goes. The other
+author keeps "Revision required.", while their My Submissions row
+already reads "Review update" and the round reads "Revisions have been
+submitted and a decision is needed.". (Side effects)
+Basis: probe, 2026-10-19. <sup>[f-a14](#fn-a14)</sup>
 
 ### OMP
 
@@ -1738,6 +1743,7 @@ traced further: the task is the decision-owned resubmit row (note m,
 the revisions task on a revision upload
 (`PendingRevisionsNotificationManager`, `PKPManageFileApiHandler`) names
 `NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS` only.
+Issue report: [docs/issues/U26-A13-resubmit-task-stays-after-revisions-upload.md](../issues/U26-A13-resubmit-task-stays-after-revisions-upload.md).
 
 <a id="fn-a14"></a>
 **f-a14** — Driven 2026-10-07 on OJS and OMP `main`, two runs each, on a
@@ -1759,6 +1765,7 @@ that one user, while `PKP\submissionFile\Repository::add()` and `delete()`
 pass every stage author. The same code is in `stable-3_5_0`,
 `stable-3_4_0` and `stable-3_3_0` (`.inc.php`), read through git in the
 lib/pkp checkout.
+Issue report: [docs/issues/U26-A14-co-author-revisions-task-stays-after-upload.md](../issues/U26-A14-co-author-revisions-task-stays-after-upload.md).
 
 <a id="fn-a10"></a>
 **f-a10** — Probed 2026-08-02, editorial view (Journal/Press Manager), on

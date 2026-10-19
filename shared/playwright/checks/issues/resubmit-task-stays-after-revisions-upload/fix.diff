@@ -1,0 +1,20 @@
+--- a/lib/pkp/classes/notification/managerDelegate/PendingRevisionsNotificationManager.php
++++ b/lib/pkp/classes/notification/managerDelegate/PendingRevisionsNotificationManager.php
+@@ -145,6 +145,17 @@
+             $removeNotifications = true;
+         }
+ 
++        // "Resubmit for Review" files its own task (EditorDecisionNotificationManager). It is
++        // done, as the pending revisions task is, once a revised file has come in since the decision.
++        $resubmitDecision = Repo::decision()->getActivePendingRevisionsDecision($submissionId, $expectedStageId, Decision::RESUBMIT);
++        if ($resubmitDecision && Repo::decision()->revisionsUploadedSinceDecision($resubmitDecision, $submissionId)) {
++            Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
++                ->withUserId($userId)
++                ->withType(Notification::NOTIFICATION_TYPE_EDITOR_DECISION_RESUBMIT)
++                ->withContextId($request->getContext()->getId())
++                ->delete();
++        }
++
+         if ($removeNotifications) {
+             $context = $request->getContext();
+             Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)

@@ -1,0 +1,87 @@
+--- a/lib/pkp/classes/notification/managerDelegate/PendingRevisionsNotificationManager.php
++++ b/lib/pkp/classes/notification/managerDelegate/PendingRevisionsNotificationManager.php
+@@ -95,15 +95,10 @@
+      */
+     public function updateNotification(PKPRequest $request, ?array $userIds, ?int $assocType, ?int $assocId): void
+     {
++        // Every author on the stage holds the task: act for each of them, not the first only.
++        $userIds = array_filter((array) $userIds, fn ($userId) => is_int($userId) && $userId > 0);
+         if (empty($userIds)) {
+-            // no user IDs provided; nothing to update
+-            return;
+-        }
+-
+-        $userId = current($userIds);
+-
+-        if (!$userId || !is_int($userId) || $userId <= 0) {
+-            // invalid user ID; skip notification creation
++            // no valid user IDs provided; nothing to update
+             return;
+         }
+ 
+@@ -123,20 +118,22 @@
+                 $removeNotifications = true;
+             } else {
+                 $context = $request->getContext();
+-                $notification = Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
+-                    ->withUserId($userId)
+-                    ->withType(Notification::NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS)
+-                    ->withContextId($context->getId())
+-                    ->first();
+-                if (!$notification) {
+-                    Repo::notification()->build(
+-                        $context->getId(),
+-                        Notification::NOTIFICATION_LEVEL_TASK,
+-                        $this->getNotificationType(),
+-                        Application::ASSOC_TYPE_SUBMISSION,
+-                        $submissionId,
+-                        $userId
+-                    );
++                foreach ($userIds as $userId) {
++                    $notification = Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
++                        ->withUserId($userId)
++                        ->withType(Notification::NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS)
++                        ->withContextId($context->getId())
++                        ->first();
++                    if (!$notification) {
++                        Repo::notification()->build(
++                            $context->getId(),
++                            Notification::NOTIFICATION_LEVEL_TASK,
++                            $this->getNotificationType(),
++                            Application::ASSOC_TYPE_SUBMISSION,
++                            $submissionId,
++                            $userId
++                        );
++                    }
+                 }
+             }
+         } else {
+@@ -147,16 +144,18 @@
+ 
+         if ($removeNotifications) {
+             $context = $request->getContext();
+-            Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
+-                ->withUserId($userId)
+-                ->withType($this->getNotificationType())
+-                ->withContextId($context->getId())
+-                ->delete();
+-            Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
+-                ->withUserId($userId)
+-                ->withType(Notification::NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS)
+-                ->withContextId($context->getId())
+-                ->delete();
++            foreach ($userIds as $userId) {
++                Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
++                    ->withUserId($userId)
++                    ->withType($this->getNotificationType())
++                    ->withContextId($context->getId())
++                    ->delete();
++                Notification::withAssoc(Application::ASSOC_TYPE_SUBMISSION, $submissionId)
++                    ->withUserId($userId)
++                    ->withType(Notification::NOTIFICATION_TYPE_EDITOR_DECISION_PENDING_REVISIONS)
++                    ->withContextId($context->getId())
++                    ->delete();
++            }
+         }
+     }
+ 
