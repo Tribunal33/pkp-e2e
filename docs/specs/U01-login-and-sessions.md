@@ -742,7 +742,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A11](#a11) | After a refused "Change Password" or "Reset Password", the browser tab loses the page's name | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
-| [A15](#a15) | A sign-in that re-saves an account's password, while a manager is logged in as it, sends the manager to the Login page, signed out of both accounts | 🐞 | minor | — |
+| [A15](#a15) | "Login As" ends and a save made as the user is silently lost when that user first signs in after an upgrade | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A16](#a16) | A back-office page left open after its session ended answers a search with an alert or an "Error" window that does not say the user is signed out, instead of the Login page | 🐞 | user-visible | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
@@ -1004,19 +1004,19 @@ until this change the box did keep them signed in, if only in part
 Since: 2026-10-06 (pkp/pkp-lib#12780) · Basis: probe, 2026-10-07. <sup>[f-a14](#fn-a14)</sup>
 
 <a id="a15"></a>
-**A15 — A sign-in that re-saves an account's password ends an impersonation of it and signs the impersonator out too** · 🐞 · minor.
-A Journal Manager logged in as an Author expects to keep acting as the
-Author until they choose "Logout as {username}", and then to be back in
-their own account (Rule 15). When the Author signs in meanwhile, in
-another browser, and that sign-in re-saves the Author's password in its
-current form (Rule 15a: an account created by an earlier version or
-imported, or a test account never signed in), the manager's next page is
-the Login page instead: signed out of the Author's account and of their
-own, with nothing on screen saying why. The manager has to sign in
-again. An Author whose password is already in the current form does not
-end the impersonation. Driven only with test accounts at their first
-sign-in.
-Basis: probe, 2026-10-14. <sup>[f-a15](#fn-a15)</sup>
+**A15 — "Login As" ends and a save made as the user is silently lost when that user first signs in after an upgrade** · 🐞 · medium.
+A Journal Manager has used "Login As" on an Author. The Author then
+signs in, in another browser, for the first time since the install was
+upgraded from 3.4 or earlier. From then on, the manager's next request
+signs them out of both accounts. A save they make as the Author is
+dropped without a word: the form stays on screen with the typed values,
+and nothing is stored. Their next page is the Login page. The manager
+has to sign in again, use "Login As" again and redo the change; the
+second impersonation holds. It can happen only at the Author's first
+sign-in after the upgrade, because that sign-in stores the Author's
+password again with today's hashing settings, and the app treats the
+changed stored value as a password change. (Rules 15, 15a)
+Basis: probe, 2026-10-19. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
 **A16 — A back-office page left open after its session ended answers a search with a refusal, not the Login page** · 🐞 · user-visible.
@@ -1908,6 +1908,7 @@ So any account whose stored hash has another cost (PHP's default 10
 before 8.4, an import, the test seed's 4) meets it once, at its next
 sign-in; not driven outside the test seed. The same check is what ends
 the account's other sessions on a reset or a forced change (Rules 9, 11).
+Issue report: [docs/issues/U01-A15-author-sign-in-ends-login-as.md](../issues/U01-A15-author-sign-in-ends-login-as.md).
 
 <a id="fn-a16"></a>
 **f-a16** — Live-probed 2026-10-15 (Rules 5a, 6, 18; OJS, OMP, OPS on

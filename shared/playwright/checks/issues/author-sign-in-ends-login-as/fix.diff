@@ -1,0 +1,87 @@
+--- a/lib/pkp/classes/core/PKPUserProvider.php
++++ b/lib/pkp/classes/core/PKPUserProvider.php
+@@ -23,6 +23,8 @@
+ use Illuminate\Database\ConnectionInterface;
+ use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
++use Illuminate\Support\Facades\Auth;
++use Illuminate\Support\Facades\Cache;
+ 
+ class PKPUserProvider implements UserProvider
+ {
+@@ -155,10 +157,33 @@
+             return;
+         }
+ 
++        $previous = $user->getAuthPassword();
+         $rehash = Validation::encryptCredentials($user->getUsername(), $credentials['password']);
+         $user->setPassword($rehash);
+ 
+         Repo::user()->edit($user);
++
++        // The password itself is unchanged. Record which hash the new one replaced, so that the
++        // account's other sessions, which still hold the previous hash (AuthenticateSession), do not
++        // read the re-hash as a password change and log out (an impersonation of the account included).
++        // Both hashes are kept as the digest the session check itself uses, never in clear.
++        $guard = Auth::guard();
++        Cache::put(
++            static::rehashedPasswordCacheKey($user->getId()),
++            ['from' => $guard->hashPasswordForCookie($previous), 'to' => $guard->hashPasswordForCookie($rehash)],
++            now()->addMinutes(max(config('session.lifetime'), config('auth.guards.web.remember')))
++        );
++    }
++
++    /**
++     * The cache key of the record a re-hash at sign-in leaves for the user's other sessions
++     *
++     * @see PKPUserProvider::rehashPasswordIfRequired()
++     * @see \PKP\middleware\PKPAuthenticateSession::validatePasswordHash()
++     */
++    public static function rehashedPasswordCacheKey(int $userId): string
++    {
++        return 'rehashedPassword-' . $userId;
+     }
+ 
+     /**
+--- a/lib/pkp/classes/middleware/PKPAuthenticateSession.php
++++ b/lib/pkp/classes/middleware/PKPAuthenticateSession.php
+@@ -17,6 +17,8 @@
+ use Closure;
+ use Illuminate\Http\Request;
+ use Illuminate\Support\Facades\Auth;
++use Illuminate\Support\Facades\Cache;
++use PKP\core\PKPUserProvider;
+ use PKP\config\Config;
+ use PKP\security\AuditEvent;
+ use PKP\security\AuditLog;
+@@ -47,6 +49,30 @@
+     }
+ 
+     /**
++     * Also accept the hash a re-hash at sign-in replaced, while the account's password is still the one
++     * re-hashed: the password did not change, so the session stays. Any later change of the password
++     * (a new hash) ends it as before.
++     *
++     * @see PKPUserProvider::rehashPasswordIfRequired()
++     */
++    protected function validatePasswordHash($passwordHash, $storedValue)
++    {
++        if (parent::validatePasswordHash($passwordHash, $storedValue)) {
++            return true;
++        }
++
++        $user = $this->auth->user();
++        $rehash = $user ? Cache::get(PKPUserProvider::rehashedPasswordCacheKey($user->getId())) : null;
++        if (!is_array($rehash) || !hash_equals($rehash['to'], $this->guard()->hashPasswordForCookie($passwordHash))) {
++            return false;
++        }
++
++        // The session holds the previous hash as the digest, or raw (as PKPSessionGuard::signInAs() stores it).
++        return hash_equals($rehash['from'], $storedValue)
++            || hash_equals($rehash['from'], $this->guard()->hashPasswordForCookie($storedValue));
++    }
++
++    /**
+      * Log the user out of the application.
+      *
+      * @param  \Illuminate\Http\Request  $request
