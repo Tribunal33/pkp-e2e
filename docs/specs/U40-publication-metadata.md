@@ -1037,7 +1037,7 @@ and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | After Cancel in the "Reset Article Permissions" confirm box, the button stays greyed until the page is reloaded | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A19](#a19) | Assistants allowed to edit the publication's metadata, and administrators with only an assistant role, get a language "Change" that fails | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A21](#a21) | Through a new version of a published item, the permitted Author changes the published version's funders and can take its review round | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
-| [A22](#a22) | Change Submission Language: on a slow link, a title typed before the Title box has finished loading is lost | 🐞 | minor | — |
+| [A22](#a22) | Change Submission Language: on a slow link, a title typed the moment the Title box appears is wiped | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [OJS1](#ojs1) | An article published as "Author's Original" or "Published Manuscript Under Review" keeps "Change", and every language change on it is refused | 🐞 | minor | claim check (claude), 2026-10-07 — trigger corrected |
 | [OMP5](#omp5) | Book page: with press License Terms and no book license, a "License" link reloads the page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [OPS3](#ops3) | In French a preprint server shows the Author's "posted" banner and the Copyright Holder and Copyright Year descriptions as raw codes | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1317,16 +1317,19 @@ published, like the title.
 Since: 2026-09-08 · Basis: probe, 2026-10-05. <sup>f-a21</sup>
 
 <a id="a22"></a>
-**A22 — Change Submission Language: a title typed before the Title box has finished loading is lost** · 🐞 · minor.
-With "Change Submission Language For" loaded (the submission's title
-under its heading), a Journal Manager picks the new language and
-types the title at once. On a slow link (8 kbit/s down) the Title box
-is still loading, showing no "Formatting" button when clicked into: the
-typed text shows in grey, then disappears once the box has loaded.
-Confirm is then refused with "This field is required." under Title,
-and nothing is stored. On an ordinary link the box loads within a
-fraction of a second and nothing typed is lost.
-Basis: probe, 2026-10-07. <sup>f-a22</sup>
+**A22 — Change Submission Language: on a slow link, a title typed the moment the Title box appears is wiped** · 🐞 · low.
+In "Change Submission Language For", the Title box (and on a journal or
+preprint server the Abstract box) appears only once the new language is
+picked, and then takes a moment to load. An editor who starts typing the
+title within half a second of the box appearing sees the first letters
+in the box. The box then turns pale and takes no more keys, and once it
+has loaded it is empty. Confirm is then refused with "This field is
+required." under Title, and nothing is stored. It needs a link on which
+the box takes more than half a second to load, such as a mobile link
+with half a second of delay, and typing that starts within that half
+second. Keys typed later are not shown at all while the box is pale. On
+an ordinary link the box has loaded before the first key.
+Basis: probe, 2026-10-19. <sup>f-a22</sup>
 
 ### OJS
 
@@ -2904,6 +2907,7 @@ holding the English title (A15). First seen in a test run 2026-09-30
 (OMP, the publication fetch and the editor's style sheets held back):
 keys pressed before the editor was initialized were lost. Kept script
 `shared/playwright/checks/U40/I07/i07.js` (`PHASES=type`).
+Issue report: [docs/issues/U40-A22-language-panel-title-typed-early-lost.md](../issues/U40-A22-language-panel-title-typed-early-lost.md).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1 — OJS1 evidence.** The submission's status comes from lib/pkp

@@ -1,0 +1,24 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldRichTextarea.vue
+@@ -45,6 +45,8 @@
+ 				:toolbar="toolbar"
+ 				:plugins="plugins"
+ 				:init="compiledInit"
++				:disabled="!isEditorReady"
++				@init="isEditorReady = true"
+ 				@focus="focus"
+ 				@blur="blur"
+ 			/>
+@@ -177,6 +179,12 @@
+ 	data() {
+ 		return {
+ 			isFocused: false,
++			/**
++			 * TinyMCE makes its box editable before it has loaded its content
++			 * style sheets, and then loads the field's value over anything typed
++			 * meanwhile. Keep the box disabled until the editor is initialized.
++			 */
++			isEditorReady: false,
+ 			wordCount: 0,
+ 		};
+ 	},
