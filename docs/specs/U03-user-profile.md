@@ -508,7 +508,11 @@ types and what the boxes do belong to
   refused at once, with "You are not authorized to access the requested
   resource."; until then, and after a cancelled "Delete", the key works.
   Creating a key revokes nothing: "Create API Key" is offered only
-  without a key.
+  without a key. A request whose key is not in the form of a key (only
+  its first two dot-separated parts, or a made-up string) is refused
+  too, with "The apiToken could not be decoded because of the following
+  error: {$error}", the "{$error}" shown as it is where a reason should
+  be ⚠ [A27](#a27).
 - **Audit lines** (no screen shows them; read from the code). When the installation's audit log is switched on (see *Settings*), an email-change request, a password change and an API key creation or deletion each write one line to the server log, recording who acted (and, while impersonating, whose account). <sup>g</sup>
 - **No submission or activity-log entry** is written by anything on this
   page (the log itself is the workflow's). <sup>g</sup>
@@ -1174,6 +1178,7 @@ Left out of the scenarios above, by reason:
   - A24 (the page's script failing after a Contact save on the site-level profile; Rule 6a)
   - A25 (another browser's tab press failing after a password change; Rule 10b)
   - A26 (a Profile page whose session ended elsewhere answering each tab press and "Save" with "##user.authorization.userRequired##"; Rules 6a and 10b)
+  - A27 (an API request with a key that is not in the form of one refused with an unfilled "{$error}"; *Side effects*, "On deleting an API key")
 - **No seed**:
   - no API secret configured: the API Key tab without its button (Rule 12d; `api_key_secret`)
   - a Site Administrator on a site with a single journal at the site-level address (Rule 3)
@@ -1216,6 +1221,7 @@ unless its Basis line says otherwise.
 | [A24](#a24) | The Profile page's Contact tab sometimes logs a script error on opening or saving; the save still works | 🐞 | low · crash: script | issues (claude), 2026-10-15 — re-verified |
 | [A25](#a25) | After a password change, a page left open in another browser drops its next save or tab press instead of going to the Login page | 🐞 | medium · crash: script | issues (claude), 2026-10-15 — re-verified |
 | [A26](#a26) | A Profile page whose session has ended answers each press with the alert "##user.authorization.userRequired##" | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
+| [A27](#a27) | An API request with a key not in the form of one is refused with "… because of the following error: {$error}", no reason in place of "{$error}" | 🐞 | minor | — |
 | [OPS2](#ops2) | A preprint server sends the email-change message but its emails list has no "Change Email Address Invitation" row to edit | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS3](#ops3) | On a preprint server, saving the Profile's Roles tab erases the account's reviewing interests | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A5](#a5) | The "role scheduled to begin" banner shows in any journal where the user has no role, even when the waiting role is elsewhere, and gives the earliest waiting date on the site | ❓ | minor | claim check (claude), 2026-10-14 — widened |
@@ -1625,6 +1631,20 @@ press after the first; the first press fails in another way
 By the code, a session that expired brings it too. No other page shows
 this code.
 Since: 2012-05-07 (14 years) · Basis: probe, 2026-10-15. <sup>[f-a26](#fn-a26)</sup>
+
+<a id="a27"></a>
+**A27 — An API request with a key not in the form of one is refused with an unfilled "{$error}"** · 🐞 · minor.
+An application that sends the journal's API a request with a key that
+is not in the form of one (only the key's first two dot-separated
+parts, or a made-up string) is refused, as it should be. The refusal
+reads "The apiToken could not be decoded because of the following
+error: {$error}": "{$error}" stays as it is, where the reason should
+be. Nothing is lost and no screen shows it; only the application's
+developer sees it, and it does not say what is wrong with the key. The
+key with the first character of its last part changed gets its own
+message, "The API token could not be validated. …", and a deleted key
+"You are not authorized to access the requested resource." (*Side effects*).
+Since: 2023-10-13 (3 years) · Basis: probe, 2026-10-19. <sup>[f-a27](#fn-a27)</sup>
 
 ### OMP
 
@@ -2390,7 +2410,14 @@ query parameter, 200, and 200 again after a cancelled "Delete"; after
 "Delete", 401 with the same message; a second key 200 and the first still
 401; a tampered key 400 "The API token could not be validated. This may
 indicate an error in the API token or that the API token is no longer
-valid.".
+valid.". Live-probed 2026-10-19 (Rules 12a–12c; Side effects), all three
+apps on `main` and `stable-3_5_0`, two runs each, as `dbarnes` on PKP's
+default dataset (the kept script `shared/playwright/checks/U03/H19/h19.js`):
+holds as above, the 172-character key wider than its box (scroll width
+1337–1394 px in a 406 px box), "Delete" asking the browser's confirm,
+OK back to "None" with the in-tab saved message and again after a
+reload; with no key 401, the key 200, after "Delete" 401; a key that
+cannot be decoded: note [f-a27](#fn-a27).
 
 <a id="fn-i"></a>
 **i** — `APP\notification\form\NotificationSettingsForm` extends
@@ -3167,6 +3194,37 @@ cancelled). The expired and signed-out-elsewhere sessions are read from
 the code: their next request arrives with no user and meets the same
 policy.
 Issue report: [pkp-e2e#990](https://github.com/jardakotesovec/pkp-e2e/issues/990) ([docs/issues/U03-A26-session-ended-alert-raw-key.md](../issues/U03-A26-session-ended-alert-raw-key.md)).
+
+<a id="fn-a27"></a>
+**f-a27** — `PKP\middleware\DecodeApiTokenWithValidation::handle()`
+answers a `DomainException` or `UnexpectedValueException` from
+`PKPJwt::decode()` (the wrong number of dot-separated segments, a
+segment that is not base64 or not JSON, a payload that is not an
+object, an unsupported or mismatched `alg`) with 400 and
+`__('api.400.tokenCouldNotBeDecoded')`, passing no `error` parameter, so
+the `{$error}` of `locale/en/api.po` stays in the text. A bad signature
+is caught first, as `SignatureInvalidException`, and answers 400
+`api.400.invalidApiToken`. The parameter was lost in pkp/pkp-lib#7698
+(the Laravel router, `71e79e31e3`, 2023-10-13, first tagged 3.5.0-0);
+3.4's and 3.3's `ApiTokenDecodingMiddleware` passed
+`['error' => $e->getMessage()]`, so they fill it with the decoder's
+message (read in the code). Live-probed 2026-10-19 (Side effects "On
+deleting an API key"), OJS, OMP and OPS on `main` and `stable-3_5_0`,
+two runs each, the same on all, `dbarnes` on PKP's default dataset with
+`api_key_secret` set for the run (the kept script
+`shared/playwright/checks/U03/H19/h19.js`): `GET {context}/api/v1/submissions`
+with no cookie answered 400 `{"error":"The apiToken could not be
+decoded because of the following error: {$error}"}` for 12 token
+shapes sent as a bearer token: `abc`, a 33-character string with no
+dots, two segments, the key plus `.x`, `..`, a payload `!!!!`, a
+payload that is base64 of `{not json` or of `123`, a header `!!!!`, a
+header that is base64 of `{oops`, a header `{"alg":"none"}` with an
+empty signature, a header `{"alg":"HS512"}`; the same for `abc` and two
+segments as `?apiToken=`, and for `abc` again after "Delete" (15
+requests a run); no server log line and no 5xx. The same runs: the
+valid key 200, the key with its signature's first character changed
+400 `api.400.invalidApiToken` (also for the deleted key so changed: the
+signature is checked before the key is looked up), the deleted key 401.
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp/registry/userGroups.xml`: `permitSelfRegistration="true"`
