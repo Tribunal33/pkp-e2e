@@ -1169,7 +1169,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused without naming the summary and publishing is unreachable | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
-| [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
+| [OJS4](#ojs4) | Editor publishing an article without an issue gets an error when a contributor has a verified ORCID iD | 🐞 | medium · crash: server | issues (claude), 2026-10-19 — re-verified |
 | [OJS5](#ojs5) | Editor's refused "Confirm" in "Review Publishing Details" opens a blank copy of the panel that keeps coming back | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [OPS1](#ops1) | A preprint posted with a future "Date Posted" stays "Scheduled" for good and never goes public | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OPS4](#ops4) | Every post, the first included, sends "New Version Posted Acknowledgement"; the first-post acknowledgement never goes out | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1448,11 +1448,15 @@ of its contributors holds a verified ORCID iD, on a journal with ORCID
 on under the member API. The publish answers with "An unexpected error
 has occurred. Please reload the page and try again.", although the
 article is in fact published. The contributor's work is never sent to
-their ORCID record. On a typical install the article's author also never
-receives "Publication Published". The editor has nothing on screen to
-resend either. Publishing without an issue is new on `main`. The fault
-needs that, the member API, a contributor with a verified iD, and DOIs
-turned on for the journal. Basis: probe, 2026-10-02.
+their ORCID record, and depending on the install the article's author
+never receives "Publication Published". The editor has nothing on screen
+to resend either. A contributor who verifies their iD after such an
+article is published meets the same fault: the page they return to from
+ORCID is blank, their iD is stored, and their work is never sent to
+their ORCID record. Publishing without an issue is new on `main`. The
+fault needs that, the member API, a contributor with a verified iD, and
+DOIs turned on for the journal; with DOIs off the same publish works and
+the deposit goes out. Basis: probe, 2026-10-19.
 <sup>[f-ojs4](#fn-ojs4)</sup>
 
 <a id="ojs5"></a>

@@ -4,9 +4,12 @@
  *
  * DOIs — the two OJS scenarios that cannot run beside the parallel suite:
  * S11 and S15 put a scratch journal on "DOI Versioning" "Yes", and while
- * any journal of the install is set so, every OJS OAI request answers 500
- * (U19 A22, spec Rule 12), which would red the U19 suite running in the
- * parallel `ojs` project. Here they run after it, in `ojs-serial`, and
+ * any journal of the install is set so on an OJS checkout older than
+ * `2815f33e65` (pkp/ojs#5947, which fixed U19 A22 on `main` on 2026-10-16),
+ * every OJS OAI request answers 500 on PostgreSQL. The app repos' PR checks
+ * run this suite against each PR's own head, and most open pkp/ojs PRs
+ * predate that fix (99 of 100 on 2026-10-19), so beside U19 in the
+ * parallel `ojs` project it would red their U19 run. Here they run after it, in `ojs-serial`, and
  * each sets its journal back to "No" on screen in a `finally`, so a
  * failed assertion cannot leave the install's OAI failing.
  * Spec: docs/specs/U45-dois.md
@@ -95,7 +98,7 @@ async function expectReaderDoi(reader, tag, submissionId, doi, {version} = {}) {
 
 /**
  * "DOI Versioning" set back to "No" on the Setup tab and saved: the
- * install's OAI answers again (U19 A22). Run from a `finally`; a refusal
+ * install's OAI answers again on an app head before the U19 A22 fix. Run from a `finally`; a refusal
  * here is reported, not swallowed.
  */
 async function restoreVersioningNo(page, tag) {

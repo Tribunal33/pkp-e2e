@@ -5,8 +5,9 @@
  * DOIs — OJS suite, one test per canonical scenario the spec runs on OJS
  * in the parallel `ojs` project (S1–S10 common, S12–S13 {OJS OPS},
  * S14, S16–S18 {OJS}). S11 and S15 put a journal on "DOI Versioning"
- * "Yes", which makes every OJS OAI request of the install answer 500
- * while it lasts (U19 A22), so they run in the `ojs-serial` project,
+ * "Yes", which on an OJS head older than the U19 A22 fix (pkp/ojs#5947,
+ * which most open app PRs predate) makes every OJS OAI request of the
+ * install answer 500 while it lasts, so they run in the `ojs-serial` project,
  * after this one: `tests/serial/U45-dois.spec.js`. S19 is the press's.
  * Spec: docs/specs/U45-dois.md
  *

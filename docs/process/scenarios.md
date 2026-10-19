@@ -693,8 +693,9 @@ Keys:
   `{doiPrefix: '10.1234', doiVersioning: true}`; a later version then
   gets a DOI of its own when it is published on screen. A journal left
   with DOIs on and `doiVersioning: true` makes every OJS OAI list request
-  of the install answer 500 (U19's A22), which reds the OJS U19 suite on
-  that fleet: a probe or test that seeds it on a journal sets "DOI
+  of the install answer 500 on an OJS head older than `2815f33e65`
+  (U19's A22, fixed by pkp/ojs#5947 on 2026-10-16; most open app PRs
+  predate it), which reds the OJS U19 suite on that fleet: a probe or test that seeds it on a journal sets "DOI
   Versioning" back to "No" on screen before it ends (U19 harness,
   2026-09-26, journal; U45 harness, 2026-09-26, three apps).
 - `registrationAgency`, `automaticDoiDeposit` (OJS, OPS; U45): Settings

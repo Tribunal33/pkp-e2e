@@ -606,12 +606,13 @@ behind a line; that scratch is deleted after review.
   2026-09-25 and 2026-09-26 (U18 claim check K1, K3).
 - A context with more than one UI language, and the site, answers
   `{context}/oai` with a 302 to `{context}/en/oai`; a one-language scratch
-  context answers at `{context}/oai` itself. OJS: while any journal on the
+  context answers at `{context}/oai` itself. OJS: on a head older than
+  `2815f33e65` (pkp/ojs#5947, 2026-10-16), while any journal on the
   install has DOIs on and "DOI Versioning" set to "Yes", every OJS OAI
   Identify, list and record request answers 500 on the Postgres test
-  install, on every journal and the site-wide address (U19 register), so a
-  `doiVersioning: true` seed breaks every OJS OAI read until it is off
-  again. A context created under Hosted Journals › "Create Journal" starts
+  install, on every journal and the site-wide address (U19 A22, retired),
+  so a `doiVersioning: true` seed breaks every OJS OAI read there until it
+  is off again; `main` since then answers. A context created under Hosted Journals › "Create Journal" starts
   not enabled publicly; one seeded through `POST scenarios/context` is
   enabled unless `enabled: false`. Administration › "System Information"
   shows the install's OAI settings (`oai` 1, the repository identifier,

@@ -224,5 +224,5 @@ Small: one method in one pkp-lib controller, and a test.
 - Upstream searched in pkp/pkp-lib, pkp/ojs, pkp/omp and
   pkp/ui-library by "Competing Interests declared",
   `competingInterestsWithDeclaration` and modify review competing
-  interests. `pkp/pkp-lib#13424` (open) is about the flag's upgrade
+  interests. `pkp/pkp-lib#13424` (closed 2026-10-07) is about the flag's upgrade
   migration, another fault.

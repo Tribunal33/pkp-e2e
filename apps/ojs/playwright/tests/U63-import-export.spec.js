@@ -5,8 +5,9 @@
  * Import & export — OJS suite, one test per canonical scenario the spec
  * runs on OJS in the parallel `ojs` project: S1–S4 (common), S5–S6 {OJS
  * OMP}, S7–S9 {OJS}. S10 puts a journal on "DOI Versioning" "Yes", which
- * makes every OJS OAI list request of the install answer 500 while it
- * lasts, so it runs in the `ojs-serial` project, after this one:
+ * on an OJS head older than the U19 A22 fix (pkp/ojs#5947, which most open
+ * app PRs predate) makes every OJS OAI list request of the install answer
+ * 500 while it lasts, so it runs in the `ojs-serial` project, after this one:
  * `tests/serial/U63-import-export.spec.js`.
  * Spec: docs/specs/U63-import-export.md
  *

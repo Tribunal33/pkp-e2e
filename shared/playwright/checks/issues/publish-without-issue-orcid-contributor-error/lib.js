@@ -156,4 +156,20 @@ async function reread(page, app, submissionId, rec) {
     };
 }
 
-module.exports = {T, sleep, flat, setOrcidMember, seedVerifiedOrcid, jobsSince, jobMarks, publishFromWorkflow, reread};
+/**
+ * Point the fleet config's two `[proxy]` lines at `url` (the local stand-in for ORCID's token
+ * endpoint, checks/sync/pkp-lib-13493/orcid-token-stub.js); returns {found, restore}, restore()
+ * putting back the file as it was. A dataset reset writes the config afresh, so a walk sets it
+ * after each reset.
+ */
+function pointProxy(configFile, url) {
+    const fs = require('fs');
+    const before = fs.readFileSync(configFile, 'utf8');
+    const found = (before.match(/^http_proxy\s*=\s*"?([^"\n]*)"?/m) || [])[1];
+    fs.writeFileSync(configFile, before.replace(/^(https?_proxy)\s*=.*$/gm, `$1 = "${url}"`));
+    let done = false;
+    const restore = () => { if (!done) { done = true; fs.writeFileSync(configFile, before); } };
+    return {found, restore};
+}
+
+module.exports = {T, sleep, flat, setOrcidMember, seedVerifiedOrcid, jobsSince, jobMarks, publishFromWorkflow, reread, pointProxy};

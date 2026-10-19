@@ -675,7 +675,7 @@ are the source; badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a
 | [A21](#a21) | The "Requesting updated ORCID record access" email asks for "updateded permissions" | 🐞 | minor | — |
 | [A22](#a22) | The landing after an emailed authorization for a published article never says the article goes to the ORCID record | 🐞 | minor | — |
 | [OJS1](#ojs1) | A review sent to ORCID on a journal with no country fails in the background instead of being skipped | 🐞 | invisible · crash: server | — |
-| [OJS2](#ojs2) | Verifying from the email for an article published without an issue ends on a blank page, though the iD is stored | 🐞 | user-visible · crash: server | — |
+| [OJS2](#ojs2) | Verifying from the email for an article published without an issue ends on a blank page, though the iD is stored | 🐞 | medium · crash: server | issues (claude), 2026-10-19 — re-verified |
 | [OPS2](#ops2) | The ORCID request emails have no rows on the preprint server's Emails screen | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A3](#a3) | An iD connected while registering lands on the account unverified | ❓ | minor | — |
 | [A6](#a6) | The author-email toggle's label misdescribes when it fires | ❓ | minor | — |
@@ -965,16 +965,17 @@ screen shows. (Rule 12)
 Basis: probe, 2026-10-16. <sup>[f-ojs1](#fn-ojs1)</sup>
 
 <a id="ojs2"></a>
-**OJS2 — Verifying from the email for an article published without an issue ends on a blank page** · 🐞 · user-visible · crash: server.
+**OJS2 — Verifying from the email for an article published without an issue ends on a blank page** · 🐞 · medium · crash: server.
 On a journal using the member API with DOIs on, a contributor of an
 article published without an issue who completes the emailed
 authorization gets a blank page instead of the "ORCID Authorization"
 page, because the app fails. Their iD is stored verified all the same,
-and opening the link again says "An ORCID iD was already stored for this
-submission." The same cause makes the publish itself fail
+but their work is never sent to their ORCID record, and opening the
+link again says "An ORCID iD was already stored for this submission."
+The same cause makes the publish itself fail
 ([→ Publish, schedule & versions OJS4](U49-publish-schedule-and-versions.md#ojs4)).
 (Side effects)
-Basis: probe, 2026-10-16. <sup>[f-ojs2](#fn-ojs2)</sup>
+Basis: probe, 2026-10-19. <sup>[f-ojs2](#fn-ojs2)</sup>
 
 ### OMP
 
@@ -1999,7 +2000,9 @@ member function getData() on null" in `OrcidWork::getAppDoiExternalIds()`
 answered "An ORCID iD was already stored for this submission.". Control:
 the same journal's article published into its issue landed on the
 success page. The publish side is *Publish, schedule & versions*' OJS4
-(note j).
+(note j). Re-walked 2026-10-19 on OJS `main` 6b4323ced7 by the issue
+reporter, on PKP's default dataset: the same 500 and stored iD.
+Issue report: [pkp-e2e#549](https://github.com/jardakotesovec/pkp-e2e/issues/549) ([docs/issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md](../issues/U49-OJS4-publish-without-issue-orcid-contributor-error.md)).
 
 <a id="fn-omp1"></a>
 **f-omp1** — `omp-main/classes/orcid/actions/SendSubmissionToOrcid`:

@@ -4,9 +4,12 @@
  *
  * Import & export — the OJS scenario that cannot run beside the parallel
  * suite: S10 puts a scratch journal on "DOI Versioning" "Yes", and while
- * any journal of the install is set so, every OJS OAI list request answers
- * 500 (spec footnote sc; scenarios.md `doiVersioning`), which would red the
- * U19 suite running in the parallel `ojs` project. Here it runs after it,
+ * any journal of the install is set so on an OJS checkout older than
+ * `2815f33e65` (pkp/ojs#5947, which fixed U19 A22 on `main` on 2026-10-16),
+ * every OJS OAI list request answers 500 on PostgreSQL. The app repos' PR checks
+ * run this suite against each PR's own head, and most open pkp/ojs PRs
+ * predate that fix (99 of 100 on 2026-10-19), so beside U19 in the
+ * parallel `ojs` project it would red their U19 run. Here it runs after it,
  * in `ojs-serial`, where no spec reads OAI, and it sets its journal back
  * to "No" on screen in a `finally`, so a failed assertion cannot leave the
  * install's OAI failing.
