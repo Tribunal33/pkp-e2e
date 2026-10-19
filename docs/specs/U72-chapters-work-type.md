@@ -1958,7 +1958,7 @@ the ordering script (note l) makes only the first sortable, so the
 placeholder stays behind until the list is drawn again. Live-probed
 2026-10-08 on OMP `main`, three runs, on the Chapters page and in the
 wizard: note td20.
-Issue report: [docs/issues/U72-A12-dragged-chapter-leaves-no-items-line.md](../issues/U72-A12-dragged-chapter-leaves-no-items-line.md).
+Issue report: [pkp-e2e#1017](https://github.com/jardakotesovec/pkp-e2e/issues/1017) ([docs/issues/U72-A12-dragged-chapter-leaves-no-items-line.md](../issues/U72-A12-dragged-chapter-leaves-no-items-line.md)).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note h: the panel changes only on the three chapter events,
