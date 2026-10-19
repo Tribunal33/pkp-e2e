@@ -2887,7 +2887,7 @@ Live-probed 2026-10-07: note q25 (the step run by one job-runner pass
 from the test kit). By the code an arXiv ID, a handle, a web address or
 a URN typed by hand gives way to the text's the same way; only the DOI
 was driven.
-Issue report: [docs/issues/U42-A25-typed-doi-replaced-by-reference-text.md](../issues/U42-A25-typed-doi-replaced-by-reference-text.md).
+Issue report: [pkp-e2e#1026](https://github.com/jardakotesovec/pkp-e2e/issues/1026) ([docs/issues/U42-A25-typed-doi-replaced-by-reference-text.md](../issues/U42-A25-typed-doi-replaced-by-reference-text.md)).
 
 <a id="fn-f-a26"></a>
 **f-a26 — A26 evidence.** Code read 2026-10-07 at lib/pkp `f8285b0b8f`:
