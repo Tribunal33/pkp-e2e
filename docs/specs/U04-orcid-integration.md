@@ -2017,7 +2017,7 @@ tried `…/peer-review` (note g). `OrcidManager::getCountry()` declares a
 string and returns the journal's unset `country`; the same on
 `stable-3_5_0` (read, not driven there). The A1 issue report lists this
 failure among the job's outcomes.
-Issue report: [docs/issues/U04-OJS1-orcid-review-no-country-fails-in-background.md](../issues/U04-OJS1-orcid-review-no-country-fails-in-background.md).
+Issue report: [pkp-e2e#1010](https://github.com/jardakotesovec/pkp-e2e/issues/1010) ([docs/issues/U04-OJS1-orcid-review-no-country-fails-in-background.md](../issues/U04-OJS1-orcid-review-no-country-fails-in-background.md)).
 
 <a id="fn-ojs2"></a>
 **f-ojs2** — Live-probed 2026-10-16 with a local stand-in for ORCID's
