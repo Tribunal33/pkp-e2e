@@ -1092,7 +1092,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A24](#a24) | Screen reader users hear a form field called invalid, but not the error message shown under it | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
-| [A25](#a25) | A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text, without a word | 🐞 | minor | — |
+| [A25](#a25) | A DOI an editor corrects in "Edit citation" before the lookup starts is replaced by the reference text's DOI | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
 | [A26](#a26) | Whether a lookup that finishes after an editor filled a reference in by hand replaces what was typed has not been seen | ❓ | user-visible | — |
@@ -1317,21 +1317,19 @@ creator row's field has no name either: [A14](#a14).)
 Basis: probe, 2026-10-19. <sup>f-a24</sup>
 
 <a id="a25"></a>
-**A25 — A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text** · 🐞 · minor.
+**A25 — A DOI an editor corrects in "Edit citation" before the lookup starts is replaced by the reference text's DOI** · 🐞 · medium.
 With metadata lookup on, an editor adds a reference whose text holds a
-DOI, opens "Edit" on it, types another DOI and saves: the row shows the
-typed DOI as a link, and the editor expects it to stay, as a saved
-change does. When the lookup's first step then runs on the reference
-(Rule 11), it puts the DOI written in the text back: the row's link and
-the "DOI" box of "Edit" show the text's DOI again, and no message says
-so. A DOI typed after that step has run stays, as does one typed on a
-reference whose text holds no DOI, and the typed title and author stay
-either way. The reach is the time a new reference waits for its lookup
-to start: seconds on an install whose background jobs keep up, longer
-when they are behind. "Reprocess all references" replaces a typed DOI
-the same way, but its question warns that manual changes will have to
-be entered again (Rule 15); "Edit" warns of nothing.
-Basis: probe, 2026-10-07. <sup>f-a25</sup>
+DOI, opens "Edit" on it, types another DOI and saves. The row shows the
+typed DOI as a link, also after a reload. Then the background step that
+picks identifiers out of the reference's text runs, and it puts the
+text's DOI back: the row's link and the "DOI" box of "Edit" show the
+text's DOI again, and no message says so. A typed DOI is lost only when
+the editor saves before that step has run. On a site that runs its
+background jobs with a worker or a cron entry, the editor has until the
+next run. On a site with the default setting, which runs jobs at the end
+of each page request, the step runs before "Edit" can be opened, unless
+the jobs are held up. A DOI typed after the step stays. (Rule 11)
+Basis: probe, 2026-10-19. <sup>f-a25</sup>
 
 <a id="a26"></a>
 **A26 — Whether a lookup that finishes after a hand edit replaces what the editor typed** · ❓ · user-visible.
@@ -2889,6 +2887,7 @@ Live-probed 2026-10-07: note q25 (the step run by one job-runner pass
 from the test kit). By the code an arXiv ID, a handle, a web address or
 a URN typed by hand gives way to the text's the same way; only the DOI
 was driven.
+Issue report: [docs/issues/U42-A25-typed-doi-replaced-by-reference-text.md](../issues/U42-A25-typed-doi-replaced-by-reference-text.md).
 
 <a id="fn-f-a26"></a>
 **f-a26 — A26 evidence.** Code read 2026-10-07 at lib/pkp `f8285b0b8f`:

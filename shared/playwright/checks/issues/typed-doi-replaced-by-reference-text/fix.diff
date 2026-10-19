@@ -1,0 +1,34 @@
+--- a/lib/pkp/api/v1/citations/PKPCitationController.php
++++ b/lib/pkp/api/v1/citations/PKPCitationController.php
+@@ -23,6 +23,8 @@
+ use Illuminate\Http\Request;
+ use Illuminate\Http\Response;
+ use Illuminate\Support\Facades\Route;
++use PKP\citation\enum\CitationProcessingStatus;
++use PKP\citation\pid\ExtractPidsHelper;
+ use PKP\core\PKPBaseController;
+ use PKP\core\PKPRequest;
+ use PKP\pid\Arxiv;
+@@ -225,6 +227,22 @@
+             return response()->json($readOnlyErrors, Response::HTTP_BAD_REQUEST);
+         }
+ 
++        // Saved by hand before the lookup's first step has run: run that step now, on the text as saved,
++        // filling only the identifiers this save leaves empty, and mark it done, so that the queued step
++        // does not replace the identifiers typed here with the ones in the text.
++        // getData(), as citations from before 3.6 have no status and getProcessingStatus() requires one.
++        if ($citation->getData('processingStatus') === CitationProcessingStatus::QUEUED->value) {
++            $extracted = clone $citation;
++            $extracted->setRawCitation($params['rawCitation'] ?? $citation->getRawCitation());
++            (new ExtractPidsHelper())->execute($extracted);
++            foreach (['doi', 'arxiv', 'handle', 'url', 'urn'] as $pid) {
++                if (empty($params[$pid]) && !empty($extracted->getData($pid))) {
++                    $params[$pid] = $extracted->getData($pid);
++                }
++            }
++            $params['processingStatus'] = CitationProcessingStatus::PID_EXTRACTED->value;
++        }
++
+         $params['id'] = $citation->getId();
+ 
+         $errors = Repo::citation()->validate($citation, $params);
