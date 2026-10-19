@@ -1163,6 +1163,7 @@ passwords and the tooling recipe are in the footnote. <sup>sc</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A20 (issue report `docs/issues/U10-A20-removed-thumbnail-stays-public.md`): once fixed, "Remove" under the thumbnail and "Save" leave its address answering 404, also when another language keeps its own thumbnail, which stays.
   - the guard for A16 (issue report `docs/issues/U10-A16-upload-box-server-refusal-no-message.md`): once fixed, a "Logo" the server refuses shows the server's message under the box.
   - the "Homepage Image" description typed in scenario 3 read on a press's and a preprint server's home page, as on a journal's (A1; the guard its issue report names)
   - the names a screen reader hears for the "Editorial Masthead" arrows ("Increase position of {role}" for an up arrow) and for each "Sidebar" box (the block's name alone) (A3; the guard its issue report names)
@@ -1245,7 +1246,7 @@ otherwise; the team settles them on spec review.
 | [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A17](#a17) | Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
-| [A20](#a20) | A removed journal thumbnail stays online at its old address | 🐞 | minor | — |
+| [A20](#a20) | A removed journal, press or server thumbnail stays online, or comes back when another language has one | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A21](#a21) | A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had | 🐞 | user-visible | — |
 | [OJS5](#ojs5) | Unticking every "Journal Content Organization" box says "Saved", but the home page keeps the current issue | 🐞 | medium | issues (claude), 2026-10-03 — re-verified |
 | [OJS6](#ojs6) | On a journal's home page, each "Latest Publications" title is a heading at the section's own level | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
@@ -1565,16 +1566,22 @@ pages that print "AM" could follow it, though which form is right is
 the product team's call. Basis: probe, 2026-10-05. <sup>f-a19</sup>
 
 <a id="a20"></a>
-**A20 — A removed journal thumbnail stays online at its old address** · 🐞 · minor.
+**A20 — A removed journal, press or server thumbnail stays online, or comes back when another language has one** · 🐞 · medium.
 A manager who presses "Remove" under "Journal thumbnail" on Settings ›
-Website › Appearance › "Setup" and saves expects the picture to be
-gone. The box stays empty after a reload, but the picture stays in the
+Website › Appearance › "Setup" and saves expects the picture to be gone.
+The box stays empty after a reload, but the picture stays in the
 journal's public files and still opens at its old address, for anyone,
-signed in or not. A "Logo" removed in the same save is deleted.
-Nothing on screen shows that the thumbnail is still there, and no
-screen can delete it; as with a removed style sheet ([A5](#a5)), it
-matters when the picture was meant to be withdrawn. Basis: probe,
-2026-10-05. <sup>f-a20</sup>
+signed in or not. A "Logo" removed in the same save is deleted. Nothing
+on screen shows that the thumbnail is still there, and no screen can
+delete it; as with a removed style sheet ([A5](https://github.com/jardak
+otesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-
+theming.md#a5)), it matters when the picture was meant to be withdrawn.
+When the journal also has a thumbnail in another language, removing one
+language's thumbnail does not even clear the setting: the save shows
+"Saved", and after a reload the removed picture is back in its box and
+is still the journal's thumbnail in that language. (As with a removed
+style sheet: [A5](#a5).)
+Basis: probe, 2026-10-19. <sup>f-a20</sup>
 
 <a id="a21"></a>
 **A21 — A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had** · 🐞 · user-visible.
@@ -2502,6 +2509,7 @@ cleared in the database; the logo's address then answered 404 and its
 file was gone, while the thumbnail's still answered 200 `image/png`
 (in a freshly launched browser too) and its file stayed on disk. The
 site's list of journals after the removal was not read.
+Issue report: [docs/issues/U10-A20-removed-thumbnail-stays-public.md](../issues/U10-A20-removed-thumbnail-stays-public.md).
 
 <a id="fn-f-a21"></a>
 **f-a21** — pkp-lib `266505ecd8` ("Check settings file types before

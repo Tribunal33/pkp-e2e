@@ -1,0 +1,27 @@
+--- a/classes/services/ContextService.php
++++ b/classes/services/ContextService.php
+@@ -101,20 +101,21 @@
+         // Move an uploaded server thumbnail and set the updated data
+         if (!empty($params['serverThumbnail'])) {
+             $supportedLocales = $newContext->getSupportedFormLocales();
++            $thumbnail = (array) $newContext->getData('serverThumbnail');
+             foreach ($supportedLocales as $localeKey) {
+                 if (!array_key_exists($localeKey, $params['serverThumbnail'])) {
+                     continue;
+                 }
+-                $localeValue = $this->_saveFileParam(
+-                    $newContext,
++                $thumbnail[$localeKey] = $this->_saveFileParam(
++                    $currentContext,
+                     $params['serverThumbnail'][$localeKey],
+                     'serverThumbnail',
+                     $request->getUser(),
+                     $localeKey,
+                     true
+                 );
+-                $newContext->setData('serverThumbnail', $localeValue, $localeKey);
+             }
++            $newContext->setData('serverThumbnail', $thumbnail);
+         }
+ 
+         // If the context is enabled or disabled, create or delete

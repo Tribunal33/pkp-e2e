@@ -1,0 +1,27 @@
+--- a/classes/services/ContextService.php
++++ b/classes/services/ContextService.php
+@@ -107,20 +107,21 @@
+         // Move an uploaded journal thumbnail and set the updated data
+         if (!empty($params['journalThumbnail'])) {
+             $supportedLocales = $newContext->getSupportedFormLocales();
++            $thumbnail = (array) $newContext->getData('journalThumbnail');
+             foreach ($supportedLocales as $localeKey) {
+                 if (!array_key_exists($localeKey, $params['journalThumbnail'])) {
+                     continue;
+                 }
+-                $localeValue = $this->_saveFileParam(
+-                    $newContext,
++                $thumbnail[$localeKey] = $this->_saveFileParam(
++                    $currentContext,
+                     $params['journalThumbnail'][$localeKey],
+                     'journalThumbnail',
+                     $request->getUser(),
+                     $localeKey,
+                     true
+                 );
+-                $newContext->setData('journalThumbnail', $localeValue, $localeKey);
+             }
++            $newContext->setData('journalThumbnail', $thumbnail);
+         }
+ 
+         // If the context is enabled or disabled, create or delete

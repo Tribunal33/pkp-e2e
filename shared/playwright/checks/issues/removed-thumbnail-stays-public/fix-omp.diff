@@ -1,0 +1,27 @@
+--- a/classes/services/ContextService.php
++++ b/classes/services/ContextService.php
+@@ -125,20 +125,21 @@
+         // Move an uploaded press thumbnail and set the updated data
+         if (!empty($params['pressThumbnail'])) {
+             $supportedLocales = $newContext->getSupportedFormLocales();
++            $thumbnail = (array) $newContext->getData('pressThumbnail');
+             foreach ($supportedLocales as $localeKey) {
+                 if (!array_key_exists($localeKey, $params['pressThumbnail'])) {
+                     continue;
+                 }
+-                $localeValue = $this->_saveFileParam(
+-                    $newContext,
++                $thumbnail[$localeKey] = $this->_saveFileParam(
++                    $currentContext,
+                     $params['pressThumbnail'][$localeKey],
+                     'pressThumbnail',
+                     $request->getUser(),
+                     $localeKey,
+                     true
+                 );
+-                $newContext->setData('pressThumbnail', $localeValue, $localeKey);
+             }
++            $newContext->setData('pressThumbnail', $thumbnail);
+         }
+     }
+ 
