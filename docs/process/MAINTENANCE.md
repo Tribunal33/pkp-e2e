@@ -100,7 +100,7 @@ works steps 1 to 5; then the day of the month decides the main work,
 so neither side starves the other: an **odd day** works incidentals
 and reports owed (steps 6 and 7), an **even day** builds and Planned
 coverage (step 8). Steps 9 to 12 follow on either day. After about
-five hours the session starts nothing new, but whatever it started
+three hours the session starts nothing new, but whatever it started
 (a report, a fold, a build or revision) it finishes in the same
 session, however long that takes, and then ends pushed (step 13). What
 is left, the next morning picks up from the files.
@@ -212,7 +212,7 @@ is left, the next morning picks up from the files.
    first: every
    🐞 entry no report covers is written up and filed through "Issue
    reports". A spec is worked whole; the next starts only inside the
-   five hours.
+   three hours.
 8. **Builds and Planned coverage** (even days). One piece of work a
    morning, the first of these that exists, run to its end:
    - a build or revision left mid-way, resumed from its
@@ -268,7 +268,7 @@ is left, the next morning picks up from the files.
    or newly tracked upstream, fixes merged upstream that still show,
    and anything step 3 left to the maintainer; reports refreshed and
    written, each with its severity and effort, the critical and high
-   first; the head of `npm run backlog` and what the five hours left;
+   first; the head of `npm run backlog` and what the three hours left;
    incidentals worked (deleted as
    already stated, folded with the spec and IDs, not reproduced), what
    is left, the build or revision worked (feature, gate reached, and on

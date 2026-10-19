@@ -15,7 +15,7 @@ not here. `docs/README.md` is the map of the documentation.
   read of `stable-3_5_0`; the **housekeeping session** reads
   `docs/tracking/incidentals.md`, `docs/tracking/friction.md` and
   `ci-triage.md`, works the queue `npm run backlog` prints for about
-  five hours, and writes the specs' defects up as issue reports in
+  three hours, and writes the specs' defects up as issue reports in
   `docs/issues/` ("Issue reports"). Check
   ci-triage FIRST when a CI failure is reported: one root cause often reds
   ojs, omp and ops as three messages.
