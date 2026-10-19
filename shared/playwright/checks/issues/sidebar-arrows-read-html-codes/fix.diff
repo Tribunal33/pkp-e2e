@@ -1,0 +1,35 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldOptions.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldOptions.vue
+@@ -94,7 +94,7 @@
+ 					<Orderer
+ 						v-if="isOrderable"
+ 						:item-id="option.value"
+-						:item-title="option.label"
++						:item-title="optionTitle(option.label)"
+ 						@up="optionOrderUp"
+ 						@down="optionOrderDown"
+ 					/>
+@@ -251,6 +251,23 @@
+ 	},
+ 	methods: {
+ 		/**
++		 * An option's label as plain text
++		 *
++		 * The label is HTML (the server escapes plugin names for it, and it is
++		 * printed with v-strip-unsafe-html), but the Orderer prints its title as
++		 * text, so `&quot;` would be read out as such. DOMParser builds an inert
++		 * document: no script runs and no image loads.
++		 *
++		 * @param {String} label The option's label (HTML)
++		 * @return {String}
++		 */
++		optionTitle(label) {
++			return new DOMParser()
++				.parseFromString(label ?? '', 'text/html')
++				.body.textContent.trim();
++		},
++
++		/**
+ 		 * Move an option up in the list
+ 		 *
+ 		 * @param {Number} optionValue The value of the option to move up

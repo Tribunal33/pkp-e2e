@@ -1243,7 +1243,7 @@ otherwise; the team settles them on spec review.
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | After a refused logo, removing it with the hidden "Remove file" still leaves the tab's "Save" disabled | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
 | [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
-| [A17](#a17) | Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&" | 🐞 | minor | — |
+| [A17](#a17) | Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A18](#a18) | A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages | 🐞 | minor | — |
 | [A20](#a20) | A removed journal thumbnail stays online at its old address | 🐞 | minor | — |
 | [A21](#a21) | A BMP logo or a misread style sheet shows "Saved", stores nothing and removes the one the journal had | 🐞 | user-visible | — |
@@ -1522,20 +1522,26 @@ picture is sent at all; the disabled controls are [A7](#a7)'s.)
 Basis: probe, 2026-10-07. <sup>f-a16</sup>
 
 <a id="a17"></a>
-**A17 — Screen readers hear `&quot;` and `&amp;` in the "Sidebar" arrows of a block whose label holds a double quote or "&"** · 🐞 · minor.
-On Settings › Website › Appearance › "Setup" › "Sidebar", a block's up
-and down arrows should be named after the block as its box shows it.
-Where the label holds a double quote or "&", the names carry it written
-as HTML code instead. With ""Developed By" Block"'s plugin enabled
-(Settings › Website › "Plugins"), a screen reader announces its arrows
-as `Increase position of &quot;Developed By&quot; Block` and `Decrease
-position of &quot;Developed By&quot; Block`. A custom block named "News 2026 & Events", whose box
-reads "news2026&-events (Custom Block)", gets `Increase position of
-news2026&amp;-events (Custom Block)` (that name is itself a fault:
-[Custom pages & blocks](U09-custom-pages-and-blocks.md#a13)). The tick
-box, whose name takes in the arrows' names ([A3](#a3)), carries the same
-codes. The visible labels are right. Basis: probe, 2026-10-05.
-<sup>f-a17</sup>
+**A17 — Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe** · 🐞 · low.
+On Settings › Website › Appearance › "Setup" › "Sidebar", a screen
+reader names each block's up and down arrows after the block. When the
+block's name holds a double quote, an apostrophe or "&", it hears the
+HTML code instead of the character: "Avancer la position de Bloc
+d&#039;abonnement" for "Bloc d'abonnement", "Increase position of
+&quot;Developed By&quot; Block". The block's tick box, whose name
+includes the arrows' names (a separate fault), carries the same codes.
+The likeliest case needs no setup: a journal or press used in French. On
+a new journal "Bloc d'abonnement" and "Bloc "Renseignements"" are on and
+listed under "Barre latérale", on a new press "Bloc d'informations". In
+English it needs a custom block named with "&" (read as `&amp;`) or a
+block plugin a manager turns on, such as ""Developed By" Block". The
+visible labels are right and the arrows work. The names were right until
+a 2023 change escaped the sidebar labels on the server (shipped since
+3.3.0-16 and 3.4.0-4). The fault is in one ui-library component, which
+passes the escaped label to the arrows as plain text. (A custom block's
+own name: [Custom pages & blocks A13](U09-custom-pages-and-
+blocks.md#a13); the tick box's name: [A3](#a3).)
+Basis: probe, 2026-10-19. <sup>f-a17</sup>
 
 <a id="a18"></a>
 **A18 — A "Custom" pattern with "S" prints "5th Oct 2026" on a library file but "5 Oct 2026" on a discussion's messages** · 🐞 · minor.
@@ -2455,6 +2461,7 @@ news2026&amp;-events (Custom Block)", the visible labels
 "news2026&-events (Custom Block)" and ""Developed By" Block". The custom
 block's row in the Custom Block Manager raised its script errors
 (Custom pages & blocks A13) during the walk; nothing else failed.
+Issue report: [docs/issues/U10-A17-sidebar-arrows-read-html-codes.md](../issues/U10-A17-sidebar-arrows-read-html-codes.md).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note j: ui-library `phpToLuxonFormat()` maps PHP's `S` to
