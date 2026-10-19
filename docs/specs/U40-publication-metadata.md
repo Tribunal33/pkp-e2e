@@ -2951,7 +2951,7 @@ from the issue. That override is no longer in OJS
 `classes/submission/Repository.php` (last touched by ojs `4ea46f5f35`,
 pkp/pkp-lib#12922; not traced further). Kept script
 `shared/playwright/checks/U40/I07/i07.js` (`PHASES=ojs1,stage`).
-Issue report: [docs/issues/U40-OJS1-published-early-version-language-change-refused.md](../issues/U40-OJS1-published-early-version-language-change-refused.md).
+Issue report: [pkp-e2e#1024](https://github.com/jardakotesovec/pkp-e2e/issues/1024) ([docs/issues/U40-OJS1-published-early-version-language-change-refused.md](../issues/U40-OJS1-published-early-version-language-change-refused.md)).
 
 <a id="fn-f-ojs2"></a>
 **f-ojs2 — OJS2 evidence.** Lean: not offered. The suggestions lookup
