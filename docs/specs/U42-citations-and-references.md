@@ -2875,7 +2875,7 @@ appears; it is not offered again with the box. The fix proposed for A14
 note q24, read from Chromium's accessibility tree; a screen reader
 itself was not run. Kept check `shared/playwright/checks/U42/I07b/i07b.js` (phases
 `l13`, `forms`).
-Issue report: [docs/issues/U42-A24-refused-box-message-not-announced.md](../issues/U42-A24-refused-box-message-not-announced.md).
+Issue report: [pkp-e2e#1025](https://github.com/jardakotesovec/pkp-e2e/issues/1025) ([docs/issues/U42-A24-refused-box-message-not-announced.md](../issues/U42-A24-refused-box-message-not-announced.md)).
 
 <a id="fn-f-a25"></a>
 **f-a25 — A25 evidence.** `ExtractPidsJob::handle()` returns early only
