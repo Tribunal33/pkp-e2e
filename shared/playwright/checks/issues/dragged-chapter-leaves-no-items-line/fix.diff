@@ -1,0 +1,22 @@
+--- a/lib/pkp/js/classes/features/OrderCategoryGridItemsFeature.js
++++ b/lib/pkp/js/classes/features/OrderCategoryGridItemsFeature.js
+@@ -58,6 +58,19 @@
+ 
+ 
+ 	/**
++	 * Keep each category's empty placeholder ("No Items") right under its
++	 * category while the list is being ordered: a dragged category moves
++	 * alone, its placeholder is a sibling element.
++	 * @inheritDoc
++	 */
++	$.pkp.classes.features.OrderCategoryGridItemsFeature.prototype.
++			updateOrderCallback = function(contextElement, event, ui) {
++		this.parent('updateOrderCallback', contextElement, event, ui);
++		this.gridHandler.updateEmptyPlaceholderPosition();
++	};
++
++
++	/**
+ 	 * @inheritDoc
+ 	 */
+ 	$.pkp.classes.features.OrderCategoryGridItemsFeature.prototype.

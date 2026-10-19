@@ -820,7 +820,7 @@ them on spec review.
 | [A8](#a8) | Chapter window promises an automatic license above a chapter's own License URL and on a published book | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | A book in a press's second language cannot get a chapter titled in that language alone | 🐞 | medium | — |
 | [A11](#a11) | In the wizard, "Order" pressed while the chapter list is being ordered opens the first step, "Upload Files" | 🐞 | minor | — |
-| [A12](#a12) | While ordering, a dragged chapter with no authors leaves its "No Items" line under another chapter | 🐞 | minor | — |
+| [A12](#a12) | Ordering a book's chapters: a dragged chapter with no authors leaves its "No Items" line under another chapter | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A13](#a13) | The wizard's Review panel "Chapters" keeps the old order after "Order" until the wizard is reloaded | 🐞 | minor | — |
 | [A1](#a1) | The assistant roles may change a published version's chapters, though not an unpublished one's | ❓ | minor | — |
 | [A9](#a9) | A chapter added to a published Edited Volume may stay without a license | ❓ | minor | — |
@@ -987,14 +987,17 @@ the list is being ordered.
 Basis: probe, 2026-10-08. <sup>f-a11</sup>
 
 <a id="a12"></a>
-**A12 — While ordering, a dragged chapter with no authors leaves its "No Items" line behind** · 🐞 · minor.
-After "Order", on the Chapters page or in the wizard, a chapter that has
-no authors is dragged to another place. Its "No Items" line stays where
-the chapter was, under the authors of the chapter that stood before it,
-as if it were that chapter's; the moved chapter has nothing under it.
-"Done" or "Cancel ordering" shows the line under its own chapter again,
-and the saved order is right. Expected: the line moves with its chapter.
-Basis: probe, 2026-10-08. <sup>f-a12</sup>
+**A12 — Ordering a book's chapters: a dragged chapter with no authors leaves its "No Items" line under another chapter** · 🐞 · low.
+While a press editor orders a book's chapters ("Order" on the Chapters
+page), a chapter that has no authors is dragged to another place. Its
+"No Items" line does not move with it: the line stays where the chapter
+was, right under the author rows of the chapter that stood just above it
+before the drag. That chapter then shows its authors followed by "No
+Items", and the moved chapter shows nothing under its title. "Done"
+draws the line under its own chapter again, and the order it saves is
+right. The fault shows only on a book that has a chapter without
+authors.
+Basis: probe, 2026-10-19. <sup>f-a12</sup>
 
 <a id="a13"></a>
 **A13 — The wizard's Review panel "Chapters" keeps the old order after "Order"** · 🐞 · minor.
@@ -1955,6 +1958,7 @@ the ordering script (note l) makes only the first sortable, so the
 placeholder stays behind until the list is drawn again. Live-probed
 2026-10-08 on OMP `main`, three runs, on the Chapters page and in the
 wizard: note td20.
+Issue report: [docs/issues/U72-A12-dragged-chapter-leaves-no-items-line.md](../issues/U72-A12-dragged-chapter-leaves-no-items-line.md).
 
 <a id="fn-f-a13"></a>
 **f-a13** — Note h: the panel changes only on the three chapter events,
