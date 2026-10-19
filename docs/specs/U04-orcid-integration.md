@@ -879,6 +879,7 @@ the application log, and only its informational entries are written
 instead. The deposits and token cancellations that run in the background
 write no informational entries at either level. (Fields; Side effects)
 Basis: probe, 2026-10-16. <sup>[f-a16](#fn-a16)</sup>
+Report: paused — written and read 2026-10-19, held for the maintainer's call before it is published (2026-10-19)
 
 <a id="a17"></a>
 **A17 — Saving a journal's locked ORCID tab leaves ORCID on, with no Client ID, after the site-wide ORCID switch is turned off** · 🐞 · medium.
