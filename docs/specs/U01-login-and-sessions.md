@@ -326,6 +326,14 @@ Login, the site's name stands in for the journal's), but after a refused
   from whom a review's anonymity already hides the entry's reviewer; they
   see the target's name alone. The log screen itself belongs to the
   *Submission activity log & notes* feature.
+- **Audit lines** (no screen shows them). When the audit log is switched
+  on, a sign-in writes "User logged in successfully" and a "Logout"
+  writes "User logged out" to the log *Settings* names, each naming the
+  account, its network address and the address of
+  the page asked for. A session the app ends because the account's
+  password was changed in another browser (see [User profile](U03-user-profile.md), its Rule 10b)
+  is written as "User forcibly logged out after a session IP address
+  change", though the address did not change ⚠ [A17](#a17). <sup>o</sup>
 
 ## Settings that modify behavior
 
@@ -354,6 +362,10 @@ Login, the site's name stands in for the journal's), but after a refused
   features (see *Cross-feature interactions*). <sup>m</sup>
 - **Idle session lifetime.** `session_lifetime` (default 7 days) in the
   configuration file's general section. <sup>m</sup>
+- **Security audit log.** `log_audit = On` in the configuration file's
+  `[logs]` section, off by default, writes the "Audit lines" of *Side
+  effects* to the log its `log_channel` names: the PHP error log on the
+  test install. <sup>o</sup>
 - **Spam checks on login and lost-password.** The configuration file's
   captcha section decides whether the login form carries reCAPTCHA or the
   invisible ALTCHA check (`captcha_on_login` / `altcha_on_login`), and
@@ -703,6 +715,7 @@ Left out of the scenarios above, by reason:
 - **Register carries it**:
   - A5 (no journal-level users screen offering the forced-change flag; Rule 11a)
   - A16 (a search on a page left open after its session ended refused with an alert or an "Error" window instead of the Login page; Rules 5a, 18)
+  - A17 (a session ended by a password change in another browser logged as an IP address change; *Side effects*, "Audit lines")
 - **No seed**:
   - the Site Administrator passing Confirm Access (Actors row "Pass the Confirm Access gate"): what is missing is a per-context way to set the re-authentication window; the configuration file's `password_timeout` is run-global
   - Confirm Access's window lapse, no replay, and the direct address going home (Rule 16): the same missing window setting
@@ -715,12 +728,13 @@ Left out of the scenarios above, by reason:
   - a session ending at browser close (Settings, `session_expire_on_close`)
   - forced https for login or the site (Settings, `force_login_ssl`, `force_ssl`)
   - the idle session lifetime (Settings, `session_lifetime`)
+  - the audit lines a sign-in and a "Logout" write with the audit log on (*Side effects*; Settings, `log_audit`): the switch sits in the configuration file and holds for the whole run, and no screen shows the log
   - on a preprint server, a flagged account signing in at the site-level Login page and, on completing "Change Password", landing on the site home page (Rule 11): what is missing is a way to seed a flagged account; a preprint server has no "Create New Reviewer" to flag one, as scenario 6 does (Rule 11a)
 - **Owned by another feature**:
   - the sentence above the Login form for a galley that needs a subscription (Rule 4a; *[Subscriptions](U51-subscriptions.md)*, scenario 1)
   - the Site Administrator's "Add User" flagging a new account, whose first sign-in diverts to "Change Password" (Rule 11a; *[Users management](U53-users-management.md)*, scenario 7)
   - the "Expire User Sessions" tool ending every session (Rule 18; *System administration & jobs*)
-  - an action taken while impersonating carrying the target's name, and its activity-log line "{impersonator} (acting as {target})" (Side effects): no action of this feature writes a log entry; the actions belong to the workflow stages and the log screen to *Submission activity log & notes*
+  - an action taken while impersonating carrying the target's name, and its activity-log line "{impersonator} (acting as {target})" (Side effects): no action of this feature writes a submission activity-log entry; the actions belong to the workflow stages and the log screen to *Submission activity log & notes*
   - spam checks on login and lost-password (Settings; *Registration & account validation*)
   - registration disabled removing the Register links (Settings; *Roles configuration*)
 
@@ -744,6 +758,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
 | [A15](#a15) | "Login As" ends and a save made as the user is silently lost when that user first signs in after an upgrade | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A16](#a16) | A back-office page left open after its session ended answers a search with an alert or an "Error" window that does not say the user is signed out, instead of the Login page | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
+| [A17](#a17) | With the audit log on, a session ended by a password change in another browser is logged as an IP address change, the same address given as old and new | 🐞 | invisible | — |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
@@ -1038,6 +1053,19 @@ After a password change in another browser, a Profile page open here
 behaves as [User profile A25](U03-user-profile.md#a25) and
 [A26](U03-user-profile.md#a26) record.
 Basis: probe, 2026-10-19. <sup>[f-a16](#fn-a16)</sup>
+
+<a id="a17"></a>
+**A17 — The audit log records a session ended by a password change as an IP address change** · 🐞 · invisible.
+With the audit log on (see *Settings*), a session the app ends
+because the account's password was changed in another browser (Profile
+› Password) is recorded as "User forcibly logged out after a session IP
+address change", with the same address given as both the old and the
+new one. The line should say that a password change ended the session;
+it reports an address change that did not happen. A plain "Logout" is
+recorded as "User logged out". When the Site Administrator sets a new
+password on "Edit User" (Rule 11a), only "User password reset by an administrator"
+is written, and the account's sessions it ends get no line of their own.
+Since: 2026-08-12 (pkp/pkp-lib#12336) · Basis: probe, 2026-10-19. <sup>[f-a17](#fn-a17)</sup>
 
 ### Retired
 
@@ -1493,6 +1521,33 @@ limiting", fields "Maximum attempts" (pre-filled 5) and "Lockout duration
 (seconds)" (pre-filled 300). Correct-password refusal inside the
 cool-down: finding A6.
 
+<a id="fn-o"></a>
+**o** — Audit log: `PKP\security\AuditLog::log()` writes only when
+`[logs] log_audit` is on (commented out, so off, on a fresh install and
+in the test datasets). With the test datasets' `log_channel = errorlog`
+the lines land in the server's error log as `production.<LEVEL>:
+<message> {event, status, userId, ip, requestUrl…}`. A sign-in:
+`Validation` logs `AuditEvent::AUTH_LOGIN` ("User logged in
+successfully", `authn_login_success`, INFO); "Logout": `AUTH_LOGOUT`
+("User logged out", `session_logout`, INFO, from `login/signOut`); the
+forced end: finding A17 (note f-a17). Live-probed 2026-10-19 (Side
+effects; OJS, OMP, OPS on `main`, two runs each; PKP's default test
+dataset with `log_audit = On` set in the dataset's configuration; kept
+script `shared/playwright/checks/U01/H19/cc19l.js`): every sign-in wrote
+the login line and a "Logout" the logout line, the Login page then
+holding the account's email in "Username or Email" (Rule 6). The two
+password changes around them wrote their own lines: a Profile › Password
+save `NOTICE Password changed` (`authn_password_change`, *User
+profile*'s), the Site Administrator's "Edit User" `NOTICE User password
+reset by an administrator` (`user_password_reset`, *Users management*'s).
+Read from the code only, not driven: `LoginHandler` also logs a refused
+sign-in (`AUTH_LOGIN_FAILED`, `AUTH_LOGIN_DISABLED`), a reset request and
+a dead reset link (`AUTH_PASSWORD_RESET_REQUEST`,
+`AUTH_PASSWORD_RESET_INVALID`), and Login As starting, ending or refused
+(`SESSION_IMPERSONATE_START`, `SESSION_IMPERSONATE_END`,
+`SESSION_IMPERSONATE_DENIED`). `stable-3_5_0` has no audit log (note
+f-a17).
+
 <a id="fn-s"></a>
 **s** — Scenario seeding: the seeded test journal/press/server
 (`publicknowledge`) and roster accounts (passwords = username doubled;
@@ -1941,7 +1996,48 @@ empties. Code: an older-style list's request refused by its access check
 gets `PKPComponentRouter::handleAuthorizationFailure()` → `JSONMessage(false, …)`,
 the same on `stable-3_4_0` and `stable-3_3_0` (code read, not walked);
 the API's answer there was not read.
+Live-probed 2026-10-19 (Rule 18; OJS, OMP, OPS on `main`, two runs
+each; PKP's default test dataset, `dbarnes` on the Dashboard in one
+browser while the same account saved a new password on Profile ›
+Password in another; kept script `shared/playwright/checks/U01/H19/cc19l.js`):
+the open Dashboard's own count request (`GET api/v1/_submissions/viewsCount`)
+answered `302` to `login?source=` that API address, a third answer
+beside the `200` refusal and the `401` above; it is the request that
+writes finding A17's audit line (note f-a17). What the open Dashboard
+showed in response was not read: the walk moved that browser to a new
+page next (the Login page). A look at that Dashboard a few seconds after
+the save, before any navigation, would settle it.
 Issue reports (two causes): [pkp-e2e#1015](https://github.com/jardakotesovec/pkp-e2e/issues/1015) ([docs/issues/U01-A16-plugins-search-after-session-ended-role-alert.md](../issues/U01-A16-plugins-search-after-session-ended-role-alert.md)) (the older lists, tabs and forms: the role alert); [pkp-e2e#1016](https://github.com/jardakotesovec/pkp-e2e/issues/1016) ([docs/issues/U01-A16-users-search-after-session-ended-error-window.md](../issues/U01-A16-users-search-after-session-ended-error-window.md)) (the newer lists: the "Error" window).
+
+<a id="fn-a17"></a>
+**f-a17** — Laravel's `AuthenticateSession::handle()` calls
+`$this->logout()` when the password hash kept in the session no longer
+matches the account's (note f-a15). `PKPAuthenticateSession` overrides
+`logout()` for its own `session_check_ip` test (note m) and logs
+`AuditEvent::AUTH_LOGOUT_IP_CHANGE` (`session_expired`, WARNING, with
+`oldIp`/`newIp`) for both callers. The Site Administrator's "Edit User"
+save calls `invalidateOtherSessions()`, which deletes the account's
+session rows, so no middleware logout runs for them. The audit log came
+with pkp/pkp-lib#12336 (pkp-lib `b3a6443a1e`, committed 2026-08-12, and
+`8a586abc5a` the same day naming the events); `stable-3_5_0` has no
+audit log (no `AuditLog` class, and its `PKPAuthenticateSession::logout()`
+writes nothing; code read). Live-probed 2026-10-19 (OJS, OMP, OPS on
+`main`, lib/pkp `042726ebf6`; two runs each; PKP's default test dataset
+with `log_audit = On`; `dbarnes` signed in on the Dashboard in browser
+B; kept script `shared/playwright/checks/U01/H19/cc19l.js`): after
+`dbarnes` saved a new password on Profile › Password in browser A ("Your
+changes have been saved."), B's session row was still there; B's
+Dashboard count request `GET api/v1/_submissions/viewsCount` then wrote
+`WARNING User forcibly logged out after a session IP address change`
+(`session_expired`, `status` `denied`, `userId` 3, `oldIp` and `newIp`
+both `127.0.0.1`), and B's next page was the Login page. With `admin`
+setting the password on the Hosted Journals settings wizard's "Edit
+User" instead, every `dbarnes` session row was gone at the save, the
+only line was `NOTICE User password reset by an administrator`
+(`user_password_reset`, `userId` 1, `targetUserId` 3), and B's next page
+was the Login page with no line for it. Control: B's own "Logout" wrote
+`INFO User logged out` (`session_logout`). No server error beyond the
+known Plugin Gallery list behind the test configuration's dead proxy.
 
 ## Reference — entry points & surfaces
 
