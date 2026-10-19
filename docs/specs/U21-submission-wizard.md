@@ -1098,7 +1098,7 @@ are the source; badges, Impact and Basis:
 | [A14](#a14) | A section editor who is also an author is offered "Submit As: Section editor", and "Begin Submission" refuses it | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [A16](#a16) | In the submission wizard, a plain language summary over the word limit is refused with an unexplained "Error" | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A18](#a18) | Submission wizard saves a field cut off mid-typing when the author starts typing after a quiet minute | 🐞 | medium | issues (claude), 2026-10-01 — re-verified |
-| [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-01 — re-verified |
+| [A19](#a19) | After the server refuses one save, the submission wizard hangs on "Saving" and the author cannot submit | 🐞 | medium · crash: script | issues (claude), 2026-10-19 — re-verified |
 | [A20](#a20) | Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang | 🐞 | high · crash: script | issues (claude), 2026-10-01 — re-verified |
 | [A21](#a21) | "Submit As" preselects another role for an editor who is also an author once their editorial role is saved | 🐞 | low | issues (claude), 2026-10-15 — re-verified |
 | [A22](#a22) | On a phone, "Make a Submission" squeezes the "Title" box to nothing, so no submission can be started | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
@@ -1394,20 +1394,23 @@ When the server refuses one of a step's saves, whatever the field, the
 wizard shows its "Error" dialog, and about four seconds later the page's
 own script fails in the browser. From then on the footer reads "Saving",
 nothing more is sent, both "Save for Later" buttons and "Submit" stay
-disabled, and "Review" never gets past "Checking your submission".
-The author's only way on is to reload the page. The reload drops the
-refused change. Anything typed after it is offered back in an "Unsaved
-Changes" dialog, and "Yes" saves it. A lost connection or a server
-failure is retried and recovers; only a refusal hangs.
-Today the server refuses a wizard save in four cases: the plain
-language summary is required (some saves of other fields); the plain
-language summary is longer than the section's word limit; on a preprint server,
-"DOI of the published preprint" is typed without its web address; on a
-press, any save of a submission made as "Chapter Author".
-([A20](#a20), [A16](#a16),
-[→ Preprint relations A7](U75-preprint-relations.md#a7), [OMP4](#omp4).)
-Basis: probe, 2026-10-01. <sup>[fn-a19](#fn-a19)</sup>
-Report: refresh owed — a fourth refusal joins the report's three: on a press, every save of a submission made as "Chapter Author" (OMP4, seen 2026-10-19), which widens main OMP's reach beyond the plain language summary cases (2026-10-19)
+disabled, and "Review" never gets past "Checking your submission". The
+author's only way on is to reload the page. The reload drops the refused
+change, and offers what was typed after it in an "Unsaved Changes"
+dialog. "Yes" sends it again; when it holds a form the server still
+refuses, the wizard hangs again. A lost connection or a server failure
+is retried and recovers; only a refusal hangs. Today the server refuses
+a wizard save in four cases: - `main` only: the journal, press or server
+requires the plain language summary, and a form without the summary is
+saved: "References", a field on "For the Editors", on a preprint server
+"Relation status", and "Details" while its summary box is empty; -
+`main` only, journals and preprint servers: the summary is longer than
+the section's abstract word limit; - preprint servers, `main`, 3.5 and
+3.4: "DOI of the published preprint" is typed without its web address; -
+presses, `main` and 3.5: any save of a submission made as "Chapter
+Author". ([A20](#a20), [A16](#a16), [→ Preprint relations
+A7](U75-preprint-relations.md#a7), [OMP4](#omp4).)
+Basis: probe, 2026-10-19. <sup>[fn-a19](#fn-a19)</sup>
 
 <a id="a20"></a>
 **A20 — Requiring a plain language summary makes the submission wizard refuse saves of other fields, and hang** · 🐞 · high · crash: script.

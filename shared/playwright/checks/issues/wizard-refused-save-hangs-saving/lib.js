@@ -111,4 +111,23 @@ async function readControls(page) {
     };
 }
 
-module.exports = {T, sleep, flat, endAnchored, watchFooter, requirePlainLanguageSummary, typeRich, beginSubmission, footer, current, currentStep, pressContinue, pressBack, readControls};
+/** As admin: Administration › "Hosted Presses" › the press's "Settings wizard" › "Users", "Edit User", tick the role, "OK".
+ *  Copied from checks/U21/H19/chapter-author-holder.js. Returns the user's row as the grid shows it after. */
+async function giveRole(page, app, username, role) {
+    const {HostedContextsPage, UserDetailsWindow} = require('../../../pages/UsersManagementPages.js');
+    const hosted = new HostedContextsPage(page, {hostedLabel: 'Hosted Presses'});
+    await hosted.gotoFromAdministration();
+    await hosted.openSettingsWizard(app.contextPath);
+    const grid = await hosted.openWizardTab('Users');
+    await grid.search({text: username, includeNoRole: true});
+    await grid.chooseAction(username, 'Edit User');
+    const win = new UserDetailsWindow(page, 'Edit User');
+    await win.expectOpen();
+    await win.roleBox(role).check();
+    await win.pressOk();
+    await win.expectClosed();
+    await idle(page).catch(() => {});
+    return (await grid.rowCells(username).catch(() => [])).join(' | ');
+}
+
+module.exports = {giveRole, T, sleep, flat, endAnchored, watchFooter, requirePlainLanguageSummary, typeRich, beginSubmission, footer, current, currentStep, pressContinue, pressBack, readControls};

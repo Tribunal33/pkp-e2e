@@ -8,23 +8,30 @@
 //
 //   npm run fleet-prep -- --feature issues-ir23 --dataset 1 --reset
 //   PROBE_FEATURE=issues-ir23 PROBE_AGENT=ir23 node bin/probe.js all shared/playwright/checks/issues/wizard-refused-save-hangs-saving/walk.js
-//   (MODE=neighbour in front for the neighbour check; PKP_E2E_LINE=stable-3_5_0 and the line's fleet for 3.5)
+//   (MODE=neighbour in front for the neighbour check; PKP_E2E_LINE=stable-3_5_0 and the line's fleet for 3.5;
+//   REFUSAL=chapter ... node bin/probe.js omp ... for the Chapter Author refusal)
 const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, idle} = require('../../../probe');
 const L = require('./lib.js');
 
 const MODE = process.env.MODE || 'walk';
 // REFUSAL=vordoi (OPS; used on 3.5, which has no plain language summary): the refused save is the "Relation status"
 // form's, "This preprint has been published elsewhere." with a DOI typed without its web address (U75 A7).
+// REFUSAL=chapter (OMP): admin gives skumar (a Proofreader) "Chapter Author", a role without the Submission stage, and
+// skumar submits; every save of that submission is refused (U21 OMP4). Step 5 types the title and the abstract on
+// "Details", step 7 a new abstract.
 const REFUSAL = process.env.REFUSAL || 'pls';
 const BARE_DOI = '10.1234/u21ir23';
 const DOI_URL = 'https://doi.org/10.1234/u21ir23';
 const ABSTRACT = 'u21ir23 abstract typed by the author.';
 const SUMMARY = 'u21ir23 summary typed after the refusal.';
 const ABS_ID = 'titleAbstract-abstract-control-en';
+const TITLE_ID = 'titleAbstract-title-control-en';
+const ABSTRACT_AFTER = 'u21ir23 abstract typed after the refusal.';
 const PLS_ID = 'titleAbstract-plainLanguageSummary-control-en';
 
 forEachApp(async (app) => {
-    const author = app.name === 'omp' ? 'aclark' : 'ccorino';
+    if (REFUSAL === 'chapter' && app.name !== 'omp') return;
+    const author = REFUSAL === 'chapter' ? 'skumar' : app.name === 'omp' ? 'aclark' : 'ccorino';
     const o = {app: app.name, line: app.line || 'main', mode: MODE, author};
     const {page, close} = await launch(app);
     await page.addInitScript(L.watchFooter);
@@ -52,7 +59,7 @@ forEachApp(async (app) => {
     const snap = async (name, facts) => {
         const s = await screen(page).catch((e) => ({url: page.url(), error: L.flat(e.message)}));
         if (facts) s.facts = facts;
-        const id = `${MODE}-${String(++n).padStart(2, '0')}-${name}`;
+        const id = `${MODE}${REFUSAL === 'pls' ? '' : '-' + REFUSAL}-${String(++n).padStart(2, '0')}-${name}`;
         record(id, s);
         await shot(page, id).catch(() => {});
         return s;
@@ -68,14 +75,23 @@ forEachApp(async (app) => {
             await snap('metadata-settings');
             await signOut(page);
         }
+        if (REFUSAL === 'chapter') {
+            await signIn(page, 'admin');
+            o.roleRow = await L.giveRole(page, app, 'skumar', 'Chapter Author');
+            await snap('chapter-author-given');
+            await signOut(page);
+        }
 
         // 1-3: the author starts a submission.
         await signIn(page, author);
         o.submissionId = await L.beginSubmission(page, app, {title: 'u21ir23 refused save', section: 'Articles'});
         o.firstStep = await L.currentStep(page);
+        o.startWrites = writes(0);
+        o.heading = L.flat(await page.locator('main h1, .pkpHeader__title, h1').first().innerText().catch(() => null), 160);
         // 4: past "Upload Files".
         if (/Upload Files\s*$/.test(o.firstStep)) await L.pressContinue(page); // 3.5 OPS opens on "Details"
         o.detailsStep = await L.currentStep(page);
+        if (REFUSAL === 'chapter') await L.typeRich(page, TITLE_ID, 'u21ir23 refused save');
         await L.typeRich(page, ABS_ID, ABSTRACT);
         if (REFUSAL === 'pls') await loc(page, 'Details: the Plain Language Summary editor', page.locator(`#${PLS_ID}_ifr`));
         const published = page.getByRole('radio', {name: 'This preprint has been published elsewhere.', exact: true});
@@ -130,14 +146,19 @@ forEachApp(async (app) => {
         // 7: Back to the refused step, the field corrected, Continue.
         await L.pressBack(page, refusedStep);
         if (REFUSAL === 'vordoi') await doiBox.fill(DOI_URL);
+        else if (REFUSAL === 'chapter') await L.typeRich(page, ABS_ID, ABSTRACT_AFTER);
         else await L.typeRich(page, PLS_ID, SUMMARY);
         const t1 = Date.now();
         await L.pressContinue(page);
         await L.sleep(8000);
         o.step7 = {writes: writes(t1), controls: await L.readControls(page), pageErrors: errsSince(t1), footer: await footerLog(t1)};
+        o.step7.errorDialog = await errDialog().isVisible().catch(() => false);
         await snap('summary-continue', o.step7);
+        // With a fix in, a save refused again opens the dialog again: OK it, as the author would.
+        const okDialog = async () => { if (await errDialog().isVisible().catch(() => false)) await errDialog().getByRole('button', {name: 'OK', exact: true}).click().catch(() => {}); };
+        await okDialog();
         // 8: on to Review.
-        for (let i = 0; i < 6 && !L.endAnchored('Review').test(await L.currentStep(page)); i++) await L.pressContinue(page);
+        for (let i = 0; i < 6 && !L.endAnchored('Review').test(await L.currentStep(page)); i++) { await L.pressContinue(page); await L.sleep(1500); await okDialog(); }
         o.reviewStep = await L.currentStep(page);
         await L.sleep(8000);
         const rv = await snap('review');
@@ -164,7 +185,7 @@ forEachApp(async (app) => {
         await page.locator('button.pkpSteps__step__label').filter({hasText: L.endAnchored('Details')}).first().click().catch(() => {});
         await page.locator(`#${ABS_ID}_ifr`).waitFor({timeout: L.T}).catch(() => {});
         await L.sleep(1500);
-        o.reload.readBack = {abstract: await richText(ABS_ID), summary: REFUSAL === 'pls' ? await richText(PLS_ID) : undefined, controls: await L.readControls(page)};
+        o.reload.readBack = {abstract: await richText(ABS_ID), summary: REFUSAL === 'pls' ? await richText(PLS_ID) : undefined, title: REFUSAL === 'chapter' ? await richText(TITLE_ID) : undefined, controls: await L.readControls(page), footer: await footerLog(t2)};
         if (REFUSAL === 'vordoi') {
             await page.locator('button.pkpSteps__step__label').filter({hasText: L.endAnchored(refusedStep)}).first().click().catch(() => {});
             await L.sleep(1500);
@@ -178,7 +199,7 @@ forEachApp(async (app) => {
     } finally {
         o.allWrites = writes(0);
         o.allPageErrors = errs.map((x) => x.text);
-        record(`facts-${MODE}`, o);
+        record(`facts-${MODE}${REFUSAL === 'pls' ? '' : '-' + REFUSAL}`, o);
         console.log(`[ir23 ${app.name} ${MODE}]`, JSON.stringify(o).slice(0, 3000));
         await close();
     }

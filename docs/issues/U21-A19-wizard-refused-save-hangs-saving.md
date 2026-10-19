@@ -6,14 +6,20 @@
 - **Crash** script
 - **Affects**
   - main: OJS, OMP, OPS
-  - 3.5: OPS; OJS, OMP latent (code)
+  - 3.5: OMP, OPS; OJS latent (code)
   - 3.4: OPS (code); OJS, OMP latent (code)
   - 3.3: none (code; no autosaving wizard)
 - **Introduced** `pkp/ui-library#241` for `pkp/pkp-lib#7191` · [467034aa4](https://github.com/pkp/ui-library/commit/467034aa4171bca0c46fa9e0e4b8b8dcdaa7cee2) · 2022-10-31 · Alec Smecher (asmecher), PR author; commit by Nate Wright (NateWr)
-- **Upstream** none found (2026-10-01)
-- **Tracked in** spec U21 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a19); spec U75 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U75-preprint-relations.md#a7) (the hang after the refused DOI)
-- **Checked** 2026-10-01, each branch's tip (the commits in Evidence)
+- **Upstream** none found (2026-10-19)
+- **Tracked in** spec U21 [A19](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#a19), [OMP4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#omp4) (the hang after a Chapter Author's refused save); spec U75 [A7](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U75-preprint-relations.md#a7) (the hang after the refused DOI)
+- **Checked** 2026-10-19, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-19: on a press, every save of a submission made in the
+"Chapter Author" role is refused, so that author meets this hang on the
+first save, on `main` and 3.5. With a required plain language summary,
+"Yes" after the reload can replay a refused form and hang the wizard
+again. The cause and the fix are unchanged.
 
 ## Summary
 
@@ -24,38 +30,60 @@ nothing more is sent, both "Save for Later" buttons and "Submit" stay
 disabled, and "Review" never gets past "Checking your submission".
 
 The author's only way on is to reload the page. The reload drops the
-refused change. Anything typed after it is offered back in an "Unsaved
-Changes" dialog, and "Yes" saves it. A lost connection or a server
+refused change, and offers what was typed after it in an "Unsaved
+Changes" dialog. "Yes" sends it again; when it holds a form the server
+still refuses, the wizard hangs again. A lost connection or a server
 failure is retried and recovers; only a refusal hangs.
 
-Today the server refuses a wizard save in three cases:
+Today the server refuses a wizard save in four cases:
 
-- the plain language summary is required and still empty;
-- the plain language summary is longer than the section's word limit;
-- on a preprint server, "DOI of the published preprint" is typed without
-  its web address.
+- `main` only: the journal, press or server requires the plain language
+  summary, and a form without the summary is saved: "References", a
+  field on "For the Editors", on a preprint server "Relation status",
+  and "Details" while its summary box is empty;
+- `main` only, journals and preprint servers: the summary is longer than
+  the section's abstract word limit;
+- preprint servers, `main`, 3.5 and 3.4: "DOI of the published preprint"
+  is typed without its web address;
+- presses, `main` and 3.5: any save of a submission made as "Chapter
+  Author".
 
 ## Impact
 
-- **Lost**: the refused change. The browser keeps each step's form
-  whole, so the refused field comes back after the reload only when the
+- **Lost**: the refused change. Each stored save holds its step's whole
+  form, so the refused field comes back after the reload only when the
   author changed something else on that same step after the refusal.
-  Everything else typed after the refusal is offered back by "Unsaved
-  Changes".
-- **Who**: the plain language summary cases need a journal, press or
-  server that asks for the summary, a setting that exists on `main`
-  only and is off by default. The word-limit case needs a section with
-  an abstract word limit, which also caps the summary (journals and
-  preprint servers). On a preprint server, every author who says the
+- **Who**: the required-summary case needs a manager who chose
+  "Require" for the summary, and the word-limit case one who turned the
+  summary on and gave a section an abstract word limit; the summary is
+  off by default. Every author on a preprint server who says the
   preprint is published elsewhere is asked for that DOI, and the box
-  does not say it wants a web address.
-- **Way round**: reload, as the dialog says, answer "Yes" in "Unsaved
-  Changes", and type the refused field again in a shape the server
-  accepts: a summary, or the DOI as `https://doi.org/…`.
+  does not say it wants a web address. On a press, a
+  submitter is made a "Chapter Author" when that is their only author
+  role, or when they hold no submitting role after a manager edited the
+  "Author" role; every save they make is refused, and they cannot
+  finish the submission.
+- **Way round**: reload, as the dialog says, then:
+  - a summary over the limit, or a bare DOI: correct the field before
+    the reload (a shorter summary; the DOI as `https://doi.org/…`) and
+    answer "Yes", or answer "No, discard unsaved changes" and type it
+    again;
+  - a required summary: answer "No, discard unsaved changes" when the
+    refused form is offered. "References", the "For the Editors" field
+    and "Relation status" stay empty: the server refuses them whatever
+    is typed;
+  - a Chapter Author: none, since every save is refused.
 
 Medium: the author cannot save or submit until they reload, but the
-error dialog tells them to reload, and the reload gets them going again.
-It would be high if a refusal were part of every ordinary submission.
+error dialog tells them to reload, and the reload, with "No" where the
+form would be refused again, gets them going. It would be high if a
+refusal were part of every ordinary submission. What a Chapter Author
+and a required summary still lose after the reload is lost to the
+refusal itself, which
+[U21 A20's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U21-A20-plain-summary-required-refuses-other-saves.md)
+and
+[U21 OMP4](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U21-submission-wizard.md#omp4)
+cover; this report's fix ends the hang.
 
 ## Steps to reproduce
 
@@ -77,8 +105,9 @@ Steps:
 1. Sign in as `ccorino` (OJS, OPS) or `aclark` (OMP), an author.
 2. Open "Make a Submission" (`/index.php/publicknowledge/en/submission`).
 3. Type the title "u21ir23 refused save", choose the section "Articles"
-   (OJS), tick the requirements and privacy boxes, press "Begin
-   Submission".
+   (OJS), choose "English" (all three apps: the dataset's contexts take
+   submissions in English and French), tick the requirements and
+   privacy boxes, press "Begin Submission".
 4. On "Upload Files" press "Continue".
 5. On "Details" type "u21ir23 abstract typed by the author." in
    "Abstract", leave "Plain Language Summary" empty, press "Continue".
@@ -91,8 +120,8 @@ Steps:
 On 3.5 (walked on OPS), which has no plain language summary, skip the
 precondition and refuse the DOI instead:
 
-1. Sign in as `ccorino`, open "Make a Submission", type the title, tick
-   both boxes, press "Begin Submission". The wizard opens on "Details".
+1. Sign in as `ccorino`, open "Make a Submission", type the title,
+   choose "English", tick both boxes, press "Begin Submission". The wizard opens on "Details".
 2. Press "Continue" until "For Readers".
 3. Choose "This preprint has been published elsewhere.", type
    "10.1234/u21ir23" in "DOI of the published preprint", press
@@ -102,13 +131,33 @@ precondition and refuse the DOI instead:
    press "Continue".
 6. Reload the page.
 
+A Chapter Author on a press, OMP `main` or 3.5. Instead of the summary
+precondition, as `admin`, Administration › "Hosted
+Presses", the arrow by "publicknowledge", "Settings wizard", "Users",
+search "skumar" (a Proofreader with no author role), the row's arrow,
+"Edit User", tick "Chapter Author", "OK". Then:
+
+1. Sign in as `skumar`, open "Make a Submission", type the title
+   "u21ir23 refused save", choose "English", tick both boxes, press
+   "Begin Submission". The wizard opens on "Upload Files" with no title
+   (on 3.5 it opens on "Details"; skip step 2).
+2. On "Upload Files" press "Continue".
+3. On "Details" type "u21ir23 refused save" in "Title" and "u21ir23
+   abstract typed by the author." in "Abstract", press "Continue".
+4. Press "OK" in the "Error" dialog and wait 20 seconds.
+5. Press "Back", type "u21ir23 abstract typed after the refusal." in
+   "Abstract", press "Continue".
+6. Press "Continue" until "Review".
+7. Reload the page and answer "Yes" in "Unsaved Changes".
+
 **Expected**: after the refused "Continue" the wizard keeps working. The
 footer goes back to its "Last saved …" line, the correction typed
 afterwards is saved, both "Save for Later" buttons stay enabled, and
 "Review" finishes its check and lists what is still missing (on `main`,
-the title and the file).
+the title and the file). For the Chapter Author the change typed after
+the refusal is sent (and refused).
 
-**Observed**: step 5's save is refused, the wizard still moves on to
+**Observed**: in the first group, step 5's save is refused, the wizard still moves on to
 "Contributors" and the dialog opens:
 
 ```
@@ -138,6 +187,19 @@ form as it stood after step 7, with both the abstract and the summary,
 and the server saves it (200). On 3.5 OPS the refusal reads
 `{"vorDoi":["This is not a valid URL."]}`, and the rest is the same.
 
+The Chapter Author's step 3 is refused the same way, and from there the
+hang is the same, step 5 sending nothing:
+
+```
+PUT …/api/v1/submissions/19/publications/19  → 401
+{"error":"user.authorization.accessibleWorkflowStage","errorMessage":"You don't currently have access to that stage of the workflow."}
+```
+
+In step 7, "Yes" sends the "Details" form as it stood after step 5. It is
+refused with the same 401, the "Error" dialog opens again, and four
+seconds later the same page error leaves the footer on "Saving" for
+good. The same on 3.5.
+
 Control: the same "Continue" made while the browser is offline shows
 "Reconnecting". Once the browser is back online the save is retried
 after 4 seconds and answered 200, "Last saved 4 seconds ago", and both
@@ -152,8 +214,9 @@ in ui-library `mixins/autosave.js` `_sendAutosave()`. For every status,
 `SubmissionWizardPage.vue` `autosaveErrored()`. That method returns at
 once for 0 and 500, which leaves the payload to be retried. For any
 other status it calls `ajaxErrorCallback({})`, which shows the generic
-"An unexpected error has occurred…" dialog; a 403 differs only in that
-the payload stays stored, and only the method's comment speaks of
+"An unexpected error has occurred…" dialog. A 403 gets the same dialog
+but keeps the payload stored for a retry; nothing on screen asks the
+author to sign in, only the method's comment speaks of
 signing in again. For a refusal it removes that form's stored saves,
 since sending them again cannot succeed. But it never clears
 `isDisconnected`. Its own `this.isDisconnected = true` changes nothing,
@@ -169,7 +232,8 @@ gone and nothing else is waiting, so it passes `undefined`.
 `this.isAutosaving = true`, then throws on `payload.url`. No request
 goes out, so no callback clears those flags or `isDisconnected`.
 
-Everything waits on those three flags:
+Everything waits on those three flags (two of them component data,
+`isAutosaveRequestPending` a module-level variable):
 
 - `_runAutosaveJobs()` returns early while `isDisconnected` or
   `isAutosaveRequestPending` is set. Later changes are only stored in
@@ -187,7 +251,20 @@ Everything waits on those three flags:
 The mixin's only user is the submission wizard (searched
 `lib/ui-library/src` and `lib/pkp/js`). Every save the wizard's forms
 make goes through it, so any server-side refusal of a wizard field
-leads here.
+leads here:
+
+- a 400 from the publication's validation (the summary and DOI cases;
+  walked);
+- a 401 from the API's authorization (`PKP\middleware\PolicyAuthorizer`
+  answers a refused policy with 401 on `main` and 3.5): a Chapter
+  Author's saves, refused by `PublicationWritePolicy`'s
+  `StageRolePolicy` because the group has no Submission stage (U21
+  OMP4; walked on OMP);
+- a 403 takes the other branch, which keeps the save and retries it.
+  On 3.4 the API answers a refused policy with 403
+  (`APIRouter::handleAuthorizationFailure()`), so a 3.4 Chapter Author
+  would get the dialog again at each retry rather than this hang
+  (code; not walked).
 
 ## Proposed fix
 
@@ -243,19 +320,30 @@ instead of sending nothing. Both changes are in ui-library
 
 The mixin's `onError` still sets `isDisconnected` first. The wizard
 sets it back to false in the same tick, so the watcher sees no change
-and no reconnect starts. The 0, 500 and 403 paths are unchanged.
+and no reconnect starts. The 0, 500 and 403 paths are unchanged, and an
+ended session stays on the 403 path: on `main` the global
+`ValidateCsrfToken` middleware runs before `PolicyAuthorizer`
+(`PKPRoutingProvider::$globalMiddleware`) and answers a stale token
+with 403, so its save is kept and retried as today.
 
 The refused text stays in its box as the author typed it. It is not
 resent on its own: `addAutosaves()` has already taken that form off its
 list of changed forms. The author's next edit to the form sends it
 whole, refused field included.
 
-Tried on `main` on OJS, OMP and OPS. With the fix in, the walk above
+Tried on `main` on OJS, OMP and OPS (2026-10-01). With the fix in, the walk above
 shows the "Error" dialog and then "Last saved …". No page error is
 logged and both "Save for Later" buttons stay enabled. Step 7's save is
 answered 200, and "Review" finishes its check and lists the missing
 file and title. The offline control behaves the same with the fix in and
 out.
+
+Tried again on OMP `main` (2026-10-19) with the Chapter Author steps. With the fix in,
+step 3's 401 shows the "Error" dialog and the footer goes back to "Last
+saved …", with no page error. Step 5's change is sent (refused again,
+with the dialog again), and "Review" finishes its check, lists what is
+missing and keeps "Save for Later" enabled. The offline control again
+recovered with the fix in.
 
 **Alternatives**:
 
@@ -268,6 +356,19 @@ out.
   again every minute and the dialog reopens each time.
 
 **What goes with it**:
+
+- `autosaveErrored()` drops the refused form's stored saves by form id
+  (`payload.id !== autosave.id`), not only the refused one. After an
+  outage, when a retried save is refused, a later save of the same form
+  queued during the outage goes too, and it may hold the author's
+  correction. The method's comment speaks of deleting "the invalid
+  autosave payload", so the wider drop looks unintended. The fix keeps
+  it as it is; filtering by `payload.timestamp` instead would drop only
+  the refused save. Not tried.
+- When a refusal ends a reconnect (the outage's retry is refused),
+  `connectionTimerInterval` stays doubled: only `success` and the new
+  guard reset it. Harmless, since the next outage starts its retries at
+  the longer interval, and a reset in the refusal branch would close it.
 
 - The dialog still names no field, and after the fix the footer reads
   "Last saved …" with the time of the last accepted save, so the refused
@@ -283,6 +384,10 @@ out.
   applies there with its context adjusted.
 - Guard: a vitest in ui-library: an autosave answered 400 leaves
   `isDisconnected` and `isAutosaving` false and sends no second request.
+  No existing test covers a mixin or `$.ajax`, so it needs stubs for the
+  global `$` and `pkp.currentUser`, and it must reset the mixin's two
+  module-level variables, `isAutosaveRequestPending` and
+  `connectionTimerInterval`, between cases.
 
 Small: a few lines in two files of one repo, following the status
 handling `autosaveErrored()` already has, plus one unit test.
@@ -295,28 +400,45 @@ handling `autosaveErrored()` already has, plus one unit test.
   [lib.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/wizard-refused-save-hangs-saving/lib.js),
   run on an install loaded from the default dataset:
   `node bin/probe.js all shared/playwright/checks/issues/wizard-refused-save-hangs-saving/walk.js`.
-  `MODE=neighbour` runs the offline control and `REFUSAL=vordoi` the
-  DOI refusal. The 3.5 walk also typed an abstract on "Details" before
-  its step 2; that save was accepted and plays no part.
-- Tips walked: OJS `main` 4408b94def (pkp-lib f5bd392a69, ui-library
-  64d67363), OMP `main` 3b0ecf794 and OPS `main` c8af945bb7 (pkp-lib
-  3dc90c81a6, ui-library 280f98c5); OPS `stable-3_5_0` 3f0919468c
-  (pkp-lib 1fb843f491, ui-library 7a3c244b). pkp/datasets 27f1204
-  (2026-10-01).
-- 3.5 and 3.4, OJS and OMP, "latent": they ship the same code, but no
-  save their wizard makes is refused. The plain language summary and
-  its limit exist on `main` only, and the DOI box is OPS's.
-- 3.5 OJS and OMP (code): `stable-3_5_0` OJS 18d097d94e and OMP
-  b24879c3d, ui-library 7a3c244b, `autosaveErrored()` and
-  `mixins/autosave.js` the same as `main`.
+  `MODE=neighbour` runs the offline control, `REFUSAL=vordoi` the DOI
+  refusal and `REFUSAL=chapter` (OMP) the Chapter Author steps.
+- Walked 2026-10-19 on PostgreSQL: the summary steps on OJS `main`
+  6b4323ced7, OMP `main` 5777025bec and OPS `main` f048e747b4 (pkp-lib
+  042726ebf6, ui-library 99abe252); the Chapter Author steps on OMP
+  `main` and on OMP `stable-3_5_0` 2d575f2506; the DOI steps on OPS
+  `stable-3_5_0` e737a9e465 (both 3.5: pkp-lib 092ec34b0f, ui-library
+  2576e00a). pkp/datasets eaf024c5 (2026-10-18). The fix was tried
+  2026-10-01 on all three apps (the summary steps and the offline
+  control) and 2026-10-19 on OMP `main` (the Chapter Author steps and
+  the offline control); `fix.diff` applies unchanged to today's tips.
+- The required-summary way round (Summary, Impact) is not walked on
+  today's tips. It rests on U21 A20's walk of 2026-10-01 (on a preprint
+  server, a "Relation status" answer offered by "Unsaved Changes" and
+  sent by "Yes" was refused with 400 and hung the wizard again; with
+  the summary typed, "References" and a "For the Editors" field were
+  still refused) and on the code: `PKP\publication\Repository::validate()`
+  requires the summary in every save's body, and "Yes" replays each
+  stored save as it was (`restoreStoredAutosave()`), so "References" and
+  "For the Editors" are refused again the same way.
+- 3.5 OJS "latent": it ships the same code (`stable-3_5_0` OJS
+  007c2cd0d6, ui-library 2576e00a, `autosaveErrored()` and
+  `_runReconnect()` the same as `main`), but no save its wizard makes is
+  refused: the plain language summary exists on `main` only, the DOI
+  box is OPS's and "Chapter Author" is OMP's.
 - 3.4 (code): ui-library `origin/stable-3_4_0` ee684b34 has the same
   `autosaveErrored()` and `_runReconnect()`, and
-  `lib/pkp/templates/submission/wizard.tpl` (pkp-lib df13621c2d) binds
+  `lib/pkp/templates/submission/wizard.tpl` (pkp-lib a71d6bd2ca) binds
   the footer and "Save for Later" to the same flags. OPS
-  `upstream/stable-3_4_0` acd8ae704b validates `vorDoi` as a URL
+  `upstream/stable-3_4_0` validates `vorDoi` as a URL
   (`schemas/publication.json`) and puts the required "Relation status"
-  form in the wizard (`pages/submission/SubmissionHandler.php`). OJS
-  9571d8fde7 and OMP 0aec65441 were read for the same handlers.
+  form in the wizard (`pages/submission/SubmissionHandler.php`). OMP
+  `upstream/stable-3_4_0` e30fa7e38c gives "Chapter Author"
+  `stages="4,5"` (`registry/userGroups.xml`), `PKPSubmissionHandler::add()`
+  picks a submitter's group by role alone, and `StageRolePolicy`
+  refuses an author without the Submission stage, but the refusal
+  answers 403 there (`APIRouter::handleAuthorizationFailure()`), which
+  `autosaveErrored()` keeps and retries instead of hanging; so OMP stays
+  latent on 3.4. Not walked.
 - 3.3 (code): ui-library `origin/stable-3_3_0` 96959f9e has no
   `src/mixins/autosave.js` and no `SubmissionWizardPage`. OJS
   9fdb9bcf9a, OMP 8e72fc883 and OPS c5532e2161 use the older
@@ -324,6 +446,11 @@ handling `autosaveErrored()` already has, plus one unit test.
 - Introduced: `git blame` on the `autosaveErrored()` lines and on
   `_runReconnect()` stops at 467034aa4, which created both (later
   commits touched only formatting: 7f13651e9, c7cb4e12b). Its PR is
-  `pkp/ui-library#241`, merged 2022-12-14, first in tag 3_4_0-0.
+  `pkp/ui-library#241`, merged 2022-12-14, first in tag `3_4_0rc1`
+  (2023-02-20).
+- `pkp/pkp-lib#10929` (open) is behind the
+  commented-out Submission-stage filter that lets a Chapter Author
+  submit; that is U21 OMP4's cause, not this one.
 - Unverified: a browser with storage disabled. There
-  `_getNextAutosave()` reads only the in-memory queue. Not driven.
+  `_getNextAutosave()` reads only the in-memory queue. Not driven. The
+  3.4 Chapter Author retry loop is read in the code only.
