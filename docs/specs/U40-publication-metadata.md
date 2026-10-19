@@ -2907,7 +2907,7 @@ holding the English title (A15). First seen in a test run 2026-09-30
 (OMP, the publication fetch and the editor's style sheets held back):
 keys pressed before the editor was initialized were lost. Kept script
 `shared/playwright/checks/U40/I07/i07.js` (`PHASES=type`).
-Issue report: [docs/issues/U40-A22-language-panel-title-typed-early-lost.md](../issues/U40-A22-language-panel-title-typed-early-lost.md).
+Issue report: [pkp-e2e#1023](https://github.com/jardakotesovec/pkp-e2e/issues/1023) ([docs/issues/U40-A22-language-panel-title-typed-early-lost.md](../issues/U40-A22-language-panel-title-typed-early-lost.md)).
 
 <a id="fn-f-ojs1"></a>
 **f-ojs1 — OJS1 evidence.** The submission's status comes from lib/pkp
