@@ -1941,7 +1941,7 @@ empties. Code: an older-style list's request refused by its access check
 gets `PKPComponentRouter::handleAuthorizationFailure()` → `JSONMessage(false, …)`,
 the same on `stable-3_4_0` and `stable-3_3_0` (code read, not walked);
 the API's answer there was not read.
-Issue reports (two causes): [docs/issues/U01-A16-plugins-search-after-session-ended-role-alert.md](../issues/U01-A16-plugins-search-after-session-ended-role-alert.md) (the older lists, tabs and forms: the role alert); [docs/issues/U01-A16-users-search-after-session-ended-error-window.md](../issues/U01-A16-users-search-after-session-ended-error-window.md) (the newer lists: the "Error" window).
+Issue reports (two causes): [pkp-e2e#1015](https://github.com/jardakotesovec/pkp-e2e/issues/1015) ([docs/issues/U01-A16-plugins-search-after-session-ended-role-alert.md](../issues/U01-A16-plugins-search-after-session-ended-role-alert.md)) (the older lists, tabs and forms: the role alert); [pkp-e2e#1016](https://github.com/jardakotesovec/pkp-e2e/issues/1016) ([docs/issues/U01-A16-users-search-after-session-ended-error-window.md](../issues/U01-A16-users-search-after-session-ended-error-window.md)) (the newer lists: the "Error" window).
 
 ## Reference — entry points & surfaces
 
