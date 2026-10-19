@@ -94,7 +94,7 @@ In French most of its headings and descriptions are raw codes
 | Section {OJS OPS} | Always has a value | Defaults to the submission's section. The select offers no empty choice, so it cannot be blanked. It carries no on-screen required mark; only Issue Assignment and Issue are marked "Required". |
 | Publication Date {OJS} / Date Posted {OPS} | No | Must be a date in the form YYYY-MM-DD ("The date must be in the format YYYY-MM-DD, such as 2019-01-01."). The description warns to leave it empty unless backdating, because the date is normally set by publishing (Rule 8). On a press or preprint server a FUTURE date entered here is what schedules the item (Rule 6). |
 | Update Type · Summary of Changes | No | As on the panel above. On a preprint server the summary box has no "Insert Content" button. |
-| Cover Image · Pages {OJS} · URL Path | No | Display extras of the published item. |
+| Cover Image · Pages {OJS} · URL Path | No | Display extras of the published item. A cover picture whose file name's ending does not match the kind of picture it holds (a PNG named "cover.jpg") is refused when saved, and the earlier cover stays ⚠ [A13](#a13). |
 | "Identity" group: "Journal Identity" {OJS} / "Server Identity" {OPS} | Nothing to fill in | The last group of the page, shown only on a version that has been published; an article or preprint not yet published has no such group. It reads "This metadata was recorded at the time of publication and will not change if the publisher updates its identity settings. To correct it, use the CLI batch tool.", then a list of what the journal's settings held when the version was published, each line only where there was a value. On a journal: "Journal Title:", "Journal Abbreviation:" (the journal's initials where it had no abbreviation), "Online ISSN:", "Print ISSN:", "Publisher:" and "Publisher Location:". On a preprint server: "Server Title:", "Server Abbreviation:" (or the initials) and "Publisher Location:". Renaming the journal afterwards leaves the list as it was. A minor version not yet published shows the list of the version before it. "Save" saves the other groups as before. <sup>j</sup> |
 
 ## Rules & state
@@ -332,6 +332,13 @@ In French most of its headings and descriptions are raw codes
     stage, or a copy of a stage-less version with none chosen (the
     dialog's stage select arriving on a stage offers no blank choice).
     Two made the same day share one name ⚠ [A9](#a9). <sup>i</sup>
+11b. **Creating a version by program.** Programs outside the apps can
+    also create a version through the install's programming interface,
+    the one the workflow's own screens use, and may send a cover image
+    with it; no screen does ("Create New Version" sends none). A cover
+    the app refuses should refuse the whole request, with no version
+    created. Instead the program is told the request failed, yet the
+    version is created, without the cover ⚠ [A12](#a12).
 12. **Version stages and numbering.** A journal and press know three
     stages: Author's Original, Published Manuscript Under Review, Version of
     Record. A preprint server knows only Author's Original. Numbering is per
@@ -1087,6 +1094,10 @@ Left out of the scenarios above, by reason:
     codes; Fields)
   - A11 (a revision summary saved with markup running as script when
     "Insert Content" opens; Rule 14)
+  - A12 (a version created through the programming interface with a
+    cover image the app refuses; Rule 11b)
+  - A13 (a cover picture whose file name's ending does not match its
+    kind; Fields, the Publication Settings page)
   - OJS1 (a required plain language summary refusing the panel's Confirm
     without naming the summary; Rule 4)
   - OJS2's second half (where only future issues exist, a Publication
@@ -1166,6 +1177,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A6](#a6) | Creating a new version, still unpublished, makes the reader page say "Published {today} — Updated on {real date}" | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A10](#a10) | In French the "Create New Version" dialog and the Publication Settings / Preprint Entry page show raw codes; the versions to copy from cannot be told apart | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A11](#a11) | An author's revision summary can carry a script that runs in the editor's browser when "Insert Content" opens | 🐞 | high | issues (claude), 2026-10-15 — re-verified |
+| [A12](#a12) | A version created through the programming interface with a cover image the app refuses is reported as failed, yet created without the cover | 🐞 | minor | — |
 | [OJS1](#ojs1) | With a plain language summary required, the panel's Confirm is refused without naming the summary and publishing is unreachable | 🐞 | high | issues (claude), 2026-10-02 — re-verified |
 | [OJS2](#ojs2) | Editor's "Schedule Only" publishes the article at once when the journal has no published issue | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | A version address naming a number the article has no version under crashes the article page with a blank server error instead of "not found" | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1180,6 +1192,7 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A4](#a4) | Switching the Publication Stage silently re-selects "Minor Revision", discarding the user's choice | ❓ | minor | — |
 | [A7](#a7) | The press's and preprint server's confirmation shows a requirement-shaped stage sentence under "All … requirements have been met" | ❓ | minor | — |
 | [A9](#a9) | Unassigned versions made the same day carry identical names in every version list | ❓ | minor | — |
+| [A13](#a13) | A real picture whose file name has the wrong ending (a PNG named "cover.jpg") is now refused as a cover image | ❓ | user-visible | — |
 | [OJS6](#ojs6) | With a summary required, a version with saved details skips the refused panel and would publish without one | ❓ | latent | — |
 | [OJS7](#ojs7) | A title typed with markup may run as script in the editor's browser when Crossref's publish warning names it | ❓ | user-visible | — |
 | [OMP1](#omp1) | The press's publish confirmation promises to make the entry public while a future date schedules it instead | ❓ | minor | — |
@@ -1399,6 +1412,40 @@ signed-in browser with the markup added.
 Security: unreleased.
 Since: 2026-05-28 · Basis: probe, 2026-10-15 (a journal; a press by the
 code). <sup>[f-a11](#fn-a11)</sup>
+
+<a id="a12"></a>
+**A12 — A version created by program with a refused cover image is reported as failed, yet created** · 🐞 · minor.
+A program that creates a new version through the install's programming
+interface (Rule 11b) and sends with it a cover image the app refuses (a
+file that is not a picture, or a picture whose file name's ending does
+not match its kind) is told "There was an error uploading this image."
+and expects no new version. Yet the version is created, without the
+cover: the workflow's "Publication" menu lists it, "Version of Record
+2.0" under the original ("Author's Original 2.0" on a preprint server).
+A program that tries again after the error adds one more version each
+time. Nothing is lost, and no screen sends a cover with this request.
+Until 2026-10-16 a cover that was not a picture was dropped and the
+version created as asked, with no error. That is `main`, and 3.5 since
+2026-10-14.
+Since: 2026-10-16 (pkp/pkp-lib#13512; on 3.5 2026-10-14) · Basis: probe, 2026-10-19. <sup>[f-a12](#fn-a12)</sup>
+
+<a id="a13"></a>
+**A13 — A real picture whose file name has the wrong ending is refused as a cover image** · ❓ · user-visible.
+A manager who saves a "Cover Image" whose file name's ending does not
+match the kind of picture it holds (a PNG named "cover.jpg") has it
+refused, with the earlier cover kept, in every app. Until 2026-10-16 the
+picture was stored, under the ending its contents give (".png"). The
+same PNG named "cover.png" is stored. The change behind it meant to
+refuse files of the wrong type; a PNG named ".jpg" is a picture of an
+accepted type. The same check now guards a journal's other picture
+uploads too ([Highlights](U11-highlights.md#a11) meets it), and it
+refuses ".jpe", ".jfif" and a name with no ending as well. Its message,
+"There was an error uploading this image.", does not say what is wrong.
+Question: is refusing a correctly-made picture for its file name
+intended? Lean: yes, as a cheap guard against disguised files; the
+message should then say what to do ("The file's name does not match
+its type. Rename it to .png and upload it again.").
+Since: 2026-10-16 (pkp/pkp-lib#13512; on 3.5 2026-10-14) · Basis: probe, 2026-10-19. <sup>[f-a13](#fn-a13)</sup>
 
 ### OJS
 
@@ -2526,6 +2573,80 @@ Proposed fix: parse inertly (`DOMParser`, or the `textContent` of a
 Security-shaped and unreleased: its issue report carries "- **Security**
 unreleased" (REPORT.md).
 Issue report: [pkp-e2e-sec#13](https://github.com/jardakotesovec/pkp-e2e-sec/issues/13) ([docs/issues/U49-A11-revision-summary-markup-runs-on-insert-content.md](../issues/U49-A11-revision-summary-markup-runs-on-insert-content.md)).
+
+<a id="fn-a12"></a>
+**f-a12** — `PKP\publication\Repository::add()` (lib/pkp
+`classes/publication/Repository.php`) inserts the publication
+(`$this->dao->insert($publication)`) before storing its cover through
+`_saveFileParam()`. pkp-lib `07bc43fe67` ("Port image upload checking
+fixes to main", pkp/pkp-lib#13512, Alec Smecher, 2026-10-16, a direct
+commit; on `stable-3_5_0` as `092ec34b0f`, 2026-10-14) turned that
+method's quiet `return null` for a temporary file that is not a picture
+into `throw new StoreTemporaryFileException(…)`, and passes `$isImage`
+on to `PKPContextService::moveTemporaryFile()`, which throws for a
+picture `FileManager::isValidImage()` refuses.
+`PKPSubmissionController::addPublication()` catches it and answers 400,
+but nothing removes the inserted row, and the rest of `add()` (the
+`Publication::add` hook, `Repo::submission()->updateStatus()`,
+`updateCurrentPublication()`) never runs for it. `addPublication()` is
+the only caller that passes a new cover to `add()`; "Create New
+Version" calls `POST …/publications/{id}/version`, which takes none,
+and editing a version (`PUT …/publications/{id}`) moves the files
+before it writes, so a refused cover leaves the version as it was
+(walked). Live-probed 2026-10-19 on PKP's default dataset
+(pkp/datasets `eaf024c`, PostgreSQL), freshly loaded, as `rvaca`, OJS,
+OMP and OPS `main` (lib/pkp `042726ebf6`) and `stable-3_5_0`
+(`092ec34b0f`), from the browser's console on a settings page: a text
+file uploaded to `temporaryFiles`, then `POST
+{context}/api/v1/submissions/{id}/publications` copying the current
+version's title, abstract and section, with `version: 2` (the schema
+still lists it as required on `main`), `versionStage` and the cover
+`{en: {temporaryFileId, altText: ''}}` (OJS submission 4, OMP 3, OPS
+1): 400 `{"coverImage":["There was an error uploading this image."]}`,
+versions 1 → 2, the "Publication" menu listing "Version of Record 2.0"
+(OPS "Author's Original 2.0"); on OPS the new version's stored cover
+the request's `{"temporaryFileId":…}`. The same request with a PNG
+named `cover.png` added a version with its cover, without a cover one
+version, both 200. Before, the `main` tips with lib/pkp
+`6ff76591a9..042726ebf6` reversed: 200 and one version with no cover. A
+fix tried (the cover checked in `Repository::validate()`, through a new
+`ValidatorFactory::temporaryFilesAreImages()`): 400
+`{"coverImage":{"en":["There was an error uploading this image."]}}`,
+versions stay at 1. Kept check
+`shared/playwright/checks/sync/pkp-lib-13512/followup.js`, fix
+`fix-followup.diff` in the same folder. Tracked in ci-triage "Open
+regressions". Written up for the team in
+`docs/reports/2026-10-19-pkp-lib-13512.md` (Finding 3; a temporary
+report, deleted once acted on; git history keeps it).
+
+<a id="fn-a13"></a>
+**f-a13** — pkp-lib `07bc43fe67` (pkp/pkp-lib#13512, 2026-10-16; on
+`stable-3_5_0` as `092ec34b0f`, 2026-10-14) makes the cover image,
+the context's and the site's logos, favicon, homepage image and
+thumbnails, and highlights pass `FileManager::isValidImage()`, which
+accepts a file only when its name's extension matches its contents
+(`.jpeg` counts as `.jpg`); `.jpe`, `.jfif` and no extension are
+refused (code). Announcements have had the check since 2023. The
+issue asks that settings uploads "should be checked for type"
+("Expected Result: The file should be rejected."); the server stores a
+picture under the extension its contents give, whatever its name.
+Neighbour: `pkp/pkp-lib#12744` (open) reports the same name check
+refusing `.jpeg` announcement pictures. Live-probed 2026-10-19 on PKP's
+default dataset (pkp/datasets `eaf024c`, PostgreSQL), freshly loaded,
+as `rvaca`, OJS, OMP and OPS `main` (lib/pkp `042726ebf6`) and
+`stable-3_5_0` (`092ec34b0f`), through the request the entry page's
+"Save" sends (`PUT {context}/api/v1/submissions/{id}/publications/{id}`
+with `coverImage`; the screen's own message was not read): a PNG
+uploaded as `cover.png` stored
+(`submission_4_24_coverImage_en.png` on OJS), then the same PNG as
+`cover.jpg`: 400 `{"coverImage":["There was an error uploading this
+image."]}`, the earlier cover still stored. Before, the `main` tips
+with lib/pkp `6ff76591a9..042726ebf6` reversed: `cover.jpg` stored as a
+`.png` cover. Kept check
+`shared/playwright/checks/sync/pkp-lib-13512/followup.js`. Written up
+for the team in `docs/reports/2026-10-19-pkp-lib-13512.md` (the
+closing question; a temporary report, deleted once acted on; git
+history keeps it).
 
 <a id="fn-ojs1"></a>
 **f-ojs1** — Live 2026-08-28 (metadata spec, register A1): with

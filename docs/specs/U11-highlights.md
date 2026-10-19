@@ -142,8 +142,13 @@ second language's boxes, labelled "{Field} in {language}" (Rule 11).
     the "Alternate text" as its description. On an edit, "Remove" then
     "Save" deletes the file and leaves the slide text-only; uploading a new
     image and saving puts the new picture in the old one's place, and
-    empties the "Alternate text" box on the way ⚠ [A9](#a9). A highlight's
-    image is deleted with the highlight. <sup>g</sup>
+    empties the "Alternate text" box on the way ⚠ [A9](#a9). A new
+    picture the app refuses at "Save" (a picture whose file name's
+    extension does not match the kind of picture it holds, such as a PNG
+    named "photo.jpg") should leave the old picture in place; instead the
+    old picture is deleted and the slide is left without one ⚠
+    [A11](#a11). A highlight's image is deleted with the highlight.
+    <sup>g</sup>
 11. **Languages.** The panel's text fields are entered in each language
     ticked under "Forms" on the journal's Languages settings; the site's
     panel offers every language the site has. Only the primary language is
@@ -416,6 +421,10 @@ Left out of the scenarios above, by reason:
     `docs/issues/U66-A2-unsaved-name-kept-after-closing-edit-panel.md`): a
     changed title closed without "Save", then "Edit" and a "Save" of
     another box, the saved title kept on the row
+  - the guard for A11 (Rule 10; the regression report proposes it): once
+    fixed, a highlight's picture replaced by a PNG named "photo.jpg" and
+    "Save" refused, the old picture still in the reopened panel and on
+    the home page's slide
 - **Nothing new to test**:
   - a file over the server's upload limit refused in the "Image" box
     (Fields): the same box's refusal scenario 1 meets with a text file,
@@ -445,6 +454,8 @@ Left out of the scenarios above, by reason:
   - A9 (the image replaced on an edit emptying "Alternate text"; Rule 10)
   - A10 (a journal's highlight read on its own through the programming
     interface; Rule 15)
+  - A11 (a replacement picture the app refuses at "Save", which deletes
+    the old one; Rule 10)
 - **No seed**:
   - the Site Administrator adding a site highlight and any visitor seeing
     the site's carousel on the site's home page (Actors rows 2 and 3;
@@ -478,6 +489,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A4](#a4) | "Edit Highlight" closed without "Save" leaves the unsaved title on the row, and the next "Save" stores it | 🐞 | medium | issues (claude), 2026-09-30 — re-verified |
 | [A5](#a5) | The site administrator cannot add site highlights: "Save" leaves the panel open and "Save Order" shows an error | 🐞 | medium · crash: server | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | Through the programming interface, a journal's highlight cannot be read on its own: its own address points at the site, and the journal's address for it fails | 🐞 | low · crash: server | issues (claude), 2026-10-15 — re-verified |
+| [A11](#a11) | Replacing a highlight's picture with one the app refuses deletes the old picture and leaves the home page's slide empty | 🐞 | user-visible | — |
 | [A2](#a2) | "URL" accepts any text although its hint asks for a full web address, so a slide's button can point nowhere | ❓ | user-visible | — |
 | [A6](#a6) | The carousel's dots do nothing when pressed and have no name for a screen reader | ❓ | minor | — |
 | [A8](#a8) | "Save Order" on an empty list shows the generic "An unexpected error has occurred…" dialog | ❓ | minor | — |
@@ -595,6 +607,25 @@ not signed in is refused. Asked for at the journal's own address, the
 same highlight fails with a server error for the Journal Manager and the
 Site Administrator alike.
 Since: 2023-10-12 · Basis: probe, 2026-10-15. <sup>f-a10</sup>
+
+<a id="a11"></a>
+**A11 — A refused replacement picture deletes the highlight's old picture and leaves the slide empty** · 🐞 · user-visible.
+A manager replaces a highlight's picture in "Edit Highlight" with one
+the app refuses at "Save": a picture whose file name's extension does
+not match the kind of picture it holds, such as a PNG named
+"photo.jpg". They expect the highlight to keep its old picture. The
+panel does stay open, with "There was an error uploading this image."
+under the picture, printed one letter to a line; but the old picture is
+already deleted. Closed and reopened, the panel's "Image" box shows no
+picture, only "Upload File", and on the home page that highlight's
+slide is an empty grey band: no picture, and its headline, text and
+button no longer show. Nothing tells the manager that the old picture
+is gone; uploading a picture the app accepts puts the slide right.
+Until 2026-10-16 such a picture was stored and shown. The change meant
+to refuse files that are not pictures before they are stored, not to
+delete a stored one: regression, not choice. That is `main`, and 3.5
+since 2026-10-14.
+Since: 2026-10-16 (pkp/pkp-lib#13512; on 3.5 2026-10-14) · Basis: probe, 2026-10-19. <sup>f-a11</sup>
 
 ### Retired
 
@@ -1165,6 +1196,54 @@ could be compared. 3.5 read in the code only (lib/pkp f4f8fcdbc0 under
 ojs, 8094f06bf5 under omp and ops); 3.4 and 3.3 have no highlights
 (note a).
 Issue report: [pkp-e2e#974](https://github.com/jardakotesovec/pkp-e2e/issues/974) ([docs/issues/U11-A10-highlight-read-on-its-own-fails.md](../issues/U11-A10-highlight-read-on-its-own-fails.md)).
+
+<a id="fn-f-a11"></a>
+**f-a11 — A11 evidence.** pkp-lib `07bc43fe67` ("Port image upload
+checking fixes to main", pkp/pkp-lib#13512, Alec Smecher, 2026-10-16, a
+direct commit; on `stable-3_5_0` as `092ec34b0f`, 2026-10-14) adds
+`FileManager::isValidImage()` to
+`PKP\highlight\Repository::handleImageUpload()`, which now throws
+`StoreTemporaryFileException` for a file whose name's extension
+disagrees with its contents. By then `Repository::edit()` has already
+stored the request's image (`$this->dao->update()`, `{"temporaryFileId":
+N}`) and run `deleteImage()` on the old file (the order since
+`9984fe44707`, 2023-10-12, unchanged), and the same commit removed
+`Repo::highlight()->delete($highlight)` from
+`HighlightsController::edit()`'s `catch`, so the highlight stays saved
+with no file. `Highlight::getImageUrl()` builds the address from the
+missing `uploadName` and `dateUploaded`, hence `…/highlights/?`. The
+issue's intention: settings uploads "should be checked for type"
+("Expected Result: The file should be rejected."). An add with a refused
+picture is clean: `HighlightsController::add()` still deletes the new
+highlight in its `catch` (code). The site's highlights share the code,
+but none can be saved (A5). Live-probed 2026-10-19 on PKP's default
+dataset (pkp/datasets `eaf024c`, PostgreSQL), freshly loaded, as
+`rvaca`, OJS, OMP and OPS `main` (lib/pkp `042726ebf6`) and
+`stable-3_5_0` (`092ec34b0f`): a highlight added with `photo.png`
+(stored `1.png`, shown on the slide), then "Edit", "Remove", `photo.jpg`
+(a PNG under a `.jpg` name), "Save": `PUT {context}/api/v1/highlights/1`
+400 `{"image":"There was an error uploading this image."}` (a bare
+string; the field printed it a character to a line), the panel open,
+`public/journals/1/highlights/` empty, the stored image
+`{"temporaryFileId":2}`; reopened, no picture; the home page's slide an
+`<img src="…/public/journals/1/highlights/?">` that loads nothing, the
+headline and button not visible in the screenshot, and on each view
+`PHP Deprecated: strtotime(): Passing null to parameter #1 … in
+lib/pkp/classes/highlight/Highlight.php`; OMP and OPS the same
+(`…/presses/1/highlights/?`, `…/contexts/1/highlights/?`). The same
+replacement with `photo2.png` under its own name: stored and shown.
+Before, the `main` tips with lib/pkp `6ff76591a9..042726ebf6` reversed:
+`photo.jpg` stored as `1.png` and shown. A fix tried (the picture
+checked in `Repository::validate()` before any write, through a new
+`ValidatorFactory::temporaryFilesAreImages()`): 400
+`{"image":["There was an error uploading this image."]}`, the message
+under the picture, `photo.png` kept on disk, in the panel and on the
+slide. Kept check
+`shared/playwright/checks/sync/pkp-lib-13512/followup.js`, fix
+`fix-followup.diff` in the same folder. Tracked in ci-triage "Open
+regressions". Written up for the team in
+`docs/reports/2026-10-19-pkp-lib-13512.md` (Finding 1; a temporary
+report, deleted once acted on; git history keeps it).
 
 ## Reference — entry points & surfaces
 

@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `97e230cc72` | 2026-10-16 | claude (daily maintenance session) |
-| omp | `9f6fd721f4` | 2026-10-16 | claude (daily maintenance session) |
-| ops | `6952ae6b0b` | 2026-10-16 | claude (daily maintenance session) |
-| pkp-lib | `93d0df22db` (ojs, omp and ops) | 2026-10-16 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
+| ojs | `007c2cd0d6` | 2026-10-19 | claude (daily maintenance session) |
+| omp | `2d575f250` | 2026-10-19 | claude (daily maintenance session) |
+| ops | `e737a9e465` | 2026-10-19 | claude (daily maintenance session) |
+| pkp-lib | `092ec34b0f` (ojs, omp and ops) | 2026-10-19 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
 
 ## Read log
 
@@ -21,6 +21,12 @@ _Newest first; one entry per read: the date and the range per repo, then
 one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
+
+- **2026-10-19 (daily session, VM s3) — ojs `97e230cc72..007c2cd0d6` (2), omp `9f6fd721f4..2d575f250` (2), ops `6952ae6b0b..e737a9e465` (2), pkp-lib `93d0df22db..092ec34b0f` (1), ui-library none. `main` first: synced today. Read in full; baselines advanced.**
+  - pkp-lib `092ec34b0f` (Alec Smecher, "pkp/pkp-lib#13512 Fix regression with stylesheets; fix site uploads; fix highlights; improve error handling", direct commit) → `~main 07bc43fe67` (with `042726ebf6`, read today): the patch is `main`'s but for the category controller (3.5 has none; its `CategoryForm` names the file itself) and `impersonatedUserId` (3.5's event log has no such line); no 3.5 caller of `moveTemporaryFile()` or `_saveFileParam()` is left on an int (grep of the three 3.5 apps and their plugins). It fixes the 13512 regression on 3.5 (`refused-uploads.js` on the 3.5 dataset fleet, OJS OMP OPS, `.reports/r13512-3_5/s1019/`). **3.5 shows `main`'s follow-up regressions (1) and (3) too** (walked, `docs/reports/2026-10-19-pkp-lib-13512.md`; (2) is `main` only); the unverified `Publication::edit()` hunch of the `main` read holds for 3.5's line 450 the same. Security: as `main`.
+  - ojs `0480d19a56`, omp `18c85531cf`, ops `6943300050` (each app's `ContextService` passes the `User`) → `=main b7504fe96b`, `c567c4757b`, `3758188c14` (read today). ojs `007c2cd0d6`, omp `2d575f2506`, ops `e737a9e465` → pointer bumps to `092ec34b0f`.
+  - The housekeeping lead (U36 claim check cc19c, handed over in `upstream-sync.md`): "More Information" › "Notes" on a copied file answers 500 on OJS and OMP 3.5 (pkp-lib#10268, `d24432eb64`, since 3.5.0-0; `main` has the import from pkp-lib#12286). Reproduced on the 3.5 dataset fleet, fix tried; report `docs/reports/2026-10-19-pkp-lib-10268-stable-3_5_0.md`, ci-triage row (`d920e867`).
+  - `main`'s findings carried over: the 13512 row reads fixed on 3.5 (above). Other open stable-line rows not re-run: the range touches none of their code.
 
 - **2026-10-16 (daily session, VM s2) — ojs `ca763c91cd..97e230cc72` (2: pkp/ojs#5909), omp `a70bbb9c4d..9f6fd721f4` (4: pkp/omp#2510, #2496), ops `44aec6e131..6952ae6b0b` (2: pkp/ops#1436), pkp-lib `4045d9241e..93d0df22db` (1), ui-library none. Read in full; baselines advanced.**
   - pkp-lib `93d0df22db` (pkp/pkp-lib#13471, "Increase font-size used in grid action buttons") → `=main 63e9702f37` (read today, `upstream-sync.md`): no regression, no security impact.

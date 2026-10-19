@@ -1,0 +1,95 @@
+--- a/lib/pkp/classes/validation/ValidatorFactory.php
++++ b/lib/pkp/classes/validation/ValidatorFactory.php
+@@ -305,4 +305,49 @@
+             }
+         });
+     }
++
++    /**
++     * Validate that an uploaded image is one the file store will accept
++     *
++     * The same rule PKPContextService::moveTemporaryFile() applies to an image,
++     * checked here so that a refused file is reported before anything is saved.
++     * A missing temporary file is left to temporaryFilesExist().
++     *
++     * @param \Illuminate\Validation\Validator $validator
++     * @param array $imageProps List of prop names that hold an image upload
++     * @param array $multilingualImageProps List of $imageProps which are multilingual
++     * @param array $props Key/value list of props
++     * @param array $allowedLocales List of locale codes
++     * @param ?int $userId The user who uploaded the temporary files
++     */
++    public static function temporaryFilesAreImages($validator, $imageProps, $multilingualImageProps, $props, $allowedLocales, $userId)
++    {
++        $validator->after(function ($validator) use ($imageProps, $multilingualImageProps, $props, $allowedLocales, $userId) {
++            $temporaryFileManager = new TemporaryFileManager();
++            $check = function (string $errorKey, $value) use ($validator, $temporaryFileManager, $userId) {
++                if (!isset($value['temporaryFileId']) || $validator->errors()->get($errorKey)) {
++                    return;
++                }
++                $temporaryFile = $temporaryFileManager->getFile((int) $value['temporaryFileId'], $userId);
++                if (
++                    $temporaryFile
++                    && (!$temporaryFileManager->getImageExtension($temporaryFile->getFileType()) || !$temporaryFileManager->isValidImage($temporaryFile))
++                ) {
++                    $validator->errors()->add($errorKey, __('api.400.errorUploadingImage'));
++                }
++            };
++            foreach ($imageProps as $imageProp) {
++                if (!isset($props[$imageProp])) {
++                    continue;
++                }
++                if (in_array($imageProp, $multilingualImageProps)) {
++                    foreach ($allowedLocales as $localeKey) {
++                        $check($imageProp . '.' . $localeKey, $props[$imageProp][$localeKey] ?? null);
++                    }
++                } else {
++                    $check($imageProp, $props[$imageProp]);
++                }
++            }
++        });
++    }
+ }
+--- a/lib/pkp/classes/highlight/Repository.php
++++ b/lib/pkp/classes/highlight/Repository.php
+@@ -136,6 +136,7 @@
+             $allowedLocales,
+             $user ? $user->getId() : null
+         );
++        ValidatorFactory::temporaryFilesAreImages($validator, ['image'], [], $props, $allowedLocales, $user?->getId());
+ 
+         $errors = [];
+ 
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -248,6 +248,7 @@
+             $allowedLocales,
+             $user?->getId()
+         );
++        ValidatorFactory::temporaryFilesAreImages($validator, ['coverImage'], ['coverImage'], $props, $allowedLocales, $user?->getId());
+ 
+         // Ensure this publication can be associated with included review round IDs
+         $validator->after(function ($validator) use ($props, $publication) {
+--- a/lib/pkp/classes/announcement/Repository.php
++++ b/lib/pkp/classes/announcement/Repository.php
+@@ -75,6 +75,9 @@
+         // Check for input from disallowed locales
+         ValidatorFactory::allowedLocales($validator, $this->schemaService->getMultilingualProps($schema), $allowedLocales);
+ 
++        // A new image must be one the file store accepts
++        ValidatorFactory::temporaryFilesAreImages($validator, ['image'], [], $props, $allowedLocales, Application::get()->getRequest()->getUser()?->getId());
++
+         $errors = [];
+ 
+         if ($validator->fails()) {
+--- a/lib/pkp/api/v1/categories/CategoryCategoryController.php
++++ b/lib/pkp/api/v1/categories/CategoryCategoryController.php
+@@ -197,7 +197,7 @@
+             $filenameBase = $categoryId . '-category';
+             $originalFileName = $temporaryFile->getOriginalFileName();
+             // Moves the temporary file to the public directory
+-            $fileName = app()->get('context')->moveTemporaryFile($context, $temporaryFile, $filenameBase, $user);
++            $fileName = app()->get('context')->moveTemporaryFile($context, $temporaryFile, $filenameBase, $user, extension: $temporaryFileManager->getImageExtension($temporaryFile->getFileType()));
+             $imageData = [
+                 'name' => $originalFileName,
+                 'thumbnailName' => $thumbnail['thumbnailName'],

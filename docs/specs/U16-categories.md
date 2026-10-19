@@ -248,7 +248,11 @@ cannot be reached by heading ⚠ [OMP3](#omp3). <sup>h</sup>
 12. **The picture.** With a "Cover Image" set, the page shows a small copy
     of it, at most 100 × 100 pixels on a journal and a preprint server.
     The picture is not a link: the full-size picture has an address, but
-    nothing on the page leads to it ⚠ [A6](#a6). The "Alternate text"
+    nothing on the page leads to it ⚠ [A6](#a6). The picture is kept as
+    a file named after the category with the picture's own ending
+    (".png" for a PNG), and a visitor who saves the full-size picture from
+    its address gets that name; the name currently has no ending ⚠
+    [A25](#a25). The "Alternate text"
     typed in the window is used nowhere: a screen reader hears "null" for the picture on a journal and
     a preprint server, the category's name on a press ⚠ [A7](#a7). On a
     press the page shows the browser's broken-picture mark, with the
@@ -881,6 +885,9 @@ Left out of the scenarios above, by reason:
     Accepted formats are .png, .gif, or .jpg." under "Cover Image", and
     no category created ([A24](#a24)): the guard the issue report
     proposes
+  - {OJS OPS} a PNG saved as a category's "Cover Image", its full-size
+    picture's address offering it under a name ending in ".png"
+    ([A25](#a25)): the guard the regression report proposes
 - **Register carries it**:
   - A2 ("Order of articles" set to another choice, with no effect on the
     page; Rule 10; Settings bullet 3)
@@ -913,6 +920,7 @@ Left out of the scenarios above, by reason:
   - A23 (a page number typed past a category's last page; Rule 9a)
   - A24 (a damaged PNG as a category's "Cover Image"; Fields, "Cover
     Image")
+  - A25 (a category's picture kept without its file ending; Rule 12)
   - OMP1 ("Cover Image Max Width" and "Cover Image Max Height" changed,
     with no picture shown to size; Settings bullet 6)
   - OMP3 (the press's "Browse" for a screen reader; Fields, the "Browse"
@@ -974,6 +982,7 @@ an entry notes otherwise; the team settles them on spec review.
 | [A22](#a22) | The picture address of a category with no picture never finishes loading on a journal or preprint server | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
 | [A23](#a23) | A category page number typed past the last page opens a page with no articles, reading "26 - 1 of 1 items", instead of "404 Not Found" | 🐞 | minor | — |
 | [A24](#a24) | A damaged PNG as a category's "Cover Image" fails "Save" halfway, with "An unexpected error has occurred"; a new category is saved without the picture | 🐞 | medium · crash: server | — |
+| [A25](#a25) | A category's picture is stored as a file with no ending ("8-category", not "8-category.png"), and the full-size picture is offered under that name | 🐞 | minor | — |
 | [OMP1](#omp1) | A press's category page shows a broken-picture mark instead of the category's picture | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [OMP2](#omp2) | A press's "Browse" block lists sub-categories in one alphabetical run, not under their parents | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [OMP3](#omp3) | A press's "Browse" block title is not a heading, so screen-reader users cannot reach it by heading | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
@@ -1270,6 +1279,22 @@ with no message at all, and an existing category's picture is lost: the
 reopened category shows a broken picture. A press's series window fails from
 the same cause ([Sections](U17-sections.md#omp10), its OMP10).
 Basis: probe, 2026-10-13. <sup>f-a24</sup>
+
+<a id="a25"></a>
+**A25 — A category's picture is stored as a file with no ending** · 🐞 · minor.
+A manager gives a category a "Cover Image", a PNG for one, and saves:
+"Category saved". The picture is kept as a file whose name has no
+ending, "8-category" for one, where until 2026-10-16 it was kept as
+"8-category.png". Nothing on
+screen is lost: "Edit Category" previews the picture, and a journal's
+and a preprint server's category page shows its small copy, which keeps
+its ending. But the full-size picture's address offers it under the
+name with no ending, so a visitor who saves it gets a file that their
+computer may not open as a picture. The change meant to check uploaded
+pictures, not to rename them: regression, not choice. That is `main`
+only; 3.5 saves categories through another window, which keeps the
+ending.
+Since: 2026-10-16 (pkp/pkp-lib#13512) · Basis: probe, 2026-10-19. <sup>f-a25</sup>
 
 ### OMP
 
@@ -2293,6 +2318,50 @@ JPG or GIF passes the same header check and fails the same decode
 (checked outside the app, not walked). Kept script:
 `shared/playwright/checks/issues/series-damaged-cover-save-hangs/walk.js`.
 Issue report: [pkp-e2e#952](https://github.com/jardakotesovec/pkp-e2e/issues/952) ([docs/issues/U17-OMP10-series-damaged-cover-save-hangs.md](../issues/U17-OMP10-series-damaged-cover-save-hangs.md)).
+
+<a id="fn-f-a25"></a>
+**f-a25** — `CategoryCategoryController::saveCategory()` (lib/pkp
+`api/v1/categories/CategoryCategoryController.php`) stores the picture
+with `moveTemporaryFile($context, $temporaryFile, $filenameBase, $user)`,
+passing neither `$isImage` nor `$extension`. pkp-lib `07bc43fe67` ("Port
+image upload checking fixes to main", pkp/pkp-lib#13512, Alec Smecher,
+2026-10-16, a direct commit) split `PKPContextService::moveTemporaryFile()`
+in two: the non-image branch now takes its extension from
+`getDocumentExtension()` alone, which knows no `image/png`, where before
+an unknown type fell back to `getImageExtension()`. Between that commit
+and `042726ebf6` (the same day, the category call passing a `User`
+where the method now takes one) the save answered 500; `042726ebf6`
+exposed this. The category picture is the only caller without
+`$isImage` or `$extension` in the three apps (code); the thumbnail is
+named by the controller's own `generateThumbnail()` and keeps `.png`.
+`Category\Repository::validate()` has already checked that the file is
+a JPEG, PNG or GIF picture. `stable-3_5_0`, 3.4 and 3.3 save categories
+through `controllers/grid/settings/category/form/CategoryForm.php`,
+which names the file `<id>-category<image extension>` itself (code).
+Live-probed 2026-10-19 on PKP's default dataset (pkp/datasets
+`eaf024c`, PostgreSQL), freshly loaded, as `rvaca`, OJS, OMP and OPS
+`main` (lib/pkp `042726ebf6`): "Add Category", "Name" "Maps", "Path"
+`maps`, `photo.png` as "Cover Image", "Save": 200; `public/journals/1/`
+(`presses/1/`, `contexts/1/`) held `8-category` and
+`8-category-thumbnail.png`, the stored image read
+`"uploadName":"8-category"`; the "Edit Category" preview
+(`…/public/journals/1/8-category?…`) showed the picture, and the
+category page's thumbnail on OJS and OPS; on OJS
+`/index.php/publicknowledge/catalog/fullSize?type=category&id=8`
+(OPS `preprints/fullSize`) answered 200 `image/png` with
+`Content-Disposition: inline; filename="8-category"`. A PNG named
+`photo.jpg` was accepted and stored as `9-category`. OMP's own
+`catalog/fullSize` reads another folder ([OMP1](#omp1)). Before, the
+`main` tips with lib/pkp `6ff76591a9..042726ebf6` reversed: stored as
+`8-category.png`. A fix tried (the controller passing
+`extension: $temporaryFileManager->getImageExtension(…)`, as the
+thumbnail and the style sheet do): stored as `8-category.png`, the
+full-size address naming `filename="8-category.png"`. Kept check
+`shared/playwright/checks/sync/pkp-lib-13512/followup.js`, fix
+`fix-followup.diff` in the same folder. Tracked in ci-triage "Open
+regressions". Written up for the team in
+`docs/reports/2026-10-19-pkp-lib-13512.md` (Finding 2; a temporary
+report, deleted once acted on; git history keeps it).
 
 <a id="fn-f-omp1"></a>
 **f-omp1** — OMP `CatalogHandler::thumbnail()` / `fullSize()` read
