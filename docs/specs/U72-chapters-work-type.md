@@ -1951,7 +1951,7 @@ being ordered. "Add Chapter" and the chapter titles carry the same two
 attributes and stay on the step when pressed; what makes the wizard
 follow the "Order" press alone was not read. On the Chapters page the
 press did nothing (two runs). Not driven on 3.5.
-Issue report: [docs/issues/U72-A11-wizard-order-pressed-again-opens-upload-files.md](../issues/U72-A11-wizard-order-pressed-again-opens-upload-files.md).
+Issue report: [pkp-e2e#1021](https://github.com/jardakotesovec/pkp-e2e/issues/1021) ([docs/issues/U72-A11-wizard-order-pressed-again-opens-upload-files.md](../issues/U72-A11-wizard-order-pressed-again-opens-upload-files.md)).
 
 <a id="fn-f-a12"></a>
 **f-a12** — lib/pkp `templates/controllers/grid/gridBodyPartWithCategory.tpl`
