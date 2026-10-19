@@ -2181,7 +2181,7 @@ would make this a change that came with 3.5; one walk of the
 galley-then-article steps on a 3.4 install settles it. The A4 issue
 report names this fault as out of its scope
 ([docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issues/U44-A4-article-own-urn-refused-as-in-use.md)).
-Issue report: [docs/issues/U44-A16-urn-shared-across-item-kinds.md](../issues/U44-A16-urn-shared-across-item-kinds.md).
+Issue report: [pkp-e2e#1011](https://github.com/jardakotesovec/pkp-e2e/issues/1011) ([docs/issues/U44-A16-urn-shared-across-item-kinds.md](../issues/U44-A16-urn-shared-across-item-kinds.md)).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-10-09 (note q26). On `stable-3_5_0` the
