@@ -1,0 +1,100 @@
+--- a/lib/pkp/classes/middleware/HasUser.php
++++ b/lib/pkp/classes/middleware/HasUser.php
+@@ -35,8 +35,11 @@
+             return $next($request);
+         }
+ 
++        // No signed-in user: a browser's session has ended, or a client sent no valid
++        // API token. The key in `error` tells a page's script to go to the login page.
+         return response()->json([
+-            'error' => __('api.403.unauthorized'),
++            'error' => 'user.authorization.loginRequired',
++            'errorMessage' => __('user.authorization.loginRequired'),
+         ], Response::HTTP_UNAUTHORIZED);
+     }
+ }
+--- a/lib/pkp/classes/middleware/PolicyAuthorizer.php
++++ b/lib/pkp/classes/middleware/PolicyAuthorizer.php
+@@ -96,6 +96,16 @@
+ 
+             $authorizationMessage = $routeController->getLastAuthorizationMessage();
+ 
++            // No signed-in user, and no check said why (a browser's session has ended, or
++            // a client sent no valid API token): the key in `error` tells a page's script
++            // to go to the login page
++            if (!$exceptionStatusCode && empty($authorizationMessage) && !$request->user()) {
++                return response()->json([
++                    'error' => 'user.authorization.loginRequired',
++                    'errorMessage' => __('user.authorization.loginRequired'),
++                ], Response::HTTP_UNAUTHORIZED);
++            }
++
+             return response()->json([
+                 'error' => empty($authorizationMessage) ? __('api.403.unauthorized') : $authorizationMessage,
+                 'errorMessage' => empty($authorizationMessage) ? '' : __($authorizationMessage),
+--- a/lib/ui-library/src/mixins/ajaxError.js
++++ b/lib/ui-library/src/mixins/ajaxError.js
+@@ -8,6 +8,7 @@
+  * @see https://vuejs.org/v2/guide/mixins.html
+  */
+ import dialog from './dialog';
++import {isLoginRequired} from '@/utils/loginRequired';
+ 
+ export default {
+ 	mixins: [dialog],
+@@ -35,6 +36,13 @@
+ 				return;
+ 			}
+ 
++			// The session has ended: reloading the page shows the login page,
++			// which returns here after signing in
++			if (isLoginRequired(r?.status, r?.responseJSON)) {
++				window.location.reload();
++				return;
++			}
++
+ 			let msg;
+ 			if (r?.responseJSON?.errorMessage || r?.responseJSON?.error) {
+ 				msg = r.responseJSON.errorMessage || r.responseJSON.error;
+--- a/lib/ui-library/src/stores/modalStore.js
++++ b/lib/ui-library/src/stores/modalStore.js
+@@ -2,6 +2,7 @@
+ import {ref, markRaw, computed} from 'vue';
+ import {t} from '@/utils/i18n';
+ import {useProgressStore} from '@/stores/progressStore';
++import {isLoginRequired} from '@/utils/loginRequired';
+ export const useModalStore = defineStore('modal', () => {
+ 	const progressStore = useProgressStore();
+ 	/**
+@@ -47,6 +48,13 @@
+ 
+ 	/** Default network error */
+ 	function openDialogNetworkError(fetchError) {
++		// The session has ended: reloading the page shows the login page, which
++		// returns here after signing in
++		if (isLoginRequired(fetchError?.status, fetchError?.data)) {
++			window.location.reload();
++			return;
++		}
++
+ 		const msg =
+ 			fetchError?.data?.errorMessage ||
+ 			fetchError?.data?.error ||
+--- /dev/null
++++ b/lib/ui-library/src/utils/loginRequired.js
+@@ -0,0 +1,15 @@
++/**
++ * Whether an API answer says that the request had no signed-in user while this
++ * page was rendered for one: the browser's session has ended since
++ *
++ * @param {Number} status The answer's HTTP status
++ * @param {Object} data The answer's JSON body
++ * @return {Boolean}
++ */
++export function isLoginRequired(status, data) {
++	return (
++		status === 401 &&
++		data?.error === 'user.authorization.loginRequired' &&
++		!!(typeof pkp !== 'undefined' && pkp?.currentUser?.id)
++	);
++}

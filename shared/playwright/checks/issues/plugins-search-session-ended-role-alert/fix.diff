@@ -1,0 +1,30 @@
+--- a/lib/pkp/classes/core/PKPComponentRouter.php
++++ b/lib/pkp/classes/core/PKPComponentRouter.php
+@@ -50,6 +50,7 @@
+ use Exception;
+ use PKP\config\Config;
+ use PKP\plugins\Hook;
++use PKP\security\Validation;
+ 
+ // The string to be found in the URL to mark this request as a component request
+ define('COMPONENT_ROUTER_PATHINFO_MARKER', '$$$call$$$');
+@@ -333,6 +334,19 @@
+         string $authorizationMessage,
+         array $messageParams = []
+     ) {
++        // A request without a signed-in user (its session has ended, or it never had one)
++        // goes to the login page, as the page router sends it. A page's script that reads
++        // the answer as JSON (a grid, a tab, a form) gets the JSON redirect the page follows;
++        // a browser navigation (a file link) gets the redirect itself.
++        if (!$request->getUser()) {
++            if (app('request')->expectsJson()) {
++                return $request->redirectUrlJson(
++                    $request->getDispatcher()->url($request, PKPApplication::ROUTE_PAGE, null, 'login')
++                );
++            }
++            Validation::redirectLogin();
++        }
++
+         $translatedAuthorizationMessage = __($authorizationMessage, $messageParams);
+ 
+         // Add the router name and operation if show_stacktrace is enabled.

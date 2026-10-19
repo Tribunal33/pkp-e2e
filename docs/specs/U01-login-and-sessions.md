@@ -743,7 +743,7 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A13](#a13) | With "Confirm Access" on, an Administration page left open still deletes journals and saves site settings without the password | 🐞 | medium | issues (claude), 2026-10-05 — re-verified |
 | [A14](#a14) | "Keep me logged in" keeps no one signed in once the session ends: back after the idle limit, the user meets the Login page | 🐞 | minor | — |
 | [A15](#a15) | "Login As" ends and a save made as the user is silently lost when that user first signs in after an upgrade | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
-| [A16](#a16) | A back-office page left open after its session ended answers a search with an alert or an "Error" window that does not say the user is signed out, instead of the Login page | 🐞 | user-visible | — |
+| [A16](#a16) | A back-office page left open after its session ended answers a search with an alert or an "Error" window that does not say the user is signed out, instead of the Login page | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A5](#a5) | No journal-level users screen offers the "must change password" box, so a Journal Manager cannot require a forced change on an existing account; only the Site Administrator's Hosted Journals list offers it | ❓ | user-visible | Jarda 2026-08-25 · to triage |
 | [A9](#a9) | The last-login date is recorded on every sign-in, but no users screen shows it, so a manager cannot see when an account last signed in | ❓ | minor | — |
 | [A3](#a3) | Retired: the set-a-new-password page's browser tab showed a raw internal code; it now reads "Reset Password \| {journal name}" (Fields) | ✅ | retired | issues (claude), 2026-10-04 — fixed upstream (pkp/pkp-lib#13132) |
@@ -1019,7 +1019,7 @@ changed stored value as a password change. (Rules 15, 15a)
 Basis: probe, 2026-10-19. <sup>[f-a15](#fn-a15)</sup>
 
 <a id="a16"></a>
-**A16 — A back-office page left open after its session ended answers a search with a refusal, not the Login page** · 🐞 · user-visible.
+**A16 — A back-office page left open after its session ended answers a search with a refusal, not the Login page** · 🐞 · low.
 Once a session has ended (after the idle limit, "Expire User Sessions"
 or the browser's cookies for the site cleared), the user expects the
 next thing they do to bring up the Login page, as opening or reloading
@@ -1037,7 +1037,7 @@ reloads, so they may well conclude that their role has lost access.
 After a password change in another browser, a Profile page open here
 behaves as [User profile A25](U03-user-profile.md#a25) and
 [A26](U03-user-profile.md#a26) record.
-Basis: probe, 2026-10-15. <sup>[f-a16](#fn-a16)</sup>
+Basis: probe, 2026-10-19. <sup>[f-a16](#fn-a16)</sup>
 
 ### Retired
 
@@ -1941,6 +1941,7 @@ empties. Code: an older-style list's request refused by its access check
 gets `PKPComponentRouter::handleAuthorizationFailure()` → `JSONMessage(false, …)`,
 the same on `stable-3_4_0` and `stable-3_3_0` (code read, not walked);
 the API's answer there was not read.
+Issue reports (two causes): [docs/issues/U01-A16-plugins-search-after-session-ended-role-alert.md](../issues/U01-A16-plugins-search-after-session-ended-role-alert.md) (the older lists, tabs and forms: the role alert); [docs/issues/U01-A16-users-search-after-session-ended-error-window.md](../issues/U01-A16-users-search-after-session-ended-error-window.md) (the newer lists: the "Error" window).
 
 ## Reference — entry points & surfaces
 
