@@ -1,0 +1,53 @@
+--- a/lib/pkp/classes/plugins/PKPPubIdPlugin.php
++++ b/lib/pkp/classes/plugins/PKPPubIdPlugin.php
+@@ -470,7 +470,7 @@
+      * Check for duplicate public identifiers.
+      *
+      * Checks to see if a pubId has already been assigned to any object
+-     * in the context (excluding the given object).
++     * of any type in the context (excluding the given object).
+      *
+      * @param string $pubId
+      * @param object $pubObject Pub object being checked
+@@ -480,15 +480,15 @@
+     public function checkDuplicate($pubId, $pubObject, int $contextId)
+     {
+         foreach ($this->getPubObjectTypes() as $type => $fqcn) {
+-            if (!$pubObject instanceof $fqcn) {
+-                continue;
+-            }
+             $typeDao = match ($type) {
+                 'Publication' => Repo::publication()->dao,
+                 'Representation' => Application::getRepresentationDAO(),
+                 'SubmissionFile' => Repo::submissionFile()->dao,
++                default => null, // An application's own types are checked by its subclass.
+             };
+-            if (isset($typeDao) && $typeDao->pubIdExists($this->getPubIdType(), $pubId, $pubObject->getId(), $contextId)) {
++            // Only the object itself is excluded, among the objects of its own type.
++            $excludeId = $pubObject instanceof $fqcn ? (int) $pubObject->getId() : 0;
++            if ($typeDao && $typeDao->pubIdExists($this->getPubIdType(), $pubId, $excludeId, $contextId)) {
+                 return false;
+             }
+         }
+--- a/classes/plugins/PubIdPlugin.php
++++ b/classes/plugins/PubIdPlugin.php
+@@ -223,14 +223,11 @@
+      */
+     public function checkDuplicate($pubId, $pubObject, int $contextId)
+     {
+-        $allowedPubObjectTypes = $this->getPubObjectTypes();
+-        if ($pubObject instanceof $allowedPubObjectTypes['Chapter']) {
+-            /** @var ChapterDAO */
+-            $chapterDao = DAORegistry::getDAO('ChapterDAO');
+-            if ($chapterDao->pubIdExists($this->getPubIdType(), $pubId, $pubObject->getId(), $contextId)) {
+-                return false;
+-            }
+-            return true;
++        /** @var ChapterDAO */
++        $chapterDao = DAORegistry::getDAO('ChapterDAO');
++        $excludeId = $pubObject instanceof Chapter ? (int) $pubObject->getId() : 0;
++        if ($chapterDao->pubIdExists($this->getPubIdType(), $pubId, $excludeId, $contextId)) {
++            return false;
+         }
+         return parent::checkDuplicate($pubId, $pubObject, $contextId);
+     }

@@ -832,6 +832,7 @@ are in the footnote. <sup>s</sup>
 Left out of the scenarios above, by reason:
 
 - **Planned**:
+  - the guard for A16 (issue report `docs/issues/U44-A16-urn-shared-across-item-kinds.md`): once fixed, with "Enter an individual URN suffix…" chosen, a galley's "Identifiers" tab refuses the URN an article already carries, and an article's page refuses a galley's, with "The given URN suffix is already in use for another published item. Please enter a unique URN suffix for each item." (Rules 11, 12a).
   - the guard for OJS1 (issue report
     `docs/issues/U44-OJS1-new-issue-galley-publisher-id-server-error.md`):
     "Create Issue Galley" with a Publisher ID saving the galley, and a
@@ -1001,7 +1002,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A13](#a13) | "Add Check Number" on an item's "Identifiers" tab writes "NaN" into an empty URN suffix box | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
 | [A14](#a14) | A galley's or chapter's "Identifiers" tab keeps showing a URN after "Clear" has removed it | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
 | [A15](#a15) | "Add Check Number" on an item's "Identifiers" tab adds "NaN" to a suffix holding a character such as "~" | 🐞 | minor | — |
-| [A16](#a16) | A URN another kind of item already carries is accepted: an article, its galley and an issue can share one URN | 🐞 | minor | — |
+| [A16](#a16) | An editor can give one URN to an issue, an article and its galley without any warning | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
 | [A17](#a17) | The header "Close" on a galley's or chapter's "Identifiers" tab drops a typed value without asking | 🐞 | minor | — |
 | [OJS1](#ojs1) | A new issue galley with a Publisher ID is not saved: "Save" stays greyed with no message | 🐞 | medium · crash: server | issues (claude), 2026-10-02 — re-verified |
 | [OJS3](#ojs3) | An issue's Publisher ID is never kept | 🐞 | medium | issues (claude), 2026-10-02 — re-verified |
@@ -1234,21 +1235,25 @@ box is a separate case.
 Basis: probe, 2026-10-02. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A URN is checked for duplicates only within its own kind of item** · 🐞 · minor.
-The URN settings window and every "Identifiers" tab say "A URN suffix
-can take any form, but must be unique among all publishing objects with
-the same URN prefix assigned:". Yet an editor can type, on an article's
-"Identifiers" page, the URN that one of its galleys, another article's
-galley or an issue already carries, and "Save" stores it. The other way
-round, a galley's or an issue's "Identifiers" tab takes the suffix of an
-article's URN and assigns it. On a press a monograph, a chapter, a
-publication format and a file can all end up with one and the same URN.
-Only two items of the same kind are refused, with "The given URN suffix
-is already in use for another published item. Please enter a unique URN
-suffix for each item." (Rules 11, 12a). It needs the URN plugin with
-"Enter an individual URN suffix…" chosen and URNs on for two kinds of
-item.
-Basis: probe, 2026-10-09. <sup>f-a16</sup>
+**A16 — An editor can give one URN to an issue, an article and its galley without any warning** · 🐞 · medium.
+An editor types, on an article's "Identifiers" page in the workflow, a
+URN that an issue or a galley of the journal already carries, and "Save"
+stores it. The other way round, the "Identifiers" tab of a galley's or
+an issue's edit window accepts a suffix whose URN another kind of item
+already carries, and assigns it. On a press, a monograph, its chapters,
+its publication formats and (by the code) its files can share one URN
+the same way. The tab's own help line says a suffix "must be unique
+among all publishing objects with the same URN prefix assigned", and 3.4
+refused such a URN (by the code); today only a second item of the same
+kind is refused. The duplicate is stored with no message, and it goes
+out: once the items are published, the article page, the issue's table
+of contents, the book page's formats, the pages' meta tags and the OAI
+records name it for each item (by the code). Every 3.5 release has the
+narrowed check, so a 3.5 install that assigns URNs this way may already
+hold such duplicates, and no screen lists them. It needs the URN plugin
+with "Enter an individual URN suffix for each published item…" chosen
+and URNs on for more than one kind of item. (Rules 11, 12a)
+Basis: probe, 2026-10-19. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Closing a galley's or chapter's window from the "Identifiers" tab drops a typed value without asking** · 🐞 · minor.
@@ -2176,6 +2181,7 @@ would make this a change that came with 3.5; one walk of the
 galley-then-article steps on a 3.4 install settles it. The A4 issue
 report names this fault as out of its scope
 ([docs/issues/U44-A4-article-own-urn-refused-as-in-use.md](../issues/U44-A4-article-own-urn-refused-as-in-use.md)).
+Issue report: [docs/issues/U44-A16-urn-shared-across-item-kinds.md](../issues/U44-A16-urn-shared-across-item-kinds.md).
 
 <a id="fn-f-a17"></a>
 **f-a17** — Live-probed 2026-10-09 (note q26). On `stable-3_5_0` the
