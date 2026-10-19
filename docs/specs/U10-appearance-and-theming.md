@@ -2461,7 +2461,7 @@ news2026&amp;-events (Custom Block)", the visible labels
 "news2026&-events (Custom Block)" and ""Developed By" Block". The custom
 block's row in the Custom Block Manager raised its script errors
 (Custom pages & blocks A13) during the walk; nothing else failed.
-Issue report: [docs/issues/U10-A17-sidebar-arrows-read-html-codes.md](../issues/U10-A17-sidebar-arrows-read-html-codes.md).
+Issue report: [pkp-e2e#1018](https://github.com/jardakotesovec/pkp-e2e/issues/1018) ([docs/issues/U10-A17-sidebar-arrows-read-html-codes.md](../issues/U10-A17-sidebar-arrows-read-html-codes.md)).
 
 <a id="fn-f-a18"></a>
 **f-a18** — Note j: ui-library `phpToLuxonFormat()` maps PHP's `S` to
