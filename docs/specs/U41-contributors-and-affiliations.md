@@ -89,7 +89,7 @@ nothing typed into its own fields clears, so Save stays disabled
 | **ORCID iD** | No | Person only. Present only while the journal has ORCID enabled. The field's states, its "Request verification" flow and iD removal are owned by *[ORCID integration](U04-orcid-integration.md)*. |
 | **Competing Interests** | Yes, when shown | Rich text, multilingual. Present only when the journal requires competing-interest statements (Settings that modify behavior). Guidance: "Please disclose any competing interests this author may have with the research subject." Saving it empty is stopped as a missing required field (the refusal described above this table). On a preprint server the field's label renders as raw code-like text instead of the plain "Competing Interests" ⚠ [OPS2](#ops2). <sup>j</sup> |
 | **Bio Statement (e.g., department and rank)** | No | Rich text, multilingual. |
-| **Affiliations** | No | The contributor's institution list, any number of entries. Guidance: 'Enter the full name of the institution below, avoiding any acronyms. Select the name from the dropdown and click "Add" to include the affiliation in your profile (e.g. "Simon Fraser University")'. Typing under "Type the institution name in {language}" queries the public ROR registry as you type, from four characters on, straight from your own browser. Each suggestion shows the institution's name, country, the ROR mark and a link to its registry record. You can also pick your typed text itself, offered first as a bare label, to record a hand-typed institution. "Add" appears only once a suggestion is picked. There is no Add button before that, and text typed but never picked is silently dropped when the form is saved ⚠ [A8](#a8). "Add" puts the institution at the end of the list. The list keeps the order of adding and has no control to change it; the reader's page does not always follow it ⚠ [A26](#a26). While a picked entry sits under "Selected", the search box is disabled: add or remove the entry before typing a new query. A registry-backed entry's identity is fixed. Its row links to the registry record, its name comes from the registry, and its only action is "Remove institution". A typed entry carries one name box per submission language ("Type the institution name in {language}"). A screen reader announces those boxes wrongly ⚠ [A10](#a10). It also shows a completeness status: "{count} of {total} languages completed" while incomplete, "All translations available" once every language is filled. That total may follow the publication's own language set rather than the journal's ⚠ [A17](#a17). A typed entry offers both "Edit institution name" and "Remove institution"; the two actions sit behind the row's expander button, named "Click to edit or delete". A save without the submission language's name is refused with "Please provide affiliation name in the submission primary locale." under the field and "Please correct one error." at the form's foot. The foot's error list, which only a screen reader reads, names that refusal "Go to Affiliations: [object Object]" ⚠ [A7](#a7). A refused "Edit" saves nothing. A refused "Add Contributor" has already added the contributor, without the institution, so the corrected save adds the same contributor a second time ⚠ [A24](#a24). A typed entry's name saved in a language that is later unticked under "Metadata" (Settings that modify behavior) loses its box. On a submission with no other text in that language, "Save" in that contributor's "Edit" is then refused, even with nothing changed, and no field shows a reason ⚠ [A28](#a28). Removing asks "Are you sure?" with "The affiliation {name} will be deleted." (Yes/No). When a registry search fails, an "ROR API Error" dialog explains why. There are three distinct messages (rate-limited, unavailable or deprecated), each dismissed with "OK", and the text just searched is left pre-picked as a typed entry. Registry suggestions do not come back after the dialog. They stay off until the Edit panel is closed and reopened, whatever the dialog's own advice says ⚠ [A11](#a11). Hand-typed entry keeps working throughout. <sup>d</sup> |
+| **Affiliations** | No | The contributor's institution list, any number of entries. Guidance: 'Enter the full name of the institution below, avoiding any acronyms. Select the name from the dropdown and click "Add" to include the affiliation in your profile (e.g. "Simon Fraser University")'. Typing under "Type the institution name in {language}" queries the public ROR registry as you type, from four characters on, straight from your own browser. Each suggestion shows the institution's name, country, the ROR mark and a link to its registry record. You can also pick your typed text itself, offered first as a bare label, to record a hand-typed institution. "Add" appears only once a suggestion is picked. There is no Add button before that, and text typed but never picked is silently dropped when the form is saved ⚠ [A8](#a8). "Add" puts the institution at the end of the list. The list keeps the order of adding and has no control to change it; the reader's page does not always follow it ⚠ [A26](#a26). While a picked entry sits under "Selected", the search box is disabled: add or remove the entry before typing a new query. A registry-backed entry's identity is fixed. Its row links to the registry record, its name comes from the registry, and its only action is "Remove institution". A typed entry carries one name box per submission language ("Type the institution name in {language}"). A screen reader announces those boxes wrongly ⚠ [A10](#a10). It also shows a completeness status: "{count} of {total} languages completed" while incomplete, "All translations available" once every language is filled. That total may follow the publication's own language set rather than the journal's ⚠ [A17](#a17). A typed entry offers both "Edit institution name" and "Remove institution"; the two actions sit behind the row's expander button, named "Click to edit or delete". A save without the submission language's name is refused with "Please provide affiliation name in the submission primary locale." under the field and "Please correct one error." at the form's foot. The foot's error list, which only a screen reader reads, names that refusal "Go to Affiliations: [object Object]" ⚠ [A7](#a7). A refused "Edit" saves nothing. A refused "Add Contributor" has already added the contributor, without the institution, so the corrected save adds the same contributor a second time ⚠ [A24](#a24). A program that edits the contributor without resending the list removes every entry ([A30](#a30), Rule 4a). A typed entry's name saved in a language that is later unticked under "Metadata" (Settings that modify behavior) loses its box. On a submission with no other text in that language, "Save" in that contributor's "Edit" is then refused, even with nothing changed, and no field shows a reason ⚠ [A28](#a28). Removing asks "Are you sure?" with "The affiliation {name} will be deleted." (Yes/No). When a registry search fails, an "ROR API Error" dialog explains why. There are three distinct messages (rate-limited, unavailable or deprecated), each dismissed with "OK", and the text just searched is left pre-picked as a typed entry. Registry suggestions do not come back after the dialog. They stay off until the Edit panel is closed and reopened, whatever the dialog's own advice says ⚠ [A11](#a11). Hand-typed entry keeps working throughout. <sup>d</sup> |
 | **Contributor Roles** | Yes | One checkbox per role the journal defines (Rule 11). At least one must be ticked; a save with none is stopped as a missing required field (the refusal described above this table). When the journal has exactly one role, the field disappears. Every contributor save from the form then fails, leaving role-less contributors behind ⚠ [A14](#a14). <sup>c</sup> |
 | **CRediT roles and the degrees of contribution** | No | Guidance: "Select the CRediT roles of the contributor and the degrees of contribution." A table with one row per role, empty ("No Items") until "Add Another Role" is pressed. Each row has a "Select a new role (required)" drop-down of the standard CRediT taxonomy, a "Degree" drop-down ("Lead", "Equal", "Supporting") and "Remove Role". A new row arrives on the list's first role, "Conceptualization", with "Degree" empty, even beside another "Conceptualization" row. Saved with "Degree" still empty, the contributor keeps the role with no degree; what "Save" does with two rows on one role was not seen. Every row's list grays out a role any row shows. From the second row on, the drop-downs are not tied to their labels: a click on a label lands in the first row ⚠ [A25](#a25). Shown on the landing page (Rule 14). The form offers no degree but those three or none; a program that saves a contributor through the install's programming interface (the one programs outside the apps call) with any other degree gets a server error, and part of its change is kept ⚠ [A29](#a29). <sup>c</sup> |
 | **Publication Lists** | No | One checkbox, ticked by default: "Include this contributor when identifying authors in lists of publications." (Rule 8, and its limits in practice, ⚠ [A3](#a3)). |
@@ -136,6 +136,28 @@ screen, Rule 12): <sup>e</sup>
    after a reload the list shows the contributors as they were before
    the panel opened. The one exception is the contributor a refused "Add
    Contributor" has already added ([A24](#a24)). <sup>c</sup>
+
+4a. **Saving through the programming interface.** A program can also
+   read and edit a contributor through the install's programming
+   interface, with the API key (*[User profile](U03-user-profile.md)*)
+   of an account that may edit the list (Actors); the requests are in
+   the footnote. The form's "Save" sends the same edit,
+   always with every field it shows, the contributor type and every
+   affiliation, so no screen sends the edits below. <sup>o</sup>
+   - **Fields left out.** An edit naming the type changes what it sends
+     and keeps what it leaves out: one sending only a new given name
+     keeps the family name, email and country. The affiliations are the
+     exception: left out, every one is removed ⚠ [A30](#a30); resent as
+     read, each is kept.
+   - **The contributor type left out.** On `main`, an edit not naming
+     the type empties the contributor ⚠ [A31](#a31).
+   - **The record sent back as read.** A contributor read and sent back
+     unchanged is not saved, and nothing changes ⚠ [A32](#a32). Sent
+     with the fields that entry names adjusted, the record saves and
+     loses nothing.
+   - **A CRediT degree** other than "Lead", "Equal" or "Supporting"
+     fails with a server error, part of the change saved ([A29](#a29)
+     says which).
 5. **Delete.** "Delete" opens a confirmation titled "Delete Contributor":
    "Are you sure you want to remove {name} as a contributor? This action
    can not be undone." Its "Delete Contributor" button removes the
@@ -869,6 +891,10 @@ Left out of the scenarios above, by reason:
   - a contributor whose hand-entered institution is named in a language
     then unticked under "Metadata" saved with nothing changed, the save
     going through ([A28](#a28)): the guard the issue report proposes
+  - a program's contributor edit through the programming interface that
+    names the type and sends only a new given name, keeping the family
+    name, email and country, and one that also resends the affiliations
+    as read, keeping each (Rule 4a)
 - **Nothing new to test**:
   - Preferred Public Name (Fields): another text box on the form
     scenario 1 fills
@@ -925,6 +951,12 @@ Left out of the scenarios above, by reason:
     Fields; Settings)
   - A29 (a contributor saved through the programming interface with an
     unknown degree failing and keeping part of the change; Fields)
+  - A30 (a program's edit that does not resend the affiliations
+    removing them all; Rule 4a; Fields)
+  - A31 (a program's edit on `main` that does not name the contributor
+    type emptying the contributor; Rule 4a)
+  - A32 (a contributor sent back by a program as it was read refused,
+    on `main` with a server error; Rule 4a)
   - OPS2 (the Competing Interests label rendering raw on a preprint
     server; Fields)
 - **No seed**:
@@ -985,6 +1017,9 @@ badges, Impact and Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [A26](#a26) | On an article, book or preprint page with several contributors, a contributor's affiliations print in reverse order | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A27](#a27) | A contributor's affiliations on an article, book or preprint page read "First Univ , Second Univ" | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [A29](#a29) | A program saving a contributor with an unknown CRediT degree gets a server error, and part of the change is kept | 🐞 | low · crash: server | issues (claude), 2026-10-15 — re-verified |
+| [A30](#a30) | A program that edits a contributor without resending the affiliations removes all of them | 🐞 | latent | — |
+| [A31](#a31) | On `main`, a program that edits a contributor without naming its type erases its names, email, country and affiliations | 🐞 | latent | — |
+| [A32](#a32) | A program that sends a contributor back as it read it gets a server error on `main`, a refusal in 3.5, and nothing is saved | 🐞 | latent · crash: server | — |
 | [A2](#a2) | Deleting the primary contact silently leaves the publication with none | ❓ | user-visible | — |
 | [A16](#a16) | The auto-created contributor can arrive without a Country — every later edit is then refused until one is supplied | ❓ | user-visible | — |
 | [A4](#a4) | The organization contributor's "ROR ID" box accepts any text without a shape check | ❓ | minor | — |
@@ -1462,6 +1497,54 @@ saved, and the roles it leaves out are removed from the contributor.
 The rest of the change, a new given name for one, is lost.
 Basis: probe + code reading, 2026-10-15. <sup>f-a29</sup>
 
+<a id="a30"></a>
+**A30 — A program that edits a contributor without resending the affiliations removes all of them** · 🐞 · latent.
+A program that changes one field of a contributor through the install's
+programming interface (its given name, say) and does not resend the
+affiliations expects them kept, as the edit keeps every other field it
+leaves out (Rule 4a). The edit reports success, yet every affiliation
+the contributor had is gone. After a reload, the contributor's "Edit"
+shows no institution under "Affiliations", only the empty search box,
+and a later read through the interface lists none. The same change sent
+with the affiliations as read keeps them. It holds on `main` and in
+version 3.5. The form always resends the list, so only a program meets
+it, and it loses the institutions without a word.
+Basis: probe, 2026-10-19. <sup>f-a30</sup>
+
+<a id="a31"></a>
+**A31 — On `main`, a program that edits a contributor without naming its type erases the contributor's names, email, country and affiliations** · 🐞 · latent.
+A program that changes one field of a contributor through the install's
+programming interface without naming the contributor type ("Person",
+"Organization or group" or "Anonymous") expects the rest kept, as when
+it names the type. The edit reports success, yet the contributor is
+emptied. The given and family names, the email, the country and every
+affiliation are blank, even when the edit resends the affiliations, and
+the new given name it sent is not kept either. The Contributors list
+then shows the contributor's row with no name, only its badges, and
+its "Edit" shows empty "Given Name", "Family Name" and "Email" boxes and
+no institution. The contributor's identity is lost behind a success
+answer, and only the next person to open the list can notice. Version
+3.5 has no contributor types: there the same edit keeps the names, email
+and country, and loses only the affiliations ([A30](#a30)).
+Basis: probe + code reading, 2026-10-19. <sup>f-a31</sup>
+
+<a id="a32"></a>
+**A32 — A program that sends a contributor back as it read it gets a server error on `main`, a refusal in 3.5, and nothing is saved** · 🐞 · latent · crash: server.
+A program that reads a contributor through the install's programming
+interface and sends the record back unchanged expects it saved as it
+was. On `main` the edit fails with a server error: the read lists the
+contributor roles as whole records, and the edit takes only their
+numbers. Sent with the numbers, the edit is refused with "This field
+must be true or false.": the read gives the field that says whether
+ORCID verification was requested as empty, and the edit does not take
+an empty value there. In version 3.5, whose record carries no
+contributor roles, the record as read is refused at once for that
+field, and on a press for the volume-editor field too, with the same
+message for each. Nothing is changed in any of these cases. Sent
+without those empty fields, and on `main` with the roles as numbers,
+the record saves and nothing is lost.
+Basis: probe, 2026-10-19. <sup>f-a32</sup>
+
 ### OMP
 
 <a id="omp1"></a>
@@ -1589,7 +1672,8 @@ Assistant, Reviewer, Author; the four writes (add/edit/delete/saveOrder)
 allow Manager, Sub-editor, Assistant, Author behind
 `PublicationWritePolicy`; `addContributor`/`editContributor` re-run
 `canEditPublication()` inline, `deleteContributor`/`saveContributorsOrder`
-rely on the policy alone (`PKPSubmissionController.php`). Primary
+rely on the policy alone (`PKPSubmissionController.php`); what the
+edit reads and takes is fn o. Primary
 contact: the panel PUTs `{primaryContactId}` to the publication itself,
 not a contributor endpoint (`setPrimaryContact()` →
 `publicationApiUrl`). OPS's `SubmissionController` re-registers publish
@@ -2016,6 +2100,58 @@ layer including `FieldAffiliations.php` and `FieldCreditRoles.php`
 (`ContributorForm.php`, panel, templates) is byte-identical across the
 pins; behavior differences, if any, would sit in form-field default
 handling — the probes run on all three apps regardless.
+
+<a id="fn-o"></a>
+**o — the contributor edit through the API (Rule 4a).** The edit is
+`PUT /index.php/{journal}/api/v1/submissions/{id}/publications/{id}/contributors/{id}`
+(`PKPSubmissionController::editContributor()`), and a `GET` of the same
+address is the read. A program outside the browser sends the account's
+API key as `Authorization: Bearer <key>` (the key works so on the
+submissions API: *[User profile](U03-user-profile.md#fn-h)*), for one `curl -X PUT -H
+"Authorization: Bearer <key>" -H "Content-Type: application/json" -d
+'{"contributorType":"PERSON","givenName":{"en":"Dana"}}' <address>`;
+the probes below sent the same requests from the account's signed-in
+page with its CSRF token instead, so the key itself was not driven on
+this edit. The panel's "Save"
+sends it as a `POST` with `X-Http-Method-Override: PUT`, carrying
+`contributorType` (on `main`), every name, email, country, `rorId`,
+`url` and biography key, `affiliations[n][id]` with each affiliation's
+name and `ror`, `contributorRoles[]`, `creditRoles` and
+`includeInBrowse` (read from the form's own save, OJS, OMP and OPS on
+`main` and `stable-3_5_0`). What the edit takes, by the code (lib/pkp
+`042726ebf6` on `main`; `092ec34b0f` on 3.5): the affiliations are
+replaced by the list sent (`$params['affiliations'] ?? []` →
+`setAffiliations()` → `Repo::affiliation()->saveAffiliations()`, which
+keeps an affiliation sent with its `id`, deletes one left out, and
+deletes them all on an empty list; 3.5 reads the key without the
+`?? []` default); on `main` `removeIrrelevantContributorTypeData()`
+nulls every field of the types other than the `contributorType` sent;
+`contributorRoles` are mapped as ids through
+`ContributorRole::withRoleIds()`. A GET of the same address gives
+`contributorRoles` as objects (`{_href, contextId,
+contributorRoleIdentifier, id, name}`) and `orcidVerificationRequested:
+null` on `main`; the 3.5 record has `userGroupId` / `userGroupName` and
+neither `contributorRoles` nor `contributorType`, and on OMP 3.5 also
+`isVolumeEditor: null`. The form's one-role collapse sends the roles as
+a single value instead, a separate failure ([A14](#a14)).
+Live-probed 2026-10-19 (Rule 4a, A30–A32; Rule 4's "Close" re-read on
+the way: no dialog, the old given name on reopening): OJS, OMP and OPS
+on `main` (lib/pkp `042726ebf6`; OJS `6b4323ced7`, OMP `5777025bec`,
+OPS `f048e747b4`) and `stable-3_5_0` (OJS `007c2cd0d6`, OMP
+`2d575f2506`, OPS `e737a9e465`), PKP's default dataset (pkp/datasets
+`eaf024c5`), `dbarnes` on `publicknowledge` with the signed-in page's
+CSRF token, two runs per app and line, each on a fresh reset; the
+contributors OJS 6/13 Dana Phillips and 7/14 Domatilia Sokoloff, OMP
+1/1 Arthur Clark and 2/2 Alvin Finkel, OPS 1/1 Carlo Corino and 4/9
+Diaga Diouf, each with one typed affiliation on an unpublished latest
+version. Every outcome was read in the answer, by a GET, in the stored
+rows and on the contributor's "Edit" after a reload. An edit sending
+`{contributorType: "PERSON", givenName}` (on 3.5 `{givenName}`)
+answered 200 and kept the family name, email and country. The
+form's own "Save" with the given name changed answered 200 and kept the
+affiliation, on both lines. Kept script
+`shared/playwright/checks/U41/H19/h19.js` (modes `roundtrip`,
+`onefield`).
 
 <a id="fn-s1"></a>
 **s1 — scenario 1 seeding.** One scratch submission (any stage before
@@ -2760,7 +2896,9 @@ PKP's dataset, `dbarnes` on `publicknowledge`, submission 6's
 contributor Dana Phillips; two runs, each on a fresh reset; every
 outcome read from the contributor's own record right after the
 request). `PUT …/api/v1/submissions/6/publications/7/contributors/13`
-with the record as read plus `creditRoles`:
+with the record as read, its `contributorRoles` as ids and its null
+fields left out (the record sent back as it is read fails: A32), plus
+`creditRoles`:
 - `[]`: 200, no CRediT role left.
 - From none, Conceptualization `LEAD`, Data curation `"NULL"`, Software
   `SUPPORTING`, with the given name changed in the same request: 500;
@@ -2792,6 +2930,67 @@ three or none (a refusal naming the field) and saves the contributor in
 one transaction. `stable-3_5_0` has no CRediT roles: no
 `credit_contributor_roles` table and no `creditRoles` in its author
 schema.
+
+<a id="fn-f-a30"></a>
+**f-a30 — A30 evidence.** Live-probed 2026-10-19 (fn o for the
+installs, contributors and runs): on `main`, `PUT …/contributors/{id}`
+with `{contributorType: "PERSON", givenName}` answered 200 with
+`affiliations: []`; the given name changed, the family name, email and
+country stayed, the stored affiliation rows were gone, and the "Edit"
+form showed under "Affiliations" only the search row "Type the
+institution name in English Selected None", after a reload, on OJS, OMP
+and OPS in both runs. The same edit with the affiliations as read
+(`{authorId, id, name, ror, rorObject}`) answered 200 and kept the
+affiliation and its id, on the form too. On `stable-3_5_0`, `{givenName}`
+alone gave the same loss, the edit with the affiliations kept them, and
+the bare edit sent after that one lost them again; 3.5 also logs `PHP
+Warning: Undefined array key "affiliations"` and `foreach() argument
+must be of type array|object, null given` in
+`PKPSubmissionController::editContributor()`. Mechanism: fn o. The A29
+issue report's "A neighbouring gap" bullet records the loss on OJS
+together with A31's
+([docs/issues/U41-A29-contributor-unknown-credit-degree-server-error.md](../issues/U41-A29-contributor-unknown-credit-degree-server-error.md)).
+
+<a id="fn-f-a31"></a>
+**f-a31 — A31 evidence.** Live-probed 2026-10-19 (fn o): on `main`,
+OJS, OMP and OPS, two runs, `PUT …/contributors/{id}` with
+`{givenName}` alone, and with `{givenName, affiliations as read}`,
+answered 200; the answer, a GET and the stored rows then held given
+name `""`, family name `""`, email `""`, country `""`, no
+`author_settings` rows and no affiliation, the given name sent not kept
+either. The Contributors list row read "Author Primary Contact Edit
+Delete", and its "Edit" showed empty "Given Name", "Family Name" and
+"Email" boxes and no affiliation. Server log: `PHP Warning: Undefined
+array key "contributorType"` in
+`PKPSubmissionController::removeIrrelevantContributorTypeData()`, plus
+three "Array to string conversion" warnings. Mechanism (lib/pkp
+`042726ebf6`): `editContributor()` calls
+`removeIrrelevantContributorTypeData()`, which reads the missing
+`contributorType` and so treats every type's fields as irrelevant and
+nulls them; `schemas/author.json` lists `contributorType` as required,
+but the edit does not enforce it. The A29 issue report's "A neighbouring
+gap" bullet names this wipe (walked on OJS)
+([docs/issues/U41-A29-contributor-unknown-credit-degree-server-error.md](../issues/U41-A29-contributor-unknown-credit-degree-server-error.md)).
+The dataset fleets' contributors left without affiliations on `main`
+most likely came from such edits.
+
+<a id="fn-f-a32"></a>
+**f-a32 — A32 evidence.** Live-probed 2026-10-19 (fn o), two runs per
+app and line, each outcome read in the answer, a GET, the stored rows
+and the "Edit" form. `main`, OJS, OMP and OPS: the GET's body sent back
+unchanged answered 500 `{"error":"Nested arrays may not be passed to
+whereIn method."}` (server log `production.ERROR: Nested arrays may not
+be passed to whereIn method.`, an `InvalidArgumentException`; requests
+`PUT …/submissions/6/publications/7/contributors/13` on OJS and
+`…/submissions/1/publications/1/contributors/1` on OMP and OPS), with
+the names, email and affiliations unchanged; with `contributorRoles` as
+ids it answered 400 `{"orcidVerificationRequested":["This field must be
+true or false."]}`; with that key also removed it answered 200, the
+affiliation kept with its id. `stable-3_5_0`: the body as read answered
+400 at once, on `orcidVerificationRequested` on OJS and OPS and also
+`"isVolumeEditor":["This field must be true or false."]` on OMP; without
+those keys, 200 and nothing lost. One server error per `main` run, none
+on 3.5.
 
 <a id="fn-f-omp1"></a>
 **f-omp1 — OMP1 evidence.** OMP
@@ -2853,7 +3052,7 @@ Issue report: [pkp-e2e#765](https://github.com/jardakotesovec/pkp-e2e/issues/765
 | Contributors step panel (wizard) | submission wizard, Contributors step | rider on the wizard shell (owned by *[Submission wizard](U21-submission-wizard.md)*) |
 | Contributor Roles screen | Settings → Workflow → Submission → "Contributor Roles" | AFFM-061 (Add Role) · AFFM-062 (row Edit) · AFFM-063 (row Delete) · VUE-034 · VUE-056 |
 | Contributor roles API | `contributorRoles` (list, get, identifiers, add, edit, delete) | API-014 |
-| Contributors API cluster | `submissions/{id}/publications/{id}/contributors` (list, get, add, edit, delete, saveOrder) | rider on the submissions API (owned by *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md)*) |
+| Contributors API cluster | `submissions/{id}/publications/{id}/contributors` (list, get, add, edit, delete, saveOrder); what an edit keeps and loses is Rule 4a | rider on the submissions API (owned by *[Workflow screen & stage access](U24-workflow-screen-and-stage-access.md)*) |
 | ROR registry lookup API | `rors` (get, list, add-or-edit cache) — the two read routes have no UI caller | API-033 |
 | ROR registry cache refresh | scheduled task, monthly + at install | JOB-057 |
 | Author record shape | — | SET-003 |
