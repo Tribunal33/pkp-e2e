@@ -2489,7 +2489,7 @@ two runs: "Custom" under "Date & Time (Short)" with `jS M Y H:i` saved
 file's "Date uploaded" read "5th Oct 2026 04:38" and a discussion
 message "Message from {username} 5 Oct 2026 04:38". Control, the
 default `Y-m-d h:i A`: both read "2026-10-05 04:38 AM".
-Issue report: [docs/issues/U10-A18-ordinal-ending-dropped-on-discussion-messages.md](../issues/U10-A18-ordinal-ending-dropped-on-discussion-messages.md).
+Issue report: [pkp-e2e#1022](https://github.com/jardakotesovec/pkp-e2e/issues/1022) ([docs/issues/U10-A18-ordinal-ending-dropped-on-discussion-messages.md](../issues/U10-A18-ordinal-ending-dropped-on-discussion-messages.md)).
 
 <a id="fn-f-a19"></a>
 **f-a19** — Note j. Live-probed 2026-10-05 on all three apps, two
