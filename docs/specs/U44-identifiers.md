@@ -2301,7 +2301,7 @@ is A11's (note f-a11), not a second fault. A journal's example reads
 "For example, vol%viss%ipp%p could create the URN suffix
 "vol3iss2pp230"." (read in the OJS locale file, with placeholders its
 list names; not driven).
-Issue report: [docs/issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md](../issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md).
+Issue report: [pkp-e2e#1013](https://github.com/jardakotesovec/pkp-e2e/issues/1013) ([docs/issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md](../issues/U44-OMP8-urn-pattern-example-unknown-placeholder.md)).
 
 ## Reference — entry points & surfaces
 
