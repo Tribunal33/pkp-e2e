@@ -2509,7 +2509,7 @@ cleared in the database; the logo's address then answered 404 and its
 file was gone, while the thumbnail's still answered 200 `image/png`
 (in a freshly launched browser too) and its file stayed on disk. The
 site's list of journals after the removal was not read.
-Issue report: [docs/issues/U10-A20-removed-thumbnail-stays-public.md](../issues/U10-A20-removed-thumbnail-stays-public.md).
+Issue report: [pkp-e2e#1020](https://github.com/jardakotesovec/pkp-e2e/issues/1020) ([docs/issues/U10-A20-removed-thumbnail-stays-public.md](../issues/U10-A20-removed-thumbnail-stays-public.md)).
 
 <a id="fn-f-a21"></a>
 **f-a21** — pkp-lib `266505ecd8` ("Check settings file types before
