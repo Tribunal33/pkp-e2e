@@ -1,0 +1,11 @@
+--- a/lib/ui-library/src/components/Form/fields/FieldBase.vue
++++ b/lib/ui-library/src/components/Form/fields/FieldBase.vue
+@@ -182,7 +182,7 @@
+ 			if (this.tooltip) {
+ 				ids.push(this.describedByTooltipId);
+ 			}
+-			if (this.error) {
++			if (this.errors?.length) {
+ 				ids.push(this.describedByErrorId);
+ 			}
+ 			if (this.isMultilingual) {

@@ -1091,7 +1091,7 @@ entry notes otherwise; the team settles them on spec review.
 | [A15](#a15) | Editing a data citation, its identifier cannot be removed and a cleared Repository, Year or URL is kept | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A16](#a16) | The row expander is always named "Collapse" and ignores the keyboard; rows with nothing to expand carry an invisible one | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A19](#a19) | The ordering arrows on the Data Citations table have no names for a screen reader | 🐞 | low | issues (claude), 2026-10-02 — re-verified |
-| [A24](#a24) | A screen reader hears that a refused box of the data citation panel is invalid, but not why | 🐞 | minor | — |
+| [A24](#a24) | Screen reader users hear a form field called invalid, but not the error message shown under it | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A25](#a25) | A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text, without a word | 🐞 | minor | — |
 | [A11](#a11) | Readers never see data citations, though the editors' table says they appear alongside the references | ❓ | user-visible | — |
 | [A17](#a17) | "Edit" accepts a repeated reference that "Add" drops | ❓ | minor | — |
@@ -1298,20 +1298,23 @@ are icon-only buttons with no name; a screen reader announces only
 Basis: probe, 2026-10-02. <sup>f-a19</sup>
 
 <a id="a24"></a>
-**A24 — A screen reader hears that a refused box of the data citation panel is invalid, but not why** · 🐞 · minor.
-When "Add Data Citation" or "Edit Data Citation" refuses a save, the
-reason shows under each refused box: "This field is required." under
-"Title" and "Relationship type", the messages of "Year" and "URL", and
-the ORCID iD message under a creator row's box. A screen reader user who
-moves to such a box is expected to hear the reason with it. The message
-is not tied to the box: the box is announced as invalid and nothing
-more, so the user has to search the panel for the reason, and a creator
-row's box has no name either ([A14](#a14)). Nothing is saved wrongly.
-The same was seen on Settings › Journal › "Contact", with "Name" and
-"Email address" under "Technical Support Contact" emptied and refused.
-The other forms of the editorial screens are built from the same boxes
-(read in the code, not walked).
-Basis: probe, 2026-10-07. <sup>f-a24</sup>
+**A24 — Screen reader users hear a form field called invalid, but not the error message shown under it** · 🐞 · low.
+When a form of the editorial screens rejects a save, it shows an error
+message under each field that failed ("This field is required.", "This
+is not a valid URL."). A screen reader user who moves into such a field
+hears it called invalid, but not the message: the message is not tied to
+the field. The fault is in the ui-library's `FieldBase.vue`, which every
+form field is built on, so every field of every such form has it. Most
+forms also list each failed field with its first message at their foot,
+in a list only a screen reader announces, and that list is the way to
+the reason. A few forms show no such list: creating a new version,
+sending a file to the text editor, an author's response to the reviews,
+and the media file windows. There the user has to read on past the field
+to find the message. The ask is a one-line fix in `FieldBase.vue`. The
+open `pkp/ui-library#934` contains the same change but needs `?.` added
+to it, or it breaks the "Creators" rows of the data citation panel. (A
+creator row's field has no name either: [A14](#a14).)
+Basis: probe, 2026-10-19. <sup>f-a24</sup>
 
 <a id="a25"></a>
 **A25 — A DOI typed in "Edit citation" before the lookup has started is replaced by the DOI in the reference's text** · 🐞 · minor.
@@ -2872,6 +2875,7 @@ appears; it is not offered again with the box. The fix proposed for A14
 note q24, read from Chromium's accessibility tree; a screen reader
 itself was not run. Kept check `shared/playwright/checks/U42/I07b/i07b.js` (phases
 `l13`, `forms`).
+Issue report: [docs/issues/U42-A24-refused-box-message-not-announced.md](../issues/U42-A24-refused-box-message-not-announced.md).
 
 <a id="fn-f-a25"></a>
 **f-a25 — A25 evidence.** `ExtractPidsJob::handle()` returns early only
