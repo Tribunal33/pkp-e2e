@@ -200,8 +200,11 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     journal, then its title). Each imported submission then belongs to
     the journal: it appears on the Dashboard
     ([Submissions dashboard](U23-submissions-dashboard.md)) in the stage
-    the file gives it, with the file's contributors and files.
-    <sup>f</sup> <sup>td7</sup>
+    the file gives it, with the file's contributors and files. The copy
+    of a published submission is published too and its public page
+    opens, but neither the Dashboard's "Published" nor its "Active
+    submissions" lists it; only the Dashboard's search box finds it
+    ⚠ [A26](#a26). <sup>f</sup> <sup>td7</sup>
 10a. **Error lines on a clean file.** Even the app's own exported
     file lists, under "Errors occured:", on a journal "The issue
     identification element is missing for the article "{title}"." for
@@ -337,6 +340,22 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
     as Rule 11 says, with a "Validation errors:" line saying of
     "plainLanguageSummary", the first of them in the file, "This element
     is not expected." <sup>h</sup>
+20b. **From the server's command line.** The Native XML Plugin also
+    runs on the server, without the screens. `php tools/importExport.php
+    NativeImportExportPlugin import {file} {journal path} {username}`
+    imports an XML file into the journal whose address carries that
+    path, in the name of that account; `… export {file} {journal path}
+    article {number}` (`monograph` on a press, `preprint` on a server)
+    writes that submission to a file. Each prints the messages of the
+    results tabs: the import those of Rules 10 and 11, the export "The
+    export completed successfully." with the lines of Rule 16a. A
+    journal's published article and a server's published preprint
+    export and import this way. On a press, a file with any book that
+    has a publication format fails to import ("The process failed.
+    Check below for errors/warnings."), and nothing is imported; once
+    the press's four ONIX details (Rule 19) are filled, the export of
+    such a book fails the same way and writes no file ⚠ [OMP6](#omp6).
+    <sup>y</sup>
 
 **Users XML Plugin** {OJS OMP}
 
@@ -705,7 +724,9 @@ Sync", "Error"), and a "Search" button. <sup>q</sup>
    Settings › Press › "Masthead",
    [Journal identity & about pages](U07-journal-identity-and-about-pages.md);
    blank on a new press). Any blank: the Native XML "Export" tab shows
-   the reminder of Rule 19; all filled: no reminder. <sup>j</sup>
+   the reminder of Rule 19; all filled: no reminder, and a book with a
+   publication format no longer exports from the command line (Rule
+   20b, [OMP6](#omp6)). <sup>j</sup>
 8. **"Minimum password length (characters)"** (Administration › "Site
    Settings" › "Site Setup" › "Security",
    [Site settings](U60-site-settings.md); 6). A plain password in a
@@ -1317,6 +1338,10 @@ Left out of the scenarios above, by reason:
     it is unpublished, with the status filter on "Any Status" and on
     "Needs Sync"; published again, its row reading "Needs Sync"
     (Rule 44) {OJS}
+  - the Native XML Plugin run from the server's command line: a
+    published article (preprint) exported and the file imported back,
+    "The export completed successfully." and the success text of Rule
+    10 printed, the copy added {OJS OPS} (Rule 20b)
 - **Nothing new to test**:
   - "Import" pressed with no file up, and with a file that is not XML
     (Rule 13)
@@ -1378,6 +1403,8 @@ Left out of the scenarios above, by reason:
     leaves
   - A25 (a file over the server's upload limit chosen on "Import";
     Rule 8a)
+  - A26 (a published submission imported, looked for on the
+    Dashboard's lists; Rule 10)
   - OJS1 (the DOAJ list's issue window heading; Rule 36)
   - OJS2 (the "DOAJ Export Plugin" row kept on the Plugins list while
     "DOAJ Plugin" is off; Rule 3)
@@ -1401,6 +1428,8 @@ Left out of the scenarios above, by reason:
   - OMP4 (the same tool run from the server's command line; Rule 6)
   - OMP5 (a press's own file with books in a series, imported; Rule
     10a)
+  - OMP6 (a press's Native XML import from the command line, and its
+    export there with the ONIX details filled; Rule 20b)
 - **No seed**:
   - the PubMed file downloading, and the journal title it carries: the
     journal's name before "NLM Title Abbreviation" is saved and after it
@@ -1441,6 +1470,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [A23](#a23) | A users file first imported on a 3.5.0 release and imported again after the update gives each ended role a second time | 🐞 | minor | — |
 | [A24](#a24) | Paging the export list, the dashboard or a preprint server's archive repeats some submissions and skips others | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A25](#a25) | A Native XML file over the server's upload limit is refused with "File size error." alone, and "Import" then does nothing | 🐞 | minor | — |
+| [A26](#a26) | On the development line, a published submission imported with the Native XML Plugin is on neither the Dashboard's "Published" nor "Active submissions" | 🐞 | minor | — |
 | [OJS1](#ojs1) | DOAJ export list's issue link opens the issue's window headed "DOI Plugin Settings" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS2](#ojs2) | With "DOAJ Plugin" switched off, the Plugins list still shows its export tool as on | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OJS4](#ojs4) | Where NLM's site cannot be reached, every PubMed export fails with a "Validation errors:" page | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
@@ -1452,6 +1482,7 @@ unless an entry notes otherwise; the team settles them on spec review.
 | [OMP1](#omp1) | Pressing "Tab Delimited Content Import Plugin" on a press's Tools page opens a blank page | 🐞 | low · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP4](#omp4) | A press's command-line CSV import stops with a fatal error, imports nothing and leaves an empty submission | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OMP5](#omp5) | Importing a press's own exported file lists "Unknown element sequence" for every book in a series | 🐞 | minor | — |
+| [OMP6](#omp6) | From the command line, a press's Native XML import fails on any book with a publication format, and so does the export once the ONIX details are filled | 🐞 | user-visible | — |
 | [A14](#a14) | "Export Users" with no row ticked ends on a blank page: the server fails | ❓ | minor · crash: server | — |
 | [A22](#a22) | "Export Users" leaves out an account whose only role starts on a later date | ❓ | minor | — |
 | [OJS8](#ojs8) | DOAJ "Register" checks nothing, "Validate XML before the export and registration." ticked or not | ❓ | minor | — |
@@ -1738,6 +1769,20 @@ fewer submissions per file, or to have the administrator raise the
 server's upload limit.
 Basis: probe, 2026-10-09. <sup>f-a25</sup>
 
+<a id="a26"></a>
+**A26 — An imported published submission is on neither of the Dashboard's lists** · 🐞 · minor.
+A published article, book or preprint brought in with the Native XML
+Plugin (Rule 10, from the "Import" tab or the command line) should be
+listed under the Dashboard's "Published", as its source is. Instead
+the copy is published and its public page opens, but neither
+"Published" nor "Active submissions" lists it. Only the Dashboard's
+search box finds it, by its number, its row reading "Published"; its
+workflow screen reads "Published" too. Nothing is lost, but an editor
+who looks on the lists for content just imported does not find it. Every published submission imported this way is
+left off. Only the development line has the fault; the 3.5 release
+lists the copy under "Published".
+Basis: probe, 2026-10-19. <sup>f-a26</sup>
+
 ### OJS
 
 <a id="ojs1"></a>
@@ -1941,6 +1986,26 @@ nothing the manager could correct, and the manager cannot tell them
 from a real warning. Every press whose books belong to series gets
 them at each import of its own files.
 Basis: probe, 2026-10-09. <sup>f-omp5</sup>
+
+<a id="omp6"></a>
+**OMP6 — From the command line, a press's Native XML import fails on any book with a publication format, and so does the export once the ONIX details are filled** · 🐞 · user-visible.
+Run from the server's command line (Rule 20b), a press's Native XML
+import should do what the "Import" tab does. Instead a file with any
+book that has a publication format stops with "The process failed.
+Check below for errors/warnings." and "Cannot assign null to property
+PKP\plugins\importexport\PKPImportExportDeployment::$_context of type
+PKP\context\Context", and nothing from the file is imported. Once the
+press's four ONIX details are filled (Settings bullet 7), the
+command-line export of such a book stops with the same two lines and
+writes no file. Either way the tool ends as a success does (exit
+status 0), so a script that runs it is not told. The same file imports
+on the "Import" tab, and the same book exports on the "Export" tab,
+with its formats; from the command line a file imports only once its
+publication formats are taken out, and the books then have none. The
+way round is the screens, within the upload limit of Rule 8a. A
+journal's and a preprint server's command-line import and export work.
+The 3.5 release has the fault too.
+Basis: probe, 2026-10-19. <sup>f-omp6</sup>
 
 ### Retired
 
@@ -2798,6 +2863,25 @@ such an article is unpublished (OJS12): `handlePublicationPublishing()`
 and `handlePublicationUnpublishing()` take `registered` exactly as
 they take `markedRegistered`, which was driven (note t).
 
+<a id="fn-y"></a>
+**y** — Rule 20b is run on the server's command line, from the app's
+directory against the install's config.
+`PKPNativeImportExportPlugin::executeCLI()` (lib/pkp
+`plugins/importexport/native/`) takes `import` or `export`, finds the
+journal by its path and builds the plugin's deployment with it. Its
+output carries the results tabs' texts, each problem and each
+left-out file on a line beginning "-" (the "…was skipped…" line of
+Rule 16a once per file); each imported file also wrote a PHP
+`tempnam()` notice to the error stream. Live-probed
+2026-10-19, OJS, OMP and OPS `main` (lib/pkp `042726ebf6`) and
+`stable-3_5_0` (lib/pkp `092ec34b0f`), PKP's default dataset, two runs
+per line after a fresh reset each, as `admin` on the command line and
+`rvaca` on the screens: OJS article 17 and OPS preprint 2, both
+published, exported ("The export completed successfully.") and the
+file imported back ("The import completed successfully. The following
+items were imported:", "Submission", `-"21" - "{title}"`); OMP: note
+f-omp6. Kept script: `shared/playwright/checks/U63/H19/h19.js`.
+
 <a id="fn-sc"></a>
 **sc** — Scenarios. Scenarios 1 to 4 run on OJS, OMP and OPS, 5 and 6
 on OJS and OMP, 7 to 10 on OJS. Scenario 2 reads `publicknowledge`
@@ -2843,9 +2927,16 @@ issue (7 also an unpublished one) and `POST scenarios/submission` with
 `author` named Ada Lovelace; 10 adds `enableDois: true`, `doiPrefix:
 '10.1234'` and `doiVersioning: true`. The new versions of scenarios 8
 and 10 are made on screen ("Create New Version"), since no key makes
-one. Scenario 10 ends with "DOI Versioning" back on "No", which a test
-also restores when it fails part-way: a journal left on "Yes" breaks
-every OJS OAI list request of the install (`scenarios.md`). Scenario
+one. Scenario 10 ends with "DOI Versioning" back on "No", a step of
+its own, which a test also restores when it fails part-way. Since
+pkp/ojs#5947 (merged 2026-10-16 as ojs `2815f33e65`;
+[OAI-PMH](U19-oai-pmh.md#a22) A22, retired) a journal left on "Yes" no
+longer makes the install's OJS OAI requests fail on `main`; the
+scenario's test still runs in the `ojs-serial` project, because most
+open pkp/ojs PRs, whose checks run this suite at their own heads,
+predate that fix (99 of 100 on 2026-10-19), and an OJS older than it
+still fails every OAI list request while any journal is on "Yes"
+(`scenarios.md`). Scenario
 9's "Register" queues a deposit that fails at connection and stays on
 Administration › "View Failed Jobs" (note u). Live-probed 2026-09-27:
 these keys seeded the claim check's states.
@@ -3460,6 +3551,31 @@ Users XML Plugin's "File" (Rule 22) and the other screens' "Upload
 File" boxes: read in the code, driven only here. Kept script:
 `shared/playwright/checks/U63/I09/native.js`.
 
+<a id="fn-f-a26"></a>
+**f-a26** — On export, `SubmissionNativeXmlFilter` (lib/pkp
+`plugins/importexport/native/filter/`, lines 103–108) writes a
+submission in the Done stage as `stage="production"` ("The DONE stage
+has no native-XML path and isn't part of the export schema so use
+PRODUCTION.", pkp/pkp-lib#12799); `NativeXmlSubmissionFilter` (lines
+87–88) sets the copy's stage from that attribute, and nothing moves a
+published import to Done, while main's Dashboard "Published" lists
+only the Done stage (the same gap note f-omp4 met with the CSV tool's
+tried fix). Live-probed 2026-10-19, OJS, OMP and OPS `main` (lib/pkp
+`042726ebf6`), PKP's default dataset as `rvaca`, two runs after a
+fresh reset each: a published submission's file (note y) imported on
+the "Import" tab and from the command line; each copy stored
+published (submission and version status 3) in stage 5 (Production),
+its source in stage 6 (Done); its public page opened with its title.
+"Published" (OJS "Published (2)", OMP "Published (2)", OPS "Published
+(17)") listed the source and not the copy, "Active submissions" not
+the copy either; the search box, from either view, found it by its
+number ("Search Results (1)"), row status "Published"; its workflow
+screen, opened by address, read "Published". `stable-3_5_0` (lib/pkp
+`092ec34b0f`, no Done stage), the same drive, two runs: "Published
+(4)" (OJS, OMP) and "Published (19)" (OPS), the copies included. No
+upstream issue found. Kept script:
+`shared/playwright/checks/U63/H19/h19.js`.
+
 <a id="fn-f-ojs1"></a>
 **f-ojs1** — `ExportPublishedSubmissionsListGridCellProvider::getCellActions()`
 `issue`: `AjaxModal(…BackIssueGridHandler/editIssue…,
@@ -3666,6 +3782,56 @@ database). Each such import also wrote "PHP Warning: Undefined
 property: stdClass::$section_id" to the server log
 (`omp/classes/section/DAO.php`, `getByPath()`), with nothing seen on
 screen. OJS and OPS have no series. Kept script: `shared/playwright/checks/U63/I09/native.js`.
+
+<a id="fn-f-omp6"></a>
+**f-omp6** — Note y. The import's `NativeXmlPublicationFilter::parsePublicationFormat()`
+(`omp/plugins/importexport/native/filter/NativeXmlPublicationFilter.php:113`,
+3.5 `:110`) and `NativeXmlPublicationFormatFilter::_processProductNode()`
+(`:145`) build `new Onix30ExportDeployment($request->getContext(), $request->getUser())`,
+and the export's `PublicationFormatNativeXmlFilter.php:63` (main and
+3.5) does the same for each format's ONIX product, only when the
+press's contact name and email and its `publisher`, `location`,
+`codeType` and `codeValue` are all set. A command-line request has no
+journal, so `getContext()` is null and the deployment's typed
+`private Context $_context` (lib/pkp `PKPImportExportDeployment`)
+refuses it; the filter's own deployment holds the press all along.
+The plugin catches the error and prints it as one of its problem lines.
+`stable-3_4_0` OMP has the same two import calls
+(`NativeXmlPublicationFilter.php:118`, `NativeXmlPublicationFormatFilter.php:144`),
+the export's at `PublicationFormatNativeXmlFilter.php:63` and the same
+typed property (code read); 3.3's property is untyped, so this error
+cannot occur there, and what 3.3 does instead was not read.
+Live-probed 2026-10-19, OMP `main` (lib/pkp `042726ebf6`) and
+`stable-3_5_0` (lib/pkp `092ec34b0f`), PKP's default dataset, two runs
+per line after a fresh reset each, as `admin` on the command line and
+`rvaca` on the screens, monograph 5 ("Bomb Canada and Other Unkind
+Remarks in the American Media", published, one format "PDF"). With
+the press's ONIX details blank (the dataset's state): the export
+"The export completed successfully.", the file with one
+`<publication_format>`; that file imported from the command line:
+"The process failed. Check below for errors/warnings.", "Errors
+occured:", "1.Generic Items", "- Cannot assign null to property
+PKP\plugins\importexport\PKPImportExportDeployment::$_context of type
+PKP\context\Context", exit status 0, no submission added; the same
+file without its `<publication_format>`: "The import completed
+successfully. The following items were imported:", "Submission",
+`-"20" - "Bomb Canada …"`, a published copy with no format; the
+unchanged file on the "Import" tab: "Results", "The import completed
+successfully. The following items were imported: Submission "21" -
+"Bomb Canada …"", the copy with its format, its catalog page opening
+with the book's title. Then "Press Publisher Name", "Geographical
+Location", "Publisher Code Type" "Proprietary (01)" and "Publisher
+Code" saved on Settings › Press › "Masthead": the command-line export
+"The process failed. Check below for errors/warnings.", "Warnings
+encountered:", "1.Submission", "Errors occured:", "1.Generic Items"
+and the same "Cannot assign null …" line, no file written, exit status
+0; the "Export" tab's export of the same book "The export completed
+successfully.", its file's format carrying an ONIX `<Product>`; that
+file imported from the command line failed the same way, and on the
+"Import" tab succeeded, the copy with its format. Upstream:
+pkp/pkp-lib#12956 (open, reported on 3.4) names the import and the
+same two lines; the export half has no upstream issue found. Kept
+script: `shared/playwright/checks/U63/H19/h19.js`.
 
 ## Reference — entry points & surfaces
 
