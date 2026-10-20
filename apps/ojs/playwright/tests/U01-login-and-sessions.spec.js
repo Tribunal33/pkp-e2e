@@ -3,13 +3,14 @@
  * @file playwright/tests/U01-login-and-sessions.spec.js
  *
  * Login & sessions — OJS suite, one test per canonical scenario the spec runs
- * on OJS (scenarios 1–8, all common).
+ * on OJS (scenarios 1–9, all common).
  * Spec: docs/specs/U01-login-and-sessions.md
  *
  * Deliberately NOT covered (register IDs from the spec's Findings register —
  * a 🐞 is never asserted as the contract, a ❓ is parked, not a gap): A1 🐞,
  * A2 🐞, A4 🐞, A5 ❓, A7 🐞, A8 🐞, A9 ❓, A10 🐞, A11 🐞, A13 🐞,
- * A14 🐞. The spec's Coverage section records everything else left out.
+ * A14 🐞, A15 🐞, A16 🐞, A17 🐞. The spec's Coverage section records
+ * everything else left out.
  *
  * Session hygiene: every sign-in, sign-out, forced-change and impersonation
  * flow runs in a FRESH browser context with a fresh UI login — never through
@@ -44,6 +45,7 @@ const {
     ChangePasswordPage,
     CreateReviewerWindow,
     LoginAsRefusalPage,
+    LoginRefusal,
     anonContext,
     freshLogin,
     restartedContext,
@@ -878,6 +880,108 @@ test.describe('login & sessions', () => {
             await userMenu.expectOwnSession();
         } finally {
             await manager.context.close();
+        }
+    });
+
+    test('S9: a disabled account is refused at sign-in', async ({browser, baseURL, ojsApi}, testInfo) => {
+        test.slow();
+        const tag = makeTag('s9', testInfo);
+        const disabled = `dis${tag}`;
+        const other = `au${tag}`;
+        // A scratch journal beside the seeded one (the site is multi-journal,
+        // Rule 3) with two throwaway Authors, the first disabled with no
+        // reason recorded (fn-s: `disabled: true` as "Disable User" with the
+        // reason box left empty).
+        await ojsApi.createContext({
+            tag,
+            users: [
+                {username: disabled, roles: ['author'], disabled: true},
+                {username: other, roles: ['author']},
+            ],
+        });
+        const journalName = `Scratch context ${tag}`;
+
+        // One browser, signed out, for every sign-in and sign-out below.
+        const context = await anonContext(browser, baseURL);
+        try {
+            const page = await context.newPage();
+            const loginPage = new LoginPage(page);
+            const refusal = new LoginRefusal(page);
+            const userMenu = new UserMenu(page);
+            const siteMenu = new SiteUserMenu(page);
+            // Every page the browser commits to, to read that a sign-in
+            // lands "at once": no Login page between the press and the
+            // landing.
+            const committed = [];
+            page.on('framenavigated', (frame) => {
+                if (frame === page.mainFrame()) {
+                    committed.push(new URL(frame.url()).pathname);
+                }
+            });
+            const committedSince = (mark) => committed.slice(mark);
+
+            await loginPage.gotoContext(tag);
+            await loginPage.expectForm();
+
+            // The disabled Author's correct password: the disabled sentence,
+            // not the generic failure; still on the Login page, signed out
+            // (Rule 2).
+            await loginPage.submitCredentials(disabled, disabled + disabled);
+            await refusal.expectDisabled(disabled);
+            expect(new URL(page.url()).pathname).toContain(`/${tag}/`);
+
+            // The other Author, next, in the same browser: lands at once on
+            // My Submissions, not back on the Login page (Rules 2, 3).
+            let mark = committed.length;
+            await loginPage.submitCredentials(other, other + other);
+            await page.waitForURL(
+                (url) => url.pathname.includes(`/${tag}/`) && url.pathname.endsWith('/dashboard/mySubmissions'),
+                {waitUntil: 'commit', timeout: 15_000}
+            );
+            await expect(userMenu.root).toBeVisible();
+            await expect(userMenu.button).toContainText(other);
+            await expect(loginPage.form).toHaveCount(0);
+            expect(committedSince(mark).filter((path) => /\/login(\/|$)/.test(path))).toEqual([]);
+            expect(committedSince(mark).length, 'the landing is a committed page').toBeGreaterThan(0);
+
+            // The site-level Login page: "Logout" in the top-right user menu,
+            // then the site's own homepage and "Login" at its top right; the
+            // disabled Author's correct password: the same sentence (Rule 2).
+            await userMenu.logout();
+            await loginPage.expectForm();
+            await loginPage.openFromSiteHome();
+            await loginPage.submitCredentials(disabled, disabled + disabled);
+            await refusal.expectDisabled(disabled);
+            expect(new URL(page.url()).pathname).toMatch(/\/index\.php\/index\//);
+
+            // Then the other Author: lands at once on the site home page,
+            // not back on the Login page and not on My Submissions (Rules 2,
+            // 3): the page lists the site's journals and carries the
+            // reader-facing user menu with the Author's name.
+            mark = committed.length;
+            await loginPage.submitCredentials(other, other + other);
+            await page.waitForURL(/\/index\.php\/index\/en\/index$/, {waitUntil: 'commit', timeout: 15_000});
+            await expect(page.getByRole('heading', {name: 'Journals', exact: true})).toBeVisible();
+            await expect(page.getByText(SEEDED_JOURNAL_NAME).first()).toBeVisible();
+            await expect(page.getByText(journalName)).toBeVisible();
+            await expect(siteMenu.toggle(other)).toBeVisible();
+            await expect(loginPage.form).toHaveCount(0);
+            expect(committedSince(mark).filter((path) => /\/login(\/|$)|\/dashboard/.test(path))).toEqual([]);
+            expect(committedSince(mark).length, 'the landing is a committed page').toBeGreaterThan(0);
+
+            // Control: "Logout" in the user menu, the journal's Login page,
+            // the disabled Author with not-the-password: the generic
+            // failure, not the disabled sentence, which the correct password
+            // alone earns (Rule 2).
+            await siteMenu.logout(other);
+            await loginPage.expectForm();
+            await loginPage.gotoContext(tag);
+            await loginPage.expectForm();
+            await loginPage.submitCredentials(disabled, 'definitely-not-the-password');
+            await refusal.expectGeneric(disabled);
+            await expect(page.getByText(GENERIC_ERROR)).toBeVisible();
+        } finally {
+            await context.close();
         }
     });
 });

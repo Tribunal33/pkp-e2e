@@ -5,10 +5,12 @@
  * OPS-local page objects for the Login & sessions suite (U01): the top-right
  * user menu and its "Logout" / "Logout as" entries, the Login As
  * confirmation dialog, the Users & Roles table's columns and row menu, the
- * lost-password and set-a-new-password pages, the two refusal pages of a
- * hand-built Login As address (OPS wording: "servers you do not manage"),
- * and the session helpers (an anonymous context, a fresh UI sign-in, a
- * "browser restart" that carries only the expiry-dated cookies).
+ * lost-password and set-a-new-password pages, the Login form's two refusal
+ * sentences (generic, disabled account), the reader-facing header's user
+ * menu, the two refusal pages of a hand-built Login As address (OPS
+ * wording: "servers you do not manage"), and the session helpers (an
+ * anonymous context, a fresh UI sign-in, a "browser restart" that carries
+ * only the expiry-dated cookies).
  *
  * The Login form itself is the shared `LoginPage`; the Users & Roles page
  * (its navigation and search) is `UserInvitationPages.UsersRolesPage`; the
@@ -400,6 +402,71 @@ exports.ResetPasswordPage = class ResetPasswordPage extends BasePage {
     /** Press the refused link's "Reset Password" link (Rule 10). */
     async followDeadLinkBack() {
         await this.deadLinkBack.click();
+    }
+};
+
+/**
+ * The two answers a refused sign-in shows above the Login form (Rule 2):
+ * the one generic sentence, and a disabled account's own sentence when no
+ * reason was recorded. Each read waits for its sentence and takes the other
+ * as the settled absence, so a refusal is always one of the two.
+ */
+exports.LoginRefusals = class LoginRefusals extends BasePage {
+    constructor(page) {
+        super(page);
+        this.generic = page.getByText('Invalid username/email or password. Please try again.');
+        this.disabled = page.getByText(
+            'Your account has been disabled. Please contact the administrator for more information.'
+        );
+        this.form = page.locator('form#login');
+    }
+
+    /** The disabled sentence over the form, and not the generic one. */
+    async expectDisabled() {
+        await expect(this.disabled).toBeVisible();
+        await expect(this.form).toBeVisible();
+        await expect(this.generic).toHaveCount(0);
+    }
+
+    /** The generic sentence over the form, and not the disabled one. */
+    async expectGeneric() {
+        await expect(this.generic).toBeVisible();
+        await expect(this.form).toBeVisible();
+        await expect(this.disabled).toHaveCount(0);
+    }
+};
+
+/**
+ * The reader-facing header's user menu (`#navigationUser`, the theme's
+ * `frontend/components/header.tpl`): the signed-in username as a top
+ * item whose list holds "Logout". It is the menu the site home page and a
+ * server's public pages show, where the back office's `app-user-nav` is
+ * not rendered.
+ */
+exports.PublicUserMenu = class PublicUserMenu extends BasePage {
+    constructor(page) {
+        super(page);
+        this.root = page.locator('#navigationUser');
+    }
+
+    /** The username's top item (its count badge, if any, after it). */
+    userItem(username) {
+        return this.root.locator('> li > a').filter({hasText: new RegExp(`^\\s*${username}\\b`)});
+    }
+
+    /**
+     * Press the username, then "Logout" in its list, and wait for the
+     * Login page (Rule 6). The theme turns the item into a toggle ("#")
+     * once its script has run; a press before that follows the address.
+     */
+    async logout(username) {
+        const item = this.userItem(username);
+        await expect(item).toHaveAttribute('href', '#');
+        await item.click();
+        const logout = item.locator('xpath=following-sibling::ul[1]').getByRole('link', {name: 'Logout', exact: true});
+        await expect(logout).toBeVisible();
+        await logout.click();
+        await this.page.waitForURL(/\/login/, {waitUntil: 'commit', timeout: 15_000});
     }
 };
 

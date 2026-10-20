@@ -7,7 +7,8 @@
  * pages' user menu, the Login As confirmation dialog, the Users & Roles row
  * menu, the lost-password and set-a-new-password pages, the forced "Change
  * Password" form, the review stage's "Create New Reviewer" form, the two
- * refusal pages of a hand-built Login As address, and the session helpers
+ * refusal pages of a hand-built Login As address, the Login form's refusal
+ * line (the generic failure, the disabled-account sentence), and the session helpers
  * (an anonymous context, a fresh UI sign-in, a "browser restart" that
  * carries only the expiry-dated cookies).
  *
@@ -23,6 +24,9 @@ const {getPassword} = require('../../../../shared/playwright/data/users.js');
 const LOGIN_AS_CONFIRM =
     'Log in as this user? All actions you perform will be attributed to this user.';
 const LOGGED_IN_AS = 'You are currently logged in as';
+const GENERIC_LOGIN_ERROR = 'Invalid username/email or password. Please try again.';
+const ACCOUNT_DISABLED =
+    'Your account has been disabled. Please contact the administrator for more information.';
 
 /**
  * The top-right user menu (initials button + its dropdown). While
@@ -532,6 +536,65 @@ exports.LoginAsRefusalPage = class LoginAsRefusalPage extends BasePage {
 };
 
 /**
+ * The Login form's refusal line (`form#login .pkp_form_error`), shown above
+ * the boxes when "Login" is refused (Rule 2): the generic failure, or the
+ * disabled-account sentence a disabled account's correct password earns.
+ * Each read is settled on the form's own answer: the refused form is back
+ * (posted to `login/signIn`) with exactly one refusal line, its text the
+ * expected sentence, and the other sentence absent from the page (the
+ * positive control of that absence is the line itself, read the same way).
+ */
+exports.LoginRefusal = class LoginRefusal extends BasePage {
+    constructor(page) {
+        super(page);
+        this.form = page.locator('form#login');
+        this.line = this.form.locator('.pkp_form_error');
+        this.usernameInput = page.locator('input#username');
+    }
+
+    /**
+     * The refused form shows `sentence` as its one refusal line, keeps the
+     * typed username, and shows no `otherSentence`; the user menu of a
+     * signed-in page is absent.
+     *
+     * @param {string} sentence
+     * @param {string} otherSentence
+     * @param {string} username
+     */
+    async expectRefused(sentence, otherSentence, username) {
+        await this.page.waitForURL(/\/login\/signIn/, {waitUntil: 'commit', timeout: 15_000});
+        await expect(this.form).toBeVisible();
+        await expect(this.line).toHaveCount(1);
+        await expect(this.line).toHaveText(sentence);
+        await expect(this.page.getByText(otherSentence)).toHaveCount(0);
+        await expect(this.usernameInput).toHaveValue(username);
+        await expect(this.page.locator('[data-cy="app-user-nav"]')).toHaveCount(0);
+        await expect(this.page.locator('#navigationUser').getByRole('link', {name: 'Logout'})).toHaveCount(0);
+    }
+
+    /**
+     * A disabled account's correct password: "Your account has been
+     * disabled. Please contact the administrator for more information.",
+     * not the generic failure (Rule 2).
+     *
+     * @param {string} username
+     */
+    async expectDisabled(username) {
+        await this.expectRefused(ACCOUNT_DISABLED, GENERIC_LOGIN_ERROR, username);
+    }
+
+    /**
+     * The generic failure, "Invalid username/email or password. Please try
+     * again.", not the disabled sentence (Rule 2).
+     *
+     * @param {string} username
+     */
+    async expectGeneric(username) {
+        await this.expectRefused(GENERIC_LOGIN_ERROR, ACCOUNT_DISABLED, username);
+    }
+};
+
+/**
  * A fresh, explicitly-anonymous context (never inherits cached storage
  * state; parallel lesson 8). Callers close it themselves.
  */
@@ -580,3 +643,4 @@ function escapeRegExp(text) {
 }
 
 exports.LOGIN_AS_CONFIRM = LOGIN_AS_CONFIRM;
+exports.ACCOUNT_DISABLED = ACCOUNT_DISABLED;

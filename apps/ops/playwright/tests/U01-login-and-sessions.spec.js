@@ -13,8 +13,8 @@
  *
  * Deliberately NOT covered (register IDs from the spec's Findings
  * register): A1 🐞, A2 🐞, A4 🐞, A5 ❓, A6 ✅, A7 🐞, A8 🐞, A10 🐞, A11 🐞,
- * A13 🐞, A14 🐞. The spec's Coverage section records everything
- * else left out.
+ * A13 🐞, A14 🐞, A15 🐞, A16 🐞, A17 🐞. The spec's Coverage section
+ * records everything else left out.
  *
  * Session hygiene: every sign-in, sign-out and impersonation flow runs in a
  * FRESH browser context with a fresh UI login — never through the shared
@@ -37,6 +37,8 @@ const {
     LostPasswordPage,
     ResetPasswordPage,
     LoginAsRefusalPage,
+    LoginRefusals,
+    PublicUserMenu,
     anonContext,
     freshLogin,
     restartedContext,
@@ -834,6 +836,98 @@ test.describe('login & sessions (U1) — OPS', () => {
             await page.goto(EDITORIAL);
             await expect(userMenu.button).toContainText(manager);
             await userMenu.expectOwnSession();
+        } finally {
+            await context.close();
+        }
+    });
+
+    test('S9: a disabled account is refused at sign-in', async ({browser, baseURL, opsApi}) => {
+        test.slow();
+        // Two throwaway Authors of a scratch server, the first disabled
+        // with no reason recorded (`disabled: true`, fn-s); the scratch
+        // server beside publicknowledge makes the site multi-server, so
+        // the site-level Login lands on the site home page (Rule 3).
+        const tag = makeTag('u1s9');
+        const disabled = `d${tag}`;
+        const other = `o${tag}`;
+        await opsApi.createContext({
+            tag,
+            users: [
+                {username: disabled, roles: ['author'], disabled: true},
+                {username: other, roles: ['author']},
+            ],
+        });
+
+        const context = await anonContext(browser, baseURL);
+        try {
+            const page = await context.newPage();
+            const login = new LoginPage(page);
+            const refusals = new LoginRefusals(page);
+            const userMenu = new UserMenu(page);
+            const publicMenu = new PublicUserMenu(page);
+
+            // Every page this browser lands on: "at once" is the correct
+            // sign-in landing on the role's page with no Login page in
+            // between (Rules 2, 3).
+            const landings = [];
+            page.on('framenavigated', (frame) => {
+                if (frame === page.mainFrame()) landings.push(frame.url());
+            });
+            const landedSince = (from) => landings.slice(from).map((url) => new URL(url).pathname);
+
+            // The disabled Author's correct password, on the server's
+            // Login page: the disabled sentence, not the generic one, the
+            // form still there and nobody signed in (Rule 2).
+            await login.gotoContext(tag);
+            await login.expectForm();
+            await login.submitCredentials(disabled, getPassword(disabled));
+            await refusals.expectDisabled();
+            await expect(page).toHaveURL(new RegExp(`/${tag}/login`));
+            await expect(userMenu.root).toHaveCount(0);
+
+            // The other Author, next, in the same browser: lands at once on
+            // My Submissions, not back on the Login page (Rules 2, 3).
+            let from = landings.length;
+            await login.signIn(other, getPassword(other));
+            await page.waitForURL(new RegExp(`/${tag}/dashboard/mySubmissions`), {waitUntil: 'commit', timeout: 15_000});
+            await expect(userMenu.root).toBeVisible();
+            await expect(userMenu.button).toContainText(other);
+            await expect(login.form).toHaveCount(0);
+            expect(landedSince(from).filter((path) => /\/login\/?$/.test(path))).toEqual([]);
+
+            // The site-level Login page: "Logout" in the user menu, the
+            // site's own homepage, "Login" at its top right. The disabled
+            // Author's correct password: the same sentence (Rule 2).
+            await userMenu.logout();
+            await login.expectForm();
+            await login.openFromSiteHome();
+            await login.submitCredentials(disabled, getPassword(disabled));
+            await refusals.expectDisabled();
+            await expect(page).toHaveURL(/\/index\/en\/login/);
+
+            // Then the other Author: at once on the site home page (the
+            // servers list), not back on the Login page and not on My
+            // Submissions (Rules 2, 3).
+            from = landings.length;
+            await login.signIn(other, getPassword(other));
+            await page.waitForURL(/\/index\/en\/index$/, {waitUntil: 'commit', timeout: 15_000});
+            await expect(page.getByRole('heading', {name: 'Public Knowledge Preprint Server'})).toBeVisible();
+            await expect(page.getByRole('heading', {name: `Scratch context ${tag}`})).toBeVisible();
+            await expect(publicMenu.userItem(other)).toBeVisible();
+            await expect(login.form).toHaveCount(0);
+            expect(landedSince(from).filter((path) => /\/login\/?$|\/dashboard/.test(path))).toEqual([]);
+
+            // Control: "Logout" in the user menu, the server's Login page,
+            // the disabled Author with not-the-password: the generic
+            // sentence, not the disabled one, which the correct password
+            // alone earns (Rule 2).
+            await publicMenu.logout(other);
+            await login.expectForm();
+            await login.gotoContext(tag);
+            await login.submitCredentials(disabled, 'not-the-password');
+            await refusals.expectGeneric();
+            await expect(login.usernameInput).toHaveValue(disabled);
+            await expect(userMenu.root).toHaveCount(0);
         } finally {
             await context.close();
         }

@@ -4,12 +4,12 @@
  *
  * U01 — Login & sessions, OMP suite (spec:
  * docs/specs/U01-login-and-sessions.md). One test per canonical scenario
- * the spec runs on a press (common scenarios 1–8, in OMP vocabulary:
+ * the spec runs on a press (common scenarios 1–9, in OMP vocabulary:
  * press, Press Manager, Series Editor — glossary substitution).
  *
  * Not covered, by register ID (the spec's Coverage section is the record
- * of everything else left out): A1, A2, A4, A5, A7, A8, A10, A11,
- * A13, A14.
+ * of everything else left out): A1, A2, A4, A5, A6, A7, A8, A10, A11,
+ * A13, A14, A15, A16, A17.
  *
  * Seeding: scenario endpoints only. Scratch submissions ride the read-only
  * `publicknowledge` press; S1 adds a scratch press with no users so the
@@ -17,6 +17,10 @@
  * throwaway users because a roster password must never change and every
  * mail assertion needs a unique throwaway recipient naming app + test
  * (Mailpit is one shared instance across the three fleets — never cleared).
+ * S9's scratch press carries two throwaway Authors, the first seeded
+ * `disabled: true` (no reason, as "Disable User" with the box left empty;
+ * the key is refused on a roster account), and the seeded press beside it
+ * makes the site multi-press (spec fn-s).
  * Every sign-in, sign-out and impersonation runs in a FRESH browser context
  * the test opens itself (`freshPage`), never the cached `.auth` storage
  * state: `signInAs`/`signOutAs`/`signOut` migrate or destroy the session
@@ -32,6 +36,8 @@ const {
     siteLoginUrl,
     usersScreenUrl,
     signInAsUserUrl,
+    openSiteLogin,
+    accountDisabledMessage,
     keepMeLoggedIn,
     loginPageBody,
     lostPasswordEmail,
@@ -77,6 +83,7 @@ const MSG = {
     mustChange: 'You must choose a new password before you can log in to this site',
     wrongCurrent: 'The current password you entered was incorrect.',
     confirmLoginAs: SESSION_MSG.confirmLoginAs,
+    accountDisabled: SESSION_MSG.accountDisabled,
 };
 
 /** Parallel-safe unique tag: single alphanumeric token, ≤32 chars. */
@@ -1196,5 +1203,105 @@ test.describe('Login & sessions (U1)', () => {
             waitUntil: 'commit',
         });
         await expectOwnSession(managerPage);
+    });
+
+    test('S9: a disabled account is refused at sign-in', async ({ompApi, freshPage}, testInfo) => {
+        // Two throwaway Authors of a scratch press, the first disabled with
+        // no reason recorded; the seeded press beside it makes the site
+        // multi-press (spec fn-s). Passwords are the usernames doubled.
+        const tag = makeTag(testInfo, 'u1s9');
+        const disabled = {username: `dis${tag}`, password: `dis${tag}dis${tag}`};
+        const other = {username: `oth${tag}`, password: `oth${tag}oth${tag}`};
+        await ompApi.createContext({
+            tag,
+            users: [
+                {
+                    username: disabled.username,
+                    roles: ['author'],
+                    givenName: `Dis${tag}`,
+                    familyName: 'Disabled',
+                    disabled: true,
+                },
+                {username: other.username, roles: ['author'], givenName: `Oth${tag}`, familyName: 'Author'},
+            ],
+        });
+
+        // Every page the browser comes to rest on, in order: "lands at once"
+        // means no stop on a Login page between the press and the landing.
+        const page = await freshPage();
+        const landings = [];
+        page.on('framenavigated', (frame) => {
+            if (frame === page.mainFrame()) landings.push(new URL(frame.url()).pathname);
+        });
+        const landingsSince = (mark) => landings.slice(mark);
+
+        // The disabled Author's correct password, on the press's Login page:
+        // the disabled sentence, not the generic one; still the Login page.
+        await page.goto(loginUrl(tag));
+        await expect(page.locator('form#login')).toBeVisible();
+        await submitLoginForm(page, disabled.username, disabled.password);
+        await expect(accountDisabledMessage(page)).toBeVisible();
+        await expect(page.getByText(MSG.genericError)).toHaveCount(0);
+        await expectLoginPage(page);
+
+        // The other Author, next, in the same browser: lands at once on My
+        // Submissions (an Author's Dashboard landing, Rule 3), the browser
+        // never resting on a Login page on the way.
+        let mark = landings.length;
+        await submitLoginForm(page, other.username, other.password);
+        await page.waitForURL(/\/dashboard\/mySubmissions/, {timeout: 15_000, waitUntil: 'commit'});
+        await expect(page.getByRole('heading', {name: /Active submissions/})).toBeVisible({
+            timeout: 20_000,
+        });
+        await expect(page.locator('form#login')).toHaveCount(0);
+        expect(landingsSince(mark).length, 'the press came to rest somewhere').toBeGreaterThan(0);
+        expect(
+            landingsSince(mark).filter((path) => /\/login(\/|$)/.test(path)),
+            'no Login page between the press and My Submissions'
+        ).toEqual([]);
+        await expectOwnSession(page);
+
+        // The site-level Login page: "Logout" in the user menu, the site's
+        // own homepage, "Login" at its top right; the disabled Author's
+        // correct password gets the same answer there.
+        await logoutFromMenu(page);
+        await openSiteLogin(page);
+        await submitLoginForm(page, disabled.username, disabled.password);
+        await expect(accountDisabledMessage(page)).toBeVisible();
+        await expect(page.getByText(MSG.genericError)).toHaveCount(0);
+        await expect(page).toHaveURL(/\/index\.php\/index\/en\/login/);
+
+        // Then the other Author: lands at once on the site home page (the
+        // press list), not back on the Login page and not on My Submissions
+        // (Rule 3); the public user menu naming the Author is the signed-in
+        // read.
+        mark = landings.length;
+        await submitLoginForm(page, other.username, other.password);
+        await page.waitForURL((url) => !url.pathname.includes('/login'), {
+            timeout: 15_000,
+            waitUntil: 'commit',
+        });
+        await expect(page).toHaveURL(/\/index\.php\/index\/en(\/index)?$/);
+        await expect(page.getByText(scratchPressName(tag))).toBeVisible();
+        await expect(page.getByText('Public Knowledge Press')).toBeVisible();
+        await expect(
+            publicUserMenu(page).getByRole('link', {name: new RegExp(`^${other.username}`)})
+        ).toBeVisible();
+        await expect(page.locator('form#login')).toHaveCount(0);
+        await expect(page).not.toHaveURL(/mySubmissions|dashboard/);
+        expect(
+            landingsSince(mark).filter((path) => /\/login(\/|$)|dashboard/.test(path)),
+            'neither a Login page nor My Submissions between the press and the site home'
+        ).toEqual([]);
+
+        // Control: "Logout" in the user menu, the press's Login page, the
+        // disabled Author with not-the-password: the generic sentence, not
+        // the disabled one, which the correct password alone earns.
+        await logoutFromPublicMenu(page, other.username);
+        await page.goto(loginUrl(tag));
+        await submitLoginForm(page, disabled.username, 'not-the-password');
+        await expect(page.getByText(MSG.genericError)).toBeVisible();
+        await expect(accountDisabledMessage(page)).toHaveCount(0);
+        await expectLoginPage(page);
     });
 });

@@ -414,8 +414,9 @@ Login, the site's name stands in for the journal's), but after a refused
 Scenarios 1 to 3, 7 and 8 use ready accounts on the seeded journal (1 on a
 site that also hosts a scratch journal, 8 on a scratch submission);
 scenarios 4 to 6 act on throwaway accounts of a scratch journal, because
-each changes a password. Scenarios 2 and 4 keep the same account signed
-in in a second browser. The ready accounts and their passwords and the
+each changes a password, and scenario 9 does too, because it disables
+one. Scenarios 2 and 4 keep the same account signed in in a second
+browser. The ready accounts and their passwords and the
 tooling recipe are in the footnote. <sup>s</sup>
 
 1. **Sign in and land on the Dashboard**
@@ -643,6 +644,35 @@ tooling recipe are in the footnote. <sup>s</sup>
      returns the Journal Manager (Rule 14); the refusal is the
      out-of-reach account's alone.
 
+9. **A disabled account is refused at sign-in**
+
+   Given: two Authors of a scratch journal, one of them disabled with no
+   reason recorded, signed out on that journal's Login page, on a site
+   that also hosts the seeded journal. <sup>s</sup>
+
+   - **The disabled Author's correct password**: type the disabled
+     Author's username in "Username or Email" and their correct password
+     in "Password", and press "Login": the page answers "Your account has
+     been disabled. Please contact the administrator for more
+     information." (Rule 2).
+   - **The other Author, next**: in the same browser, type the other
+     Author's username in "Username or Email" and their correct password
+     in "Password", and press "Login": the browser lands at once on My
+     Submissions, not back on the Login page (Rules 2, 3).
+   - **The site-level Login page**: open the top-right user menu (the
+     initials button) and press "Logout", then open the site's own
+     homepage and press "Login" at its top right. Sign in there as the
+     disabled Author with their correct password: the same answer, "Your
+     account has been disabled. Please contact the administrator for more
+     information." Then sign in as the other Author: the browser lands at
+     once on the site home page, not back on the Login page and not on
+     My Submissions (Rules 2, 3).
+   - **Control**: press "Logout" in the user menu, open the journal's
+     Login page and sign in as the disabled Author with not-the-password
+     in "Password": the page answers "Invalid username/email or password.
+     Please try again.", not the disabled sentence, which the correct
+     password alone earns (Rule 2).
+
 ## Coverage
 
 Left out of the scenarios above, by reason:
@@ -699,12 +729,6 @@ Left out of the scenarios above, by reason:
     manager's next page still shows the Author's account and "Logout as"
     leads back to the manager's own (Rule 15a); for a sign-in that
     re-saves the Author's password, the guard owed once [A15](#a15) is fixed
-  - a disabled account refused on the journal's and the site-level Login
-    page with "Your account has been disabled. Please contact the
-    administrator for more information.", and with the reason when staff
-    typed one; then another account's correct password in the same
-    browser landing where Rule 3 says, not back on the Login page
-    (Rule 2; [A12](#a12))
 - **Rarely met**:
   - a forced change ending the account's other sessions, and flagging alone leaving them signed in (Rule 11): it needs the Site Administrator's "Edit User" (Rule 11a) on an account already signed in elsewhere
 - **Nothing new to test**:
@@ -733,6 +757,7 @@ Left out of the scenarios above, by reason:
 - **Owned by another feature**:
   - the sentence above the Login form for a galley that needs a subscription (Rule 4a; *[Subscriptions](U51-subscriptions.md)*, scenario 1)
   - the Site Administrator's "Add User" flagging a new account, whose first sign-in diverts to "Change Password" (Rule 11a; *[Users management](U53-users-management.md)*, scenario 7)
+  - a disabled account's refusal quoting the reason staff typed when disabling it, "Your account has been disabled for the following reason: {reason}" (Rule 2; *[Users management](U53-users-management.md)*, scenario 3)
   - the "Expire User Sessions" tool ending every session (Rule 18; *System administration & jobs*)
   - an action taken while impersonating carrying the target's name, and its activity-log line "{impersonator} (acting as {target})" (Side effects): no action of this feature writes a submission activity-log entry; the actions belong to the workflow stages and the log screen to *Submission activity log & notes*
   - spam checks on login and lost-password (Settings; *Registration & account validation*)
@@ -1612,7 +1637,16 @@ user's id from the context response, and the copied address is
 `login/signInAsUser/{id}` as the browser visited it from the Author's
 row (no return address on the Users & Roles surface, note i). Scenario 4's
 account caveat: resetting a roster password must be undone or done on a
-scratch user for the same reason as 6.
+scratch user for the same reason as 6. Scenario 9 two throwaway `author`s
+on a scratch journal (`POST scenarios/context` with `users:
+[{username, roles: ['author'], disabled: true}, {username, roles:
+['author']}]`): the `disabled` key disables the first as Settings ›
+Users & Roles › the row's "Disable User" does with the reason box left
+empty (the key is refused on a roster account, which every worker
+shares); the scratch journal beside `publicknowledge` makes the site
+multi-journal, and the site-level Login page is `index/login`. The
+reason case is Users management's scenario 3, whose Journal Manager
+types the reason on screen.
 
 <a id="fn-a1"></a>
 **f-a1** — `maxlength="32"` hardcoded on the password inputs of

@@ -11,7 +11,9 @@
  * with, the cookie filter that plays a browser restart (spec fn-s), the
  * user menu's impersonation reads and "Logout as {username}" (shared with
  * U03's S11), the top bar's initials (Rule 13), the Login page's own
- * region, the lost-password page's box and the public pages' user menu.
+ * region, the lost-password page's box and the public pages' user menu,
+ * the disabled account's refusal (Rule 2) and the site-level Login page
+ * reached from the site's own homepage (Rule 1).
  *
  * Function exports, the shape of `ReviewStagePages.js`; every function
  * takes the page (or a locator) it works on.
@@ -34,6 +36,9 @@ const MSG = {
         'Enter your account email address below and an email will be sent with instructions on how to reset your password.',
     confirmLoginAs:
         'Log in as this user? All actions you perform will be attributed to this user.',
+    /** A disabled account's correct password, no reason recorded (Rule 2). */
+    accountDisabled:
+        'Your account has been disabled. Please contact the administrator for more information.',
 };
 
 /** The site's own home page (the press list) and its Login page. */
@@ -46,6 +51,20 @@ const usersScreenUrl = (contextPath) => `/index.php/${contextPath}/management/se
 /** The Login As address as the browser visits it from a users row. */
 const signInAsUserUrl = (contextPath, userId) =>
     `/index.php/${contextPath}/login/signInAsUser/${userId}`;
+
+/**
+ * Open the site's own homepage and press "Login" at its top right: the
+ * site-level Login page (Rule 1), its form shown.
+ */
+async function openSiteLogin(page) {
+    await page.goto(siteHomeUrl());
+    await page.getByRole('link', {name: 'Login', exact: true}).first().click();
+    await expect(page).toHaveURL(new RegExp(`${siteLoginUrl()}$`));
+    await expect(page.locator('form#login')).toBeVisible();
+}
+
+/** The Login page's answer to a disabled account's correct password (Rule 2). */
+const accountDisabledMessage = (page) => page.getByText(MSG.accountDisabled);
 
 /** The Login page's "Keep me logged in" box. */
 const keepMeLoggedIn = (page) => page.getByLabel('Keep me logged in');
@@ -273,6 +292,8 @@ module.exports = {
     siteLoginUrl,
     usersScreenUrl,
     signInAsUserUrl,
+    openSiteLogin,
+    accountDisabledMessage,
     keepMeLoggedIn,
     loginPageBody,
     lostPasswordEmail,
