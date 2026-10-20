@@ -82,18 +82,34 @@ if real, their specs' own probes will resurface them.)
 - Why parked: dead-code candidate — the post target does not exist.
 - Resolves: Phase-1 probe (does the page render/submit at all?); if dead, stays
   here as confirmed; if live, claim in U64.
-- Evidence (U64 spec author, code read 2026-09-27, omp `72a01a026`): no
-  template, handler, Vue component or JS file of OMP or its lib/pkp names
+- Evidence (U64 spec author, code read 2026-09-27, omp `72a01a026`;
+  re-read and driven 2026-10-20, U64 UA1, omp `5777025be`, lib/pkp
+  `042726ebf6`, OJS and OPS as controls, two runs each): no template,
+  handler, Vue component or JS file of OMP or its lib/pkp names
   `statisticsSettingsForm.tpl`; its only reference is its own header
-  (unchanged since 2021-01-29). Its post target `tools/saveStatisticsSettings`
-  falls into `PKPToolsHandler::tools()`'s `default: assert(false)`, and the
-  file it includes, `core:statistics/defaultMetricTypeFormElements.tpl`, does
-  not exist in lib/pkp. The `management/statistics` op that
-  `pages/management/index.php` routes to `PKPToolsHandler` has no method and
-  no role assignment. The live statistics settings are the Vue tabs
-  Settings › Distribution › "Statistics" and Administration › Site Settings ›
-  "Statistics" (the usage statistics spec). Dead-code candidate; resolves on
-  maintainer confirmation.
+  (last commit 2021-01-29, copyright dates). pkp-lib `35595503c9`
+  (2020-11-30, pkp/pkp-lib#6145) removed the Tools `statistics` page that
+  included it, `saveStatisticsSettings()`, the `statistics` op and role
+  assignment and `core:statistics/defaultMetricTypeFormElements.tpl`,
+  which the form still includes; the template and the apps' `case
+  'statistics'` routing in `pages/management/index.php` were left. On
+  screen, no management, statistics or administration page (every tab
+  pressed, as a Press Manager and as `admin`) holds the form, a form
+  posting to `tools/saveStatisticsSettings` or the string at all. Typed,
+  `…/management/tools/saveStatisticsSettings` answers what any unknown
+  `tools/` word answers: a blank page, 200, to the Press Manager, the
+  Press editor and `admin` (assertions off; U63 A19), the access-denied
+  page to the Series Editor, Author and Reader, the Login page signed
+  out. `…/management/statistics` answers a bare "404 Not Found" to every
+  role and signed out, as an unknown management op does, on all three
+  apps. The live statistics settings are the Vue tabs Settings ›
+  Distribution › "Statistics" and Administration › Site Settings ›
+  "Site Setup" › "Statistics" (U64 Rules 26–27). Dead code (screen and
+  code agree); resolves on maintainer confirmation as a removal
+  candidate, the template and the `statistics` routing line together.
+  Snapshots: `.reports/U64/ccUA1/` (`ua1-typed-*`, `ua1-ctrl-*`,
+  `ua1-crawl-*`, `ua1-tabs-*`); kept script
+  `shared/playwright/checks/U64/UA1/ua1.js`.
 
 ### NOTIF-011 — NOTIFICATION_TYPE_PLUGIN_BASE
 - What: plugin-type base offset constant.
