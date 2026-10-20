@@ -5880,7 +5880,7 @@ shape, another filter. Code: ojs `plugins/generic/crossref`
 publication per version stage and major version, never one per DOI;
 lib/pkp `publication\Repository::version()` keeps the source's DOI
 unless "DOI Versioning" is on and the version is not minor.
-Issue report: [docs/issues/U45-OJS11-journal-crossref-file-doi-twice.md](../issues/U45-OJS11-journal-crossref-file-doi-twice.md).
+Issue report: [pkp-e2e#1030](https://github.com/jardakotesovec/pkp-e2e/issues/1030) ([docs/issues/U45-OJS11-journal-crossref-file-doi-twice.md](../issues/U45-OJS11-journal-crossref-file-doi-twice.md)).
 
 <a id="fn-f-ojs12"></a>
 **f-ojs12** — Live-probed 2026-10-19, OJS `main`, four runs (note q52).

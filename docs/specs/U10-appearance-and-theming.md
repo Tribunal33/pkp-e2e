@@ -2475,7 +2475,7 @@ Seen 2026-10-19 on all three apps, `main` (lib/pkp `042726ebf6`) and
 (a BMP "Homepage Image" the same, keyed `homepageImage`); the box shows
 no text, and the message reaches only the error summary's
 screen-reader text (f-a21).
-Issue reports (two causes): [pkp-e2e#937](https://github.com/jardakotesovec/pkp-e2e/issues/937) ([docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md)) (a refusal of the upload itself); [docs/issues/U10-A16-logo-save-refusal-no-message-under-box.md](../issues/U10-A16-logo-save-refusal-no-message-under-box.md) (a picture refused at "Save", 2026-10-20).
+Issue reports (two causes): [pkp-e2e#937](https://github.com/jardakotesovec/pkp-e2e/issues/937) ([docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md)) (a refusal of the upload itself); [pkp-e2e#1029](https://github.com/jardakotesovec/pkp-e2e/issues/1029) ([docs/issues/U10-A16-logo-save-refusal-no-message-under-box.md](../issues/U10-A16-logo-save-refusal-no-message-under-box.md)) (a picture refused at "Save").
 
 <a id="fn-f-a17"></a>
 **f-a17** — `FieldOptions.vue` prints `option.label` as HTML
