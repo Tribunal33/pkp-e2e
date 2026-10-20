@@ -19,14 +19,15 @@
 // per app is `k4-summary-<app>.json` in the agent's output folder.
 const fs = require('fs');
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile, drainJobs: kitDrainJobs} =
     require('../../../probe');
-const {runJobs} = require('../../../support/jobs');
 
 const SCRATCH_FILE = outFile(`k4-scratch-${process.env.PROBE_APPS}.json`);
 const scratchAll = fs.existsSync(SCRATCH_FILE) ? JSON.parse(fs.readFileSync(SCRATCH_FILE, 'utf8')) : {};
 const ONLY_PHASES = process.env.PHASES ? process.env.PHASES.split(',') : null;
-const MAILPIT_UI = process.env.MAILPIT_URL || 'http://127.0.0.1:8025';
+// Mailpit's web UI is the slot's own (app.mailpitUrl): a fixed 8025 opened slot 0's Mailpit, which
+// answered "404 page not found" for this slot's messages (U05 drift sweep 2026-10-20).
+const mailpitUi = (app) => app.mailpitUrl;
 
 async function safeScreen(page) {
     try {
@@ -231,10 +232,11 @@ async function mailCount(app, to, contains) {
     }
 }
 
-function drainJobs(app) {
-    process.env.PKP_CONFIG_FILE = app.configFile;
-    const out = runJobs({appRoot: app.root});
-    return out.split('\n').filter((l) => l.trim()).slice(-12).join('\n');
+// The kit's drainJobs (patterns.md "Probe kit"): support/jobs.js runJobs() polls worker 0, which is down
+// outside a suite run, so the ann and issue phases timed out after 180 s (U05 drift sweep 2026-10-20).
+async function drainJobs(app) {
+    const out = await kitDrainJobs(app);
+    return {passes: out.passes, counts: out.counts, tail: String(out.output || '').split('\n').filter((l) => l.trim()).slice(-12).join('\n')};
 }
 
 /** A queued email's link carries the config base_url (the worker port); open it on the probe server. */
@@ -243,21 +245,32 @@ function onProbeServer(app, link) {
 }
 
 /** Mailpit's own message view (the mail catcher as a screen): the HTML view, then its "Text" tab. */
-async function mailpitView(page, mailId, name) {
+async function mailpitView(page, app, mailId, name) {
     const out = {};
-    await page.goto(`${MAILPIT_UI}/view/${mailId}`);
-    await page.getByText('Text', {exact: true}).first().waitFor({timeout: 20000}).catch(() => {});
-    out.tabs = await page.locator('.nav-tabs a, .nav a.nav-link, [role=tab]').allInnerTexts().catch(() => []);
+    await page.goto(`${mailpitUi(app)}/view/${mailId}`);
+    await page.locator('#nav-plain-text-tab').waitFor({timeout: 20000}).catch(() => {});
+    out.tabs = await page.locator('[role=tab]').allInnerTexts().catch(() => []);
     record(`${name}-html-view`, await safeScreen(page));
     await shot(page, `${name}-html-view`);
-    const textTab = page.getByRole('link', {name: 'Text', exact: true}).or(page.getByText('Text', {exact: true})).first();
+    // The "Text" tab is #nav-plain-text-tab and its pane #nav-plain-text; the first `pre` on the page is the
+    // "HTML Source" pane, which the 2026-10-20 sweep's first fixed run read by mistake.
+    const textTab = page.locator('#nav-plain-text-tab');
     out.textTabFound = await textTab.count();
     if (out.textTabFound) {
         await textTab.click();
-        await page.locator('#nav-plain-text, .text-view, pre').first().waitFor({timeout: 10000}).catch(() => {});
-        out.textView = await page.locator('#nav-plain-text, .text-view, pre').first().innerText().catch(() => null);
+        await page.locator('#nav-plain-text').waitFor({state: 'visible', timeout: 10000}).catch(() => {});
+        out.textView = await page.locator('#nav-plain-text').innerText().catch(() => null);
         record(`${name}-text-view`, {...(await safeScreen(page)), textView: out.textView});
         await shot(page, `${name}-text-view`);
+    }
+    // What the message itself carries: Mailpit's "Text" is its own rendering when the email has no text part.
+    try {
+        const raw = await (await fetch(`${mailpitUi(app)}/api/v1/message/${mailId}/raw`)).text();
+        const head = raw.split(/\r?\n\r?\n/)[0];
+        out.contentType = (head.match(/^Content-Type:\s*([^;\r\n]+)/im) || [])[1] || null;
+        out.mimeParts = [...raw.matchAll(/^Content-Type:\s*([^;\r\n]+)/gim)].map((m) => m[1]);
+    } catch (error) {
+        out.rawError = String(error.message).split('\n')[0];
     }
     return out;
 }
@@ -479,7 +492,7 @@ forEachApp(async (app) => {
                 summary.disc1.mailDelaySeconds = (new Date(mail.created) - new Date(summary.disc1.open.pressedAt)) / 1000;
                 const u = new URL(mail.unsubscribeLink);
                 summary.disc1.linkShape = {path: u.pathname, validateLength: (u.searchParams.get('validate') || '').length, id: u.searchParams.get('id'), endsWithAmpId: /&id=\d+$/.test(mail.unsubscribeLink), paramOrder: [...u.searchParams.keys()]};
-                summary.disc1.mailpitView = await mailpitView(page, mail.id, `disc1-mailpit-${app.name}`);
+                summary.disc1.mailpitView = await mailpitView(page, app, mail.id, `disc1-mailpit-${app.name}`);
             }
             summary.disc1.authorMail = slim(mail);
             summary.disc1.m1MailCount = await mailCount(app, email(m1), `${scratch.tag}d1`);
@@ -495,7 +508,7 @@ forEachApp(async (app) => {
         // ---- mailpit / profile: re-runs of two disc1/unsub1 legs (named phases only; the full run does them inline).
         await phase('mailpit', async () => {
             if (!ONLY_PHASES) return;
-            summary.disc1.mailpitView = await mailpitView(page, summary.disc1.authorMail.id, `disc1-mailpit-${app.name}`);
+            summary.disc1.mailpitView = await mailpitView(page, app, summary.disc1.authorMail.id, `disc1-mailpit-${app.name}`);
         });
         await phase('profile', async () => {
             if (!ONLY_PHASES) return;
@@ -674,7 +687,7 @@ forEachApp(async (app) => {
             summary.ann.add = await addAnnouncement(page, app, cp, `Announcement ${scratch.tag}`, true, 'ann-add');
             await signOut(page);
             summary.ann.beforeJobs = {r1MailCount: await mailCount(app, email(r1), `Announcement ${scratch.tag}`)};
-            summary.ann.jobs = drainJobs(app);
+            summary.ann.jobs = await drainJobs(app);
             const mail = await mailFor(app, email(r1), `Announcement ${scratch.tag}`, 30000);
             if (mail.found) record(`ann-mail-r1-${app.name}`, mail);
             summary.ann.r1Mail = slim(mail);
@@ -740,7 +753,7 @@ forEachApp(async (app) => {
                 await shot(page, `issue-after-publish-${app.name}`);
                 await signOut(page);
                 summary.issue.beforeJobs = {abMailCount: await mailCount(app, email(ab), `Issue ${scratch.tag}`)};
-                summary.issue.jobs = drainJobs(app);
+                summary.issue.jobs = await drainJobs(app);
                 const mail = await mailFor(app, email(ab), `Issue ${scratch.tag}`, 30000);
                 if (mail.found) record(`issue-mail-author-${app.name}`, mail);
                 summary.issue.abMail = slim(mail);
@@ -807,7 +820,7 @@ forEachApp(async (app) => {
             await signOut(page);
             let mail = await mailFor(app, email(ab), `Publish me ${scratch.tag}`, 15000);
             if (!mail.found) {
-                summary.a8.jobs = drainJobs(app);
+                summary.a8.jobs = await drainJobs(app);
                 mail = await mailFor(app, email(ab), `Publish me ${scratch.tag}`, 15000);
             }
             if (mail.found) {
@@ -829,12 +842,14 @@ forEachApp(async (app) => {
             }
             await signIn(page, m1);
             summary.a5.m1TabBefore = tabSummary(await recordTab(page, app, cp, `a5-tab-m1-before-${app.name}`));
-            await page.goto(`${MAILPIT_UI}/view/${m.id}`);
+            await page.goto(`${mailpitUi(app)}/view/${m.id}`);
             const unsub = page.getByText('Unsubscribe', {exact: true}).first();
             await unsub.waitFor({timeout: 20000});
             await unsub.click();
             const modal = page.locator('.modal:visible, [role=dialog]:visible').last();
             await modal.waitFor({timeout: 10000}).catch(() => {});
+            // Mailpit 1.31 offers no one-click button: the press unfolds an "Unsubscribe" row with the header's link.
+            summary.a5.infoRow = await page.locator('tr').filter({has: page.locator('th', {hasText: /^Unsubscribe$/})}).first().innerText().catch(() => null);
             summary.a5.modalText = await modal.innerText().catch(() => null);
             summary.a5.modalButtons = await modal.locator('button, a.btn').allInnerTexts().catch(() => []);
             record(`a5-mailpit-unsubscribe-dialog-${app.name}`, {...(await safeScreen(page)), modalText: summary.a5.modalText, modalButtons: summary.a5.modalButtons});

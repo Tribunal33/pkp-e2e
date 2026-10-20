@@ -18,7 +18,7 @@
 const path = require('path');
 const {forEachApp, launch, signIn, screen, shot, record, loc, note, idle, tag} = require('../../../probe');
 
-const RUN = process.env.RUN || 'r1';
+const RUN = process.env.RUN || process.env.PROBE_RUN || 'r1';
 // PHASES (default all): l59a (who gets the needs-editor task), assign (L59b "Assign"), toast (L140b and the
 // Notify window's ways out), axis (L59b "Notify" lengths and the success-toast control), control2 (the
 // Profile save toast's "×"), unbroken (a message with a 150-character address), read (the recipients'

@@ -492,8 +492,11 @@ forEachApp(async (app) => {
             const create = page.getByRole('button', {name: /^Create/}).or(page.getByRole('link', {name: /^Create/})).first();
             p4.createLabel = await create.innerText().catch(() => null);
             await create.click();
-            const form = dialog(page);
-            await form.locator('input, textarea').first().waitFor({timeout: 20000});
+            // The Create form is a Vue side form: wait for its first visible text field, not for a
+            // field inside the last [role=dialog] (that matched the page's hidden submit input and
+            // timed out on every app; U05 SW1 drift sweep, 2026-10-20).
+            const form = page.locator('[role="dialog"]').filter({has: page.locator('input[type="text"]:visible')}).last();
+            await page.locator('input[type="text"]:visible, textarea:visible').first().waitFor({state: 'visible', timeout: 30000});
             await idle(page);
             record(`p4-admin-create-form-${app.name}`, await safeScreen(page));
             await shot(page, `p4-admin-create-form-${app.name}`);

@@ -18,13 +18,16 @@
 //   PROBE_FEATURE=U05 PROBE_AGENT=ccK2 node bin/probe.js all shared/playwright/checks/U05/K2/k2.js
 //   PHASES=tab,subA … re-runs named phases on the saved scratch context.
 //
+// The site phase switches the site's "Enable announcements" on when it is off and puts it back
+// afterwards: a site-wide setting, so a run that includes that phase on a fleet where it is off takes
+// `bin/app-lock.sh exclusive` (drift sweep 2026-10-20: the sweep's run left it on).
+//
 // No assertions: every screen is recorded with screen()/shot(); the summary
 // per app is `k2-summary-<app>.json` in the agent's output folder.
 const fs = require('fs');
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile, drainJobs: kitDrainJobs} =
     require('../../../probe');
-const {runJobs} = require('../../../support/jobs');
 
 const REPO = path.resolve(__dirname, '../../../../..');
 const FIXTURES = {
@@ -228,10 +231,11 @@ async function mailCount(app, to, contains) {
     }
 }
 
-function drainJobs(app) {
-    process.env.PKP_CONFIG_FILE = app.configFile;
-    const out = runJobs({appRoot: app.root});
-    return out.split('\n').filter((l) => l.trim()).slice(-8).join('\n');
+// The kit's drainJobs (patterns.md "Probe kit"): support/jobs.js runJobs() polls worker 0, which is down
+// outside a suite run, so every phase that drained jobs through it timed out (U05 drift sweep 2026-10-20).
+async function drainJobs(app) {
+    const out = await kitDrainJobs(app);
+    return {passes: out.passes, counts: out.counts, tail: String(out.output || '').split('\n').filter((l) => l.trim()).slice(-8).join('\n')};
 }
 
 function onProbeServer(app, link) {
@@ -729,7 +733,7 @@ forEachApp(async (app) => {
             summary.ann.first = await addAnnouncement(page, app, `/index.php/${cp}/management/settings/announcements`, t1, false, 'ann-first');
             summary.ann.second = await addAnnouncement(page, app, `/index.php/${cp}/management/settings/announcements`, t2, true, 'ann-second');
             await signOut(page);
-            summary.ann.jobs = drainJobs(app);
+            summary.ann.jobs = await drainJobs(app);
             summary.ann.rdMailSecond = await mailFor(app, email(rd), t2, 30000);
             summary.ann.counts = {
                 first: {rd: await mailCount(app, email(rd), t1), au: await mailCount(app, email(au), t1), m1: await mailCount(app, email(m1), t1), m2: await mailCount(app, email(m2), t1)},
@@ -782,7 +786,7 @@ forEachApp(async (app) => {
                 await idle(page);
                 record(`issue-after-publish-${app.name}`, await safeScreen(page));
                 await signOut(page);
-                summary.issue.jobs = drainJobs(app);
+                summary.issue.jobs = await drainJobs(app);
                 summary.issue.rdMail = await mailFor(app, email(rd), issueTitle, 30000);
                 summary.issue.counts = {rd: await mailCount(app, email(rd), issueTitle), au: await mailCount(app, email(au), issueTitle), m1: await mailCount(app, email(m1), issueTitle), m2: await mailCount(app, email(m2), issueTitle)};
                 await signIn(page, rd);
@@ -868,8 +872,27 @@ forEachApp(async (app) => {
             await form.waitFor({state: 'hidden', timeout: 15000}).catch(() => {});
             record(`site-announcement-after-save-${app.name}`, await safeScreen(page));
             await signOut(page);
-            summary.site.siteAnnouncement.jobs = drainJobs(app);
+            summary.site.siteAnnouncement.jobs = await drainJobs(app);
             summary.site.siteAnnouncement.counts = {rd: await mailCount(app, email(rd), siteTitle), au: await mailCount(app, email(au), siteTitle), se: await mailCount(app, email(se), siteTitle), m2: await mailCount(app, email(m2), siteTitle)};
+            // A4: the Reader's Tasks window after the site announcement (no task).
+            await signIn(page, rd);
+            summary.site.rdTasksAfterSiteAnnouncement = await tasksWindow(page, app, cp, `site-tasks-rd-${app.name}`, 'user/profile');
+            await signOut(page);
+            // Put the site's "Enable announcements" back when this phase switched it on (a site-wide
+            // setting: run the site phase under `bin/app-lock.sh exclusive` when it starts off).
+            if (summary.site.siteAnnouncementsWereEnabled === false) {
+                await signIn(page, 'admin');
+                await page.goto(app.url('/index.php/index/admin/settings'));
+                const tabBack = page.getByRole('tab', {name: 'Announcements', exact: true}).first();
+                await tabBack.waitFor({timeout: 30000});
+                await tabBack.click();
+                const boxBack = page.getByRole('checkbox', {name: /Enable announcements/i}).first();
+                await boxBack.uncheck();
+                const savedBack = page.waitForResponse((r) => /\/api\/v1\/site/.test(r.url()) && /^(PUT|POST)$/.test(r.request().method()), {timeout: 20000});
+                await boxBack.locator('xpath=ancestor::form[1]').getByRole('button', {name: 'Save', exact: true}).click();
+                summary.site.siteAnnouncementsPutBack = (await savedBack).status();
+                await signOut(page);
+            }
         });
 
         // ---- reg: Rule 5e — registration with the email consent box unticked, then ticked; a site-level registration

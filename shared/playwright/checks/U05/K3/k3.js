@@ -366,6 +366,9 @@ async function createHostedJournal(page, app, t, name) {
     const dlg = page.getByRole('dialog', {name: /Create (Journal|Press|Server)/}).first();
     await dlg.getByRole('textbox', {name: /Principal Contact Name/}).fill('Check Contact');
     await dlg.getByRole('textbox', {name: /Principal Contact Email/}).fill(`${t}h-contact@mail.test`);
+    // The window refuses a save with no country ("This is not a valid country.", U59); the drift
+    // sweep of 2026-10-20 found this phase answered 400 there.
+    await dlg.locator('select').filter({has: page.locator('option[value="CA"]')}).first().selectOption('CA');
     const english = dlg.getByRole('checkbox', {name: 'English', exact: true}).first();
     if ((await english.count()) && !(await english.isChecked())) await english.check();
     const primary = dlg.getByRole('radio', {name: 'English', exact: true}).first();
