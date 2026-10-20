@@ -264,8 +264,10 @@ form.
     Response" is enabled again. The author's card returns to "Respond to Reviews"
     with "Submit Response": because the round remembers the request (Rule
     6), the author may submit a new response without being asked again.
-    "Cancel" changes nothing. The app does not check that the round
-    belongs to the submission the request names ⚠ [A11](#a11). <sup>l</sup>
+    "Cancel" changes nothing. A delete, an edit or a "Request Response"
+    request typed into the browser's console that names a review round
+    of another submission, in this journal or another, is refused and
+    changes nothing. <sup>l</sup>
 
 <a id="rounds"></a>
 12. **Rounds.** Each round carries its own request and its own response.
@@ -714,6 +716,11 @@ Left out of the scenarios above, by reason:
     get author responses: the "Author Response" table and card on both
     of a press's review stages, and the decision email's button opening
     the response form
+  - the guard for A11, retired (Rule 11): a Section Editor's and a
+    Journal Manager's delete, edit and "Request Response" request that
+    name a round of another submission, in the same journal and in
+    another, are refused and leave the response and the round as they
+    were; the same requests with the submission's own round go through
 - **Nothing new to test**:
   - Site Administrator (the Journal Manager's offer, scenarios 1 and 3)
   - Guest Editor (the Section Editor's gate, scenario 6)
@@ -751,12 +758,12 @@ an entry notes otherwise; the team settles them on spec review.
 | [A5](#a5) | "Request Author Response" refuses an empty subject or message with "An unexpected error has occurred" | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A7](#a7) | Author who uploads revisions first can no longer respond to the reviewers, as the decision email asks | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A10](#a10) | Anyone, without signing in, can read an author's response that also answers reviews the editor kept private | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
-| [A11](#a11) | A Section Editor can delete, and another journal's manager delete or rewrite, an author's response to reviews | 🐞 | medium | issues (claude), 2026-10-13 — re-verified |
 | [OMP1](#omp1) | Press author's "Submit Author Response" email button opens a review round with nothing to respond in | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Nobody is told when the author's response arrives | ❓ | user-visible | — |
 | [A6](#a6) | Under a minimum, the request email says every review is in while one is still due | ❓ | minor | — |
 | [A8](#a8) | A cancelled reviewer's effect on readiness and on the email was not seen | ❓ | minor | — |
 | [A9](#a9) | Retired: in French the "Author Response" table, the author's card, both windows and the request page show raw codes such as "##submission.reviewRound.authorResponse##" | ✅ | retired | Jarda 2026-10-08 · overturned |
+| [A11](#a11) | Retired: a Section Editor could delete, and another journal's manager delete or rewrite, an author's response to reviews; such requests are now refused (Rule 11) | ✅ | retired | housekeeping (claude), 2026-10-20 — fixed by pkp/pkp-lib#13510 |
 
 ### All apps
 
@@ -899,25 +906,6 @@ making every review of a round public, or none.
 Security: unreleased.
 Since: 2026-02-03 (pkp/pkp-lib#12294) · Basis: probe, 2026-10-15. <sup>f-a10</sup>
 
-<a id="a11"></a>
-**A11 — A Section Editor can delete, and another journal's manager delete or rewrite, an author's response to reviews** · 🐞 · medium.
-An author's response to the reviews can be removed or rewritten by
-editors outside the submission and journal they work in. The delete and
-edit requests name a submission and a review round, and the journal
-checks only the submission. So, through a submission they may act on:
-
-- a Section Editor can delete the response on any other submission's
-  round, in their journal or, by the same route, in the site's other
-  journals; they cannot rewrite it;
-- a Journal Manager can delete the response on a round of another
-  journal on the same site, or rewrite its text and the contributors it
-  is attributed to.
-
-The response is gone or changed, and nobody is told. Nothing on screen
-offers this; it takes requests typed into the browser's console.
-Since: 2026-01-23 (pkp/pkp-lib#12048) · Basis: probe, 2026-10-13. <sup>f-a11</sup>
-
-
 ### OMP
 
 <a id="omp1"></a>
@@ -943,6 +931,9 @@ Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-omp1<
 
 <a id="a9"></a>
 **A9 — In French the Author Response screens show raw codes** · ✅ · retired. Overturned by Jarda, 2026-10-08: a missing translation is no finding (TEMPLATE "Findings register"). <sup>f-a9</sup>
+
+<a id="a11"></a>
+**A11 — A Section Editor could delete, and another journal's manager delete or rewrite, an author's response to reviews** · ✅ · retired. Fixed upstream (pkp/pkp-lib#13510, for pkp/pkp-lib#13509, merged 2026-10-20), walked 2026-10-20 on the default dataset on OJS and OMP: a delete, an edit or a "Request Response" request that names another submission's round is refused and the response stays as it was (Rule 11). <sup>f-a11</sup>
 
 ---
 
@@ -983,7 +974,7 @@ Since: 2026-01-23 (pkp/ui-library#767) · Basis: probe, 2026-10-04. <sup>f-omp1<
 **k** — `useReviewRoundAuthorResponseConfig::getAuthorItemActions()`: no actions without a response; with one, `common.view` "View" (`responseView`) and `common.delete` "Delete" (`responseDelete`, warnable), each `disabled: submittingUser.id !== authorUser.id`; rendered by `AuthorResponseRequestManagerCellMoreActions.vue` (`DropdownActions` labelled `common.moreActions` "More Actions", ellipsis). Editor window: title `submission.reviewRound.authorResponseToReviews` "Author Response to Reviews", description `submission.reviewRound.authorResponse.noteForEditor` (`{$userFullName}`), submit label `common.save` when `isEditor`; `PUT reviews/{submissionId}/{reviewRoundId}/authorResponse/{responseId}` → `PKPReviewController::editAuthorResponse()` updates `authorResponse` and re-associates the authors; `userId` (the submitter) is untouched, hence the unchanged name. Live-probed 2026-09-06 (Rule 10; Actors rows 5–6): "More Actions" on both author rows, "View" and "Delete" `aria-disabled` on the non-submitter's, "Delete" styled `text-negative`; the editor's "Save" greys with the box unticked; the saved text is what the author's window then shows; `assistant.rita` gets the same title and note with a `disabled` "Submit Response" and no "Save".
 
 <a id="fn-l"></a>
-**l** — `AuthorResponseRequestManagerStore::responseDelete()`: `openDialog({title: common.delete, message: common.confirmDelete, modalStyle: 'negative', actions: [common.ok (warnable) → DELETE reviews/{id}/{roundId}/authorResponse/{responseId}, common.cancel]})`, then `triggerDataChange()`. `PKPReviewController::deleteAuthorResponse()` deletes by round and response id with no further check; `isAuthorResponseRequested` is not touched, so `AddResponse` accepts a new response afterwards. Live-probed 2026-09-06 (Rule 11; Actors row 7): the dialog's "OK" is `text-negative` and precedes "Cancel"; after "OK" the settled read still shows the old cell and the table changes by itself within 15 s (a test polls for "Ready to invite author"); after a reload no row has "…"; the Funding Coordinator's `DELETE` answers 401 and the dialog turns into "Error" / "The current role does not have access to this operation." with the response intact for `manager.maya`.
+**l** — `AuthorResponseRequestManagerStore::responseDelete()`: `openDialog({title: common.delete, message: common.confirmDelete, modalStyle: 'negative', actions: [common.ok (warnable) → DELETE reviews/{id}/{roundId}/authorResponse/{responseId}, common.cancel]})`, then `triggerDataChange()`. `PKPReviewController::deleteAuthorResponse()` deletes by round and response id, after checking (since `pkp/pkp-lib#13510`, 2026-10-20) that the round belongs to the authorized submission; `isAuthorResponseRequested` is not touched, so `AddResponse` accepts a new response afterwards. Live-probed 2026-09-06 (Rule 11; Actors row 7): the dialog's "OK" is `text-negative` and precedes "Cancel"; after "OK" the settled read still shows the old cell and the table changes by itself within 15 s (a test polls for "Ready to invite author"); after a reload no row has "…"; the Funding Coordinator's `DELETE` answers 401 and the dialog turns into "Error" / "The current role does not have access to this operation." with the response intact for `manager.maya`.
 
 <a id="fn-m"></a>
 **m** — One `AuthorResponse` per round (`AddResponse::passedValidation()` 409 on an existing one; `Schema::getPropertyReviewRounds()` maps `first()` per round). The editorial config pushes `AuthorResponseRequestManager` for whichever round is selected (note c), and `canRequestReviewRoundAuthorResponse` reads that round's assignments, so a past round's button follows Rule 3. Live-probed 2026-09-06 (Rule 12; Coverage states row 15): two rounds seeded as `decisions: ['sendExternalReview']` with two `reviewRounds[]` entries (round 1 completed, round 2 accepted): round 1 ready and requested, its response readable under "View" after "Review Round 1" is chosen in the workflow menu, round 2 "Awaiting reviews" with no card for the author; the author's round 1 status box reads "The submission has been advanced to the next round of review."; an accepted submission's Copyediting and Production stages show nothing of the response.
@@ -1037,8 +1028,8 @@ Issue report: [pkp-e2e#816](https://github.com/jardakotesovec/pkp-e2e/issues/816
 Issue report: [pkp-e2e-sec#14](https://github.com/jardakotesovec/pkp-e2e-sec/issues/14) ([docs/issues/U30-A10-public-review-data-unpublic-author-response.md](../issues/U30-A10-public-review-data-unpublic-author-response.md)).
 
 <a id="fn-f-a11"></a>
-**f-a11** — Note a, l: `PKPReviewController::authorize()` adds `SubmissionAccessPolicy` on the path's `submissionId`; the round is the path's `reviewRoundId`, loaded by id alone. `deleteAuthorResponse()` deletes `AuthorResponse::withReviewRoundIds([$reviewRoundId])->where('response_id', …)` with no check that `$reviewRound->getSubmissionId()` is the authorized submission or that the round is in the request's context. `EditResponse::passedValidation()` checks a sub-editor's `StageAssignment` on the round's own submission (sound), but its manager branch is `hasRole([ROLE_ID_MANAGER], $request->getContext()->getId())`, and `ReviewRoundAuthorResponseCommonValidator::commonRules()` checks `submissionId` only with `Rule::exists('submissions', …)`. `RequestAuthorResponse::rules()` loads the submission in the context and the round by id, never comparing them; `requestAuthorResponse()` then sets `isAuthorResponseRequested` on that round (the email goes to the named submission's authors). `AddResponse` is sound: it checks the author's assignment on the round's own submission. `api/v1/reviews/index.php` exists in OJS and OMP, not OPS. Read 2026-10-13 at pkp-lib `f4c2578c94`; `stable-3_5_0` has no author responses. Reported by the maintainer from a code read, 2026-10-13; walked the same day on the default dataset (OJS and OMP; a Section Editor's edit is refused, the delete and the other journal's manager's edit and delete go through; "Request Response" the same way sets the other round's request flag and mails the named submission's authors).
-Issue report: [pkp-e2e-sec#9](https://github.com/jardakotesovec/pkp-e2e-sec/issues/9) ([docs/issues/U30-A11-author-response-deleted-from-other-submission.md](../issues/U30-A11-author-response-deleted-from-other-submission.md)).
+**f-a11** — Note a, l: `PKPReviewController::authorize()` adds `SubmissionAccessPolicy` on the path's `submissionId`; the round is the path's `reviewRoundId`, loaded by id alone. `deleteAuthorResponse()` deletes `AuthorResponse::withReviewRoundIds([$reviewRoundId])->where('response_id', …)` with no check that `$reviewRound->getSubmissionId()` is the authorized submission or that the round is in the request's context. `EditResponse::passedValidation()` checks a sub-editor's `StageAssignment` on the round's own submission (sound), but its manager branch is `hasRole([ROLE_ID_MANAGER], $request->getContext()->getId())`, and `ReviewRoundAuthorResponseCommonValidator::commonRules()` checks `submissionId` only with `Rule::exists('submissions', …)`. `RequestAuthorResponse::rules()` loads the submission in the context and the round by id, never comparing them; `requestAuthorResponse()` then sets `isAuthorResponseRequested` on that round (the email goes to the named submission's authors). `AddResponse` is sound: it checks the author's assignment on the round's own submission. `api/v1/reviews/index.php` exists in OJS and OMP, not OPS. Read 2026-10-13 at pkp-lib `f4c2578c94`; `stable-3_5_0` has no author responses. Reported by the maintainer from a code read, 2026-10-13; walked the same day on the default dataset (OJS and OMP; a Section Editor's edit is refused, the delete and the other journal's manager's edit and delete go through; "Request Response" the same way sets the other round's request flag and mails the named submission's authors). Fixed 2026-10-20 by `pkp/pkp-lib#13510` (for `pkp/pkp-lib#13509`; lib/pkp `45f674d77b` on pkp-lib `main`): `deleteAuthorResponse()` answers 404 "The requested resource was not found." when `$reviewRound->getSubmissionId()` is not the authorized submission; the `reviewRoundId` rule of `ReviewRoundAuthorResponseCommonValidator::commonRules()` (edit) and of `RequestAuthorResponse::rules()` (request) fails with `api.404.resourceNotFound` (422) for such a round; `RequestAuthorResponse` loads the submission within the request's context. Walked 2026-10-20 with the report's kept script on a freshly reset default dataset fleet, ojs `6b4323ced7` and omp `5777025be` with lib/pkp pinned at `45f674d77b` (the apps' pointers, `042726ebf6`, do not carry it yet). OJS: `minoue`'s edit through submission 2's address on submission 13's round answered 422 `{"reviewRoundId":["The requested resource was not found."]}`, the delete 404; `phudson` (manager of a second journal, `u30r1`) edit 422, delete 404; `minoue`'s request through submission 2's address on submission 10's round 422, no email to either submission's author; Lise Kumiega's response kept its text, the card and the table unchanged throughout. OMP: `minoue`'s delete through submission 6's address on submission 16's round 404, the response kept (control on the old pointer, same run: 200 and the response gone). Neighbours with the fix: on OJS the author's "Submit Response", the editor's "View" › "Save" (PUT 200) and "Delete" (200) on submission 13, and "Request Response" › "Submit Request" on submission 10 (200) work through the screens; on OMP post, edit and delete through submission 16's own address answer 200.
+Issue report: [pkp-e2e-sec#9](https://github.com/jardakotesovec/pkp-e2e-sec/issues/9) (closed 2026-10-20, fixed by `pkp/pkp-lib#13510`).
 
 <a id="fn-f-a9"></a>
 **f-a9** — Notes c, d, f, h, j and k name the keys. None of the keys quoted in A9 has an entry in lib/pkp's `locale/fr_CA/` (`submission.po`, `common.po`, `emails.po`), while `submission.dashboard.view.awaitingReviews` has one; `emails.reviewRound.requestAuthorResponse.subject` and `.body` exist in `locale/en/emails.po` only. Live-probed 2026-09-30 at ojs `7ce98ec09e`, omp `3b0ecf794c` (lib/pkp `3dc90c81a6`), two runs, each on a scratch journal and a scratch press with English and French (Canada) as interface languages, as their Journal Manager and the submitting Author, on a round awaiting reviews, a ready round and a round with revisions requested; every French read was paired with the same read in `/en/`, where the only code on screen was the header's help link (the workflow screen's, U24 A11). On the ready round the Journal Manager sent a request from the page reached through "Request Response"; the Author opened the window, typed and pressed "Annuler" (the window closed with no question and reopened with its submit button greyed), then typed, ticked themself and submitted: one saved response per run, the card reading the submitted code at once and after a reload; the Journal Manager then read the table, the row's menu, the "View" window (closed with "Annuler") and the "Delete" dialog ("Annuler", the row unchanged). The ready cell's capitals come from the same CSS as the English cell's (note d), the page's capitals from the heading's `uppercase` class (note f). The request page's language switch read "Passer à français" and was not pressed. Control: the press's External Review stage showed no table and no card in either language. No response of 500 or more and no script error. Re-walked 2026-10-04 on OJS `main` (issues session): the row's "…" button's name, `common.moreActions`, is a released text French (Canada) lacks on 3.5 too; every other key is in lib/pkp `locale/en` on `main` only (22 from 3dff6a7b6e, 2026-01-23, `pkp/pkp-lib#12048`; the email's subject and body from 4f3b6f906e, 2026-02-20, `pkp/pkp-lib#12307`; `discussion.form.templatesLabel` from 2ceea5cd28, 2025-09-15, `pkp/pkp-lib#11825`), no other language has them and `stable-3_5_0` has none.
