@@ -5,7 +5,7 @@
 // seeded journal's home. Reuses k1.js's contexts from k1-summary-<app>.json.
 // Run: PROBE_FEATURE=U05 PROBE_AGENT=ccK1 node bin/probe.js all shared/playwright/checks/U05/K1/k1-remainder.js
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, outDir} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, outDir, outFile} =
     require('../../../probe');
 
 async function safeScreen(page) {
@@ -21,7 +21,7 @@ async function userNav(page) {
 }
 
 forEachApp(async (app) => {
-    const prev = require(path.join(outDir(), `k1-summary-${app.name}.json`));
+    const prev = require(outFile(`k1-summary-${app.name}.json`));
     const t = prev.tag;
     const U = {m1: `${t}m1`, au: `${t}au`};
     const S = {app: app.name, tag: t, errors: {}};

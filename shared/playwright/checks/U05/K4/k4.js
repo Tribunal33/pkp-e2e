@@ -19,11 +19,11 @@
 // per app is `k4-summary-<app>.json` in the agent's output folder.
 const fs = require('fs');
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile} =
     require('../../../probe');
 const {runJobs} = require('../../../support/jobs');
 
-const SCRATCH_FILE = path.join(outDir(), 'scratch.json');
+const SCRATCH_FILE = outFile(`k4-scratch-${process.env.PROBE_APPS}.json`);
 const scratchAll = fs.existsSync(SCRATCH_FILE) ? JSON.parse(fs.readFileSync(SCRATCH_FILE, 'utf8')) : {};
 const ONLY_PHASES = process.env.PHASES ? process.env.PHASES.split(',') : null;
 const MAILPIT_UI = process.env.MAILPIT_URL || 'http://127.0.0.1:8025';
@@ -439,7 +439,7 @@ forEachApp(async (app) => {
     const cp = scratch.path;
     const email = (u) => `${u}@mail.test`;
     summary.scratch = {path: cp, s1: scratch.s1.submissionId, s2: scratch.s2 && scratch.s2.submissionId};
-    const priorFile = path.join(outDir(), `k4-summary-${app.name}.json`);
+    const priorFile = outFile(`k4-summary-${app.name}.json`);
     if (ONLY_PHASES && fs.existsSync(priorFile)) {
         Object.assign(summary, JSON.parse(fs.readFileSync(priorFile, 'utf8')), {problems: [], blocked: []});
     }

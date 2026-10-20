@@ -9,9 +9,9 @@
 //   ONLY=ops PROBE_FEATURE=U05 PROBE_AGENT=ccK2 node bin/probe.js all shared/playwright/checks/U05/K2/k2-remainder.js
 const fs = require('fs');
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, idle, outDir} = require('../../../probe');
+const {forEachApp, launch, signIn, signOut, screen, shot, record, idle, outDir, outFile} = require('../../../probe');
 
-const scratchAll = JSON.parse(fs.readFileSync(path.join(outDir(), 'scratch.json'), 'utf8'));
+const scratchAll = JSON.parse(fs.readFileSync(outFile(`k2-scratch-${process.env.PROBE_APPS}.json`), 'utf8'));
 const email = (u) => `${u}@mail.test`;
 
 async function safeScreen(page) {

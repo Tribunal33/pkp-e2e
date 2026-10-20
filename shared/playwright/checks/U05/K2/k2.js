@@ -22,7 +22,7 @@
 // per app is `k2-summary-<app>.json` in the agent's output folder.
 const fs = require('fs');
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile} =
     require('../../../probe');
 const {runJobs} = require('../../../support/jobs');
 
@@ -31,7 +31,7 @@ const FIXTURES = {
     ojs: path.join(REPO, 'apps/ojs/playwright/fixtures/files/article.pdf'),
     ops: path.join(REPO, 'apps/ops/playwright/fixtures/files/preprint.pdf'),
 };
-const SCRATCH_FILE = path.join(outDir(), 'scratch.json');
+const SCRATCH_FILE = outFile(`k2-scratch-${process.env.PROBE_APPS}.json`);
 const scratchAll = fs.existsSync(SCRATCH_FILE) ? JSON.parse(fs.readFileSync(SCRATCH_FILE, 'utf8')) : {};
 const ONLY_PHASES = process.env.PHASES ? process.env.PHASES.split(',') : null;
 const email = (u) => `${u}@mail.test`;

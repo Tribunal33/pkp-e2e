@@ -4,11 +4,11 @@
 // chunk's screen notes. Run after k1.js:
 // PROBE_FEATURE=U05 PROBE_AGENT=ccK1 node bin/probe.js all shared/playwright/checks/U05/K1/k1-menu.js
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, outDir} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, outDir, outFile} =
     require('../../../probe');
 
 forEachApp(async (app) => {
-    const prev = require(path.join(outDir(), `k1-summary-${app.name}.json`));
+    const prev = require(outFile(`k1-summary-${app.name}.json`));
     const t = prev.tag;
     const S = {app: app.name, tag: t, errors: {}};
     const {page, close} = await launch(app);

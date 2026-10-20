@@ -18,10 +18,10 @@
 //  hosted   OJS only: admin creates a journal on Administration › Hosted Journals; its Register page signed out (F3's by-hand premise)
 const fs = require('fs');
 const path = require('path');
-const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir} =
+const {forEachApp, launch, signIn, signOut, screen, shot, record, loc, note, idle, tag, outDir, outFile} =
     require('../../../probe');
 
-const SCRATCH_FILE = path.join(outDir(), 'scratch.json');
+const SCRATCH_FILE = outFile(`k3-scratch-${process.env.PROBE_APPS}.json`);
 const scratchAll = fs.existsSync(SCRATCH_FILE) ? JSON.parse(fs.readFileSync(SCRATCH_FILE, 'utf8')) : {};
 const PHASES = process.env.PHASES ? process.env.PHASES.split(',') : null;
 const on = (p) => !PHASES || PHASES.includes(p);
@@ -37,7 +37,7 @@ async function snap(page, name) {
     await shot(page, name).catch(() => {});
     return data;
 }
-function sumFile(app) { return path.join(outDir(), `k3-summary-${app.name}.json`); }
+function sumFile(app) { return outFile(`k3-summary-${app.name}.json`); }
 function loadSummary(app) { return fs.existsSync(sumFile(app)) ? JSON.parse(fs.readFileSync(sumFile(app), 'utf8')) : {app: app.name}; }
 function saveSummary(app, s) { fs.writeFileSync(sumFile(app), JSON.stringify(s, null, 2)); }
 function saveScratch() { fs.writeFileSync(SCRATCH_FILE, JSON.stringify(scratchAll, null, 2)); }
