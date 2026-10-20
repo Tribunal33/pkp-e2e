@@ -1,6 +1,12 @@
 // Helpers of walk.js (issue report docs/issues/U08-A2-section-editor-dashboard-opens-profile.md).
 // Requiring this file runs nothing. Every helper presses what a person presses.
 const {idle} = require('../../../probe');
+// The invitation wizard and the accept wizard: ../newcomer-not-signed-in-after-accepting/lib.js.
+const N = require('../newcomer-not-signed-in-after-accepting/lib.js');
+
+/** The Guest editor the steps invite on OJS (names tagged u08h20d; the password is the username twice). */
+const GUEST = {email: 'u08h20d@example.com', givenName: 'Gwen', familyName: 'Guest-u08h20d', username: 'u08h20d',
+    password: 'u08h20du08h20d', country: 'Canada', role: 'Guest editor'};
 
 const T = 30_000;
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -105,4 +111,61 @@ async function untickFrenchForms(page, ctx) {
     return {before, status: response ? response.status() : null, url: rel(response && response.url()), alerts, after};
 }
 
-module.exports = {readBell, openPublic, readUserMenu, readUserMenuNarrow, pressDashboard, untickFrenchForms};
+/**
+ * As the signed-in manager: Settings › Users & Roles › "Invite to a role", the newcomer as Guest editor; then,
+ * in a browser of their own, the email's accept link: username and password, the privacy box, the country,
+ * "Accept And Continue to …". Returns what each step showed.
+ */
+async function guestEditorJoins(page, app, launch) {
+    const since = new Date();
+    const invited = await N.invite(page, app, {email: GUEST.email, givenName: GUEST.givenName, familyName: GUEST.familyName, role: GUEST.role});
+    const link = await N.acceptLink(app, GUEST.email, since);
+    if (!link.accept) throw new Error('no invitation email with an accept link');
+    const other = await launch(app);
+    try {
+        const p = other.page;
+        const met = await N.openAccept(p, link.accept);
+        await p.getByLabel(/^Username/).fill(GUEST.username);
+        await p.getByLabel(/^Password/).fill(GUEST.password);
+        await p.getByRole('checkbox').first().check();
+        await p.getByRole('button', {name: 'Save and continue'}).click();
+        await p.getByRole('heading', {name: /Enter details/}).waitFor({timeout: T});
+        await idle(p);
+        await p.getByLabel(/^Country/).first().selectOption({label: GUEST.country});
+        await p.getByRole('button', {name: 'Save and continue'}).click();
+        await p.getByRole('heading', {name: /Review & create account/}).waitFor({timeout: T});
+        await idle(p);
+        const accepted = await N.acceptAndLeave(p);
+        return {invited: invited.sentText, subject: link.subject, met, accepted: {dialog: accepted.dialog, finalize: accepted.finalize}};
+    } finally {
+        await other.close();
+    }
+}
+
+/** Where the Guest editor gets a task on OJS: submission 2, its review round, and the discussion they are added to. */
+const GUEST_TASK = {where: {id: 2, menuKey: 'workflow_3_2', panelTitle: 'Review Tasks & Discussions'},
+    name: 'u08h20d question', message: 'u08h20d: a question for the Guest editor.'};
+
+/**
+ * As the signed-in manager, on submission 2's review round: Participants › "Assign", role "Guest editor",
+ * the Guest editor, "OK"; then "Review Tasks & Discussions" › "Add": a name, the Guest editor ticked, a
+ * message, "Save". Returns the Participants rows after the assignment and the save's status.
+ */
+async function guestEditorGetsTask(page, app) {
+    const S = require('../../../pages/StageParticipantsPages.js');
+    const D = require('../merge-fails-for-discussion-opener/lib.js');
+    const panel = new S.ParticipantsPanel(page, app.contextPath);
+    await panel.goto(GUEST_TASK.where.id, {menuKey: GUEST_TASK.where.menuKey});
+    const win = await panel.openAssign();
+    await win.chooseRole(GUEST.role);
+    await win.search(GUEST.familyName);
+    await win.choosePerson(`${GUEST.givenName} ${GUEST.familyName}`);
+    await win.ok();
+    await idle(page);
+    const rows = await panel.rowLines().catch((e) => String(e).slice(0, 200));
+    const discussion = await D.addDiscussion(page, app, GUEST_TASK.where, {name: GUEST_TASK.name, participant: GUEST.username,
+        participantName: `${GUEST.givenName} ${GUEST.familyName}`, message: GUEST_TASK.message, label: '7b-guest-task'});
+    return {rows, discussion};
+}
+
+module.exports = {GUEST, GUEST_TASK, guestEditorJoins, guestEditorGetsTask, readBell, openPublic, readUserMenu, readUserMenuNarrow, pressDashboard, untickFrenchForms};

@@ -11,8 +11,12 @@
 - **Introduced** [9cbfcc323c](https://github.com/pkp/ops/commit/9cbfcc323c74f2ff54e9ecdd53cc1791424464c1) · 2019-06-05 · ajnyga (ajnyga), no PR: OPS kept only the production stage, while the task's shared link (pkp-lib, since 2013) names the submission stage
 - **Upstream** `pkp/pkp-lib#5738` (closed; its fix, `pkp/ops#12`, sent only the new-submission notice to the production stage and left this task's link)
 - **Tracked in** spec U05 [OPS3](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U05-notifications-center-and-email-preferences.md#ops3)
-- **Checked** 2026-10-04, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-20, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-20: the report now names the "needs an editor" email the
+managers receive and who goes without it; the Steps were walked again on
+`main` and 3.5 with the same Observed.
 
 ## Summary
 
@@ -23,10 +27,12 @@ the same task on a journal or a press. The browser lands instead on a
 reader-facing page whose whole text is "A workflow stage was not
 specified.", and the task is marked read on the way.
 
-The manager has to find the preprint in the submissions list instead.
 The task no longer counts as unread, though it stays listed until a
-moderator is assigned. The "needs a moderator" email opens the workflow,
-so only the task is broken.
+moderator is assigned. Each manager who gets the task is also sent the
+"needs an editor" email for the same preprint, and its link opens the
+workflow. A manager who turned that email off gets none, so for them the
+task is the only link, and they have to find the preprint in the
+submissions list.
 
 Every manager gets the task for each new preprint that no moderator is
 assigned to automatically. A new server's section names no moderator, so
@@ -38,8 +44,9 @@ on such a server that is every preprint.
   moderator still removes the task. Nothing is stored wrong.
 - **Who**: every Preprint Server Manager, on a server whose section
   names no moderator.
-- **Way round**: the submissions list opens the preprint; "Mark New"
-  restores the unread mark.
+- **Way round**: the "needs an editor" email's link, for a manager who
+  has not turned that email off, or the submissions list opens the
+  preprint; "Mark New" restores the unread mark.
 
 Medium: the task's only link fails, with a way round on screen, and the
 silent read mark counts against it.
@@ -137,10 +144,20 @@ Reach:
 - `NOTIFICATION_TYPE_SUBMISSION_SUBMITTED` shares the delegate's line.
   OPS's override already sends it elsewhere, and it is not a task, so the
   Tasks window never lists it (code).
-- The "needs a moderator" email links to the workflow through the
-  dashboard address (`SubmissionNeedsEditor`). Only when the server lacks
-  that email template does `AssignEditors` mail the task's own link
-  (line 104), which then fails the same way (code).
+- `AssignEditors::handle()` sends each manager it gives the task the
+  "needs an editor" email (`SubmissionNeedsEditor`, subject
+  `A new submission needs an editor to be assigned: "{$submissionTitle}"`)
+  for the same preprint. Its title link is
+  `dashboard/editorial?workflowSubmissionId=<id>`
+  (`SubmissionEmailVariable::getSubmissionUrl()`, line 122), which opens
+  the workflow (on screen).
+- A manager who ticked "Do not send me an email for these types of
+  notifications." for this notification under their profile's
+  Notifications gets the task but no email (`AssignEditors` lines 80–92),
+  so the task is their only link (code).
+- Only when the server lacks the `SUBMISSION_NEEDS_EDITOR` template does
+  `AssignEditors` mail the task's own link (line 104), which then fails
+  the same way (code).
 - The only other stage address among the notification links is the
   reviewer-comment notice's (`PKPNotificationManager` line 72). OPS never
   raises it, because a preprint server has no review (code).
@@ -219,24 +236,34 @@ Small: one line in the shared delegate, tried, plus a test.
   with OJS and OMP as the control. It runs as
   `PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/ops-task-link-workflow-stage-not-specified/walk.js`
   on an install loaded from PKP's default test dataset (pkp/datasets
-  566bb1f, 2026-10-03), PostgreSQL. With `neighbour` as its argument it
+  35759b4c, 2026-10-19), PostgreSQL. With `neighbour` as its argument it
   runs the neighbour check alone. The walk tags the title with a run tag
-  ("u05bu05b… needs a moderator"). It records the browser's
+  ("u05b… needs a moderator"). It records the browser's
   top-level requests and the reply to the task press. No crash was recorded on
   any run.
-- Walked on `main` and `stable-3_5_0`, OJS, OMP and OPS: the same
-  Observed on OPS and the same control on OJS and OMP on both. The dataset
+- Email control:
+  [email.js](https://github.com/jardakotesovec/pkp-e2e/blob/main/shared/playwright/checks/issues/ops-task-link-workflow-stage-not-specified/email.js),
+  run right after the walk on the same install
+  (`… node bin/probe.js ops …/email.js`), reads the email `dbarnes`
+  received for the walk's preprint, and opens its title link,
+  `dashboard/editorial?workflowSubmissionId=20`, as `dbarnes`: the
+  preprint's workflow opens over the submissions list on its Production
+  stage, on `main` and 3.5.
+- Walked on `main` and `stable-3_5_0`, OJS, OMP and OPS, on 2026-10-04
+  and again on 2026-10-20: the same Observed on OPS and the same control
+  on OJS and OMP each time. The dataset
   gives `dbarnes` other unread tasks on OJS (3) and OMP (14), so the bell
   there showed more than "1".
 - Fix tried with `node bin/try-fix.js apply …/fix.diff ojs omp ops` on
-  `main`, the walk and the neighbour check run, then reverted; the
-  neighbour check was run again without the fix.
-- Tips: `main` OPS c8af945bb7 (lib/pkp 3dc90c81a6), OJS ff004d0973
-  (lib/pkp 987776cd04), OMP 3b0ecf794c (lib/pkp 3dc90c81a6);
-  `stable-3_5_0` OPS 38b61882d3 (lib/pkp cf3f984335), OJS c1cee76b95
-  (lib/pkp 771474347e), OMP 9c5e24246c; `stable-3_4_0` OPS acd8ae704b
-  (lib/pkp 767353f4fe); `stable-3_3_0` OPS c5532e2161 (lib/pkp
-  ac3fa73402).
+  `main` on 2026-10-04, the walk and the neighbour check run, then
+  reverted; the neighbour check was run again without the fix. Not tried
+  again on 2026-10-20: the delegate's line and its context are unchanged
+  at today's tips, and the diff still applies to them.
+- Tips (2026-10-20): `main` OPS f048e747b4, OJS 6b4323ced7, OMP
+  5777025bec (lib/pkp 042726ebf6 in each); `stable-3_5_0` OPS
+  110effdd6e, OJS b56f8b74ff, OMP 722d3e661e (lib/pkp cd82be0528 in
+  each); `stable-3_4_0` OPS 0f1e21a117 (lib/pkp a71d6bd2ca);
+  `stable-3_3_0` OPS c5532e2161 (lib/pkp 5e84acd11b).
 - Code reads, 3.5: the delegate line (64) and OPS override (line 48) as
   on `main`; `getApplicationStages()` production only (line 175, `main`
   150), which `WorkflowStageRequiredPolicy` (line 48) checks directly.
@@ -264,13 +291,15 @@ Small: one line in the shared delegate, tried, plus a test.
   (`pkp/ops#12`, 2020-04-16, ajnyga) for `pkp/pkp-lib#5738` redirected
   only `SUBMISSION_SUBMITTED`. The report in that issue was a mailed link
   of the same shape.
-- Upstream search, 2026-10-04: pkp/pkp-lib, pkp/ops and pkp/ui-library
+- Upstream search, 2026-10-04, repeated for the symptom and the delegate
+  on 2026-10-20 with nothing new: pkp/pkp-lib, pkp/ops and pkp/ui-library
   issues and PRs for "workflow stage was not specified", "moderator needs
   to be assigned", "workflowStageRequired", `SubmissionNotificationManager`,
   `getNotificationUrl`, `EDITOR_ASSIGNMENT_REQUIRED`, "editorAssignmentTask";
   only `pkp/pkp-lib#5738` matched.
 - Not driven: 3.4 and 3.3 (code only, as asked); the server without the
-  "needs a moderator" email template; the other managers' tasks;
+  "needs an editor" email template; a manager who turned that email off;
+  the other managers' tasks;
   assigning a moderator, which deletes the task for every manager
   (`StageParticipantGridHandler::saveParticipant()`, line 361; code).
 - MySQL not checked; nothing in the fault depends on the database.

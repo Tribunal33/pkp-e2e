@@ -6,6 +6,7 @@
 // `neighbour` as the argument runs the neighbour check alone: after the same set-up, the
 // Moderator (section/series editor) minoue, not assigned, types the address the fixed task
 // opens; the submission must stay closed to them, with the fix in and out.
+// email.js beside it, run after this walk on the same install, opens the "needs an editor" email's link.
 //   PROBE_FEATURE=<feature> PROBE_AGENT=<id> node bin/probe.js all shared/playwright/checks/issues/ops-task-link-workflow-stage-not-specified/walk.js [neighbour]
 const {forEachApp, launch, signIn, signOut, screen, record, tag, idle} = require('../../../probe');
 const H = require('./lib.js');

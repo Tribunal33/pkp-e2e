@@ -919,10 +919,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | ID | Finding (one line, symptom) | Bug? | Impact | Review |
 |----|-----------------------------|------|--------|--------|
 | [A10](#a10) | A manager who turns off the "needs an editor" notification still gets its email for every new submission | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
-| [OPS3](#ops3) | On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
+| [OPS3](#ops3) | On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint | 🐞 | medium | issues (claude), 2026-10-20 — re-verified |
 | [A1](#a1) | A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | A Section Editor or a Guest Editor never sees their unread count on the public pages, beside their name or in the narrow-window menu, while the other roles do | 🐞 | low | issues (claude), 2026-10-14 — re-verified |
+| [A3](#a3) | A Section Editor or a Guest Editor never sees their unread count on the public pages, beside their name or in the narrow-window menu, while the other roles do | 🐞 | low | issues (claude), 2026-10-20 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | On a journal with French under "Forms", no name on the public pages carries the unread count, and a window 992 px or wider shows it nowhere | 🐞 | minor | — |
 | [A16](#a16) | A discussion email's "#{submission number} {authors}" link tells the submission's own Author "The current role does not have access to this operation." | 🐞 | user-visible | — |
@@ -995,7 +995,6 @@ Editor's "Dashboard" to the Profile page
 ([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a2)).
 Read from the code's history, it worked in 3.0 and broke in 3.1.
 Basis: probe, 2026-10-14; the Guest Editor, 2026-10-20. <sup>[f-a3](#fn-a3)</sup>
-Report: refresh owed — the 2026-10-20 drift sweep widened the reach from the Section Editor to every role at the Section Editor permission level, the Guest Editor on a journal included (bare name at 1280 px, no count after "Dashboard" at 800 px), the roles `PKPNavigationMenuService::getDisplayStatus()` leaves out; no code changed (2026-10-20)
 
 <a id="a4"></a>
 **A4 — The site-level tab governs nothing** · ❓ · latent.
@@ -1257,16 +1256,16 @@ Tasks window, expecting the preprint's workflow to open, as it does for
 the same task on a journal or a press. The browser lands instead on a
 reader-facing page whose whole text is "A workflow stage was not
 specified.", and the task is marked read on the way.
-The manager has to find the preprint in the submissions list instead.
 The task no longer counts as unread, though it stays listed until a
-moderator is assigned. The "needs an editor" email ("A new submission
-needs an editor to be assigned: "{title}"") opens the workflow, so only
-the task is broken.
+moderator is assigned. Each manager who gets the task is also sent the
+"needs an editor" email for the same preprint, and its link opens the
+workflow. A manager who turned that email off gets none, so for them the
+task is the only link, and they have to find the preprint in the
+submissions list.
 Every manager gets the task for each new preprint that no moderator is
 assigned to automatically. A new server's section names no moderator, so
 on such a server that is every preprint.
-Basis: probe, 2026-10-04. <sup>[f-ops3](#fn-ops3)</sup>
-Report: refresh owed — the 2026-10-20 drift sweep read the email's subject: it is the "needs an editor" email ("A new submission needs an editor to be assigned: "{title}""), not a "needs a moderator" one, and its link opens the workflow on a preprint server; the report's wording follows, no class or method changed (2026-10-20)
+Basis: probe, 2026-10-20. <sup>[f-ops3](#fn-ops3)</sup>
 
 
 ### Retired
