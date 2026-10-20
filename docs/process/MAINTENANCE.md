@@ -368,7 +368,7 @@ same model: a false positive's piece goes to a narrow rerun
    (the stable lines' checkouts have locks of their own): a walk
    or a drive takes it `shared`, any number at once since only a fix
    changes the code, and a fix trial takes it `exclusive` as one command
-   (apply, walks, revert), naming only the apps it patches; requests are
+   (apply, walks, revert, then the neighbour walk with the fix out), naming only the apps it patches; requests are
    served in the order asked, app by app (a request waits only behind
    earlier ones for an app it names), and the lock goes when the command
    ends. A trial on three apps holds every other run for its ten minutes
