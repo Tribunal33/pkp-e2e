@@ -1461,6 +1461,15 @@ trips.
   a whole run lost again, makes the friction line of 2026-10-09 (service
   images from a registry without the limit) a harness change.
 
+- **OMP U03 S12's contributor window not closing after "Close"** (first
+  sighting, pkp-e2e push run 38889807760 at b4be0ff0, 2026-10-16, shard
+  2/3, green on its retry): `closeContributorEdit()`
+  (`apps/omp/playwright/pages/SubmissionWizardPages.js`) pressed the
+  window's "Close" and the `active-modal` holding the contributor's
+  "Given Name" box was still there after 30 s; trace not read. Found by
+  the housekeeping flake tally of 2026-10-20 (20 runs per repo).
+  **Watch condition**: a second sighting in any app.
+
 ## Companion branches — pkp-e2e branches waiting on app PRs
 
 One row per branch prepared for a developer's open OJS, OMP or OPS pull
