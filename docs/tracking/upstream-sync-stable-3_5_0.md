@@ -22,6 +22,9 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-20 (PR review, VM s0) — pkp/pkp-lib#13565 `e99f3e9c7b` on `f94e556856`, with pkp/ojs#5953 `5dc7541a30`, pkp/omp#2517 `c3a93b5b6`, pkp/ops#1456 `0925df83c5` (pointer bumps on the tips). Baselines not advanced.**
+  - pkp-lib `e99f3e9c7b` (Kaitlin Newson, for pkp/pkp-lib#13564) → `stable-only` (`main` has the import from `51ebba2aa9`): adds `use PKP\note\Note;` to `FileInformationCenterHandler`, drops the unused `DAORegistry` import, gives `setupTemplate()` a `: void` return (its parents declare none; no subclass in pkp-lib, the three 3.5 apps or their plugins), and tidies a stray `;`, an indent and the copyright years. Fixes the pkp-lib#10268 row on OJS and OMP 3.5 (base 500, head 200; ci-triage companion row). No regression; no security impact.
+  - The pointer bumps carry nothing besides: `cd82be0528..f94e556856` is a merge with no tree change.
 - **2026-10-20 (daily session, VM s3) — ojs `007c2cd0d6..b56f8b74ff` (2), omp `2d575f250..722d3e661e` (2), ops `e737a9e465..110effdd6e` (2), pkp-lib `092ec34b0f..f94e556856` (1 and its merge), ui-library none. `main` first: no range there today. Read in full; baselines advanced.**
   - pkp-lib `cd82be0528` (pkp/pkp-lib#13535 for pkp/pkp-lib#13533, Kaitlin Newson, merged `f94e556856`) → `=main ef6100d5e2` (read 2026-10-16): `cypress/support/commands.js` alone, the install's page-load timeout for the ROR import; no caller outside PKP's own Cypress CI. No regression; no security impact.
   - ojs `395bc4816d`, omp `35ffb1fe9a`, ops `5d49db8240` → pointer bumps to `cd82be0528`; `b56f8b74ff` (pkp/ojs#5939), `722d3e661e` (pkp/omp#2515), `5d49db8240`'s merge `110effdd6e` (pkp/ops#1454) → merges.
