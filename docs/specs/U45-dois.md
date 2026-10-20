@@ -2317,12 +2317,12 @@ an entry notes otherwise; the team settles them on spec review.
 | [OJS8](#ojs8) | With DataCite and "DOI Versioning" "Yes", a deposit is given only the current version, yet "Deposit All" and "Deposit DOIs" mark every published major version's DOIs "Submitted" | 🐞 | user-visible | @bozana 2026-10-08 · tracked upstream |
 | [OJS9](#ojs9) | With "Author Response" DOIs turned on, every DOI assignment gives each author response a new DOI | 🐞 | low | issues (claude), 2026-10-13 — re-verified |
 | [OJS10](#ojs10) | A cancelled reviewer's review stays on the DOIs page and is still deposited with Crossref | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
-| [OJS11](#ojs11) | A journal's Crossref file names a DOI twice when two published major versions share it, the older version first | 🐞 | user-visible | — |
+| [OJS11](#ojs11) | A journal's Crossref deposit names a DOI twice, older version first, after "DOI Versioning" is switched on | 🐞 | medium | issues (claude), 2026-10-20 — re-verified |
 | [OMP1](#omp1) | A press's DOIs page lists no books when only "Files" is ticked, and "Needs DOI" skips missing file DOIs | 🐞 | medium | issues (claude), 2026-10-12 — re-verified |
 | [OMP2](#omp2) | A DOI typed into a book's file row on a press's DOIs page is saved, but "Save" reports a failure | 🐞 | medium · crash: server | issues (claude), 2026-10-01 — re-verified |
 | [OPS1](#ops1) | A preprint server's "DOIs" settings box is labelled "Allow … (DOIs) to assigned to works …" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
 | [OPS3](#ops3) | A preprint server's Crossref "Username" help reads "see the advise above" | 🐞 | low | issues (claude), 2026-10-01 — re-verified |
-| [OPS6](#ops6) | A preprint server's Crossref deposit names a DOI once per posted version that shares it | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
+| [OPS6](#ops6) | A preprint server's Crossref deposit names a DOI once per posted version that shares it | 🐞 | medium | issues (claude), 2026-10-20 — re-verified |
 | [OPS7](#ops7) | A preprint server's Crossref file repeats the preprint's title where its subtitle belongs | 🐞 | medium | issues (claude), 2026-10-15 — re-verified |
 | [A1](#a1) | A new journal arrives in a DOI state its own Setup tab refuses to save | ❓ | minor | — |
 | [A5](#a5) | The Registration tab keeps a new agency even when its fields are refused | ❓ | minor | — |
@@ -2932,22 +2932,29 @@ holds; they stop the review being sent, or sent again.
 Basis: probe, 2026-10-15. <sup>f-ojs10</sup>
 
 <a id="ojs11"></a>
-**OJS11 — A journal's Crossref file names a DOI twice when two published major versions share it, the older version first** · 🐞 · user-visible.
-A journal on "DOI Versioning" "No" publishes 2.0 of an article, made
-with "Major Revision", so it keeps 1.0's DOI (Rule 11); then it saves
-"Yes". The article's Crossref file (Rule 29b) holds two records for
-that one DOI: 1.0's first, pointing to 1.0's page, then 2.0's, which
-names its own DOI as the one it is a version of. It should hold one
-record, the newest published version's. Crossref takes the first
-record of a DOI in a file, so the
-DOI is registered with 1.0's page and metadata, and the repeat is
-refused, which the journal counts as a failed deposit: the DOI reads
-"Error", as on a preprint server ([OPS6](#ops6), where the newest
-version comes first). The DOIs page gives no sign: "View all" lists
-1.0 and 2.0 with the same DOI. Saving "Yes" before 2.0 is published
-gives the same file. 3.5 is not affected: a journal there has no "DOI
-Versioning".
-Basis: probe, 2026-10-19. <sup>f-ojs11</sup>
+**OJS11 — A journal's Crossref deposit names a DOI twice, older version first, after "DOI Versioning" is switched on** · 🐞 · medium.
+An article of a journal that registers DOIs with Crossref has two
+published major versions that share one DOI: 2.0 was made with "Major
+Revision" while "DOI Versioning" was "No", the journal's default. After
+the journal saves "DOI Versioning" "Yes", the article's Crossref file
+lists that DOI twice. "Export DOIs" downloads this file and a deposit
+sends it. It holds one record per major version, the oldest first, each
+pointing to its own version's page. It should hold one record, the
+newest version's.
+
+Crossref documents that it takes the first record of a DOI in a
+deposit and refuses each repeat, so such a deposit would register the
+DOI with version 1.0's page and date, and the journal would show the
+DOI as "Error" after every deposit of that article. The DOIs page gives
+no hint why: "View all" lists both versions with the same DOI. Saving
+"DOI Versioning" back to "No" makes the file right again, at the cost of
+versioning.
+
+Articles carried over from an earlier release with more than one
+version are in the same state, since their versions kept one DOI there.
+A preprint server's file has the same repeat, newest version first
+([OPS6](#ops6)), from another cause.
+Basis: probe, 2026-10-20. <sup>f-ojs11</sup>
 
 <a id="ojs12"></a>
 **OJS12 — Saving "DOI Versioning" "Yes" leaves Crossref's required "Update Policy DOI" empty, and every Crossref file then fails Crossref's format check** · ❓ · user-visible.
@@ -3089,8 +3096,7 @@ On 3.5 and 3.4 a server set to "No" sends the DOI once. There the fault
 shows only when versions made under "No" are deposited after the server
 switched to "Yes": two major versions on one DOI. `main` has that case
 too, and the open fix `pkp/crossref-ops#67` leaves it.
-Basis: probe, 2026-10-15. <sup>f-ops6</sup>
-Report: refresh owed — the journal's case, which the report reads from the code alone, was walked on OJS `main`: two major versions on one DOI are both written, the older first ([OJS11](#ojs11), 2026-10-19)
+Basis: probe, 2026-10-20. <sup>f-ops6</sup>
 
 <a id="ops7"></a>
 **OPS7 — A preprint server's Crossref file repeats the preprint's title where its subtitle belongs** · 🐞 · medium.
@@ -5874,6 +5880,7 @@ shape, another filter. Code: ojs `plugins/generic/crossref`
 publication per version stage and major version, never one per DOI;
 lib/pkp `publication\Repository::version()` keeps the source's DOI
 unless "DOI Versioning" is on and the version is not minor.
+Issue report: [docs/issues/U45-OJS11-journal-crossref-file-doi-twice.md](../issues/U45-OJS11-journal-crossref-file-doi-twice.md).
 
 <a id="fn-f-ojs12"></a>
 **f-ojs12** — Live-probed 2026-10-19, OJS `main`, four runs (note q52).

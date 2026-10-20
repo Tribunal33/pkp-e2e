@@ -1,0 +1,181 @@
+--- a/lib/pkp/classes/validation/ValidatorFactory.php
++++ b/lib/pkp/classes/validation/ValidatorFactory.php
+@@ -305,4 +305,50 @@
+             }
+         });
+     }
++
++    /**
++     * Validate that a new image upload is one the file store will accept
++     *
++     * The rule PKPContextService::moveTemporaryFile() applies to an image, checked
++     * here so that a refused file is reported, under its locale, before any file
++     * of the same save is moved. A missing temporary file is left to
++     * temporaryFilesExist().
++     *
++     * @param \Illuminate\Validation\Validator $validator
++     * @param array $imageProps List of prop names that hold an image upload
++     * @param array $multilingualImageProps List of $imageProps which are multilingual
++     * @param array $props Key/value list of props
++     * @param array $allowedLocales List of locale codes
++     * @param ?int $userId The user who uploaded the temporary files
++     */
++    public static function temporaryFilesAreImages($validator, $imageProps, $multilingualImageProps, $props, $allowedLocales, $userId)
++    {
++        $validator->after(function ($validator) use ($imageProps, $multilingualImageProps, $props, $allowedLocales, $userId) {
++            $temporaryFileManager = new TemporaryFileManager();
++            $check = function (string $errorKey, $value) use ($validator, $temporaryFileManager, $userId) {
++                if (!isset($value['temporaryFileId']) || $validator->errors()->get($errorKey)) {
++                    return;
++                }
++                $temporaryFile = $temporaryFileManager->getFile((int) $value['temporaryFileId'], $userId);
++                if (
++                    $temporaryFile
++                    && (!$temporaryFileManager->getImageExtension($temporaryFile->getFileType()) || !$temporaryFileManager->isValidImage($temporaryFile))
++                ) {
++                    $validator->errors()->add($errorKey, __('api.400.errorUploadingImage'));
++                }
++            };
++            foreach ($imageProps as $imageProp) {
++                if (!isset($props[$imageProp])) {
++                    continue;
++                }
++                if (in_array($imageProp, $multilingualImageProps)) {
++                    foreach ($allowedLocales as $localeKey) {
++                        $check($imageProp . '.' . $localeKey, $props[$imageProp][$localeKey] ?? null);
++                    }
++                } else {
++                    $check($imageProp, $props[$imageProp]);
++                }
++            }
++        });
++    }
+ }
+--- a/lib/pkp/classes/services/PKPContextService.php
++++ b/lib/pkp/classes/services/PKPContextService.php
+@@ -380,6 +380,15 @@
+             $allowedLocales,
+             $user ? $user->getId() : null
+         );
++        // A new picture must be one moveTemporaryFile() accepts, checked before any file is moved
++        ValidatorFactory::temporaryFilesAreImages(
++            $validator,
++            ['favicon', 'homepageImage', 'pageHeaderLogoImage'],
++            ['favicon', 'homepageImage', 'pageHeaderLogoImage'],
++            $props,
++            $allowedLocales,
++            $user ? $user->getId() : null
++        );
+ 
+         // If sidebar blocks are passed, ensure the block plugin exists and is
+         // enabled
+@@ -828,7 +837,7 @@
+         if ($isImage) {
+             $extension ??= $publicFileManager->getImageExtension($temporaryFile->getFileType());
+             if (!$extension || !$temporaryFileManager->isValidImage($temporaryFile)) {
+-                throw new StoreTemporaryFileException($temporaryFile, $fileNameBase, $user, $context);
++                throw new StoreTemporaryFileException($temporaryFile, $fileNameBase, $user, $context, $localeKey ?: null);
+             }
+         } else {
+             $extension ??= $publicFileManager->getDocumentExtension($temporaryFile->getFileType());
+--- a/lib/pkp/classes/services/PKPSiteService.php
++++ b/lib/pkp/classes/services/PKPSiteService.php
+@@ -144,6 +144,15 @@
+             $allowedLocales,
+             $user ? $user->getId() : null
+         );
++        // A new picture must be one moveTemporaryFile() accepts, checked before any file is moved
++        ValidatorFactory::temporaryFilesAreImages(
++            $validator,
++            ['pageHeaderTitleImage'],
++            ['pageHeaderTitleImage'],
++            $props,
++            $allowedLocales,
++            $user ? $user->getId() : null
++        );
+ 
+         // If sidebar blocks are passed, ensure the block plugin exists and is
+         // enabled
+@@ -272,7 +281,7 @@
+         if ($isImage) {
+             $extension ??= $publicFileManager->getImageExtension($temporaryFile->getFileType());
+             if (!$extension || !$temporaryFileManager->isValidImage($temporaryFile)) {
+-                throw new StoreTemporaryFileException($temporaryFile, $fileNameBase, $user, $site);
++                throw new StoreTemporaryFileException($temporaryFile, $fileNameBase, $user, $site, $localeKey ?: null);
+             }
+         } else {
+             $extension ??= $publicFileManager->getDocumentExtension($temporaryFile->getFileType());
+--- a/lib/pkp/classes/core/exceptions/StoreTemporaryFileException.php
++++ b/lib/pkp/classes/core/exceptions/StoreTemporaryFileException.php
+@@ -25,7 +25,7 @@
+ 
+ class StoreTemporaryFileException extends Exception
+ {
+-    public function __construct(public TemporaryFile $temporaryFile, public string $targetPath, public ?User $user, public DataObject|Model|null $dataObject)
++    public function __construct(public TemporaryFile $temporaryFile, public string $targetPath, public ?User $user, public DataObject|Model|null $dataObject, public ?string $localeKey = null)
+     {
+         $message = "Unable to store temporary file {$temporaryFile->getFilePath()} in {$targetPath}.";
+         if ($user) {
+--- a/lib/pkp/api/v1/contexts/PKPContextController.php
++++ b/lib/pkp/api/v1/contexts/PKPContextController.php
+@@ -419,8 +419,10 @@
+         try {
+             $context = $contextService->edit($context, $params, $request);
+         } catch (StoreTemporaryFileException $e) {
++            // A multilingual setting's error is nested under its locale, as validate() reports it
++            $message = [__('api.400.errorUploadingImage')];
+             return response()->json([
+-                $e->targetPath => [__('api.400.errorUploadingImage')]
++                $e->targetPath => $e->localeKey ? [$e->localeKey => $message] : $message
+             ], Response::HTTP_BAD_REQUEST);
+         }
+ 
+--- a/lib/pkp/api/v1/site/PKPSiteController.php
++++ b/lib/pkp/api/v1/site/PKPSiteController.php
+@@ -162,8 +162,10 @@
+         try {
+             $site = $siteService->edit($site, $params, $request);
+         } catch (StoreTemporaryFileException $e) {
++            // A multilingual setting's error is nested under its locale, as validate() reports it
++            $message = [__('api.400.errorUploadingImage')];
+             return response()->json([
+-                $e->targetPath => [__('api.400.errorUploadingImage')]
++                $e->targetPath => $e->localeKey ? [$e->localeKey => $message] : $message
+             ], Response::HTTP_BAD_REQUEST);
+         }
+ 
+--- a/lib/pkp/api/v1/submissions/PKPSubmissionController.php
++++ b/lib/pkp/api/v1/submissions/PKPSubmissionController.php
+@@ -1279,8 +1279,9 @@
+         try {
+             $newId = Repo::publication()->add($publication);
+         } catch (StoreTemporaryFileException $e) {
++            $message = [__('api.400.errorUploadingImage')];
+             return response()->json([
+-                'coverImage' => [__('api.400.errorUploadingImage')]
++                'coverImage' => $e->localeKey ? [$e->localeKey => $message] : $message
+             ], Response::HTTP_BAD_REQUEST);
+         }
+         $publication = Repo::publication()->get($newId);
+@@ -1448,8 +1449,9 @@
+         try {
+             Repo::publication()->edit($publication, $params);
+         } catch (StoreTemporaryFileException $e) {
++            $message = [__('api.400.errorUploadingImage')];
+             return response()->json([
+-                'coverImage' => [__('api.400.errorUploadingImage')]
++                'coverImage' => $e->localeKey ? [$e->localeKey => $message] : $message
+             ], Response::HTTP_BAD_REQUEST);
+         }
+         $publication = Repo::publication()->get($publication->getId());
+--- a/lib/pkp/classes/publication/Repository.php
++++ b/lib/pkp/classes/publication/Repository.php
+@@ -1145,7 +1145,7 @@
+         $fileNameBase = join('_', ['submission', $submission->getId(), $publication->getId(), $settingName]); // eg - submission_1_1_coverImage
+         if (!$temporaryFile || ($isImage && !$temporaryFileManager->getImageExtension($temporaryFile->getFileType()))) {
+             // Temporary file must exist, and if it should be an image, ensure that's the case
+-            throw new StoreTemporaryFileException($temporaryFile, $fileNameBase, $user, $publication);
++            throw new StoreTemporaryFileException($temporaryFile, $fileNameBase, $user, $publication, $localeKey ?: null);
+         }
+         $fileName = app()->get('context')->moveTemporaryFile($submissionContext, $temporaryFile, $fileNameBase, $user, $localeKey, $isImage);
+ 

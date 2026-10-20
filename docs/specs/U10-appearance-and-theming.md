@@ -1168,7 +1168,8 @@ Left out of the scenarios above, by reason:
 
 - **Planned**:
   - the guard for A20 (issue report `docs/issues/U10-A20-removed-thumbnail-stays-public.md`): once fixed, "Remove" under the thumbnail and "Save" leave its address answering 404, also when another language keeps its own thumbnail, which stays.
-  - the guard for A16 (issue report `docs/issues/U10-A16-upload-box-server-refusal-no-message.md`): once fixed, a "Logo" the server refuses shows the server's message under the box, both for a BMP "Logo" refused at "Save" ("There was an error uploading this image.") and for a picture refused for its size.
+  - the guard for A16 (issue report `docs/issues/U10-A16-upload-box-server-refusal-no-message.md`): once fixed, a "Logo" refused for its size shows the server's message under the box
+  - the guard for A16 (issue report `docs/issues/U10-A16-logo-save-refusal-no-message-under-box.md`): once fixed, a BMP or SVG "Logo" refused at "Save" shows "There was an error uploading this image." under the box, and a PNG "Homepage Image" saved beside it is not lost
   - a BMP chosen for "Logo" over a saved logo and saved: refused with "Please correct one error.", the earlier logo back in the box after a reload and still in the visitor's header; and a ".css" file that opens with a comment block and a `:root` rule, saved as the style sheet and applied on the public pages (Fields, the upload boxes)
   - the "Homepage Image" description typed in scenario 3 read on a press's and a preprint server's home page, as on a journal's (A1; the guard its issue report names)
   - the names a screen reader hears for the "Editorial Masthead" arrows ("Increase position of {role}" for an up arrow) and for each "Sidebar" box (the block's name alone) (A3; the guard its issue report names)
@@ -1248,7 +1249,7 @@ otherwise; the team settles them on spec review.
 | [A11](#a11) | In French, a press's or preprint server's "Entête" settings say the role order is for "the journal's" editorial team page | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A12](#a12) | In French, the settings upload boxes say "Drop files here to upload" and show their refusal in English | 🐞 | low | issues (claude), 2026-10-03 — re-verified |
 | [A15](#a15) | After a refused logo, removing it with the hidden "Remove file" still leaves the tab's "Save" disabled | 🐞 | low | issues (claude), 2026-10-07 — re-verified |
-| [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | low · crash: server | issues (claude), 2026-10-07 — re-verified |
+| [A16](#a16) | A logo or image the server refuses leaves its upload box with a warning sign and no message | 🐞 | medium · crash: server | issues (claude), 2026-10-20 — re-verified |
 | [A17](#a17) | Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A18](#a18) | A "Custom" date pattern with "S" prints "17 Oct" on discussion messages and workflow file lists, "17th Oct" elsewhere | 🐞 | low | issues (claude), 2026-10-19 — re-verified |
 | [A20](#a20) | A removed journal, press or server thumbnail stays online, or comes back when another language has one | 🐞 | medium | issues (claude), 2026-10-19 — re-verified |
@@ -1505,7 +1506,7 @@ the other language's message too and enables "Save".
 Basis: probe, 2026-10-07. <sup>f-a15</sup>
 
 <a id="a16"></a>
-**A16 — A logo or image the server refuses leaves its upload box with a warning sign and no message** · 🐞 · low · crash: server.
+**A16 — A logo or image the server refuses leaves its upload box with a warning sign and no message** · 🐞 · medium · crash: server.
 A manager uploads a picture as the "Logo" in the website settings, and
 the upload's request answers with a server error that carries a message.
 The box shows none of it: the picture stays in the box with a red
@@ -1517,12 +1518,22 @@ the server sends back: the context's logo, thumbnail, homepage image,
 favicon and style sheet, the site's logo and style sheet, the images of
 announcements, categories and highlights, and a publication's cover
 image. A file of the wrong type is refused in the browser before it is
-sent, and its message shows. A picture of a type the box takes but the
-server does not (a BMP "Logo" or "Homepage Image") is refused when the
-tab is saved, and that message is dropped too: no text under the box,
-only "Please correct one error." at the form's foot, and the message
-("There was an error uploading this image.") is read out only by a
-screen reader, after "Go to Logo:" ("Go to Homepage Image:").
+sent, and its message shows.
+
+A picture the box takes but the server does not store (an SVG or BMP
+"Logo" or "Homepage Image": any type but PNG, JPEG, GIF, WebP or
+ICO, or a picture whose file name's ending does not match its
+contents) is refused when the tab is saved, for another reason, and
+its message is dropped too: no text under the box, only "Please
+correct one error." at the form's foot, and the message ("There was
+an error uploading this image.") is read out only by a screen reader,
+after "Go to Logo:" ("Go to Homepage Image:"). The same holds for the
+context's thumbnail and favicon, the site's logo and a publication's
+cover image. A picture the server accepts, saved in the same "Save"
+(a PNG "Homepage Image" beside a refused logo), is lost with it: once
+the logo is replaced, the next "Save" is refused with "The file you
+uploaded could not be found. Please try to upload it again." under
+"Homepage Image", and the picture has to be chosen again.
 
 The refusal walked here takes a server whose PHP limits
 `upload_max_filesize` and `post_max_size` are equal, and a picture of
@@ -1530,8 +1541,7 @@ exactly that size: the box's own size check lets it through and PHP
 refuses the request.
 ([Submission files](U36-submission-files.md#a21) describes why such a
 picture is sent at all; the disabled controls are [A7](#a7)'s.)
-Basis: probe, 2026-10-07. <sup>f-a16</sup>
-Report: refresh owed — pkp-lib `07bc43fe67` (pkp/pkp-lib#13512, 2026-10-16) makes `PKPContextService::_saveFileParam()` and `moveTemporaryFile()` refuse a picture type the server does not take, so a BMP "Logo" or "Homepage Image" now gets a save refusal whose message the box drops too; the report reads `_saveFileParam()` as having no image check (2026-10-19)
+Basis: probe, 2026-10-20. <sup>f-a16</sup>
 
 <a id="a17"></a>
 **A17 — Screen readers hear "&quot;" or "&#039;" in the Sidebar arrows of a block named with a quote or apostrophe** · 🐞 · low.
@@ -2465,7 +2475,7 @@ Seen 2026-10-19 on all three apps, `main` (lib/pkp `042726ebf6`) and
 (a BMP "Homepage Image" the same, keyed `homepageImage`); the box shows
 no text, and the message reaches only the error summary's
 screen-reader text (f-a21).
-Issue report: [pkp-e2e#937](https://github.com/jardakotesovec/pkp-e2e/issues/937) ([docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md)).
+Issue reports (two causes): [pkp-e2e#937](https://github.com/jardakotesovec/pkp-e2e/issues/937) ([docs/issues/U10-A16-upload-box-server-refusal-no-message.md](../issues/U10-A16-upload-box-server-refusal-no-message.md)) (a refusal of the upload itself); [docs/issues/U10-A16-logo-save-refusal-no-message-under-box.md](../issues/U10-A16-logo-save-refusal-no-message-under-box.md) (a picture refused at "Save", 2026-10-20).
 
 <a id="fn-f-a17"></a>
 **f-a17** — `FieldOptions.vue` prints `option.label` as HTML

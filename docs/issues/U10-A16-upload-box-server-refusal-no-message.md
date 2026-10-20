@@ -10,10 +10,18 @@
   - 3.4: none (code; the refusal's message shows)
   - 3.3: none (code; the refusal's message shows)
 - **Introduced** `pkp/pkp-lib#9176` for `pkp/pkp-lib#7698` · [71e79e31e3](https://github.com/pkp/pkp-lib/commit/71e79e31e3d5c827e4bfa2443bbe81e5ec4c1dba) · 2023-10-13 · Touhidur Rahman (touhidurabir)
-- **Upstream** none found (2026-10-07)
+- **Upstream** none found (2026-10-20)
 - **Tracked in** spec U10 [A16](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U10-appearance-and-theming.md#a16)
-- **Checked** 2026-10-07, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-20, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-20: pkp-lib `07bc43fe67` (`pkp/pkp-lib#13512`, on
+`stable-3_5_0` as `092ec34b0f`) makes "Save" refuse a logo or
+homepage image the server does not store, such as a BMP. That
+refusal's message does not show under the box either, but for
+another reason and with another fix:
+[U10-A16-logo-save-refusal-no-message-under-box](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U10-A16-logo-save-refusal-no-message-under-box.md).
+Re-walked on `main` and 3.5 with the same result as before.
 
 ## Summary
 
@@ -160,8 +168,17 @@ Reach:
   could not be uploaded because of a server configuration error…"), the
   `has.user` middleware's 401 for a signed-out user, and a server
   error from `render()`. A wrong file type is refused by dropzone.js
-  in the browser, as a string, and shows. A file that is not a real
-  image is not checked at upload; it is stored on "Save".
+  in the browser, as a string, and shows. The upload checks no
+  picture's type or contents. For the context's logo, homepage image,
+  thumbnail and favicon, the site's logo and a publication's cover
+  image, "Save" refuses a picture of a type the server does not store
+  (a BMP) or whose contents do not match its name's ending
+  (`isValidImage()`: a PNG named "logo.jpg"). That refusal comes back
+  as the save's 400, which the form handles, not `onError()`, and its
+  message does not show under these boxes for another reason:
+  [U10-A16-logo-save-refusal-no-message-under-box](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U10-A16-logo-save-refusal-no-message-under-box.md).
+  An announcement's or highlight's image refused at "Save" shows its
+  message under the box; a category's image is stored, not checked.
 - Not covered here: the box keeping the picture and disabling its
   "Upload File" and the tab's "Save" is
   [U10-A7-refused-upload-locks-box](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U10-A7-refused-upload-locks-box.md);
@@ -253,16 +270,27 @@ Small: one line in one ui-library method, tried.
   with `PKP_E2E_LINE=stable-3_5_0` in front for 3.5. `MODE=nb` is the
   neighbour check (a ".pdf" and a 1 MiB PNG chosen for "Logo"), walked
   with the fix in and out.
-- Walked 2026-10-07 on OJS, OMP and OPS, `main` and `stable-3_5_0`,
-  each on its default dataset (pkp/datasets 401a013, 2026-10-06), on
-  PostgreSQL and PHP's built-in server; the fault does not touch the
-  database. The same 500, empty warning line and screen-reader "Go to
-  Logo:" on all six.
+- Walked 2026-10-07 and again 2026-10-20 on OJS, OMP and OPS, `main`
+  and `stable-3_5_0`, each on its default dataset (pkp/datasets
+  35759b4c, 2026-10-19, for the second walk), on PostgreSQL and PHP's
+  built-in server; the fault does not touch the database. The same
+  500, empty warning line and screen-reader "Go to Logo:" on all six,
+  both times. The fix was not tried again: `FieldUpload.vue`,
+  `FieldUploadImage.vue`, `FieldBase.vue` and `useDropzoneDragDrop.js`
+  have no commits in ui-library `a36dc7fe..99abe252`, and pkp-lib's
+  `PKPTemporaryFilesController` was last changed in `4c31a12403`
+  (2024-08-01).
 - Code reads. 3.5 has the Cause's code at the same lines, with
   `render()` as the anonymous handler in
   `PKPContainer::registerBaseBindings()`, and no `parseDropzoneError()`.
   For the Reach's refusals: the `HasUser` middleware, and
-  `PKPContextService::_saveFileParam()` (no image check at upload). 3.4
+  `PKPContextService::moveTemporaryFile()`. Its type gate at "Save"
+  came with `266505ecd8` (`pkp/pkp-lib#13512`, 2026-10-13) as a silent
+  `return false`; `07bc43fe67` (3.5: `092ec34b0f`) added the contents
+  check `isValidImage()` and turned both into a refusal. The category
+  image's `CategoryCategoryController` calls `moveTemporaryFile()`
+  without `$isImage`; announcements and highlights answer a flat
+  refusal for their single-language field. 3.4
   (`origin/stable-3_4_0`): the box's handler is `error()` (line 306)
   with the same `message.errorMessage`, and
   `PKPTemporaryFilesHandler::uploadFile()` (line 97) answers each
@@ -277,17 +305,18 @@ Small: one line in one ui-library method, tried.
   controller's answers give 71e79e31e3.
 - Upstream: pkp/pkp-lib, pkp/ojs, pkp/omp, pkp/ops and pkp/ui-library
   searched by the symptom's words and by `FieldUpload`,
-  `parseDropzoneError` and `errorMessage`; `pkp/pkp-lib#5650` read, not
-  the same fault (OPS 3.2, the logo upload never finishing).
+  `parseDropzoneError` and `errorMessage`; `pkp/pkp-lib#5650` read, not the same fault (OPS 3.2,
+  the logo upload never finishing).
 - Not driven: the other boxes and refusals the Reach lists (code only),
   the `{}` answer, and a front web server (nginx, Apache).
-- Tips:
-  - **`main`:** OJS 92bc2bb467 (lib/pkp e60013c77f), OMP a0e6d0a8bc
-    and OPS 7e34fdd57e (lib/pkp 5a5ab2d6c7); lib/ui-library a36dc7fe in
-    each.
-  - **`stable-3_5_0`:** OJS b8f5e9a951, OMP 7d6b00060a, OPS acc0de0586,
-    lib/pkp 6d7f1540b6 and lib/ui-library 98ac8986 in each.
-  - **`stable-3_4_0`:** OJS d68934d0d1, OMP 0aec65441, OPS acd8ae704b,
-    pkp-lib 767353f4fe, ui-library ee684b34.
-  - **`stable-3_3_0`:** OJS ac77c9fb35, OMP 8e72fc883, OPS c5532e2161,
-    pkp-lib ac3fa73402, ui-library 96959f9e.
+- Tips (2026-10-20):
+  - **`main`:** OJS 6b4323ced7, OMP 5777025bec, OPS f048e747b4;
+    lib/pkp 042726ebf6 and lib/ui-library 99abe252 in each.
+  - **`stable-3_5_0`:** OJS b56f8b74ff, OMP 722d3e661e, OPS
+    110effdd6e; lib/pkp cd82be0528 and lib/ui-library 2576e00a in each.
+  - **`stable-3_4_0`:** OJS 0012bd1022, OMP e30fa7e38c, OPS
+    0f1e21a117, pkp-lib a71d6bd2ca, ui-library ee684b34 (the code the
+    3.4 read rests on is unchanged since pkp-lib 767353f4fe).
+  - **`stable-3_3_0`:** OJS d7d9dd14ec, OMP 8e72fc8836, OPS
+    c5532e2161, pkp-lib 5e84acd11b, ui-library 96959f9e (unchanged
+    since pkp-lib ac3fa73402 for the same code).

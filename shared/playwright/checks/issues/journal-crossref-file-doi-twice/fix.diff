@@ -1,0 +1,38 @@
+--- a/lib/pkp/classes/doi/Repository.php
++++ b/lib/pkp/classes/doi/Repository.php
+@@ -446,7 +446,11 @@
+      * Get the latest minor published publication with a DOI for each version stage and major version,
+      * for use by DOI export/deposit plugins (Crossref, DataCite, mEDRA, etc.).
+      *
+-     * @param Enumerable<int,Publication> $publications
++     * Versions can share a DOI (a major version or a new stage made while DOI versioning was off,
++     * or carried over from an earlier release), and an agency takes one record per DOI: a DOI is
++     * kept with the newest of these publications only.
++     *
++     * @param Enumerable<int,Publication> $publications Ordered by version (Collector::orderByVersion())
+      *
+      * @return array<string, array<int, Publication>> Keyed by versionStage, then versionMajor
+      */
+@@ -472,7 +476,21 @@
+                 $result[$versionStage][$versionMajor] = $publication;
+             }
+         }
+-        return $result;
++        // The newest publication carrying each DOI, by its place in the version order
++        $newestByDoi = [];
++        foreach ($result as $versionStage => $publicationsByMajor) {
++            foreach ($publicationsByMajor as $publication) {
++                $newestByDoi[$publication->getDoi()] = $publication->getId();
++            }
++        }
++        foreach ($result as $versionStage => $publicationsByMajor) {
++            foreach ($publicationsByMajor as $versionMajor => $publication) {
++                if ($newestByDoi[$publication->getDoi()] !== $publication->getId()) {
++                    unset($result[$versionStage][$versionMajor]);
++                }
++            }
++        }
++        return array_filter($result);
+     }
+ 
+     /**

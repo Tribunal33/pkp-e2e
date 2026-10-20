@@ -11,8 +11,17 @@
 - **Introduced** not traced; present since at least [383acb2e76](https://github.com/pkp/ops/commit/383acb2e76a26dcf90941db437570edd7e9701bd) (2020-02-06)
 - **Upstream** `pkp/pkp-lib#12553` (closed): the "No" case, fixed on `stable-3_4_0` and `stable-3_5_0` only (`pkp/crossref-ops#63`, `#64`); fix in PR `pkp/crossref-ops#67` (for `pkp/pkp-lib#11590`), not yet in main: it covers "No" and "Minor Revision", not two major versions on one DOI
 - **Tracked in** spec U45 [OPS6](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/specs/U45-dois.md#ops6)
-- **Checked** 2026-10-15, each branch's tip (the commits in Evidence)
+- **Checked** 2026-10-20, each branch's tip (the commits in Evidence)
 - **Model** claude-opus-5-5
+
+Update 2026-10-20: the Steps were walked again on `main` and 3.5 at
+today's tips and show the same files. The journal's case, which this
+report read from the code alone, was walked on OJS `main`: two
+published major versions on one DOI are both written, the older first.
+The journal's filter picks its versions with pkp-lib's
+`getLatestMinorPublicationsForDoiDeposit()`, where the journal's fix
+goes, so that case is a report of its own
+([pkp-e2e U45 OJS11](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS11-journal-crossref-file-doi-twice.md)).
 
 ## Summary
 
@@ -84,7 +93,7 @@ Setting up:
    `Public Knowledge Project`, "Depositor Email"
    `dbarnes@mailinator.com`, "Save".
 5. Side menu "DOIs": tick preprint 2; "Bulk Actions" › "Assign DOIs" ›
-   "Assign DOIs". It gets a DOI (`10.1234/g2bf2q98` in the walk).
+   "Assign DOIs". It gets a DOI (`10.1234/drf2mx66` in the walk).
 
 "Minor Revision":
 
@@ -120,19 +129,19 @@ built holds two records for one DOI, under the file's one
 `<timestamp>`:
 
 ```xml
-<timestamp>20261015092208000</timestamp>
+<timestamp>20261020030726000</timestamp>
 …
 <posted_content type="preprint" language="en">
   …
   <doi_data>
-    <doi>10.1234/g2bf2q98</doi>
+    <doi>10.1234/drf2mx66</doi>
     <resource>…/index.php/publicknowledge/preprint/view/2/version/21</resource>
   </doi_data>
 </posted_content>
 <posted_content type="preprint" language="en">
   …
   <doi_data>
-    <doi>10.1234/g2bf2q98</doi>
+    <doi>10.1234/drf2mx66</doi>
     <resource>…/index.php/publicknowledge/preprint/view/2/version/2</resource>
   </doi_data>
 </posted_content>
@@ -194,13 +203,16 @@ Reach:
   (`PKPI7014_DoiMigration`) gave each version a `dois` row of its own
   with the same DOI, and `I8027_DoiVersioning` set every server to
   "Yes". Their DOI is written once per version on every line.
-- A journal (OJS `main`, code only, not walked): `ArticleCrossrefXmlFilter`
-  writes the current version under "No", and under "Yes" one record per
-  stage and major version (`Repo::doi()->getLatestMinorPublicationsForDoiDeposit()`).
-  Two major versions that share a DOI, made under "No" before a switch
-  to "Yes", would also be written twice there. OJS 3.5 has no "DOI
-  Versioning" and writes the current version alone. A press has no
-  Crossref plugin.
+- A journal (OJS `main`, walked): `ArticleCrossrefXmlFilter` writes the
+  current version alone under "No", and under "Yes" the versions
+  pkp-lib's `getLatestMinorPublicationsForDoiDeposit()` picks, which
+  the preprint filter on `main` does not call. Two published major
+  versions that share a DOI, made under "No" before a switch to "Yes",
+  are both written there, the older first; OJS 3.5 has no "DOI
+  Versioning" and writes the current version alone. That case has a
+  fix of its own:
+  [U45 OJS11's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS11-journal-crossref-file-doi-twice.md).
+  A press has no Crossref plugin.
 
 ## Proposed fix
 
@@ -257,12 +269,20 @@ team decides.
   "Yes", the newest minor version of each stage and major version. It
   covers "No" and "Minor Revision", but two major versions on one DOI
   (made under "No" before a switch, or carried over from 3.3) are still
-  written twice. The DOI check above can go into that PR's loop.
-- Keep one publication per DOI in pkp-lib's
-  `getLatestMinorPublicationsForDoiDeposit()`: it would cover the
-  journal's case too, but that helper's stage and major grouping feeds
-  the article filter's relations, so it is a change of its own, with
-  its own OJS check.
+  written twice. That PR's loop walks the versions oldest first, so the
+DOI check goes there as "keep the newest version per DOI", not as the
+first-seen check above.
+- Keep the newest publication per DOI in pkp-lib's
+  `getLatestMinorPublicationsForDoiDeposit()`, which walks the versions
+  oldest first, so a first-seen rule there would keep the older one:
+  that is the journal's fix
+  ([U45 OJS11's report](https://github.com/jardakotesovec/pkp-e2e/blob/main/docs/issues/U45-OJS11-journal-crossref-file-doi-twice.md)).
+  The preprint filter on `main` does not call the helper, and PR
+  `pkp/crossref-ops#67` copies it as its filter's
+  `getLatestMinorPublications()`. The helper's fix reaches a preprint
+  server once that PR calls `Repo::doi()->getLatestMinorPublicationsForDoiDeposit()`
+  instead; until then this report's check in
+  `PreprintCrossrefXmlFilter::process()` is needed.
 
 **What goes with it:**
 
@@ -297,10 +317,12 @@ plugin has a test folder.
   `fix.diff` applied to the checkout and walked again with it out. The
   script reads the file "Export DOIs" leaves in the files directory's
   `temp` folder.
-- Walks ran on PostgreSQL, on these tips. `main`: ops `2ece50497f`
-  (pkp-lib `b17fadae59`, crossref-ops `8e82eda`). `stable-3_5_0`: ops
-  `44aec6e131` (pkp-lib `4045d9241e`, crossref-ops `20f5409`). Dataset
-  pkp/datasets `7912e09` (2026-10-14).
+- Walks ran on PostgreSQL, on these tips (2026-10-20; the fix was
+  tried on 2026-10-15 at ops `2ece50497f`, with the same
+  `PreprintCrossrefXmlFilter.php`, crossref-ops `8e82eda`). `main`: ops
+  `f048e747b4` (pkp-lib `042726ebf6`, crossref-ops `8e82eda`).
+  `stable-3_5_0`: ops `110effdd6e` (pkp-lib `cd82be0528`, crossref-ops
+  `20f5409`). Dataset pkp/datasets `35759b4c` (2026-10-19).
 - Code reads. `main`: `PreprintCrossrefXmlFilter::process()` and
   `createPostedContentNode()`; `CrossrefExportPlugin::depositXML()`,
   `exportAndDeposit()`, `exportAsDownload()`; `CrossrefPlugin::exportSubmissions()`;
@@ -343,5 +365,4 @@ plugin has a test folder.
   environment) for the DOI deposit" on "Registration", takes steps 1-7, then "Deposit DOIs" on preprint 2: the
   code reads the deposit as failed and the DOI as "Error" (not driven
   here).
-- Not walked: 3.4 and 3.3 (code); OJS's case of two major versions on
-  one DOI (code).
+- Not walked: 3.4 and 3.3 (code).
