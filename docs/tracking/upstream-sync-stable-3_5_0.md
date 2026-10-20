@@ -10,10 +10,10 @@ and no CI follows this branch. `main`'s baselines are in
 
 | Repo | Last-read commit | Date | Read by |
 |------|------------------|------|---------|
-| ojs | `007c2cd0d6` | 2026-10-19 | claude (daily maintenance session) |
-| omp | `2d575f250` | 2026-10-19 | claude (daily maintenance session) |
-| ops | `e737a9e465` | 2026-10-19 | claude (daily maintenance session) |
-| pkp-lib | `092ec34b0f` (ojs, omp and ops) | 2026-10-19 | claude (daily maintenance session); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
+| ojs | `b56f8b74ff` | 2026-10-20 | claude (daily maintenance session) |
+| omp | `722d3e661e` | 2026-10-20 | claude (daily maintenance session) |
+| ops | `110effdd6e` | 2026-10-20 | claude (daily maintenance session) |
+| pkp-lib | `f94e556856` (the merge of pkp/pkp-lib#13535; ojs, omp and ops at its head `cd82be0528`, the same tree) | 2026-10-20 | claude (daily maintenance session; before it `092ec34b0f`, 2026-10-19); ui-library `2576e00afd` (ojs, omp, ops; 2026-10-09); ojs `plugins/generic/jatsTemplate` `96eacdab48` (2026-10-12, the pointer of pkp/ojs#5921); `plugins/generic/citationStyleLanguage` `0150021249` (ojs, omp, ops, 2026-10-08) |
 
 ## Read log
 
@@ -22,6 +22,10 @@ one line per commit (sha → `=main <sha>` with the date of the `main` read /
 `~main <sha>` with what the backport changed / `stable-only`; the
 regression verdict; what was filed)._
 
+- **2026-10-20 (daily session, VM s3) — ojs `007c2cd0d6..b56f8b74ff` (2), omp `2d575f250..722d3e661e` (2), ops `e737a9e465..110effdd6e` (2), pkp-lib `092ec34b0f..f94e556856` (1 and its merge), ui-library none. `main` first: no range there today. Read in full; baselines advanced.**
+  - pkp-lib `cd82be0528` (pkp/pkp-lib#13535 for pkp/pkp-lib#13533, Kaitlin Newson, merged `f94e556856`) → `=main ef6100d5e2` (read 2026-10-16): `cypress/support/commands.js` alone, the install's page-load timeout for the ROR import; no caller outside PKP's own Cypress CI. No regression; no security impact.
+  - ojs `395bc4816d`, omp `35ffb1fe9a`, ops `5d49db8240` → pointer bumps to `cd82be0528`; `b56f8b74ff` (pkp/ojs#5939), `722d3e661e` (pkp/omp#2515), `5d49db8240`'s merge `110effdd6e` (pkp/ops#1454) → merges.
+  - `main`'s findings carried over: the `main` sync read nothing new today. Open stable-line rows not re-run: the range touches only Cypress.
 - **2026-10-19 (daily session, VM s3) — ojs `97e230cc72..007c2cd0d6` (2), omp `9f6fd721f4..2d575f250` (2), ops `6952ae6b0b..e737a9e465` (2), pkp-lib `93d0df22db..092ec34b0f` (1), ui-library none. `main` first: synced today. Read in full; baselines advanced.**
   - pkp-lib `092ec34b0f` (Alec Smecher, "pkp/pkp-lib#13512 Fix regression with stylesheets; fix site uploads; fix highlights; improve error handling", direct commit) → `~main 07bc43fe67` (with `042726ebf6`, read today): the patch is `main`'s but for the category controller (3.5 has none; its `CategoryForm` names the file itself) and `impersonatedUserId` (3.5's event log has no such line); no 3.5 caller of `moveTemporaryFile()` or `_saveFileParam()` is left on an int (grep of the three 3.5 apps and their plugins). It fixes the 13512 regression on 3.5 (`refused-uploads.js` on the 3.5 dataset fleet, OJS OMP OPS, `.reports/r13512-3_5/s1019/`). **3.5 shows `main`'s follow-up regressions (1) and (3) too** (walked, `docs/reports/2026-10-19-pkp-lib-13512.md`; (2) is `main` only); the unverified `Publication::edit()` hunch of the `main` read holds for 3.5's line 450 the same. Security: as `main`.
   - ojs `0480d19a56`, omp `18c85531cf`, ops `6943300050` (each app's `ContextService` passes the `User`) → `=main b7504fe96b`, `c567c4757b`, `3758188c14` (read today). ojs `007c2cd0d6`, omp `2d575f2506`, ops `e737a9e465` → pointer bumps to `092ec34b0f`.
