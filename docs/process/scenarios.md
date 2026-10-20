@@ -1478,7 +1478,12 @@ Keys:
   (article) has been submitted to which an editor needs to be assigned."
   stays up even with an editor seeded in; read the Tasks panel by the
   driven submission's title, never by count (OMP and OJS, 2026-09-27, U71
-  claim check K6).
+  claim check K6). A participant seeded with `role: 'manager'` lands in the
+  "Journal manager" group, which has no workflow stage, so no stage's
+  Participants panel lists them and the review-complete email leaves them
+  out; a manager-level participant who shows on the panel is seeded with
+  `role: 'editor'` (Journal or Press editor; U05 sweep ccSW2, OJS and OMP,
+  2026-10-20).
 - `published` (default false). Requires `submitted: true`.
   A published seed records no accepting decision, so it never counts
   under "Editorial Activity"'s "Submissions Accepted", and after

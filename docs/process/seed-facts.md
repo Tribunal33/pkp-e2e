@@ -724,9 +724,21 @@ behind a line; that scratch is deleted after review.
   check I28).
 - Every row of a user's Notifications settings starts with "Enable these
   types of notifications." ticked and "Do not send me an email for these
-  types of notifications." unticked, the registration form's preset
-  included. Profile › Notifications. Live-probed 2026-09-17, all three apps
-  (`.reports/U12/ccK5`).
+  types of notifications." unticked, for an account seeded or created by a
+  manager; one registered on a journal's Register page with "Yes, I would
+  like to be notified of new publications and announcements." left
+  unticked (its arrival state) starts with "Do not send me an email…"
+  ticked on every "Public Announcements" row of that journal. Profile ›
+  Notifications; Register page. Live-probed 2026-09-17 and 2026-10-20, all
+  three apps (`.reports/U12/ccK5`; U05 sweep ccSW2 `register`).
+- PKP's notification emails (discussion, announcement, issue, review
+  complete, statistics report, needs an editor, Publication Published) are
+  single-part `text/html` (the statistics email `multipart/mixed` with its
+  CSV); Mailpit's API `Text` field and its "Text" tab are Mailpit's own
+  rendering of the HTML, each link's address in parentheses after its
+  words. The MIME reads from `/api/v1/message/{id}/raw`; the slot's own
+  Mailpit is `app.mailpitUrl`. Live-probed 2026-10-20, all three apps (U05
+  sweep ccSW3).
 - A scratch preprint server's Settings › Website › Appearance › Setup
   "Sidebar" list offers "Web Feed Plugin" and "Language Toggle Block"
   alone (no Information block), and its Plugins grid lists "Web Feed

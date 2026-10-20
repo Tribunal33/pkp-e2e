@@ -56,7 +56,7 @@ Editor; on a preprint server the Preprint Server Manager alone. <sup>e</sup>
 |--------|--------------------|
 | **Open the Tasks panel** | • Any signed-in user on an editorial page, whatever their roles, including a user with no role in that journal, a user with no role in any journal, and the Site Administrator (Rule 2). The panel lists the account holder's own tasks only; what one Journal Manager deletes leaves another's rows untouched <sup>a</sup> |
 | **Mark tasks read or new, delete tasks** | • The account holder, on their own list only (Rule 3) <sup>a</sup> |
-| **See the unread count on the reader-side header** | • A signed-in user holding Journal Manager, Author, Reviewer or an assistant-level role in the journal, or the Site Administrator, on a journal whose only "Forms" language is English (Rule 4a); the count shows even when it is "0"<br>• The same roles on a journal with French under "Forms": beside the name nobody; only a window narrower than 992 px shows the number, after "Dashboard" [A15](#a15) (Rule 4c)<br>• On the site's own home page, in a window 992 px or wider, nobody: every name is bare, and the "Dashboard" entry under the Site Administrator's name carries the number without displaying it [A13](#a13); in a narrower window the Site Administrator sees it after "Dashboard" (Rule 4d)<br>• A Section Editor sees their name without a count, with or without unread tasks ⚠ [A3](#a3); a Reader sees the bare name too <sup>c</sup> |
+| **See the unread count on the reader-side header** | • A signed-in user holding, in the journal, a role whose permission level (Settings › Users & Roles › "Roles", column "Permission level") is Journal Manager, Assistant, Reviewer or Author (on a default journal the Journal Manager, the Editor, the Production Editor, every assistant-level role, the Translator, the Reviewer and the Author), or the Site Administrator, on a journal whose only "Forms" language is English (Rule 4a); the count shows even when it is "0"<br>• The same roles on a journal with French under "Forms": beside the name nobody; only a window narrower than 992 px shows the number, after "Dashboard" [A15](#a15) (Rule 4c)<br>• On the site's own home page, in a window 992 px or wider, nobody: every name is bare, and the "Dashboard" entry under the Site Administrator's name carries the number without displaying it [A13](#a13); in a narrower window the Site Administrator sees it after "Dashboard" (Rule 4d)<br>• A user whose roles in the journal are all at the Section Editor permission level (a Section Editor, {OJS} a Guest Editor) sees their name without a count, with or without unread tasks ⚠ [A3](#a3); a Reader sees the bare name too <sup>c</sup> |
 | **Choose which events reach them, and which by email** | • The account holder, per journal, on the Profile page's "Notifications" tab (Rule 5) <sup>d</sup> |
 | **Open the Unsubscribe page and unsubscribe** | • Whoever holds the emailed link, signed in or not; the page names and acts on the addressee, not on whoever is signed in (Rule 8, scenario 6) <sup>f</sup> |
 | **Receive a task or a notification email** | • Decided per event type by the feature that raises it; the roster in Rule 6 says who is told, where it shows and whether an email goes out <sup>e</sup> |
@@ -115,10 +115,11 @@ is listed even where the journal's statistics email is off ⚠ [A9](#a9).
 <sup>f</sup>
 
 **The Tasks panel** (Rule 2): a full-height panel over the page with a
-back-arrow button "Close" and the heading "Tasks"; inside it a table with
-the columns "Select" (a box at the start of every row) and "Tasks", the
-three actions "Mark New", "Mark Read" and "Delete" under the table (offered
-even while the list is empty), and a line counting the rows ("0 - 0 of 0
+back-arrow button "Close" (the Escape key closes the panel too) and the
+heading "Tasks"; inside it a table with the columns "Select" (a box at
+the start of every row and none in the header, so no box ticks every row
+at once) and "Tasks", the three actions "Mark New", "Mark Read" and
+"Delete" under the table (offered even while the list is empty), and a line counting the rows ("0 - 0 of 0
 items" on an empty list). No text can be typed anywhere in the panel.
 <sup>a</sup>
 
@@ -128,8 +129,11 @@ items" on an empty list). No text can be typed anywhere in the panel.
    of these, and the roster in Rule 6 says which:
    - a *toast*: a short message at the top right of the editorial page
      the person is on, gone after a few seconds (Rule 9);
-   - a *task*: a row in the Tasks panel, kept until the person deletes it,
-     shown as unread until read (Rule 2);
+   - a *task*: a row in the Tasks panel, shown as unread until read
+     (Rule 2). It stays until the person deletes it, except the "needs an
+     editor" task (Rule 6), which leaves every manager's list once a
+     Section Editor is assigned to the submission with "Assign" on its
+     Participants panel;
    - a *notice on a screen*: a sentence or box that another feature's screen
      shows while a situation lasts (the review round's status box, the
      "awaiting approval" notice); those belong to the screen's own spec;
@@ -169,10 +173,12 @@ items" on an empty list). No text can be typed anywhere in the panel.
      "1 - 25 of 26 items" with page numbers and ">" and ">>" after it, and
      offers "Items per page:" with the choices "10", "25", "50", "75" and
      "100".
-   - 2c. **Opening a task.** A row's text (the sentence and, where there is one,
-     the title under it) is one link; the blank part of the row does nothing. Pressing the
-     text marks the task read and leaves the window for the submission the
-     task is about: {OJS OMP} the submissions dashboard opens with that
+   - 2c. **Opening a task.** A row's text (the sentence and, where there
+     is one, the title under it) is one link as wide as the "Tasks"
+     column, the blank space beside the text included. Only the row's
+     last few pixels above its bottom border, and the "Select" cell around
+     its box, do nothing. Pressing the link anywhere marks the task read
+     and leaves the window for the submission the task is about: {OJS OMP} the submissions dashboard opens with that
      submission's workflow in a panel over the list, headed with the
      author's name and the submission's title under it; {OPS} the browser
      lands instead on a reader-facing page whose whole text is "A workflow
@@ -194,8 +200,9 @@ items" on an empty list). No text can be typed anywhere in the panel.
    every box is unticked again, and once the window is closed the badge on
    the bell shows the new number of unread rows. <sup>a</sup>
 4. **The reader-side count.** It is a count only: the reader-side header
-   offers no list. Actors says who sees it; a Section Editor and a Reader
-   see the bare name, with or without unread tasks [A3](#a3). <sup>c</sup>
+   offers no list. Actors says who sees it; a Section Editor, {OJS} a
+   Guest Editor and a Reader see the bare name, with or without unread
+   tasks [A3](#a3). <sup>c</sup>
    - 4a. **Beside the name.** On a journal's reader-facing pages, in a
      window 992 px or wider, a signed-in user's name in the header is
      followed by the number of unread tasks the bell shows, as "{name} 1"
@@ -246,10 +253,13 @@ items" on an empty list). No text can be typed anywhere in the panel.
      example "…/index/user/profile" (*[User profile](U03-user-profile.md)*
      Rule 3); the site's home page has the same "index", and its "View
      Profile" under the signed-in name leads to the site-level profile. A
-     user with a
-     role in exactly one journal who opens that address is sent to that
-     journal's profile with the "Identity" tab open, whatever tab the
-     address named; the site-level tab is seen by a user with roles in
+     user with a role in exactly one journal who opens that address is
+     sent to that journal's profile, on the tab the address names
+     (*[User profile](U03-user-profile.md)* Rules 2f and 3):
+     "…/index/user/profile/notificationSettings" opens "Notifications",
+     while the address with no tab, or with a word that names none
+     ("…/index/user/profile/password", for one), opens "Identity". The
+     site-level tab is seen by a user with roles in
      several journals or in none, and by the Site Administrator of a site
      with several journals (a site with one journal was not tried). No
      event listed on the tab is raised at site level, so the site-level set
@@ -281,35 +291,49 @@ items" on an empty list). No text can be typed anywhere in the panel.
 
    | Row (as on the tab) | Raised by (owner) | Who is told | In the application | Email (footer link?) |
    |---|---|---|---|---|
-   | "A new announcement has been created." / "New announcement." | A Journal Manager posts an announcement (*Announcements*, spec not yet written) | every user with a role in the journal | no task | only when the announcement was posted with "Send an email about this to all registered users." ticked; link: yes |
-   | "An issue has been published." {OJS} | A Journal Manager publishes an issue with "Send an email about this to all registered users." ticked in the "Publish Issue" dialog (*Issues*, spec not yet written) | every user with a role in the journal | no task | yes; link: yes |
-   | "An issue has been made open access." {OJS} | the day an issue of a subscription journal becomes open access, if the journal's open-access notification is on (those screens are *Subscriptions & open access control*'s, spec not yet written). A scheduled task raises it (above); no screen starts it | every user with a role in the journal | no task | yes; link: yes |
+   | "A new announcement has been created." / "New announcement." | A Journal Manager posts an announcement (*[Announcements](U12-announcements.md)*) | every user with a role in the journal | no task | only when the announcement was posted with "Send an email about this to all registered users." ticked; link: yes |
+   | "An issue has been published." {OJS} | A Journal Manager publishes an issue with "Send an email about this to all registered users." ticked in the "Publish Issue" dialog (*[Issues](U50-issues.md#publish-issue)*) | every user with a role in the journal | no task | yes; link: yes |
+   | "An issue has been made open access." {OJS} | the day an issue of a subscription journal becomes open access, if the journal's open-access notification is on (those screens are *[Subscriptions & open access control](U51-subscriptions.md)*'s). A scheduled task raises it (above); no screen starts it | every user with a role in the journal | no task | yes; link: yes |
    | "A new article, "Title," has been submitted." | a new submission into a section whose form has an editor ticked under "Editorial Assignments" (Settings › Journal › "Sections", a section's "Edit"; the assignment itself is *[Submission wizard](U21-submission-wizard.md)*'s). On every journal but the install's first (its oldest; the seeded journal, on a test install) the tick is ignored and this event never happens: the submission raises the "needs an editor" row's event instead, as if nobody were ticked ⚠ [A11](#a11) <sup>e</sup> | nobody, by this row, on any journal but the install's first: the ticked editor gets neither task nor email, and the "needs an editor" row's task and email go to that row's recipients exactly as for that row below (what the ticked editor gets on the install's first journal was never seen, [A11](#a11)) | none of this row's own. That task is the "needs an editor" row's and answers to that row's "Enable…" box, not this one's (Rule 5a, scenario 3); what this row's own boxes change was never seen, the event never having happened on a test install | none of this row's own; link: no. That email is the "needs an editor" row's, stopped only by that row's "Do not send me an email…" box ⚠ [A10](#a10) (scenario 4); nothing to the ticked editor |
    | "A new version of your submission, "Title", was published." | a version goes live (*[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*) | every user holding an Author assignment on the submission | a task, the title inside its sentence and no title line under it (Rule 2b) | the "Publication Published" email; link: no ⚠ [A8](#a8) |
-   | "A new article has been submitted to which an editor needs to be assigned." | a new submission with nobody assigned automatically (*[Submission wizard](U21-submission-wizard.md)*) | every user holding a manager-level role in the journal (*Actors & permissions*), the Site Administrator included wherever enrolled in one; a Section Editor, a Copyeditor (on a preprint server an Editorial Board Member), an Author and a Reader get neither task nor email <sup>e</sup> | a task | the "needs an editor" email, subject "A new submission needs an editor to be assigned: "{title}""; link: no ⚠ [A8](#a8); sent even with "Enable…" unticked ⚠ [A10](#a10) |
+   | "A new article has been submitted to which an editor needs to be assigned." | a new submission with nobody assigned automatically (*[Submission wizard](U21-submission-wizard.md)*) | every user holding a manager-level role in the journal (*Actors & permissions*), the Site Administrator included wherever enrolled in one; a Section Editor, a Copyeditor (on a preprint server an Editorial Board Member), an Author and a Reader get neither task nor email <sup>e</sup> | a task, until a Section Editor is assigned to the submission (Rule 1); the assigned Section Editor gets none | the "needs an editor" email, subject "A new submission needs an editor to be assigned: "{title}""; link: no ⚠ [A8](#a8); sent even with "Enable…" unticked ⚠ [A10](#a10) |
    | "Discussion added." | a discussion is opened with the person as a participant, and every reply to it (*[Tasks & discussions](U37-tasks-and-discussions.md)*) | the discussion's participants, the person who wrote the message included | a task reading "{who opened it} started a discussion: {name}: {opening message}", where an opening message of 198 characters or fewer shows whole and a longer one shows its first 199 characters followed by "..." (so one of exactly 199 shows whole, with "..." after it); for a reply the same sentence again ⚠ [A1](#a1) <sup>e</sup> | the whole message, however long, subject the discussion's name, its From line naming the person who wrote it; link: yes, in Rule 7a's "Reply to this comment…" sentence |
    | "Discussion activity." | nothing: no event raises it ⚠ [A1](#a1) | — | — | — |
-   | "A reviewer has commented on "Title"." | a reviewer submits a review (*[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)*) | only the Journal Managers and Section Editors assigned to that submission, in either role; a Journal Manager who is not assigned gets nothing | no task | the review-complete email, subject "Review complete: {reviewer} recommends {recommendation} for #{submission number} {authors} — "{title}"" ({submission number} and {authors} as in Rule 7a; {OMP} "recommends None", the press's review form offering no recommendation, a wording *[Reviewer's review](U28-reviewers-review.md#omp2)* records); link: yes, in Rule 7a's "This is an automated message…" sentence |
+   | "A reviewer has commented on "Title"." | a reviewer submits a review (*[Reviewer assignment & management](U27-reviewer-assignment-and-management.md)*) | only the editors assigned to the submission on its Participants panel, an Editor or a Section Editor; that panel's "Assign" offers no Journal Manager role, so a Journal Manager not assigned in an editor role gets nothing <sup>e</sup> | no task | the review-complete email, subject "Review complete: {reviewer} recommends {recommendation} for #{submission number} {authors} — "{title}"" ({submission number} and {authors} as in Rule 7a; {OMP} "recommends None", the press's review form offering no recommendation, a wording *[Reviewer's review](U28-reviewers-review.md#omp2)* records); link: yes, in Rule 7a's "This is an automated message…" sentence |
    | "Weekly email of outstanding tasks" | the monthly reminder of outstanding tasks that *[Submissions dashboard (editorial)](U23-submissions-dashboard.md)* describes (the "Weekly" mislabel is noted in Fields); listed on a preprint server too, where the email is never sent ⚠ [OPS1](#ops1). A scheduled task raises it (above); no screen starts it | Journal Managers and Section Editors with submissions waiting on them (which submissions count is *[Submissions dashboard (editorial)](U23-submissions-dashboard.md)*'s to say) | no task | yes; link: yes, in Rule 7a's "This is an automated message…" sentence |
    | "Statistics report summary." | the monthly statistics email that *[Editorial statistics](U65-editorial-statistics.md#monthly-email)* describes, sent while the journal's "Editorial statistics" choice is "Send a monthly email to editors." (Settings that modify behavior). A scheduled task raises it (above); no screen starts it | every user holding a manager-level role in the journal (*Actors & permissions*), the Site Administrator included wherever enrolled in one, every Section Editor and {OJS} every Guest Editor; an Author and a Reader get neither task nor email, and neither do {OJS OMP} a Reviewer, a Copyeditor or a Funding Coordinator, {OMP} a Volume Editor and {OPS} an Editorial Board Member <sup>e</sup> | a task reading "This is a kind reminder for you to check your publication's health through the editorial report.", with no title line under it (Rule 2b); pressing it opens Statistics › "Editorial Activity" (Rule 2c) | the statistics email, subject "Editorial activity for {month}, {year}" ("Preprint Server activity for {month}, {year}" on a preprint server), with the spreadsheet "editorial-report.csv" attached; link: yes |
 
-   One email that a box on this tab does *not* govern is the reviewer's
-   "Review assignment updated." notice; *[Reviewer assignment & management](U27-reviewer-assignment-and-management.md#a12)*
-   records that gap.
+   Two emails are governed by no box on this tab:
+   - the reviewer's "Review assignment updated." notice; *[Reviewer assignment & management](U27-reviewer-assignment-and-management.md#a12)*
+     records that gap;
+   - {OPS} "New Version Posted Acknowledgement", which reaches the author
+     when a preprint is posted even with "Do not send me an email…"
+     ticked under "A new version of your submission, "Title", was
+     published."; the "Preprint Posted" choice under Settings › Workflow ›
+     "Emails" governs it
+     (*[Publish, schedule & versions](U49-publish-schedule-and-versions.md)*).
+     <sup>e</sup>
 7. **Notification emails and their footer.** <sup>f</sup>
    - 7a. An email marked "link: yes" in Rule 6 ends with a footer: a dash
-     ("—") on a line of its own, then one of three sentences: "Unsubscribe from emails sent by
-     {journal name}." (announcements, issues and the statistics report) <sup>e</sup>, "This
-     is an automated message from {journal name}. You can unsubscribe from
-     this email at any time." (the reminder, the review-complete email) and
-     "Reply to this comment at #{submission number} {authors} or
-     unsubscribe from emails sent by {journal name}." (discussions;
-     {submission number} is the number the submission's workflow page
-     shows at its top, {authors} the family names of its authors, and that
-     part links to the submission). In each, "Unsubscribe" or "unsubscribe"
-     is the link, and the journal name links to the journal. The email's
-     plain-text version shows each link's address in parentheses after the
-     link's words.
+     ("—") on a line of its own, then one of the three sentences below. In
+     each, "Unsubscribe" or "unsubscribe" is the link, and the journal
+     name links to the journal. The emails are sent as HTML only; a mail
+     program that shows an email as text (the mail catcher's "Text" tab,
+     for one) prints each link's address in parentheses after the link's
+     words. The sentences:
+     - "Unsubscribe from emails sent by {journal name}." on the
+       announcement, issue and statistics emails; <sup>e</sup>
+     - "This is an automated message from {journal name}. You can unsubscribe from this email at any time." on the review-complete email and on the reminder of outstanding tasks (a scheduled task sends the reminder; no screen does);
+     - "Reply to this comment at #{submission number} {authors} or
+       unsubscribe from emails sent by {journal name}." on the discussion
+       emails. {submission number} is the number the submission's
+       workflow page shows at its top; {authors} is the first author's
+       family name, followed by "et al." when the submission has more
+       than one author. The "#{submission number} {authors}" part links
+       to the submission's workflow: a Journal Manager who presses it
+       lands there, while the submission's Author, signed in, lands on the
+       page "The current role does not have access to this operation."
+       instead ⚠ [A16](#a16).
    - 7b. The link is personal and permanent: it names the addressee and the
      notification it came with, needs no sign-in, and keeps working every
      time it is opened. It stops working only if the notification it came
@@ -318,9 +342,7 @@ items" on an empty list). No text can be typed anywhere in the panel.
      program show its own "Unsubscribe" button. Whether that button works is
      an open question ⚠ [A5](#a5); the link in the footer is the supported
      way.
-   - 7d. Both the link and the headers depend on a secret the system
-     administrator sets in the configuration file (Settings). Without it,
-     the footer link opens the "404 Not Found" page ⚠ [A6](#a6).
+   - 7d. Both the link and the headers depend on a secret the system administrator sets in the configuration file, which no screen shows (Settings). Without it, the footer link opens the "404 Not Found" page ⚠ [A6](#a6).
 8. **The Unsubscribe page.** <sup>f</sup>
    - 8a. **Reaching it.** The footer link opens the page in the journal's
      reader-facing layout, signed in or not. The link's address ends
@@ -352,13 +374,13 @@ items" on an empty list). No text can be typed anywhere in the panel.
      successfully unsubscribed. We'll no longer send you those emails. You
      can resubscribe to email notifications at any time from your user
      profile." The page can go stale: if it is left open while the person
-     signs in or out in another tab of the same browser (or clears the
-     browser's cookies) and "Unsubscribe" is then pressed on the old page, it
+     signs out in another tab of the same browser (or clears the browser's
+     cookies) and "Unsubscribe" is then pressed on the old page, it
      reads "We could not unsubscribe you" with "There was an unexpected
      error and we could not unsubscribe the email address {email}. You can
      unsubscribe from all email notifications in your user profile or
      contact us directly for help." Opening the emailed link afresh works
-     again.
+     again. A sign-in alone in another tab leaves the open page working.
    - 8e. **The "user profile" link** on both pages opens the journal's
      Profile page on its first tab, "Identity", not on "Notifications"; a
      signed-out visitor is asked to sign in first and then lands there.
@@ -383,8 +405,11 @@ items" on an empty list). No text can be typed anywhere in the panel.
      The same holds over an open window (the "Notify" side panel showing
      9a's warning, or the "Add a Component" window of
      *[Submission intake configuration](U58-submission-intake-configuration.md)*
-     after saving "Key" -survey): the "×" removes the toast and the pointer
-     resting on it keeps it, and the window stays open.
+     after "Save" with -survey typed in "Key", whose warning reads "The
+     key can contain only alphanumeric characters, underscores, and
+     hyphens, and must begin and end with an alphanumeric character."):
+     the "×" removes the toast and the pointer resting on it keeps it, and
+     the window stays open.
    - 9c. **Messages that are not toasts.** A form the server rejected
      shows no toast: its errors appear inside the form under the heading
      "Errors occurred processing this form" (the Profile page's
@@ -421,10 +446,7 @@ items" on an empty list). No text can be typed anywhere in the panel.
   the row from the tab (the Unsubscribe page keeps its box ⚠ [A9](#a9))
   and stops the email; choosing the first again brings the row back on
   the tab's next load. <sup>i</sup>
-- **The API secret (configuration file, no screen).** A key the system
-  administrator writes into the configuration file; no screen shows or sets
-  it. Set on the test installs; without it the Unsubscribe links and
-  headers are dead (Rule 7d) ⚠ [A6](#a6). <sup>i</sup>
+- **The API secret (configuration file, no screen).** A key the system administrator writes into the configuration file; no screen shows or sets it. Set on the test installs; without it the Unsubscribe links and headers are dead (Rule 7d) ⚠ [A6](#a6). <sup>i</sup>
 - **Rows per page (configuration file, no screen).** The Tasks panel's page
   size, 25 on a default install; the panel's own "Items per page:" choice
   changes it for the moment only (Rule 2b). <sup>i</sup>
@@ -435,10 +457,16 @@ items" on an empty list). No text can be typed anywhere in the panel.
   the signed-in name carries the unread count (Rule 4a); with French
   ticked as well it carries none (Rule 4c) [A15](#a15). <sup>c</sup>
 - **The announcement's and the issue's email box** ("Send an email about
-  this to all registered users.", Rule 6), **the open-access notification
-  and the journal's announcements switch** decide whether the events in
-  Rule 6 send email at all; all four belong to *Announcements*, *Issues*
-  and *Subscriptions & open access control* (specs not yet written).
+  this to all registered users.", Rule 6) **and the open-access
+  notification** decide whether those events send email; they belong to
+  *[Announcements](U12-announcements.md)*, *[Issues](U50-issues.md)* and
+  *[Subscriptions & open access control](U51-subscriptions.md)*. The
+  journal's "Enable announcements" switch does not. While it is off the
+  side menu no longer offers the Announcements page, but the page still
+  opens at its address ("…/management/settings/announcements"), and an
+  announcement added there still emails every user with a role in the journal, and its "Visit
+  our website to read the full announcement" link opens "404 Not Found"
+  ([Announcements A8](U12-announcements.md#a8)). <sup>e</sup>
 
 ## Cross-feature interactions
 
@@ -452,10 +480,11 @@ items" on an empty list). No text can be typed anywhere in the panel.
   reader-side header the bell and the count sit in; the bell's window and
   the count's value are this spec's (Rules 2 and 4).
 - **Submission wizard**, **Publish, schedule & versions**, **Reviewer
-  assignment & management**, **Submissions dashboard** and the unwritten
-  *Announcements*, *Issues*, *Subscriptions & open access control*,
-  *Stage participants* and
-  *Tasks & discussions* each raise the events in Rule 6 and own their
+  assignment & management**, **Submissions dashboard**,
+  **[Announcements](U12-announcements.md)**, **[Issues](U50-issues.md)**,
+  **[Subscriptions & open access control](U51-subscriptions.md)**,
+  **[Stage participants](U35-stage-participants.md)** and
+  **[Tasks & discussions](U37-tasks-and-discussions.md)** each raise the events in Rule 6 and own their
   triggers, recipients and email texts; the discussion form ("Add" in the
   workflow page's discussions panel) and its reply are *Tasks &
   discussions*'.
@@ -517,8 +546,9 @@ footnote says how) and judge both mailboxes only once they have run.
      (worded per application as in Fields), with the submission's title
      under it; while the window is open the bell in the header is greyed
      out with no number.
-   - **The blank part of the row**: press the row beside its text: nothing
-     happens; the window stays as it is (Rule 2c).
+   - **The margin of the row**: press the row's bottom right-hand corner,
+     just above its border: nothing happens; the window stays as it is
+     (Rule 2c).
    - **Opening the task**: press the row's sentence: {OJS OMP} the
      submission's workflow opens over the submissions dashboard (Rule 2c);
      {OPS} a reader-facing page reading "A workflow stage was not
@@ -625,10 +655,9 @@ footnote says how) and judge both mailboxes only once they have run.
      to this comment at #{submission number} {authors} or unsubscribe from
      emails sent by {journal name}." (Rule 7a; {authors} is the Author's
      family name, the one author), with "unsubscribe" as the link and
-     {journal
-     name} a link to the journal; its plain-text version shows each
-     link's address in parentheses after the link's words. The Manager's
-     own mailbox holds a copy.
+     {journal name} a link to the journal; shown as text (the mail
+     catcher's "Text" tab), each link's address follows the link's words
+     in parentheses. The Manager's own mailbox holds a copy.
    - **The Unsubscribe page, signed out**: open the "unsubscribe" link in
      the signed-out browser: the "Unsubscribe" page shows "Select the
      emails that you no longer wish to receive at {the Author's address}
@@ -744,8 +773,8 @@ footnote says how) and judge both mailboxes only once they have run.
      Issues, presses the small arrow at the start of the issue's row to
      show its actions, presses "Publish Issue" and, in the dialog, leaves
      "Send an email about this to all registered users." ticked (it
-     arrives ticked) and confirms "OK" (*Issues*, spec not yet written,
-     owns that dialog; an issue with no articles publishes without a
+     arrives ticked) and confirms "OK"
+     (*[Issues](U50-issues.md#publish-issue)* owns that dialog; an issue with no articles publishes without a
      warning). Run the site's background jobs ("When emails arrive"
      above).
    - **The Author's mailbox**: holds the issue email: its subject is "Just
@@ -825,6 +854,16 @@ Left out of the scenarios above, by reason:
   - a preprint server's new-preprint row on the Notifications tab reading "A new preprint, "Title", has been submitted." (*Fields & validation*; the guard [OPS2](#ops2)'s issue report proposes)
   - in a window narrower than 992 px, after "Open Menu", the name bare and the unread count after "Dashboard", on a journal's home page and for the Site Administrator on the site's (Rules 4b, 4d)
   - a ticked "Do not send me an email for these types of notifications." with its "Enable these types of notifications." unticked: greyed with its tick, unticked on the tab's next load after "Save", and the event's emails coming again once "Enable…" is ticked back (Rule 5c)
+  - the Escape key closing the Tasks window, and no box in the "Select" column's header (*Fields & validation*, "The Tasks panel")
+  - a press on the blank space to the right of a row's sentence opening the task (Rule 2c; scenario 1 presses the sentence and the row's margin)
+  - the "needs an editor" task leaving every manager's Tasks window once a Section Editor is assigned with "Assign" on the submission's Participants panel, the assigned Section Editor getting none (Rules 1, 6)
+  - "Enable…" unticked stopping the announcement email, on a scratch journal with announcements switched on (Rules 5a, 6)
+  - an Author's "Do not send me an email…" under "A new version of your submission, "Title", was published." stopping the "Publication Published" email while the task still arrives (Rule 5b; [A8](#a8))
+  - {OPS} "New Version Posted Acknowledgement" still reaching an author who ticked that box (Rule 6)
+  - the discussion footer naming the first author's family name followed by "et al." on a submission with more than one author (Rule 7a; scenario 5's submission has one author)
+  - a sign-in alone in another tab leaving the open Unsubscribe page working (Rule 8d; scenario 6 signs out)
+  - {OMP} the review-complete email's subject reading "recommends None" (Rule 6; scenario 11 states it, the press's suite does not read it yet)
+  - {OJS} no title line under the published-version task (Rules 2b, 6; scenario 10 states it, the journal's suite does not read it yet)
 - **Rarely met**:
   - the Tasks window paged beyond 25 rows, "1 - 25 of 26 items" and "Items per page:" (Rule 2b): 26 tasks to raise for one account
   - the blue-edged notice toast (Rule 9a): the one screen that produces it is a plugin switch under Settings › Website › "Plugins", a Journal Manager's occasional act, not an editor's, author's or reviewer's week
@@ -835,8 +874,10 @@ Left out of the scenarios above, by reason:
   - toasts never subject to a choice (Rule 1): no box governs them, so there is nothing to switch
   - the bell's hidden name "Tasks N" (Rule 2a): the badge scenario 1 reads
   - the email choice on an event whose email is optional for the sender (Rule 5b): the same box as scenario 4's
+  - an Editor, a Production Editor, a Funding Coordinator, a Translator or a Reviewer seeing the unread count beside the name (Actors row 3, Rule 4a): the same count scenario 1's Journal Manager reads
+  - an assigned Editor getting the review-complete email (Rule 6): the same email as scenario 11's Section Editor
 - **Register carries it**:
-  - A3 (a Section Editor's bare name on the reader-side header; Rule 4)
+  - A3 (a Section Editor's or a Guest Editor's bare name on the reader-side header; Rule 4)
   - A11 (the ticked editor told nothing, the manager-level roles told instead; Rule 6)
   - A8 (the "Publication Published" and "needs an editor" emails without a footer; Rule 6)
   - OPS1 (two rows a preprint server never raises; Rule 6; scenario 11 names it)
@@ -847,16 +888,16 @@ Left out of the scenarios above, by reason:
   - A12 (two tasks raised within one second listed in either order; Rule 2b; scenario 2's second submission comes a second after the first)
   - A13 (the Site Administrator's unread count hidden on the site's home page at a desktop width; Rule 4d; scenario 7 marks it)
   - A15 (no unread count beside the name on a journal with French under "Forms"; Rule 4c, *Settings*)
+  - A16 (the discussion email's "#{submission number} {authors}" link refusing the submission's Author; Rule 7a)
 - **No seed**:
   - the journal initials on the rows of an account with roles in several journals (Rules 2b, 2d)
   - each journal keeping its own set of choices (Rule 5d)
-  - "Enable…" unticked stopping the announcement email (Rules 5a, 6): a scratch journal's announcements are off, and the switch is *Announcements*' (*Settings*)
   - the open-access email and the reminder email of outstanding tasks (Rule 6): each raised by a scheduled task no screen starts
   - the API secret unset: every footer link opening "404 Not Found" (Rule 7d, *Settings*; A6): the configuration file is shared by every test
   - the Tasks panel's rows per page from the configuration file (*Settings*)
 - **Owned by another feature**:
-  - the site-level address forwarding a user with a role in one journal to that journal's "Identity" tab (Rule 5d; *User profile*, scenario 2)
-  - the warning toast for a refused action (Rule 9a; *Stage participants*, scenario 6, after "Notify" with "Message" empty)
+  - the site-level address forwarding a user with a role in one journal to that journal's profile (Rule 5d; *User profile*, scenario 2)
+  - the warning toast for a refused action (Rule 9a; *[Stage participants](U35-stage-participants.md)*, scenario 6, after "Notify" with "Message" empty)
   - a toast's "×" over an open window removing the toast, the window left open (Rule 9b; *[Submission intake configuration](U58-submission-intake-configuration.md)*, scenario 6, the refused "Key")
   - a form the server rejected: errors inside the form, no toast, gone after about seven seconds (Rule 9c; *User profile*, scenario 8)
   - the success message shown inside the form instead of as a toast (Rule 9c; *User profile*, scenario 2)
@@ -864,7 +905,8 @@ Left out of the scenarios above, by reason:
   - the monthly statistics email and its task: who gets them, "Enable…" unticked stopping both, and the task opening "Editorial Activity" (Rules 2b, 2c, 5a, 6; *[Editorial statistics](U65-editorial-statistics.md)*, scenario 3)
   - the editorial statistics email off, its row leaving the tab and coming back when the email is on again (*Settings*; *[Editorial statistics](U65-editorial-statistics.md)*, scenario 4)
   - every email in Rule 6 as an email, its trigger, recipients and text (*Side effects*; the raising feature each row names)
-  - the announcement's and the issue's email box, the open-access notification and the announcements switch (*Settings*; *Announcements*, *Issues*, *Subscriptions & open access control*)
+  - the announcement's and the issue's email box and the open-access notification (*Settings*; *[Announcements](U12-announcements.md)*, *[Issues](U50-issues.md)*, *[Subscriptions & open access control](U51-subscriptions.md)*)
+  - the announcements switch, which leaves an announcement's email going out (*Settings*; *[Announcements](U12-announcements.md#a8)*, its A8)
   - decision tasks landing in the panel with no box to switch them off (*Cross-feature interactions*; *Review stage & rounds*)
 
 ## Findings register
@@ -880,9 +922,10 @@ Basis: [Reading a spec](GLOSSARY.md#reading-a-spec).
 | [OPS3](#ops3) | On a preprint server, the manager's "a moderator needs to be assigned" task opens "A workflow stage was not specified." instead of the preprint | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
 | [A1](#a1) | A reply in a discussion ignores the "Discussion activity." choices and is announced as the discussion's start | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A2](#a2) | Unticking boxes on an email's Unsubscribe page switches back on emails the person had turned off | 🐞 | medium | issues (claude), 2026-10-04 — re-verified |
-| [A3](#a3) | A Section Editor never sees their unread count on the public pages, beside their name or in the narrow-window menu, while the other roles do | 🐞 | low | issues (claude), 2026-10-14 — re-verified |
+| [A3](#a3) | A Section Editor or a Guest Editor never sees their unread count on the public pages, beside their name or in the narrow-window menu, while the other roles do | 🐞 | low | issues (claude), 2026-10-14 — re-verified |
 | [OPS2](#ops2) | On a preprint server, the Notifications tab's new-preprint row has a stray space before the comma | 🐞 | low | issues (claude), 2026-10-04 — re-verified |
 | [A15](#a15) | On a journal with French under "Forms", no name on the public pages carries the unread count, and a window 992 px or wider shows it nowhere | 🐞 | minor | — |
+| [A16](#a16) | A discussion email's "#{submission number} {authors}" link tells the submission's own Author "The current role does not have access to this operation." | 🐞 | user-visible | — |
 | [A4](#a4) | The site-level profile's Notifications tab offers choices that no event honours | ❓ | latent | — |
 | [A5](#a5) | A mail program's own "Unsubscribe" button, offered because of the emails' headers, is probably refused | ❓ | latent | — |
 | [A6](#a6) | Without an API secret in the configuration file, which a fresh install leaves empty, every footer "Unsubscribe" link opens "404 Not Found" | ❓ | user-visible | — |
@@ -930,27 +973,29 @@ off again on the profile tab.
 Many readers and authors have such emails off without ever opening the
 tab: a new account that leaves "Yes, I would like to be notified of new
 publications and announcements." unticked at registration starts with
-the issue and announcement emails off. Only sites that set an API
-secret in their configuration file can reach the page. The installer
-leaves it empty, and then every unsubscribe link opens "404 Not Found".
+the issue and announcement emails off.
+Only sites that set an API secret in their configuration file (no screen shows or sets it) can reach the page. The installer leaves it empty, and then every unsubscribe link opens "404 Not Found".
 Basis: probe, 2026-10-04. <sup>[f-a2](#fn-a2)</sup>
 
 <a id="a3"></a>
-**A3 — No reader-side count for a Section Editor** · 🐞 · low.
+**A3 — No reader-side count for a Section Editor or a Guest Editor** · 🐞 · low.
 On the public pages of a journal whose only "Forms" language is English,
-a Journal Manager, a Journal editor, an assistant, a Reviewer or an Author
-sees their number of unread tasks beside their name in the header, and in
-a narrow window after "Dashboard" in the "Open Menu" list (Rule 4a); with
-French under "Forms" the number beside the name is gone for every role
-([A15](#a15)). A Section Editor
-(Series Editor on a press, Moderator on a preprint server) who holds
-none of those roles in the journal never sees the number in either place,
-even while the bell shows "1", and learns of new tasks only from the bell
-on the editorial pages. The same cause sends their "Dashboard" to the
-Profile page
+a user holding a role at the Journal Manager, Assistant, Reviewer or
+Author permission level (the Journal Manager, the Editor, the Production
+Editor, a Copyeditor, a Funding Coordinator, a Translator, a Reviewer, an
+Author) sees their number of unread tasks beside their name in the
+header, and in a narrow window after "Dashboard" in the "Open Menu" list
+(Rule 4a); with French under "Forms" the number beside the name is gone
+for every role ([A15](#a15)). A Section Editor (Series Editor on a press,
+Moderator on a preprint server), or on a journal a Guest Editor, who
+holds no role at those levels in the journal never sees the number in
+either place, even while the bell shows "1", and learns of new tasks only
+from the bell on the editorial pages. The same cause sends a Section
+Editor's "Dashboard" to the Profile page
 ([Navigation menus & site chrome](U08-navigation-menus-and-site-chrome.md#a2)).
-It worked in 3.0 and broke in 3.1.
-Basis: probe, 2026-10-14. <sup>[f-a3](#fn-a3)</sup>
+Read from the code's history, it worked in 3.0 and broke in 3.1.
+Basis: probe, 2026-10-14; the Guest Editor, 2026-10-20. <sup>[f-a3](#fn-a3)</sup>
+Report: refresh owed — the 2026-10-20 drift sweep widened the reach from the Section Editor to every role at the Section Editor permission level, the Guest Editor on a journal included (bare name at 1280 px, no count after "Dashboard" at 800 px), the roles `PKPNavigationMenuService::getDisplayStatus()` leaves out; no code changed (2026-10-20)
 
 <a id="a4"></a>
 **A4 — The site-level tab governs nothing** · ❓ · latent.
@@ -1005,14 +1050,16 @@ link comes with the task itself. Exempt, because their events raise no
 task and so nothing can be deleted: the announcement, issue and
 open-access emails, the "A reviewer has commented" email and the
 reminder of outstanding tasks. The statistics report raises a task too
-(Rule 6), but read from the application its link comes with a record of
-its own that no screen lists, not with the task; deleting that task was
-not tried. The "needs an editor" and "Publication Published"
+(Rule 6), but its link comes with a record of its own, which nothing on
+screen lists: after the Journal Manager deleted that task, the statistics
+email's "Unsubscribe" still opened the page naming the Manager's
+address. The "needs an editor" and "Publication Published"
 emails carry no Unsubscribe link at all (A8).
 Question: is the link meant to outlive the task? Lean: yes; the email is
 still in the inbox, so its link should still work.
 Basis: probe (a discussion email, its task deleted, the link opened
-signed in and signed out). <sup>[f-a7](#fn-a7)</sup>
+signed in and signed out; the statistics email, its task deleted,
+2026-10-20). <sup>[f-a7](#fn-a7)</sup>
 
 <a id="a8"></a>
 **A8 — Two emails without the footer** · ❓ · minor.
@@ -1026,16 +1073,14 @@ editor" email to the manager-level roles, ending "This is an automated email fro
 the only box that works for it (A10), and that was seen live. The second
 is the "Publication Published" email to an author (subject "Publication
 Published", from the journal's own name and address), ending with the
-address of the published item. The author's tab has a box for it too, "Do
-not send me an email…" under "A new version of your submission, "Title",
-was published.", the box that stops the other emails (Rule 5b); whether it
-stops this one was not tried, so the author's only way out is expected,
-not seen.
+address of the published item. The author's tab has a box for it too,
+"Do not send me an email…" under "A new version of your submission,
+"Title", was published.", and ticked it stops this email while the task
+still arrives; that was seen.
 Question: intended, or an omission? Lean: an omission; both are recurring
 notification emails like the others.
-Basis: probe (both emails' footers and headers; the Manager's box),
-judgment (the author's box stopping the "Publication Published" email).
-<sup>[f-a8](#fn-a8)</sup>
+Basis: probe (both emails' footers and headers; the Manager's box; the
+author's box, 2026-10-20). <sup>[f-a8](#fn-a8)</sup>
 
 <a id="a9"></a>
 **A9 — The Unsubscribe page lists an email the journal never sends** · ❓ · minor.
@@ -1080,8 +1125,8 @@ editor to tick. On the install's first journal (its oldest; the seeded
 journal on a test install) the assignment does happen, and there, read
 from the application, the "needs an editor" task and email are replaced
 by an email from the "Editor Assigned" template to the ticked editor, with no
-task and no Unsubscribe link (*Stage participants*, spec not yet written,
-owns that email); its subject is not on this page, and neither that email
+task and no Unsubscribe link
+(*[Stage participants](U35-stage-participants.md)* owns that email); its subject is not on this page, and neither that email
 nor the editor's empty Tasks panel was ever seen. What would settle that
 half: an editor assigned automatically on the install's first journal,
 then their Tasks panel and mailbox read.
@@ -1099,16 +1144,18 @@ gets). <sup>[f-a11](#fn-a11)</sup>
 The Tasks window lists tasks newest first (Rule 2b), so a Journal Manager
 whose window holds two "needs an editor" rows expects the later
 submission's row first. When the two tasks were raised within the same
-second, the rows came in either order: the earlier submission's row was
-first on two of three runs on a press and the later's on the third. A
-person reading the window cannot tell which of two same-second tasks is
-the newer. Seen on a press with two seeded submissions; two submissions made by hand within
-one second were not tried, and that is what would settle whether an
-ordinary pair of submitters can meet it.
+second, the rows came in either order. Seen on all three applications:
+two Authors who press the wizard's final "Submit" at the same moment
+raised their tasks within one second on three of six runs (twice on a
+press, once on a preprint server), and the Manager's window then listed
+the earlier submission first twice and the later once; rows seeded
+within one second came in an order that held across reloads but was
+neither oldest- nor newest-first. A person reading the window cannot
+tell which of two same-second tasks is the newer.
 Question: is newest-first meant to hold for tasks raised in the same
 second? Lean: yes; breaking the tie by the task's number would keep the
 newer row first.
-Basis: test run. <sup>[f-a12](#fn-a12)</sup>
+Basis: test run; probe, 2026-10-20. <sup>[f-a12](#fn-a12)</sup>
 
 <a id="a13"></a>
 **A13 — The Site Administrator's unread count is hidden on the site's home page** · ❓ · minor.
@@ -1152,6 +1199,20 @@ pages give. The cause is not traced; the browser's page inspector finds
 no number beside the name, so it is missing from the page, not hidden
 by its styling.
 Basis: probe, 2026-10-13. <sup>[f-a15](#fn-a15)</sup>
+
+<a id="a16"></a>
+**A16 — A discussion email's "#{submission number} {authors}" link tells the submission's own Author "The current role does not have access to this operation."** · 🐞 · user-visible.
+Every discussion email ends "Reply to this comment at #{submission
+number} {authors} or unsubscribe from emails sent by {journal name}."
+(Rule 7a), its "#{submission number} {authors}" a link to the
+submission's editorial workflow. A Journal Manager who presses it lands
+on the workflow. The submission's own Author, signed in, lands instead on
+the page "The current role does not have access to this operation.", so
+in every discussion email to an author the link meant for replying leads
+nowhere they can use; they have to find the submission on My Submissions
+themselves. A preprint's first-post email has the same kind of link
+([Publish, schedule & versions OPS6](U49-publish-schedule-and-versions.md#ops6)).
+Basis: probe, 2026-10-20. <sup>[f-a16](#fn-a16)</sup>
 
 ### OPS
 
@@ -1198,12 +1259,14 @@ reader-facing page whose whole text is "A workflow stage was not
 specified.", and the task is marked read on the way.
 The manager has to find the preprint in the submissions list instead.
 The task no longer counts as unread, though it stays listed until a
-moderator is assigned. The "needs a moderator" email opens the workflow,
-so only the task is broken.
+moderator is assigned. The "needs an editor" email ("A new submission
+needs an editor to be assigned: "{title}"") opens the workflow, so only
+the task is broken.
 Every manager gets the task for each new preprint that no moderator is
 assigned to automatically. A new server's section names no moderator, so
 on such a server that is every preprint.
 Basis: probe, 2026-10-04. <sup>[f-ops3](#fn-ops3)</sup>
+Report: refresh owed — the 2026-10-20 drift sweep read the email's subject: it is the "needs an editor" email ("A new submission needs an editor to be assigned: "{title}""), not a "needs a moderator" one, and its link opens the workflow on a preprint server; the report's wording follows, no class or method changed (2026-10-20)
 
 
 ### Retired
@@ -1265,8 +1328,8 @@ browser dialog, no modal, "No Items" at once, no badge after a full
 reload; a second Manager's two rows survived. Every action re-renders the
 grid with the boxes cleared. The link target is the grid's own
 `mark-read?redirect=1&selectedElements[]=<id>` (Rule 2c); pressing the
-title, the sentence or the blank cell was tried, the blank cell does
-nothing. The discussion row's link (OMP) lands the same way, on the
+title or the sentence was tried; the blank space beside the text is
+part of the link (note s1, 2026-10-20). The discussion row's link (OMP) lands the same way, on the
 dashboard with the panel open; the redirect is the same address for every
 submission task. `pkp.currentUser.unreadTasksCount` is set at page load and
 updated only by the grid's own actions, so a task raised while a page is
@@ -1278,6 +1341,16 @@ initials field reads "Journal Initials" and "Server Initials" since
 pkp/ojs#5608 and pkp/ops#1315, seen 2026-10-01 at the PR heads
 `b5504f9f74` (OJS) and `8c4a7b7597` (OPS), before their merge ("Journal
 initials", "Server initials" until then).
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each (Fields "The
+Tasks panel"; Rule 1): Escape with the window open closed it, and the
+"Select" column's header holds no box (no tick-all). On a scratch
+context with two Journal Managers, each window held the needs-editor row
+(one read, one unread); after "Assign" of a Section editor (OMP Series
+editor, OPS Moderator) on the submission's Participants panel ("OK",
+`save-participant` 200) neither window held a row for the title and both
+bells read "Tasks"; the assigned editor's window got no row either.
+`AssignEditors`' task is deleted for every manager once an editor is
+assigned.
 
 <a id="fn-c"></a>
 **c** — `PKPNavigationMenuService::getDisplayStatus()` (`NMI_TYPE_USER_DASHBOARD`,
@@ -1334,6 +1407,21 @@ entry "Dashboard" at 1280 px with "Dashboard 1" / "Dashboard 2" in its
 text (the bell's number), "Dashboard 1" / "Dashboard 2" displayed at
 800 px; the two-journal Manager's entry bare at both widths, linking to
 `index/en/user/profile`.
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each (Actors row
+3; Rule 4; A3), on a scratch journal with English alone under "Forms",
+one account per role, read at 1280 and 800 px: "{name} 0" beside the
+name for the "Journal editor", "Production editor", "Funding
+coordinator", "Translator" and "Reviewer" (OJS), the "Press editor",
+"Production editor", "Volume editor", "Internal Reviewer" and "Chapter
+Author" (OMP) and the "Editorial Board Member" (OPS); the "Guest editor"
+(OJS) the bare name at 1280 px and a bare "Dashboard" at 800 px, as the
+"Section editor". Users & Roles › "Roles", column "Permission level":
+"Journal manager", "Journal editor" and "Production editor" at "Journal
+Manager"; OMP "Press manager", "Press editor", "Production editor" at
+"Press Manager"; OPS "Preprint Server manager" alone at "Manager". The
+code's role list (`ROLE_ID_MANAGER`, `ROLE_ID_ASSISTANT`,
+`ROLE_ID_REVIEWER`, `ROLE_ID_AUTHOR`) is by permission level, so every
+group at `ROLE_ID_SUB_EDITOR` is left out.
 
 <a id="fn-d"></a>
 **d** — `PKPNotificationSettingsForm::getNotificationSettingCategories()`
@@ -1371,10 +1459,18 @@ still ticked before "Save", unticked after reload; "Enable…" re-ticked →
 email box unticked after reload (Rule 5c). Effects: "Enable…" unticked
 stopped the needs-editor task and not its email (A10), and stopped the
 announcement and issue emails; the email box ticked stopped the
-needs-editor email and kept the task (scenario 4). Typing
-`index/user/profile/notificationSettings` as `manager.maya` lands on
+needs-editor email and kept the task (scenario 4). On 2026-09-04 typing
+`index/user/profile/notificationSettings` as `manager.maya` landed on
 `publicknowledge/…/user/profile?0=notificationSettings` with "Identity"
-open (Rule 5d); the site home's "View Profile" points at
+open; live-probed 2026-10-20 on OJS, OMP and OPS, two runs each (Rule
+5d), a Reader and a Journal Manager of one scratch journal at
+`…/index/user/profile` landed on `{journal}/user/profile` with "Identity"
+open, at `…/index/user/profile/notificationSettings` on
+`{journal}/user/profile#notificationSettings` with "Notifications" open
+and its form shown, and at `…/index/user/profile/password` on
+`#password` with "Identity" open: the redirect now passes the tab word on
+as the address's anchor (`ProfileHandler::profile()` passes `$args` on,
+pkp-lib `aeac6f75cf`, 2026-09-16, pkp/pkp-lib#13181); the site home's "View Profile" points at
 `index/user/profile` for `manager.maya` and `admin` alike. That entry is
 a hidden dropdown item under the name (`href` `…/index/en/user/profile`);
 whether hovering or pressing the name shows it was not tried, so scenario
@@ -1451,8 +1547,8 @@ Review" and the "Confirm" window's "OK"; the assigned Section Editor's
 mailbox 0.3 s later held `ReviewCompleteNotifyEditors`, subject "Review
 complete: {reviewer} recommends {recommendation} for #{number} {authors}
 — "{title}"" ("recommends None" on OMP, whose review form offers no
-recommendation list), From "Site Admin <admin@mail.test>", text part
-ending "—" then "This is an automated message from {journal name} (
+recommendation list), From "Site Admin <admin@mail.test>", Mailpit's
+text rendering ending "—" then "This is an automated message from {journal name} (
 {home} ). You can unsubscribe ( {link} ) from this email at any time.",
 with the `List-Unsubscribe` headers; the journal's Manager, not assigned,
 got no email; neither got a task. The `EditorAssigned` path (Rule 6's
@@ -1479,8 +1575,8 @@ editor" accounts (OMP "Press manager", "Press editor", "Production
 editor", "Series editor"; OPS the "Preprint Server manager" and
 "Moderator") each got one email,
 subject "Editorial activity for August, 2026" (OPS "Preprint Server
-activity for August, 2026") with `editorial-report.csv` attached, the
-text part ending "—" then "Unsubscribe ( {link} ) from emails sent by
+activity for August, 2026") with `editorial-report.csv` attached,
+Mailpit's text rendering ending "—" then "Unsubscribe ( {link} ) from emails sent by
 {journal name} ( {link} ).", and the `List-Unsubscribe` headers; and one
 Tasks row, its sentence as in Rule 6 and an empty title cell; on OJS
 and OPS the task's own recipient list (`notified`, `mailed`) held those
@@ -1524,6 +1620,35 @@ each discussion email carried the whole message. A 300-character string
 with no space in it ran past the window's right edge unmarked on one OJS
 run; a 150-character address with hyphens and slashes wrapped and showed
 whole on all three apps.
+Live-probed 2026-10-20 on OJS and OMP, two runs each (Rule 6, the
+reviewer-comment row's "Who is told"): the review stage's Participants ›
+"Assign" offered the roles "Journal editor, Section editor, Guest editor,
+Funding coordinator, Translator, Author" (OMP "Press editor, Series
+editor, Funding coordinator, Author, Volume editor, Translator"), no
+Journal (Press) manager; with a Journal (Press) editor and a Section
+(Series) editor assigned, both got the review-complete email and two
+unassigned Journal (Press) Managers got none. The recipient list reads
+the review stage's assignments (`withStageIds`), and the "Journal
+manager" group has no stages: a participant seeded as `manager` is
+listed on no stage's panel and got no email (one OJS run). Live-probed
+2026-10-20 on OPS, two runs (Rule 6's closing list): a real post
+("Post the preprint" › "Post") sent an author with "Do not send me an
+email…" ticked under "A new version of your submission, "Title", was
+published." "New Version Posted Acknowledgement" alone, and an author at
+the defaults "New Version Posted Acknowledgement" and "Publication
+Published"; on OJS (Publication › "Publish", no issue) and OMP the
+box-ticked author got neither email and the other "Publication
+Published" alone. Live-probed 2026-10-20 on OJS, OMP and OPS, two runs
+each (Settings, the announcements switch): with the journal's "Enable
+announcements" unticked the side menu offered no "Announcements" link,
+the page at `{journal}/management/settings/announcements` still offered
+"Add Announcement", and an announcement saved there with "Send an email
+about this to all registered users." ticked (POST 200) emailed the
+Reader, the Author and the Section Editor with the footer "Unsubscribe
+from emails sent by {journal name}."; the email's "Visit our website to
+read the full announcement" link, opened signed out, answered "404 Not
+Found", as did `{journal}/announcement`. Every notification email read
+on 2026-10-20 is HTML only (note f).
 
 <a id="fn-f"></a>
 **f** — Link: `PKPNotificationOperationManager::getUnsubscribeNotificationUrl()`
@@ -1551,11 +1676,11 @@ verify. No role policy on the handler: `PKPHandler::authorize()` adds none
 for anonymous visitors (Actors row 5). `{url page="user" op="profile"}` is
 the Identity tab (Rule 8e). Live-probed 2026-09-04 on OJS, OMP and OPS
 (Rules 7a–7c, 8a–8e; Fields "The Unsubscribe page"; Actors row 5;
-scenarios 5, 6; A2, A7, A9) from a scratch discussion's email: the text
-part ends "—" then "Reply to this comment at #32 Author ( {workflow
+scenarios 5, 6; A2, A7, A9) from a scratch discussion's email: Mailpit's
+text rendering ends "—" then "Reply to this comment at #32 Author ( {workflow
 address} ) or unsubscribe ( {link} ) from emails sent by Scratch context
 {tag} ( {home} )." (OMP, OPS: "#6 Author"; the number is the submission id,
-"Author" the seeded contributor's family name); the HTML part has the three
+"Author" the seeded contributor's family name); the HTML has the three
 links; Mailpit's headers show `List-Unsubscribe` and
 `List-Unsubscribe-Post: List-Unsubscribe=One-Click`. Signed out, the link
 answers the reader-facing page (title "Unsubscribe | {journal}") with the
@@ -1578,8 +1703,22 @@ left open in one tab while the person signed in and out again in another,
 then "Unsubscribe" pressed on the old page (the `FormValidatorCSRF` check
 fails; the POST answers 200 with the `.error` template: heading "We could
 not unsubscribe you", text as quoted); the link opened afresh showed the
-form again. Mailpit's "Text" tab shows the plain-text part, each link's
-address in parentheses after the link's words (Rule 7a's last sentence).
+form again. Mailpit's "Text" tab shows its own text rendering of the
+HTML, each link's address in parentheses after the link's words.
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each (Rules 7a,
+8d): every notification email read (discussion, announcement, issue,
+review-complete, statistics, "needs an editor", "Publication Published")
+is a single `text/html` part, the statistics email `multipart/mixed` with
+`text/html` and the CSV (Mailpit's `/api/v1/message/{id}/raw`); Mailpit's
+"Text" tab and its API's `Text` field are Mailpit's rendering. The
+discussion footer read "Reply to this comment at #147 Author" on a
+one-author submission and "#148 Author et al." with a second
+contributor; its "#{number} {authors}" link opened the workflow for the
+Journal Manager and refused the Author (A16). An Unsubscribe page opened
+signed out, then a sign-in alone in a second tab, then "Unsubscribe" on
+the old page: "You have been unsubscribed", the header then showing the
+signed-in Reader; signed in then signed out in the second tab, and
+cookies cleared: "We could not unsubscribe you".
 
 <a id="fn-g"></a>
 **g** — `layouts/backend.tpl` `.app__notifications` renders `Page.vue`'s
@@ -1626,6 +1765,12 @@ toast's left border read `rgb(0, 178, 78)` again. The "×" removed a
 toast shown with no window open within 0.11–0.14 s (the save toast on
 all three apps; "Notification sent to users." after a sent "Notify" on
 OJS and OMP); over the open side panel it did not (A14).
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each (Rule 9b):
+the "Add a Component" window after "Save" with -survey in "Key" showed
+the warning toast (left edge `rgb(208, 10, 108)`) "The key can contain
+only alphanumeric characters, underscores, and hyphens, and must begin
+and end with an alphanumeric character.", which stayed 8 s under the
+pointer and went at a press on its "×", the window open.
 
 <a id="fn-h"></a>
 **h** — `RegistrationForm::execute()`: when a context is open and
@@ -1652,9 +1797,12 @@ it; the description mentions "the journal" on OMP and OPS too).
 `[security] api_key_secret` is
 `"Api_Key_Secret_For_Testing_Purposes_Only"` on the fleets
 (`shared/playwright/make-test-config.js`). `[interface] items_per_page = 25`
-(`config.TEMPLATE.inc.php`). The scenario API has no `editorialStatsEmail`
-passthrough (scenarios.md "Field shapes not built yet" lists none), so the
-off end is probed through the settings screen on a scratch context.
+(`config.TEMPLATE.inc.php`). `scenarios/context` `editorialStatsEmail:
+false` stores "Do not send the email to editors."; live-probed 2026-10-20
+on OJS, OMP and OPS, two runs each: such a journal's tab has no
+"Statistics report summary." row and `scenarios/task` `statisticsReport`
+notifies and mails nobody (`jobs` 0), while the same run mails the
+editors of a journal with the email on.
 
 <a id="fn-s0"></a>
 **s0** — Ready accounts: `manager.maya` (Journal Manager),
@@ -1674,8 +1822,9 @@ The job runner prints one "Processing:" / "Processed:" pair per job with
 the job's name (`NewAnnouncementNotifyUsers`, `IssuePublishedNotifyUsers`)
 and ends "[OK] Completed running N jobs in the queue named queue."; before
 it runs the mailbox holds nothing for the event (2026-09-04, all apps).
-Mailpit shows the plain-text part on the message's "Text" tab, each
-link's address in parentheses after the link's words. The wizard on a
+Mailpit's "Text" tab shows its own text rendering of the HTML-only
+message, each link's address in parentheses after the link's words
+(note f, 2026-10-20). The wizard on a
 scratch context (2026-09-04, all apps): "Begin Submission" wants the
 title, the checklist box and the privacy box; the files step a file with
 its genre; the details step the abstract on OJS and OPS (the default
@@ -1698,12 +1847,12 @@ wizard's final "Submit" raises both. Expected task text per app: Fields,
 author's name; the trailing query part after the id came and went between
 runs, so only the path and `workflowSubmissionId` are asserted); OPS
 `{context}/user/authorizationDenied?message=user.authorization.workflowStageRequired`
-(OPS3). The reader-side count is read on the scratch context's home page (`{context}/index`), `#navigationUserWrapper` `span.task_count` beside the name, and the entries under the name are the seeded user menu ("Dashboard", "View Profile", note c); after the task is opened the same page shows "0". The blank part of the row is the `td` outside the row's one `<a>` (`task.tpl`, note a): pressing it left the modal open on 2026-09-04.
+(OPS3). The reader-side count is read on the scratch context's home page (`{context}/index`), `#navigationUserWrapper` `span.task_count` beside the name, and the entries under the name are the seeded user menu ("Dashboard", "View Profile", note c); after the task is opened the same page shows "0". The margin of the row is the strip of the `td` below the row's one `<a>`, which spans the cell's full width (`task.tpl`, note a): live-probed 2026-10-20 on OJS, OMP and OPS, two runs each, at 1280 px the link runs from x 171 to 1264, 44 px high in a 59.5 px cell; a press at x ≈ 1234 on the sentence's line, right of the sentence's end (x ≈ 690–727), left the window for the workflow (OJS, OMP) or the denied page (OPS), and a press in the cell's bottom-right corner (the suites' `pressBlankPart`) left the window open, the row unread and the address unchanged.
 
 <a id="fn-s2"></a>
 **s2** — Two tasks from two submissions on the same scratch context; the
 unread look is `div.task.unread` in `task.tpl`. Driven 2026-09-04 on all
-three apps as written. Newest first is the grid's creation-date order (note a): the later submission's title is the first row. The order is stamped to the second: on OMP on 2026-09-13 two seeded submissions landed inside one second and the earlier's row came first on two runs of three (note f-a12), so the suites seed the second submission after the clock's next second and the green runs on all three apps list the later one first (A12). The control is a second throwaway `manager` of the same context (`admin` also qualifies), whose two rows survived the first Manager's "Delete" on 2026-09-04 (note a).
+three apps as written. Newest first is the grid's creation-date order (note a): the later submission's title is the first row. The order is stamped to the second: on OMP on 2026-09-13 two seeded submissions landed inside one second and the earlier's row came first on two runs of three, and on 2026-10-20 same-second ties showed on all three apps (note f-a12), so the suites seed the second submission after the clock's next second and the green runs on all three apps list the later one first (A12). The control is a second throwaway `manager` of the same context (`admin` also qualifies), whose two rows survived the first Manager's "Delete" on 2026-09-04 (note a).
 
 <a id="fn-s3"></a>
 **s3** — Box names: `notificationEditorAssignmentRequired` and
@@ -1736,7 +1885,7 @@ the 2026-09-02 pkp tips the save fails with `Class
 "APP\notification\Notification" not found` until the campaign's overlay
 class is mounted (`docs/tracking/app-changes.md` row 12; the fleets run
 with it). Driven 2026-09-04 on all three apps up to and including the
-second discussion, with the Manager's own copy as the control. The email's From name is the Manager's (`From.Name` asserted by the three suites; the address was not recorded). The three broken links are Rule 8a's, built from the emailed address (`validate` cut, `id` cut, `id=999999999`), each answering the bare "404 Not Found" page signed in or out (note f). The plain-text part is Mailpit's "Text" tab (note s0). "No email confirms it": `count()` on the Author's address stays at 1 after the press. The "user profile" link on the form page is `{context}/user/profile`; signed out it led to Login and then to "Identity" (note f).
+second discussion, with the Manager's own copy as the control. The email's From name is the Manager's (`From.Name` asserted by the three suites; the address was not recorded). The three broken links are Rule 8a's, built from the emailed address (`validate` cut, `id` cut, `id=999999999`), each answering the bare "404 Not Found" page signed in or out (note f). The text read is Mailpit's "Text" tab, its rendering of the HTML-only email (note s0). "No email confirms it": `count()` on the Author's address stays at 1 after the press. The "user profile" link on the form page is `{context}/user/profile`; signed out it led to Login and then to "Identity" (note f).
 
 <a id="fn-s6"></a>
 **s6** — The addressee is `Notification::userId` of the link's notification;
@@ -1785,8 +1934,9 @@ no `.details .submission` line under it (test runs of 2026-09-13 on OJS,
 OMP and OPS: the aria snapshot's row holds that one link and nothing
 else); the notification's `assocType` is `ASSOC_TYPE_PUBLICATION`, which
 `NotificationsGridCellProvider::_getTitle()` has no case for, so no title
-line is built. The suites assert the full sentence and the absence of the
-title line. The seed also raises the "needs an editor" task for every
+line is built. The three suites assert the full sentence; the OMP and OPS suites
+also assert the absence of the title line, the OJS suite not yet
+(2026-10-20). The seed also raises the "needs an editor" task for every
 Manager of the context (seed-facts), which is the control's positive half:
 the Manager's window lists that row for the title and none opening "A new
 version of your submission".
@@ -1807,7 +1957,7 @@ assignment opens on step 1, scenarios.md), on OJS "Recommendation" set to
 "Accept Submission", "Submit Review", then "OK" in the "Confirm" window.
 The email is `ReviewCompleteNotifyEditors`, From "Site Admin
 <admin@mail.test>", in the Section Editor's mailbox 0.3 s after "OK" on
-2026-09-04 (OJS and OMP), text part ending "—" then "This is an automated
+2026-09-04 (OJS and OMP), Mailpit's text rendering ending "—" then "This is an automated
 message from {journal name} ( {home} ). You can unsubscribe ( {link} ) from
 this email at any time.", with the `List-Unsubscribe` headers; the Section
 Editor's Tasks window unchanged and the Manager's mailbox without it (note
@@ -1852,6 +2002,11 @@ Section Editor (Series Editor, Moderator) with the bell at "Tasks 1" from a
 discussion shows the bare name on the journal's home page; `manager.maya`
 and `author.alex` show "0" there without a task.
 Issue report: [docs/issues/U08-A2-section-editor-dashboard-opens-profile.md](../issues/U08-A2-section-editor-dashboard-opens-profile.md), filed as [pkp-e2e#634](https://github.com/jardakotesovec/pkp-e2e/issues/634).
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each (note c): the
+OJS "Guest editor" reads as the Section editor, the bare name at 1280 px
+and a bare "Dashboard" at 800 px; every other role at the Journal
+Manager, Assistant, Reviewer or Author level read "{name} 0". The 3.0 /
+3.1 history comes from the code's change history, not a drive.
 
 <a id="fn-a4"></a>
 **f-a4** — `PKPNotificationSettingsForm::fetch()` with `$context === null`
@@ -1886,7 +2041,8 @@ empty token. `Unsubscribe::headers()` skips the headers only when
 so the headers carry the dead link too. `config.TEMPLATE.inc.php` ships
 `api_key_secret = ""` and nothing under `classes/install` sets it, so a
 fresh install's file has it empty until the administrator edits the line.
-Fixed on the fleets by `make-test-config.js`; not probeable there.
+Fixed on the fleets by `make-test-config.js`; not probeable there:
+read from the code and the shipped file, and no screen shows the secret.
 
 <a id="fn-a7"></a>
 **f-a7** — `NotificationsGridHandler::deleteNotifications()` calls
@@ -1899,6 +2055,12 @@ email: the task deleted from the panel, the footer link answered the bare
 passes it to `allowUnsubscribe()`, while the Tasks row is a separate
 `TASK`-level row from the job `jobs/notifications/StatisticsReportNotify`
 (note e); deleting the task would leave the link's row in place.
+Live-probed 2026-10-20 on OJS, OMP and OPS (two runs each on OMP and
+OPS, one on OJS): after the Journal Manager deleted "This is a kind
+reminder for you to check your publication's health through the
+editorial report." from the Tasks window, the statistics email's
+"Unsubscribe" link still opened the page (200) naming the Manager's
+address.
 
 <a id="fn-a8"></a>
 **f-a8** — `SubmissionNeedsEditor` and `AuthorPublicationPublished` extend
@@ -1911,10 +2073,14 @@ was seen the same day on OMP and OPS after a Manager published through
 the workflow (note e): subject "Publication Published", From "{journal
 name} <admin@mail.test>", ending with the item's public address, no "—"
 line, no unsubscribe wording, no `List-Unsubscribe` headers, and the
-Author's Tasks window holding "A new version of your submission…". Not
-seen: whether "Do not send me an email…" under "A new version…" stops
-it; settling observation: a publish with that box ticked on the Author's
-tab.
+Author's Tasks window holding "A new version of your submission…".
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each: an author who
+had ticked and saved "Do not send me an email…" under "A new version of
+your submission, "Title", was published." got the task and no
+"Publication Published" email after a publish through the workflow (OJS
+Publication › "Publish", no issue), while the control author got both;
+on OPS the box-ticked author still got "New Version Posted
+Acknowledgement" (Rule 6).
 
 <a id="fn-a9"></a>
 **f-a9** — `PKPNotificationsUnsubscribeForm::fetch()` assigns the whole
@@ -1979,9 +2145,14 @@ to back produced `notifications` rows 246 and 255 with equal
 `date_created`; the window listed the earlier submission's title first on
 runs 2 and 3 and the later's on run 1. The suites now seed the second
 submission after the clock's next second (the condition the order depends
-on) and the green runs on OJS, OMP and OPS list the later one first; OJS
-and OPS did not show the tie. Settling observation: two submissions
-raised in the same second, listed several times.
+on) and the green runs on OJS, OMP and OPS list the later one first.
+Live-probed 2026-10-20 on OJS, OMP and OPS, two runs each: two Authors'
+wizard "Submit" pressed at once raised tasks in the same second on OMP
+in both runs and on OPS in one (OJS one second apart in both); the
+window listed the earlier first on OMP r1 and OPS r1, the later first on
+OMP r2. 26 seeded submissions on each app: rows of one second came in an
+order that held across reloads but was neither oldest- nor newest-first
+(OJS r1 second :55 listed 927, 943, 935).
 
 <a id="fn-a13"></a>
 **f-a13** — `dashboardMenuItem.tpl` prints `<span class="task_count">`
@@ -2005,6 +2176,16 @@ site admin through as it lets a manager; unticking French as a site
 language is site-wide and was not done on the shared fleet. Settling
 observation: `admin`'s name on `index/en` of an install whose site
 languages are English alone.
+A site with English as its only language cannot be made on a shared
+test install: unticking French under Administration › Languages also
+strips French from every journal's languages
+(`AdminLanguageGridHandler::_updateContextLocaleSettings()`), which
+ticking it back does not undo (traced in the code, 2026-10-20). Traced
+in the code, not driven: with no journal in the request, the form
+languages the navigation menu's title code loops over
+(`setAllNMILocalizedTitles()`) are the site's languages, `fr_CA` and
+`en` on the fleets, the same condition as A15's. The settling
+observation needs a fleet of its own.
 
 <a id="fn-a15"></a>
 **f-a15** — Live-probed 2026-10-13 on OJS, OMP and OPS `main`, two runs
@@ -2026,6 +2207,18 @@ to the count. Not traced: `dashboardMenuItem.tpl`, the
 default theme's `head.less` and `getDisplayStatus()`'s title and role
 code are unchanged from `stable-3_5_0`, which therefore likely behaves
 the same (code read, not driven); a 3.5 drive settles it.
+
+<a id="fn-a16"></a>
+**f-a16** — The discussion footer's "#{number} {authors}" link
+(`emails.footer.unsubscribe.discussion`, the `Discussion` trait, note e)
+is the editorial workflow address
+`{context}/dashboard/editorial?workflowSubmissionId={id}`. Live-probed
+2026-10-20 on OJS, OMP and OPS, two runs each: signed in as the
+submission's Author (the Author role alone), the link answered
+`user/authorizationDenied?message=user.authorization.roleBasedAccessDenied`,
+the page reading "The current role does not have access to this
+operation."; signed in as the Journal Manager, the same link opened the
+submission's workflow.
 
 <a id="fn-a14"></a>
 **f-a14** — While the "Notify" side panel is open, the page body,
@@ -2082,6 +2275,11 @@ afterwards, the row read). OJS and OMP land on
 `dashboard/editorial?workflowSubmissionId=<id>…` with the workflow panel
 open. Not seen on the discussion or "published" tasks; same redirect.
 Issue report: [pkp-e2e#847](https://github.com/jardakotesovec/pkp-e2e/issues/847) ([docs/issues/U05-OPS3-ops-task-link-workflow-stage-not-specified.md](../issues/U05-OPS3-ops-task-link-workflow-stage-not-specified.md)).
+Live-probed 2026-10-20 on OPS, two runs: the needs-editor email's
+subject reads "A new submission needs an editor to be assigned:
+"{title}"", and its link `…/dashboard/editorial?workflowSubmissionId=<id>`
+opened as the Preprint Server Manager lands on the workflow over the
+submissions list (`workflowMenuKey=workflow_5`).
 
 ## Reference — entry points & surfaces
 
